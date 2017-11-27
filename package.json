@@ -1,6 +1,6 @@
 {
   "name": "@polkadot/client",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A JavaScript client node for the polkadot network",
   "main": "polkadot.js",
   "bin": {
