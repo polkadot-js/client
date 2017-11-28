@@ -5,6 +5,7 @@
   "keywords": [],
   "author": "Jaco Greeff <jacogr@gmail.com>",
   "license": "ISC",
+  "private": true,
   "engines": {
     "node": ">=8.0"
   },
