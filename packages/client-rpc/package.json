@@ -1,0 +1,38 @@
+{
+  "name": "@polkadot/client-rpc",
+  "version": "0.2.0",
+  "description": "RPC server for a Polkadot client",
+  "main": "index.js",
+  "keywords": [
+    "Polkadot",
+    "JsonRPC"
+  ],
+  "author": "Jaco Greeff <jacogr@gmail.com>",
+  "license": "ISC",
+  "engines": {
+    "node": ">=6.4"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/polkadot-js/client.git"
+  },
+  "bugs": {
+    "url": "https://github.com/polkadot-js/client/issues"
+  },
+  "homepage": "https://github.com/polkadot-js/client/tree/master/packages/client-rpc#readme",
+  "scripts": {},
+  "devDependencies": {
+    "@polkadot/api-provider": "^0.5.1"
+  },
+  "dependencies": {
+    "@polkadot/util": "^0.5.15",
+    "koa": "^2.4.1",
+    "koa-body": "^2.5.0",
+    "koa-json": "^2.0.2",
+    "koa-router": "^7.3.0"
+  }
+}

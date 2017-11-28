@@ -1,23 +1,12 @@
 {
-  "name": "@polkadot/client",
-  "version": "0.1.1",
-  "description": "A JavaScript client node for the polkadot network",
-  "main": "polkadot.js",
-  "bin": {
-    "polkadot-js": "./scripts/polkadot.js"
-  },
-  "keywords": [
-    "Polkadot",
-    "JsonRPC"
-  ],
+  "name": "@polkadot/client-wrapper",
+  "version": "0.2.0",
+  "description": "Non-published, see packages/",
   "author": "Jaco Greeff <jacogr@gmail.com>",
   "license": "ISC",
+  "private": true,
   "engines": {
     "node": ">=8.0"
-  },
-  "publishConfig": {
-    "access": "public",
-    "registry": "https://registry.npmjs.org"
   },
   "repository": {
     "type": "git",
@@ -28,20 +17,16 @@
   },
   "homepage": "https://github.com/polkadot-js/client#readme",
   "scripts": {
-    "build": "polkadot-dev-build-babel",
-    "check": "eslint src && flow check",
-    "start": "node scripts/polkadot.js",
-    "test": "jest --coverage src"
+    "build": "yarn polkadot-dev-build-babel",
+    "check": "yarn eslint packages && yarn flow check",
+    "test": "yarn jest --coverage packages"
   },
   "devDependencies": {
-    "@polkadot/dev": "^0.8.1"
+    "@polkadot/dev": "^0.9.4",
+    "lerna": "^2.5.1"
   },
-  "dependencies": {
-    "@polkadot/client-p2p": "^0.1.9",
-    "@polkadot/client-rpc": "^0.1.10",
-    "@polkadot/jsonrpc": "^0.3.10",
-    "@polkadot/util": "^0.5.14",
-    "@polkadot/wasm": "^0.1.7",
-    "yargs": "^10.0.3"
-  }
+  "dependencies": {},
+  "workspaces": [
+    "packages/*"
+  ]
 }

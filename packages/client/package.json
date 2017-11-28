@@ -1,0 +1,40 @@
+{
+  "name": "@polkadot/client",
+  "version": "0.2.0",
+  "description": "A JavaScript client node for the polkadot network",
+  "main": "polkadot.js",
+  "bin": {
+    "polkadot-js": "./scripts/polkadot.js"
+  },
+  "keywords": [
+    "Polkadot",
+    "JsonRPC"
+  ],
+  "author": "Jaco Greeff <jacogr@gmail.com>",
+  "license": "ISC",
+  "engines": {
+    "node": ">=8.0"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/polkadot-js/client.git"
+  },
+  "bugs": {
+    "url": "https://github.com/polkadot-js/client/issues"
+  },
+  "homepage": "https://github.com/polkadot-js/client/tree/master/packages/client#readme",
+  "scripts": {},
+  "devDependencies": {},
+  "dependencies": {
+    "@polkadot/api-jsonrpc": "^0.5.1",
+    "@polkadot/client-p2p": "^0.2.0",
+    "@polkadot/client-rpc": "^0.2.0",
+    "@polkadot/client-wasm": "^0.2.0",
+    "@polkadot/util": "^0.5.15",
+    "yargs": "^10.0.3"
+  }
+}
