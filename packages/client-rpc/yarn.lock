@@ -62,9 +62,9 @@
     babel-runtime "^6.26.0"
     isomorphic-fetch "^2.2.1"
 
-"@polkadot/dev@^0.7.2":
-  version "0.7.2"
-  resolved "https://registry.yarnpkg.com/@polkadot/dev/-/dev-0.7.2.tgz#24ca5160b11d0c3d7ca9176f0773afaa8543ea78"
+"@polkadot/dev@^0.8.1":
+  version "0.8.1"
+  resolved "https://registry.yarnpkg.com/@polkadot/dev/-/dev-0.8.1.tgz#828994b8017a7b780e2b162172551016920e5b48"
   dependencies:
     babel-cli "^6.26.0"
     babel-core "^6.26.0"
@@ -95,11 +95,19 @@
     mkdirp "^0.5.1"
     rimraf "^2.6.2"
     stylelint "^8.2.0"
-    stylelint-config-standard "^17.0.0"
+    stylelint-config-standard "^18.0.0"
 
-"@polkadot/util@^0.5.10", "@polkadot/util@^0.5.11":
+"@polkadot/util@^0.5.10":
   version "0.5.11"
   resolved "https://registry.yarnpkg.com/@polkadot/util/-/util-0.5.11.tgz#7917d40e6cea6ce0155565bbf3aa846fdb98e7f4"
+  dependencies:
+    babel-runtime "^6.26.0"
+    bn.js "^4.11.8"
+    keccak "^1.3.0"
+
+"@polkadot/util@^0.5.15":
+  version "0.5.15"
+  resolved "https://registry.yarnpkg.com/@polkadot/util/-/util-0.5.15.tgz#0e1ef0cec9699fd9c9ec1a324eefd074fcb423a5"
   dependencies:
     babel-runtime "^6.26.0"
     bn.js "^4.11.8"
@@ -4276,15 +4284,15 @@ style-search@^0.1.0:
   version "0.1.0"
   resolved "https://registry.yarnpkg.com/style-search/-/style-search-0.1.0.tgz#7958c793e47e32e07d2b5cafe5c0bf8e12e77902"
 
-stylelint-config-recommended@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/stylelint-config-recommended/-/stylelint-config-recommended-1.0.0.tgz#752c17fc68fa64cd5e7589e24f6e46e77e14a735"
+stylelint-config-recommended@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/stylelint-config-recommended/-/stylelint-config-recommended-2.0.0.tgz#560a028e81ea3ca8894b9a8eef4c0e05ac60e090"
 
-stylelint-config-standard@^17.0.0:
-  version "17.0.0"
-  resolved "https://registry.yarnpkg.com/stylelint-config-standard/-/stylelint-config-standard-17.0.0.tgz#42103a090054ee2a3dde9ecaed55e5d4d9d059fc"
+stylelint-config-standard@^18.0.0:
+  version "18.0.0"
+  resolved "https://registry.yarnpkg.com/stylelint-config-standard/-/stylelint-config-standard-18.0.0.tgz#0d872b40fafdcddcf4188fb5b64ddb3887e8aefc"
   dependencies:
-    stylelint-config-recommended "^1.0.0"
+    stylelint-config-recommended "^2.0.0"
 
 stylelint@^8.2.0:
   version "8.2.0"
