@@ -1,6 +1,6 @@
 {
   "name": "@polkadot/client",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "A JavaScript client node for the polkadot network",
   "main": "polkadot.js",
   "bin": {
@@ -30,9 +30,9 @@
   "scripts": {},
   "dependencies": {
     "@polkadot/api-jsonrpc": "^0.5.1",
-    "@polkadot/client-p2p": "^0.2.2",
-    "@polkadot/client-rpc": "^0.2.2",
-    "@polkadot/client-wasm": "^0.2.2",
+    "@polkadot/client-p2p": "^0.2.3",
+    "@polkadot/client-rpc": "^0.2.3",
+    "@polkadot/client-wasm": "^0.2.3",
     "@polkadot/util": "^0.5.15",
     "yargs": "^10.0.3"
   }
