@@ -1,6 +1,3 @@
-[![Build Status](https://travis-ci.org/polkadot-js/client-p2p.svg?branch=master)](https://travis-ci.org/polkadot-js/client-p2p)
-[![Coverage Status](https://coveralls.io/repos/github/polkadot-js/client-p2p/badge.svg?branch=master)](https://coveralls.io/github/polkadot-js/client-p2p?branch=master)
-[![Greenkeeper badge](https://badges.greenkeeper.io/polkadot-js/client-p2p.svg)](https://greenkeeper.io/)
 [![Dependency Status](https://david-dm.org/polkadot-js/client-p2p.svg)](https://david-dm.org/polkadot-js/client-p2p)
 [![devDependency Status](https://david-dm.org/polkadot-js/client-p2p/dev-status.svg)](https://david-dm.org/polkadot-js/client-p2p#info=devDependencies)
 

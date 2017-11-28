@@ -1,6 +1,3 @@
-[![Build Status](https://travis-ci.org/polkadot-js/client-rpc.svg?branch=master)](https://travis-ci.org/polkadot-js/client-rpc)
-[![Coverage Status](https://coveralls.io/repos/github/polkadot-js/client-rpc/badge.svg?branch=master)](https://coveralls.io/github/polkadot-js/client-rpc?branch=master)
-[![Greenkeeper badge](https://badges.greenkeeper.io/polkadot-js/client-rpc.svg)](https://greenkeeper.io/)
 [![Dependency Status](https://david-dm.org/polkadot-js/client-rpc.svg)](https://david-dm.org/polkadot-js/client-rpc)
 [![devDependency Status](https://david-dm.org/polkadot-js/client-rpc/dev-status.svg)](https://david-dm.org/polkadot-js/client-rpc#info=devDependencies)
 

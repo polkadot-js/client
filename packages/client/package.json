@@ -26,7 +26,7 @@
   "bugs": {
     "url": "https://github.com/polkadot-js/client/issues"
   },
-  "homepage": "https://github.com/polkadot-js/client#readme",
+  "homepage": "https://github.com/polkadot-js/client/tree/master/packages/client#readme",
   "scripts": {
     "build": "polkadot-dev-build-babel",
     "check": "eslint src && flow check",
@@ -37,11 +37,11 @@
     "@polkadot/dev": "^0.9.1"
   },
   "dependencies": {
+    "@polkadot/api-jsonrpc": "^0.5.1",
     "@polkadot/client-p2p": "^0.2.0",
     "@polkadot/client-rpc": "^0.2.0",
-    "@polkadot/jsonrpc": "^0.3.10",
-    "@polkadot/util": "^0.5.14",
-    "@polkadot/wasm": "^0.1.7",
+    "@polkadot/client-wasm": "^0.2.0",
+    "@polkadot/util": "^0.5.15",
     "yargs": "^10.0.3"
   }
 }

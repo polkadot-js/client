@@ -23,7 +23,7 @@
   "bugs": {
     "url": "https://github.com/polkadot-js/client/issues"
   },
-  "homepage": "https://github.com/polkadot-js/client/client/packages/client-p2p#readme",
+  "homepage": "https://github.com/polkadot-js/client/client/tree/master/packages/client-p2p#readme",
   "scripts": {
     "build": "polkadot-dev-build-babel",
     "check": "eslint src && flow check",
@@ -35,7 +35,7 @@
     "ethereum-common": "^0.2.1"
   },
   "dependencies": {
-    "@polkadot/util": "^0.5.11",
+    "@polkadot/util": "^0.5.15",
     "babel-runtime": "^6.26.0",
     "ethereumjs-devp2p": "^2.1.3",
     "eventemitter3": "^2.0.3"
