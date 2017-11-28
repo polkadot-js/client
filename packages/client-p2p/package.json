@@ -1,0 +1,43 @@
+{
+  "name": "@polkadot/client-p2p",
+  "version": "0.2.0",
+  "description": "Interfaces to P2P layers used in the Polkadot network",
+  "main": "index.js",
+  "keywords": [
+    "Polkadot",
+    "JsonRPC"
+  ],
+  "author": "Jaco Greeff <jacogr@gmail.com>",
+  "license": "ISC",
+  "engines": {
+    "node": ">=6.4"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/polkadot-js/client.git"
+  },
+  "bugs": {
+    "url": "https://github.com/polkadot-js/client/issues"
+  },
+  "homepage": "https://github.com/polkadot-js/client/client/packages/client-p2p#readme",
+  "scripts": {
+    "build": "polkadot-dev-build-babel",
+    "check": "eslint src && flow check",
+    "example/blocklog.js": "babel-node example/blocklog.js",
+    "test": "jest --coverage src"
+  },
+  "devDependencies": {
+    "@polkadot/dev": "^0.8.1",
+    "ethereum-common": "^0.2.1"
+  },
+  "dependencies": {
+    "@polkadot/util": "^0.5.11",
+    "babel-runtime": "^6.26.0",
+    "ethereumjs-devp2p": "^2.1.3",
+    "eventemitter3": "^2.0.3"
+  }
+}
