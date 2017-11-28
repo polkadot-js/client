@@ -14,7 +14,7 @@ export type P2pConfigType = {
   maxPeers?: number,
   privateKey?: Buffer,
   port?: number,
-  type: P2pTypes
+  type?: P2pTypes
 };
 
 export type P2pOnErrorCallback = ({ message: string, type: string }) => void;

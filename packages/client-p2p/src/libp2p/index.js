@@ -18,7 +18,7 @@ module.exports = class LibP2p extends EventEmitter implements P2pInterface {
     throw new Error(NOT_IMPLEMENTED);
   }
 
-  addBootnodes (bootnodes: Array<P2pNodeType>): Promise<void> {
+  async addBootnodes (bootnodes: Array<P2pNodeType>): Promise<void> {
   }
 
   onError (handler: P2pOnErrorCallback): void {

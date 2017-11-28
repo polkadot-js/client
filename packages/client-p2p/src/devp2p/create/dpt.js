@@ -1,8 +1,7 @@
 // ISC, Copyright 2017 Jaco Greeff
 // @flow
 
-import type { P2pEmitFunc } from '../../types';
-import type { DevP2pConfigType } from '../types';
+import type { P2pConfigType, P2pEmitFunc } from '../../types';
 
 const bufferToHex = require('@polkadot/util/buffer/toHex');
 const l = require('@polkadot/util/logger')('devp2p/dpt');
@@ -10,7 +9,7 @@ const EthDevP2p = require('ethereumjs-devp2p');
 
 const defaults = require('../../defaults');
 
-module.exports = function createDpt ({ address = defaults.ADDRESS, clientId = defaults.CLIENT_ID, port = defaults.PORT, privateKey = defaults.PRIVATE_KEY }: DevP2pConfigType, emit: P2pEmitFunc): EthDevP2p.DPT {
+module.exports = function createDpt ({ address = defaults.ADDRESS, clientId = defaults.CLIENT_ID, port = defaults.PORT, privateKey = defaults.PRIVATE_KEY }: P2pConfigType, emit: P2pEmitFunc): EthDevP2p.DPT {
   l.log('Initialising');
 
   const dpt = new EthDevP2p.DPT(

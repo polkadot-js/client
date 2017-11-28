@@ -1,15 +1,14 @@
 // ISC, Copyright 2017 Jaco Greeff
 // @flow
 
-import type { P2pEmitFunc } from '../../types';
-import type { DevP2pConfigType } from '../types';
+import type { P2pConfigType, P2pEmitFunc } from '../../types';
 
 const l = require('@polkadot/util/logger')('devp2p/rlpx');
 const EthDevP2p = require('ethereumjs-devp2p');
 
 const defaults = require('../../defaults');
 
-module.exports = function createRlpx ({ address = defaults.ADDRESS, clientId = defaults.CLIENT_ID, privateKey = defaults.PRIVATE_KEY, maxPeers = defaults.MAX_PEERS, port = defaults.PORT }: DevP2pConfigType, dpt: EthDevP2p.DPT, emit: P2pEmitFunc): EthDevP2p.RLPx {
+module.exports = function createRlpx ({ address = defaults.ADDRESS, clientId = defaults.CLIENT_ID, privateKey = defaults.PRIVATE_KEY, maxPeers = defaults.MAX_PEERS, port = defaults.PORT }: P2pConfigType, dpt: EthDevP2p.DPT, emit: P2pEmitFunc): EthDevP2p.RLPx {
   l.log('Initialising');
 
   const rlpx = new EthDevP2p.RLPx(
