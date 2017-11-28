@@ -1,7 +1,7 @@
 // ISC, Copyright 2017 Jaco Greeff
 // @flow
 
-import EventEmitter from 'evertemitter3'; // eslint-disable-line
+import EventEmitter from 'eventemitter3'; // eslint-disable-line
 
 declare module 'ethereumjs-devp2p' {
   declare type EjsDevP2pDpt$ConfigEndpoint = {
