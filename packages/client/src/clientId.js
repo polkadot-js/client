@@ -12,14 +12,8 @@ try {
 } catch (error) {
   stability = 'development';
 
-  try {
-    // $FlowFixMe
-    pkgJson = require('../package.json'); // source version;
-  } catch (error) {
-    pkgJson = {
-      version: 'unknown'
-    };
-  }
+  // $FlowFixMe
+  pkgJson = require('../package.json'); // source version;
 }
 
 module.exports = `${NAME}/${pkgJson.version}-${stability}`;
