@@ -8,7 +8,7 @@
 
 ## Introduction
 
-A very early, WIP and POC JavaScript port version of a Polkadot network client.
+A very early, WIP and POC JavaScript version of a Polkadot network client.
 
 ## Usage
 
