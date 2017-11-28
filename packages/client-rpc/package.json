@@ -24,14 +24,9 @@
     "url": "https://github.com/polkadot-js/client/issues"
   },
   "homepage": "https://github.com/polkadot-js/client/tree/master/packages/client-rpc#readme",
-  "scripts": {
-    "build": "polkadot-dev-build-babel",
-    "check": "eslint src && flow check",
-    "test": "jest --coverage src"
-  },
+  "scripts": {},
   "devDependencies": {
-    "@polkadot/api-provider": "^0.5.1",
-    "@polkadot/dev": "^0.9.1"
+    "@polkadot/api-provider": "^0.5.1"
   },
   "dependencies": {
     "@polkadot/util": "^0.5.15",

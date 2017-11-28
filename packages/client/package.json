@@ -27,15 +27,8 @@
     "url": "https://github.com/polkadot-js/client/issues"
   },
   "homepage": "https://github.com/polkadot-js/client/tree/master/packages/client#readme",
-  "scripts": {
-    "build": "polkadot-dev-build-babel",
-    "check": "eslint src && flow check",
-    "start": "node scripts/polkadot.js",
-    "test": "jest --coverage src"
-  },
-  "devDependencies": {
-    "@polkadot/dev": "^0.9.1"
-  },
+  "scripts": {},
+  "devDependencies": {},
   "dependencies": {
     "@polkadot/api-jsonrpc": "^0.5.1",
     "@polkadot/client-p2p": "^0.2.0",

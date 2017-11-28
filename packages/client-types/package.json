@@ -23,13 +23,8 @@
     "url": "https://github.com/polkadot-js/client/issues"
   },
   "homepage": "https://github.com/polkadot-js/client/tree/master/packages/client-types#readme",
-  "scripts": {
-    "build": "polkadot-dev-build-babel",
-    "check": "eslint src && flow check",
-    "test": "echo \"Tests skipped\""
-  },
+  "scripts": {},
   "devDependencies": {
-    "@polkadot/dev": "^0.9.1",
     "bn.js": "^4.11.8"
   },
   "dependencies": {}

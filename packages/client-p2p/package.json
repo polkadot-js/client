@@ -24,14 +24,8 @@
     "url": "https://github.com/polkadot-js/client/issues"
   },
   "homepage": "https://github.com/polkadot-js/client/client/tree/master/packages/client-p2p#readme",
-  "scripts": {
-    "build": "polkadot-dev-build-babel",
-    "check": "eslint src && flow check",
-    "example/blocklog.js": "babel-node example/blocklog.js",
-    "test": "jest --coverage src"
-  },
+  "scripts": {},
   "devDependencies": {
-    "@polkadot/dev": "^0.9.1",
     "ethereum-common": "^0.2.1"
   },
   "dependencies": {
