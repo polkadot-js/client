@@ -39,7 +39,7 @@
   "dependencies": {
     "@polkadot/client-p2p": "^0.1.9",
     "@polkadot/client-rpc": "^0.1.10",
-    "@polkadot/jsonrpc": "^0.3.10",
+    "@polkadot/jsonrpc": "^0.4.1",
     "@polkadot/util": "^0.5.14",
     "@polkadot/wasm": "^0.1.7",
     "yargs": "^10.0.3"
