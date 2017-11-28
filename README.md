@@ -14,11 +14,10 @@ It is split up into a number of internal packages -
 - [packages/client-p2p](packages/client-p2p/) Peer-to-peer server
 - [packages/client-rpc](packages/client-rpc/) RPC server
 - [packages/client-types](packages/client-types/) Network type definitions
-- [packages/client-wasm](packages/client-rpc/) Wasm interface wrapper
+- [packages/client-wasm](packages/client-wasm/) Wasm interface wrapper
 
 ## Contributing
 
 - Make sure you have [Lerna](https://lernajs.io/) installed, `yarn install -g lerna`
-- Install the wrapper dependencies, `yarn install`
 - Bootstrap the dependencies, `lerna bootstrap`
 - Make any changes in the relevant package, on master merges new versions will be published automatically
