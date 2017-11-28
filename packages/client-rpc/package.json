@@ -1,6 +1,6 @@
 {
   "name": "@polkadot/client-rpc",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "RPC server for a Polkadot client",
   "main": "index.js",
   "keywords": [
