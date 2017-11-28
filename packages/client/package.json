@@ -34,7 +34,7 @@
     "test": "jest --coverage src"
   },
   "devDependencies": {
-    "@polkadot/dev": "^0.8.1"
+    "@polkadot/dev": "^0.9.1"
   },
   "dependencies": {
     "@polkadot/client-p2p": "^0.2.0",

@@ -18,7 +18,7 @@
   },
   "homepage": "https://github.com/polkadot-js/client#readme",
   "devDependencies": {
-    "@polkadot/dev": "^0.8.1",
+    "@polkadot/dev": "^0.9.1",
     "lerna": "^2.5.1"
   },
   "dependencies": {}
