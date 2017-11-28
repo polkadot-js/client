@@ -1,3 +1,4 @@
+[![npm (scoped)](https://img.shields.io/npm/v/@polkadot/client.svg)](https://www.npmjs.com/package/@polkadot/client)
 [![Build Status](https://travis-ci.org/polkadot-js/client.svg?branch=master)](https://travis-ci.org/polkadot-js/client)
 [![Coverage Status](https://coveralls.io/repos/github/polkadot-js/client/badge.svg?branch=master)](https://coveralls.io/github/polkadot-js/client?branch=master)
 [![Greenkeeper badge](https://badges.greenkeeper.io/polkadot-js/client.svg)](https://greenkeeper.io/)
