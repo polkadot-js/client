@@ -1,7 +1,26 @@
 // ISC, Copyright 2017 Jaco Greeff
 // @flow
 
+import type { RoleType } from '@polkadot/client-types/role';
+
 export type P2pTypes = 'devp2p' | 'libp2p';
+
+export type P2pErrorEventTypes =
+  'comms.error' |
+  'comms.error.peer' |
+  'discover.error' |
+  'discover.error.bootnode' |
+  'discover.error.peer';
+
+export type P2pDiscoverEventTypes =
+  'discover.peer.added' |
+  'discover.peer.removed';
+
+export type P2pTransportEventTypes =
+  'comms.peer.added' |
+  'comms.peer.removed';
+
+export type P2pEventTypes = P2pErrorEventTypes | P2pDiscoverEventTypes | P2pTransportEventTypes;
 
 export type P2pNodeType = {
   address: string,
@@ -14,19 +33,15 @@ export type P2pConfigType = {
   maxPeers?: number,
   privateKey?: Buffer,
   port?: number,
-  type?: P2pTypes
+  role?: RoleType
 };
 
-export type P2pOnErrorCallback = ({ message: string, type: string }) => void;
+export type P2pOnErrorCallback = ({ message: string, type: P2pErrorEventTypes }) => void;
 
 export interface P2pInterface {
-  addBootnodes (bootnodes: Array<P2pNodeType>): Promise<void>;
-  onError (handler: P2pOnErrorCallback): void
+  addBootnodes (nodes: Array<P2pNodeType>): Promise<void>;
+  addPeers (nodes: Array<P2pNodeType>): Promise<void>;
+  onError (handler: P2pOnErrorCallback): void;
 }
 
-type P2pDiscoverEventTypes = 'discover.error' | 'discover.peer.added' | 'discover.peer.removed';
-type P2pTransportEventTypes = '';
-
-export type P2pEventTypes = P2pDiscoverEventTypes | P2pTransportEventTypes;
-
-export type P2pEmitFunc = (event: string, ...params?: any[]) => any;
+export type P2pEmitFunc = (event: string, ...params?: Array<any>) => any;

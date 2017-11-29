@@ -7,6 +7,13 @@ const l = require('@polkadot/util/logger')('devp2p/rlpx');
 const EthDevP2p = require('ethereumjs-devp2p');
 
 const defaults = require('../../defaults');
+const ProtocolDevP2p = require('../../protocol/devp2p');
+
+const capabilities = [
+  ProtocolDevP2p.dot00
+  // EthDevP2p.ETH.eth63,
+  // EthDevP2p.ETH.eth62
+];
 
 module.exports = function createRlpx ({ address = defaults.ADDRESS, clientId = defaults.CLIENT_ID, privateKey = defaults.PRIVATE_KEY, maxPeers = defaults.MAX_PEERS, port = defaults.PORT }: P2pConfigType, dpt: EthDevP2p.DPT, emit: P2pEmitFunc): EthDevP2p.RLPx {
   l.log('Initialising');
@@ -17,10 +24,7 @@ module.exports = function createRlpx ({ address = defaults.ADDRESS, clientId = d
       clientId,
       dpt,
       maxPeers,
-      capabilities: [
-        EthDevP2p.ETH.eth63,
-        EthDevP2p.ETH.eth62
-      ],
+      capabilities,
       listenPort: null
     }
   );

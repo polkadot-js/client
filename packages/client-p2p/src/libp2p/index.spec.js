@@ -6,8 +6,8 @@ describe('LibP2p', () => {
   describe('constructor', () => {
     it('throws an exception', () => {
       expect(
-        () => new LibP2p()
-      ).toThrow();
+        () => new LibP2p({})
+      ).toThrow(/has not been implemented/);
     });
   });
 });

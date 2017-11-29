@@ -33,7 +33,7 @@ describe('DevP2p', () => {
 
   describe('constructor', () => {
     it('creates an EthDevP2p.DPT instance', () => {
-      new DevP2p({ bootnodes: [] }); // eslint-disable-line
+      new DevP2p({}); // eslint-disable-line
 
       expect(dptSpy).toHaveBeenCalled();
     });

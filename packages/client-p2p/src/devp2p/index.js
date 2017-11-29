@@ -9,6 +9,7 @@ const EventEmitter = require('eventemitter3');
 
 const createDpt = require('./create/dpt');
 const createRlpx = require('./create/rlpx');
+const attachError = require('../attach/error');
 
 module.exports = class DevP2p extends EventEmitter implements P2pInterface {
   _dpt: EthDevP2p.DPT;
@@ -25,8 +26,8 @@ module.exports = class DevP2p extends EventEmitter implements P2pInterface {
     this._rlpx = createRlpx(config, this._dpt, emit);
   }
 
-  async addBootnodes (bootnodes: Array<P2pNodeType>): Promise<void> {
-    bootnodes.forEach(async ({ address, port }) => {
+  async addBootnodes (nodes: Array<P2pNodeType>): Promise<void> {
+    nodes.forEach(async ({ address, port }) => {
       try {
         await this._dpt.bootstrap({
           address,
@@ -34,21 +35,38 @@ module.exports = class DevP2p extends EventEmitter implements P2pInterface {
           udpPort: port
         });
       } catch (error) {
-        this.emit('bootnode.error', error);
+        this.emit('discover.error.bootnode', error);
+      }
+    });
+  }
+
+  async addPeers (nodes: Array<P2pNodeType>): Promise<void> {
+    nodes.forEach(async ({ address, port }) => {
+      try {
+        const { id } = await this._dpt.addPeer({
+          address,
+          tcpPort: port,
+          udpPort: port
+        });
+
+        try {
+          // address: peer.address,
+          // port: peer.tcpPort
+          await this._rlpx.connect({
+            address,
+            id,
+            port
+          });
+        } catch (error) {
+          this.emit('comms.error.peer', error);
+        }
+      } catch (error) {
+        this.emit('discover.error.peer', error);
       }
     });
   }
 
   onError (handler: P2pOnErrorCallback): void {
-    const onWrapper = (type: string) => {
-      this.on(type, (error: Error): void => handler({
-        message: error.message,
-        type
-      }));
-    };
-
-    onWrapper('bootnode.error');
-    onWrapper('discover.error');
-    onWrapper('comms.error');
+    attachError(this, handler);
   }
 };
