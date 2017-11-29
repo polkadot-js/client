@@ -9,9 +9,7 @@ const config = require('./cli')();
 const initRpc = require('./rpc');
 const initP2p = require('./p2p');
 
-console.log('config', config);
+l.log(`Initialising for role '${config.role}'`);
 
-l.log(`Initialising for type=${config.type}`);
-
-initP2p(config.p2p);
-initRpc(config.rpc);
+initP2p(config);
+initRpc(config);

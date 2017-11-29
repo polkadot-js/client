@@ -54,23 +54,23 @@
     lodash "^4.2.0"
     to-fast-properties "^2.0.0"
 
-"@polkadot/api-jsonrpc@^0.5.1":
-  version "0.5.2"
-  resolved "https://registry.yarnpkg.com/@polkadot/api-jsonrpc/-/api-jsonrpc-0.5.2.tgz#a0ab62892fb7d689c9bf8134c9e419cb2c268524"
+"@polkadot/api-jsonrpc@^0.5.5":
+  version "0.5.5"
+  resolved "https://registry.yarnpkg.com/@polkadot/api-jsonrpc/-/api-jsonrpc-0.5.5.tgz#004ed19c2c5585230c8ec77caee78b5f6d61e62a"
   dependencies:
     babel-runtime "^6.26.0"
 
-"@polkadot/api-provider@^0.5.1":
-  version "0.5.2"
-  resolved "https://registry.yarnpkg.com/@polkadot/api-provider/-/api-provider-0.5.2.tgz#1c751ca8b5ae919868c315623c886bf4faddf290"
+"@polkadot/api-provider@^0.5.5":
+  version "0.5.5"
+  resolved "https://registry.yarnpkg.com/@polkadot/api-provider/-/api-provider-0.5.5.tgz#2851b99e8940451d46591d01888dc548e3f1dd88"
   dependencies:
-    "@polkadot/util" "^0.5.15"
+    "@polkadot/util" "^0.5.19"
     babel-runtime "^6.26.0"
     isomorphic-fetch "^2.2.1"
 
-"@polkadot/dev@^0.9.8":
-  version "0.9.8"
-  resolved "https://registry.yarnpkg.com/@polkadot/dev/-/dev-0.9.8.tgz#677e1901c9dada05e9323feb0dc3b2f425527b2f"
+"@polkadot/dev@^0.9.9":
+  version "0.9.9"
+  resolved "https://registry.yarnpkg.com/@polkadot/dev/-/dev-0.9.9.tgz#b302ba6728a5068c7bffe069fd64290c227d317c"
   dependencies:
     babel-cli "^6.26.0"
     babel-core "^6.26.0"
@@ -103,9 +103,17 @@
     stylelint "^8.2.0"
     stylelint-config-standard "^18.0.0"
 
-"@polkadot/util@^0.5.15":
-  version "0.5.16"
-  resolved "https://registry.yarnpkg.com/@polkadot/util/-/util-0.5.16.tgz#1f1bff7074311edb56ff4561e77f7f372445ff71"
+"@polkadot/util@^0.5.19":
+  version "0.5.19"
+  resolved "https://registry.yarnpkg.com/@polkadot/util/-/util-0.5.19.tgz#e34d917f3fd52b98c6a7633e534f26d182e7cb6f"
+  dependencies:
+    babel-runtime "^6.26.0"
+    bn.js "^4.11.8"
+    keccak "^1.3.0"
+
+"@polkadot/util@^0.5.20":
+  version "0.5.20"
+  resolved "https://registry.yarnpkg.com/@polkadot/util/-/util-0.5.20.tgz#9c93c3e7b3bb600847f8665897aacc9c56fe5feb"
   dependencies:
     babel-runtime "^6.26.0"
     bn.js "^4.11.8"

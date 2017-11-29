@@ -22,7 +22,7 @@ export type JsonRpcResponse = JsonRpcBase & {
   result: any
 };
 
-export type HandlerType = (...params: Array<any>) => Promise<JsonRpcError | JsonRpcResponse>;
+export type HandlerType = (...params: Array<any>) => Promise<any>;
 
 export type HandlersType = {
   [string]: HandlerType

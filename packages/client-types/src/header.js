@@ -1,19 +1,19 @@
 // ISC, Copyright 2017 Jaco Greeff
 // @flow
 
-import type { Tbytes, THash, TBlockNumber } from './base';
+import type { BytesType, HashType, BlockNumberType } from './base';
 
-export type TDigest$Log = Tbytes;
+export type DigestType$Log = BytesType;
 
-export type TDigest = {
-  parachain_activity_bitfield: Tbytes,
-  logs: Array<TDigest$Log>
+export type DigestType = {
+  parachain_activity_bitfield: BytesType,
+  logs: Array<DigestType$Log>
 };
 
-export type THeader = {
-  parent_hash: THash,
-  number: TBlockNumber,
-  state_root: THash,
-  transaction_root: THash,
-  digest: TDigest
+export type HeaderType = {
+  parent_hash: HashType,
+  number: BlockNumberType,
+  state_root: HashType,
+  transaction_root: HashType,
+  digest: DigestType
 };

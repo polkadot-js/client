@@ -1,20 +1,20 @@
 // ISC, Copyright 2017 Jaco Greeff
 // @flow
 
-import type { TAccountID, TBalance, Tbytes, THash } from './base';
+import type { AccountIdType, BalanceType, BytesType, HashType } from './base';
 
-export type TParachainState$BalanceDownload = [TBalance, Tbytes];
+export type ParachainStateType$BalanceDownload = [BalanceType, BytesType];
 
-export type TParachainState$EgressRoot = THash;
+export type ParachainStateType$EgressRoot = HashType;
 
-export type TParachainState = {
-  head_data: Tbytes,
-  balance: TBalance,
+export type ParachainStateType = {
+  head_data: BytesType,
+  balance: BalanceType,
   user_balances: {
-    [TAccountID]: TBalance
+    [AccountIdType]: BalanceType
   },
   balance_downloads: {
-    [TAccountID]: TParachainState$BalanceDownload
+    [AccountIdType]: ParachainStateType$BalanceDownload
   },
-  egress_roots: Array<TParachainState$EgressRoot>
+  egress_roots: Array<ParachainStateType$EgressRoot>
 };

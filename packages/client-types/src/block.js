@@ -1,12 +1,12 @@
 // ISC, Copyright 2017 Jaco Greeff
 // @flow
 
-import type { TSignature } from './base';
-import type { THeader } from './header';
-import type { TTransaction } from './transaction';
+import type { SignatureType } from './base';
+import type { HeaderType } from './header';
+import type { TransactionType } from './transaction';
 
-export type TBlock = {
-  header: THeader,
-  transactions: Array<TTransaction>,
-  signatures: Array<TSignature>
+export type BlockType = {
+  header: HeaderType,
+  transactions: Array<TransactionType>,
+  signatures: Array<SignatureType>
 };

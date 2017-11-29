@@ -23,7 +23,8 @@ module.exports = class Wasm {
       throw new Error('No exports found on WebAssembly instance');
     }
 
-    Object.keys(exports).forEach((key) => {
+    Object.keys(exports).forEach((key: string) => {
+      // $FlowFixMe naughty...
       this[key] = exports[key];
     });
   }

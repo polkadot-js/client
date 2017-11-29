@@ -3,8 +3,6 @@
 
 import type { HandlerType } from '@polkadot/client-rpc/types';
 
-type EndpointType = {
+export type EndpointType = {
   [string]: HandlerType
 };
-
-module.exports = ({}: EndpointType);
