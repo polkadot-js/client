@@ -1,8 +1,9 @@
 // ISC, Copyright 2017 Jaco Greeff
 // @flow
 
-import type { EjsDevP2pCapability, EjsDevP2pRlpx$Capability, EjsDevP2pRlpx$Node } from 'ethereumjs-devp2p';
+import type { EjsDevP2pCapability, EjsDevP2pCapability$Status, EjsDevP2pRlpx$Capability, EjsDevP2pRlpx$Node } from 'ethereumjs-devp2p';
 
+const numberToBuffer = require('@polkadot/util/number/toBuffer');
 const EthDevP2p = require('ethereumjs-devp2p');
 
 const ProtocolBase = require('./base');
@@ -26,15 +27,15 @@ class DevP2pImpl extends ProtocolBase implements EjsDevP2pCapability {
     super.receive(code, data);
   }
 
-  sendStatus (status: any): any {
+  sendStatus ({ bestHash, genesisHash, networkId, td }: EjsDevP2pCapability$Status): any {
     super.send(
       EthDevP2p.ETH.MESSAGE_CODES.STATUS,
       [
-        EthDevP2p._util.int2buffer(this._version),
-        EthDevP2p._util.int2buffer(status.networkId),
-        status.td,
-        status.bestHash,
-        status.genesisHash
+        numberToBuffer(this._version),
+        numberToBuffer(networkId),
+        td,
+        bestHash,
+        genesisHash
       ]
     );
   }

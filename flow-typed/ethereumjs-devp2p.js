@@ -33,10 +33,17 @@ declare module 'ethereumjs-devp2p' {
     port: number
   };
 
+  declare type EjsDevP2pCapability$Status = {
+    bestHash: Buffer,
+    genesisHash: Buffer,
+    networkId: number,
+    td: Buffer
+  };
+
   declare interface EjsDevP2pCapability {
     _handleMessage (code: number, data: Buffer): any;
     getVersion (): number;
-    sendStatus (status: string): any;
+    sendStatus (status: EjsDevP2pCapability$Status): any;
     sendMessage (code: number, payload: Array<Buffer>): any;
   }
 

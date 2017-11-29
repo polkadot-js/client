@@ -5,17 +5,6 @@
   "author": "Jaco Greeff <jacogr@gmail.com>",
   "license": "ISC",
   "private": true,
-  "engines": {
-    "node": ">=8.0"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/polkadot-js/client.git"
-  },
-  "bugs": {
-    "url": "https://github.com/polkadot-js/client/issues"
-  },
-  "homepage": "https://github.com/polkadot-js/client#readme",
   "workspaces": [
     "packages/*"
   ],
