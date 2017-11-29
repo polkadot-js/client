@@ -4,16 +4,16 @@
 const NAME: string = 'node.js';
 
 let pkgJson: any;
-let stability: string = 'stable';
+let stability: string;
 
 try {
-  // $FlowFixMe
-  pkgJson = require('./package.json'); // compiled version
+  // $FlowFixMe compiled version
+  pkgJson = require('./package.json');
+  stability = 'stable';
 } catch (error) {
+  // $FlowFixMe source version
+  pkgJson = require('../package.json');
   stability = 'development';
-
-  // $FlowFixMe
-  pkgJson = require('../package.json'); // source version;
 }
 
 module.exports = `${NAME}/${pkgJson.version}-${stability}`;
