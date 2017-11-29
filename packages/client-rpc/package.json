@@ -24,12 +24,16 @@
     "url": "https://github.com/polkadot-js/client/issues"
   },
   "homepage": "https://github.com/polkadot-js/client/tree/master/packages/client-rpc#readme",
-  "scripts": {},
+  "scripts": {
+    "build": "polkadot-dev-build-babel",
+    "check": "eslint src && flow check",
+    "test": "echo \"Tests only available from root wrapper\""
+  },
   "devDependencies": {
-    "@polkadot/api-provider": "^0.5.1"
+    "@polkadot/api-provider": "^0.5.5"
   },
   "dependencies": {
-    "@polkadot/util": "^0.5.15",
+    "@polkadot/util": "^0.5.19",
     "koa": "^2.4.1",
     "koa-body": "^2.5.0",
     "koa-json": "^2.0.2",

@@ -27,13 +27,17 @@
     "url": "https://github.com/polkadot-js/client/issues"
   },
   "homepage": "https://github.com/polkadot-js/client/tree/master/packages/client#readme",
-  "scripts": {},
+  "scripts": {
+    "build": "polkadot-dev-build-babel",
+    "check": "eslint src && flow check",
+    "test": "echo \"Tests only available from root wrapper\""
+  },
   "dependencies": {
-    "@polkadot/api-jsonrpc": "^0.5.1",
+    "@polkadot/api-jsonrpc": "^0.5.5",
     "@polkadot/client-p2p": "^0.2.3",
     "@polkadot/client-rpc": "^0.2.3",
     "@polkadot/client-wasm": "^0.2.3",
-    "@polkadot/util": "^0.5.15",
+    "@polkadot/util": "^0.5.19",
     "yargs": "^10.0.3"
   }
 }
