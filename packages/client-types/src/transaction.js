@@ -1,22 +1,22 @@
 // ISC, Copyright 2017 Jaco Greeff
 // @flow
 
-import type { Tbytes, TObjectID, TSignature, TTxOrder } from './base';
+import type { BytesType, ObjectIdType, SignatureType, TxOrderType } from './base';
 
-export type TTransaction$Param = any;
+export type TransactionType$Param = any;
 
-export type TTransaction = {
-  destination: TObjectID,
-  function_name: Tbytes,
-  parameters: Array<TTransaction$Param>
+export type TransactionType = {
+  destination: ObjectIdType,
+  function_name: BytesType,
+  parameters: Array<TransactionType$Param>
 };
 
-export type TUnsignedTransaction = {
-  tx: TTransaction,
-  nonce: TTxOrder
+export type UnsignedTransactionType = {
+  tx: TransactionType,
+  nonce: TxOrderType
 };
 
-export type TSignedTransaction = {
-  unsigned: TUnsignedTransaction,
-  signature: TSignature
+export type SignedTransactionType = {
+  unsigned: UnsignedTransactionType,
+  signature: SignatureType
 };
