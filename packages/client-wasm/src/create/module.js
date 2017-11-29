@@ -5,7 +5,7 @@
 
 const isUint8Array = require('@polkadot/util/is/uint8Array');
 
-module.exports = function createModule (code?: Uint8Array): Promise<WebAssembly$Module> {
+module.exports = function createModule (code?: Uint8Array): WebAssembly$Module {
   if (!code) {
     throw new Error('Bytecode needs to be provided');
   }
