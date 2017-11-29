@@ -37,7 +37,7 @@
     "@polkadot/client-p2p": "^0.2.3",
     "@polkadot/client-rpc": "^0.2.3",
     "@polkadot/client-wasm": "^0.2.3",
-    "@polkadot/util": "^0.5.19",
+    "@polkadot/util": "^0.5.20",
     "yargs": "^10.0.3"
   }
 }

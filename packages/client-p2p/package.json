@@ -33,7 +33,7 @@
     "ethereum-common": "^0.2.1"
   },
   "dependencies": {
-    "@polkadot/util": "^0.5.19",
+    "@polkadot/util": "^0.5.20",
     "babel-runtime": "^6.26.0",
     "ethereumjs-devp2p": "^2.1.3",
     "eventemitter3": "^2.0.3"
