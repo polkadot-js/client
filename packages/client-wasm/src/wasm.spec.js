@@ -1,6 +1,7 @@
 // ISC, Copyright 2017 Jaco Greeff
 
 /* global WebAssembly */
+/* global jest */
 
 const isInstanceOf = require('@polkadot/util/is/instanceOf');
 
@@ -49,22 +50,62 @@ describe('Wasm', () => {
   describe('instance', () => {
     let wasm;
 
-    beforeEach(() => {
-      wasm = Wasm.fromCode(
-        loadWasm('addTwo.wasm')
-      );
+    describe('valid modules', () => {
+      beforeEach(() => {
+        wasm = Wasm.fromCode(
+          loadWasm('addTwo.wasm')
+        );
+      });
+
+      it('creates a valid instance via fromCode', () => {
+        expect(
+          isInstanceOf(wasm, Wasm)
+        ).toEqual(true);
+      });
+
+      it('allows calls into the module', () => {
+        expect(
+          wasm.addTwo(22, 33)
+        ).toEqual(55);
+      });
     });
 
-    it('creates a valid instance via fromCode', () => {
-      expect(
-        isInstanceOf(wasm, Wasm)
-      ).toEqual(true);
+    describe('imports', () => {
+      let callback;
+      let wasm;
+
+      beforeEach(() => {
+        callback = jest.fn();
+        wasm = Wasm.fromCode(
+          loadWasm('import.wasm'),
+          { js: { callback } }
+        );
+      });
+
+      it('allows imports to be called', () => {
+        wasm.go(123);
+
+        expect(callback).toHaveBeenCalledWith(123);
+      });
     });
 
-    it('allows calls into the module', () => {
-      expect(
-        wasm.addTwo(22, 33)
-      ).toEqual(55);
+    describe('start', () => {
+      let callback;
+      // let wasm;
+
+      beforeEach(() => {
+        callback = jest.fn();
+        Wasm.fromCode(
+          loadWasm('start.wasm'),
+          { js: { callback } }
+        );
+      });
+
+      it('allows imports to be called', () => {
+        // wasm.go(123);
+
+        expect(callback).toHaveBeenCalledWith(1337);
+      });
     });
   });
 });
