@@ -3,12 +3,12 @@
 const fs = require('fs');
 const path = require('path');
 
-const u8aFromBuffer = require('@polkadot/util/u8a/fromBuffer');
+const bufferToU8a = require('@polkadot/util/buffer/toU8a');
 
 function loadWasm (filename) {
-  return u8aFromBuffer(
+  return bufferToU8a(
     fs.readFileSync(
-      path.join(__dirname, filename)
+      path.join(__dirname, 'wasm', filename)
     )
   );
 }

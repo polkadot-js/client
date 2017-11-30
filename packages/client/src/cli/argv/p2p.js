@@ -1,9 +1,11 @@
 // ISC, Copyright 2017 Jaco Greeff
 // @flow
 
+import type { Options } from 'yargs';
+
 const defaults = require('@polkadot/client-p2p/defaults');
 
-module.exports = {
+module.exports = ({
   'p2p-address': {
     default: defaults.ADDRESS,
     description: 'The interface to bind to (p2p-port > 0)',
@@ -25,4 +27,4 @@ module.exports = {
     description: 'Sets the peer-to-peer communications protocol',
     type: 'string'
   }
-};
+}: { [key: string]: Options });

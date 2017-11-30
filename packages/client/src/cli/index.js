@@ -1,34 +1,12 @@
 // ISC, Copyright 2017 Jaco Greeff
 // @flow
 
-import type { RpcConfigType } from '@polkadot/client-rpc/types';
-import type { ConfigType, ExtP2pConfigType } from './types';
+import type { ConfigType } from './types';
 
-const yargs = require('yargs');
+const getArgv = require('./argv');
 
-const general = require('./general');
-const p2p = require('./p2p');
-const rpc = require('./rpc');
-const clientId = require('../clientId');
-
-module.exports = function parse (cli?: string): ConfigType {
-  const config = yargs
-    .version(clientId)
-    .options(Object.assign({}, general, p2p, rpc))
-    .group(Object.keys(p2p), 'Peer-to-peer')
-    .group(Object.keys(rpc), 'RPC server')
-    .strict();
-
-  const emptyConfig: $Shape<ConfigType> = {
-    p2p: ({}: $Shape<ExtP2pConfigType>),
-    rpc: ({}: $Shape<RpcConfigType>)
-  };
-
-  const argv = (((
-    cli
-      ? config.parse(cli).argv
-      : config.argv
-  ): any): { [string]: any });
+module.exports = function cli (params?: string): ConfigType {
+  const argv = getArgv(params);
 
   return Object
     .keys(argv)
@@ -47,5 +25,5 @@ module.exports = function parse (cli?: string): ConfigType {
       }
 
       return config;
-    }, emptyConfig);
+    }, ({}: $Shape<ConfigType>));
 };

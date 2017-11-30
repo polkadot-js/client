@@ -1,9 +1,11 @@
 // ISC, Copyright 2017 Jaco Greeff
 // @flow
 
+import type { Options } from 'yargs';
+
 const allRoles = require('@polkadot/client-types/role/all');
 
-module.exports = {
+module.exports = ({
   role: {
     choices: ((Object.keys(allRoles): any): Array<mixed>),
     default: 'none',
@@ -11,4 +13,4 @@ module.exports = {
     demandOption: true,
     type: 'string'
   }
-};
+}: { [key: string]: Options });
