@@ -1,8 +1,5 @@
 // ISC, Copyright 2017 Jaco Greeff
 
-/* global WebAssembly */
-/* global jest */
-
 const isInstanceOf = require('@polkadot/util/is/instanceOf');
 const createInstance = require('./instance');
 

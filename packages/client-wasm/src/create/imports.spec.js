@@ -1,7 +1,5 @@
 // ISC, Copyright 2017 Jaco Greeff
 
-/* global jest */
-
 const createImports = require('./imports');
 
 describe('createImports', () => {

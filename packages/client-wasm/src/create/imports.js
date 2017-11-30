@@ -1,8 +1,6 @@
 // ISC, Copyright 2017 Jaco Greeff
 // @flow
 
-/* global WebAssembly */
-
 const DEFAULT_MEMORY: WebAssembly$Memory$Config = {
   initial: 256
 };
