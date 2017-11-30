@@ -1,7 +1,5 @@
 // ISC, Copyright 2017 Jaco Greeff
 
-/* global jest */
-
 const ExtError = require('@polkadot/util/ext/error');
 const HttpProvider = require('@polkadot/api-provider/http');
 

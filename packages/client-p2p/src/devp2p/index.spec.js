@@ -1,7 +1,5 @@
 // ISC, Copyright 2017 Jaco Greeff
 
-/* global jest */
-
 const EthDevP2p = require('ethereumjs-devp2p');
 
 const DevP2p = require('./index');

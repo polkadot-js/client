@@ -1,7 +1,5 @@
 // ISC, Copyright 2017 Jaco Greeff
 
-/* global jest */
-
 const EventEmitter = require('eventemitter3');
 
 const attachError = require('./error');

@@ -1,8 +1,6 @@
 // ISC, Copyright 2017 Jaco Greeff
 // @flow
 
-/* global WebAssembly */
-
 const isInstanceOf = require('@polkadot/util/is/instanceOf');
 
 const { createInstance, createModule } = require('./create');

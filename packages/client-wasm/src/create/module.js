@@ -1,8 +1,6 @@
 // ISC, Copyright 2017 Jaco Greeff
 // @flow
 
-/* global WebAssembly */
-
 const isUint8Array = require('@polkadot/util/is/uint8Array');
 
 module.exports = function createModule (code?: Uint8Array): WebAssembly$Module {
