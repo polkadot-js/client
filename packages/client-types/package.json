@@ -1,6 +1,6 @@
 {
   "name": "@polkadot/client-types",
-  "version": "0.2.6",
+  "version": "0.2.7",
   "description": "Type defintions for the Polkadot network",
   "main": "index.js",
   "engines": {
