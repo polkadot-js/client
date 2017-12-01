@@ -5,7 +5,7 @@ const isInstanceOf = require('@polkadot/util/is/instanceOf');
 
 const createImports = require('./imports');
 
-module.exports = function createInstance (module?: WebAssembly$Module, imports?: WebAssembly$Imports): WebAssembly$Instance {
+module.exports = function createInstance (module?: WebAssemblyModule, imports?: WebAssemblyImports): WebAssemblyInstance {
   if (!module) {
     throw new Error('WebAssembly module to be provided');
   }

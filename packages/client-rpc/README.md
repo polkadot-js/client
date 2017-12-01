@@ -1,5 +1,5 @@
-[![Dependency Status](https://david-dm.org/polkadot-js/client.svg?path=packages/client-rpc)](https://david-dm.org/polkadot-js/client?path=packages/client-rpc)
-[![devDependency Status](https://david-dm.org/polkadot-js/client/dev-status.svg?path=packages/client-rpc)](https://david-dm.org/polkadot-js/client?path=packages/client-rpc#info=devDependencies)
+[![dependency](https://david-dm.org/polkadot-js/client.svg?style=flat-square&path=packages/client-rpc)](https://david-dm.org/polkadot-js/client?path=packages/client-rpc)
+[![devDependency](https://david-dm.org/polkadot-js/client/dev-status.svg?style=flat-square&path=packages/client-rpc)](https://david-dm.org/polkadot-js/client?path=packages/client-rpc#info=devDependencies)
 
 # @polkadot/client-rpc
 

@@ -1,15 +1,15 @@
 // ISC, Copyright 2017 Jaco Greeff
 // @flow
 
-const DEFAULT_MEMORY: WebAssembly$Memory$Config = {
+const DEFAULT_MEMORY: WebAssemblyMemory$Config = {
   initial: 256
 };
-const DEFAULT_TABLE: WebAssembly$Table$Config = {
+const DEFAULT_TABLE: WebAssemblyTable$Config = {
   initial: 0,
   element: 'anyfunc'
 };
 
-module.exports = function createImports (imports?: WebAssembly$Imports): WebAssembly$Imports {
+module.exports = function createImports (imports?: WebAssemblyImports): WebAssemblyImports {
   imports = imports || {};
 
   imports.env = imports.env || {};
