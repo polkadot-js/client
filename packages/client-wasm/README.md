@@ -1,5 +1,5 @@
-[![Dependency Status](https://david-dm.org/polkadot-js/client.svg?path=packages/client-wasm)](https://david-dm.org/polkadot-js/client?path=packages/client-wasm)
-[![devDependency Status](https://david-dm.org/polkadot-js/client/dev-status.svg?path=packages/client-wasm)](https://david-dm.org/polkadot-js/client?path=packages/client-wasm#info=devDependencies)
+[![dependency](https://david-dm.org/polkadot-js/client.svg?style=flat-square&path=packages/client-wasm)](https://david-dm.org/polkadot-js/client?path=packages/client-wasm)
+[![devDependency](https://david-dm.org/polkadot-js/client/dev-status.svg?style=flat-square&path=packages/client-wasm)](https://david-dm.org/polkadot-js/client?path=packages/client-wasm#info=devDependencies)
 
 # @polkadot/client-wasm
 

@@ -6,7 +6,7 @@ const isInstanceOf = require('@polkadot/util/is/instanceOf');
 const { createInstance, createModule } = require('./create');
 
 module.exports = class Wasm {
-  constructor (instance?: WebAssembly$Instance) {
+  constructor (instance?: WebAssemblyInstance) {
     if (!instance) {
       throw new Error('No instance specified');
     }
@@ -27,7 +27,7 @@ module.exports = class Wasm {
     });
   }
 
-  static fromCode (code?: Uint8Array, imports?: WebAssembly$Imports): Wasm {
+  static fromCode (code?: Uint8Array, imports?: WebAssemblyImports): Wasm {
     const module = createModule(code);
     const instance = createInstance(module, imports);
 
