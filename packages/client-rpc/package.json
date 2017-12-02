@@ -30,10 +30,10 @@
     "test": "echo \"Tests only available from root wrapper\""
   },
   "devDependencies": {
-    "@polkadot/api-provider": "^0.5.7"
+    "@polkadot/api-provider": "^0.5.10"
   },
   "dependencies": {
-    "@polkadot/util": "^0.6.1",
+    "@polkadot/util": "^0.6.6",
     "koa": "^2.4.1",
     "koa-body": "^2.5.0",
     "koa-json": "^2.0.2",

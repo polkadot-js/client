@@ -1,25 +1,20 @@
 // ISC, Copyright 2017 Jaco Greeff
 // @flow
 
+const assert = require('@polkadot/util/assert');
 const isInstanceOf = require('@polkadot/util/is/instanceOf');
 
 const { createInstance, createModule } = require('./create');
 
 module.exports = class Wasm {
-  constructor (instance?: WebAssemblyInstance) {
-    if (!instance) {
-      throw new Error('No instance specified');
-    }
+  constructor (instance: WebAssemblyInstance) {
+    assert(instance, 'No instance specified');
 
-    if (!isInstanceOf(instance, WebAssembly.Instance)) {
-      throw new Error('WebAssembly instance to be provided');
-    }
+    assert(isInstanceOf(instance, WebAssembly.Instance), 'WebAssembly instance to be provided');
 
     const exports = instance.exports;
 
-    if (!instance.exports) {
-      throw new Error('No exports found on WebAssembly instance');
-    }
+    assert(exports, 'No exports found on WebAssembly instance');
 
     Object.keys(exports).forEach((key: string) => {
       // $FlowFixMe naughty...

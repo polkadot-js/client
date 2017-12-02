@@ -106,7 +106,7 @@ describe('Server', () => {
           expect(ctx.body).toMatchObject({
             error: {
               code: ExtError.CODES.INVALID_JSONRPC,
-              message: "Expected a numeric id, got 'undefined'"
+              message: "Expected a defined id, received 'undefined'"
             }
           });
         });
