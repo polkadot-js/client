@@ -11,12 +11,15 @@ type PostContextType = {
 };
 
 type WsContextType = {
-  ws: WebSocket
+  websocket: {
+    on: (type: 'message', (message: string) => any) => void,
+    send: (message: string) => void
+  }
 };
 
 const Koa = require('koa');
-const koaBody = require('koa-body');
-const koaJson = require('koa-json');
+const koaJsonResult = require('koa-json');
+const koaJsonBody = require('koa-json-body');
 const koaRoute = require('koa-route');
 const koaWebsocket = require('koa-websocket');
 
@@ -68,13 +71,15 @@ module.exports = class RPCServer {
       : koaWebsocket(new Koa());
 
     if (this._type.includes('http')) {
-      app.use(koaBody());
-      app.use(koaJson({ pretty: false }));
+      app.use(koaJsonBody());
+      app.use(koaJsonResult({ pretty: false }));
       app.use(koaRoute.post(this._path, this._handlePost));
     }
 
     if (this._type.includes('ws')) {
-      app.ws.use(koaRoute.all(this._path, this._handleWs));
+      (app: any).ws.use(
+        koaRoute.all(this._path, this._handleWs)
+      );
     }
 
     this._server = app.listen(this._port);
