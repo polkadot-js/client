@@ -54,15 +54,15 @@
     lodash "^4.2.0"
     to-fast-properties "^2.0.0"
 
-"@polkadot/api-jsonrpc@^0.5.10":
-  version "0.5.10"
-  resolved "https://registry.yarnpkg.com/@polkadot/api-jsonrpc/-/api-jsonrpc-0.5.10.tgz#88fbfba77ac28ddf9993084420db7e6a5ad0011d"
+"@polkadot/api-jsonrpc@^0.5.11":
+  version "0.5.11"
+  resolved "https://registry.yarnpkg.com/@polkadot/api-jsonrpc/-/api-jsonrpc-0.5.11.tgz#a03190a8645c942a0893fa8ec1b4990432c62242"
   dependencies:
     babel-runtime "^6.26.0"
 
-"@polkadot/api-provider@^0.5.10":
-  version "0.5.10"
-  resolved "https://registry.yarnpkg.com/@polkadot/api-provider/-/api-provider-0.5.10.tgz#0cb28d06a7f47d67d908db10184ba2d04db0712c"
+"@polkadot/api-provider@^0.5.11":
+  version "0.5.11"
+  resolved "https://registry.yarnpkg.com/@polkadot/api-provider/-/api-provider-0.5.11.tgz#8a8d3d2affe0a8bef87035be3d96c138ddac4d85"
   dependencies:
     "@polkadot/util" "^0.6.6"
     babel-runtime "^6.26.0"
@@ -108,6 +108,14 @@
 "@polkadot/util@^0.6.6":
   version "0.6.6"
   resolved "https://registry.yarnpkg.com/@polkadot/util/-/util-0.6.6.tgz#75cbbaa4215dcc353b680613237a76515b00833f"
+  dependencies:
+    babel-runtime "^6.26.0"
+    bn.js "^4.11.8"
+    keccak "^1.3.0"
+
+"@polkadot/util@^0.6.7":
+  version "0.6.7"
+  resolved "https://registry.yarnpkg.com/@polkadot/util/-/util-0.6.7.tgz#eb9a6bd3717b69c962f6fb70830ebc60380c333f"
   dependencies:
     babel-runtime "^6.26.0"
     bn.js "^4.11.8"
