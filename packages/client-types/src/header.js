@@ -6,14 +6,14 @@ import type { BytesType, HashType, BlockNumberType } from './base';
 export type DigestType$Log = BytesType;
 
 export type DigestType = {
-  parachain_activity_bitfield: BytesType,
+  parachainActivityBitfield: BytesType,
   logs: Array<DigestType$Log>
 };
 
 export type HeaderType = {
-  parent_hash: HashType,
+  parentHash: HashType,
   number: BlockNumberType,
-  state_root: HashType,
-  transaction_root: HashType,
+  stateRoot: HashType,
+  transactionRoot: HashType,
   digest: DigestType
 };
