@@ -2,6 +2,7 @@
 
 const ExtError = require('@polkadot/util/ext/error');
 const HttpProvider = require('@polkadot/api-provider/http');
+const WsProvider = require('@polkadot/api-provider/ws');
 
 const Server = require('./server');
 
@@ -239,13 +240,23 @@ describe('Server', () => {
     });
   });
 
-  it('starts and accepts requests, sending responses', () => {
-    server = new Server({ port: 9901 }, handlers); // eslint-disable-line
+  it('starts and accepts requests, sending responses (HTTP)', () => {
+    server = new Server({ port: 9901, type: ['http'] }, handlers); // eslint-disable-line
 
     return new HttpProvider('http://localhost:9901')
-      .send('echo', [1, 'string', false])
+      .send('echo', [1, 'http', true])
       .then((result) => {
-        expect(result).toEqual('echo: 1,string,false');
+        expect(result).toEqual('echo: 1,http,true');
+      });
+  });
+
+  it('starts and accepts requests, sending responses (WS)', () => {
+    server = new Server({ port: 9901, type: ['ws'] }, handlers); // eslint-disable-line
+
+    return new WsProvider('ws://localhost:9901')
+      .send('echo', [1, 'ws', true])
+      .then((result) => {
+        expect(result).toEqual('echo: 1,ws,true');
       });
   });
 });
