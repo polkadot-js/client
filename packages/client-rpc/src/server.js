@@ -37,7 +37,7 @@ module.exports = class RPCServer {
 
     const handlerKeys = Object.keys(handlers || {});
 
-    assert(handlerKeys.length >= 0, 'Cannot instantiate without handlers');
+    assert(handlerKeys.length > 0, 'Cannot instantiate without handlers');
 
     const invalidHandlers = handlerKeys
       .filter((key) => !isFunction(handlers[key]))
