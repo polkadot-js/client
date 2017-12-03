@@ -7,6 +7,7 @@ const numberToBuffer = require('@polkadot/util/number/toBuffer');
 const EthDevP2p = require('ethereumjs-devp2p');
 
 const ProtocolBase = require('./base');
+const version = require('./version');
 
 class DevP2pImpl extends ProtocolBase implements EjsDevP2pCapability {
   _peer: EjsDevP2pRlpx$Node;
@@ -45,8 +46,8 @@ class DevP2pImpl extends ProtocolBase implements EjsDevP2pCapability {
   }
 
   static dot00: EjsDevP2pRlpx$Capability = {
-    name: 'dot',
-    version: 0,
+    name: version.NAME,
+    version: version.NUMERIC,
     length: 0, // ???
     constructor: DevP2pImpl
   };
