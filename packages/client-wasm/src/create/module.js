@@ -1,20 +1,15 @@
 // ISC, Copyright 2017 Jaco Greeff
 // @flow
 
+const assert = require('@polkadot/util/assert');
 const isUint8Array = require('@polkadot/util/is/uint8Array');
 
-module.exports = function createModule (code?: Uint8Array): WebAssemblyModule {
-  if (!code) {
-    throw new Error('Bytecode needs to be provided');
-  }
+module.exports = function createModule (code: Uint8Array): WebAssemblyModule {
+  assert(code, 'Bytecode needs to be provided');
 
-  if (!isUint8Array(code)) {
-    throw new Error('Cannot create from non-Uint8Array');
-  }
+  assert(isUint8Array(code), 'Cannot create from non-Uint8Array');
 
-  if (!WebAssembly.validate(code)) {
-    throw new Error('Invalid wasm bytecode supplied');
-  }
+  assert(WebAssembly.validate(code), 'Invalid wasm bytecode supplied');
 
   return new WebAssembly.Module(code);
 };

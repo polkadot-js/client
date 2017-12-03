@@ -15,6 +15,7 @@ const koaBody = require('koa-body');
 const koaJson = require('koa-json');
 const KoaRouter = require('koa-router');
 
+const assert = require('@polkadot/util/assert');
 const ExtError = require('@polkadot/util/ext/error');
 const l = require('@polkadot/util/logger')('rpc');
 const isError = require('@polkadot/util/is/error');
@@ -32,23 +33,17 @@ module.exports = class RPCServer {
   _server: ?net$Server;
 
   constructor ({ path = defaults.PATH, port = defaults.PORT }: RpcConfigType, handlers: HandlersType, autoStart: boolean = true) {
-    if (!isNumber(port)) {
-      throw new Error(`Cannot instantiate with non-numeric port='${port}'`);
-    }
+    assert(isNumber(port), `Cannot instantiate with non-numeric port='${port}'`);
 
     const handlerKeys = Object.keys(handlers || {});
 
-    if (handlerKeys.length === 0) {
-      throw new Error(`Cannot instantiate without handlers`);
-    }
+    assert(handlerKeys.length > 0, 'Cannot instantiate without handlers');
 
     const invalidHandlers = handlerKeys
       .filter((key) => !isFunction(handlers[key]))
       .map((key) => `'${key}'`);
 
-    if (invalidHandlers.length) {
-      throw new Error(`Invalid method handlers found: ${invalidHandlers.join(', ')}`);
-    }
+    assert(invalidHandlers.length === 0, `Invalid method handlers found: ${invalidHandlers.join(', ')}`);
 
     this._handlers = handlers;
     this._path = path;
@@ -90,19 +85,15 @@ module.exports = class RPCServer {
     const { request: { body: { id, jsonrpc, method, params } } } = ctx;
 
     try {
-      if (jsonrpc !== '2.0') {
-        throw new ExtError(`Invalid jsonrpc field, expected '2.0', got '${jsonrpc}'`, ExtError.CODES.INVALID_JSONRPC);
-      }
+      assert(jsonrpc === '2.0', `Invalid jsonrpc field, expected '2.0', got '${jsonrpc}'`, ExtError.CODES.INVALID_JSONRPC);
 
-      if (isUndefined(id) || !isNumber(id)) {
-        throw new ExtError(`Expected a numeric id, got '${id}'`, ExtError.CODES.INVALID_JSONRPC);
-      }
+      assert(!isUndefined(id), "Expected a defined id, received 'undefined'", ExtError.CODES.INVALID_JSONRPC);
+
+      assert(isNumber(id), `Expected a numeric id, got '${id}'`, ExtError.CODES.INVALID_JSONRPC);
 
       const handler = this._handlers[method];
 
-      if (!isFunction(handler)) {
-        throw new ExtError(`Method '${method}' not found`, ExtError.CODES.METHOD_NOT_FOUND);
-      }
+      assert(isFunction(handler), `Method '${method}' not found`, ExtError.CODES.METHOD_NOT_FOUND);
 
       const result = await handler(params);
 

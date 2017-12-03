@@ -4,9 +4,21 @@
 const fs = require('fs');
 const path = require('path');
 
-console.log(
-  fs.readFileSync(
-    path.join(__dirname, '../LICENSE')
-  ).toString('utf-8')
-);
+let license: string;
+
+function readFile (name: string): string {
+  return fs.readFileSync(
+    path.join(__dirname, name)
+  ).toString('utf-8');
+}
+
+try {
+  // production
+  license = readFile('LICENSE');
+} catch (error) {
+  // development
+  license = readFile('../LICENSE');
+}
+
+console.log(license);
 console.log();
