@@ -22,7 +22,7 @@ module.exports = class Wasm {
     });
   }
 
-  static fromCode (code?: Uint8Array, imports?: WebAssemblyImports): Wasm {
+  static fromCode (code: Uint8Array, imports?: WebAssemblyImports): Wasm {
     const module = createModule(code);
     const instance = createInstance(module, imports);
 

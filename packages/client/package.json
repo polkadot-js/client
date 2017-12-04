@@ -33,7 +33,7 @@
     "test": "echo \"Tests only available from root wrapper\""
   },
   "dependencies": {
-    "@polkadot/api-jsonrpc": "^0.5.11",
+    "@polkadot/api-jsonrpc": "^0.6.2",
     "@polkadot/client-p2p": "^0.2.9",
     "@polkadot/client-rpc": "^0.2.9",
     "@polkadot/client-wasm": "^0.2.9",

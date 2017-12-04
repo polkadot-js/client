@@ -1,6 +1,6 @@
 // ISC, Copyright 2017 Jaco Greeff
 
-const createResponse = require('./response');
+const { createResponse } = require('./index');
 
 describe('jsonrpc/response', () => {
   describe('createResponse', () => {

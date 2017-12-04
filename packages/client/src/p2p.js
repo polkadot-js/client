@@ -18,7 +18,7 @@ module.exports = function initP2p ({ role, p2p: { address, maxPeers, port, type 
 
   assert(Clazz, `Unable to create unknown p2p type '${type || ''}'`);
 
-  return new Clazz({
+  return new ((Clazz: any): Class<LibP2p>)({
     address,
     maxPeers,
     port,

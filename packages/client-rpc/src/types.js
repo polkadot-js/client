@@ -28,7 +28,10 @@ export type HandlersType = {
   [string]: HandlerType
 };
 
+export type RpcType = 'http' | 'ws';
+
 export type RpcConfigType = {
   path: string,
-  port: number
+  port: number,
+  type: Array<RpcType>
 };

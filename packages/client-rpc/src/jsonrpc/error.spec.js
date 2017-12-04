@@ -2,7 +2,7 @@
 
 const ExtError = require('@polkadot/util/ext/error');
 
-const createError = require('./error');
+const { createError } = require('./index');
 
 describe('jsonrpc/error', () => {
   describe('createError', () => {

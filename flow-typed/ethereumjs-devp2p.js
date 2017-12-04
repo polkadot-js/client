@@ -1,4 +1,3 @@
-// ISC, Copyright 2017 Jaco Greeff
 // @flow
 
 import EventEmitter from 'eventemitter3'; // eslint-disable-line

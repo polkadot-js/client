@@ -1,54 +1,52 @@
 // ISC, Copyright 2017 Jaco Greeff
 // @flow
 
-import type { HandlersType, JsonRpcError, JsonRpcRequest, JsonRpcResponse, RpcConfigType } from './types';
+import type { HandlersType, JsonRpcError, JsonRpcRequest, JsonRpcResponse, RpcConfigType, RpcType } from './types';
 
 type PostContextType = {
-  body: JsonRpcError | JsonRpcResponse,
-  request: {
-    body: JsonRpcRequest
+  body: string,
+  req: string,
+  type: 'application/json'
+};
+
+type WsContextType = {
+  websocket: {
+    on: (type: 'message', (message: string) => any) => void,
+    send: (message: string) => void
   }
 };
 
+const coBody = require('co-body');
 const Koa = require('koa');
-const koaBody = require('koa-body');
-const koaJson = require('koa-json');
-const KoaRouter = require('koa-router');
+const koaRoute = require('koa-route');
+const koaWebsocket = require('koa-websocket');
 
 const assert = require('@polkadot/util/assert');
 const ExtError = require('@polkadot/util/ext/error');
 const l = require('@polkadot/util/logger')('rpc');
 const isError = require('@polkadot/util/is/error');
 const isFunction = require('@polkadot/util/is/function');
-const isNumber = require('@polkadot/util/is/number');
-const isUndefined = require('@polkadot/util/is/undefined');
 
 const defaults = require('./defaults');
 const { createError, createResponse } = require('./jsonrpc');
+const { validateConfig, validateRequest, validateHandlers } = require('./validate');
 
 module.exports = class RPCServer {
   _handlers: HandlersType;
   _path: string;
   _port: number;
   _server: ?net$Server;
+  _type: Array<RpcType>;
 
-  constructor ({ path = defaults.PATH, port = defaults.PORT }: RpcConfigType, handlers: HandlersType, autoStart: boolean = true) {
-    assert(isNumber(port), `Cannot instantiate with non-numeric port='${port}'`);
-
-    const handlerKeys = Object.keys(handlers || {});
-
-    assert(handlerKeys.length > 0, 'Cannot instantiate without handlers');
-
-    const invalidHandlers = handlerKeys
-      .filter((key) => !isFunction(handlers[key]))
-      .map((key) => `'${key}'`);
-
-    assert(invalidHandlers.length === 0, `Invalid method handlers found: ${invalidHandlers.join(', ')}`);
+  constructor ({ path = defaults.PATH, port = defaults.PORT, type = defaults.TYPE }: RpcConfigType, handlers: HandlersType, autoStart: boolean = true) {
+    validateConfig({ path, port, type });
+    validateHandlers(handlers);
 
     this._handlers = handlers;
     this._path = path;
     this._port = port;
     this._server = null;
+    this._type = type;
 
     if (autoStart) {
       this.start();
@@ -59,51 +57,78 @@ module.exports = class RPCServer {
     if (this._server) {
       this._server.close();
       this._server = null;
+
+      l.log('Client stopped');
     }
   }
 
   start () {
     this.stop();
 
-    const router = new KoaRouter();
+    const hasHttp = this._type.includes('http');
+    const hasWs = this._type.includes('ws');
+    const app = hasWs
+      ? koaWebsocket(new Koa())
+      : new Koa();
 
-    router
-      .use(this._path, koaBody())
-      .use(this._path, koaJson({ pretty: false }))
-      .post(this._path, this._handlePost);
+    if (hasHttp) {
+      app.use(
+        koaRoute.post(this._path, this._handlePost)
+      );
+    }
 
-    const app = new Koa();
-
-    app.use(router.routes());
+    if (hasWs) {
+      (app: any).ws.use(
+        koaRoute.all(this._path, this._handleWs)
+      );
+    }
 
     this._server = app.listen(this._port);
 
-    l.log(`Client started on port=${this._port}`);
+    l.log(`Client started on port=${this._port} for type=[${this._type.join(',')}]`);
   }
 
   _handlePost = async (ctx: PostContextType): Promise<void> => {
-    const { request: { body: { id, jsonrpc, method, params } } } = ctx;
+    const body = await coBody.text(ctx.req);
+    const response = await this._handleMessage(body);
 
+    ctx.type = 'application/json';
+    ctx.body = JSON.stringify(response);
+  }
+
+  _handleWs = async (ctx: WsContextType): Promise<void> => {
+    ctx.websocket.on('message', async (message: string) => {
+      const response = await this._handleMessage(message);
+
+      ctx.websocket.send(
+        JSON.stringify(response)
+      );
+    });
+  }
+
+  _handleMessage = async (message: string): Promise<JsonRpcError | JsonRpcResponse> => {
     try {
-      assert(jsonrpc === '2.0', `Invalid jsonrpc field, expected '2.0', got '${jsonrpc}'`, ExtError.CODES.INVALID_JSONRPC);
+      const { id, jsonrpc, method, params }: JsonRpcRequest = JSON.parse(message);
 
-      assert(!isUndefined(id), "Expected a defined id, received 'undefined'", ExtError.CODES.INVALID_JSONRPC);
+      try {
+        validateRequest(id, jsonrpc);
 
-      assert(isNumber(id), `Expected a numeric id, got '${id}'`, ExtError.CODES.INVALID_JSONRPC);
+        const handler = this._handlers[method];
 
-      const handler = this._handlers[method];
+        assert(isFunction(handler), `Method '${method}' not found`, ExtError.CODES.METHOD_NOT_FOUND);
 
-      assert(isFunction(handler), `Method '${method}' not found`, ExtError.CODES.METHOD_NOT_FOUND);
+        const result = await handler(params);
 
-      const result = await handler(params);
+        if (isError(result)) {
+          throw result;
+        }
 
-      if (isError(result)) {
-        throw result;
+        return createResponse(id, result);
+      } catch (error) {
+        return createError(id, error);
       }
-
-      ctx.body = createResponse(id, result);
     } catch (error) {
-      ctx.body = createError(id, error);
+      return createError(0, error);
     }
   }
 };
