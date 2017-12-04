@@ -4,8 +4,8 @@
 import type { HashType, ObjectIdType } from './base';
 
 export type StateType$Storage = {
-  code_hash: HashType,
-  storage_root: HashType
+  codeHash: HashType,
+  storageRoot: HashType
 };
 
 export type StateType = {

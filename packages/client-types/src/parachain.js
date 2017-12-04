@@ -8,13 +8,13 @@ export type ParachainStateType$BalanceDownload = [BalanceType, BytesType];
 export type ParachainStateType$EgressRoot = HashType;
 
 export type ParachainStateType = {
-  head_data: BytesType,
+  headData: BytesType,
   balance: BalanceType,
-  user_balances: {
+  userBalances: {
     [AccountIdType]: BalanceType
   },
-  balance_downloads: {
+  balanceDownloads: {
     [AccountIdType]: ParachainStateType$BalanceDownload
   },
-  egress_roots: Array<ParachainStateType$EgressRoot>
+  egressRoots: Array<ParachainStateType$EgressRoot>
 };

@@ -7,7 +7,7 @@ export type TransactionType$Param = any;
 
 export type TransactionType = {
   destination: ObjectIdType,
-  function_name: BytesType,
+  functionName: BytesType,
   parameters: Array<TransactionType$Param>
 };
 
