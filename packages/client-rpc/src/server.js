@@ -4,10 +4,9 @@
 import type { HandlersType, JsonRpcError, JsonRpcRequest, JsonRpcResponse, RpcConfigType, RpcType } from './types';
 
 type PostContextType = {
-  body: JsonRpcError | JsonRpcResponse,
-  request: {
-    body: JsonRpcRequest
-  }
+  body: string,
+  req: string,
+  type: 'application/json'
 };
 
 type WsContextType = {
@@ -17,9 +16,8 @@ type WsContextType = {
   }
 };
 
+const coBody = require('co-body');
 const Koa = require('koa');
-const koaJsonResult = require('koa-json');
-const koaJsonBody = require('koa-json-body');
 const koaRoute = require('koa-route');
 const koaWebsocket = require('koa-websocket');
 
@@ -28,11 +26,10 @@ const ExtError = require('@polkadot/util/ext/error');
 const l = require('@polkadot/util/logger')('rpc');
 const isError = require('@polkadot/util/is/error');
 const isFunction = require('@polkadot/util/is/function');
-const isNumber = require('@polkadot/util/is/number');
-const isUndefined = require('@polkadot/util/is/undefined');
 
 const defaults = require('./defaults');
 const { createError, createResponse } = require('./jsonrpc');
+const { validateConfig, validateRequest, validateHandlers } = require('./validate');
 
 module.exports = class RPCServer {
   _handlers: HandlersType;
@@ -42,8 +39,8 @@ module.exports = class RPCServer {
   _type: Array<RpcType>;
 
   constructor ({ path = defaults.PATH, port = defaults.PORT, type = defaults.TYPE }: RpcConfigType, handlers: HandlersType, autoStart: boolean = true) {
-    RPCServer._validateConfig({ path, port, type });
-    RPCServer._validateHandlers(handlers);
+    validateConfig({ path, port, type });
+    validateHandlers(handlers);
 
     this._handlers = handlers;
     this._path = path;
@@ -60,23 +57,27 @@ module.exports = class RPCServer {
     if (this._server) {
       this._server.close();
       this._server = null;
+
+      l.log('Client stopped');
     }
   }
 
   start () {
     this.stop();
 
-    const app = this._type.includes['ws']
-      ? new Koa()
-      : koaWebsocket(new Koa());
+    const hasHttp = this._type.includes('http');
+    const hasWs = this._type.includes('ws');
+    const app = hasWs
+      ? koaWebsocket(new Koa())
+      : new Koa();
 
-    if (this._type.includes('http')) {
-      app.use(koaJsonBody());
-      app.use(koaJsonResult({ pretty: false }));
-      app.use(koaRoute.post(this._path, this._handlePost));
+    if (hasHttp) {
+      app.use(
+        koaRoute.post(this._path, this._handlePost)
+      );
     }
 
-    if (this._type.includes('ws')) {
+    if (hasWs) {
       (app: any).ws.use(
         koaRoute.all(this._path, this._handleWs)
       );
@@ -84,75 +85,50 @@ module.exports = class RPCServer {
 
     this._server = app.listen(this._port);
 
-    l.log(`Client started on port=${this._port}`);
+    l.log(`Client started on port=${this._port} for type=[${this._type.join(',')}]`);
   }
 
   _handlePost = async (ctx: PostContextType): Promise<void> => {
-    const { request: { body } } = ctx;
+    const body = await coBody.text(ctx.req);
+    const response = await this._handleMessage(body);
 
-    ctx.body = await this._handleMessage(body);
+    ctx.type = 'application/json';
+    ctx.body = JSON.stringify(response);
   }
 
   _handleWs = async (ctx: WsContextType): Promise<void> => {
-    const { websocket } = ctx;
+    ctx.websocket.on('message', async (message: string) => {
+      const response = await this._handleMessage(message);
 
-    websocket.on('message', async (message: string) => {
-      const request: JsonRpcRequest = JSON.parse(message);
-      const response = await this._handleMessage(request);
-
-      websocket.send(
+      ctx.websocket.send(
         JSON.stringify(response)
       );
     });
   }
 
-  _handleMessage = async ({ id, jsonrpc, method, params }: JsonRpcRequest): Promise<JsonRpcError | JsonRpcResponse> => {
+  _handleMessage = async (message: string): Promise<JsonRpcError | JsonRpcResponse> => {
     try {
-      RPCServer._validateRequest(id, jsonrpc);
+      const { id, jsonrpc, method, params }: JsonRpcRequest = JSON.parse(message);
 
-      const handler = this._handlers[method];
+      try {
+        validateRequest(id, jsonrpc);
 
-      assert(isFunction(handler), `Method '${method}' not found`, ExtError.CODES.METHOD_NOT_FOUND);
+        const handler = this._handlers[method];
 
-      const result = await handler(params);
+        assert(isFunction(handler), `Method '${method}' not found`, ExtError.CODES.METHOD_NOT_FOUND);
 
-      if (isError(result)) {
-        throw result;
+        const result = await handler(params);
+
+        if (isError(result)) {
+          throw result;
+        }
+
+        return createResponse(id, result);
+      } catch (error) {
+        return createError(id, error);
       }
-
-      return createResponse(id, result);
     } catch (error) {
-      return createError(id, error);
+      return createError(0, error);
     }
-  }
-
-  static _validateRequest (id: number, jsonrpc: string): void {
-    assert(jsonrpc === '2.0', `Invalid jsonrpc field, expected '2.0', got '${jsonrpc}'`, ExtError.CODES.INVALID_JSONRPC);
-
-    assert(!isUndefined(id), "Expected a defined id, received 'undefined'", ExtError.CODES.INVALID_JSONRPC);
-
-    assert(isNumber(id), `Expected a numeric id, got '${id}'`, ExtError.CODES.INVALID_JSONRPC);
-  }
-
-  static _validateConfig ({ path, port, type }: RpcConfigType): void {
-    assert(isNumber(port), `Cannot instantiate with non-numeric port='${port}'`);
-
-    assert(Array.isArray(type), `Type should be specified as Array ['http', 'ws']`);
-
-    const invalidTypes = type.filter((_type) => !['http', 'ws'].includes(_type));
-
-    assert(invalidTypes.length === 0, `Invalid RPC type found: ${invalidTypes.join(', ')}`);
-  }
-
-  static _validateHandlers (handlers: HandlersType): void {
-    const handlerKeys = Object.keys(handlers || {});
-
-    assert(handlerKeys.length > 0, 'Cannot instantiate without handlers');
-
-    const invalidHandlers = handlerKeys
-      .filter((key) => !isFunction(handlers[key]))
-      .map((key) => `'${key}'`);
-
-    assert(invalidHandlers.length === 0, `Invalid method handlers found: ${invalidHandlers.join(', ')}`);
   }
 };
