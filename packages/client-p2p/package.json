@@ -29,13 +29,9 @@
     "check": "eslint src && flow check",
     "test": "echo \"Tests only available from root wrapper\""
   },
-  "devDependencies": {
-    "ethereum-common": "^0.2.1"
-  },
   "dependencies": {
     "@polkadot/util": "^0.6.7",
     "babel-runtime": "^6.26.0",
-    "ethereumjs-devp2p": "^2.1.3",
     "eventemitter3": "^2.0.3",
     "libp2p": "^0.13.3"
   }

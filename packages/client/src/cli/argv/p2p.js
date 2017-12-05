@@ -20,11 +20,5 @@ module.exports = ({
     default: defaults.PORT,
     description: 'Sets the peer-to-peer port, 0 for non-listening mode',
     type: 'number'
-  },
-  'p2p-type': {
-    choices: ['devp2p', 'libp2p'],
-    default: 'devp2p',
-    description: 'Sets the peer-to-peer communications protocol',
-    type: 'string'
   }
 }: { [key: string]: Options });
