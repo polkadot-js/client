@@ -3,8 +3,6 @@
 
 import type { RoleType } from '@polkadot/client-types/role';
 
-export type P2pTypes = 'devp2p' | 'libp2p';
-
 export type P2pErrorEventTypes =
   'comms.error' |
   'comms.error.peer' |
@@ -31,7 +29,6 @@ export type P2pConfigType = {
   address?: string,
   clientId?: string,
   maxPeers?: number,
-  privateKey?: Buffer,
   port?: number,
   role?: RoleType
 };
