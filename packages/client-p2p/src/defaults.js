@@ -1,7 +1,7 @@
 // ISC, Copyright 2017 Jaco Greeff
 // @flow
 
-import type { RoleType } from '@polkadot/client-types/role';
+import type { RoleType } from '@polkadot/primitives/role';
 
 const ADDRESS: string = '0.0.0.0';
 const CLIENT_ID: string = 'client/0.0.0';

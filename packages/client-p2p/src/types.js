@@ -1,7 +1,7 @@
 // ISC, Copyright 2017 Jaco Greeff
 // @flow
 
-import type { RoleType } from '@polkadot/client-types/role';
+import type { RoleType } from '@polkadot/primitives/role';
 
 export type P2pErrorEventTypes =
   'comms.error' |
