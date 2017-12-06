@@ -17,8 +17,13 @@ module.exports = class Wasm {
     assert(exports, 'No exports found on WebAssembly instance');
 
     Object.keys(exports).forEach((key: string) => {
+      Object.defineProperty(this, key, {
+        configurable: false,
+        enumerable: true,
+        value: exports[key]
+      });
       // $FlowFixMe naughty...
-      this[key] = exports[key];
+      // this[key] = exports[key];
     });
   }
 

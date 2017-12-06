@@ -3,7 +3,7 @@
 
 import type { P2pConfigType } from '@polkadot/client-p2p/types';
 import type { RpcConfigType } from '@polkadot/client-rpc/types';
-import type { RoleType } from '@polkadot/client-types/role';
+import type { RoleType } from '@polkadot/primitives/role';
 
 export type ConfigType = {
   p2p: P2pConfigType,

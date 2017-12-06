@@ -3,7 +3,7 @@
 
 import type { Options } from 'yargs';
 
-const allRoles = require('@polkadot/client-types/role/all');
+const allRoles = require('@polkadot/primitives/role/all');
 
 module.exports = ({
   role: {

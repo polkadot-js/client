@@ -107,9 +107,21 @@
     stylelint "^8.2.0"
     stylelint-config-standard "^18.0.0"
 
+"@polkadot/primitives@^0.1.2":
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/@polkadot/primitives/-/primitives-0.1.2.tgz#31af31161e17e99af38d8767e8d1306610a1f3d1"
+
 "@polkadot/util@^0.6.7":
   version "0.6.7"
   resolved "https://registry.yarnpkg.com/@polkadot/util/-/util-0.6.7.tgz#eb9a6bd3717b69c962f6fb70830ebc60380c333f"
+  dependencies:
+    babel-runtime "^6.26.0"
+    bn.js "^4.11.8"
+    keccak "^1.3.0"
+
+"@polkadot/util@^0.6.8":
+  version "0.6.8"
+  resolved "https://registry.yarnpkg.com/@polkadot/util/-/util-0.6.8.tgz#ff6ef811b169b18afac7f31ea1665600e562acb1"
   dependencies:
     babel-runtime "^6.26.0"
     bn.js "^4.11.8"
