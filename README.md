@@ -15,7 +15,6 @@ It is split up into a number of internal packages -
 - [packages/client](packages/client/) The main JavaScript client
 - [packages/client-p2p](packages/client-p2p/) Peer-to-peer server
 - [packages/client-rpc](packages/client-rpc/) RPC server
-- [packages/client-types](packages/client-types/) Network type definitions
 - [packages/client-wasm](packages/client-wasm/) Wasm interface wrapper
 
 ## Contributing
