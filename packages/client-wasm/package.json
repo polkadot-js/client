@@ -1,6 +1,6 @@
 {
   "name": "@polkadot/client-wasm",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "WASM compiler & call interface",
   "main": "index.js",
   "engines": {
