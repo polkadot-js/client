@@ -4,6 +4,18 @@
 try {
   require('../index.js'); // production
 } catch (error) {
-  require('babel-register');
+  const alias = ['chains', 'p2p', 'rpc', 'wasm']
+    .map((path) => `client-${path}`)
+    .reduce((alias, path) => {
+      alias[`^@polkadot/${path}(.+)`] = `./packages/${path}/src\\1`;
+
+      return alias;
+    }, {});
+
+  require('babel-register')({
+    plugins: [
+      ['module-resolver', { alias }]
+    ]
+  });
   require('../src/index.js'); // development
 }

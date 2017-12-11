@@ -33,12 +33,16 @@
     "test": "echo \"Tests only available from root wrapper\""
   },
   "dependencies": {
-    "@polkadot/api-jsonrpc": "^0.6.2",
+    "@polkadot/api-jsonrpc": "^0.6.5",
+    "@polkadot/client-chains": "^0.3.3",
     "@polkadot/client-p2p": "^0.3.3",
     "@polkadot/client-rpc": "^0.3.3",
     "@polkadot/client-wasm": "^0.3.3",
-    "@polkadot/primitives": "^0.1.2",
-    "@polkadot/util": "^0.6.8",
+    "@polkadot/primitives": "^0.1.5",
+    "@polkadot/util": "^0.7.1",
     "yargs": "^10.0.3"
+  },
+  "devDependencies": {
+    "babel-plugin-module-resolver": "^3.0.0"
   }
 }

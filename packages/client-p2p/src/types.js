@@ -27,6 +27,7 @@ export type P2pNodeType = {
 
 export type P2pConfigType = {
   address?: string,
+  chain?: string,
   clientId?: string,
   maxPeers?: number,
   port?: number,
