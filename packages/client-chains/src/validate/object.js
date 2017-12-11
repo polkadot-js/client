@@ -21,9 +21,9 @@ module.exports = function validateObject (type: string, object: { [string]: any 
 
     if (strict) {
       throw new ExtError(error);
-    } else {
-      console.warn(error);
     }
+
+    console.warn(error);
   }
 
   return true;

@@ -7,7 +7,7 @@ describe('chains', () => {
     it(`validates chain '${chain.name}' (strict)`, () => {
       expect(
         validateChain(chain, true)
-      ).toEqual(true);
+      ).toBeDefined();
     });
   });
 });
