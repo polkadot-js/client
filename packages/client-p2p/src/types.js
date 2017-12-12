@@ -27,10 +27,10 @@ export type P2pNodeType = {
 
 export type P2pConfigType = {
   address: string,
-  clientId?: string,
+  clientId: string,
   maxPeers: number,
   port: number,
-  role?: RoleType
+  role: RoleType
 };
 
 export type P2pOnErrorCallback = ({ message: string, type: P2pErrorEventTypes }) => void;
