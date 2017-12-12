@@ -1,6 +1,7 @@
 // ISC, Copyright 2017 Jaco Greeff
 
 const isInstanceOf = require('@polkadot/util/is/instanceOf');
+const promisify = require('@polkadot/util/promisify');
 const Railing = require('libp2p-railing');
 const PeerInfo = require('peer-info');
 
@@ -10,15 +11,7 @@ describe('createConfig', () => {
   let peerInfo;
 
   beforeEach(async () => {
-    peerInfo = await new Promise((resolve, reject) => {
-      PeerInfo.create((error, peerInfo) => {
-        if (error) {
-          reject(error);
-        } else {
-          resolve(peerInfo);
-        }
-      });
-    });
+    peerInfo = await promisify(PeerInfo.create, { bits: 0 });
   });
 
   it('expects a peerInfo object', () => {
@@ -43,7 +36,7 @@ describe('createConfig', () => {
     expect(
       isInstanceOf(
         createConfig(
-          peerInfo, ['/ip4/12.7.0.0.1/tcp/6677']
+          peerInfo, ['/ip4/127.0.0.1/tcp/6677']
         ).discovery[1],
         Railing
       )

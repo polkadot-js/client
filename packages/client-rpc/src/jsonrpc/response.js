@@ -3,10 +3,10 @@
 
 import type { JsonRpcResponse } from '../types';
 
+const createJson = require('./json');
+
 module.exports = function createResponse (id: number, result: any): JsonRpcResponse {
-  return {
-    id,
-    jsonrpc: '2.0',
+  return createJson(id, {
     result
-  };
+  });
 };

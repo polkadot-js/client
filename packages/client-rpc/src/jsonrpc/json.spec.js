@@ -1,15 +1,17 @@
 // ISC, Copyright 2017 Jaco Greeff
 
-const { createResponse } = require('./index');
+const createJson = require('./json');
 
-describe('createResponse', () => {
+describe('createJson', () => {
   it('creates a valid JSONRPC structure', () => {
     expect(
-      createResponse(123, 'test result')
+      createJson(123, { some: { extra: 'data' } })
     ).toEqual({
       id: 123,
       jsonrpc: '2.0',
-      result: 'test result'
+      some: {
+        extra: 'data'
+      }
     });
   });
 });

@@ -119,9 +119,9 @@
     bn.js "^4.11.8"
     keccak "^1.3.0"
 
-"@polkadot/util@^0.7.1":
-  version "0.7.1"
-  resolved "https://registry.yarnpkg.com/@polkadot/util/-/util-0.7.1.tgz#5b22c93be1862b315d71ccbd2e871e21e24a7411"
+"@polkadot/util@^0.8.1":
+  version "0.8.1"
+  resolved "https://registry.yarnpkg.com/@polkadot/util/-/util-0.8.1.tgz#c5d4e27a8691700e4667978345d99f2646f1b4eb"
   dependencies:
     babel-runtime "^6.26.0"
     bn.js "^4.11.8"

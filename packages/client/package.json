@@ -39,7 +39,7 @@
     "@polkadot/client-rpc": "^0.4.0",
     "@polkadot/client-wasm": "^0.4.0",
     "@polkadot/primitives": "^0.1.5",
-    "@polkadot/util": "^0.7.1",
+    "@polkadot/util": "^0.8.1",
     "yargs": "^10.0.3"
   },
   "devDependencies": {

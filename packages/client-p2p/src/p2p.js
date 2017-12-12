@@ -3,9 +3,10 @@
 
 import type Libp2p from 'libp2p';
 import type { ChainConfigType } from '@polkadot/client-chains/types';
-import type { P2pNodeType, P2pConfigType, P2pInterface, P2pOnErrorCallback } from './types';
+import type { P2pConfigType, P2pInterface, P2pOnErrorCallback } from './types';
 
 const assert = require('@polkadot/util/assert');
+const isObject = require('@polkadot/util/is/object');
 const l = require('@polkadot/util/logger')('p2p');
 const EventEmitter = require('eventemitter3');
 
@@ -21,6 +22,10 @@ module.exports = class P2p extends EventEmitter implements P2pInterface {
   constructor (config: P2pConfigType, chain: ChainConfigType, autoStart: boolean = true) {
     super();
 
+    assert(isObject(config), 'Expected a P2P configuration object');
+
+    assert(isObject(chain), 'Expected a chain definition object');
+
     this._config = config;
     this._chain = chain;
 
@@ -33,14 +38,6 @@ module.exports = class P2p extends EventEmitter implements P2pInterface {
     this._node = await createNode(this._config, this._chain);
 
     l.log('Started');
-  }
-
-  async addBootnodes (nodes: Array<P2pNodeType>): Promise<void> {
-    assert(false, 'P2p:addBootnodes is not implemented');
-  }
-
-  async addPeers (nodes: Array<P2pNodeType>): Promise<void> {
-    assert(false, 'P2p:addPeers is not implemented');
   }
 
   onError (handler: P2pOnErrorCallback): void {

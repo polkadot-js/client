@@ -37,8 +37,6 @@ export type P2pConfigType = {
 export type P2pOnErrorCallback = ({ message: string, type: P2pErrorEventTypes }) => void;
 
 export interface P2pInterface {
-  addBootnodes (nodes: Array<P2pNodeType>): Promise<void>;
-  addPeers (nodes: Array<P2pNodeType>): Promise<void>;
   onError (handler: P2pOnErrorCallback): void;
 }
 

@@ -3,18 +3,17 @@
 
 const assert = require('@polkadot/util/assert');
 const isInstanceOf = require('@polkadot/util/is/instanceOf');
+const isObject = require('@polkadot/util/is/object');
 
 const { createInstance, createModule } = require('./create');
 
 module.exports = class Wasm {
   constructor (instance: WebAssemblyInstance) {
-    assert(instance, 'No instance specified');
-
     assert(isInstanceOf(instance, WebAssembly.Instance), 'WebAssembly instance to be provided');
 
     const exports = instance.exports;
 
-    assert(exports, 'No exports found on WebAssembly instance');
+    assert(isObject(exports), 'No exports found on WebAssembly instance');
 
     Object.keys(exports).forEach((key: string) => {
       Object.defineProperty(this, key, {
@@ -22,8 +21,6 @@ module.exports = class Wasm {
         enumerable: true,
         value: exports[key]
       });
-      // $FlowFixMe naughty...
-      // this[key] = exports[key];
     });
   }
 

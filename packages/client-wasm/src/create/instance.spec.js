@@ -27,13 +27,7 @@ describe('createInstance', () => {
     global.WebAssembly = origWebAssembly;
   });
 
-  it('throws an error on empty module', () => {
-    expect(
-      () => createInstance()
-    ).toThrow(/WebAssembly module to be provided/);
-  });
-
-  it('throws and error on non-Uint8Array bytecode', () => {
+  it('throws and error on non-WebAssembly module', () => {
     expect(
       () => createInstance('nonAModule')
     ).toThrow(/Cannot create from non/);

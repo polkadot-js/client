@@ -25,12 +25,6 @@ describe('Wasm', () => {
       global.WebAssembly = origWebAssembly;
     });
 
-    it('checks for a existing instance', () => {
-      expect(
-        () => new Wasm()
-      ).toThrow(/No instance specified/);
-    });
-
     it('check for instance as WebAssembly.Instance', () => {
       expect(
         () => new Wasm('notInstance')
