@@ -10,7 +10,7 @@ const config = require('./cli')();
 const initRpc = require('./rpc');
 const initP2p = require('./p2p');
 
-l.log(`Initialising for role '${config.role}' on chain '${config.chain}'`);
+l.log(`Initialising for role=${config.role} on chain=${config.chain}`);
 
 const chain = loadChain(config.chain);
 
