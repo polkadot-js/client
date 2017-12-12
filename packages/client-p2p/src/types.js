@@ -26,10 +26,10 @@ export type P2pNodeType = {
 };
 
 export type P2pConfigType = {
-  address?: string,
+  address: string,
   clientId?: string,
-  maxPeers?: number,
-  port?: number,
+  maxPeers: number,
+  port: number,
   role?: RoleType
 };
 
