@@ -17,8 +17,36 @@ It is split up into a number of internal packages -
 - [packages/client-rpc](packages/client-rpc/) RPC server
 - [packages/client-wasm](packages/client-wasm/) Wasm interface wrapper
 
+## Local development node
+
+Start the node with `yarn start <options>`. At the time of this writing, the available options are
+
+  Operation
+    --chain  Use the chain specified, one of 'nelson' or custom '<chain>.json'
+                                           [string] [required] [default: "nelson"]
+    --role   Sets the type of role the node operates as
+                [string] [required] [choices: "none", "full", "light", "collator",
+                                                    "validator"] [default: "none"]
+
+  Peer-to-peer
+    --p2p-address    The interface to bind to (p2p-port > 0)
+                                                   [string] [default: "127.0.0.1"]
+    --p2p-max-peers  The maximum allowed peers              [number] [default: 25]
+    --p2p-port       Sets the peer-to-peer port, 0 for non-listening mode
+                                                       [number] [default: 30903]
+
+  RPC server
+    --rpc-path  Sets the endpoint for RPC POST requests    [string] [default: "/"]
+    --rpc-port  Sets the port to use for local RPC        [number] [default: 9933]
+    --rpc-type  Sets the available RPC protocol types
+                          [array] [choices: "http", "ws"] [default: ["http","ws"]]
+
+  Options:
+    --help     Show help                                                 [boolean]
+    --version  Show version number                                       [boolean]
+
 ## Contributing
 
 - Make sure you have [Lerna](https://lernajs.io/) installed, `yarn install -g lerna`
-- Bootstrap the dependencies, `lerna bootstrap`
+- Bootstrap the dependencies, `yarn`
 - Make any changes in the relevant package, on master merges new versions will be published automatically
