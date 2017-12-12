@@ -3,10 +3,10 @@
 
 import type { RoleType } from '@polkadot/primitives/role';
 
-const ADDRESS: string = '0.0.0.0';
-const CLIENT_ID: string = 'client/0.0.0';
-const MAX_PEERS: number = 25;
-const PORT: number = 0;
+const ADDRESS = '127.0.0.1';
+const CLIENT_ID = 'client/0.0.0';
+const MAX_PEERS = 25;
+const PORT = 30903;
 const ROLE: RoleType = 'none';
 
 module.exports = {

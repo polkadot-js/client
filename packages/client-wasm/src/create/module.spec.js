@@ -26,12 +26,6 @@ describe('createModule', () => {
     WebAssembly.Module = origModule;
   });
 
-  it('throws an error on empty bytecode', () => {
-    expect(
-      () => createModule()
-    ).toThrow(/Bytecode needs to be provided/);
-  });
-
   it('throws an error on non-Uint8Array bytecode', () => {
     expect(
       () => createModule('nonUint8Array')

@@ -17,8 +17,12 @@ It is split up into a number of internal packages -
 - [packages/client-rpc](packages/client-rpc/) RPC server
 - [packages/client-wasm](packages/client-wasm/) Wasm interface wrapper
 
+## Local development node
+
+Start the node with `yarn start <options>`. User `--help` to get a list of available options.
+
 ## Contributing
 
 - Make sure you have [Lerna](https://lernajs.io/) installed, `yarn install -g lerna`
-- Bootstrap the dependencies, `lerna bootstrap`
+- Bootstrap the dependencies, `yarn`
 - Make any changes in the relevant package, on master merges new versions will be published automatically

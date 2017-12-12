@@ -6,8 +6,8 @@ import type { HandlersType } from '../types';
 const assert = require('@polkadot/util/assert');
 const isFunction = require('@polkadot/util/is/function');
 
-module.exports = function validateHandlers (handlers: HandlersType): void {
-  const handlerKeys = Object.keys(handlers || {});
+module.exports = function validateHandlers (handlers: HandlersType = {}): void {
+  const handlerKeys = Object.keys(handlers);
 
   assert(handlerKeys.length !== 0, 'Cannot instantiate without handlers');
 

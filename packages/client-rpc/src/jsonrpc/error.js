@@ -5,13 +5,13 @@ import type { JsonRpcError } from '../types';
 
 const ExtError = require('@polkadot/util/ext/error');
 
+const createJson = require('./json');
+
 module.exports = function createError (id: number, error: Error | ExtError): JsonRpcError {
-  return {
-    id,
-    jsonrpc: '2.0',
+  return createJson(id, ({
     error: {
       code: ((error: any): ExtError).code || ExtError.CODES.UNKNOWN,
       message: error.message
     }
-  };
+  }: $Shape<JsonRpcError>));
 };
