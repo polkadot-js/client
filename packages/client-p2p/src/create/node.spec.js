@@ -19,7 +19,7 @@ describe('createNode', () => {
   });
 
   it('creates a valid LibP2p instance', async () => {
-    const libp2p = await createNode({}, []);
+    const libp2p = await createNode({ address: '127.0.0.1', port: 6789 }, { nodes: [] }, []);
 
     expect(
       isInstanceOf(libp2p, LibP2P)

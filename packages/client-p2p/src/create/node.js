@@ -5,15 +5,16 @@ import type { ChainConfigType, ChainConfigType$Nodes } from '@polkadot/client-ch
 import type { P2pConfigType } from '../types';
 
 const assert = require('@polkadot/util/assert');
+const isObject = require('@polkadot/util/is/object');
 const Libp2p = require('libp2p');
 
 const createConfig = require('./config');
 const createPeer = require('./peer');
 
 module.exports = async function createNode (config: P2pConfigType, chain: ChainConfigType, peers: ChainConfigType$Nodes = []): Promise<Libp2p> {
-  assert(config, 'Expected a valid p2p config object');
+  assert(isObject(config), 'Expected a valid p2p config object');
 
-  assert(chain, 'Expected a valid chain defintion');
+  assert(isObject(chain), 'Expected a valid chain defintion');
 
   const peerInfo = await createPeer(config.address, config.port);
   const nodeConfig = createConfig(peerInfo, chain.nodes);
