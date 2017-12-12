@@ -14,7 +14,7 @@ module.exports = function argv (cli?: string): { [string]: any } {
   const parser = yargs
     .version(clientId)
     .options(
-      Object.assign(({}: { [key: string]: Options }), operation, p2p, rpc)
+      Object.assign(({}: { [string]: Options }), operation, p2p, rpc)
     )
     .group(Object.keys(operation), 'Operation')
     .group(Object.keys(p2p), 'Peer-to-peer')

@@ -37,7 +37,9 @@ module.exports = class P2p extends EventEmitter implements P2pInterface {
   async start (): Promise<void> {
     this._node = await createNode(this._config, this._chain);
 
-    l.log('Started');
+    const { address, port } = this._config;
+
+    l.log(`Started on address=${address}, port=${port}`);
   }
 
   onError (handler: P2pOnErrorCallback): void {

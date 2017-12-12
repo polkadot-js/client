@@ -4,17 +4,14 @@
 try {
   require('../index.js'); // production
 } catch (error) {
-  const alias = ['chains', 'p2p', 'rpc', 'wasm']
-    .map((path) => `client-${path}`)
-    .reduce((alias, path) => {
-      alias[`^@polkadot/${path}(.+)`] = `./packages/${path}/src\\1`;
-
-      return alias;
-    }, {});
-
   require('babel-register')({
     plugins: [
-      ['module-resolver', { alias }]
+      ['module-resolver', {
+        alias: {
+          '^@polkadot/client-(chains|p2p|rpc|wasm)(.+)': './packages/client-\\1/src\\2',
+          '^@polkadot/client-(chains|p2p|rpc|wasm)': './packages/client-\\1/src'
+        }
+      }]
     ]
   });
   require('../src/index.js'); // development
