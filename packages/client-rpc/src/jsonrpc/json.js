@@ -1,9 +1,7 @@
 // ISC, Copyright 2017 Jaco Greeff
 // @flow
 
-import type { JsonRpcBase } from '../types';
-
-module.exports = function createJson (id: number, body: { [string]: any }): $Shape<JsonRpcBase> {
+module.exports = function createJson<T> (id: number, body: $Shape<T>): T {
   return Object.assign({
     id,
     jsonrpc: '2.0'

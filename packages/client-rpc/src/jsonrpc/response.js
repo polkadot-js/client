@@ -6,7 +6,7 @@ import type { JsonRpcResponse } from '../types';
 const createJson = require('./json');
 
 module.exports = function createResponse (id: number, result: any): JsonRpcResponse {
-  return createJson(id, {
+  return createJson(id, ({
     result
-  });
+  }: $Shape<JsonRpcResponse>));
 };
