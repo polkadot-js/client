@@ -4,7 +4,7 @@ const isUndefined = require('@polkadot/util/is/undefined');
 
 const module = require('./');
 
-describe('client-p2p', () => {
+describe('client-rpc', () => {
   it('exports a defined object', () => {
     expect(
       isUndefined(module)

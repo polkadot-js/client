@@ -1,6 +1,7 @@
 // ISC, Copyright 2017 Jaco Greeff
 // @flow
 
+import type { ChainConfigType$Nodes } from '@polkadot/client-chains/types';
 import type { RoleType } from '@polkadot/primitives/role';
 
 export type P2pErrorEventTypes =
@@ -29,6 +30,7 @@ export type P2pConfigType = {
   address: string,
   clientId: string,
   maxPeers: number,
+  peers?: ChainConfigType$Nodes,
   port: number,
   role: RoleType
 };

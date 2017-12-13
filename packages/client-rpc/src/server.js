@@ -53,16 +53,7 @@ module.exports = class RPCServer {
     }
   }
 
-  stop () {
-    if (this._server) {
-      this._server.close();
-      this._server = null;
-
-      l.log('Client stopped');
-    }
-  }
-
-  start () {
+  async start (): Promise<void> {
     this.stop();
 
     const hasHttp = this._type.includes('http');
@@ -85,7 +76,20 @@ module.exports = class RPCServer {
 
     this._server = app.listen(this._port);
 
-    l.log(`Client started on port=${this._port} for type=[${this._type.join(',')}]`);
+    l.log(`Server started on port=${this._port} for type=${this._type.join(',')}`);
+  }
+
+  async stop (): Promise<void> {
+    if (!this._server) {
+      return;
+    }
+
+    const server = this._server;
+
+    this._server = null;
+    server.close();
+
+    l.log('Server stopped');
   }
 
   _handlePost = async (ctx: PostContextType): Promise<void> => {
