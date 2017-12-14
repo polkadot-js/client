@@ -26,13 +26,13 @@ describe('createListener', () => {
   });
 
   it('validates the IP address', () => {
-    createListener('no.ip.is.here').catch((error) => {
+    return createListener('no.ip.is.here').catch((error) => {
       expect(error.message).toMatch(/valid IP address/);
     });
   });
 
   it('validates the port', () => {
-    createListener('127.0.0.1', 'notAPort').catch((error) => {
+    return createListener('127.0.0.1', 'notAPort').catch((error) => {
       expect(error.message).toMatch(/valid numeric port/);
     });
   });
@@ -56,7 +56,7 @@ describe('createListener', () => {
   it('fails when PeerInfo.create fails', () => {
     PeerInfo.create = (cb) => cb(new Error('test create failure'));
 
-    createListener('127.0.0.1', 999).catch((error) => {
+    return createListener('127.0.0.1', 999).catch((error) => {
       expect(error.message).toMatch(/test create failure/);
     });
   });
