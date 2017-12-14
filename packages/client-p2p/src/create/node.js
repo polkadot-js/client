@@ -19,7 +19,7 @@ module.exports = async function createNode (config: P2pConfigType, chain: ChainC
 
   const listener = await createListener(config.address, config.port);
   const peerBook = await createPeerBook(peers);
-  const nodeConfig = createConfig(listener, chain.nodes, peerBook);
+  const nodeConfig = createConfig(listener, chain.nodes);
 
-  return new Libp2p(nodeConfig, listener);
+  return new Libp2p(nodeConfig, listener, peerBook);
 };

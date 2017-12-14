@@ -21,8 +21,15 @@ declare type LibP2P$Config = {
 };
 
 declare module 'libp2p' {
+  declare type LibP2P$Events = 'peer:connect' | 'peer:disconnect' | 'peer:discovery' | 'start' | 'stop';
+
   declare class LibP2P {
     constructor (config?: LibP2P$Config, peerInfo?: PeerInfo, peerBook?: PeerBook): LibP2P;
+
+    handle (protocol: string, (protocol: string, conn: any) => any): void;
+    on (event: LibP2P$Events, callback: (event: any) => any): void;
+    start ((error: Error) => any): void;
+    stop ((error: Error) => any): void;
   }
 
   declare module.exports: typeof LibP2P;

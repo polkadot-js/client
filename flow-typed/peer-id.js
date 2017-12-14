@@ -9,6 +9,7 @@ declare module 'peer-id' {
   declare class PeerId {
     constructor (id: Buffer, privKey: Buffer, pubKey: Buffer): PeerId;
 
+    toB58String (): string;
     toJSON (): { [string]: any };
 
     static create (options: PeerId$CreateOptions, callback: PeerId$CreateCb): void;
