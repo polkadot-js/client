@@ -8,7 +8,8 @@ const CLIENT_ID = 'client/0.0.0';
 const MAX_PEERS = 25;
 const PORT = 39933;
 const ROLE: RoleType = 'none';
-const PROTOCOL = '/dot/0.0.0';
+const PROTOCOL_VERSION = 0;
+const PROTOCOL = `/dot/0.0.${PROTOCOL_VERSION}`;
 
 module.exports = {
   ADDRESS,
@@ -16,5 +17,6 @@ module.exports = {
   MAX_PEERS,
   PORT,
   PROTOCOL,
+  PROTOCOL_VERSION,
   ROLE
 };

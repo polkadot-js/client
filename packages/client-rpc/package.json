@@ -33,7 +33,7 @@
     "@polkadot/api-provider": "^0.6.5"
   },
   "dependencies": {
-    "@polkadot/util": "^0.8.1",
+    "@polkadot/util": "^0.9.1",
     "co-body": "^5.1.1",
     "koa": "^2.4.1",
     "koa-route": "^3.2.0",

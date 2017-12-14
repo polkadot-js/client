@@ -10,7 +10,7 @@ const PeerInfo = require('peer-info');
 module.exports = async function createPeerInfo (addresses: ChainConfigType$Nodes): Promise<PeerInfo> {
   assert(Array.isArray(addresses), 'Expected an array of peers');
 
-  const peerInfo: PeerInfo = await promisify(PeerInfo.create);
+  const peerInfo: PeerInfo = await promisify(null, PeerInfo.create);
 
   addresses.forEach((address) => {
     peerInfo.multiaddrs.add(address);

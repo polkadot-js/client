@@ -107,9 +107,20 @@
     stylelint "^8.2.0"
     stylelint-config-standard "^18.0.0"
 
-"@polkadot/primitives@^0.1.5":
-  version "0.1.5"
-  resolved "https://registry.yarnpkg.com/@polkadot/primitives/-/primitives-0.1.5.tgz#6eb2fbccb06bda8bd774d205528d9b3a1d3e0b21"
+"@polkadot/primitives-json@^0.3.1":
+  version "0.3.1"
+  resolved "https://registry.yarnpkg.com/@polkadot/primitives-json/-/primitives-json-0.3.1.tgz#7c18589b944d792019ed08155363a29504604d23"
+  dependencies:
+    "@polkadot/primitives" "^0.3.1"
+    "@polkadot/util" "^0.9.1"
+    babel-runtime "^6.26.0"
+
+"@polkadot/primitives@^0.3.1":
+  version "0.3.1"
+  resolved "https://registry.yarnpkg.com/@polkadot/primitives/-/primitives-0.3.1.tgz#420220a8e9c3118f613e47218b038ca7c3724922"
+  dependencies:
+    "@polkadot/util" "^0.9.1"
+    babel-runtime "^6.26.0"
 
 "@polkadot/util@^0.6.7":
   version "0.6.10"
@@ -119,9 +130,9 @@
     bn.js "^4.11.8"
     keccak "^1.3.0"
 
-"@polkadot/util@^0.8.1":
-  version "0.8.1"
-  resolved "https://registry.yarnpkg.com/@polkadot/util/-/util-0.8.1.tgz#c5d4e27a8691700e4667978345d99f2646f1b4eb"
+"@polkadot/util@^0.9.1":
+  version "0.9.1"
+  resolved "https://registry.yarnpkg.com/@polkadot/util/-/util-0.9.1.tgz#222a31f0325468044736792bd5652e483b8336db"
   dependencies:
     babel-runtime "^6.26.0"
     bn.js "^4.11.8"

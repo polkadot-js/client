@@ -30,8 +30,9 @@
     "test": "echo \"Tests only available from root wrapper\""
   },
   "dependencies": {
-    "@polkadot/primitives": "^0.1.5",
-    "@polkadot/util": "^0.8.1",
+    "@polkadot/primitives": "^0.3.1",
+    "@polkadot/primitives-json": "^0.3.1",
+    "@polkadot/util": "^0.9.1",
     "babel-runtime": "^6.26.0",
     "eventemitter3": "^2.0.3",
     "libp2p": "^0.13.3",

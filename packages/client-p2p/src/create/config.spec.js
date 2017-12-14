@@ -11,7 +11,7 @@ describe('createConfig', () => {
   let peerInfo;
 
   beforeEach(async () => {
-    peerInfo = await promisify(PeerInfo.create, { bits: 0 });
+    peerInfo = await promisify(null, PeerInfo.create, { bits: 0 });
   });
 
   it('expects a peerInfo object', () => {

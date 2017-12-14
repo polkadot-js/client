@@ -71,12 +71,6 @@ describe('createListener', () => {
         peerInfoMock.multiaddrs.add
       ).toHaveBeenCalledWith('/ip4/10.12.34.67/tcp/7788');
     });
-
-    // it('adds udp entry', () => {
-    //   expect(
-    //     peerInfoMock.multiaddrs.add
-    //   ).toHaveBeenCalledWith('/ip4/10.12.34.67/udp/7788');
-    // });
   });
 
   describe('IPv6', () => {
@@ -89,11 +83,5 @@ describe('createListener', () => {
         peerInfoMock.multiaddrs.add
       ).toHaveBeenCalledWith('/ip6/2:3:4:5:6:7:8:9/tcp/6677');
     });
-
-    // it('adds udp entry', () => {
-    //   expect(
-    //     peerInfoMock.multiaddrs.add
-    //   ).toHaveBeenCalledWith('/ip6/2:3:4:5:6:7:8:9/udp/6677');
-    // });
   });
 });
