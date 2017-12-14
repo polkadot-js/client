@@ -17,13 +17,13 @@ describe('createConfig', () => {
   it('expects a peerInfo object', () => {
     expect(
       () => createConfig()
-    ).toThrow(/peerInfo as a PeerInfo/);
+    ).toThrow(/PeerInfo instance/);
   });
 
   it('expects a valid bootNodes array', () => {
     expect(
       () => createConfig(peerInfo, 'notanArray')
-    ).toThrow(/array of nodes/);
+    ).toThrow(/array of bootNodes/);
   });
 
   it('returns a valid configuration object', () => {

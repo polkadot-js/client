@@ -42,7 +42,7 @@ describe('validateGenesis', () => {
       () => validateGenesis(
         Object.assign({}, test, { author: 'notHex' })
       )
-    ).toThrow(/valid network accountId/);
+    ).toThrow(/AccountId/);
   });
 
   it('validates the hash', () => {
@@ -50,7 +50,7 @@ describe('validateGenesis', () => {
       () => validateGenesis(
         Object.assign({}, test, { hash: 'notHex' })
       )
-    ).toThrow(/valid header hash/);
+    ).toThrow(/HeaderHash/);
   });
 
   it('validates the parentHash', () => {
@@ -58,7 +58,7 @@ describe('validateGenesis', () => {
       () => validateGenesis(
         Object.assign({}, test, { parentHash: 'notHex' })
       )
-    ).toThrow(/valid header hash/);
+    ).toThrow(/HeaderHash/);
   });
 
   it('validates the stateRoot', () => {
@@ -66,6 +66,6 @@ describe('validateGenesis', () => {
       () => validateGenesis(
         Object.assign({}, test, { stateRoot: 'notHex' })
       )
-    ).toThrow(/valid hash/);
+    ).toThrow(/Hash/);
   });
 });

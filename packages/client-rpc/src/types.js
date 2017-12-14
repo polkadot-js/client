@@ -35,3 +35,9 @@ export type RpcConfigType = {
   port: number,
   type: Array<RpcType>
 };
+
+export type RpcInterface$Events = 'started' | 'stopped';
+
+export interface RpcInterface {
+  on (type: RpcInterface$Events, () => any): any;
+}

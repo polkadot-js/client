@@ -23,13 +23,13 @@ describe('createNode', () => {
 
   it('requires a valid config object', () => {
     return createNode().catch((error) => {
-      expect(error.message).toMatch(/valid p2p config/);
+      expect(error.message).toMatch(/P2P configuration/);
     });
   });
 
   it('requires a valid chain definition object', () => {
     return createNode({}).catch((error) => {
-      expect(error.message).toMatch(/valid chain/);
+      expect(error.message).toMatch(/chain definition/);
     });
   });
 

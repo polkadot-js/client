@@ -14,7 +14,7 @@ const PREFIX = 'Chain.params';
 module.exports = function validateParams (params: ChainConfigType$Params, strict: boolean = false): boolean {
   validateObject(PREFIX, params, KNOWN_KEYS, strict);
 
-  assert(isHex(params.networkID), `${PREFIX}.networkID should be a hex number`);
+  assert(isHex(params.networkID), `${PREFIX}.networkID should be a Hex`);
 
   return true;
 };

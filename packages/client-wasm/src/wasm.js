@@ -9,11 +9,11 @@ const { createInstance, createModule } = require('./create');
 
 module.exports = class Wasm {
   constructor (instance: WebAssemblyInstance) {
-    assert(isInstanceOf(instance, WebAssembly.Instance), 'WebAssembly instance to be provided');
+    assert(isInstanceOf(instance, WebAssembly.Instance), 'Expected WebAssembly.Instance');
 
     const exports = instance.exports;
 
-    assert(isObject(exports), 'No exports found on WebAssembly instance');
+    assert(isObject(exports), 'Expected function exports');
 
     Object.keys(exports).forEach((key: string) => {
       Object.defineProperty(this, key, {
@@ -24,8 +24,8 @@ module.exports = class Wasm {
     });
   }
 
-  static fromCode (code: Uint8Array, imports?: WebAssemblyImports): Wasm {
-    const module = createModule(code);
+  static fromCode (bytecode: Uint8Array, imports?: WebAssemblyImports): Wasm {
+    const module = createModule(bytecode);
     const instance = createInstance(module, imports);
 
     return new Wasm(instance);

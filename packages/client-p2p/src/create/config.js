@@ -30,9 +30,8 @@ const DEFAULT_TRANSPORTS = [
 ];
 
 module.exports = function createConfig (peerInfo: PeerInfo, bootNodes: ChainConfigType$Nodes = []): LibP2P$Config {
-  assert(isInstanceOf(peerInfo, PeerInfo), 'Expected peerInfo as a PeerInfo instance');
-
-  assert(Array.isArray(bootNodes), 'Expected bootNodes as an array of nodes');
+  assert(isInstanceOf(peerInfo, PeerInfo), 'Expected PeerInfo instance');
+  assert(Array.isArray(bootNodes), 'Expected array of bootNodes');
 
   return {
     connection: {

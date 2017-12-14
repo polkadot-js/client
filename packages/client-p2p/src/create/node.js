@@ -13,9 +13,8 @@ const createListener = require('./listener');
 const createPeerBook = require('./peerBook');
 
 module.exports = async function createNode (config: P2pConfigType, chain: ChainConfigType): Promise<Libp2p> {
-  assert(isObject(config), 'Expected a valid p2p config object');
-
-  assert(isObject(chain), 'Expected a valid chain defintion');
+  assert(isObject(config), 'Expected P2P configuration');
+  assert(isObject(chain), 'Expected chain definition');
 
   const listener = await createListener(config.address, config.port);
   const peerBook = await createPeerBook(config.peers);

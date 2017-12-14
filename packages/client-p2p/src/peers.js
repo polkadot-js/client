@@ -16,7 +16,7 @@ module.exports = class Peers extends EventEmitter implements PeersInterface {
   constructor (emitter: Libp2p) {
     super();
 
-    assert(emitter, 'Expected to receive a Libp2p event emitter');
+    assert(emitter, 'Expected to receive a Libp2p emitter');
 
     this._peers = {};
 

@@ -67,7 +67,7 @@ describe('Server', () => {
         expect(result).toMatchObject({
           error: {
             code: ExtError.CODES.INVALID_JSONRPC,
-            message: "Expected a numeric id, received 'notNumber'"
+            message: 'Expected a numeric id'
           }
         });
       });

@@ -30,7 +30,7 @@ describe('createInstance', () => {
   it('throws and error on non-WebAssembly module', () => {
     expect(
       () => createInstance('nonAModule')
-    ).toThrow(/Cannot create from non/);
+    ).toThrow(/WebAssembly\.Module/);
   });
 
   it('creates an instance with the module & imports', () => {

@@ -11,7 +11,6 @@ const KNOWN_KEYS = ['description', 'genesis', 'name', 'nodes', 'params'];
 
 module.exports = function validateChain (chain: ChainConfigType, strict: boolean = false): ChainConfigType {
   validateObject('Chain', chain, KNOWN_KEYS, strict);
-
   validateGenesis(chain.genesis, strict);
   validateParams(chain.params, strict);
 

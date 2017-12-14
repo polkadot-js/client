@@ -1,7 +1,7 @@
 // ISC, Copyright 2017 Jaco Greeff
 // @flow
 
-import type { HandlersType, JsonRpcError, JsonRpcRequest, JsonRpcResponse, RpcConfigType, RpcType } from './types';
+import type { HandlersType, JsonRpcError, JsonRpcRequest, JsonRpcResponse, RpcConfigType, RpcInterface, RpcType } from './types';
 
 type PostContextType = {
   body: string,
@@ -26,12 +26,13 @@ const ExtError = require('@polkadot/util/ext/error');
 const l = require('@polkadot/util/logger')('rpc');
 const isError = require('@polkadot/util/is/error');
 const isFunction = require('@polkadot/util/is/function');
+const EventEmitter = require('eventemitter3');
 
 const defaults = require('./defaults');
 const { createError, createResponse } = require('./jsonrpc');
 const { validateConfig, validateRequest, validateHandlers } = require('./validate');
 
-module.exports = class RPCServer {
+module.exports = class RPCServer extends EventEmitter implements RpcInterface {
   _handlers: HandlersType;
   _path: string;
   _port: number;
@@ -39,6 +40,8 @@ module.exports = class RPCServer {
   _type: Array<RpcType>;
 
   constructor ({ path = defaults.PATH, port = defaults.PORT, type = defaults.TYPE }: RpcConfigType, handlers: HandlersType, autoStart: boolean = true) {
+    super();
+
     validateConfig({ path, port, type });
     validateHandlers(handlers);
 
@@ -77,6 +80,7 @@ module.exports = class RPCServer {
     this._server = app.listen(this._port);
 
     l.log(`Server started on port=${this._port} for type=${this._type.join(',')}`);
+    this.emit('started');
   }
 
   async stop (): Promise<void> {
@@ -90,6 +94,7 @@ module.exports = class RPCServer {
     server.close();
 
     l.log('Server stopped');
+    this.emit('stopped');
   }
 
   _handlePost = async (ctx: PostContextType): Promise<void> => {

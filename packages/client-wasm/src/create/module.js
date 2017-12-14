@@ -4,10 +4,9 @@
 const assert = require('@polkadot/util/assert');
 const isUint8Array = require('@polkadot/util/is/uint8Array');
 
-module.exports = function createModule (code: Uint8Array): WebAssemblyModule {
-  assert(isUint8Array(code), 'Cannot create from non-Uint8Array');
+module.exports = function createModule (bytecode: Uint8Array): WebAssemblyModule {
+  assert(isUint8Array(bytecode), 'Expected bytecode as Uint8Array');
+  assert(WebAssembly.validate(bytecode), 'Expected valid wasm bytecode');
 
-  assert(WebAssembly.validate(code), 'Invalid wasm bytecode supplied');
-
-  return new WebAssembly.Module(code);
+  return new WebAssembly.Module(bytecode);
 };

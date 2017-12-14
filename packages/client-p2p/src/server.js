@@ -26,9 +26,8 @@ module.exports = class Server extends EventEmitter implements P2pInterface {
   constructor (config: P2pConfigType, chain: ChainConfigType, autoStart: boolean = true) {
     super();
 
-    assert(isObject(config), 'Expected a P2P configuration object');
-
-    assert(isObject(chain), 'Expected a chain definition object');
+    assert(isObject(config), 'Expected P2P configuration');
+    assert(isObject(chain), 'Expected chain definition');
 
     this._config = config;
     this._chain = chain;

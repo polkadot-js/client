@@ -27,13 +27,13 @@ describe('createListener', () => {
 
   it('validates the IP address', () => {
     return createListener('no.ip.is.here').catch((error) => {
-      expect(error.message).toMatch(/valid IP address/);
+      expect(error.message).toMatch(/IP address/);
     });
   });
 
   it('validates the port', () => {
     return createListener('127.0.0.1', 'notAPort').catch((error) => {
-      expect(error.message).toMatch(/valid numeric port/);
+      expect(error.message).toMatch(/numeric port/);
     });
   });
 
