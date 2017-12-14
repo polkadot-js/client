@@ -15,7 +15,13 @@ module.exports = function cli (params?: string): ConfigType {
 
       if (/^(p2p|rpc)-/.test(key)) {
         const section = key.substr(0, sepIndex);
-        const name = key.replace(/^(p2p|rpc)-/, '');
+        const name = key.split('-').reduce((name, part, index) => {
+          if (index <= 1) {
+            return part;
+          }
+
+          return `${name}${part.substr(0, 1).toUpperCase()}${part.substr(1).toLowerCase()}`;
+        }, '');
 
         config[section] = config[section] || {};
         config[section][name] = argv[key];
