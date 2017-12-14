@@ -8,7 +8,7 @@ const promisify = require('@polkadot/util/promisify');
 const PeerInfo = require('peer-info');
 
 module.exports = async function createPeerInfo (addresses: ChainConfigType$Nodes): Promise<PeerInfo> {
-  assert(Array.isArray(addresses), 'Expected an array of peers');
+  assert(Array.isArray(addresses), 'Expected an array of addresses');
 
   const peerInfo: PeerInfo = await promisify(null, PeerInfo.create);
 

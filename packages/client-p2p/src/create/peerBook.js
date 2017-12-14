@@ -9,7 +9,7 @@ const PeerBook = require('peer-book');
 const createPeerInfo = require('./peerInfo');
 
 module.exports = async function createPeerBook (peers: ChainConfigType$Nodes = []): Promise<PeerBook> {
-  assert(Array.isArray(peers), 'Expected an array of addresses');
+  assert(Array.isArray(peers), 'Expected an array of peers');
 
   const peerBook = new PeerBook();
   const peerInfos = await Promise.all(
