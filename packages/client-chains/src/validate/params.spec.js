@@ -39,6 +39,6 @@ describe('validateParams', () => {
       () => validateParams(
         Object.assign({}, test, { networkID: 123 })
       )
-    ).toThrow(/networkID should be a hex/);
+    ).toThrow(/networkID should be a Hex/);
   });
 });

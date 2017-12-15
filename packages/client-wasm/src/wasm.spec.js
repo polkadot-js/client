@@ -3,7 +3,6 @@
 const isInstanceOf = require('@polkadot/util/is/instanceOf');
 
 const { loadWasm } = require('../test/helpers');
-
 const Wasm = require('./wasm');
 
 describe('Wasm', () => {
@@ -28,13 +27,13 @@ describe('Wasm', () => {
     it('check for instance as WebAssembly.Instance', () => {
       expect(
         () => new Wasm('notInstance')
-      ).toThrow(/WebAssembly instance to be provided/);
+      ).toThrow(/WebAssembly\.Instance/);
     });
 
     it('disallows empty exports', () => {
       expect(
         () => new Wasm(new WebAssembly.Instance())
-      ).toThrow(/No exports found/);
+      ).toThrow(/Expected function exports/);
     });
   });
 

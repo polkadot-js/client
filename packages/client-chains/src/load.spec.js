@@ -1,6 +1,7 @@
 // ISC, Copyright 2017 Jaco Greeff
 
 const path = require('path');
+
 const { loadChain } = require('./index');
 
 describe('loadChain', () => {

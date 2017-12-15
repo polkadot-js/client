@@ -1,8 +1,8 @@
 // ISC, Copyright 2017 Jaco Greeff
 
-const { loadWasm } = require('../../test/helpers');
 const isInstanceOf = require('@polkadot/util/is/instanceOf');
 
+const { loadWasm } = require('../../test/helpers');
 const createModule = require('./module');
 
 describe('createModule', () => {
@@ -29,13 +29,13 @@ describe('createModule', () => {
   it('throws an error on non-Uint8Array bytecode', () => {
     expect(
       () => createModule('nonUint8Array')
-    ).toThrow(/Cannot create from non/);
+    ).toThrow(/code as Uint8Array/);
   });
 
   it('throws error on non-Wasm inputs', () => {
     expect(
       () => createModule(new Uint8Array([1, 2, 3]))
-    ).toThrow(/Invalid wasm bytecode supplied/);
+    ).toThrow(/valid wasm bytecode/);
   });
 
   it('calls the Module constructor with the code', () => {

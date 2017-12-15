@@ -1,19 +1,21 @@
 // ISC, Copyright 2017 Jaco Greeff
 
-const isInstanceOf = require('@polkadot/util/is/instanceOf');
 const LibP2P = require('libp2p');
 const PeerId = require('peer-id');
 const PeerInfo = require('peer-info');
+
+const isInstanceOf = require('@polkadot/util/is/instanceOf');
 
 const createNode = require('./node');
 
 describe('createNode', () => {
   let origPeerInfoCreate;
+  let count = 0;
 
   beforeEach(() => {
     origPeerInfoCreate = PeerInfo.create;
     PeerInfo.create = (callback) => {
-      origPeerInfoCreate(new PeerId(Buffer.from([])), callback);
+      origPeerInfoCreate(new PeerId(Buffer.from([count++])), callback);
     };
   });
 
@@ -23,13 +25,13 @@ describe('createNode', () => {
 
   it('requires a valid config object', () => {
     return createNode().catch((error) => {
-      expect(error.message).toMatch(/valid p2p config/);
+      expect(error.message).toMatch(/P2P configuration/);
     });
   });
 
   it('requires a valid chain definition object', () => {
     return createNode({}).catch((error) => {
-      expect(error.message).toMatch(/valid chain/);
+      expect(error.message).toMatch(/chain definition/);
     });
   });
 

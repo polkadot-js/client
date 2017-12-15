@@ -11,3 +11,4 @@ module.name_mapper='^@polkadot/client-chains\(.*\)$' -> '<PROJECT_ROOT>/packages
 module.name_mapper='^@polkadot/client-p2p\(.*\)$' -> '<PROJECT_ROOT>/packages/client-p2p/src\1'
 module.name_mapper='^@polkadot/client-rpc\(.*\)$' -> '<PROJECT_ROOT>/packages/client-rpc/src\1'
 module.name_mapper='^@polkadot/client-wasm\(.*\)$' -> '<PROJECT_ROOT>/packages/client-wasm/src\1'
+unsafe.enable_getters_and_setters=true

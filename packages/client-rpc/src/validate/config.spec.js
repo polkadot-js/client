@@ -6,19 +6,19 @@ describe('validateConfig', () => {
   it('throws when non-numeric port is specified', () => {
     expect(
       () => validateConfig({ port: 'abc' })
-    ).toThrow(/non-numeric port='abc'/);
+    ).toThrow(/numeric port/);
   });
 
   it('throws when type is not an array', () => {
     expect(
       () => validateConfig({ port: 123, type: 'notArray' })
-    ).toThrow(/Type should be specified as an Array/);
+    ).toThrow(/as an Array/);
   });
 
   it('throws when type is an empty array', () => {
     expect(
       () => validateConfig({ port: 123, type: [] })
-    ).toThrow(/Type should have at least one/);
+    ).toThrow(/non-empty type/);
   });
 
   it('throws when unknown type is found', () => {

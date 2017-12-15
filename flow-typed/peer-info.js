@@ -13,6 +13,7 @@ declare module 'peer-info' {
   declare class PeerInfo {
     constructor (): PeerInfo;
 
+    id: PeerId;
     multiaddrs: MultiAddrSet;
 
     static create (idOrCallback: PeerId | PeerInfo$CreateCb, callback?: PeerInfo$CreateCb): void;

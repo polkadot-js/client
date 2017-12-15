@@ -16,6 +16,10 @@ module.exports = ({
     description: 'The maximum allowed peers',
     type: 'number'
   },
+  'p2p-peers': {
+    description: 'Peers to make initial connections to',
+    type: 'array'
+  },
   'p2p-port': {
     default: defaults.PORT,
     description: 'Sets the peer-to-peer port, 0 for non-listening mode',

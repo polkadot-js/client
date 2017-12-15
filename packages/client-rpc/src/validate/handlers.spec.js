@@ -3,16 +3,16 @@
 const { validateHandlers } = require('./index');
 
 describe('validateHandlers', () => {
-  it('throws when handlers are undefined', () => {
+  it('throws when handlers is non-object', () => {
     expect(
-      () => validateHandlers()
-    ).toThrow(/without handlers/);
+      () => validateHandlers('notAnObject')
+    ).toThrow(/handler mapping object/);
   });
 
   it('throws when handlers are empty', () => {
     expect(
       () => validateHandlers({})
-    ).toThrow(/without handlers/);
+    ).toThrow(/non-empty handler/);
   });
 
   it('throws when non-function handlers are found', () => {

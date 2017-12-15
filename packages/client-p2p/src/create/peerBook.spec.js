@@ -1,0 +1,51 @@
+// ISC, Copyright 2017 Jaco Greeff
+
+const PeerBook = require('peer-book');
+const PeerId = require('peer-id');
+const PeerInfo = require('peer-info');
+
+const isInstanceOf = require('@polkadot/util/is/instanceOf');
+
+const createPeerBook = require('./peerBook');
+
+describe('createPeerBook', () => {
+  let origPeerInfoCreate;
+  let count = 0;
+
+  beforeEach(() => {
+    origPeerInfoCreate = PeerInfo.create;
+    PeerInfo.create = (callback) => {
+      origPeerInfoCreate(new PeerId(Buffer.from([count++])), callback);
+    };
+  });
+
+  afterEach(() => {
+    PeerInfo.create = origPeerInfoCreate;
+  });
+
+  it('expects an array of peers', () => {
+    return createPeerBook('notAddrArray').catch((error) => {
+      expect(error.message).toMatch(/array of peer addresses/);
+    });
+  });
+
+  it('returns a PeerBook instance', async () => {
+    const peerBook = await createPeerBook();
+
+    expect(
+      isInstanceOf(peerBook, PeerBook)
+    ).toEqual(true);
+  });
+
+  it('has the provided peers added', async () => {
+    const addresses = [
+      '/ip4/127.0.0.1/tcp/8888',
+      '/ip4/127.0.0.1/tcp/8899'
+    ];
+    const peerBook = await createPeerBook(addresses);
+
+    expect(
+      peerBook.getAllArray()
+    ).toHaveLength(2);
+  });
+});

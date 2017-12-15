@@ -1,9 +1,10 @@
 // ISC, Copyright 2017 Jaco Greeff
 
-const isInstanceOf = require('@polkadot/util/is/instanceOf');
-const promisify = require('@polkadot/util/promisify');
 const Railing = require('libp2p-railing');
 const PeerInfo = require('peer-info');
+
+const isInstanceOf = require('@polkadot/util/is/instanceOf');
+const promisify = require('@polkadot/util/promisify');
 
 const createConfig = require('./config');
 
@@ -11,19 +12,19 @@ describe('createConfig', () => {
   let peerInfo;
 
   beforeEach(async () => {
-    peerInfo = await promisify(PeerInfo.create, { bits: 0 });
+    peerInfo = await promisify(null, PeerInfo.create, { bits: 0 });
   });
 
   it('expects a peerInfo object', () => {
     expect(
       () => createConfig()
-    ).toThrow(/peerInfo as a PeerInfo/);
+    ).toThrow(/PeerInfo instance/);
   });
 
   it('expects a valid bootNodes array', () => {
     expect(
       () => createConfig(peerInfo, 'notanArray')
-    ).toThrow(/array of nodes/);
+    ).toThrow(/array of bootNodes/);
   });
 
   it('returns a valid configuration object', () => {

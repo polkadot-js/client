@@ -3,7 +3,7 @@
 const { createResponse } = require('./index');
 
 describe('createResponse', () => {
-  it('creates a valid JSONRPC structure', () => {
+  it('creates a valid JsonRpc structure', () => {
     expect(
       createResponse(123, 'test result')
     ).toEqual({

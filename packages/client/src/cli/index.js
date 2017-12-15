@@ -11,17 +11,21 @@ module.exports = function cli (params?: string): ConfigType {
   return Object
     .keys(argv)
     .reduce((config: ConfigType, key: string) => {
-      if (key.indexOf('-') !== -1) {
-        return config;
-      }
+      const sepIndex = key.indexOf('-');
 
-      if (/^(p2p|rpc)/.test(key)) {
-        const section = key.substr(0, 3);
-        const name = key.replace(/^(p2p|rpc)/, '');
+      if (/^(p2p|rpc)-/.test(key)) {
+        const section = key.substr(0, sepIndex);
+        const name = key.split('-').reduce((name, part, index) => {
+          if (index <= 1) {
+            return part;
+          }
+
+          return `${name}${part.substr(0, 1).toUpperCase()}${part.substr(1).toLowerCase()}`;
+        }, '');
 
         config[section] = config[section] || {};
-        config[section][`${name.substr(0, 1).toLowerCase()}${name.substr(1)}`] = argv[key];
-      } else {
+        config[section][name] = argv[key];
+      } else if (!/^(p2p|rpc)[A-Z]/.test(key)) {
         config[key] = argv[key];
       }
 

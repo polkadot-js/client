@@ -1,19 +1,19 @@
 // ISC, Copyright 2017 Jaco Greeff
 // @flow
 
-const NAME: string = 'node.js';
+const NAME = 'polkadot-js';
 
 let pkgJson: any;
-let stability: string;
+let stability = 'stable';
 
 try {
   // $FlowFixMe compiled version
   pkgJson = require('./package.json');
-  stability = 'stable';
 } catch (error) {
+  stability = 'development';
+
   // $FlowFixMe source version
   pkgJson = require('../package.json');
-  stability = 'development';
 }
 
 module.exports = `${NAME}/${pkgJson.version}-${stability}`;
