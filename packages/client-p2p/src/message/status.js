@@ -10,12 +10,13 @@ const BN = require('bn.js');
 
 const roleFromId = require('@polkadot/primitives/role/fromId');
 const roleToId = require('@polkadot/primitives/role/toId');
+const { accountIdDecode, accountIdEncode } = require('@polkadot/primitives-rlp/accountId');
+const { blockNumberDecode, blockNumberEncode } = require('@polkadot/primitives-rlp/blockNumber');
+const { headerHashDecode, headerHashEncode } = require('@polkadot/primitives-rlp/headerHash');
+const { parachainIdDecode, parachainIdEncode } = require('@polkadot/primitives-rlp/parachainId');
+const { signatureDecode, signatureEncode } = require('@polkadot/primitives-rlp/signature');
 const assert = require('@polkadot/util/assert');
-const bnToHex = require('@polkadot/util/bn/toHex');
-const bufferToHex = require('@polkadot/util/buffer/toHex');
 const bufferToNumber = require('@polkadot/util/buffer/toNumber');
-const hexToBn = require('@polkadot/util/hex/toBn');
-const hexToBuffer = require('@polkadot/util/hex/toBuffer');
 const numberToBuffer = require('@polkadot/util/number/toBuffer');
 const isObject = require('@polkadot/util/is/object');
 
@@ -54,28 +55,26 @@ module.exports = class StatusMessage extends BaseMessage implements MessageInter
 
     const [version, roles, bestNumber, bestHash, genesisHash, validatorSignature, validatorId, parachainId] = raw;
 
-    // TODO: Use from @polkadot/primitives-rlp
     this.version = bufferToNumber(version);
     this.roles = roles.map(bufferToNumber).map(roleFromId);
-    this.bestNumber = hexToBn(bufferToHex(bestNumber));
-    this.bestHash = bufferToHex(bestHash);
-    this.genesisHash = bufferToHex(genesisHash);
-    this.validatorSignature = bufferToHex(validatorSignature || Buffer.from([]));
-    this.validatorId = bufferToHex(validatorId || Buffer.from([]));
-    this.parachainId = hexToBn(bufferToHex(parachainId || Buffer.from([])));
+    this.bestNumber = blockNumberDecode(bestNumber);
+    this.bestHash = headerHashDecode(bestHash);
+    this.genesisHash = headerHashDecode(genesisHash);
+    this.validatorSignature = signatureDecode(validatorSignature || Buffer.from([]));
+    this.validatorId = accountIdDecode(validatorId || Buffer.from([]));
+    this.parachainId = parachainIdDecode(parachainId || Buffer.from([]));
   }
 
   _rawEncodeRlp (): Array<any> {
-    // TODO: Use from @polkadot/primitives-rlp
     return [
       numberToBuffer(this.version),
       this.roles.map(roleToId).map(numberToBuffer),
-      hexToBuffer(bnToHex(this.bestNumber)),
-      hexToBuffer(this.bestHash),
-      hexToBuffer(this.genesisHash),
-      hexToBuffer(this.validatorSignature || '0x0'),
-      hexToBuffer(this.validatorId || '0x0'),
-      hexToBuffer(bnToHex(this.parachainId || new BN(0)))
+      blockNumberEncode(this.bestNumber),
+      headerHashEncode(this.bestHash),
+      headerHashEncode(this.genesisHash),
+      signatureEncode(this.validatorSignature || '0x0'),
+      accountIdEncode(this.validatorId || '0x0'),
+      parachainIdEncode(this.parachainId || new BN(0))
     ];
   }
 };
