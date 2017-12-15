@@ -1,9 +1,15 @@
 // ISC, Copyright 2017 Jaco Greeff
 // @flow
 
-export type MessageTypeEnum = 'status';
+import type { AccountIdType, BlockNumberType, HeaderHashType, ParachainIdType, SignatureType } from '@polkadot/primitives/base';
+import type { RoleType } from '@polkadot/primitives/role';
 
-export type MessageType = {
-  type: MessageTypeEnum,
-  message: any
+export interface StatusMessageInterface {
+  roles: Array<RoleType>;
+  bestNumber: BlockNumberType;
+  bestHash: HeaderHashType;
+  genesisHash: HeaderHashType;
+  validatorSignature: ?SignatureType;
+  validatorId: ?AccountIdType;
+  parachainId: ?ParachainIdType;
 }

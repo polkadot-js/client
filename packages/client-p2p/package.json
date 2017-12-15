@@ -43,6 +43,7 @@
     "libp2p-tcp": "^0.11.1",
     "pull-pushable": "^2.1.1",
     "pull-stream": "^3.6.1",
-    "pump": "^2.0.0"
+    "pump": "^2.0.0",
+    "rlp": "^2.0.0"
   }
 }

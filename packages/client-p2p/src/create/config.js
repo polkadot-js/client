@@ -3,20 +3,20 @@
 
 import type { ChainConfigType$Nodes } from '@polkadot/client-chains/types';
 
-const arrayFilter = require('@polkadot/util/array/filter');
-const assert = require('@polkadot/util/assert');
-const isInstanceOf = require('@polkadot/util/is/instanceOf');
 const KadDHT = require('libp2p-kad-dht');
 const Multicast = require('libp2p-mdns');
 const Multiplex = require('libp2p-multiplex');
 const Railing = require('libp2p-railing');
 const TCP = require('libp2p-tcp');
 const PeerInfo = require('peer-info');
-
 // TODO: enable as required
 // const Secio = require('libp2p-secio');
 // const Spdy = require('libp2p-spdy');
 // const WS = require('libp2p-websockets');
+
+const arrayFilter = require('@polkadot/util/array/filter');
+const assert = require('@polkadot/util/assert');
+const isInstanceOf = require('@polkadot/util/is/instanceOf');
 
 const DEFAULT_CRYPTO = []; // [Secio]
 const DEFAULT_DHT = KadDHT;

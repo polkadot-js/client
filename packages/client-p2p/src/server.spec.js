@@ -3,11 +3,23 @@
 const Server = require('./index');
 
 describe('Server', () => {
-  describe('constructor', () => {
-    it('creates the instance', () => {
+  it('creates the instance', () => {
+    expect(
+      new Server({}, {}, false)
+    ).toBeDefined();
+  });
+
+  describe('_receive', () => {
+    let server;
+
+    beforeEach(() => {
+      server = new Server({}, {}, false);
+    });
+
+    it('checks for a protocol match', () => {
       expect(
-        new Server({}, {}, false)
-      ).toBeDefined();
+        () => server._receive()
+      ).toThrow(/Expected matching protocol/);
     });
   });
 });

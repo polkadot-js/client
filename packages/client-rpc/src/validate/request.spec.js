@@ -1,3 +1,5 @@
+// ISC, Copyright 2017 Jaco Greeff
+
 const { validateRequest } = require('./index');
 
 describe('validateRequest', () => {

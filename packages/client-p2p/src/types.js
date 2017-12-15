@@ -5,6 +5,15 @@ import type { ChainConfigType$Nodes } from '@polkadot/client-chains/types';
 import type { RoleType } from '@polkadot/primitives/role';
 import type PeerInfo from 'peer-info';
 
+export interface MessageInterface {
+  constructor (data: any): any;
+
+  encodeRlp (): [Buffer, Array<any>];
+  decodeRlp (id: number, raw: Array<any>): void;
+
+  static MESSAGE_ID: number;
+}
+
 export type P2pNodeType = {
   address: string,
   port: number
@@ -20,6 +29,7 @@ export type P2pConfigType = {
 };
 
 export type PeerType = {
+  connection: ?any,
   id: string,
   isConnected: boolean,
   isConnecting: boolean,

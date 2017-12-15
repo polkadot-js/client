@@ -1,14 +1,15 @@
 // ISC, Copyright 2017 Jaco Greeff
 // @flow
 
-import type { PeersInterface, PeerType } from './types';
+import type { PeersInterface, PeersInterface$Events, PeerType } from './types';
 import type Libp2p from 'libp2p';
 import type PeerInfo from 'peer-info';
+
+const EventEmitter = require('eventemitter3');
 
 const assert = require('@polkadot/util/assert');
 const stringShorten = require('@polkadot/util/string/shorten');
 const l = require('@polkadot/util/logger')('p2p/peers');
-const EventEmitter = require('eventemitter3');
 
 module.exports = class Peers extends EventEmitter implements PeersInterface {
   _peers: { [string]: PeerType };
@@ -30,12 +31,24 @@ module.exports = class Peers extends EventEmitter implements PeersInterface {
   }
 
   get connectedCount (): number {
-    return this.getConnected().length;
+    return this.peersConnected.length;
   }
 
-  getConnected (): Array<PeerType> {
-    return ((Object.values(this._peers): any): Array<PeerType>)
-      .filter(({ isConnected }) => isConnected);
+  get peers (): Array<PeerType> {
+    return ((Object.values(this._peers): any): Array<PeerType>);
+  }
+
+  get peersConnected (): Array<PeerType> {
+    return this.peers.filter(({ isConnected }) => isConnected);
+  }
+
+  get (index: number): PeerType {
+    return this.peers[index];
+  }
+
+  _logPeer (event: PeersInterface$Events, peer: PeerType): void {
+    l.log(peer.shortId, event);
+    this.emit(event, peer);
   }
 
   _onConnect = (peerInfo: PeerInfo): any => {
@@ -53,8 +66,7 @@ module.exports = class Peers extends EventEmitter implements PeersInterface {
     peer.isConnecting = false;
     peer.isConnected = true;
 
-    l.log(peer.shortId, 'connected');
-    this.emit('connected', peer);
+    this._logPeer('connected', peer);
   }
 
   _onDisconnect = (peerInfo: PeerInfo): any => {
@@ -71,8 +83,7 @@ module.exports = class Peers extends EventEmitter implements PeersInterface {
 
     delete this._peers[id];
 
-    l.log(peer.shortId, 'disconnected');
-    this.emit('disconnected', peer);
+    this._logPeer('disconnected', peer);
   }
 
   _onDiscovery = (peerInfo: PeerInfo): any => {
@@ -90,6 +101,7 @@ module.exports = class Peers extends EventEmitter implements PeersInterface {
     const shortId = stringShorten(id);
 
     peer = this._peers[id] = {
+      connection: null,
       id,
       isConnected: false,
       isConnecting: false,
@@ -97,7 +109,6 @@ module.exports = class Peers extends EventEmitter implements PeersInterface {
       shortId
     };
 
-    l.log(shortId, 'discovered');
-    this.emit('discovered', peer);
+    this._logPeer('discovered', peer);
   }
 };

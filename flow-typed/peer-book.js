@@ -7,6 +7,8 @@ declare module 'peer-book' {
     constructor (): PeerBook;
 
     put (peerInfo: PeerInfo): void;
+    getAll (): { [string]: PeerInfo };
+    getAllArray (): Array<PeerInfo>;
   }
 
   declare module.exports: typeof PeerBook;

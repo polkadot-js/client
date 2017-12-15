@@ -1,9 +1,10 @@
 // ISC, Copyright 2017 Jaco Greeff
 
-const isInstanceOf = require('@polkadot/util/is/instanceOf');
-const promisify = require('@polkadot/util/promisify');
 const Railing = require('libp2p-railing');
 const PeerInfo = require('peer-info');
+
+const isInstanceOf = require('@polkadot/util/is/instanceOf');
+const promisify = require('@polkadot/util/promisify');
 
 const createConfig = require('./config');
 

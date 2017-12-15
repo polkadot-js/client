@@ -3,17 +3,20 @@
 
 import type Libp2p from 'libp2p';
 import type { ChainConfigType } from '@polkadot/client-chains/types';
-import type { P2pConfigType, P2pInterface, PeerType } from './types';
+import type { MessageInterface, P2pConfigType, P2pInterface, PeerType } from './types';
+
+const EventEmitter = require('eventemitter3');
+const pull = require('pull-stream');
 
 const assert = require('@polkadot/util/assert');
 const isObject = require('@polkadot/util/is/object');
 const promisify = require('@polkadot/util/promisify');
 const l = require('@polkadot/util/logger')('p2p');
-const EventEmitter = require('eventemitter3');
 
 const Peers = require('./peers');
 const createNode = require('./create/node');
-const protocolHandler = require('./protocol/handler');
+const StatusMessage = require('./message/status');
+const rlpEncode = require('./rlp/encode');
 const defaults = require('./defaults');
 
 module.exports = class Server extends EventEmitter implements P2pInterface {
@@ -22,7 +25,6 @@ module.exports = class Server extends EventEmitter implements P2pInterface {
   _node: Libp2p;
   _peers: Peers;
 
-  // TODO: Save peers, pass through valid PeerBook for known nodes as part of the setup process (could also specify these on the commandline)
   constructor (config: P2pConfigType, chain: ChainConfigType, autoStart: boolean = true) {
     super();
 
@@ -45,9 +47,7 @@ module.exports = class Server extends EventEmitter implements P2pInterface {
     this.stop();
 
     this._node = await createNode(this._config, this._chain);
-    this._node.on('start', () => this.emit('started'));
-    this._node.on('stop', () => this.emit('stopped'));
-    this._node.handle(defaults.PROTOCOL, protocolHandler);
+    this._node.handle(defaults.PROTOCOL, this._receive);
 
     this._peers = new Peers(this._node);
     this._peers.on('discovered', this._dialPeer);
@@ -55,6 +55,7 @@ module.exports = class Server extends EventEmitter implements P2pInterface {
     await promisify(this._node, this._node.start);
 
     l.log(`Started on address=${this._config.address}, port=${this._config.port}`);
+    this.emit('started');
   }
 
   async stop (): Promise<void> {
@@ -73,6 +74,7 @@ module.exports = class Server extends EventEmitter implements P2pInterface {
     await promisify(node, node.stop);
 
     l.log('Server stopped');
+    this.emit('stopped');
   }
 
   _dialPeer = async (peer: PeerType): any => {
@@ -84,9 +86,52 @@ module.exports = class Server extends EventEmitter implements P2pInterface {
     peer.isConnected = false;
 
     try {
-      await promisify(this._node, this._node.dial, peer.peerInfo, defaults.PROTOCOL);
+      peer.connection = await promisify(this._node, this._node.dial, peer.peerInfo, defaults.PROTOCOL);
+
+      this._send(peer.connection, new StatusMessage());
     } catch (error) {
       peer.isConnecting = false;
     }
+  }
+
+  _send = (connection: any, message: MessageInterface): void => {
+    const encoded = rlpEncode(message);
+    const streamWriter = pull.values([
+      encoded
+    ]);
+
+    console.log('W', encoded);
+
+    pull(
+      streamWriter,
+      connection
+    );
+  }
+
+  _receive = (protocol: string, connection: any): void => {
+    assert(protocol === defaults.PROTOCOL, `Expected matching protocol, '${protocol}' received`);
+
+    const streamReader = (read: Function): void => {
+      const next = (end: Error | boolean, encoded: Buffer): void => {
+        if (end) {
+          if (end === true) {
+            return;
+          }
+
+          throw end;
+        }
+
+        console.log('R', encoded);
+
+        read(null, next);
+      };
+
+      read(null, next);
+    };
+
+    pull(
+      connection,
+      streamReader
+    );
   }
 };

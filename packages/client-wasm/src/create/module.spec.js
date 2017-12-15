@@ -1,8 +1,8 @@
 // ISC, Copyright 2017 Jaco Greeff
 
-const { loadWasm } = require('../../test/helpers');
 const isInstanceOf = require('@polkadot/util/is/instanceOf');
 
+const { loadWasm } = require('../../test/helpers');
 const createModule = require('./module');
 
 describe('createModule', () => {

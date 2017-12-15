@@ -4,9 +4,10 @@
 import type { ChainConfigType } from '@polkadot/client-chains/types';
 import type { P2pConfigType } from '../types';
 
+const Libp2p = require('libp2p');
+
 const assert = require('@polkadot/util/assert');
 const isObject = require('@polkadot/util/is/object');
-const Libp2p = require('libp2p');
 
 const createConfig = require('./config');
 const createListener = require('./listener');

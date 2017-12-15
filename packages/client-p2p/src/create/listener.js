@@ -1,10 +1,11 @@
 // ISC, Copyright 2017 Jaco Greeff
 // @flow
 
+const PeerInfo = require('peer-info');
+
 const assert = require('@polkadot/util/assert');
 const isIp = require('@polkadot/util/is/ip');
 const isNumber = require('@polkadot/util/is/number');
-const PeerInfo = require('peer-info');
 
 const createPeerInfo = require('./peerInfo');
 const defaults = require('../defaults');

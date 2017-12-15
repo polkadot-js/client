@@ -4,6 +4,7 @@
 import type { ChainConfigType } from './types';
 
 const path = require('path');
+
 const assert = require('@polkadot/util/assert');
 const ExtError = require('@polkadot/util/ext/error');
 const isString = require('@polkadot/util/is/string');
