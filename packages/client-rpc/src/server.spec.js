@@ -1,6 +1,7 @@
 // ISC, Copyright 2017 Jaco Greeff
 
 const ExtError = require('@polkadot/util/ext/error');
+const isFunction = require('@polkadot/util/is/function');
 const HttpProvider = require('@polkadot/api-provider/http');
 const WsProvider = require('@polkadot/api-provider/ws');
 
@@ -153,6 +154,52 @@ describe('Server', () => {
           id: 1,
           result: 'test'
         });
+      });
+    });
+  });
+
+  describe('_handleWs', () => {
+    let context;
+    let handler;
+    let server;
+
+    beforeEach(() => {
+      context = {
+        websocket: {
+          on: jest.fn((type, cb) => {
+            if (type === 'message') {
+              handler = cb;
+            }
+          }),
+          send: jest.fn(() => true)
+        }
+      };
+      handler = null;
+      server = new Server({ port: 9901, type: ['ws'] }, handlers, false);
+    });
+
+    it('registers a handler for messages', () => {
+      server._handleWs(context);
+
+      expect(
+        isFunction(handler)
+      ).toEqual(true);
+    });
+
+    it('calls the socket with the result', () => {
+      server._handleWs(context);
+
+      return handler(
+        JSON.stringify({
+          jsonrpc: '2.0',
+          id: 1,
+          method: 'test',
+          params: ['a', 'b']
+        })
+      ).then(() => {
+        expect(
+          context.websocket.send
+        ).toHaveBeenCalledWith('{"id":1,"jsonrpc":"2.0","result":"test"}');
       });
     });
   });
