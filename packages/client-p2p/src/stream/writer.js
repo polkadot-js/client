@@ -5,12 +5,13 @@ import type { MessageInterface } from '../types';
 import type { CallbackType } from './types';
 
 const assert = require('@polkadot/util/assert');
-const isObject = require('@polkadot/util/is/object');
+const isInstanceOf = require('@polkadot/util/is/instanceOf');
 
+const BaseMessage = require('../message/base');
 const rlpEncode = require('../rlp/encode');
 
 module.exports = function streamWriter (message: MessageInterface): any {
-  assert(isObject(message), 'Expected message of type MessageInterface');
+  assert(isInstanceOf(message, BaseMessage), 'Expected valid message');
 
   const encoded = rlpEncode(message);
 

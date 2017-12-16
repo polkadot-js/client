@@ -60,9 +60,9 @@ module.exports = class StatusMessage extends BaseMessage implements MessageInter
     this.bestNumber = blockNumberDecode(bestNumber);
     this.bestHash = headerHashDecode(bestHash);
     this.genesisHash = headerHashDecode(genesisHash);
-    this.validatorSignature = signatureDecode(validatorSignature || Buffer.from([]));
-    this.validatorId = accountIdDecode(validatorId || Buffer.from([]));
-    this.parachainId = parachainIdDecode(parachainId || Buffer.from([]));
+    this.validatorSignature = signatureDecode(validatorSignature);
+    this.validatorId = accountIdDecode(validatorId);
+    this.parachainId = parachainIdDecode(parachainId);
   }
 
   _rawEncode (): Array<any> {
@@ -72,9 +72,9 @@ module.exports = class StatusMessage extends BaseMessage implements MessageInter
       blockNumberEncode(this.bestNumber),
       headerHashEncode(this.bestHash),
       headerHashEncode(this.genesisHash),
-      signatureEncode(this.validatorSignature || '0x0'),
-      accountIdEncode(this.validatorId || '0x0'),
-      parachainIdEncode(this.parachainId || new BN(0))
+      signatureEncode(this.validatorSignature),
+      accountIdEncode(this.validatorId),
+      parachainIdEncode(this.parachainId)
     ];
   }
 };

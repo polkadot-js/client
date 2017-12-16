@@ -15,7 +15,7 @@ describe('streamWriter', () => {
   it('expects a message as input', () => {
     expect(
       () => streamWriter()
-    ).toThrow(/message of type/);
+    ).toThrow(/valid message/);
   });
 
   it('returns a handler function', () => {

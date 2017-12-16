@@ -9,12 +9,15 @@ const EventEmitter = require('eventemitter3');
 const pull = require('pull-stream');
 
 const assert = require('@polkadot/util/assert');
+const isInstanceOf = require('@polkadot/util/is/instanceOf');
 const isObject = require('@polkadot/util/is/object');
+const isUndefined = require('@polkadot/util/is/undefined');
 const promisify = require('@polkadot/util/promisify');
 const l = require('@polkadot/util/logger')('p2p');
 
 const Peers = require('./peers');
 const createNode = require('./create/node');
+const BaseMessage = require('./message/base');
 const StatusMessage = require('./message/status');
 const streamWriter = require('./stream/writer');
 const streamReader = require('./stream/reader');
@@ -96,6 +99,9 @@ module.exports = class Server extends EventEmitter implements P2pInterface {
   }
 
   _send = (connection: any, message: MessageInterface): void => {
+    assert(!isUndefined(connection), 'Expected valid connection');
+    assert(isInstanceOf(message, BaseMessage), 'Expected valid message');
+
     pull(
       streamWriter(message),
       connection
@@ -104,6 +110,7 @@ module.exports = class Server extends EventEmitter implements P2pInterface {
 
   _receive = (protocol: string, connection: any): void => {
     assert(protocol === defaults.PROTOCOL, `Expected matching protocol, '${protocol}' received`);
+    assert(!isUndefined(connection), 'Expected valid connection');
 
     pull(
       connection,
@@ -112,5 +119,6 @@ module.exports = class Server extends EventEmitter implements P2pInterface {
   }
 
   _handleMessage = (message: MessageInterface): void => {
+    assert(isInstanceOf(message, BaseMessage), 'Expected valid message');
   }
 };
