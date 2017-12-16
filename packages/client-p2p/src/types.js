@@ -8,8 +8,8 @@ import type PeerInfo from 'peer-info';
 export interface MessageInterface {
   constructor (data: any): any;
 
-  encodeRlp (): [Buffer, Array<any>];
-  decodeRlp (id: number, raw: Array<any>): void;
+  encode (): [Buffer, Array<any>];
+  decode (id: number, raw: Array<any>): void;
 
   static MESSAGE_ID: number;
 }

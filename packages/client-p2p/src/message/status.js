@@ -49,7 +49,7 @@ module.exports = class StatusMessage extends BaseMessage implements MessageInter
     this.parachainId = data.parachainId || new BN(0);
   }
 
-  _rawDecodeRlp (raw: Array<any>): void {
+  _rawDecode (raw: Array<any>): void {
     assert(Array.isArray(raw), 'Expected raw message Array');
     assert(raw.length >= 5, 'Expected correct message length');
 
@@ -65,7 +65,7 @@ module.exports = class StatusMessage extends BaseMessage implements MessageInter
     this.parachainId = parachainIdDecode(parachainId || Buffer.from([]));
   }
 
-  _rawEncodeRlp (): Array<any> {
+  _rawEncode (): Array<any> {
     return [
       numberToBuffer(this.version),
       this.roles.map(roleToId).map(numberToBuffer),

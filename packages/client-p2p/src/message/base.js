@@ -15,26 +15,26 @@ module.exports = class BaseMessage {
     this.id = id;
   }
 
-  decodeRlp (id: number, raw: Array<any>): void {
+  decode (id: number, raw: Array<any>): void {
     assert(isNumber(id), 'Expected numeric id');
     assert(id === this.id, 'Expected message id to match');
     assert(Array.isArray(raw), 'Expected raw message body');
 
-    this._rawDecodeRlp(raw);
+    this._rawDecode(raw);
   }
 
-  encodeRlp (): [Buffer, Array<any>] {
+  encode (): [Buffer, Array<any>] {
     return [
       numberToBuffer(this.id),
-      this._rawEncodeRlp()
+      this._rawEncode()
     ];
   }
 
-  _rawDecodeRlp (raw: Array<any>): void {
-    throw new ExtError('Expected _rawDecodeRlp() to be implemented');
+  _rawDecode (raw: Array<any>): void {
+    throw new ExtError('Expected _rawDecode() to be implemented');
   }
 
-  _rawEncodeRlp (): Array<any> {
-    throw new ExtError('Expected _rawEncodeRlp() to be implemented');
+  _rawEncode (): Array<any> {
+    throw new ExtError('Expected _rawEncode() to be implemented');
   }
 };

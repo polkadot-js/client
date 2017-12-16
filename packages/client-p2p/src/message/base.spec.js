@@ -15,46 +15,46 @@ describe('BaseMessage', () => {
     ).toThrow(/ numeric id/);
   });
 
-  describe('decodeRlp', () => {
+  describe('decode', () => {
     it('expects a numeric message id', () => {
       expect(
-        () => base.decodeRlp()
+        () => base.decode()
       ).toThrow(/numeric id/);
     });
 
     it('expects id to match constructor id', () => {
       expect(
-        () => base.decodeRlp(1)
+        () => base.decode(1)
       ).toThrow(/id to match/);
     });
 
     it('expects raw body in message', () => {
       expect(
-        () => base.decodeRlp(123)
+        () => base.decode(123)
       ).toThrow(/raw message body/);
     });
 
     it('calls into _rawDecode, failing (base)', () => {
       expect(
-        () => base.decodeRlp(123, [])
-      ).toThrow(/Expected _rawDecodeRlp/);
+        () => base.decode(123, [])
+      ).toThrow(/Expected _rawDecode/);
     });
   });
 
-  describe('encodeRlp', () => {
+  describe('encode', () => {
     it('calls into _rawEncode, failing (base)', () => {
       expect(
-        () => base.encodeRlp()
-      ).toThrow(/Expected _rawEncodeRlp/);
+        () => base.encode()
+      ).toThrow(/Expected _rawEncode/);
     });
 
     it('returns message containing id and raw (implemented)', () => {
       const raw = ['something', ['else']];
 
-      base._rawEncodeRlp = () => raw;
+      base._rawEncode = () => raw;
 
       expect(
-        base.encodeRlp()
+        base.encode()
       ).toEqual([Buffer.from([123]), raw]);
     });
   });
