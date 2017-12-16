@@ -16,7 +16,8 @@ const l = require('@polkadot/util/logger')('p2p');
 const Peers = require('./peers');
 const createNode = require('./create/node');
 const StatusMessage = require('./message/status');
-const rlpEncode = require('./rlp/encode');
+const streamWriter = require('./stream/writer');
+const streamReader = require('./stream/reader');
 const defaults = require('./defaults');
 
 module.exports = class Server extends EventEmitter implements P2pInterface {
@@ -95,15 +96,8 @@ module.exports = class Server extends EventEmitter implements P2pInterface {
   }
 
   _send = (connection: any, message: MessageInterface): void => {
-    const encoded = rlpEncode(message);
-    const streamWriter = pull.values([
-      encoded
-    ]);
-
-    console.log('W', encoded);
-
     pull(
-      streamWriter,
+      streamWriter(message),
       connection
     );
   }
@@ -111,27 +105,12 @@ module.exports = class Server extends EventEmitter implements P2pInterface {
   _receive = (protocol: string, connection: any): void => {
     assert(protocol === defaults.PROTOCOL, `Expected matching protocol, '${protocol}' received`);
 
-    const streamReader = (read: Function): void => {
-      const next = (end: Error | boolean, encoded: Buffer): void => {
-        if (end) {
-          if (end === true) {
-            return;
-          }
-
-          throw end;
-        }
-
-        console.log('R', encoded);
-
-        read(null, next);
-      };
-
-      read(null, next);
-    };
-
     pull(
       connection,
-      streamReader
+      streamReader(this._handleMessage)
     );
+  }
+
+  _handleMessage = (message: MessageInterface): void => {
   }
 };
