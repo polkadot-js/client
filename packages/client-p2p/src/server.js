@@ -91,7 +91,7 @@ module.exports = class Server extends EventEmitter implements P2pInterface {
     return true;
   }
 
-  _dialPeer = async (peer: PeerType): Promise<boolean> => {
+  _dialPeer = async (peer: PeerType): any => {
     if (!peer || peer.isConnecting) {
       return false;
     }

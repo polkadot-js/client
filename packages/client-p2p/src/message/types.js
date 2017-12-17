@@ -9,7 +9,7 @@ export interface StatusMessageInterface {
   bestNumber: BlockNumberType;
   bestHash: HeaderHashType;
   genesisHash: HeaderHashType;
-  validatorSignature: ?SignatureType;
-  validatorId: ?AccountIdType;
-  parachainId: ?ParachainIdType;
+  validatorSignature: SignatureType;
+  validatorId: AccountIdType;
+  parachainId: ParachainIdType;
 }
