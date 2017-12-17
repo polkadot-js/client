@@ -16,6 +16,7 @@ A very early, WIP and POC JavaScript version of a simplified Polkadot network cl
 It is split up into a number of internal packages -
 
 - [packages/client](packages/client/) The main JavaScript client
+- [packages/client-db](packages/client-db/) Database interface
 - [packages/client-p2p](packages/client-p2p/) Peer-to-peer server
 - [packages/client-rpc](packages/client-rpc/) RPC server
 - [packages/client-wasm](packages/client-wasm/) Wasm interface wrapper
@@ -29,7 +30,7 @@ It is possible to start 2 servers (testing connections between), by opening 2 te
 The above is (currently) equivalent to offsetting the ports by 1 and adding the first as a peer. The equivalent command would be -
 
 ```
-$ yarn run start --p2p-peers=/ip4/127.0.0.1/tcp/39933 --p2p-port=39934 --rpc-port=9934
+$ yarn run start --p2p-peers=/ip4/127.0.0.1/tcp/39933 --p2p-port=39934 --rpc-port=9934 --db-path=./tmp
 ```
 
 ## Contributing
