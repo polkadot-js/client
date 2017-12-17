@@ -46,6 +46,10 @@ module.exports = class Server extends EventEmitter implements P2pInterface {
     return this._peers;
   }
 
+  get isStarted (): boolean {
+    return !!this._node;
+  }
+
   async start (): Promise<boolean> {
     this.stop();
 

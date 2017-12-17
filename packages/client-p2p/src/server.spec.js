@@ -1,5 +1,8 @@
 // ISC, Copyright 2017 Jaco Greeff
 
+const PeerId = require('peer-id');
+const PeerInfo = require('peer-info');
+
 const isInstanceOf = require('@polkadot/util/is/instanceOf');
 
 const StatusMessage = require('./message/status');
@@ -8,10 +11,22 @@ const { PROTOCOL } = require('./defaults');
 const Server = require('./index');
 
 describe('Server', () => {
+  let origPeerInfoCreate;
+  let count = 0;
   let server;
 
   beforeEach(() => {
-    server = new Server({}, {}, false);
+    origPeerInfoCreate = PeerInfo.create;
+    PeerInfo.create = (callback) => {
+      origPeerInfoCreate(new PeerId(Buffer.from([count++])), callback);
+    };
+    server = new Server({ port: 36677 }, {}, false);
+  });
+
+  afterEach(() => {
+    PeerInfo.create = origPeerInfoCreate;
+
+    return server.stop();
   });
 
   it('expects a valid config', () => {
@@ -32,10 +47,114 @@ describe('Server', () => {
     ).toBeDefined();
   });
 
+  describe('peers', () => {
+    it('returns the peers via .peers', () => {
+      server._peers = { 'peers': 'something' };
+
+      expect(
+        server.peers
+      ).toEqual(server._peers);
+    });
+  });
+
+  describe('isStarted', () => {
+    it('returns the started status (false)', () => {
+      expect(
+        server.isStarted
+      ).toEqual(false);
+    });
+
+    it('returns the started status (true)', () => {
+      return server.start().then(() => {
+        expect(
+          server.isStarted
+        ).toEqual(true);
+      });
+    });
+  });
+
   describe('start', () => {
+    let stopSpy;
+
+    beforeEach(() => {
+      stopSpy = jest.spyOn(server, 'stop');
+    });
+
+    it('stops any started servers', () => {
+      return server.start().then(() => {
+        expect(stopSpy).toHaveBeenCalled();
+      });
+    });
+
+    it('returns true when started', () => {
+      return server.start().then((result) => {
+        expect(result).toEqual(true);
+      });
+    });
+
+    it('emits the started event', (done) => {
+      server.on('started', () => {
+        done();
+      });
+
+      server.start();
+    });
   });
 
   describe('stop', () => {
+    let stopSpy;
+
+    beforeEach(() => {
+      stopSpy = jest.fn((cb) => cb());
+      server._peers = {};
+      server._node = {
+        stop: stopSpy
+      };
+    });
+
+    afterEach(() => {
+      server._node = null;
+    });
+
+    it('calls stop() on the internal server', () => {
+      return server.stop().then(() => {
+        expect(stopSpy).toHaveBeenCalled();
+      });
+    });
+
+    it('resets the connected peers', () => {
+      return server.stop().then(() => {
+        expect(server._peers).toEqual(null);
+      });
+    });
+
+    it('resets the server', () => {
+      return server.stop().then(() => {
+        expect(server._node).toEqual(null);
+      });
+    });
+
+    it('emits the stopped event', (done) => {
+      server.on('stopped', () => {
+        done();
+      });
+
+      server.stop();
+    });
+
+    it('returns true when completed', () => {
+      return server.stop().then((result) => {
+        expect(result).toEqual(true);
+      });
+    });
+
+    it('returns false when internal server not started', () => {
+      server._node = null;
+
+      return server.stop().then((result) => {
+        expect(result).toEqual(false);
+      });
+    });
   });
 
   describe('_dialPeer', () => {
@@ -53,6 +172,10 @@ describe('Server', () => {
       server._node = {
         dial: jest.fn((peerInfo, protocol, cb) => cb(null, connection))
       };
+    });
+
+    afterEach(() => {
+      server._node = null;
     });
 
     it('returns false when peer is not found', () => {

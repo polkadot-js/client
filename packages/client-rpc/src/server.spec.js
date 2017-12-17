@@ -204,6 +204,48 @@ describe('Server', () => {
     });
   });
 
+  describe('stop', () => {
+    beforeEach(() => {
+      server = new Server({ port: 9901, type: ['http'] }, handlers, false);
+      server._server = {
+        close: () => true
+      };
+    });
+
+    it('returns false when internal server not started', () => {
+      server._server = null;
+
+      return server.stop().then((result) => {
+        expect(result).toEqual(false);
+      });
+    });
+
+    it('calls stop() on the internal server', (done) => {
+      server._server = {
+        close: () => {
+          expect(server._server).toEqual(null);
+          done();
+        }
+      };
+
+      server.stop();
+    });
+
+    it('emits the stopped event', (done) => {
+      server.on('stopped', () => {
+        done();
+      });
+
+      server.stop();
+    });
+
+    it('returns true when completed', () => {
+      return server.stop().then((result) => {
+        expect(result).toEqual(true);
+      });
+    });
+  });
+
   it('starts and accepts requests, sending responses (HTTP)', () => {
     server = new Server({ port: 9901, type: ['http'] }, handlers); // eslint-disable-line
 
