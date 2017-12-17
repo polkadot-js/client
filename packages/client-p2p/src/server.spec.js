@@ -20,19 +20,13 @@ describe('Server', () => {
     PeerInfo.create = (callback) => {
       origPeerInfoCreate(new PeerId(Buffer.from([count++])), callback);
     };
-    server = new Server({ port: 36677 }, {}, false);
+    server = new Server({ address: '127.0.0.1', port: 36677 }, {}, false);
   });
 
   afterEach(() => {
     PeerInfo.create = origPeerInfoCreate;
 
     return server.stop();
-  });
-
-  it('expects a valid config', () => {
-    expect(
-      () => new Server()
-    ).toThrow(/P2P configuration/);
   });
 
   it('expects a chain definition', () => {

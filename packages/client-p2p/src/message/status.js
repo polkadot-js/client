@@ -31,9 +31,9 @@ module.exports = class StatusMessage extends BaseMessage implements MessageInter
   bestNumber: BlockNumberType;
   bestHash: HeaderHashType;
   genesisHash: HeaderHashType;
-  validatorSignature: ?SignatureType;
-  validatorId: ?AccountIdType;
-  parachainId: ?ParachainIdType;
+  validatorSignature: SignatureType;
+  validatorId: AccountIdType;
+  parachainId: ParachainIdType;
 
   constructor (data: $Shape<StatusMessageInterface> = {}) {
     super(StatusMessage.MESSAGE_ID);

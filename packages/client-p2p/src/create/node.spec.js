@@ -23,20 +23,32 @@ describe('createNode', () => {
     PeerInfo.create = origPeerInfoCreate;
   });
 
-  it('requires a valid config object', () => {
+  it('requires a valid address', () => {
     return createNode().catch((error) => {
-      expect(error.message).toMatch(/P2P configuration/);
+      expect(error.message).toMatch(/IP address/);
+    });
+  });
+
+  it('requires a valid port', () => {
+    return createNode('127.0.0.1').catch((error) => {
+      expect(error.message).toMatch(/numeric port/);
     });
   });
 
   it('requires a valid chain definition object', () => {
-    return createNode({}).catch((error) => {
+    return createNode('127.0.0.1', 36677).catch((error) => {
       expect(error.message).toMatch(/chain definition/);
     });
   });
 
+  it('requires a valid peer array', () => {
+    return createNode('127.0.0.1', 36677, {}, 'notArray').catch((error) => {
+      expect(error.message).toMatch(/Expected peers/);
+    });
+  });
+
   it('creates a valid LibP2p instance', async () => {
-    const libp2p = await createNode({ address: '127.0.0.1', port: 6789 }, {});
+    const libp2p = await createNode('127.0.0.1', 36789, {});
 
     expect(
       isInstanceOf(libp2p, LibP2P)

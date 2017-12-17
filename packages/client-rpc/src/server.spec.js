@@ -43,7 +43,7 @@ describe('Server', () => {
 
   describe('_handleMessage', () => {
     beforeEach(() => {
-      server = new Server({ port: 9901 }, handlers, false);
+      server = new Server({}, handlers, false);
     });
 
     it('fails when invalid JSON', () => {
