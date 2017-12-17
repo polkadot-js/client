@@ -42,10 +42,10 @@ module.exports = class StatusMessage extends BaseMessage implements MessageInter
 
     this.roles = data.roles || ['none'];
     this.bestNumber = data.bestNumber || new BN(0);
-    this.bestHash = data.bestHash || '0x0';
-    this.genesisHash = data.genesisHash || '0x0';
-    this.validatorSignature = data.validatorSignature || '0x0';
-    this.validatorId = data.validatorId || '0x0';
+    this.bestHash = data.bestHash || '0x00';
+    this.genesisHash = data.genesisHash || '0x00';
+    this.validatorSignature = data.validatorSignature || '0x00';
+    this.validatorId = data.validatorId || '0x00';
     this.parachainId = data.parachainId || new BN(0);
   }
 

@@ -11,10 +11,10 @@ describe('StatusMessage', () => {
     ).toMatchObject({
       roles: ['none'],
       bestNumber: new BN(0),
-      bestHash: '0x0',
-      genesisHash: '0x0',
-      validatorSignature: '0x0',
-      validatorId: '0x0',
+      bestHash: '0x00',
+      genesisHash: '0x00',
+      validatorSignature: '0x00',
+      validatorId: '0x00',
       parachainId: new BN(0)
     });
   });

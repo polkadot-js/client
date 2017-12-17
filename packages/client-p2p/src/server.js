@@ -19,8 +19,7 @@ const Peers = require('./peers');
 const createNode = require('./create/node');
 const BaseMessage = require('./message/base');
 const StatusMessage = require('./message/status');
-const streamWriter = require('./stream/writer');
-const streamReader = require('./stream/reader');
+const { streamReader, streamWriter } = require('./stream');
 const defaults = require('./defaults');
 
 module.exports = class Server extends EventEmitter implements P2pInterface {
@@ -47,7 +46,7 @@ module.exports = class Server extends EventEmitter implements P2pInterface {
     return this._peers;
   }
 
-  async start (): Promise<void> {
+  async start (): Promise<boolean> {
     this.stop();
 
     this._node = await createNode(this._config, this._chain);
@@ -60,11 +59,13 @@ module.exports = class Server extends EventEmitter implements P2pInterface {
 
     l.log(`Started on address=${this._config.address}, port=${this._config.port}`);
     this.emit('started');
+
+    return true;
   }
 
-  async stop (): Promise<void> {
+  async stop (): Promise<boolean> {
     if (!this._node) {
-      return;
+      return false;
     }
 
     const node = this._node;
@@ -79,11 +80,13 @@ module.exports = class Server extends EventEmitter implements P2pInterface {
 
     l.log('Server stopped');
     this.emit('stopped');
+
+    return true;
   }
 
-  _dialPeer = async (peer: PeerType): any => {
+  _dialPeer = async (peer: PeerType): Promise<boolean> => {
     if (!peer || peer.isConnecting) {
-      return;
+      return false;
     }
 
     peer.isConnecting = true;
@@ -95,17 +98,16 @@ module.exports = class Server extends EventEmitter implements P2pInterface {
       this._send(peer.connection, new StatusMessage());
     } catch (error) {
       peer.isConnecting = false;
+      return false;
     }
+
+    return true;
   }
 
-  _send = (connection: any, message: MessageInterface): void => {
-    assert(!isUndefined(connection), 'Expected valid connection');
+  _handleMessage = (message: MessageInterface): void => {
     assert(isInstanceOf(message, BaseMessage), 'Expected valid message');
 
-    pull(
-      streamWriter(message),
-      connection
-    );
+    this.emit('message', message);
   }
 
   _receive = (protocol: string, connection: any): void => {
@@ -118,7 +120,13 @@ module.exports = class Server extends EventEmitter implements P2pInterface {
     );
   }
 
-  _handleMessage = (message: MessageInterface): void => {
+  _send = (connection: any, message: MessageInterface): void => {
+    assert(!isUndefined(connection), 'Expected valid connection');
     assert(isInstanceOf(message, BaseMessage), 'Expected valid message');
+
+    pull(
+      streamWriter(message),
+      connection
+    );
   }
 };

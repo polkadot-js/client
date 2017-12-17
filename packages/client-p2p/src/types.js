@@ -46,7 +46,7 @@ export interface PeersInterface {
   on (type: PeersInterface$Events, (peer: PeerType) => any): any;
 }
 
-export type P2pInterface$Events = 'started' | 'stopped';
+export type P2pInterface$Events = 'message' | 'started' | 'stopped';
 
 export interface P2pInterface {
   +peers: PeersInterface;
