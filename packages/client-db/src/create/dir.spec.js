@@ -1,5 +1,4 @@
 // ISC, Copyright 2017 Jaco Greeff
-// @flow
 
 const fs = require('fs');
 const rimraf = require('rimraf');
