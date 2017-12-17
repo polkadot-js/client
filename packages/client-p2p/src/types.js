@@ -8,8 +8,8 @@ import type PeerInfo from 'peer-info';
 export interface MessageInterface {
   constructor (data: any): any;
 
-  encodeRlp (): [Buffer, Array<any>];
-  decodeRlp (id: number, raw: Array<any>): void;
+  encode (): [Buffer, Array<any>];
+  decode (id: number, raw: Array<any>): void;
 
   static MESSAGE_ID: number;
 }
@@ -46,7 +46,7 @@ export interface PeersInterface {
   on (type: PeersInterface$Events, (peer: PeerType) => any): any;
 }
 
-export type P2pInterface$Events = 'started' | 'stopped';
+export type P2pInterface$Events = 'message' | 'started' | 'stopped';
 
 export interface P2pInterface {
   +peers: PeersInterface;

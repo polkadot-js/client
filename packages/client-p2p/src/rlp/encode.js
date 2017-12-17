@@ -6,12 +6,14 @@ import type { MessageInterface } from '../types';
 const rlp = require('rlp');
 
 const assert = require('@polkadot/util/assert');
-const isUndefined = require('@polkadot/util/is/undefined');
+const isInstanceOf = require('@polkadot/util/is/instanceOf');
 
-module.exports = function messageRlpEncode (message: MessageInterface): Buffer {
-  assert(!isUndefined(message), 'Expected valid message');
+const BaseMessage = require('../message/base');
+
+module.exports = function rlpEncode (message: MessageInterface): Buffer {
+  assert(isInstanceOf(message, BaseMessage), 'Expected valid message');
 
   return rlp.encode(
-    message.encodeRlp()
+    message.encode()
   );
 };

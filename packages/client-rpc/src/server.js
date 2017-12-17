@@ -56,7 +56,7 @@ module.exports = class RPCServer extends EventEmitter implements RpcInterface {
     }
   }
 
-  async start (): Promise<void> {
+  async start (): Promise<boolean> {
     this.stop();
 
     const hasHttp = this._type.includes('http');
@@ -81,11 +81,13 @@ module.exports = class RPCServer extends EventEmitter implements RpcInterface {
 
     l.log(`Server started on port=${this._port} for type=${this._type.join(',')}`);
     this.emit('started');
+
+    return true;
   }
 
-  async stop (): Promise<void> {
+  async stop (): Promise<boolean> {
     if (!this._server) {
-      return;
+      return false;
     }
 
     const server = this._server;
@@ -95,6 +97,8 @@ module.exports = class RPCServer extends EventEmitter implements RpcInterface {
 
     l.log('Server stopped');
     this.emit('stopped');
+
+    return true;
   }
 
   _handlePost = async (ctx: PostContextType): Promise<void> => {

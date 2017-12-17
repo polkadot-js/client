@@ -9,6 +9,12 @@ describe('validateHandlers', () => {
     ).toThrow(/handler mapping object/);
   });
 
+  it('throws when handlers are undefined', () => {
+    expect(
+      () => validateHandlers()
+    ).toThrow(/non-empty handler/);
+  });
+
   it('throws when handlers are empty', () => {
     expect(
       () => validateHandlers({})

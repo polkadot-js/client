@@ -42,14 +42,14 @@ module.exports = class StatusMessage extends BaseMessage implements MessageInter
 
     this.roles = data.roles || ['none'];
     this.bestNumber = data.bestNumber || new BN(0);
-    this.bestHash = data.bestHash || '0x0';
-    this.genesisHash = data.genesisHash || '0x0';
-    this.validatorSignature = data.validatorSignature || '0x0';
-    this.validatorId = data.validatorId || '0x0';
+    this.bestHash = data.bestHash || '0x00';
+    this.genesisHash = data.genesisHash || '0x00';
+    this.validatorSignature = data.validatorSignature || '0x00';
+    this.validatorId = data.validatorId || '0x00';
     this.parachainId = data.parachainId || new BN(0);
   }
 
-  _rawDecodeRlp (raw: Array<any>): void {
+  _rawDecode (raw: Array<any>): void {
     assert(Array.isArray(raw), 'Expected raw message Array');
     assert(raw.length >= 5, 'Expected correct message length');
 
@@ -60,21 +60,21 @@ module.exports = class StatusMessage extends BaseMessage implements MessageInter
     this.bestNumber = blockNumberDecode(bestNumber);
     this.bestHash = headerHashDecode(bestHash);
     this.genesisHash = headerHashDecode(genesisHash);
-    this.validatorSignature = signatureDecode(validatorSignature || Buffer.from([]));
-    this.validatorId = accountIdDecode(validatorId || Buffer.from([]));
-    this.parachainId = parachainIdDecode(parachainId || Buffer.from([]));
+    this.validatorSignature = signatureDecode(validatorSignature);
+    this.validatorId = accountIdDecode(validatorId);
+    this.parachainId = parachainIdDecode(parachainId);
   }
 
-  _rawEncodeRlp (): Array<any> {
+  _rawEncode (): Array<any> {
     return [
       numberToBuffer(this.version),
       this.roles.map(roleToId).map(numberToBuffer),
       blockNumberEncode(this.bestNumber),
       headerHashEncode(this.bestHash),
       headerHashEncode(this.genesisHash),
-      signatureEncode(this.validatorSignature || '0x0'),
-      accountIdEncode(this.validatorId || '0x0'),
-      parachainIdEncode(this.parachainId || new BN(0))
+      signatureEncode(this.validatorSignature),
+      accountIdEncode(this.validatorId),
+      parachainIdEncode(this.parachainId)
     ];
   }
 };
