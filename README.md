@@ -29,7 +29,7 @@ It is possible to start 2 servers (testing connections between), by opening 2 te
 The above is (currently) equivalent to offsetting the ports by 1 and adding the first as a peer. The equivalent command would be -
 
 ```
-$ yarn run start --p2p-peers=/ip4/127.0.0.1/tcp/39933 --p2p-port=39934 --rpc-port=9934
+$ yarn run start --p2p-peers=/ip4/127.0.0.1/tcp/39933 --p2p-port=39934 --rpc-port=9934 --db-path=./tmp
 ```
 
 ## Contributing

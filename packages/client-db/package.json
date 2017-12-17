@@ -1,0 +1,44 @@
+{
+  "name": "@polkadot/client-db",
+  "version": "0.4.5",
+  "description": "Database interface layer for network client",
+  "main": "index.js",
+  "engines": {
+    "node": ">=8.0"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/polkadot-js/client.git"
+  },
+  "keywords": [
+    "Polkadot",
+    "Merkel Patricia Tree"
+  ],
+  "author": "Jaco Greeff <jacogr@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/polkadot-js/client/issues"
+  },
+  "homepage": "https://github.com/polkadot-js/client/tree/master/packages/client-db#readme",
+  "scripts": {
+    "build": "polkadot-dev-build-babel",
+    "check": "eslint src && flow check",
+    "test": "echo \"Tests only available from root wrapper\""
+  },
+  "dependencies": {
+    "@polkadot/util": "^0.10.1",
+    "babel-runtime": "^6.26.0",
+    "leveldown": "^2.1.1",
+    "levelup": "^2.0.1",
+    "memdown": "^1.4.1",
+    "merkle-patricia-tree": "^2.3.0",
+    "mkdirp": "^0.5.1"
+  },
+  "devDependencies": {
+    "rimraf": "^2.6.2"
+  }
+}

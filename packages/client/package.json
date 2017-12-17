@@ -35,11 +35,12 @@
   "dependencies": {
     "@polkadot/api-jsonrpc": "^0.6.7",
     "@polkadot/client-chains": "^0.4.5",
+    "@polkadot/client-db": "^0.4.5",
     "@polkadot/client-p2p": "^0.4.5",
     "@polkadot/client-rpc": "^0.4.5",
     "@polkadot/client-wasm": "^0.4.5",
     "@polkadot/primitives": "^0.4.1",
-    "@polkadot/util": "^0.9.3",
+    "@polkadot/util": "^0.10.1",
     "yargs": "^10.0.3"
   },
   "devDependencies": {

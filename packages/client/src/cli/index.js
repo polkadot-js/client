@@ -13,7 +13,7 @@ module.exports = function cli (params?: string): ConfigType {
     .reduce((config: ConfigType, key: string) => {
       const sepIndex = key.indexOf('-');
 
-      if (/^(p2p|rpc)-/.test(key)) {
+      if (/^(db|p2p|rpc)-/.test(key)) {
         const section = key.substr(0, sepIndex);
         const name = key.split('-').reduce((name, part, index) => {
           if (index <= 1) {
