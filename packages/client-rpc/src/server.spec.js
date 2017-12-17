@@ -256,8 +256,7 @@ describe('Server', () => {
       });
   });
 
-  // FIXME: WebSocket server does not shutdown cleanly in the test environment
-  it.skip('starts and accepts requests, sending responses (WS)', () => {
+  it('starts and accepts requests, sending responses (WS)', () => {
     server = new Server({ port: 9901, type: ['ws'] }, handlers); // eslint-disable-line
 
     return new WsProvider('ws://localhost:9901')
@@ -267,8 +266,7 @@ describe('Server', () => {
       });
   });
 
-  // FIXME: As above
-  it.skip('starts and accepts requests, sending responses (HTTP & WS)', () => {
+  it('starts and accepts requests, sending responses (HTTP & WS)', () => {
     server = new Server({ port: 9901, type: ['http', 'ws'] }, handlers); // eslint-disable-line
 
     return new WsProvider('ws://localhost:9901')

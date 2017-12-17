@@ -18,9 +18,6 @@ type WsContextType = {
 
 const coBody = require('co-body');
 const EventEmitter = require('eventemitter3');
-const Koa = require('koa');
-const koaRoute = require('koa-route');
-const koaWebsocket = require('koa-websocket');
 
 const assert = require('@polkadot/util/assert');
 const ExtError = require('@polkadot/util/ext/error');
@@ -28,8 +25,8 @@ const l = require('@polkadot/util/logger')('rpc');
 const isError = require('@polkadot/util/is/error');
 const isFunction = require('@polkadot/util/is/function');
 
+const { createKoa, createError, createResponse } = require('./create');
 const defaults = require('./defaults');
-const { createError, createResponse } = require('./jsonrpc');
 const { validateConfig, validateRequest, validateHandlers } = require('./validate');
 
 module.exports = class RPCServer extends EventEmitter implements RpcInterface {
@@ -37,7 +34,7 @@ module.exports = class RPCServer extends EventEmitter implements RpcInterface {
   _path: string;
   _port: number;
   _server: ?net$Server;
-  _type: Array<RpcType>;
+  _types: Array<RpcType>;
 
   constructor ({ path = defaults.PATH, port = defaults.PORT, type = defaults.TYPE }: RpcConfigType, handlers: HandlersType, autoStart: boolean = true) {
     super();
@@ -49,7 +46,7 @@ module.exports = class RPCServer extends EventEmitter implements RpcInterface {
     this._path = path;
     this._port = port;
     this._server = null;
-    this._type = type;
+    this._types = type;
 
     if (autoStart) {
       this.start();
@@ -59,27 +56,18 @@ module.exports = class RPCServer extends EventEmitter implements RpcInterface {
   async start (): Promise<boolean> {
     this.stop();
 
-    const hasHttp = this._type.includes('http');
-    const hasWs = this._type.includes('ws');
-    const app = hasWs
-      ? koaWebsocket(new Koa())
-      : new Koa();
-
-    if (hasHttp) {
-      app.use(
-        koaRoute.post(this._path, this._handlePost)
-      );
-    }
-
-    if (hasWs) {
-      (app: any).ws.use(
-        koaRoute.all(this._path, this._handleWs)
-      );
-    }
+    const app = createKoa({
+      handlers: {
+        http: this._handlePost,
+        ws: this._handleWs
+      },
+      path: this._path,
+      types: this._types
+    });
 
     this._server = app.listen(this._port);
 
-    l.log(`Server started on port=${this._port} for type=${this._type.join(',')}`);
+    l.log(`Server started on port=${this._port} for type=${this._types.join(',')}`);
     this.emit('started');
 
     return true;
