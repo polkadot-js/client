@@ -2,7 +2,7 @@
 // @flow
 
 import type Libp2p from 'libp2p';
-import type { ChainConfigType } from '@polkadot/client-chains/types';
+import type { ChainConfigType, ChainConfigType$Nodes } from '@polkadot/client-chains/types';
 import type { MessageInterface, P2pConfigType, P2pInterface, PeerType } from './types';
 
 const EventEmitter = require('eventemitter3');
@@ -23,18 +23,21 @@ const { streamReader, streamWriter } = require('./stream');
 const defaults = require('./defaults');
 
 module.exports = class Server extends EventEmitter implements P2pInterface {
-  _config: P2pConfigType;
+  _address: string;
   _chain: ChainConfigType;
   _node: Libp2p;
+  _peerAddresses: ChainConfigType$Nodes;
   _peers: Peers;
+  _port: number;
 
-  constructor (config: P2pConfigType, chain: ChainConfigType, autoStart: boolean = true) {
+  constructor ({ address = defaults.ADDRESS, peers = [], port = defaults.PORT }: P2pConfigType, chain: ChainConfigType, autoStart: boolean = true) {
     super();
 
-    assert(isObject(config), 'Expected P2P configuration');
     assert(isObject(chain), 'Expected chain definition');
 
-    this._config = config;
+    this._address = address;
+    this._peerAddresses = peers;
+    this._port = port;
     this._chain = chain;
 
     if (autoStart) {
@@ -53,7 +56,7 @@ module.exports = class Server extends EventEmitter implements P2pInterface {
   async start (): Promise<boolean> {
     this.stop();
 
-    this._node = await createNode(this._config, this._chain);
+    this._node = await createNode(this._address, this._port, this._chain, this._peerAddresses);
     this._node.handle(defaults.PROTOCOL, this._receive);
 
     this._peers = new Peers(this._node);
@@ -61,7 +64,7 @@ module.exports = class Server extends EventEmitter implements P2pInterface {
 
     await promisify(this._node, this._node.start);
 
-    l.log(`Started on address=${this._config.address}, port=${this._config.port}`);
+    l.log(`Started on address=${this._address}, port=${this._port}`);
     this.emit('started');
 
     return true;

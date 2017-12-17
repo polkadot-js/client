@@ -17,6 +17,7 @@ type WsContextType = {
 };
 
 const coBody = require('co-body');
+const EventEmitter = require('eventemitter3');
 const Koa = require('koa');
 const koaRoute = require('koa-route');
 const koaWebsocket = require('koa-websocket');
@@ -26,7 +27,6 @@ const ExtError = require('@polkadot/util/ext/error');
 const l = require('@polkadot/util/logger')('rpc');
 const isError = require('@polkadot/util/is/error');
 const isFunction = require('@polkadot/util/is/function');
-const EventEmitter = require('eventemitter3');
 
 const defaults = require('./defaults');
 const { createError, createResponse } = require('./jsonrpc');
