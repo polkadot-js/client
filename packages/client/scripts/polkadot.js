@@ -8,8 +8,8 @@ try {
     plugins: [
       ['module-resolver', {
         alias: {
-          '^@polkadot/client-(chains|p2p|rpc|wasm)(.+)': './packages/client-\\1/src\\2',
-          '^@polkadot/client-(chains|p2p|rpc|wasm)': './packages/client-\\1/src'
+          '^@polkadot/client-(chains|db|p2p|rpc|wasm)(.+)': './packages/client-\\1/src\\2',
+          '^@polkadot/client-(chains|db|p2p|rpc|wasm)': './packages/client-\\1/src'
         }
       }]
     ]

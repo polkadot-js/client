@@ -13,14 +13,12 @@ module.exports = ({
   chain: {
     default: chainDefaults.MAIN,
     description: `Use the chain specified, one of ${allChains.join(', ')} or custom '<chain>.json'`,
-    demandOption: true,
     type: 'string'
   },
   role: {
     choices: ((Object.keys(allRoles): any): Array<mixed>),
     default: 'none',
     description: 'Sets the type of role the node operates as',
-    demandOption: true,
     type: 'string'
   }
 }: { [key: string]: Options });
