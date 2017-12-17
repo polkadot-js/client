@@ -25,7 +25,7 @@ Usage -
 ```js
 const DB = require('@polkadot/client-db');
 
-const db = new DB('my-awesome-db'); // name
+const db = new DB({ path: '/tmp' }, 'my-awesome-db');
 
 db.put('some-key', '12345');
 ```
