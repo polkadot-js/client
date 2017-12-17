@@ -1,6 +1,6 @@
 {
   "name": "@polkadot/client-db",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "Database interface layer for network client",
   "main": "index.js",
   "engines": {
