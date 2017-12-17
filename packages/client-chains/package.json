@@ -1,6 +1,6 @@
 {
   "name": "@polkadot/client-chains",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "description": "Node configuration definitions for specific chains",
   "main": "index.js",
   "keywords": [
