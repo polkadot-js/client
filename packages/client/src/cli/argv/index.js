@@ -9,11 +9,10 @@ const db = require('./db');
 const operation = require('./operation');
 const p2p = require('./p2p');
 const rpc = require('./rpc');
-const clientId = require('../../clientId');
 
 module.exports = function argv (cli?: string): { [string]: any } {
   const parser = yargs
-    .version(clientId)
+    .version(((operation['client-id'].default: any): string))
     .options(
       Object.assign(({}: { [string]: Options }), operation, db, p2p, rpc)
     )

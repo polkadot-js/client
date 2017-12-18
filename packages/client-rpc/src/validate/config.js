@@ -7,11 +7,11 @@ const assert = require('@polkadot/util/assert');
 
 const { TYPE } = require('../defaults');
 
-module.exports = function validateConfig ({ path, type }: RpcConfigType): void {
+module.exports = function validateConfig ({ path, types }: RpcConfigType): void {
   assert(/^\//.test(path), 'Expected valid path');
-  assert(type.length !== 0, 'Expected non-empty type Array');
+  assert(types.length !== 0, 'Expected non-empty type Array');
 
-  const invalid = type
+  const invalid = types
     .filter((_type) => !TYPE.includes(_type))
     .map((type) => `'${type}'`)
     .join(', ');
