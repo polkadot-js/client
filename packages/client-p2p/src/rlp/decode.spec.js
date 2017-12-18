@@ -3,12 +3,6 @@
 const rlpDecode = require('./decode');
 
 describe('rlpDecode', () => {
-  it('expects an input Buffer', () => {
-    expect(
-      () => rlpDecode()
-    ).toThrow(/message buffer/);
-  });
-
   it('decodes, returning the message', () => {
     expect(
       rlpDecode(

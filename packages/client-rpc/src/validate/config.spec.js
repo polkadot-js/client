@@ -9,18 +9,6 @@ describe('validateConfig', () => {
     ).toThrow(/valid path/);
   });
 
-  it('throws when non-numeric port is specified', () => {
-    expect(
-      () => validateConfig({ path: '/', port: 'abc' })
-    ).toThrow(/numeric port/);
-  });
-
-  it('throws when type is not an array', () => {
-    expect(
-      () => validateConfig({ path: '/', port: 123, type: 'notArray' })
-    ).toThrow(/as an Array/);
-  });
-
   it('throws when type is an empty array', () => {
     expect(
       () => validateConfig({ path: '/', port: 123, type: [] })

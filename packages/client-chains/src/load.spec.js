@@ -5,12 +5,6 @@ const path = require('path');
 const { loadChain } = require('./index');
 
 describe('loadChain', () => {
-  it('expects a chain name', () => {
-    expect(
-      () => loadChain()
-    ).toThrow(/Expected a chain name/);
-  });
-
   it('loads a chain from chains/*', () => {
     expect(
       loadChain('nelson')

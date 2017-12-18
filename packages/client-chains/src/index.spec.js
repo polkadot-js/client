@@ -2,7 +2,7 @@
 
 const { chains, validateChain } = require('./index');
 
-describe('chains', () => {
+describe('client-chains', () => {
   Object.values(chains).forEach((chain) => {
     it(`validates chain '${chain.name}' (strict)`, () => {
       expect(

@@ -27,12 +27,6 @@ describe('createInstance', () => {
     global.WebAssembly = origWebAssembly;
   });
 
-  it('throws and error on non-WebAssembly module', () => {
-    expect(
-      () => createInstance('nonAModule')
-    ).toThrow(/WebAssembly\.Module/);
-  });
-
   it('creates an instance with the module & imports', () => {
     const module = new WebAssembly.Module();
     const imports = {};

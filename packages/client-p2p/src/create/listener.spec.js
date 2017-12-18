@@ -31,12 +31,6 @@ describe('createListener', () => {
     });
   });
 
-  it('validates the port', () => {
-    return createListener('127.0.0.1', 'notAPort').catch((error) => {
-      expect(error.message).toMatch(/numeric port/);
-    });
-  });
-
   it('creates using defaults', async () => {
     await createListener();
 

@@ -26,12 +26,6 @@ describe('createPeerInfo', () => {
     PeerInfo.create = origPeerInfoCreate;
   });
 
-  it('expects address Array', () => {
-    return createPeerInfo('notAddrArray').catch((error) => {
-      expect(error.message).toMatch(/array of network addresses/);
-    });
-  });
-
   it('expects address values', () => {
     return createPeerInfo([]).catch((error) => {
       expect(error.message).toMatch(/one network address/);

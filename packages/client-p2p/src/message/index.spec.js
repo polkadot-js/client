@@ -6,12 +6,6 @@ const StatusMessage = require('./status');
 const message = require('./index');
 
 describe('message', () => {
-  it('expects a numeric id', () => {
-    expect(
-      () => message()
-    ).toThrow(/numeric id/);
-  });
-
   it('throws when class is not found', () => {
     expect(
       () => message(666)

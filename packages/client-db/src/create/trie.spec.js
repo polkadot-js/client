@@ -15,24 +15,6 @@ describe('createTrie', () => {
     trie = createTrie('./tmp', 'test', true);
   });
 
-  it('checks for a valid root', () => {
-    expect(
-      () => createTrie()
-    ).toThrow(/Expected database root/);
-  });
-
-  it('checks for a valid name', () => {
-    expect(
-      () => createTrie('./tmp')
-    ).toThrow(/Expected database name/);
-  });
-
-  it('checks for a memory flag', () => {
-    expect(
-      () => createTrie('./tmp', 'test')
-    ).toThrow(/Expected memory flag/);
-  });
-
   it('returns a valid Trie instance', () => {
     expect(
       isInstanceOf(trie, Trie)

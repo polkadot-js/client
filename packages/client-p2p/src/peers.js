@@ -7,7 +7,6 @@ import type PeerInfo from 'peer-info';
 
 const EventEmitter = require('eventemitter3');
 
-const assert = require('@polkadot/util/assert');
 const stringShorten = require('@polkadot/util/string/shorten');
 const l = require('@polkadot/util/logger')('p2p/peers');
 
@@ -16,8 +15,6 @@ module.exports = class Peers extends EventEmitter implements PeersInterface {
 
   constructor (emitter: Libp2p) {
     super();
-
-    assert(emitter, 'Expected to receive a Libp2p emitter');
 
     this._peers = {};
 

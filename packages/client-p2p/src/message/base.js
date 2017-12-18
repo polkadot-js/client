@@ -3,22 +3,17 @@
 
 const assert = require('@polkadot/util/assert');
 const ExtError = require('@polkadot/util/ext/error');
-const isNumber = require('@polkadot/util/is/number');
 const numberToBuffer = require('@polkadot/util/number/toBuffer');
 
 module.exports = class BaseMessage {
   id: number;
 
   constructor (id: number) {
-    assert(isNumber(id), 'Expected numeric id');
-
     this.id = id;
   }
 
   decode (id: number, raw: Array<any>): void {
-    assert(isNumber(id), 'Expected numeric id');
     assert(id === this.id, 'Expected message id to match');
-    assert(Array.isArray(raw), 'Expected raw message body');
 
     this._rawDecode(raw);
   }

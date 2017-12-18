@@ -9,29 +9,11 @@ describe('BaseMessage', () => {
     base = new BaseMessage(123);
   });
 
-  it('expects a numeric id', () => {
-    expect(
-      () => new BaseMessage()
-    ).toThrow(/ numeric id/);
-  });
-
   describe('decode', () => {
-    it('expects a numeric message id', () => {
-      expect(
-        () => base.decode()
-      ).toThrow(/numeric id/);
-    });
-
     it('expects id to match constructor id', () => {
       expect(
         () => base.decode(1)
       ).toThrow(/id to match/);
-    });
-
-    it('expects raw body in message', () => {
-      expect(
-        () => base.decode(123)
-      ).toThrow(/raw message body/);
     });
 
     it('calls into _rawDecode, failing (base)', () => {

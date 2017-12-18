@@ -15,24 +15,6 @@ describe('createConfig', () => {
     peerInfo = await promisify(null, PeerInfo.create, { bits: 0 });
   });
 
-  it('expects a peerInfo object', () => {
-    expect(
-      () => createConfig()
-    ).toThrow(/PeerInfo instance/);
-  });
-
-  it('expects a valid bootNodes array', () => {
-    expect(
-      () => createConfig(peerInfo, 'notanArray')
-    ).toThrow(/array of bootNodes/);
-  });
-
-  it('returns a valid configuration object', () => {
-    expect(
-      createConfig(peerInfo)
-    ).toBeDefined();
-  });
-
   it('uses Railing when bootnodes available', () => {
     expect(
       isInstanceOf(

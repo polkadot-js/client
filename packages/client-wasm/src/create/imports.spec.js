@@ -32,6 +32,12 @@ describe('createImports', () => {
     global.WebAssembly = origWebAssembly;
   });
 
+  it('works when import has not been specified', () => {
+    expect(
+      createImports()
+    ).toBeDefined();
+  });
+
   it('uses env.memoryBase when supplied', () => {
     imports.env = { memoryBase: 'test' };
     imports = createImports(imports);
