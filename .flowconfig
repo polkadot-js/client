@@ -8,4 +8,4 @@
 
 [options]
 unsafe.enable_getters_and_setters=true
-module.name_mapper='^@polkadot/client-\(chains\|db\|p2p\|rpc\|wasm\)\(.*\)$' -> '<PROJECT_ROOT>/packages/client-\1/src\2'
+module.name_mapper='^@polkadot/client-\(chains\|db\|p2p\|rpc\|state\|wasm\)\(.*\)$' -> '<PROJECT_ROOT>/packages/client-\1/src\2'

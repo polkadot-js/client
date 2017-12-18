@@ -3,7 +3,6 @@
 
 import type { ChainConfigType } from '@polkadot/client-chains/types';
 import type { AccountIdType, BlockNumberType, HeaderHashType, ParachainIdType, SignatureType } from '@polkadot/primitives/base';
-import type { RoleType } from '@polkadot/primitives/role';
 
 export interface StateType$Genesis {
   hash: HeaderHashType;
@@ -29,8 +28,4 @@ export interface StateInterface {
   genesis: StateType$Genesis,
   parachain: StateType$Parachain,
   validator: StateType$Validator
-}
-
-export interface StatusMessageInterface {
-  roles: Array<RoleType>;
 }
