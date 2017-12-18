@@ -66,7 +66,7 @@ module.exports = class RPCServer extends EventEmitter implements RpcInterface {
 
     this._server = app.listen(this._config.port);
 
-    l.log(`Server started on port=${this._config.port} for type=${this._config.types.join(',')}`);
+    l.log(`Server started on port=${this._config.port} for types=${this._config.types.join(',')}`);
     this.emit('started');
 
     return true;
