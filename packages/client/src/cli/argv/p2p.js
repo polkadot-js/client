@@ -17,6 +17,7 @@ module.exports = ({
     type: 'number'
   },
   'p2p-peers': {
+    default: [],
     description: 'Peers to make initial connections to',
     type: 'array'
   },

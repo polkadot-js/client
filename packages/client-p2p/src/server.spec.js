@@ -20,7 +20,16 @@ describe('Server', () => {
     PeerInfo.create = (callback) => {
       origPeerInfoCreate(new PeerId(Buffer.from([count++])), callback);
     };
-    server = new Server({ address: '127.0.0.1', port: 36677 }, {}, false);
+    server = new Server({
+      chain: {},
+      config: {
+        p2p: {
+          address: '127.0.0.1',
+          port: 36677,
+          peers: []
+        }
+      }
+    }, false);
   });
 
   afterEach(() => {
@@ -31,7 +40,7 @@ describe('Server', () => {
 
   it('creates the instance', () => {
     expect(
-      new Server({}, {}, false)
+      server
     ).toBeDefined();
   });
 
