@@ -1,16 +1,10 @@
 {
-  "name": "@polkadot/client-rpc",
+  "name": "@polkadot/client-state",
   "version": "0.6.0",
-  "description": "RPC server for a Polkadot client",
+  "description": "Global shared state layer for the network client",
   "main": "index.js",
-  "keywords": [
-    "Polkadot",
-    "JsonRPC"
-  ],
-  "author": "Jaco Greeff <jacogr@gmail.com>",
-  "license": "ISC",
   "engines": {
-    "node": ">=6.4"
+    "node": ">=8.0"
   },
   "publishConfig": {
     "access": "public",
@@ -20,25 +14,23 @@
     "type": "git",
     "url": "git+https://github.com/polkadot-js/client.git"
   },
+  "keywords": [
+    "Polkadot",
+    "Merkel Patricia Tree"
+  ],
+  "author": "Jaco Greeff <jacogr@gmail.com>",
+  "license": "ISC",
   "bugs": {
     "url": "https://github.com/polkadot-js/client/issues"
   },
-  "homepage": "https://github.com/polkadot-js/client/tree/master/packages/client-rpc#readme",
+  "homepage": "https://github.com/polkadot-js/client/tree/master/packages/client-state#readme",
   "scripts": {
     "build": "polkadot-dev-build-babel",
     "check": "eslint src && flow check",
     "test": "echo \"Tests only available from root wrapper\""
   },
-  "devDependencies": {
-    "@polkadot/api-provider": "^0.6.7"
-  },
   "dependencies": {
     "@polkadot/util": "^0.10.1",
-    "babel-runtime": "^6.26.0",
-    "co-body": "^5.1.1",
-    "eventemitter3": "^2.0.3",
-    "koa": "^2.4.1",
-    "koa-route": "^3.2.0",
-    "koa-websocket": "^4.1.0"
+    "babel-runtime": "^6.26.0"
   }
 }
