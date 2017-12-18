@@ -15,10 +15,10 @@ module.exports = ({
     description: `Use the chain specified, one of ${allChains.join(', ')} or custom '<chain>.json'`,
     type: 'string'
   },
-  role: {
+  roles: {
     choices: ((Object.keys(allRoles): any): Array<mixed>),
-    default: 'none',
-    description: 'Sets the type of role the node operates as',
-    type: 'string'
+    default: ['none'],
+    description: 'Sets the type of roles the node operates as',
+    type: 'array'
   }
 }: { [key: string]: Options });

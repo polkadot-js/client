@@ -11,7 +11,7 @@ const initRpc = require('./rpc');
 const initP2p = require('./p2p');
 // const initState = require('./state');
 
-l.log(`Initialising for role=${config.role} on chain=${config.chain}`);
+l.log(`Initialising for roles=${config.roles.join(',')} on chain=${config.chain}`);
 
 const chain = loadChain(config.chain);
 // const state = initState(chain);
