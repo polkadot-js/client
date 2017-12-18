@@ -17,7 +17,7 @@ module.exports = ({
     type: 'number'
   },
   'rpc-types': {
-    default: defaults.TYPE,
+    default: defaults.TYPES,
     description: 'Sets the available RPC protocol types',
     type: 'array',
     choices: ['http', 'ws']

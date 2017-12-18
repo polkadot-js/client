@@ -12,7 +12,7 @@ const clientId = require('../../clientId');
 const allChains = Object.keys(chains).map((chain) => `'${chain}'`);
 
 module.exports = ({
-  chain: {
+  'chain': {
     default: chainDefaults.MAIN,
     description: `Use the chain specified, one of ${allChains.join(', ')} or custom '<chain>.json'`,
     type: 'string'
@@ -22,7 +22,7 @@ module.exports = ({
     description: 'The client/version identifier for the running node',
     type: 'string'
   },
-  roles: {
+  'roles': {
     choices: ((Object.keys(allRoles): any): Array<mixed>),
     default: ['none'],
     description: 'Sets the type of roles the node operates as',

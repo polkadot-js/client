@@ -5,10 +5,10 @@ import type { RpcType } from './types';
 
 const PATH: string = '/';
 const PORT: number = 9933;
-const TYPE: Array<RpcType> = ['http', 'ws'];
+const TYPES: Array<RpcType> = ['http', 'ws'];
 
 module.exports = {
   PATH,
   PORT,
-  TYPE
+  TYPES
 };

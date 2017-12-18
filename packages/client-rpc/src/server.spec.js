@@ -43,7 +43,14 @@ describe('Server', () => {
 
   describe('_handleMessage', () => {
     beforeEach(() => {
-      server = new Server({}, handlers, false);
+      server = new Server({
+        config: {
+          rpc: {
+            path: '/',
+            types: ['http']
+          }
+        }
+      }, handlers, false);
     });
 
     it('fails when invalid JSON', () => {
@@ -175,7 +182,15 @@ describe('Server', () => {
         }
       };
       handler = null;
-      server = new Server({ port: 9901, type: ['ws'] }, handlers, false);
+      server = new Server({
+        config: {
+          rpc: {
+            path: '/',
+            port: 9901,
+            types: ['ws']
+          }
+        }
+      }, handlers, false);
     });
 
     it('registers a handler for messages', () => {
@@ -206,7 +221,15 @@ describe('Server', () => {
 
   describe('stop', () => {
     beforeEach(() => {
-      server = new Server({ port: 9901, type: ['http'] }, handlers, false);
+      server = new Server({
+        config: {
+          rpc: {
+            path: '/',
+            port: 9901,
+            types: ['http']
+          }
+        }
+      }, handlers, false);
       server._server = {
         close: () => true
       };
@@ -247,7 +270,15 @@ describe('Server', () => {
   });
 
   it('starts and accepts requests, sending responses (HTTP)', () => {
-    server = new Server({ port: 9901, type: ['http'] }, handlers); // eslint-disable-line
+    server = new Server({
+      config: {
+        rpc: {
+          path: '/',
+          port: 9901,
+          types: ['http']
+        }
+      }
+    }, handlers); // eslint-disable-line
 
     return new HttpProvider('http://localhost:9901')
       .send('echo', [1, 'http', true])
@@ -257,7 +288,15 @@ describe('Server', () => {
   });
 
   it('starts and accepts requests, sending responses (WS)', () => {
-    server = new Server({ port: 9901, type: ['ws'] }, handlers); // eslint-disable-line
+    server = new Server({
+      config: {
+        rpc: {
+          path: '/',
+          port: 9901,
+          types: ['ws']
+        }
+      }
+    }, handlers); // eslint-disable-line
 
     return new WsProvider('ws://localhost:9901')
       .send('echo', [1, 'ws', true])
@@ -267,7 +306,15 @@ describe('Server', () => {
   });
 
   it('starts and accepts requests, sending responses (HTTP & WS)', () => {
-    server = new Server({ port: 9901, type: ['http', 'ws'] }, handlers); // eslint-disable-line
+    server = new Server({
+      config: {
+        rpc: {
+          path: '/',
+          port: 9901,
+          types: ['http', 'ws']
+        }
+      }
+    }, handlers); // eslint-disable-line
 
     return new WsProvider('ws://localhost:9901')
       .send('echo', [1, 'ws', true])
