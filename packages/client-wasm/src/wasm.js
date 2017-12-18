@@ -2,15 +2,12 @@
 // @flow
 
 const assert = require('@polkadot/util/assert');
-const isInstanceOf = require('@polkadot/util/is/instanceOf');
 const isObject = require('@polkadot/util/is/object');
 
-const { createInstance, createModule } = require('./create');
+const { createImports, createInstance, createModule } = require('./create');
 
 module.exports = class Wasm {
   constructor (instance: WebAssemblyInstance) {
-    assert(isInstanceOf(instance, WebAssembly.Instance), 'Expected WebAssembly.Instance');
-
     const exports = instance.exports;
 
     assert(isObject(exports), 'Expected function exports');
@@ -24,8 +21,9 @@ module.exports = class Wasm {
     });
   }
 
-  static fromCode (bytecode: Uint8Array, imports?: WebAssemblyImports): Wasm {
+  static fromCode (bytecode: Uint8Array, _imports?: WebAssemblyImports): Wasm {
     const module = createModule(bytecode);
+    const imports = createImports(_imports);
     const instance = createInstance(module, imports);
 
     return new Wasm(instance);

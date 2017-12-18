@@ -18,7 +18,6 @@ const { signatureDecode, signatureEncode } = require('@polkadot/primitives-rlp/s
 const assert = require('@polkadot/util/assert');
 const bufferToNumber = require('@polkadot/util/buffer/toNumber');
 const numberToBuffer = require('@polkadot/util/number/toBuffer');
-const isObject = require('@polkadot/util/is/object');
 
 const defaults = require('../defaults');
 const BaseMessage = require('./base');
@@ -35,22 +34,19 @@ module.exports = class StatusMessage extends BaseMessage implements MessageInter
   validatorId: AccountIdType;
   parachainId: ParachainIdType;
 
-  constructor (data: $Shape<StatusMessageInterface> = {}) {
+  constructor ({ roles = ['none'], bestNumber = new BN(0), bestHash = '0x00', genesisHash = '0x00', validatorSignature = '0x00', validatorId = '0x00', parachainId = new BN(0) }: $Shape<StatusMessageInterface> = {}) {
     super(StatusMessage.MESSAGE_ID);
 
-    assert(isObject(data), 'Expected data or undefined');
-
-    this.roles = data.roles || ['none'];
-    this.bestNumber = data.bestNumber || new BN(0);
-    this.bestHash = data.bestHash || '0x00';
-    this.genesisHash = data.genesisHash || '0x00';
-    this.validatorSignature = data.validatorSignature || '0x00';
-    this.validatorId = data.validatorId || '0x00';
-    this.parachainId = data.parachainId || new BN(0);
+    this.roles = roles;
+    this.bestNumber = bestNumber;
+    this.bestHash = bestHash;
+    this.genesisHash = genesisHash;
+    this.validatorSignature = validatorSignature;
+    this.validatorId = validatorId;
+    this.parachainId = parachainId;
   }
 
   _rawDecode (raw: Array<any>): void {
-    assert(Array.isArray(raw), 'Expected raw message Array');
     assert(raw.length >= 5, 'Expected correct message length');
 
     const [version, roles, bestNumber, bestHash, genesisHash, validatorSignature, validatorId, parachainId] = raw;

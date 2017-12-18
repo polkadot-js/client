@@ -1,18 +1,16 @@
 // ISC, Copyright 2017 Jaco Greeff
 // @flow
 
-const NAME = 'polkadot-js';
+const NAME = '@polkadot';
 
 let pkgJson: any;
 let stability = 'stable';
 
 try {
-  // $FlowFixMe compiled version
+  // $FlowFixMe production version
   pkgJson = require('./package.json');
 } catch (error) {
   stability = 'development';
-
-  // $FlowFixMe source version
   pkgJson = require('../package.json');
 }
 

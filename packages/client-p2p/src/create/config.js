@@ -15,8 +15,6 @@ const PeerInfo = require('peer-info');
 // const WS = require('libp2p-websockets');
 
 const arrayFilter = require('@polkadot/util/array/filter');
-const assert = require('@polkadot/util/assert');
-const isInstanceOf = require('@polkadot/util/is/instanceOf');
 
 const DEFAULT_CRYPTO = []; // [Secio]
 const DEFAULT_DHT = KadDHT;
@@ -30,9 +28,6 @@ const DEFAULT_TRANSPORTS = [
 ];
 
 module.exports = function createConfig (peerInfo: PeerInfo, bootNodes: ChainConfigType$Nodes = []): LibP2P$Config {
-  assert(isInstanceOf(peerInfo, PeerInfo), 'Expected PeerInfo instance');
-  assert(Array.isArray(bootNodes), 'Expected array of bootNodes');
-
   return {
     connection: {
       crypto: DEFAULT_CRYPTO,

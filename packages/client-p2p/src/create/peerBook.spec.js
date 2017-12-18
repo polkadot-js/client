@@ -23,12 +23,6 @@ describe('createPeerBook', () => {
     PeerInfo.create = origPeerInfoCreate;
   });
 
-  it('expects an array of peers', () => {
-    return createPeerBook('notAddrArray').catch((error) => {
-      expect(error.message).toMatch(/array of peer addresses/);
-    });
-  });
-
   it('returns a PeerBook instance', async () => {
     const peerBook = await createPeerBook();
 

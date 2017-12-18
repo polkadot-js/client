@@ -5,12 +5,6 @@ const isFunction = require('@polkadot/util/is/function');
 const streamReader = require('./reader');
 
 describe('streamReader', () => {
-  it('expects a handler callback', () => {
-    expect(
-      () => streamReader()
-    ).toThrow(/handler function/);
-  });
-
   it('returns a handler function', () => {
     expect(
       isFunction(

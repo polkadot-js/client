@@ -29,12 +29,6 @@ describe('Server', () => {
     return server.stop();
   });
 
-  it('expects a chain definition', () => {
-    expect(
-      () => new Server({})
-    ).toThrow(/chain definition/);
-  });
-
   it('creates the instance', () => {
     expect(
       new Server({}, {}, false)
@@ -224,12 +218,6 @@ describe('Server', () => {
   });
 
   describe('_handleMessage', () => {
-    it('expects a valid message', () => {
-      expect(
-        () => server._handleMessage()
-      ).toThrow(/valid message/);
-    });
-
     it('emits the message as received', (done) => {
       const message = new StatusMessage();
 
@@ -243,18 +231,6 @@ describe('Server', () => {
   });
 
   describe('_receive', () => {
-    it('checks for a protocol match', () => {
-      expect(
-        () => server._receive()
-      ).toThrow(/Expected matching protocol/);
-    });
-
-    it('expects a valid connection', () => {
-      expect(
-        () => server._receive(PROTOCOL)
-      ).toThrow(/valid connection/);
-    });
-
     it('reads the stream, handles the message', (done) => {
       const message = new StatusMessage();
 
@@ -268,18 +244,6 @@ describe('Server', () => {
   });
 
   describe('_send', () => {
-    it('expects a valid connection', () => {
-      expect(
-        () => server._send()
-      ).toThrow(/valid connection/);
-    });
-
-    it('expects a valid message', () => {
-      expect(
-        () => server._send({})
-      ).toThrow(/valid message/);
-    });
-
     it('sends the message', (done) => {
       const message = new StatusMessage();
 

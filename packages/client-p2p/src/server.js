@@ -8,16 +8,11 @@ import type { MessageInterface, P2pConfigType, P2pInterface, PeerType } from './
 const EventEmitter = require('eventemitter3');
 const pull = require('pull-stream');
 
-const assert = require('@polkadot/util/assert');
-const isInstanceOf = require('@polkadot/util/is/instanceOf');
-const isObject = require('@polkadot/util/is/object');
-const isUndefined = require('@polkadot/util/is/undefined');
 const promisify = require('@polkadot/util/promisify');
 const l = require('@polkadot/util/logger')('p2p');
 
 const Peers = require('./peers');
 const createNode = require('./create/node');
-const BaseMessage = require('./message/base');
 const StatusMessage = require('./message/status');
 const { streamReader, streamWriter } = require('./stream');
 const defaults = require('./defaults');
@@ -32,8 +27,6 @@ module.exports = class Server extends EventEmitter implements P2pInterface {
 
   constructor ({ address = defaults.ADDRESS, peers = [], port = defaults.PORT }: P2pConfigType, chain: ChainConfigType, autoStart: boolean = true) {
     super();
-
-    assert(isObject(chain), 'Expected chain definition');
 
     this._address = address;
     this._peerAddresses = peers;
@@ -112,15 +105,10 @@ module.exports = class Server extends EventEmitter implements P2pInterface {
   }
 
   _handleMessage = (message: MessageInterface): void => {
-    assert(isInstanceOf(message, BaseMessage), 'Expected valid message');
-
     this.emit('message', message);
   }
 
   _receive = (protocol: string, connection: any): void => {
-    assert(protocol === defaults.PROTOCOL, `Expected matching protocol, '${protocol}' received`);
-    assert(!isUndefined(connection), 'Expected valid connection');
-
     pull(
       connection,
       streamReader(this._handleMessage)
@@ -128,9 +116,6 @@ module.exports = class Server extends EventEmitter implements P2pInterface {
   }
 
   _send = (connection: any, message: MessageInterface): void => {
-    assert(!isUndefined(connection), 'Expected valid connection');
-    assert(isInstanceOf(message, BaseMessage), 'Expected valid message');
-
     pull(
       streamWriter(message),
       connection

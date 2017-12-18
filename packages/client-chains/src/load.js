@@ -5,9 +5,7 @@ import type { ChainConfigType } from './types';
 
 const path = require('path');
 
-const assert = require('@polkadot/util/assert');
 const ExtError = require('@polkadot/util/ext/error');
-const isString = require('@polkadot/util/is/string');
 
 const validateChain = require('./validate');
 
@@ -27,8 +25,6 @@ function loadFromDisk (name: string): ChainConfigType {
 }
 
 module.exports = function loadChain (name: string): ChainConfigType {
-  assert(isString(name), `Expected a chain name, received '${name}'`);
-
   // builtin?
   if (!/\.json$/.test(name)) {
     try {

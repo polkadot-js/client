@@ -17,18 +17,6 @@ describe('DB', () => {
   });
 
   describe('put', () => {
-    it('expects a key', () => {
-      return db.put().catch((error) => {
-        expect(error.message).toMatch(/Expected string key/);
-      });
-    });
-
-    it('expects a value', () => {
-      return db.put('test').catch((error) => {
-        expect(error.message).toMatch(/Expected value/);
-      });
-    });
-
     it('sets the value', () => {
       return db.put('test', '123').then((result) => {
         expect(result).toEqual('123');
@@ -37,12 +25,6 @@ describe('DB', () => {
   });
 
   describe('get', () => {
-    it('expects a key', () => {
-      return db.get().catch((error) => {
-        expect(error.message).toMatch(/Expected string key/);
-      });
-    });
-
     it('gets the value set', () => {
       return db.put('test', '456').then(() => {
         return db.get('test').then((value) => {
@@ -59,12 +41,6 @@ describe('DB', () => {
   });
 
   describe('del', () => {
-    it('expects a key', () => {
-      return db.del().catch((error) => {
-        expect(error.message).toMatch(/Expected string key/);
-      });
-    });
-
     it('removes a key set', () => {
       return db.put('test', '789').then(() => {
         return db.del('test').then((result) => {

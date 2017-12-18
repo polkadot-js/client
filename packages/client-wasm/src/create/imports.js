@@ -9,9 +9,7 @@ const DEFAULT_TABLE: WebAssemblyTable$Config = {
   element: 'anyfunc'
 };
 
-module.exports = function createImports (imports?: WebAssemblyImports): WebAssemblyImports {
-  imports = imports || {};
-
+module.exports = function createImports (imports?: WebAssemblyImports = {}): WebAssemblyImports {
   imports.env = imports.env || {};
   imports.env.memoryBase = imports.env.memoryBase || 0;
   imports.env.tableBase = imports.env.tableBase || 0;

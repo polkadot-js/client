@@ -10,12 +10,6 @@ describe('rlpEncode', () => {
     message = new StatusMessage();
   });
 
-  it('throws when message not provided', () => {
-    expect(
-      () => rlpEncode()
-    ).toThrow(/valid message/);
-  });
-
   it('returns an encoded Buffer', () => {
     expect(
       Buffer.isBuffer(

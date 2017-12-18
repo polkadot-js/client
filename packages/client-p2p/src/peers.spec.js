@@ -18,12 +18,6 @@ describe('Peers', () => {
     peers = new Peers(emitter);
   });
 
-  it('expects an emitter', () => {
-    expect(
-      () => new Peers()
-    ).toThrow(/Libp2p emitter/);
-  });
-
   it('creates an instance', () => {
     expect(
       peers
