@@ -12,5 +12,5 @@ export type ConfigType = {
   db: DbConfigType,
   p2p: P2pConfigType,
   rpc: RpcConfigType,
-  role: RoleType
+  roles: Array<RoleType>
 };

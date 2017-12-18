@@ -2,7 +2,6 @@
 // @flow
 
 import type { ChainConfigType$Nodes } from '@polkadot/client-chains/types';
-import type { RoleType } from '@polkadot/primitives/role';
 import type PeerInfo from 'peer-info';
 
 export interface MessageInterface {
@@ -24,8 +23,7 @@ export type P2pConfigType = {
   clientId: string,
   maxPeers: number,
   peers?: ChainConfigType$Nodes,
-  port: number,
-  role: RoleType
+  port: number
 };
 
 export type PeerType = {
