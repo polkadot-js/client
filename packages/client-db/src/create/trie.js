@@ -9,13 +9,13 @@ const Trie = require('merkle-patricia-tree');
 const defaults = require('../defaults');
 const createDir = require('./dir');
 
-module.exports = function createTrie (root: string, name: string, inMemory: boolean): Trie {
+module.exports = function createTrie (root: string, chainName: string, dbType: string, inMemory: boolean): Trie {
   return new Trie(
     new LevelUp(
       inMemory
         ? new MemDown()
         : new LevelDown(
-          createDir(root, defaults.PREFIX_DB, name)
+          createDir(root, defaults.PREFIX_DB, `${chainName}/${dbType}`)
         )
     )
   );

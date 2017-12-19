@@ -12,7 +12,7 @@ describe('createTrie', () => {
   let trie;
 
   beforeEach(() => {
-    trie = createTrie('./tmp', 'test', true);
+    trie = createTrie('./tmp', 'chainTrie', 'test', true);
   });
 
   it('returns a valid Trie instance', () => {
@@ -29,7 +29,7 @@ describe('createTrie', () => {
 
   it('creates a LevelDown store (default, inMemory = false)', () => {
     expect(
-      isInstanceOf(createTrie('./tmp', 'test', false).db._db, LevelDown)
+      isInstanceOf(createTrie('./tmp', 'chainTrie', 'test', false).db._db, LevelDown)
     ).toEqual(true);
   });
 });

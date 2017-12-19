@@ -25,4 +25,10 @@ describe('createConfig', () => {
       )
     ).toEqual(true);
   });
+
+  it('does not Railing when no bootnodes', () => {
+    expect(
+      createConfig(peerInfo).discovery
+    ).toHaveLength(1);
+  });
 });

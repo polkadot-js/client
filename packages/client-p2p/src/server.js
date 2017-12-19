@@ -2,7 +2,8 @@
 // @flow
 
 import type Libp2p from 'libp2p';
-import type { ChainConfigType, ChainConfigType$Nodes } from '@polkadot/client-chains/types';
+import type { ConfigType } from '@polkadot/client/types';
+import type { StateInterface } from '@polkadot/client-state/types';
 import type { MessageInterface, P2pConfigType, P2pInterface, PeerType } from './types';
 
 const EventEmitter = require('eventemitter3');
@@ -18,20 +19,16 @@ const { streamReader, streamWriter } = require('./stream');
 const defaults = require('./defaults');
 
 module.exports = class Server extends EventEmitter implements P2pInterface {
-  _address: string;
-  _chain: ChainConfigType;
+  _config: P2pConfigType;
   _node: Libp2p;
-  _peerAddresses: ChainConfigType$Nodes;
   _peers: Peers;
-  _port: number;
+  _state: StateInterface;
 
-  constructor ({ address = defaults.ADDRESS, peers = [], port = defaults.PORT }: P2pConfigType, chain: ChainConfigType, autoStart: boolean = true) {
+  constructor (config: ConfigType, state: StateInterface, autoStart: boolean = true) {
     super();
 
-    this._address = address;
-    this._peerAddresses = peers;
-    this._port = port;
-    this._chain = chain;
+    this._config = config.p2p;
+    this._state = state;
 
     if (autoStart) {
       this.start();
@@ -49,7 +46,7 @@ module.exports = class Server extends EventEmitter implements P2pInterface {
   async start (): Promise<boolean> {
     this.stop();
 
-    this._node = await createNode(this._address, this._port, this._chain, this._peerAddresses);
+    this._node = await createNode(this._config.address, this._config.port, this._state.chain, this._config.peers);
     this._node.handle(defaults.PROTOCOL, this._receive);
 
     this._peers = new Peers(this._node);
@@ -57,7 +54,7 @@ module.exports = class Server extends EventEmitter implements P2pInterface {
 
     await promisify(this._node, this._node.start);
 
-    l.log(`Started on address=${this._address}, port=${this._port}`);
+    l.log(`Started on address=${this._config.address}, port=${this._config.port}`);
     this.emit('started');
 
     return true;

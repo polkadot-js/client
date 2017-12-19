@@ -33,7 +33,7 @@ export type RpcType = 'http' | 'ws';
 export type RpcConfigType = {
   path: string,
   port: number,
-  type: Array<RpcType>
+  types: Array<RpcType>
 };
 
 export type RpcInterface$Events = 'started' | 'stopped';

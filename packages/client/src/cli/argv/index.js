@@ -1,7 +1,7 @@
 // ISC, Copyright 2017 Jaco Greeff
 // @flow
 
-import type { Options } from 'yargs';
+import type { ConfigType } from '../../types';
 
 const yargs = require('yargs');
 
@@ -9,13 +9,12 @@ const db = require('./db');
 const operation = require('./operation');
 const p2p = require('./p2p');
 const rpc = require('./rpc');
-const clientId = require('../../clientId');
 
-module.exports = function argv (cli?: string): { [string]: any } {
+module.exports = function argv (cli?: string): ConfigType {
   const parser = yargs
-    .version(clientId)
+    .version(((operation['client-id'].default: any): string))
     .options(
-      Object.assign(({}: { [string]: Options }), operation, db, p2p, rpc)
+      Object.assign({}, operation, db, p2p, rpc)
     )
     .group(Object.keys(operation), 'Operation')
     .group(Object.keys(db), 'Database')
@@ -27,5 +26,5 @@ module.exports = function argv (cli?: string): { [string]: any } {
     ? parser.parse(cli).argv
     : parser.argv;
 
-  return ((parsed: any): { [string]: any });
+  return ((parsed: any): ConfigType);
 };

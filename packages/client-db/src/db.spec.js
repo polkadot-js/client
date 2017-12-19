@@ -1,19 +1,38 @@
 // ISC, Copyright 2017 Jaco Greeff
 
+const LevelDown = require('leveldown');
+
+const isInstanceOf = require('@polkadot/util/is/instanceOf');
+
 const DB = require('./db');
-const defaults = require('./defaults');
 
 describe('DB', () => {
   let db;
+  let config;
+  let state;
 
   beforeEach(() => {
-    db = new DB({ path: './tmp' }, 'test', true);
+    config = {
+      db: {
+        path: './tmp'
+      }
+    };
+    state = {
+      chain: {
+        name: 'chainDB'
+      }
+    };
+
+    db = new DB(config, state, 'test', true);
   });
 
-  it('sets the DB path to sane default', () => {
+  it('creates a LevelDown store as required (default)', () => {
     expect(
-      new DB({}, 'test').path
-    ).toEqual(defaults.PATH);
+      isInstanceOf(
+        new DB(config, state, 'test')._trie.db._db,
+        LevelDown
+      )
+    ).toEqual(true);
   });
 
   describe('put', () => {

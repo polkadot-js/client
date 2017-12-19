@@ -1,6 +1,6 @@
 {
   "name": "@polkadot/client-rpc",
-  "version": "0.5.4",
+  "version": "0.6.0",
   "description": "RPC server for a Polkadot client",
   "main": "index.js",
   "keywords": [
@@ -30,7 +30,8 @@
     "test": "echo \"Tests only available from root wrapper\""
   },
   "devDependencies": {
-    "@polkadot/api-provider": "^0.6.7"
+    "@polkadot/api-provider": "^0.6.7",
+    "@polkadot/client": "^0.6.0"
   },
   "dependencies": {
     "@polkadot/util": "^0.10.1",

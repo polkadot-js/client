@@ -11,16 +11,29 @@ const { PROTOCOL } = require('./defaults');
 const Server = require('./index');
 
 describe('Server', () => {
+  let config;
+  let state;
   let origPeerInfoCreate;
   let count = 0;
   let server;
 
   beforeEach(() => {
+    config = {
+      p2p: {
+        address: '127.0.0.1',
+        port: 36677,
+        peers: []
+      }
+    };
+    state = {
+      chain: {}
+    };
+
     origPeerInfoCreate = PeerInfo.create;
     PeerInfo.create = (callback) => {
       origPeerInfoCreate(new PeerId(Buffer.from([count++])), callback);
     };
-    server = new Server({ address: '127.0.0.1', port: 36677 }, {}, false);
+    server = new Server(config, state, false);
   });
 
   afterEach(() => {
@@ -31,7 +44,7 @@ describe('Server', () => {
 
   it('creates the instance', () => {
     expect(
-      new Server({}, {}, false)
+      server
     ).toBeDefined();
   });
 

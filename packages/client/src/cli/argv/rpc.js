@@ -16,8 +16,8 @@ module.exports = ({
     description: 'Sets the port to use for local RPC',
     type: 'number'
   },
-  'rpc-type': {
-    default: defaults.TYPE,
+  'rpc-types': {
+    default: defaults.TYPES,
     description: 'Sets the available RPC protocol types',
     type: 'array',
     choices: ['http', 'ws']

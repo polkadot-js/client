@@ -3,16 +3,18 @@
 
 require('./license.js');
 
-const l = require('@polkadot/util/logger')('client');
 const loadChain = require('@polkadot/client-chains/load');
+const l = require('@polkadot/util/logger')('client');
 
 const config = require('./cli')();
-const initRpc = require('./rpc');
-const initP2p = require('./p2p');
+const createRpc = require('./create/rpc');
+const createP2p = require('./create/p2p');
+const createState = require('./create/state');
 
 l.log(`Initialising for roles=${config.roles.join(',')} on chain=${config.chain}`);
 
 const chain = loadChain(config.chain);
+const state = createState(config, chain);
 
-initP2p(config, chain);
-initRpc(config);
+createP2p(config, state);
+createRpc(config, state);

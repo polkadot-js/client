@@ -4,7 +4,7 @@
 import type { ChainNameType } from '@polkadot/client-chains/types';
 import type { DbConfigType } from '@polkadot/client-db/types';
 import type { P2pConfigType } from '@polkadot/client-p2p/types';
-import type { RpcConfigType } from '@polkadot/client-rpc/types';
+import type { RpcConfigType, HandlerType } from '@polkadot/client-rpc/types';
 import type { RoleType } from '@polkadot/primitives/role';
 
 export type ConfigType = {
@@ -13,4 +13,8 @@ export type ConfigType = {
   p2p: P2pConfigType,
   rpc: RpcConfigType,
   roles: Array<RoleType>
+};
+
+export type EndpointType = {
+  [string]: HandlerType
 };

@@ -11,13 +11,13 @@ describe('validateConfig', () => {
 
   it('throws when type is an empty array', () => {
     expect(
-      () => validateConfig({ path: '/', port: 123, type: [] })
+      () => validateConfig({ path: '/', types: [] })
     ).toThrow(/non-empty type/);
   });
 
   it('throws when unknown type is found', () => {
     expect(
-      () => validateConfig({ path: '/', port: 123, type: ['unknown', 'http', 'ws', 'none'] })
+      () => validateConfig({ path: '/', types: ['unknown', 'http', 'ws', 'none'] })
     ).toThrow(/Invalid RPC type found: 'unknown', 'none'/);
   });
 });

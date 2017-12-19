@@ -1,7 +1,9 @@
 // ISC, Copyright 2017 Jaco Greeff
 // @flow
 
-import type { HandlersType, JsonRpcError, JsonRpcRequest, JsonRpcResponse, RpcConfigType, RpcInterface, RpcType } from './types';
+import type { ConfigType } from '@polkadot/client/types';
+import type { StateInterface } from '@polkadot/client-state/types';
+import type { HandlersType, JsonRpcError, JsonRpcRequest, JsonRpcResponse, RpcConfigType, RpcInterface } from './types';
 
 type PostContextType = {
   body: string,
@@ -26,27 +28,25 @@ const isError = require('@polkadot/util/is/error');
 const isFunction = require('@polkadot/util/is/function');
 
 const { createKoa, createError, createResponse } = require('./create');
-const defaults = require('./defaults');
 const { validateConfig, validateRequest, validateHandlers } = require('./validate');
 
 module.exports = class RPCServer extends EventEmitter implements RpcInterface {
+  _config: RpcConfigType;
   _handlers: HandlersType;
-  _path: string;
-  _port: number;
   _server: ?net$Server;
-  _types: Array<RpcType>;
+  _state: StateInterface;
 
-  constructor ({ path = defaults.PATH, port = defaults.PORT, type = defaults.TYPE }: RpcConfigType, handlers: HandlersType, autoStart: boolean = true) {
+  constructor (config: ConfigType, state: StateInterface, handlers: HandlersType, autoStart: boolean = true) {
     super();
 
-    validateConfig({ path, port, type });
+    this._config = config.rpc;
+    this._state = state;
+
+    validateConfig(this._config);
     validateHandlers(handlers);
 
     this._handlers = handlers;
-    this._path = path;
-    this._port = port;
     this._server = null;
-    this._types = type;
 
     if (autoStart) {
       this.start();
@@ -61,13 +61,13 @@ module.exports = class RPCServer extends EventEmitter implements RpcInterface {
         http: this._handlePost,
         ws: this._handleWs
       },
-      path: this._path,
-      types: this._types
+      path: this._config.path,
+      types: this._config.types
     });
 
-    this._server = app.listen(this._port);
+    this._server = app.listen(this._config.port);
 
-    l.log(`Server started on port=${this._port} for type=${this._types.join(',')}`);
+    l.log(`Server started on port=${this._config.port} for types=${this._config.types.join(',')}`);
     this.emit('started');
 
     return true;
