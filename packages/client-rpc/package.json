@@ -31,7 +31,7 @@
   },
   "devDependencies": {
     "@polkadot/api-provider": "^0.6.7",
-    "@polkadot-client": "^0.6.0"
+    "@polkadot/client": "^0.6.0"
   },
   "dependencies": {
     "@polkadot/util": "^0.10.1",
