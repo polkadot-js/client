@@ -34,6 +34,7 @@
   },
   "dependencies": {
     "@polkadot/api-jsonrpc": "^0.6.7",
+    "@polkadot/client-chains": "^0.6.0",
     "@polkadot/client-db": "^0.6.0",
     "@polkadot/client-p2p": "^0.6.0",
     "@polkadot/client-rpc": "^0.6.0",

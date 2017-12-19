@@ -2,24 +2,22 @@
 // @flow
 
 import type Trie from 'merkle-patricia-tree';
+import type { ConfigType } from '@polkadot/client/types';
+import type { StateInterface } from '@polkadot/client-state/types';
 import type { DbConfigType } from './types';
 
 const promisify = require('@polkadot/util/promisify');
 
 const createTrie = require('./create/trie');
-const defaults = require('./defaults');
 
 module.exports = class DB {
-  _path: string;
+  _config: DbConfigType;
   _trie: Trie;
 
-  constructor ({ path = defaults.PATH }: DbConfigType, name: string, inMemory: boolean = false) {
-    this._path = path;
-    this._trie = createTrie(path, name, inMemory);
-  }
-
-  get path (): string {
-    return this._path;
+  // TODO: allowed values for dbType as soon as subclassed
+  constructor (config: ConfigType, state: StateInterface, dbType: string, inMemory: boolean = false) {
+    this._config = config.db;
+    this._trie = createTrie(config.db.path, state.chain.name, dbType, inMemory);
   }
 
   async del (key: string): Promise<boolean> {

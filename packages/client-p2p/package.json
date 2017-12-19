@@ -45,5 +45,8 @@
     "pull-stream": "^3.6.1",
     "pump": "^2.0.0",
     "rlp": "^2.0.0"
+  },
+  "devDependencies": {
+    "@polkadot/client": "^0.6.0"
   }
 }

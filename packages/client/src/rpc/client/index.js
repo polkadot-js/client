@@ -1,7 +1,7 @@
 // ISC, Copyright 2017 Jaco Greeff
 // @flow
 
-import type { EndpointType } from '../types';
+import type { EndpointType } from '../../types';
 
 const version = require('./version');
 

@@ -1,6 +1,7 @@
 // ISC, Copyright 2017 Jaco Greeff
 // @flow
 
+import type { ConfigType } from '@polkadot/client/types';
 import type { StateInterface } from '@polkadot/client-state/types';
 import type { HandlersType, JsonRpcError, JsonRpcRequest, JsonRpcResponse, RpcConfigType, RpcInterface } from './types';
 
@@ -35,10 +36,10 @@ module.exports = class RPCServer extends EventEmitter implements RpcInterface {
   _server: ?net$Server;
   _state: StateInterface;
 
-  constructor (state: StateInterface, handlers: HandlersType, autoStart: boolean = true) {
+  constructor (config: ConfigType, state: StateInterface, handlers: HandlersType, autoStart: boolean = true) {
     super();
 
-    this._config = state.config.rpc;
+    this._config = config.rpc;
     this._state = state;
 
     validateConfig(this._config);

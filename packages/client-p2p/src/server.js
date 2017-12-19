@@ -2,6 +2,7 @@
 // @flow
 
 import type Libp2p from 'libp2p';
+import type { ConfigType } from '@polkadot/client/types';
 import type { StateInterface } from '@polkadot/client-state/types';
 import type { MessageInterface, P2pConfigType, P2pInterface, PeerType } from './types';
 
@@ -23,10 +24,10 @@ module.exports = class Server extends EventEmitter implements P2pInterface {
   _peers: Peers;
   _state: StateInterface;
 
-  constructor (state: StateInterface, autoStart: boolean = true) {
+  constructor (config: ConfigType, state: StateInterface, autoStart: boolean = true) {
     super();
 
-    this._config = state.config.p2p;
+    this._config = config.p2p;
     this._state = state;
 
     if (autoStart) {

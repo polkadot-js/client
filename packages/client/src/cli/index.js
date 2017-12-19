@@ -1,7 +1,7 @@
 // ISC, Copyright 2017 Jaco Greeff
 // @flow
 
-import type { ConfigType } from '@polkadot/client-state/types';
+import type { ConfigType } from '../types';
 
 const getArgv = require('./argv');
 
@@ -20,7 +20,7 @@ module.exports = function cli (params?: string): ConfigType {
 
   return Object
     .keys(argv)
-    .reduce((config: ConfigType, key: string) => {
+    .reduce((config: any, key: string) => {
       const sepIndex = key.indexOf('-');
 
       if (/^(db|p2p|rpc)-/.test(key)) {
