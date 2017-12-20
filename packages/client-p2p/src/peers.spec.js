@@ -51,7 +51,7 @@ describe('Peers', () => {
 
   it('does not add when re-discovered (connecting)', () => {
     emitter.emit('peer:discovery', peer);
-    peers.get(0).isConnecting = true;
+    peers.getIndex(0).isConnecting = true;
     emitter.emit('peer:discovery', peer);
 
     expect(peers.count).toEqual(1);
@@ -60,7 +60,7 @@ describe('Peers', () => {
 
   it('does not add when re-discovered (connected)', () => {
     emitter.emit('peer:discovery', peer);
-    peers.get(0).isConnected = true;
+    peers.getIndex(0).isConnected = true;
     emitter.emit('peer:discovery', peer);
 
     expect(peers.count).toEqual(1);
@@ -125,5 +125,44 @@ describe('Peers', () => {
     emitter.emit('peer:discovery', peer);
     emitter.emit('peer:connect', peer);
     emitter.emit('peer:disconnect', peer);
+  });
+
+  describe('add', () => {
+    let peerInfo;
+    let connection;
+
+    beforeEach(() => {
+      connection = { 'some': 'connection' };
+      peerInfo = {
+        id: {
+          toB58String: () => '0x1234'
+        }
+      };
+    });
+
+    it('adds the peer', () => {
+      peers.add(peerInfo, null);
+
+      expect(peers.count).toEqual(1);
+    });
+
+    it('adds the peer (connected)', () => {
+      peers.add(peerInfo, connection);
+
+      expect(peers.connectedCount).toEqual(1);
+    });
+
+    it('adds the peer with connection (connected)', () => {
+      peers.add(peerInfo, connection);
+
+      expect(peers.getIndex(0).connection).toEqual(connection);
+    });
+
+    it('adds the peer with new info', () => {
+      peers.add(peerInfo);
+      peers.add(peerInfo, connection);
+
+      expect(peers.getIndex(0).connection).toEqual(connection);
+    });
   });
 });

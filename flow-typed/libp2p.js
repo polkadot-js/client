@@ -23,11 +23,15 @@ declare type LibP2P$Config = {
 declare module 'libp2p' {
   declare type LibP2P$Events = 'peer:connect' | 'peer:disconnect' | 'peer:discovery' | 'start' | 'stop';
 
+  declare interface LibP2P$Connection {
+    getPeerInfo (error: Error, peerInfo: PeerInfo): void;
+  }
+
   declare class LibP2P {
     constructor (config?: LibP2P$Config, peerInfo?: PeerInfo, peerBook?: PeerBook): LibP2P;
 
-    dial (peerInfo: PeerInfo, protocol: string, (error: Error, conn: any) => any): void;
-    handle (protocol: string, (protocol: string, conn: any) => any): void;
+    dial (peerInfo: PeerInfo, protocol: string, (error: Error, conn: LibP2P$Connection) => any): void;
+    handle (protocol: string, (protocol: string, conn: LibP2P$Connection) => any): void;
     on (event: LibP2P$Events, callback: (event: any) => any): void;
     start ((error: Error) => any): void;
     stop ((error: Error) => any): void;

@@ -2,7 +2,9 @@
 // @flow
 
 import type { ChainConfigType$Nodes } from '@polkadot/client-chains/types';
+import type { LibP2P$Connection } from 'libp2p';
 import type PeerInfo from 'peer-info';
+import type StatusMessage from './message/status';
 
 export interface MessageInterface {
   constructor (data: any): any;
@@ -26,13 +28,15 @@ export type P2pConfigType = {
   port: number
 };
 
-export type PeerType = {
-  connection: ?any,
+export type PeerInterface = {
+  +hasStatus: boolean,
+  +isConnected: boolean,
+
+  connection: ?LibP2P$Connection,
   id: string,
-  isConnected: boolean,
-  isConnecting: boolean,
   peerInfo: PeerInfo,
-  shortId: string
+  shortId: string,
+  status: ?StatusMessage
 };
 
 export type PeersInterface$Events = 'connected' | 'disconnected' | 'discovered';
@@ -41,7 +45,7 @@ export interface PeersInterface {
   +count: number;
   +connectedCount: number;
 
-  on (type: PeersInterface$Events, (peer: PeerType) => any): any;
+  on (type: PeersInterface$Events, (peer: PeerInterface) => any): any;
 }
 
 export type P2pInterface$Events = 'message' | 'started' | 'stopped';

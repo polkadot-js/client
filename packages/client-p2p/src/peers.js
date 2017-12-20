@@ -1,26 +1,31 @@
 // ISC, Copyright 2017 Jaco Greeff
 // @flow
 
-import type { PeersInterface, PeersInterface$Events, PeerType } from './types';
-import type Libp2p from 'libp2p';
+import type { PeersInterface, PeersInterface$Events, PeerInterface } from './types';
+import type LibP2P, { LibP2P$Connection } from 'libp2p';
 import type PeerInfo from 'peer-info';
 
 const EventEmitter = require('eventemitter3');
 
-const stringShorten = require('@polkadot/util/string/shorten');
 const l = require('@polkadot/util/logger')('p2p/peers');
+const promisify = require('@polkadot/util/promisify');
+
+const defaults = require('./defaults');
+const Peer = require('./peer');
 
 module.exports = class Peers extends EventEmitter implements PeersInterface {
-  _peers: { [string]: PeerType };
+  _node: LibP2P;
+  _peers: { [string]: PeerInterface };
 
-  constructor (emitter: Libp2p) {
+  constructor (node: LibP2P) {
     super();
 
+    this._node = node;
     this._peers = {};
 
-    emitter.on('peer:connect', this._onConnect);
-    emitter.on('peer:disconnect', this._onDisconnect);
-    emitter.on('peer:discovery', this._onDiscovery);
+    node.on('peer:connect', this._onConnect);
+    node.on('peer:disconnect', this._onDisconnect);
+    node.on('peer:discovery', this._onDiscovery);
   }
 
   get count (): number {
@@ -31,19 +36,46 @@ module.exports = class Peers extends EventEmitter implements PeersInterface {
     return this.peersConnected.length;
   }
 
-  get peers (): Array<PeerType> {
-    return ((Object.values(this._peers): any): Array<PeerType>);
+  get peers (): Array<PeerInterface> {
+    return ((Object.values(this._peers): any): Array<PeerInterface>);
   }
 
-  get peersConnected (): Array<PeerType> {
+  get peersConnected (): Array<PeerInterface> {
     return this.peers.filter(({ isConnected }) => isConnected);
   }
 
-  get (index: number): PeerType {
+  getIndex (index: number): PeerInterface {
     return this.peers[index];
   }
 
-  _logPeer (event: PeersInterface$Events, peer: PeerType): void {
+  get (peerInfo: PeerInfo): ?PeerInterface {
+    const id = peerInfo.id.toB58String();
+
+    return this._peers[id];
+  }
+
+  add (peerInfo: PeerInfo, connection: ?LibP2P$Connection): PeerInterface {
+    const id = peerInfo.id.toB58String();
+    let peer = this._peers[id];
+
+    if (!peer) {
+      peer = this._peers[id] = new Peer(peerInfo);
+      peer.on('message', (message: MessageInterface) => {
+        this.emit('message', {
+          message,
+          peer
+        });
+      });
+    }
+
+    if (connection) {
+      peer.addConnection(connection);
+    }
+
+    return peer;
+  }
+
+  _logPeer (event: PeersInterface$Events, peer: PeerInterface): void {
     l.log(peer.shortId, event);
     this.emit(event, peer);
   }
@@ -53,15 +85,11 @@ module.exports = class Peers extends EventEmitter implements PeersInterface {
       return;
     }
 
-    const id = peerInfo.id.toB58String();
-    const peer = this._peers[id];
+    const peer = this.get(peerInfo);
 
-    if (!peer || peer.isConnected) {
+    if (!peer) {
       return;
     }
-
-    peer.isConnecting = false;
-    peer.isConnected = true;
 
     this._logPeer('connected', peer);
   }
@@ -71,41 +99,42 @@ module.exports = class Peers extends EventEmitter implements PeersInterface {
       return;
     }
 
-    const id = peerInfo.id.toB58String();
-    const peer = this._peers[id];
+    const peer = this.get(peerInfo);
 
     if (!peer) {
       return;
     }
+
+    const id = peer.id;
 
     delete this._peers[id];
 
     this._logPeer('disconnected', peer);
   }
 
-  _onDiscovery = (peerInfo: PeerInfo): any => {
+  _onDiscovery = async (peerInfo: PeerInfo): Promise<boolean> => {
     if (!peerInfo) {
-      return;
+      return false;
     }
 
-    const id = peerInfo.id.toB58String();
-    let peer = this._peers[id];
+    let peer = this.get(peerInfo);
 
-    if (peer && (peer.isConnecting || peer.isConnected)) {
-      return;
+    if (peer) {
+      return false;
     }
 
-    const shortId = stringShorten(id);
+    try {
+      peer = this.add(peerInfo, null);
 
-    peer = this._peers[id] = {
-      connection: null,
-      id,
-      isConnected: false,
-      isConnecting: false,
-      peerInfo,
-      shortId
-    };
+      const connection = await promisify(this._node, this._node.dial, peerInfo, defaults.PROTOCOL);
+
+      peer.addConnection(connection);
+    } catch (error) {
+      return false;
+    }
 
     this._logPeer('discovered', peer);
+
+    return true;
   }
 };

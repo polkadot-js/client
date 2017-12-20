@@ -3,11 +3,12 @@
 const PeerId = require('peer-id');
 const PeerInfo = require('peer-info');
 
+const State = require('@polkadot/client-state');
 const isInstanceOf = require('@polkadot/util/is/instanceOf');
 
 const StatusMessage = require('./message/status');
 const { streamReader, streamWriter } = require('./stream');
-const { PROTOCOL } = require('./defaults');
+const defaults = require('./defaults');
 const Server = require('./index');
 
 describe('Server', () => {
@@ -19,15 +20,18 @@ describe('Server', () => {
 
   beforeEach(() => {
     config = {
+      roles: ['none'],
       p2p: {
         address: '127.0.0.1',
         port: 36677,
         peers: []
       }
     };
-    state = {
-      chain: {}
-    };
+    state = new State({
+      genesis: {
+        hash: '0x1234'
+      }
+    });
 
     origPeerInfoCreate = PeerInfo.create;
     PeerInfo.create = (callback) => {
@@ -165,6 +169,7 @@ describe('Server', () => {
     beforeEach(() => {
       connection = { 'some': 'connection' };
       peer = {
+        connection,
         isConnecting: false,
         peerInfo: 'peerInfo'
       };
@@ -212,7 +217,7 @@ describe('Server', () => {
     it('dials the peer', () => {
       return server._dialPeer(peer).then((result) => {
         expect(server._node.dial).toHaveBeenCalledWith(
-          peer.peerInfo, PROTOCOL, expect.anything()
+          peer.peerInfo, defaults.PROTOCOL, expect.anything()
         );
       });
     });
@@ -224,6 +229,8 @@ describe('Server', () => {
           isInstanceOf(message, StatusMessage)
         ).toEqual(true);
         done();
+
+        return true;
       };
 
       server._dialPeer(peer);
@@ -231,39 +238,145 @@ describe('Server', () => {
   });
 
   describe('_handleMessage', () => {
-    it('emits the message as received', (done) => {
-      const message = new StatusMessage();
+    let peer;
+    let status;
 
-      server.on('message', (_message) => {
-        expect(_message).toEqual(message);
+    beforeEach(() => {
+      peer = {};
+      status = new StatusMessage();
+
+      server._sendStatus = jest.fn(() => true);
+    });
+
+    it('emits the message as received', (done) => {
+      server.on('message', (message) => {
+        expect(message).toEqual(status);
         done();
       });
 
-      server._handleMessage(message);
+      server._handleMessage(peer, status);
+    });
+
+    it('add status to peer status is received', () => {
+      server._handleMessage(peer, status);
+
+      expect(peer.status).toEqual(status);
+    });
+
+    it('send status when status is received', () => {
+      server._handleMessage(peer, status);
+
+      expect(server._sendStatus).toHaveBeenCalledWith(peer);
+    });
+  });
+
+  describe('_sendStatus', () => {
+    let peer;
+
+    beforeEach(() => {
+      peer = {
+        hasStatus: false,
+        connection: true
+      };
+      server._send = jest.fn(() => true);
+    });
+
+    it('returns false when peer hasStatus', () => {
+      expect(
+        server._sendStatus(
+          Object.assign(peer, { hasStatus: true })
+        )
+      ).toEqual(false);
+    });
+
+    it('returns true when completed', () => {
+      expect(
+        server._sendStatus(peer)
+      ).toEqual(true);
+    });
+
+    it('sets hasStatus upon sending', () => {
+      server._sendStatus(peer);
+
+      expect(
+        peer.hasStatus
+      ).toEqual(true);
+    });
+  });
+
+  describe('_handleProtocol', () => {
+    let connection;
+    let peer;
+    let peerInfo;
+
+    beforeEach(() => {
+      peerInfo = {
+        id: {
+          toB58String: () => '0x00'
+        }
+      };
+      connection = {
+        getPeerInfo: jest.fn((cb) => {
+          cb(null, peerInfo);
+        })
+      };
+      peer = {};
+      server._peers = {
+        add: jest.fn(() => peer)
+      };
+      server._receive = jest.fn((peer) => true);
+
+      server._handleProtocol(defaults.PROTOCOL, connection);
+    });
+
+    it('retrieves the peerInfo', () => {
+      expect(connection.getPeerInfo).toHaveBeenCalled();
+    });
+
+    it('adds the peer', () => {
+      expect(server._peers.add).toHaveBeenCalledWith(peerInfo, connection);
+    });
+
+    it('calls into _receive with the peer', () => {
+      expect(server._receive).toHaveBeenCalledWith(peer);
     });
   });
 
   describe('_receive', () => {
-    it('reads the stream, handles the message', (done) => {
+    beforeEach(() => {
+      server._handleMessage = jest.fn(() => true);
+    });
+
+    it('reads the stream, handles the message', () => {
       const message = new StatusMessage();
+      const peer = {
+        connection: streamWriter(message)
+      };
 
-      server.on('message', (_message) => {
-        expect(JSON.stringify(_message)).toEqual(JSON.stringify(message));
-        done();
-      });
+      server._receive(peer);
 
-      server._receive(PROTOCOL, streamWriter(message));
+      expect(server._handleMessage).toHaveBeenCalledWith(
+        peer, expect.objectContaining({ id: 0 })
+      );
     });
   });
 
   describe('_send', () => {
+    it('does not send without a peer connection', () => {
+      expect(
+        server._send({})
+      ).toEqual(false);
+    });
+
     it('sends the message', (done) => {
       const message = new StatusMessage();
 
-      server._send(streamReader((_message) => {
-        expect(JSON.stringify(_message)).toEqual(JSON.stringify(message));
-        done();
-      }), message);
+      server._send({
+        connection: streamReader((_message) => {
+          expect(JSON.stringify(_message)).toEqual(JSON.stringify(message));
+          done();
+        })
+      }, message);
     });
   });
 });
