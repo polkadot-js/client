@@ -80,21 +80,31 @@ module.exports = class Peers extends EventEmitter implements PeersInterface {
     this.emit(event, peer);
   }
 
-  _onConnect = (peerInfo: PeerInfo): any => {
+  _onConnect = (peerInfo: PeerInfo): boolean => {
+    if (!peerInfo) {
+      return false;
+    }
+
     const peer = this.get(peerInfo);
 
     if (!peer) {
-      return;
+      return false;
     }
 
     this._logPeer('connected', peer);
+
+    return true;
   }
 
-  _onDisconnect = (peerInfo: PeerInfo): any => {
+  _onDisconnect = (peerInfo: PeerInfo): boolean => {
+    if (!peerInfo) {
+      return false;
+    }
+
     const peer = this.get(peerInfo);
 
     if (!peer) {
-      return;
+      return false;
     }
 
     const id = peer.id;
@@ -102,6 +112,8 @@ module.exports = class Peers extends EventEmitter implements PeersInterface {
     delete this._peers[id];
 
     this._logPeer('disconnected', peer);
+
+    return true;
   }
 
   _onDiscovery = async (peerInfo: PeerInfo): Promise<boolean> => {
