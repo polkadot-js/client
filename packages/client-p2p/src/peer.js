@@ -14,20 +14,24 @@ const rlpEncode = require('./rlp/encode');
 
 module.exports = class Peer extends EventEmitter implements PeerInterface {
   _connections: Array<LibP2P$Connection> = [];
-  _peerInfo: PeerInfo;
-
-  id: string;
-  shortId: string;
+  _id: string;
+  _shortId: string;
   status: ?StatusMessage = null;
 
   constructor (peerInfo: PeerInfo) {
     super();
 
-    this.id = peerInfo.id.toB58String();
-    this.shortId = stringShorten(this.id);
-
-    this._peerInfo = peerInfo;
+    this._id = peerInfo.id.toB58String();
+    this._shortId = stringShorten(this.id);
     this._pushable = pushable();
+  }
+
+  get id (): string {
+    return this._id;
+  }
+
+  get shortId (): string {
+    return this._shortId;
   }
 
   get isConnected (): boolean {
@@ -38,9 +42,26 @@ module.exports = class Peer extends EventEmitter implements PeerInterface {
     return !!this.status;
   }
 
-  addConnection (connection: LibP2P$Connection): void {
+  addConnection (connection: LibP2P$Connection): boolean {
     this._connections.push(connection);
-    this._receive(connection);
+
+    return this._receive(connection);
+  }
+
+  _decodeMessage = (encoded: Buffer): void => {
+    console.log('R', encoded);
+
+    const message = rlpDecode(encoded);
+
+    this.emit('message', message);
+  }
+
+  _encodeMessage = (message: MessageInterface): Buffer => {
+    const encoded = rlpEncode(message);
+
+    console.log('W', encoded);
+
+    return encoded;
   }
 
   _receive (connection: LibP2P$Connection): boolean {
@@ -52,14 +73,9 @@ module.exports = class Peer extends EventEmitter implements PeerInterface {
 
       pull(
         connection,
-        pull.drain((encoded: Buffer) => {
-          console.log('R', encoded);
-
-          this.emit('message', rlpDecode(encoded));
-        })
+        pull.drain(this._decodeMessage)
       );
     } catch (error) {
-      console.error('error', error);
       return false;
     }
 
@@ -72,11 +88,9 @@ module.exports = class Peer extends EventEmitter implements PeerInterface {
     }
 
     try {
-      const encoded = rlpEncode(message);
-
-      console.log('W', encoded);
-
-      this._pushable.push(encoded);
+      this._pushable.push(
+        this._encodeMessage(message)
+      );
     } catch (error) {
       return false;
     }
