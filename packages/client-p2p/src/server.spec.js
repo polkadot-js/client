@@ -191,6 +191,12 @@ describe('Server', () => {
 
       expect(server._sendStatus).toHaveBeenCalledWith(peer);
     });
+
+    it('does not send status when non-status is received', () => {
+      server._onMessage({ peer, message: { id: 'test' } });
+
+      expect(server._sendStatus).not.toHaveBeenCalled();
+    });
   });
 
   describe('_onPeerConnected', () => {
