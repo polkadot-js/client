@@ -83,7 +83,7 @@ module.exports = class Server extends EventEmitter implements P2pInterface {
 
   _onMessage = ({ peer, message }: { peer: PeerInterface, message: MessageInterface }): void => {
     if (message.id === StatusMessage.MESSAGE_ID) {
-      // this._sendStatus(peer);
+      this._sendStatus(peer);
       peer.status = ((message: any): StatusMessage);
     }
 
@@ -104,7 +104,7 @@ module.exports = class Server extends EventEmitter implements P2pInterface {
   }
 
   _sendStatus = (peer: PeerInterface): boolean => {
-    setTimeout(() => this._sendStatus(peer), 5000);
+    // setTimeout(() => this._sendStatus(peer), 5000);
 
     return peer.send(
       new StatusMessage({
