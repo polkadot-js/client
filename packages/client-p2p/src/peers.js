@@ -81,10 +81,6 @@ module.exports = class Peers extends EventEmitter implements PeersInterface {
   }
 
   _onConnect = (peerInfo: PeerInfo): any => {
-    if (!peerInfo) {
-      return;
-    }
-
     const peer = this.get(peerInfo);
 
     if (!peer) {
@@ -95,10 +91,6 @@ module.exports = class Peers extends EventEmitter implements PeersInterface {
   }
 
   _onDisconnect = (peerInfo: PeerInfo): any => {
-    if (!peerInfo) {
-      return;
-    }
-
     const peer = this.get(peerInfo);
 
     if (!peer) {
@@ -124,11 +116,9 @@ module.exports = class Peers extends EventEmitter implements PeersInterface {
     }
 
     try {
-      peer = this.add(peerInfo, null);
-
       const connection = await promisify(this._node, this._node.dial, peerInfo, defaults.PROTOCOL);
 
-      peer.addConnection(connection);
+      peer = this.add(peerInfo, connection);
     } catch (error) {
       return false;
     }
