@@ -45,15 +45,6 @@ describe('Peers', () => {
       ).toEqual(false);
     });
 
-    // it('ignores connections already added', () => {
-    //   const peer = peers.add(peerInfo);
-    //   peer.addConnection(connection);
-    //
-    //   expect(
-    //     peers._onConnect(peerInfo)
-    //   ).toEqual(false);
-    // });
-
     it('emits connected event', (done) => {
       peers.add(peerInfo);
       peers.on('connected', () => {

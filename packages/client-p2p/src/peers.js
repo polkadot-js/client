@@ -71,10 +71,6 @@ module.exports = class Peers extends EventEmitter implements PeersInterface {
       return false;
     }
 
-    // if (peer.hasConnection(peerInfo.isConnected())) {
-    //   return false;
-    // }
-
     this._logPeer('connected', peer);
 
     return true;

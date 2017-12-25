@@ -53,12 +53,6 @@ module.exports = class Peer extends EventEmitter implements PeerInterface {
     return !!this.status;
   }
 
-  // hasConnection (connection: LibP2P$Connection): boolean {
-  //   const connId = connection.toString();
-  //
-  //   return !!this._connections.find((connection) => connection.toString() === connId);
-  // }
-
   addConnection (connection: LibP2P$Connection): boolean {
     this._connections.push(connection);
 
