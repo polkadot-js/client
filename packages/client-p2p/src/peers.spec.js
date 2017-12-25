@@ -2,21 +2,23 @@
 
 const EventEmitter = require('eventemitter3');
 
-const defaults = require('./defaults');
 const Peers = require('./peers');
 
 describe('Peers', () => {
+  const connection = {
+    toString: () => '123'
+  };
   const peerInfo = {
     id: {
       toB58String: () => '1234567890'
-    }
+    },
+    isConnected: () => connection
   };
   let node;
   let peers;
 
   beforeEach(() => {
     node = new EventEmitter();
-    node.dial = jest.fn((peerInfo, protocol, cb) => cb(null, {}));
     peers = new Peers(node);
   });
 
@@ -39,6 +41,15 @@ describe('Peers', () => {
     });
 
     it('ignores non-existing peers', () => {
+      expect(
+        peers._onConnect(peerInfo)
+      ).toEqual(false);
+    });
+
+    it('ignores connections already added', () => {
+      const peer = peers.add(peerInfo);
+      peer.addConnection(connection);
+
       expect(
         peers._onConnect(peerInfo)
       ).toEqual(false);
@@ -83,51 +94,32 @@ describe('Peers', () => {
 
   describe('_onDiscovery', () => {
     it('ignores invalid connections', () => {
-      return peers._onDiscovery().then((result) => {
-        expect(result).toEqual(false);
-      });
+      expect(
+        peers._onDiscovery()
+      ).toEqual(false);
     });
 
     it('ignores already-existing peers', () => {
       peers.add(peerInfo);
-      return peers._onDiscovery(peerInfo).then((result) => {
-        expect(result).toEqual(false);
-      });
-    });
-
-    it('returns false when adding fails', () => {
-      peers.add = () => {
-        throw new Error('error');
-      };
-
-      return peers._onDiscovery(peerInfo).then((result) => {
-        expect(result).toEqual(false);
-      });
-    });
-
-    it('dials the peer', () => {
-      return peers._onDiscovery(peerInfo).then(() => {
-        expect(node.dial).toHaveBeenCalledWith(
-          peerInfo, defaults.PROTOCOL, expect.anything()
-        );
-      });
+      expect(
+        peers._onDiscovery(peerInfo)
+      ).toEqual(false);
     });
 
     it('adds the peer', () => {
       peers.add = jest.fn(() => true);
+      peers._onDiscovery(peerInfo);
 
-      return peers._onDiscovery(peerInfo).then(() => {
-        expect(peers.add).toHaveBeenCalledWith(peerInfo, {});
-      });
+      expect(
+        peers.add
+      ).toHaveBeenCalledWith(peerInfo);
     });
   });
 
   describe('add', () => {
     let peerInfo;
-    let connection;
 
     beforeEach(() => {
-      connection = { 'some': 'connection' };
       peerInfo = {
         id: {
           toB58String: () => '0x1234'
@@ -136,26 +128,20 @@ describe('Peers', () => {
     });
 
     it('adds the peer', () => {
-      peers.add(peerInfo, null);
+      peers.add(peerInfo);
 
       expect(peers.count).toEqual(1);
     });
 
-    it('adds the peerInfo (connected)', () => {
-      peers.add(peerInfo, connection);
+    it('does not re-add a peer', () => {
+      peers.add(peerInfo);
+      peers.add(peerInfo);
 
-      expect(peers.connectedCount).toEqual(1);
-    });
-
-    it('adds the peerInfo with new info', () => {
-      peers.add(peerInfo, connection);
-      peers.add(peerInfo, { second: 'connection' });
-
-      expect(peers.getIndex(0)._connections).toHaveLength(2);
+      expect(peers.count).toEqual(1);
     });
 
     it('emits message when peer receives', (done) => {
-      const peer = peers.add(peerInfo, connection);
+      const peer = peers.add(peerInfo);
       const message = { 'something': 'else' };
 
       peers.on('message', (info) => {

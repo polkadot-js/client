@@ -15,6 +15,7 @@ const rlpEncode = require('./rlp/encode');
 module.exports = class Peer extends EventEmitter implements PeerInterface {
   _connections: Array<LibP2P$Connection> = [];
   _id: string;
+  _peerInfo: PeerInfo;
   _shortId: string;
   status: ?StatusMessage = null;
 
@@ -23,6 +24,7 @@ module.exports = class Peer extends EventEmitter implements PeerInterface {
 
     this._id = peerInfo.id.toB58String();
     this._shortId = stringShorten(this.id);
+    this._peerInfo = peerInfo;
     this._pushable = pushable();
   }
 
@@ -34,12 +36,22 @@ module.exports = class Peer extends EventEmitter implements PeerInterface {
     return this._shortId;
   }
 
+  get peerInfo (): PeerInfo {
+    return this._peerInfo;
+  }
+
   get isConnected (): boolean {
     return !!this._connections.length;
   }
 
   get hasStatus (): boolean {
     return !!this.status;
+  }
+
+  hasConnection (connection: LibP2P$Connection): boolean {
+    const connId = connection.toString();
+
+    return !!this._connections.find((connection) => connection.toString() === connId);
   }
 
   addConnection (connection: LibP2P$Connection): boolean {
@@ -73,7 +85,7 @@ module.exports = class Peer extends EventEmitter implements PeerInterface {
 
       pull(
         connection,
-        pull.drain(this._decodeMessage)
+        pull.drain(this._decodeMessage, () => false)
       );
     } catch (error) {
       return false;
@@ -83,10 +95,6 @@ module.exports = class Peer extends EventEmitter implements PeerInterface {
   }
 
   send (message: MessageInterface): boolean {
-    if (!this.isConnected) {
-      return false;
-    }
-
     try {
       this._pushable.push(
         this._encodeMessage(message)

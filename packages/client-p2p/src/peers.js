@@ -2,25 +2,21 @@
 // @flow
 
 import type { PeersInterface, PeersInterface$Events, PeerInterface } from './types';
-import type LibP2P, { LibP2P$Connection } from 'libp2p';
+import type LibP2P from 'libp2p';
 import type PeerInfo from 'peer-info';
 
 const EventEmitter = require('eventemitter3');
 
 const l = require('@polkadot/util/logger')('p2p/peers');
-const promisify = require('@polkadot/util/promisify');
 
-const defaults = require('./defaults');
 const Peer = require('./peer');
 
 module.exports = class Peers extends EventEmitter implements PeersInterface {
-  _node: LibP2P;
   _peers: { [string]: PeerInterface };
 
   constructor (node: LibP2P) {
     super();
 
-    this._node = node;
     this._peers = {};
 
     node.on('peer:connect', this._onConnect);
@@ -44,17 +40,13 @@ module.exports = class Peers extends EventEmitter implements PeersInterface {
     return this.peers.filter(({ isConnected }) => isConnected);
   }
 
-  getIndex (index: number): PeerInterface {
-    return this.peers[index];
-  }
-
   get (peerInfo: PeerInfo): ?PeerInterface {
     const id = peerInfo.id.toB58String();
 
     return this._peers[id];
   }
 
-  add (peerInfo: PeerInfo, connection: ?LibP2P$Connection): PeerInterface {
+  add (peerInfo: PeerInfo): PeerInterface {
     const id = peerInfo.id.toB58String();
     let peer = this._peers[id];
 
@@ -66,10 +58,6 @@ module.exports = class Peers extends EventEmitter implements PeersInterface {
           peer
         });
       });
-    }
-
-    if (connection) {
-      peer.addConnection(connection);
     }
 
     return peer;
@@ -88,6 +76,10 @@ module.exports = class Peers extends EventEmitter implements PeersInterface {
     const peer = this.get(peerInfo);
 
     if (!peer) {
+      return false;
+    }
+
+    if (peer.hasConnection(peerInfo.isConnected())) {
       return false;
     }
 
@@ -116,7 +108,7 @@ module.exports = class Peers extends EventEmitter implements PeersInterface {
     return true;
   }
 
-  _onDiscovery = async (peerInfo: PeerInfo): Promise<boolean> => {
+  _onDiscovery = (peerInfo: PeerInfo): boolean => {
     if (!peerInfo) {
       return false;
     }
@@ -127,13 +119,7 @@ module.exports = class Peers extends EventEmitter implements PeersInterface {
       return false;
     }
 
-    try {
-      const connection = await promisify(this._node, this._node.dial, peerInfo, defaults.PROTOCOL);
-
-      peer = this.add(peerInfo, connection);
-    } catch (error) {
-      return false;
-    }
+    peer = this.add(peerInfo);
 
     this._logPeer('discovered', peer);
 

@@ -186,16 +186,10 @@ describe('Server', () => {
       expect(peer.status).toEqual(status);
     });
 
-    it('send status when status is received', () => {
-      server._onMessage({ peer, message: status });
+    it('does not add status to peer non-status is received', () => {
+      server._onMessage({ peer, message: { id: 666 } });
 
-      expect(server._sendStatus).toHaveBeenCalledWith(peer);
-    });
-
-    it('does not send status when non-status is received', () => {
-      server._onMessage({ peer, message: { id: 'test' } });
-
-      expect(server._sendStatus).not.toHaveBeenCalled();
+      expect(peer.status).toEqual(null);
     });
   });
 
@@ -212,6 +206,57 @@ describe('Server', () => {
       server._onPeerConnected(peer);
 
       expect(server._sendStatus).toHaveBeenCalledWith(peer);
+    });
+  });
+
+  describe('_onPeerDiscovery', () => {
+    let connection;
+    let peerInfo;
+    let peer;
+
+    beforeEach(() => {
+      connection = { some: 'connection' };
+      peerInfo = { peer: 'info' };
+      peer = { id: '123456', shortId: '123456', peerInfo, addConnection: jest.fn(() => true) };
+      server._node = {
+        dial: jest.fn((peerInfo, protocol, cb) => cb(null, connection))
+      };
+    });
+
+    afterEach(() => {
+      server._node = null;
+    });
+
+    it('returns true on success', () => {
+      return server._onPeerDiscovery(peer).then((result) => {
+        expect(result).toEqual(true);
+      });
+    });
+
+    it('returns false on failure', () => {
+      peer.addConnection = () => {
+        throw new Error('error');
+      };
+
+      return server._onPeerDiscovery(peer).then((result) => {
+        expect(result).toEqual(false);
+      });
+    });
+
+    it('dials the peer', () => {
+      return server._onPeerDiscovery(peer).then(() => {
+        expect(
+          server._node.dial
+        ).toHaveBeenCalledWith(peerInfo, defaults.PROTOCOL, expect.anything());
+      });
+    });
+
+    it('adds the connection to the peer', () => {
+      return server._onPeerDiscovery(peer).then(() => {
+        expect(
+          peer.addConnection
+        ).toHaveBeenCalledWith(connection);
+      });
     });
   });
 
@@ -255,7 +300,9 @@ describe('Server', () => {
           cb(null, peerInfo);
         })
       };
-      peer = {};
+      peer = {
+        addConnection: jest.fn(() => true)
+      };
       server._peers = {
         add: jest.fn(() => peer)
       };
@@ -269,7 +316,11 @@ describe('Server', () => {
     });
 
     it('adds the peer', () => {
-      expect(server._peers.add).toHaveBeenCalledWith(peerInfo, connection);
+      expect(server._peers.add).toHaveBeenCalledWith(peerInfo);
+    });
+
+    it('adds the peer connection', () => {
+      expect(peer.addConnection).toHaveBeenCalledWith(connection);
     });
   });
 });

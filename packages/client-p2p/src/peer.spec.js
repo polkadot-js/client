@@ -10,13 +10,15 @@ const Peer = require('./peer');
 describe('Peer', () => {
   const id = '0123456789';
   let peer;
+  let peerInfo;
 
   beforeEach(() => {
-    peer = new Peer({
+    peerInfo = {
       id: {
         toB58String: () => id
       }
-    });
+    };
+    peer = new Peer(peerInfo);
   });
 
   it('stores the peerInfo id', () => {
@@ -26,6 +28,12 @@ describe('Peer', () => {
     expect(
       peer.shortId
     ).toBeDefined();
+  });
+
+  it('stores the peerInfo', () => {
+    expect(
+      peer.peerInfo
+    ).toEqual(peerInfo);
   });
 
   describe('hasStatus', () => {
@@ -99,14 +107,6 @@ describe('Peer', () => {
     beforeEach(() => {
       peer._receive = jest.fn(() => true);
       peer.addConnection({});
-    });
-
-    it('returns false when not connected', () => {
-      peer._connections = [];
-
-      expect(
-        peer.send()
-      ).toEqual(false);
     });
 
     it('returns false when sending fails', () => {

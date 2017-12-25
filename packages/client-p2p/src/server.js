@@ -83,7 +83,6 @@ module.exports = class Server extends EventEmitter implements P2pInterface {
 
   _onMessage = ({ peer, message }: { peer: PeerInterface, message: MessageInterface }): void => {
     if (message.id === StatusMessage.MESSAGE_ID) {
-      this._sendStatus(peer);
       peer.status = ((message: any): StatusMessage);
     }
 
@@ -93,19 +92,30 @@ module.exports = class Server extends EventEmitter implements P2pInterface {
     });
   }
 
+  _onPeerDiscovery = async (peer: PeerInterface): Promise<boolean> => {
+    try {
+      const connection = await promisify(this._node, this._node.dial, peer.peerInfo, defaults.PROTOCOL);
+
+      peer.addConnection(connection);
+    } catch (error) {
+      return false;
+    }
+
+    return true;
+  }
+
   _onPeerConnected = (peer: PeerInterface): void => {
     this._sendStatus(peer);
   }
 
   _onProtocol = async (protocol: string, connection: LibP2P$Connection): Promise<void> => {
     const peerInfo = await promisify(connection, connection.getPeerInfo);
+    const peer = this._peers.add(peerInfo);
 
-    this._peers.add(peerInfo, connection);
+    peer.addConnection(connection);
   }
 
   _sendStatus = (peer: PeerInterface): boolean => {
-    // setTimeout(() => this._sendStatus(peer), 5000);
-
     return peer.send(
       new StatusMessage({
         roles: this._config.roles,
