@@ -1,6 +1,6 @@
 {
   "name": "@polkadot/client-db",
-  "version": "0.6.1",
+  "version": "0.6.2",
   "description": "Database interface layer for network client",
   "main": "index.js",
   "engines": {
@@ -30,7 +30,7 @@
     "test": "echo \"Tests only available from root wrapper\""
   },
   "dependencies": {
-    "@polkadot/client-state": "^0.6.1",
+    "@polkadot/client-state": "^0.6.2",
     "@polkadot/util": "^0.10.1",
     "babel-runtime": "^6.26.0",
     "leveldown": "^2.1.1",
@@ -40,7 +40,7 @@
     "mkdirp": "^0.5.1"
   },
   "devDependencies": {
-    "@polkadot/client": "^0.6.1",
+    "@polkadot/client": "^0.6.2",
     "rimraf": "^2.6.2"
   }
 }
