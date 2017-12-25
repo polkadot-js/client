@@ -1,13 +1,13 @@
 // ISC, Copyright 2017 Jaco Greeff
 // @flow
 
-import type Libp2p from 'libp2p';
+import type LibP2P, { LibP2P$Connection } from 'libp2p';
 import type { ConfigType } from '@polkadot/client/types';
 import type { StateInterface } from '@polkadot/client-state/types';
-import type { MessageInterface, P2pConfigType, P2pInterface, PeerType } from './types';
+import type { MessageInterface, P2pInterface } from './types';
+import type Peer from './peer';
 
 const EventEmitter = require('eventemitter3');
-const pull = require('pull-stream');
 
 const promisify = require('@polkadot/util/promisify');
 const l = require('@polkadot/util/logger')('p2p');
@@ -15,19 +15,18 @@ const l = require('@polkadot/util/logger')('p2p');
 const Peers = require('./peers');
 const createNode = require('./create/node');
 const StatusMessage = require('./message/status');
-const { streamReader, streamWriter } = require('./stream');
 const defaults = require('./defaults');
 
 module.exports = class Server extends EventEmitter implements P2pInterface {
-  _config: P2pConfigType;
-  _node: Libp2p;
+  _config: ConfigType;
+  _node: LibP2P;
   _peers: Peers;
   _state: StateInterface;
 
   constructor (config: ConfigType, state: StateInterface, autoStart: boolean = true) {
     super();
 
-    this._config = config.p2p;
+    this._config = config;
     this._state = state;
 
     if (autoStart) {
@@ -46,15 +45,17 @@ module.exports = class Server extends EventEmitter implements P2pInterface {
   async start (): Promise<boolean> {
     this.stop();
 
-    this._node = await createNode(this._config.address, this._config.port, this._state.chain, this._config.peers);
-    this._node.handle(defaults.PROTOCOL, this._receive);
+    this._node = await createNode(this._config.p2p.address, this._config.p2p.port, this._state.chain, this._config.p2p.peers);
+    this._node.handle(defaults.PROTOCOL, this._onProtocol);
 
     this._peers = new Peers(this._node);
-    this._peers.on('discovered', this._dialPeer);
+    this._peers.on('connected', this._onPeerConnected);
+    this._peers.on('discovered', this._onPeerDiscovery);
+    this._peers.on('message', this._onMessage);
 
     await promisify(this._node, this._node.start);
 
-    l.log(`Started on address=${this._config.address}, port=${this._config.port}`);
+    l.log(`Started on address=${this._config.p2p.address}, port=${this._config.p2p.port}`);
     this.emit('started');
 
     return true;
@@ -81,41 +82,48 @@ module.exports = class Server extends EventEmitter implements P2pInterface {
     return true;
   }
 
-  _dialPeer = async (peer: PeerType): any => {
-    if (!peer || peer.isConnecting) {
-      return false;
+  _onMessage = ({ peer, message }: { peer: Peer, message: MessageInterface }): void => {
+    if (message.id === StatusMessage.MESSAGE_ID) {
+      peer.status = ((message: any): StatusMessage);
     }
 
-    peer.isConnecting = true;
-    peer.isConnected = false;
+    this.emit('message', {
+      peer,
+      message
+    });
+  }
 
+  _onPeerDiscovery = async (peer: Peer): any => {
     try {
-      peer.connection = await promisify(this._node, this._node.dial, peer.peerInfo, defaults.PROTOCOL);
+      const connection = await promisify(this._node, this._node.dial, peer.peerInfo, defaults.PROTOCOL);
 
-      this._send(peer.connection, new StatusMessage());
+      peer.addConnection(connection);
     } catch (error) {
-      peer.isConnecting = false;
       return false;
     }
 
     return true;
   }
 
-  _handleMessage = (message: MessageInterface): void => {
-    this.emit('message', message);
+  _onPeerConnected = (peer: Peer): void => {
+    this._sendStatus(peer);
   }
 
-  _receive = (protocol: string, connection: any): void => {
-    pull(
-      connection,
-      streamReader(this._handleMessage)
-    );
+  _onProtocol = async (protocol: string, connection: LibP2P$Connection): Promise<void> => {
+    const peerInfo = await promisify(connection, connection.getPeerInfo);
+    const peer = this._peers.add(peerInfo);
+
+    peer.addConnection(connection);
   }
 
-  _send = (connection: any, message: MessageInterface): void => {
-    pull(
-      streamWriter(message),
-      connection
+  _sendStatus = (peer: Peer): boolean => {
+    return peer.send(
+      new StatusMessage({
+        roles: this._config.roles,
+        bestNumber: this._state.best.number,
+        bestHash: this._state.best.hash,
+        genesisHash: this._state.genesis.hash
+      })
     );
   }
 };

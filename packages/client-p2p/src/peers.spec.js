@@ -5,17 +5,21 @@ const EventEmitter = require('eventemitter3');
 const Peers = require('./peers');
 
 describe('Peers', () => {
-  const peer = {
+  const connection = {
+    toString: () => '123'
+  };
+  const peerInfo = {
     id: {
       toB58String: () => '1234567890'
-    }
+    },
+    isConnected: () => connection
   };
-  let emitter;
+  let node;
   let peers;
 
   beforeEach(() => {
-    emitter = new EventEmitter();
-    peers = new Peers(emitter);
+    node = new EventEmitter();
+    peers = new Peers(node);
   });
 
   it('creates an instance', () => {
@@ -26,104 +30,119 @@ describe('Peers', () => {
 
   it('starts with 0 peers, none connected', () => {
     expect(peers.count).toEqual(0);
-    expect(peers.connectedCount).toEqual(0);
   });
 
-  it('ignores invalid discovery', () => {
-    emitter.emit('peer:discovery');
+  describe('_onConnect', () => {
+    it('ignores invalid connections', () => {
+      expect(
+        peers._onConnect()
+      ).toEqual(false);
+    });
 
-    expect(peers.count).toEqual(0);
-    expect(peers.connectedCount).toEqual(0);
+    it('ignores non-existing peers', () => {
+      expect(
+        peers._onConnect(peerInfo)
+      ).toEqual(false);
+    });
+
+    it('emits connected event', (done) => {
+      peers.add(peerInfo);
+      peers.on('connected', () => {
+        done();
+      });
+      peers._onConnect(peerInfo);
+    });
   });
 
-  it('adds the peer when discovered', () => {
-    emitter.emit('peer:discovery', peer);
+  describe('_onDisconnect', () => {
+    it('ignores invalid connections', () => {
+      expect(
+        peers._onDisconnect()
+      ).toEqual(false);
+    });
 
-    expect(peers.count).toEqual(1);
-    expect(peers.connectedCount).toEqual(0);
+    it('ignores non-existing peers', () => {
+      expect(
+        peers._onDisconnect(peerInfo)
+      ).toEqual(false);
+    });
+
+    it('emits the disconnected event', (done) => {
+      peers.add(peerInfo);
+      peers.on('disconnected', () => {
+        done();
+      });
+      peers._onDisconnect(peerInfo);
+    });
+
+    it('removes the peer', () => {
+      peers.add(peerInfo);
+      peers._onDisconnect(peerInfo);
+      expect(peers._peers).toEqual({});
+    });
   });
 
-  it('emits "discovered" when peer found', (done) => {
-    peers.on('discovered', () => done());
+  describe('_onDiscovery', () => {
+    it('ignores invalid connections', () => {
+      expect(
+        peers._onDiscovery()
+      ).toEqual(false);
+    });
 
-    emitter.emit('peer:discovery', peer);
+    it('ignores already-existing peers', () => {
+      peers.add(peerInfo);
+      expect(
+        peers._onDiscovery(peerInfo)
+      ).toEqual(false);
+    });
+
+    it('adds the peer', () => {
+      peers.add = jest.fn(() => true);
+      peers._onDiscovery(peerInfo);
+
+      expect(
+        peers.add
+      ).toHaveBeenCalledWith(peerInfo);
+    });
   });
 
-  it('does not add when re-discovered (connecting)', () => {
-    emitter.emit('peer:discovery', peer);
-    peers.get(0).isConnecting = true;
-    emitter.emit('peer:discovery', peer);
+  describe('add', () => {
+    let peerInfo;
 
-    expect(peers.count).toEqual(1);
-    expect(peers.connectedCount).toEqual(0);
-  });
+    beforeEach(() => {
+      peerInfo = {
+        id: {
+          toB58String: () => '0x1234'
+        }
+      };
+    });
 
-  it('does not add when re-discovered (connected)', () => {
-    emitter.emit('peer:discovery', peer);
-    peers.get(0).isConnected = true;
-    emitter.emit('peer:discovery', peer);
+    it('adds the peer', () => {
+      peers.add(peerInfo);
 
-    expect(peers.count).toEqual(1);
-    expect(peers.connectedCount).toEqual(1);
-  });
+      expect(peers.count).toEqual(1);
+    });
 
-  it('ignores invalid connection', () => {
-    emitter.emit('peer:connect');
+    it('does not re-add a peer', () => {
+      peers.add(peerInfo);
+      peers.add(peerInfo);
 
-    expect(peers.count).toEqual(0);
-    expect(peers.connectedCount).toEqual(0);
-  });
+      expect(peers.count).toEqual(1);
+    });
 
-  it('ignores the peer when connected, but not discovered', () => {
-    emitter.emit('peer:connect', peer);
+    it('emits message when peer receives', (done) => {
+      const peer = peers.add(peerInfo);
+      const message = { 'something': 'else' };
 
-    expect(peers.count).toEqual(0);
-    expect(peers.connectedCount).toEqual(0);
-  });
+      peers.on('message', (info) => {
+        expect(info).toEqual({
+          peer,
+          message
+        });
+        done();
+      });
 
-  it('connects the peer when connected and discovered', () => {
-    emitter.emit('peer:discovery', peer);
-    emitter.emit('peer:connect', peer);
-
-    expect(peers.count).toEqual(1);
-    expect(peers.connectedCount).toEqual(1);
-  });
-
-  it('emits "connected" when peer connected', (done) => {
-    peers.on('connected', () => done());
-
-    emitter.emit('peer:discovery', peer);
-    emitter.emit('peer:connect', peer);
-  });
-
-  it('ignores invalid disconnection', () => {
-    emitter.emit('peer:disconnect');
-
-    expect(peers.count).toEqual(0);
-    expect(peers.connectedCount).toEqual(0);
-  });
-
-  it('ignores disconnection when peer is not discovered', () => {
-    emitter.emit('peer:disconnect', peer);
-
-    expect(peers.count).toEqual(0);
-    expect(peers.connectedCount).toEqual(0);
-  });
-
-  it('disconnects the peer when connected and discovered', () => {
-    emitter.emit('peer:discovery', peer);
-    emitter.emit('peer:connect', peer);
-    emitter.emit('peer:disconnect', peer);
-
-    expect(peers.count).toEqual(0);
-    expect(peers.connectedCount).toEqual(0);
-  });
-
-  it('emits "disconnected" when peer disconnected', (done) => {
-    peers.on('disconnected', () => done());
-
-    emitter.emit('peer:discovery', peer);
-    emitter.emit('peer:connect', peer);
-    emitter.emit('peer:disconnect', peer);
+      peer.emit('message', message);
+    });
   });
 });

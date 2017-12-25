@@ -3,7 +3,7 @@
 
 import type { ConfigType } from '@polkadot/client/types';
 import type { StateInterface } from '@polkadot/client-state/types';
-import type { HandlersType, JsonRpcError, JsonRpcRequest, JsonRpcResponse, RpcConfigType, RpcInterface } from './types';
+import type { HandlersType, JsonRpcError, JsonRpcRequest, JsonRpcResponse, RpcInterface } from './types';
 
 type PostContextType = {
   body: string,
@@ -31,7 +31,7 @@ const { createKoa, createError, createResponse } = require('./create');
 const { validateConfig, validateRequest, validateHandlers } = require('./validate');
 
 module.exports = class RPCServer extends EventEmitter implements RpcInterface {
-  _config: RpcConfigType;
+  _config: ConfigType;
   _handlers: HandlersType;
   _server: ?net$Server;
   _state: StateInterface;
@@ -39,10 +39,10 @@ module.exports = class RPCServer extends EventEmitter implements RpcInterface {
   constructor (config: ConfigType, state: StateInterface, handlers: HandlersType, autoStart: boolean = true) {
     super();
 
-    this._config = config.rpc;
+    this._config = config;
     this._state = state;
 
-    validateConfig(this._config);
+    validateConfig(this._config.rpc);
     validateHandlers(handlers);
 
     this._handlers = handlers;
@@ -61,13 +61,13 @@ module.exports = class RPCServer extends EventEmitter implements RpcInterface {
         http: this._handlePost,
         ws: this._handleWs
       },
-      path: this._config.path,
-      types: this._config.types
+      path: this._config.rpc.path,
+      types: this._config.rpc.types
     });
 
-    this._server = app.listen(this._config.port);
+    this._server = app.listen(this._config.rpc.port);
 
-    l.log(`Server started on port=${this._config.port} for types=${this._config.types.join(',')}`);
+    l.log(`Server started on port=${this._config.rpc.port} for types=${this._config.rpc.types.join(',')}`);
     this.emit('started');
 
     return true;

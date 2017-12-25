@@ -1,111 +1,116 @@
 // ISC, Copyright 2017 Jaco Greeff
 // @flow
 
-import type { PeersInterface, PeersInterface$Events, PeerType } from './types';
-import type Libp2p from 'libp2p';
+import type { MessageInterface, PeersInterface, PeersInterface$Events } from './types';
+import type LibP2P from 'libp2p';
 import type PeerInfo from 'peer-info';
 
 const EventEmitter = require('eventemitter3');
 
-const stringShorten = require('@polkadot/util/string/shorten');
 const l = require('@polkadot/util/logger')('p2p/peers');
 
-module.exports = class Peers extends EventEmitter implements PeersInterface {
-  _peers: { [string]: PeerType };
+const Peer = require('./peer');
 
-  constructor (emitter: Libp2p) {
+module.exports = class Peers extends EventEmitter implements PeersInterface {
+  _peers: { [string]: Peer };
+
+  constructor (node: LibP2P) {
     super();
 
     this._peers = {};
 
-    emitter.on('peer:connect', this._onConnect);
-    emitter.on('peer:disconnect', this._onDisconnect);
-    emitter.on('peer:discovery', this._onDiscovery);
+    node.on('peer:connect', this._onConnect);
+    node.on('peer:disconnect', this._onDisconnect);
+    node.on('peer:discovery', this._onDiscovery);
   }
 
   get count (): number {
     return Object.keys(this._peers).length;
   }
 
-  get connectedCount (): number {
-    return this.peersConnected.length;
+  get peers (): Array<Peer> {
+    return ((Object.values(this._peers): any): Array<Peer>);
   }
 
-  get peers (): Array<PeerType> {
-    return ((Object.values(this._peers): any): Array<PeerType>);
+  get (peerInfo: PeerInfo): ?Peer {
+    const id = peerInfo.id.toB58String();
+
+    return this._peers[id];
   }
 
-  get peersConnected (): Array<PeerType> {
-    return this.peers.filter(({ isConnected }) => isConnected);
+  add (peerInfo: PeerInfo): Peer {
+    const id = peerInfo.id.toB58String();
+    let peer = this._peers[id];
+
+    if (!peer) {
+      this._peers[id] = peer = new Peer(peerInfo);
+      peer.on('message', (message: MessageInterface) => {
+        this.emit('message', {
+          message,
+          peer
+        });
+      });
+    }
+
+    return peer;
   }
 
-  get (index: number): PeerType {
-    return this.peers[index];
-  }
-
-  _logPeer (event: PeersInterface$Events, peer: PeerType): void {
+  _logPeer (event: PeersInterface$Events, peer: Peer): void {
     l.log(peer.shortId, event);
     this.emit(event, peer);
   }
 
-  _onConnect = (peerInfo: PeerInfo): any => {
+  _onConnect = (peerInfo: PeerInfo): boolean => {
     if (!peerInfo) {
-      return;
+      return false;
     }
 
-    const id = peerInfo.id.toB58String();
-    const peer = this._peers[id];
-
-    if (!peer || peer.isConnected) {
-      return;
-    }
-
-    peer.isConnecting = false;
-    peer.isConnected = true;
-
-    this._logPeer('connected', peer);
-  }
-
-  _onDisconnect = (peerInfo: PeerInfo): any => {
-    if (!peerInfo) {
-      return;
-    }
-
-    const id = peerInfo.id.toB58String();
-    const peer = this._peers[id];
+    const peer = this.get(peerInfo);
 
     if (!peer) {
-      return;
+      return false;
     }
+
+    this._logPeer('connected', peer);
+
+    return true;
+  }
+
+  _onDisconnect = (peerInfo: PeerInfo): boolean => {
+    if (!peerInfo) {
+      return false;
+    }
+
+    const peer = this.get(peerInfo);
+
+    if (!peer) {
+      return false;
+    }
+
+    const id = peer.id;
 
     delete this._peers[id];
 
     this._logPeer('disconnected', peer);
+
+    return true;
   }
 
-  _onDiscovery = (peerInfo: PeerInfo): any => {
+  _onDiscovery = (peerInfo: PeerInfo): boolean => {
     if (!peerInfo) {
-      return;
+      return false;
     }
 
-    const id = peerInfo.id.toB58String();
-    let peer = this._peers[id];
+    let peer = this.get(peerInfo);
 
-    if (peer && (peer.isConnecting || peer.isConnected)) {
-      return;
+    if (peer) {
+      return false;
     }
 
-    const shortId = stringShorten(id);
-
-    peer = this._peers[id] = {
-      connection: null,
-      id,
-      isConnected: false,
-      isConnecting: false,
-      peerInfo,
-      shortId
-    };
+    peer = this.add(peerInfo);
 
     this._logPeer('discovered', peer);
+
+    return true;
   }
 };
