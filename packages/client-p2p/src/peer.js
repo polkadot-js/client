@@ -2,6 +2,10 @@
 // @flow
 
 import type { LibP2P$Connection } from 'libp2p';
+import type PeerInfo from 'peer-info';
+import type { Pushable } from 'pull-pushable';
+import type { MessageInterface, PeerInterface } from './types';
+import type StatusMessage from './message/status';
 
 const EventEmitter = require('eventemitter3');
 const pull = require('pull-stream');
@@ -16,6 +20,7 @@ module.exports = class Peer extends EventEmitter implements PeerInterface {
   _connections: Array<LibP2P$Connection> = [];
   _id: string;
   _peerInfo: PeerInfo;
+  _pushable: Pushable;
   _shortId: string;
   status: ?StatusMessage = null;
 
@@ -48,11 +53,11 @@ module.exports = class Peer extends EventEmitter implements PeerInterface {
     return !!this.status;
   }
 
-  hasConnection (connection: LibP2P$Connection): boolean {
-    const connId = connection.toString();
-
-    return !!this._connections.find((connection) => connection.toString() === connId);
-  }
+  // hasConnection (connection: LibP2P$Connection): boolean {
+  //   const connId = connection.toString();
+  //
+  //   return !!this._connections.find((connection) => connection.toString() === connId);
+  // }
 
   addConnection (connection: LibP2P$Connection): boolean {
     this._connections.push(connection);

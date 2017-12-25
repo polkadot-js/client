@@ -4,7 +4,8 @@
 import type LibP2P, { LibP2P$Connection } from 'libp2p';
 import type { ConfigType } from '@polkadot/client/types';
 import type { StateInterface } from '@polkadot/client-state/types';
-import type { MessageInterface, P2pInterface, PeerInterface } from './types';
+import type { MessageInterface, P2pInterface } from './types';
+import type Peer from './peer';
 
 const EventEmitter = require('eventemitter3');
 
@@ -81,7 +82,7 @@ module.exports = class Server extends EventEmitter implements P2pInterface {
     return true;
   }
 
-  _onMessage = ({ peer, message }: { peer: PeerInterface, message: MessageInterface }): void => {
+  _onMessage = ({ peer, message }: { peer: Peer, message: MessageInterface }): void => {
     if (message.id === StatusMessage.MESSAGE_ID) {
       peer.status = ((message: any): StatusMessage);
     }
@@ -92,7 +93,7 @@ module.exports = class Server extends EventEmitter implements P2pInterface {
     });
   }
 
-  _onPeerDiscovery = async (peer: PeerInterface): Promise<boolean> => {
+  _onPeerDiscovery = async (peer: Peer): any => {
     try {
       const connection = await promisify(this._node, this._node.dial, peer.peerInfo, defaults.PROTOCOL);
 
@@ -104,7 +105,7 @@ module.exports = class Server extends EventEmitter implements P2pInterface {
     return true;
   }
 
-  _onPeerConnected = (peer: PeerInterface): void => {
+  _onPeerConnected = (peer: Peer): void => {
     this._sendStatus(peer);
   }
 
@@ -115,7 +116,7 @@ module.exports = class Server extends EventEmitter implements P2pInterface {
     peer.addConnection(connection);
   }
 
-  _sendStatus = (peer: PeerInterface): boolean => {
+  _sendStatus = (peer: Peer): boolean => {
     return peer.send(
       new StatusMessage({
         roles: this._config.roles,

@@ -30,7 +30,6 @@ describe('Peers', () => {
 
   it('starts with 0 peers, none connected', () => {
     expect(peers.count).toEqual(0);
-    expect(peers.connectedCount).toEqual(0);
   });
 
   describe('_onConnect', () => {
@@ -46,14 +45,14 @@ describe('Peers', () => {
       ).toEqual(false);
     });
 
-    it('ignores connections already added', () => {
-      const peer = peers.add(peerInfo);
-      peer.addConnection(connection);
-
-      expect(
-        peers._onConnect(peerInfo)
-      ).toEqual(false);
-    });
+    // it('ignores connections already added', () => {
+    //   const peer = peers.add(peerInfo);
+    //   peer.addConnection(connection);
+    //
+    //   expect(
+    //     peers._onConnect(peerInfo)
+    //   ).toEqual(false);
+    // });
 
     it('emits connected event', (done) => {
       peers.add(peerInfo);

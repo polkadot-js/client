@@ -189,7 +189,7 @@ describe('Server', () => {
     it('does not add status to peer non-status is received', () => {
       server._onMessage({ peer, message: { id: 666 } });
 
-      expect(peer.status).toEqual(null);
+      expect(peer.status).not.toBeDefined();
     });
   });
 
