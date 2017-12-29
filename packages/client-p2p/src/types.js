@@ -8,8 +8,6 @@ export interface MessageInterface {
 
   encode (): [Buffer, Array<any>];
   decode (id: number, raw: Array<any>): void;
-
-  static MESSAGE_ID: number;
 }
 
 export type P2pNodeType = {

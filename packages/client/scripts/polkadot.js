@@ -9,7 +9,7 @@ try {
     plugins: [
       ['module-resolver', {
         alias: {
-          '^@polkadot/client-(chains|db|p2p|rpc|state|wasm)(.*)': './packages/client-\\1/src\\2'
+          '^@polkadot/client-(chains|db|p2p|rpc|state|wasm-runtime|wasm)(.*)': './packages/client-\\1/src\\2'
         }
       }]
     ]

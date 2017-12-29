@@ -1,13 +1,10 @@
 {
-  "name": "@polkadot/client-wasm",
+  "name": "@polkadot/client-wasm-runtime",
   "version": "0.6.2",
-  "description": "WASM compiler & call interface",
+  "description": "Basic libc-compatible interace for WASM programs",
   "main": "index.js",
   "engines": {
     "node": ">=8.0"
-  },
-  "bin": {
-    "polkadot-wat2wasm": "./scripts/wat2wasm.sh"
   },
   "publishConfig": {
     "access": "public",
@@ -26,14 +23,13 @@
   "bugs": {
     "url": "https://github.com/polkadot-js/client/issues"
   },
-  "homepage": "https://github.com/polkadot-js/client/tree/master/packages/client-wasm#readme",
+  "homepage": "https://github.com/polkadot-js/client/tree/master/packages/client-wasm-runtime#readme",
   "scripts": {
     "build": "polkadot-dev-build-babel",
     "check": "eslint src && flow check",
     "test": "echo \"Tests only available from root wrapper\""
   },
   "dependencies": {
-    "@polkadot/client-wasm-runtime": "^0.6.2",
     "@polkadot/util": "^0.10.1",
     "babel-runtime": "^6.26.0"
   }

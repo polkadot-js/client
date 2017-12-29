@@ -20,6 +20,7 @@ It is split up into a number of internal packages -
 - [packages/client-p2p](packages/client-p2p/) Peer-to-peer server
 - [packages/client-rpc](packages/client-rpc/) RPC server
 - [packages/client-wasm](packages/client-wasm/) Wasm interface wrapper
+- [packages/client-wasm-runtime](packages/client-wasm-runtime/) Basic Wasm libc replacement wrapper
 
 ## Local development node
 

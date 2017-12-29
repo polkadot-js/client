@@ -1,7 +1,8 @@
 // ISC, Copyright 2017 Jaco Greeff
 
 const isInstanceOf = require('@polkadot/util/is/instanceOf');
-const createInstance = require('./instance');
+
+const { createInstance } = require('./index');
 
 describe('createInstance', () => {
   let origWebAssembly;

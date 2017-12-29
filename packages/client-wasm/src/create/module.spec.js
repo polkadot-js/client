@@ -3,7 +3,7 @@
 const isInstanceOf = require('@polkadot/util/is/instanceOf');
 
 const { loadWasm } = require('../../test/helpers');
-const createModule = require('./module');
+const { createModule } = require('./index');
 
 describe('createModule', () => {
   let code;
