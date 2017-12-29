@@ -13,8 +13,8 @@ module.exports = function memory ({ heap }: RuntimeType): { [string]: Function }
   return {
     free: (ptr: PointerType): void => free(heap, ptr),
     malloc: (size: number): PointerType => malloc(heap, size),
-    memcpy: (dest: PointerType, src: PointerType, num: number): PointerType => memcpy(heap, dest, src, num),
-    memmove: (dest: PointerType, src: PointerType, num: number): PointerType => memmove(heap, dest, src, num),
-    memset: (dest: PointerType, value: number, num: number): PointerType => memset(heap, dest, value, num)
+    memcpy: (dst: PointerType, src: PointerType, num: number): PointerType => memcpy(heap, dst, src, num),
+    memmove: (dst: PointerType, src: PointerType, num: number): PointerType => memmove(heap, dst, src, num),
+    memset: (dst: PointerType, val: number, num: number): PointerType => memset(heap, dst, val, num)
   };
 };

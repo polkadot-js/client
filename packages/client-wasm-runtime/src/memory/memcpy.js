@@ -3,11 +3,11 @@
 
 import type { HeapType, PointerType } from '../types';
 
-module.exports = function memcpy (heap: HeapType, dest: PointerType, src: PointerType, num: number): PointerType {
+module.exports = function memcpy (heap: HeapType, dst: PointerType, src: PointerType, num: number): PointerType {
   heap.uint8.set(
     heap.uint8.subarray(src, src + num),
-    dest
+    dst
   );
 
-  return dest;
+  return dst;
 };

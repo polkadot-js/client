@@ -15,7 +15,7 @@ describe('memcpy', () => {
     memcpy = index(runtime).memcpy;
   });
 
-  it('copys the src to dest', () => {
+  it('copys the src to dst', () => {
     memcpy(4, 2, 3);
 
     expect(

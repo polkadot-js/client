@@ -15,7 +15,7 @@ describe('memmove', () => {
     memmove = index(runtime).memmove;
   });
 
-  it('copys the src to dest', () => {
+  it('copys the src to dst', () => {
     memmove(0, 2, 2);
 
     expect(
