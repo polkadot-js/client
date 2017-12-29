@@ -30,6 +30,7 @@ describe('Peers', () => {
 
   it('starts with 0 peers, none connected', () => {
     expect(peers.count).toEqual(0);
+    expect(peers.peers).toHaveLength(0);
   });
 
   describe('_onConnect', () => {
