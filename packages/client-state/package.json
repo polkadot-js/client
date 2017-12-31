@@ -1,6 +1,6 @@
 {
   "name": "@polkadot/client-state",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "description": "Global shared state layer for the network client",
   "main": "index.js",
   "engines": {
@@ -34,6 +34,6 @@
     "babel-runtime": "^6.26.0"
   },
   "devDependencies": {
-    "@polkadot/client": "^0.7.0"
+    "@polkadot/client": "^0.7.1"
   }
 }
