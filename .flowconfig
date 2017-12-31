@@ -7,6 +7,5 @@
 ./node_modules/@polkadot/dev/flow-typed
 
 [options]
-unsafe.enable_getters_and_setters=true
-module.name_mapper='^@polkadot/client-\(chains\|db\|p2p\|rpc\|state\|wasm\)\(.*\)$' -> '<PROJECT_ROOT>/packages/client-\1/src\2'
+module.name_mapper='^@polkadot/client-\(chains\|db\|p2p\|rpc\|state\|wasm-runtime\|wasm\)\(.*\)$' -> '<PROJECT_ROOT>/packages/client-\1/src\2'
 module.name_mapper='^@polkadot/client\(.*\)$' -> '<PROJECT_ROOT>/packages/client/src\1'

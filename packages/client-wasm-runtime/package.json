@@ -1,7 +1,7 @@
 {
-  "name": "@polkadot/client-db",
+  "name": "@polkadot/client-wasm-runtime",
   "version": "0.7.0",
-  "description": "Database interface layer for network client",
+  "description": "Basic libc-compatible interace for WASM programs",
   "main": "index.js",
   "engines": {
     "node": ">=8.0"
@@ -16,31 +16,21 @@
   },
   "keywords": [
     "Polkadot",
-    "Merkel Patricia Tree"
+    "wasm"
   ],
   "author": "Jaco Greeff <jacogr@gmail.com>",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/polkadot-js/client/issues"
   },
-  "homepage": "https://github.com/polkadot-js/client/tree/master/packages/client-db#readme",
+  "homepage": "https://github.com/polkadot-js/client/tree/master/packages/client-wasm-runtime#readme",
   "scripts": {
     "build": "polkadot-dev-build-babel",
     "check": "eslint src && flow check",
     "test": "echo \"Tests only available from root wrapper\""
   },
   "dependencies": {
-    "@polkadot/client-state": "^0.7.0",
     "@polkadot/util": "^0.11.1",
-    "babel-runtime": "^6.26.0",
-    "leveldown": "^2.1.1",
-    "levelup": "^2.0.1",
-    "memdown": "^1.4.1",
-    "merkle-patricia-tree": "^2.3.0",
-    "mkdirp": "^0.5.1"
-  },
-  "devDependencies": {
-    "@polkadot/client": "^0.7.0",
-    "rimraf": "^2.6.2"
+    "babel-runtime": "^6.26.0"
   }
 }
