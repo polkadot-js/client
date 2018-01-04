@@ -17,7 +17,9 @@ function loadFromDisk (name: string): ChainConfigType {
   } catch (error) {
     try {
       // $FlowFixMe naughty, not a literal
-      return require(path.join(process.cwd(), name));
+      return require(
+        path.join(process.cwd(), name)
+      );
     } catch (error) {
       throw new ExtError(`Unable to locate and load chain file '${name}'`);
     }
@@ -29,7 +31,7 @@ module.exports = function loadChain (name: string): ChainConfigType {
   if (!/\.json$/.test(name)) {
     try {
       // $FlowFixMe naughty, not a literal
-      return require(`./chains/${name}.json`);
+      return require(`./chains/${name}`);
     } catch (error) {
       throw new ExtError(`Unable to load builtin chain '${name}'`);
     }
