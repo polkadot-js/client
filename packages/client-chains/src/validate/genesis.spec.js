@@ -1,4 +1,4 @@
-// ISC, Copyright 2017 Jaco Greeff
+// ISC, Copyright 2017-2018 Jaco Greeff
 
 const test = {
   author: '0x0000000000000000000000000000000000000000',

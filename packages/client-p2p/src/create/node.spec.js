@@ -1,4 +1,4 @@
-// ISC, Copyright 2017 Jaco Greeff
+// ISC, Copyright 2017-2018 Jaco Greeff
 
 const LibP2P = require('libp2p');
 const PeerId = require('peer-id');

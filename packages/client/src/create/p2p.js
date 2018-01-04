@@ -1,4 +1,4 @@
-// ISC, Copyright 2017 Jaco Greeff
+// ISC, Copyright 2017-2018 Jaco Greeff
 // @flow
 
 import type { P2pInterface } from '@polkadot/client-p2p/types';
