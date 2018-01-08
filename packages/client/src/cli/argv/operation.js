@@ -23,6 +23,7 @@ module.exports = ({
     type: 'string'
   },
   'roles': {
+    // flowlint-next-line unclear-type:off
     choices: ((Object.keys(allRoles): any): Array<mixed>),
     default: ['none'],
     description: 'Sets the type of roles the node operates as',

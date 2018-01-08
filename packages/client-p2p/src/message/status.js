@@ -46,12 +46,13 @@ module.exports = class StatusMessage extends BaseMessage implements MessageInter
     this.parachainId = parachainId;
   }
 
+  // flowlint-next-line unclear-type:off
   _rawDecode (raw: Array<any>): void {
     assert(raw.length >= 5, 'Expected correct message length');
 
     const [version, roles, bestNumber, bestHash, genesisHash, validatorSignature, validatorId, parachainId] = raw;
 
-    this.version = bufferToNumber(version);
+    this.version = bufferToNumber((version: Buffer));
     this.roles = roles.map(bufferToNumber).map(roleFromId);
     this.bestNumber = blockNumberDecode(bestNumber);
     this.bestHash = headerHashDecode(bestHash);
@@ -61,6 +62,7 @@ module.exports = class StatusMessage extends BaseMessage implements MessageInter
     this.parachainId = parachainIdDecode(parachainId);
   }
 
+  // flowlint-next-line unclear-type:off
   _rawEncode (): Array<any> {
     return [
       numberToBuffer(this.version),

@@ -10,6 +10,7 @@ const createJson = require('./json');
 module.exports = function createError (id: number, error: Error | ExtError): JsonRpcError {
   return createJson(id, ({
     error: {
+      // flowlint-next-line unclear-type:off
       code: ((error: any): ExtError).code || ExtError.CODES.UNKNOWN,
       message: error.message
     }

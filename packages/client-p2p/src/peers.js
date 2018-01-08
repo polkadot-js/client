@@ -1,5 +1,6 @@
 // ISC, Copyright 2017-2018 Jaco Greeff
 // @flow
+// flowlint unsafe-getters-setters:off
 
 import type { MessageInterface, PeersInterface, PeersInterface$Events } from './types';
 import type LibP2P from 'libp2p';
@@ -29,6 +30,7 @@ module.exports = class Peers extends EventEmitter implements PeersInterface {
   }
 
   get peers (): Array<Peer> {
+    // flowlint-next-line unclear-type:off
     return ((Object.values(this._peers): any): Array<Peer>);
   }
 

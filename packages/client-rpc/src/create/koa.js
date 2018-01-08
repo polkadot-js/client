@@ -1,12 +1,12 @@
 // ISC, Copyright 2017-2018 Jaco Greeff
 // @flow
 
-import type { RpcType } from '../types';
+import type { RpcType, PostContextType, WsContextType } from '../types';
 
 type CreateKoaOptionType = {
   handlers: {
-    http: Function,
-    ws: Function
+    http: (ctx: PostContextType) => Promise<void>,
+    ws: (ctx: WsContextType) => Promise<void>
   },
   path: string,
   types: Array<RpcType>
@@ -28,6 +28,7 @@ module.exports = function createKoa ({ handlers, path, types }: CreateKoaOptionT
   if (types.includes('ws')) {
     app = koaWebsocket(app);
 
+    // flowlint-next-line unclear-type:off
     (app: any).ws.use(
       koaRoute.all(path, handlers.ws)
     );

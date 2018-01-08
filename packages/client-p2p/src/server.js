@@ -1,5 +1,6 @@
 // ISC, Copyright 2017-2018 Jaco Greeff
 // @flow
+// flowlint unsafe-getters-setters:off
 
 import type LibP2P, { LibP2P$Connection } from 'libp2p';
 import type { ConfigType } from '@polkadot/client/types';
@@ -84,6 +85,7 @@ module.exports = class Server extends EventEmitter implements P2pInterface {
 
   _onMessage = ({ peer, message }: { peer: Peer, message: MessageInterface }): void => {
     if (message.id === StatusMessage.MESSAGE_ID) {
+      // flowlint-next-line unclear-type:off
       peer.status = ((message: any): StatusMessage);
     }
 
@@ -93,6 +95,7 @@ module.exports = class Server extends EventEmitter implements P2pInterface {
     });
   }
 
+  // flowlint-next-line unclear-type:off
   _onPeerDiscovery = async (peer: Peer): any => {
     try {
       const connection = await promisify(this._node, this._node.dial, peer.peerInfo, defaults.PROTOCOL);

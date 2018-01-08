@@ -3,7 +3,7 @@
 
 const NAME = '@polkadot';
 
-let pkgJson: any;
+let pkgJson: { version: string };
 let stability = 'stable';
 
 try {
@@ -11,6 +11,7 @@ try {
   pkgJson = require('./package.json');
 } catch (error) {
   stability = 'development';
+  // flowlint-next-line untyped-import:off
   pkgJson = require('../package.json');
 }
 
