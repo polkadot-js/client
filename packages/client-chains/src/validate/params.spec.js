@@ -1,7 +1,7 @@
 // ISC, Copyright 2017-2018 Jaco Greeff
 
 const test = {
-  networkID: '0x1f'
+  networkId: '0x1f'
 };
 
 describe('validateParams', () => {
@@ -39,6 +39,6 @@ describe('validateParams', () => {
       () => validateParams(
         Object.assign({}, test, { networkId: 123 })
       )
-    ).toThrow(/networkID should be a Hex/);
+    ).toThrow(/networkId should be a Hex/);
   });
 });
