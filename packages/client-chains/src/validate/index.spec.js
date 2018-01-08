@@ -3,7 +3,7 @@
 const test = {
   name: 'Test Chain',
   genesis: { author: '0x0' },
-  params: { networkID: 666 }
+  params: { networkId: 666 }
 };
 
 describe('validateChain', () => {

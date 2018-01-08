@@ -1,5 +1,6 @@
 // ISC, Copyright 2017-2018 Jaco Greeff
 // @flow
+// flowlint unsafe-getters-setters:off
 
 import type { LibP2P$Connection } from 'libp2p';
 import type PeerInfo from 'peer-info';

@@ -9,9 +9,12 @@ import type { HeapType, HeapType$Alloc, PointerType } from '../types';
 function findContaining (freed: HeapType$Alloc, size: number): number {
   const [pointer] = Object
     .keys(freed)
+    // flowlint-next-line unclear-type:off
     .filter((offset) => freed[((offset: any): number)] >= size)
     .sort((a, b) => {
+      // flowlint-next-line unclear-type:off
       const sizeA = freed[((a: any): number)];
+      // flowlint-next-line unclear-type:off
       const sizeB = freed[((b: any): number)];
 
       if (sizeA < sizeB) {
@@ -28,6 +31,14 @@ function findContaining (freed: HeapType$Alloc, size: number): number {
   }
 
   return -1;
+}
+
+// TODO: We are being wasteful here, i.e. we should probably just un-free the requested size instead of everything, which leads to long-term "loss"
+function realloc (heap: HeapType, ptr: number, size: number): PointerType {
+  delete heap.freed[ptr];
+  heap.alloc[ptr] = size;
+
+  return ptr;
 }
 
 module.exports = function malloc (heap: HeapType, size: number): PointerType {
@@ -52,9 +63,5 @@ module.exports = function malloc (heap: HeapType, size: number): PointerType {
     return 0;
   }
 
-  // TODO: We are potentially being wasteful here, i.e. we should probably just un-free the requested size instead of everything, which leads to long-term "loss"
-  delete heap.freed[reclaimed];
-  heap.alloc[reclaimed] = size;
-
-  return reclaimed;
+  return realloc(heap, reclaimed, size);
 };

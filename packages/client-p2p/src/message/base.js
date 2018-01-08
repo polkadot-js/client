@@ -12,12 +12,14 @@ module.exports = class BaseMessage {
     this.id = id;
   }
 
+  // flowlint-next-line unclear-type:off
   decode (id: number, raw: Array<any>): void {
     assert(id === this.id, 'Expected message id to match');
 
     this._rawDecode(raw);
   }
 
+  // flowlint-next-line unclear-type:off
   encode (): [Buffer, Array<any>] {
     return [
       numberToBuffer(this.id),
@@ -25,10 +27,12 @@ module.exports = class BaseMessage {
     ];
   }
 
+  // flowlint-next-line unclear-type:off
   _rawDecode (raw: Array<any>): void {
     throw new ExtError('Expected _rawDecode() to be implemented');
   }
 
+  // flowlint-next-line unclear-type:off
   _rawEncode (): Array<any> {
     throw new ExtError('Expected _rawEncode() to be implemented');
   }

@@ -4,7 +4,7 @@
 const memory = require('./memory');
 const runtime = require('./runtime');
 
-module.exports = function (wasmMemory: WebAssembly.Memory): any {
+module.exports = function (wasmMemory: WebAssembly.Memory): { [string]: mixed } {
   const rt = runtime(wasmMemory);
   const exports = Object.assign({}, memory(rt));
 

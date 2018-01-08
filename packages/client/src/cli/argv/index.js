@@ -12,6 +12,7 @@ const rpc = require('./rpc');
 
 module.exports = function argv (cli?: string): ConfigType {
   const parser = yargs
+    // flowlint-next-line unclear-type:off
     .version(((operation['client-id'].default: any): string))
     .options(
       Object.assign({}, operation, db, p2p, rpc)
@@ -22,9 +23,11 @@ module.exports = function argv (cli?: string): ConfigType {
     .group(Object.keys(rpc), 'RPC server')
     .strict();
 
+  // flowlint-next-line sketchy-null-string:off
   const parsed = cli
     ? parser.parse(cli).argv
     : parser.argv;
 
+  // flowlint-next-line unclear-type:off
   return ((parsed: any): ConfigType);
 };

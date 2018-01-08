@@ -5,6 +5,7 @@ const ExtError = require('@polkadot/util/ext/error');
 const isObject = require('@polkadot/util/is/object');
 const assert = require('@polkadot/util/assert');
 
+// flowlint-next-line unclear-type:off
 module.exports = function validateObject (type: string, object: { [string]: any }, knownKeys: Array<string>, strict: boolean = false): boolean {
   assert(isObject(object), `${type} definition should be an object`);
 

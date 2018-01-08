@@ -1,7 +1,7 @@
 // ISC, Copyright 2017-2018 Jaco Greeff
 
 const test = {
-  networkID: '0x1f'
+  networkId: '0x1f'
 };
 
 describe('validateParams', () => {
@@ -34,11 +34,11 @@ describe('validateParams', () => {
     expect(mockValidateObject).toHaveBeenCalledWith('Chain.params', test, validateParams.KNOWN_KEYS, true);
   });
 
-  it('validates networkID as hex', () => {
+  it('validates networkId as hex', () => {
     expect(
       () => validateParams(
-        Object.assign({}, test, { networkID: 123 })
+        Object.assign({}, test, { networkId: 123 })
       )
-    ).toThrow(/networkID should be a Hex/);
+    ).toThrow(/networkId should be a Hex/);
   });
 });

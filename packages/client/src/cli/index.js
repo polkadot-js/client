@@ -20,7 +20,7 @@ module.exports = function cli (params?: string): ConfigType {
 
   return Object
     .keys(argv)
-    .reduce((config: any, key: string) => {
+    .reduce((config, key) => {
       const sepIndex = key.indexOf('-');
 
       if (/^(db|p2p|rpc)-/.test(key)) {

@@ -12,7 +12,7 @@ export type ChainConfigType$Genesis = {
 };
 
 export type ChainConfigType$Params = {
-  networkID: string
+  networkId: string
 };
 
 export type ChainConfigType = {

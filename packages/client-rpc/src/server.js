@@ -3,20 +3,7 @@
 
 import type { ConfigType } from '@polkadot/client/types';
 import type { StateInterface } from '@polkadot/client-state/types';
-import type { HandlersType, JsonRpcError, JsonRpcRequest, JsonRpcResponse, RpcInterface } from './types';
-
-type PostContextType = {
-  body: string,
-  req: string,
-  type: 'application/json'
-};
-
-type WsContextType = {
-  websocket: {
-    on: (type: 'message', (message: string) => any) => void,
-    send: (message: string) => void
-  }
-};
+import type { HandlersType, JsonRpcError, JsonRpcRequest, JsonRpcResponse, RpcInterface, PostContextType, WsContextType } from './types';
 
 const coBody = require('co-body');
 const EventEmitter = require('eventemitter3');
@@ -90,8 +77,8 @@ module.exports = class RPCServer extends EventEmitter implements RpcInterface {
   }
 
   _handlePost = async (ctx: PostContextType): Promise<void> => {
-    const body = await coBody.text(ctx.req);
-    const response = await this._handleMessage(body);
+    const message: string = await coBody.text(ctx.req);
+    const response = await this._handleMessage(message);
 
     ctx.type = 'application/json';
     ctx.body = JSON.stringify(response);

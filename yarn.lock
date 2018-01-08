@@ -148,6 +148,15 @@
     ip-regex "^2.1.0"
     keccak "^1.3.0"
 
+"@polkadot/util@^0.11.2":
+  version "0.11.2"
+  resolved "https://registry.yarnpkg.com/@polkadot/util/-/util-0.11.2.tgz#35bc61f4f4ecf9ae941fdb02b74fc6a96d39cfe5"
+  dependencies:
+    babel-runtime "^6.26.0"
+    bn.js "^4.11.8"
+    ip-regex "^2.1.0"
+    keccak "^1.3.0"
+
 "@types/node@*":
   version "8.5.2"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-8.5.2.tgz#83b8103fa9a2c2e83d78f701a9aa7c9539739aa5"

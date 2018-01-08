@@ -15,14 +15,14 @@ export type JsonRpcError = JsonRpcBase & {
 
 export type JsonRpcRequest = JsonRpcBase & {
   method: string,
-  params: Array<any>
+  params: Array<mixed>
 };
 
 export type JsonRpcResponse = JsonRpcBase & {
-  result: any
+  result: mixed
 };
 
-export type HandlerType = (any) => Promise<any>;
+export type HandlerType = (mixed) => Promise<mixed>;
 
 export type HandlersType = {
   [string]: HandlerType
@@ -39,5 +39,20 @@ export type RpcConfigType = {
 export type RpcInterface$Events = 'started' | 'stopped';
 
 export interface RpcInterface {
+  // flowlint-next-line unclear-type:off
   on (type: RpcInterface$Events, () => any): any;
 }
+
+export type PostContextType = {
+  body: string,
+  req: http$IncomingMessage,
+  type: 'application/json'
+};
+
+export type WsContextType = {
+  websocket: {
+    // flowlint-next-line unclear-type:off
+    on: (type: 'message', (message: string) => any) => any,
+    send: (message: string) => void
+  }
+};
