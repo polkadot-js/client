@@ -41,7 +41,7 @@ module.exports = function freealloc (heap: HeapType, size: number): PointerType 
     return 0;
   }
 
-  // FIXME: We are being wasteful here, i.e. we should just un-free the requested size instead of everything, which leads to long-term fragmenbtation and loss
+  // FIXME: We are being wasteful here, i.e. we should just un-free the requested size instead of everything (long-term fragmentation and loss)
   delete heap.freed[ptr];
   heap.alloc[ptr] = size;
 

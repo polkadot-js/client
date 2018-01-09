@@ -1,6 +1,8 @@
 // ISC, Copyright 2017-2018 Jaco Greeff
 // @flow
 
+import type { Logger } from '@polkadot/util/logger';
+
 export type HeapType$Alloc = {
   [number]: number // offset -> size
 }
@@ -14,7 +16,8 @@ export type HeapType = {
 };
 
 export type RuntimeType = {
-  heap: HeapType
+  heap: HeapType,
+  l: Logger
 };
 
 export type PointerType = number;
@@ -27,6 +30,12 @@ export type RuntimeInterface$Memory = {
   memset: (dst: PointerType, val: number, num: number) => PointerType
 };
 
+export type RuntimeInterface$Io = {
+  print: (ptr: PointerType, length: number) => void,
+  print_num: (num: number) => void
+}
+
 export type RuntimeInterface = {
+  io: RuntimInterface$Io,
   memory: RuntimeInterface$Memory
 };
