@@ -2,14 +2,11 @@
 // @flow
 
 import type { Logger } from '@polkadot/util/types';
-import type { RuntimeEnv$Heap, PointerType } from '../types';
 
 const utf8Coder = new TextDecoder('utf-8');
 
-module.exports = function print (l: Logger, heap: RuntimeEnv$Heap, ptr: PointerType, len: number): void {
+module.exports = function print (l: Logger, data: Uint8Array): void {
   l.log(
-    utf8Coder.decode(
-      heap.get(ptr, len)
-    )
+    utf8Coder.decode(data)
   );
 };

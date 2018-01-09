@@ -8,7 +8,7 @@ export type DbConfigType = {
 };
 
 export interface DbInterface {
-  del: (key: string) => Promise<boolean>,
-  get: (key: string) => Promise<Buffer>,
-  put: (key: string, value: Buffer | string) => Promise<Buffer | string>
+  del (key: string): Promise<boolean>,
+  get (key: string): Promise<Buffer>,
+  put (key: string, value: Buffer | string): Promise<Buffer | string>
 }

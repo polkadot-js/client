@@ -10,7 +10,9 @@ const printNum = require('./printNum');
 
 module.exports = function io ({ heap, l }: RuntimeEnv): RuntimeInterface$Io {
   return {
-    print: (ptr: PointerType, len: number): void => print(l, heap, ptr, len),
-    print_num: (num: number): void => printNum(l, num)
+    print: (ptr: PointerType, len: number): void =>
+      print(l, heap.get(ptr, len)),
+    print_num: (num: number): void =>
+      printNum(l, num)
   };
 };

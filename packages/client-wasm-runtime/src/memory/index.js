@@ -11,10 +11,15 @@ const memset = require('./memset');
 
 module.exports = function memory ({ heap }: RuntimeEnv): RuntimeInterface$Memory {
   return {
-    free: (ptr: PointerType): void => free(heap, ptr),
-    malloc: (size: number): PointerType => malloc(heap, size),
-    memcpy: (dst: PointerType, src: PointerType, num: number): PointerType => memcpy(heap, dst, src, num),
-    memmove: (dst: PointerType, src: PointerType, num: number): PointerType => memmove(heap, dst, src, num),
-    memset: (dst: PointerType, val: number, num: number): PointerType => memset(heap, dst, val, num)
+    free: (ptr: PointerType): void =>
+      free(heap, ptr),
+    malloc: (size: number): PointerType =>
+      malloc(heap, size),
+    memcpy: (dst: PointerType, src: PointerType, num: number): PointerType =>
+      memcpy(heap, dst, src, num),
+    memmove: (dst: PointerType, src: PointerType, num: number): PointerType =>
+      memmove(heap, dst, src, num),
+    memset: (dst: PointerType, val: number, num: number): PointerType =>
+      memset(heap, dst, val, num)
   };
 };

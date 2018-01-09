@@ -2,13 +2,12 @@
 // @flow
 
 import type { DbInterface } from '@polkadot/client-db/types';
-import type { RuntimeEnv$Heap, PointerType } from '../types';
 
 const u8aToBuffer = require('@polkadot/util/u8a/toBuffer');
 
-module.exports = function set (heap: RuntimeEnv$Heap, storage: DbInterface, keyPtr: PointerType, keyLength: number, dataPtr: PointerType, dataLength: number): void {
-  const key = u8aToBuffer(heap.get(keyPtr, keyLength));
-  const data = u8aToBuffer(heap.get(dataPtr, dataLength));
+module.exports = function set (storage: DbInterface, _key: Uint8Array, _data: Uint8Array): void {
+  const key = u8aToBuffer(_key);
+  const data = u8aToBuffer(_data);
 
   storage.put(key, data);
 };
