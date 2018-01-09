@@ -1,15 +1,18 @@
 // ISC, Copyright 2017-2018 Jaco Greeff
 // @flow
 
+import type { DbInterface } from '@polkadot/client-db/types';
+
+const createEnv = require('./env');
 const io = require('./io');
 const memory = require('./memory');
-const runtime = require('./runtime');
+const storage = require('./storage');
 
 // flowlint-next-line unclear-type:off
-module.exports = function (wasmMemory: WebAssembly.Memory): { [string]: Function } {
-  const rt = runtime(wasmMemory);
+module.exports = function runtime (wasmMemory: WebAssembly.Memory, db: DbInterface): { [string]: Function } {
+  const env = createEnv(wasmMemory, db);
   const exports = Object.assign(
-    {}, io(rt), memory(rt)
+    {}, io(env), memory(env), storage(env)
   );
 
   return Object

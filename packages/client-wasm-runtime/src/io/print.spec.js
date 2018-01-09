@@ -2,6 +2,7 @@
 
 require('./polyfill');
 
+const env = require('../env');
 const index = require('./index');
 
 describe('print', () => {
@@ -11,9 +12,9 @@ describe('print', () => {
   let print;
 
   beforeEach(() => {
-    heap = {
-      uint8: new TextEncoder('utf-8').encode(TEST)
-    };
+    const runtime = env({ buffer: new TextEncoder('utf-8').encode(TEST) });
+
+    heap = runtime.heap;
     l = {
       log: jest.fn(() => void 0)
     };

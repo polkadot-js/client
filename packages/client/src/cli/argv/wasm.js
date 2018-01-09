@@ -1,6 +1,8 @@
 // ISC, Copyright 2017-2018 Jaco Greeff
 // @flow
 
+import type { Options } from 'yargs';
+
 const defaults = require('@polkadot/client-wasm/defaults');
 
 module.exports = ({

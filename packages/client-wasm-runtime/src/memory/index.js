@@ -1,7 +1,7 @@
 // ISC, Copyright 2017-2018 Jaco Greeff
 // @flow
 
-import type { PointerType, RuntimeType, RuntimeInterface$Memory } from '../types';
+import type { PointerType, RuntimeEnv, RuntimeInterface$Memory } from '../types';
 
 const free = require('./free');
 const malloc = require('./malloc');
@@ -9,7 +9,7 @@ const memcpy = require('./memcpy');
 const memmove = require('./memmove');
 const memset = require('./memset');
 
-module.exports = function memory ({ heap }: RuntimeType): RuntimeInterface$Memory {
+module.exports = function memory ({ heap }: RuntimeEnv): RuntimeInterface$Memory {
   return {
     free: (ptr: PointerType): void => free(heap, ptr),
     malloc: (size: number): PointerType => malloc(heap, size),

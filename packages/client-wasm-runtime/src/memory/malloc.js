@@ -1,11 +1,11 @@
 // ISC, Copyright 2017-2018 Jaco Greeff
 // @flow
 
-import type { HeapType, PointerType } from '../types';
+import type { RuntimeEnv$Heap, PointerType } from '../types';
 
 const freealloc = require('./freealloc');
 
-module.exports = function malloc (heap: HeapType, size: number): PointerType {
+module.exports = function malloc (heap: RuntimeEnv$Heap, size: number): PointerType {
   if (size === 0) {
     return 0;
   }

@@ -1,5 +1,6 @@
 // ISC, Copyright 2017-2018 Jaco Greeff
 
+const env = require('../env');
 const index = require('./index');
 
 describe('memmove', () => {
@@ -7,11 +8,7 @@ describe('memmove', () => {
   let memmove;
 
   beforeEach(() => {
-    runtime = {
-      heap: {
-        uint8: new Uint8Array([1, 2, 3, 4, 5])
-      }
-    };
+    runtime = env({ buffer: new Uint8Array([1, 2, 3, 4, 5]) });
     memmove = index(runtime).memmove;
   });
 
