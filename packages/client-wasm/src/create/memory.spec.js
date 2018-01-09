@@ -27,20 +27,8 @@ describe('createMemory', () => {
 
   it('expects initial <= maximum', () => {
     expect(
-      () => createMemory(1024, 64)
+      () => createMemory(16, 8)
     ).toThrow(/initial size to be/);
-  });
-
-  it('expects initial size to fit into page', () => {
-    expect(
-      () => createMemory(32 * 1024, 32 * 1024)
-    ).toThrow(/Expected intial to be multiple/);
-  });
-
-  it('expects maximum size to fit into page', () => {
-    expect(
-      () => createMemory(64 * 1024, 96 * 1024)
-    ).toThrow(/Expected maximum to be multiple/);
   });
 
   it('constructs WebAssembly.Memory with defaults', () => {
@@ -55,7 +43,7 @@ describe('createMemory', () => {
   });
 
   it('constructs WebAssembly.Memory with provided values', () => {
-    createMemory(4 * 1024 * 1024, 4 * 1024 * 1024);
+    createMemory(4, 4);
 
     expect(
       constructInstanceSpy
@@ -65,7 +53,7 @@ describe('createMemory', () => {
     });
   });
 
-  it('returns a WebAssemblt.Memory instance', () => {
+  it('returns a WebAssembly.Memory instance', () => {
     expect(
       isInstanceOf(
         createMemory(), WebAssembly.Memory

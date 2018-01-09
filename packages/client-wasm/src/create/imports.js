@@ -6,14 +6,14 @@ const runtime = require('@polkadot/client-wasm-runtime');
 const createMemory = require('./memory');
 const createTable = require('./table');
 
-module.exports = function createImports (imports?: WebAssemblyImports = {}): WebAssemblyImports {
+module.exports = function createImports (imports?: WebAssemblyImports = {}, initialMemory?: number, maximumMemory?: number): WebAssemblyImports {
   imports.env = imports.env || {};
   imports.env.memoryBase = imports.env.memoryBase || 0;
   imports.env.tableBase = imports.env.tableBase || 0;
 
   if (!imports.env.memory) {
     // $FlowFixMe imports.env gets a value above
-    imports.env.memory = createMemory();
+    imports.env.memory = createMemory(initialMemory, maximumMemory);
   }
 
   if (!imports.env.table) {

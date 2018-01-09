@@ -8,6 +8,7 @@ const { createImports } = require('./index');
 describe('createImports', () => {
   let imports;
   let origWebAssembly;
+  let memOptions;
 
   beforeEach(() => {
     imports = {};
@@ -15,8 +16,9 @@ describe('createImports', () => {
 
     global.WebAssembly = class {
       static Memory = class {
-        constructor () {
+        constructor (options) {
           this.buffer = new Uint8Array(10);
+          memOptions = options;
         }
       };
       static Table = class {};
@@ -76,6 +78,17 @@ describe('createImports', () => {
         imports.env.memory, WebAssembly.Memory
       )
     ).toEqual(true);
+  });
+
+  it('creates env.memory using the supplied initial/maximum', () => {
+    createImports(imports, 4, 6);
+
+    expect(
+      memOptions
+    ).toEqual({
+      initial: (4 * 1024) / 64,
+      maximum: (6 * 1024) / 64
+    });
   });
 
   it('uses env.table when supplied', () => {
