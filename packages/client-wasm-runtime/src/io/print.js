@@ -3,10 +3,10 @@
 
 import type { Logger } from '@polkadot/util/types';
 
-const utf8Coder = new TextDecoder('utf-8');
+const utf8Decode = require('../util/utf8Decode');
 
 module.exports = function print (l: Logger, data: Uint8Array): void {
   l.log(
-    utf8Coder.decode(data)
+    utf8Decode(data)
   );
 };

@@ -2,14 +2,14 @@
 // @flow
 
 import type { DbInterface } from '@polkadot/client-db/types';
+import type { RuntimeExports } from './types';
 
 const createEnv = require('./env');
 const io = require('./io');
 const memory = require('./memory');
 const storage = require('./storage');
 
-// flowlint-next-line unclear-type:off
-module.exports = function runtime (wasmMemory: WebAssembly.Memory, db: DbInterface): { [string]: Function } {
+module.exports = function runtime (wasmMemory: WebAssembly.Memory, db: DbInterface): RuntimeExports {
   const env = createEnv(wasmMemory, db);
   const exports = Object.assign(
     {}, io(env), memory(env), storage(env)

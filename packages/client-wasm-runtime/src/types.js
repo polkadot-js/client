@@ -49,3 +49,8 @@ export type RuntimeInterface = {
   memory: RuntimeInterface$Memory,
   storage: RuntimeInterface$Storage
 };
+
+export type RuntimeExports = {
+  // flowlint-next-line unclear-type:off
+  [string]: (any) => any
+};

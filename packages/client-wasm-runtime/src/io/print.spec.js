@@ -1,7 +1,5 @@
 // ISC, Copyright 2017-2018 Jaco Greeff
 
-require('./polyfill');
-
 const env = require('../env');
 const index = require('./index');
 

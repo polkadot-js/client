@@ -5,9 +5,16 @@ import type { DbInterface } from '@polkadot/client-db/types';
 
 const u8aToBuffer = require('@polkadot/util/u8a/toBuffer');
 
-module.exports = function set (storage: DbInterface, _key: Uint8Array, _data: Uint8Array): void {
-  const key = u8aToBuffer(_key);
-  const data = u8aToBuffer(_data);
+const utf8Decode = require('../util/utf8Decode');
+const syncify = require('../util/syncify');
 
-  storage.put(key, data);
+module.exports = function set (storage: DbInterface, key: Uint8Array, data: Uint8Array): void {
+  syncify(
+    storage.put(
+      utf8Decode(
+        u8aToBuffer(key)
+      ),
+      u8aToBuffer(data)
+    )
+  );
 };

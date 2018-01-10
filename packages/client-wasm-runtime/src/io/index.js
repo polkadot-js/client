@@ -3,8 +3,6 @@
 
 import type { RuntimeEnv, RuntimeInterface$Io, PointerType } from '../types';
 
-require('./polyfill');
-
 const print = require('./print');
 const printNum = require('./printNum');
 
