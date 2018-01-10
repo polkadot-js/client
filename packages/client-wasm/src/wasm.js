@@ -1,31 +1,21 @@
 // ISC, Copyright 2017-2018 Jaco Greeff
 // @flow
 
-const assert = require('@polkadot/util/assert');
-const isObject = require('@polkadot/util/is/object');
+import type { ConfigType } from '@polkadot/client/types';
+import type { DbInterface } from '@polkadot/client-db/types';
+import type { WasmExtraImports } from './types';
 
-const { createImports, createInstance, createModule } = require('./create');
+const createRuntime = require('@polkadot/client-wasm-runtime');
 
-module.exports = class Wasm {
-  constructor (instance: WebAssemblyInstance) {
-    const exports = instance.exports;
+const { createImports, createInstance, createMemory, createModule, createTable } = require('./create');
 
-    assert(isObject(exports), 'Expected function exports');
+module.exports = function wasm ({ wasm: { memoryInitial, memoryMaximum } }: ConfigType, db: DbInterface, bytecode: Uint8Array, imports?: WasmExtraImports = {}): WebAssemblyInstance$Exports {
+  const memory = createMemory(memoryInitial, memoryMaximum);
+  const table = createTable();
+  const runtime = createRuntime(memory, db);
 
-    Object.keys(exports).forEach((key: string) => {
-      Object.defineProperty(this, key, {
-        configurable: false,
-        enumerable: true,
-        value: exports[key]
-      });
-    });
-  }
-
-  static fromCode (bytecode: Uint8Array, _imports?: WebAssemblyImports): Wasm {
-    const module = createModule(bytecode);
-    const imports = createImports(_imports);
-    const instance = createInstance(module, imports);
-
-    return new Wasm(instance);
-  }
+  return createInstance(
+    createModule(bytecode),
+    createImports(memory, table, runtime, imports)
+  ).exports;
 };
