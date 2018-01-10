@@ -9,12 +9,9 @@ describe('malloc', () => {
   beforeEach(() => {
     runtime = {
       heap: {
-        // ok, these don't make much sense, but it allows for sorting inside the actual findFree function (the one being tested later on) to find the first & smallest
         freed: {
-          0: 200,
-          3: 120,
-          4: 120,
-          122: 500
+          0: 3,
+          3: 120
         },
         alloc: {},
         offset: 150,

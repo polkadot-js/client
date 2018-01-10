@@ -1,27 +1,16 @@
 // ISC, Copyright 2017-2018 Jaco Greeff
 // @flow
 
-const runtime = require('@polkadot/client-wasm-runtime');
+import type { RuntimeExports } from '@polkadot/client-wasm-runtime/types';
 
-const createMemory = require('./memory');
-const createTable = require('./table');
-
-module.exports = function createImports (imports?: WebAssemblyImports = {}): WebAssemblyImports {
-  imports.env = imports.env || {};
-  imports.env.memoryBase = imports.env.memoryBase || 0;
-  imports.env.tableBase = imports.env.tableBase || 0;
-
-  if (!imports.env.memory) {
-    // $FlowFixMe imports.env gets a value above
-    imports.env.memory = createMemory();
-  }
-
-  if (!imports.env.table) {
-    // $FlowFixMe imports.env gets a value above
-    imports.env.table = createTable();
-  }
-
-  imports.env = Object.assign(imports.env, runtime(imports.env.memory));
-
-  return imports;
+// flowlint-next-line unclear-type:off
+module.exports = function createImports (memory: WebAssembly.Memory, table: WebAssembly.Table, runtime: RuntimeExports, imports?: Object = {}): WebAssemblyImports {
+  return Object.assign({}, imports, {
+    env: Object.assign({}, runtime, {
+      memory,
+      memoryBase: 0,
+      table,
+      tableBase: 0
+    })
+  });
 };

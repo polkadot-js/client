@@ -9,6 +9,7 @@ const db = require('./db');
 const operation = require('./operation');
 const p2p = require('./p2p');
 const rpc = require('./rpc');
+const wasm = require('./wasm');
 
 module.exports = function argv (cli?: string): ConfigType {
   const parser = yargs
@@ -21,6 +22,7 @@ module.exports = function argv (cli?: string): ConfigType {
     .group(Object.keys(db), 'Database')
     .group(Object.keys(p2p), 'Peer-to-peer')
     .group(Object.keys(rpc), 'RPC server')
+    .group(Object.keys(wasm), 'WASM Runtime')
     .strict();
 
   // flowlint-next-line sketchy-null-string:off

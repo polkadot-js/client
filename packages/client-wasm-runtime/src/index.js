@@ -1,12 +1,19 @@
 // ISC, Copyright 2017-2018 Jaco Greeff
 // @flow
 
-const memory = require('./memory');
-const runtime = require('./runtime');
+import type { DbInterface } from '@polkadot/client-db/types';
+import type { RuntimeExports } from './types';
 
-module.exports = function (wasmMemory: WebAssembly.Memory): { [string]: mixed } {
-  const rt = runtime(wasmMemory);
-  const exports = Object.assign({}, memory(rt));
+const createEnv = require('./env');
+const io = require('./io');
+const memory = require('./memory');
+const storage = require('./storage');
+
+module.exports = function runtime (wasmMemory: WebAssembly.Memory, db: DbInterface): RuntimeExports {
+  const env = createEnv(wasmMemory, db);
+  const exports = Object.assign(
+    {}, io(env), memory(env), storage(env)
+  );
 
   return Object
     .keys(exports)

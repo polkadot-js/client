@@ -4,13 +4,13 @@
 import type Trie from 'merkle-patricia-tree';
 import type { ConfigType } from '@polkadot/client/types';
 import type { StateInterface } from '@polkadot/client-state/types';
-import type { DbConfigType } from './types';
+import type { DbConfigType, DbInterface } from './types';
 
 const promisify = require('@polkadot/util/promisify');
 
 const createTrie = require('./create/trie');
 
-module.exports = class DB {
+module.exports = class DB implements DbInterface {
   _config: DbConfigType;
   _trie: Trie;
 

@@ -1,6 +1,6 @@
 // ISC, Copyright 2017-2018 Jaco Greeff
 // @flow
 
-const Wasm = require('./wasm');
+const wasm = require('./wasm');
 
-module.exports = Wasm;
+module.exports = wasm;

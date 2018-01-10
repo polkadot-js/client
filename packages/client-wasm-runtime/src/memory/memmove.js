@@ -1,12 +1,12 @@
 // ISC, Copyright 2017-2018 Jaco Greeff
 // @flow
 
-import type { HeapType, PointerType } from '../types';
+import type { RuntimeEnv$Heap, PointerType } from '../types';
 
-module.exports = function memmove (heap: HeapType, dst: PointerType, src: PointerType, num: number): PointerType {
-  heap.uint8.set(
-    heap.uint8.subarray(src, src + num),
-    dst
+module.exports = function memmove (heap: RuntimeEnv$Heap, dst: PointerType, src: PointerType, num: number): PointerType {
+  heap.set(
+    dst,
+    heap.get(src, num)
   );
 
   return dst;
