@@ -1,5 +1,7 @@
 // ISC, Copyright 2017-2018 Jaco Greeff
 
+const u8aFromUtf8 = require('@polkadot/util/u8a/fromUtf8');
+
 const env = require('../env');
 const index = require('./index');
 
@@ -10,7 +12,7 @@ describe('print', () => {
   let print;
 
   beforeEach(() => {
-    const runtime = env({ buffer: new TextEncoder('utf-8').encode(TEST) });
+    const runtime = env({ buffer: u8aFromUtf8(TEST) });
 
     heap = runtime.heap;
     l = {
