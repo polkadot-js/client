@@ -3,17 +3,14 @@
 
 import type { DbInterface } from '@polkadot/client-db/types';
 
+const syncify = require('@polkadot/util/syncify');
 const u8aToBuffer = require('@polkadot/util/u8a/toBuffer');
-
-const utf8Decode = require('../util/utf8Decode');
-const syncify = require('../util/syncify');
+const u8aToUtf8 = require('@polkadot/util/u8a/toUtf8');
 
 module.exports = function set (storage: DbInterface, key: Uint8Array, data: Uint8Array): void {
   syncify(
     storage.put(
-      utf8Decode(
-        u8aToBuffer(key)
-      ),
+      u8aToUtf8(key),
       u8aToBuffer(data)
     )
   );
