@@ -1,5 +1,7 @@
 #!/usr/bin/env node
-// ISC, Copyright 2017-2018 Jaco Greeff
+// Copyright 2017-2018 Jaco Greeff
+// This software may be modified and distributed under the terms
+// of the ISC license. See the LICENSE file for details.
 
 try {
   // $FlowFixMe production version
