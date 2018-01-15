@@ -21,6 +21,7 @@ module.exports = function createEnv ({ buffer }: WebAssembly.Memory, storage: Db
       freed: {},
       offset: START_OFFSET,
       size: buffer.byteLength,
+      dup: (ptr: PointerType, len: number): Uint8Array => uint8.slice(ptr, ptr + len),
       get: (ptr: PointerType, len: number): Uint8Array => uint8.subarray(ptr, ptr + len),
       set: (ptr: PointerType, data: Uint8Array): void => uint8.set(data, ptr)
     }
