@@ -19,6 +19,7 @@ export type RuntimeEnv$Heap = {
   size: number,
   uint8: Uint8Array,
 
+  dup: (ptr: PointerType, length: number) => Uint8Array,
   get: (ptr: PointerType, length: number) => Uint8Array,
   set: (ptr: PointerType, data: Uint8Array) => void
 };
