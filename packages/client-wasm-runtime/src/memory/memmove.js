@@ -6,7 +6,7 @@ import type { RuntimeEnv$Heap, PointerType } from '../types';
 module.exports = function memmove (heap: RuntimeEnv$Heap, dst: PointerType, src: PointerType, num: number): PointerType {
   heap.set(
     dst,
-    heap.get(src, num)
+    heap.dup(src, num)
   );
 
   return dst;
