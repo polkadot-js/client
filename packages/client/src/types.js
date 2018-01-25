@@ -10,9 +10,15 @@ import type { RpcConfigType, HandlerType } from '@polkadot/client-rpc/types';
 import type { WasmConfigType } from '@polkadot/client-wasm/types';
 import type { RoleType } from '@polkadot/primitives/role';
 
+export type DevConfigType = {
+  genBlocks: boolean,
+  genInterval: number
+};
+
 export type ConfigType = {
   chain: ChainNameType,
   db: DbConfigType,
+  dev: DevConfigType,
   p2p: P2pConfigType,
   rpc: RpcConfigType,
   roles: Array<RoleType>,

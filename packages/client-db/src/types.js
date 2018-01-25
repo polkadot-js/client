@@ -5,8 +5,11 @@
 
 export type PathPrefixType = 'database';
 
+export type DbConfigType$Type = 'disk' | 'memory';
+
 export type DbConfigType = {
-  path: string
+  path: string,
+  type: DbConfigType$Type
 };
 
 export interface DbInterface {

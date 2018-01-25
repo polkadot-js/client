@@ -17,9 +17,9 @@ module.exports = class DB implements DbInterface {
   _trie: Trie;
 
   // TODO: allowed values for dbType as soon as subclassed
-  constructor (config: ConfigType, state: StateInterface, dbType: string, inMemory: boolean = false) {
+  constructor (config: ConfigType, state: StateInterface, dbType: string) {
     this._config = config.db;
-    this._trie = createTrie(config.db.path, state.chain.name, dbType, inMemory);
+    this._trie = createTrie(config.db.path, state.chain.name, dbType, config.db.type === 'memory');
   }
 
   async del (key: string): Promise<boolean> {

@@ -8,15 +8,24 @@ require('./license.js');
 const loadChain = require('@polkadot/client-chains/load');
 const l = require('@polkadot/util/logger')('client');
 
+const clientId = require('./clientId');
 const config = require('./cli')();
 const createRpc = require('./create/rpc');
 const createP2p = require('./create/p2p');
 const createState = require('./create/state');
 
-l.log(`Initialising for roles=${config.roles.join(',')} on chain=${config.chain}`);
+(async function main (): Promise<void> {
+  const verNpm = await clientId.getNpmVersion();
+  const verStatus = verNpm === clientId.version
+    ? 'up to date'
+    : `outdated, ${verNpm} available`;
 
-const chain = loadChain(config.chain);
-const state = createState(config, chain);
+  l.log(`Running version ${clientId.version} (${verStatus})`);
+  l.log(`Initialising for roles=${config.roles.join(',')} on chain=${config.chain}`);
 
-createP2p(config, state);
-createRpc(config, state);
+  const chain = loadChain(config.chain);
+  const state = createState(config, chain);
+
+  createP2p(config, state);
+  createRpc(config, state);
+})();

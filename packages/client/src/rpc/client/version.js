@@ -3,7 +3,7 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-const clientId = require('../../clientId');
+const { clientId } = require('../../clientId');
 
 module.exports = async function clientVersion (): Promise<string> {
   return clientId;

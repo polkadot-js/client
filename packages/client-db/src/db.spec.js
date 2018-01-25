@@ -16,7 +16,8 @@ describe('DB', () => {
   beforeEach(() => {
     config = {
       db: {
-        path: './tmp'
+        path: './tmp',
+        type: 'memory'
       }
     };
     state = {
@@ -25,13 +26,13 @@ describe('DB', () => {
       }
     };
 
-    db = new DB(config, state, 'test', true);
+    db = new DB(config, state, 'test');
   });
 
   it('creates a LevelDown store as required (default)', () => {
     expect(
       isInstanceOf(
-        new DB(config, state, 'test')._trie.db._db,
+        new DB(Object.assign({}, config, { db: { path: './tmp' } }), state, 'test')._trie.db._db,
         LevelDown
       )
     ).toEqual(true);

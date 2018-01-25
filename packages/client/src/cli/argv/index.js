@@ -7,19 +7,28 @@ import type { ConfigType } from '../../types';
 
 const yargs = require('yargs');
 
+const { isDevelopment } = require('../../clientId');
 const db = require('./db');
+const dev = require('./dev');
 const operation = require('./operation');
 const p2p = require('./p2p');
 const rpc = require('./rpc');
 const wasm = require('./wasm');
 
 module.exports = function argv (cli?: string): ConfigType {
+  const devOpts = isDevelopment
+    ? dev
+    : {};
   const parser = yargs
     // flowlint-next-line unclear-type:off
     .version(((operation['client-id'].default: any): string))
     .options(
-      Object.assign({}, operation, db, p2p, rpc)
+      Object.assign({}, devOpts, operation, db, p2p, rpc, wasm)
     )
+    .wrap(
+      Math.min(120, yargs.terminalWidth())
+    )
+    .group(Object.keys(devOpts), 'Development')
     .group(Object.keys(operation), 'Operation')
     .group(Object.keys(db), 'Database')
     .group(Object.keys(p2p), 'Peer-to-peer')

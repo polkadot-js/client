@@ -63,24 +63,24 @@
     lodash "^4.2.0"
     to-fast-properties "^2.0.0"
 
-"@polkadot/api-jsonrpc@^0.6.12":
-  version "0.6.12"
-  resolved "https://registry.yarnpkg.com/@polkadot/api-jsonrpc/-/api-jsonrpc-0.6.12.tgz#ca978c22474b050486a107347580e778a41215b3"
+"@polkadot/api-jsonrpc@^0.7.1":
+  version "0.7.1"
+  resolved "https://registry.yarnpkg.com/@polkadot/api-jsonrpc/-/api-jsonrpc-0.7.1.tgz#af8928344a1d9571545c7d53516467cf1359cd4d"
   dependencies:
     babel-runtime "^6.26.0"
 
-"@polkadot/api-provider@^0.6.12":
-  version "0.6.12"
-  resolved "https://registry.yarnpkg.com/@polkadot/api-provider/-/api-provider-0.6.12.tgz#8992cf8c8991b281809f6ce34d14e21f12b6e426"
+"@polkadot/api-provider@^0.7.1":
+  version "0.7.1"
+  resolved "https://registry.yarnpkg.com/@polkadot/api-provider/-/api-provider-0.7.1.tgz#8591f76cdcd16404a95ef000e5f179e1eec80570"
   dependencies:
-    "@polkadot/util" "^0.11.1"
+    "@polkadot/util" "^0.13.1"
     babel-runtime "^6.26.0"
     isomorphic-fetch "^2.2.1"
     websocket "^1.0.25"
 
-"@polkadot/dev@^0.14.9":
-  version "0.14.9"
-  resolved "https://registry.yarnpkg.com/@polkadot/dev/-/dev-0.14.9.tgz#82e7fc132ce8004e269a51ec0e1b411901a88f0e"
+"@polkadot/dev@^0.15.1":
+  version "0.15.1"
+  resolved "https://registry.yarnpkg.com/@polkadot/dev/-/dev-0.15.1.tgz#74b764552ae7c11cbf35797abd389148033fe562"
   dependencies:
     babel-cli "^6.26.0"
     babel-core "^6.26.0"
@@ -104,59 +104,49 @@
     eslint-plugin-promise "^3.6.0"
     eslint-plugin-react "^7.4.0"
     eslint-plugin-standard "^3.0.1"
-    flow-bin "^0.63.1"
+    flow-bin "^0.64.0"
     flow-copy-source "^1.2.1"
     jest "^22.0.0"
     makeshift "^1.1.0"
     mkdirp "^0.5.1"
     postcss "^6.0.14"
-    postcss-sass "^0.2.0"
+    postcss-sass "^0.3.0"
     rimraf "^2.6.2"
     stylelint "^8.2.0"
     stylelint-config-standard "^18.0.0"
 
-"@polkadot/primitives-json@^0.4.9":
-  version "0.4.9"
-  resolved "https://registry.yarnpkg.com/@polkadot/primitives-json/-/primitives-json-0.4.9.tgz#c3561be09d3118318b333903fdccefcc9628f1ac"
+"@polkadot/primitives-json@^0.4.10":
+  version "0.4.10"
+  resolved "https://registry.yarnpkg.com/@polkadot/primitives-json/-/primitives-json-0.4.10.tgz#93ecf3d1ccd178bcbb11d8721fd323bf3d161df3"
   dependencies:
-    "@polkadot/primitives" "^0.4.9"
-    "@polkadot/util" "^0.11.1"
+    "@polkadot/primitives" "^0.4.10"
+    "@polkadot/util" "^0.13.1"
     babel-runtime "^6.26.0"
 
-"@polkadot/primitives-rlp@^0.4.9":
-  version "0.4.9"
-  resolved "https://registry.yarnpkg.com/@polkadot/primitives-rlp/-/primitives-rlp-0.4.9.tgz#7f162d45fa5b0f5fcb49657a20223ea5560083d3"
+"@polkadot/primitives-rlp@^0.4.10":
+  version "0.4.10"
+  resolved "https://registry.yarnpkg.com/@polkadot/primitives-rlp/-/primitives-rlp-0.4.10.tgz#6c986175cc7d04ab58e9c14ec8e97594b0063640"
   dependencies:
-    "@polkadot/primitives" "^0.4.9"
-    "@polkadot/primitives-json" "^0.4.9"
-    "@polkadot/util" "^0.11.1"
+    "@polkadot/primitives" "^0.4.10"
+    "@polkadot/primitives-json" "^0.4.10"
+    "@polkadot/util" "^0.13.1"
     babel-runtime "^6.26.0"
 
-"@polkadot/primitives@^0.4.9":
-  version "0.4.9"
-  resolved "https://registry.yarnpkg.com/@polkadot/primitives/-/primitives-0.4.9.tgz#900c290c2be5164571af14197a55a47bbd16cef9"
+"@polkadot/primitives@^0.4.10":
+  version "0.4.10"
+  resolved "https://registry.yarnpkg.com/@polkadot/primitives/-/primitives-0.4.10.tgz#5ec557cf0ecdb608697d31e3ac17224bedd90572"
   dependencies:
-    "@polkadot/util" "^0.11.1"
+    "@polkadot/util" "^0.13.1"
     babel-runtime "^6.26.0"
 
-"@polkadot/util@^0.11.1":
-  version "0.11.1"
-  resolved "https://registry.yarnpkg.com/@polkadot/util/-/util-0.11.1.tgz#16183ee293a1188da691dee822a19b8ecdcc54d8"
-  dependencies:
-    babel-runtime "^6.26.0"
-    bn.js "^4.11.8"
-    ip-regex "^2.1.0"
-    keccak "^1.3.0"
-
-"@polkadot/util@^0.12.3":
-  version "0.12.3"
-  resolved "https://registry.yarnpkg.com/@polkadot/util/-/util-0.12.3.tgz#25368dad0066d3070dbed9c3adda092bce86e364"
+"@polkadot/util@^0.13.1":
+  version "0.13.1"
+  resolved "https://registry.yarnpkg.com/@polkadot/util/-/util-0.13.1.tgz#17373a04e8310f2a06ffcf3e4cc7b47eb7693be8"
   dependencies:
     babel-runtime "^6.26.0"
     bn.js "^4.11.8"
     deasync "^0.1.12"
     ip-regex "^2.1.0"
-    keccak "^1.3.0"
 
 "@types/node@*":
   version "8.5.2"
@@ -2502,9 +2492,9 @@ flat-cache@^1.2.1:
     graceful-fs "^4.1.2"
     write "^0.2.1"
 
-flow-bin@^0.63.1:
-  version "0.63.1"
-  resolved "https://registry.yarnpkg.com/flow-bin/-/flow-bin-0.63.1.tgz#ab00067c197169a5fb5b4996c8f6927b06694828"
+flow-bin@^0.64.0:
+  version "0.64.0"
+  resolved "https://registry.yarnpkg.com/flow-bin/-/flow-bin-0.64.0.tgz#ddd3fb3b183ab1ab35a5d5dec9caf5ebbcded167"
 
 flow-copy-source@^1.2.1:
   version "1.2.1"
@@ -2772,7 +2762,7 @@ globjoin@^0.1.4:
   version "0.1.4"
   resolved "https://registry.yarnpkg.com/globjoin/-/globjoin-0.1.4.tgz#2f4494ac8919e3767c5cbb691e9f463324285d43"
 
-gonzales-pe@^4.0.3:
+gonzales-pe@^4.2.3:
   version "4.2.3"
   resolved "https://registry.yarnpkg.com/gonzales-pe/-/gonzales-pe-4.2.3.tgz#41091703625433285e0aee3aa47829fc1fbeb6f2"
   dependencies:
@@ -3812,7 +3802,7 @@ k-bucket@^3.3.0:
     inherits "^2.0.1"
     randombytes "^2.0.3"
 
-keccak@^1.0.2, keccak@^1.3.0:
+keccak@^1.0.2:
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/keccak/-/keccak-1.4.0.tgz#572f8a6dbee8e7b3aa421550f9e6408ca2186f80"
   dependencies:
@@ -5180,12 +5170,12 @@ postcss-safe-parser@^3.0.1:
   dependencies:
     postcss "^6.0.6"
 
-postcss-sass@^0.2.0:
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/postcss-sass/-/postcss-sass-0.2.0.tgz#e55516441e9526ba4b380a730d3a02e9eaa78c7a"
+postcss-sass@^0.3.0:
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/postcss-sass/-/postcss-sass-0.3.0.tgz#dc2582ee0e61541aa88bafdc5a8aebb53deaae75"
   dependencies:
-    gonzales-pe "^4.0.3"
-    postcss "^6.0.6"
+    gonzales-pe "^4.2.3"
+    postcss "^6.0.16"
 
 postcss-scss@^1.0.2:
   version "1.0.2"
@@ -5221,6 +5211,14 @@ postcss@^6.0.14, postcss@^6.0.3, postcss@^6.0.6, postcss@^6.0.8:
     chalk "^2.3.0"
     source-map "^0.6.1"
     supports-color "^4.4.0"
+
+postcss@^6.0.16:
+  version "6.0.16"
+  resolved "https://registry.yarnpkg.com/postcss/-/postcss-6.0.16.tgz#112e2fe2a6d2109be0957687243170ea5589e146"
+  dependencies:
+    chalk "^2.3.0"
+    source-map "^0.6.1"
+    supports-color "^5.1.0"
 
 prebuild-install@^2.1.0:
   version "2.4.1"
@@ -6230,6 +6228,12 @@ supports-color@^3.1.2, supports-color@^3.2.3:
 supports-color@^4.0.0, supports-color@^4.4.0:
   version "4.5.0"
   resolved "https://registry.yarnpkg.com/supports-color/-/supports-color-4.5.0.tgz#be7a0de484dec5c5cddf8b3d59125044912f635b"
+  dependencies:
+    has-flag "^2.0.0"
+
+supports-color@^5.1.0:
+  version "5.1.0"
+  resolved "https://registry.yarnpkg.com/supports-color/-/supports-color-5.1.0.tgz#058a021d1b619f7ddf3980d712ea3590ce7de3d5"
   dependencies:
     has-flag "^2.0.0"
 

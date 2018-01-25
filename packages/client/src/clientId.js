@@ -3,18 +3,41 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-const NAME = '@polkadot';
+type PackageJsonType = {
+  name: string,
+  version: string
+};
 
-let pkgJson: { version: string };
-let stability = 'stable';
+const npmQuery = require('package-json');
+
+const DEVELOPMENT = 'development';
+
+const name = '@polkadot';
+let pkgJson: PackageJsonType;
+let stability = 'release';
 
 try {
   // $FlowFixMe production version
   pkgJson = require('./package.json');
 } catch (error) {
-  stability = 'development';
+  stability = DEVELOPMENT;
   // flowlint-next-line untyped-import:off
   pkgJson = require('../package.json');
 }
 
-module.exports = `${NAME}/${pkgJson.version}-${stability}`;
+const isDevelopment = stability === DEVELOPMENT;
+
+async function getNpmVersion (): Promise<string> {
+  return npmQuery(pkgJson.name)
+    .then((npmJson: PackageJsonType) => npmJson.version)
+    .catch(() => pkgJson.version);
+}
+
+module.exports = {
+  clientId: `${name}/${pkgJson.version}-${stability}`,
+  isDevelopment,
+  getNpmVersion,
+  name,
+  stability,
+  version: pkgJson.version
+};

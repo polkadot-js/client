@@ -12,5 +12,11 @@ module.exports = ({
     default: defaults.PATH,
     description: 'Sets the path for all storage operations',
     type: 'string'
+  },
+  'db-type': {
+    choices: ['disk', 'memory'],
+    default: defaults.TYPE,
+    description: 'The type of database storage to use',
+    type: 'string'
   }
 }: { [key: string]: Options });
