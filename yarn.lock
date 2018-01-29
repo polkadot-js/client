@@ -78,9 +78,9 @@
     isomorphic-fetch "^2.2.1"
     websocket "^1.0.25"
 
-"@polkadot/dev@^0.15.1":
-  version "0.15.1"
-  resolved "https://registry.yarnpkg.com/@polkadot/dev/-/dev-0.15.1.tgz#74b764552ae7c11cbf35797abd389148033fe562"
+"@polkadot/dev@^0.15.2":
+  version "0.15.2"
+  resolved "https://registry.yarnpkg.com/@polkadot/dev/-/dev-0.15.2.tgz#496350e1ca3dfa30d73bd64206c221fa6e96b3ec"
   dependencies:
     babel-cli "^6.26.0"
     babel-core "^6.26.0"
@@ -142,6 +142,15 @@
 "@polkadot/util@^0.13.1":
   version "0.13.1"
   resolved "https://registry.yarnpkg.com/@polkadot/util/-/util-0.13.1.tgz#17373a04e8310f2a06ffcf3e4cc7b47eb7693be8"
+  dependencies:
+    babel-runtime "^6.26.0"
+    bn.js "^4.11.8"
+    deasync "^0.1.12"
+    ip-regex "^2.1.0"
+
+"@polkadot/util@^0.13.2":
+  version "0.13.2"
+  resolved "https://registry.yarnpkg.com/@polkadot/util/-/util-0.13.2.tgz#0969295aed0b5c171c7f104ee450dcad8eef6edc"
   dependencies:
     babel-runtime "^6.26.0"
     bn.js "^4.11.8"
