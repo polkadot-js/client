@@ -23,15 +23,13 @@ module.exports = function cli (params?: string): ConfigType {
   return Object
     .keys(argv)
     .reduce((config, key) => {
-      const sepIndex = key.indexOf('-');
-
-      if (/^(db|p2p|rpc|wasm)-/.test(key)) {
-        const section = key.substr(0, sepIndex);
+      if (/^(db|dev|p2p|rpc|wasm)-/.test(key)) {
+        const section = key.substr(0, key.indexOf('-'));
         const name = keyToCamel(key, 1);
 
         config[section] = config[section] || {};
         config[section][name] = argv[key];
-      } else if (!/^(db|p2p|rpc|wasm)[A-Z]/.test(key)) {
+      } else if (!/^(db|dev|p2p|rpc|wasm)[A-Z]/.test(key)) {
         const name = keyToCamel(key);
 
         config[name] = argv[key];

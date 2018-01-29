@@ -9,7 +9,7 @@ const allRoles = require('@polkadot/primitives/role/all');
 const chains = require('@polkadot/client-chains/chains');
 const chainDefaults = require('@polkadot/client-chains/defaults');
 
-const clientId = require('../../clientId');
+const { clientId } = require('../../clientId');
 
 const allChains = Object.keys(chains).map((chain) => `'${chain}'`);
 
