@@ -30,6 +30,12 @@ export type RuntimeEnv = {
   storage: DbInterface
 };
 
+export type RuntimeInterface$Crypto = {
+  blake2_256: (data: PointerType, len: number, out: PointerType) => void,
+  twox_128: (data: PointerType, len: number, out: PointerType) => void,
+  twox_256: (data: PointerType, len: number, out: PointerType) => void
+}
+
 export type RuntimeInterface$Io = {
   print: (ptr: PointerType, length: number) => void,
   print_num: (num: number) => void
@@ -48,6 +54,7 @@ export type RuntimeInterface$Storage = {
 }
 
 export type RuntimeInterface = {
+  crypto: RuntimeInterface$Crypto,
   io: RuntimeInterface$Io,
   memory: RuntimeInterface$Memory,
   storage: RuntimeInterface$Storage
