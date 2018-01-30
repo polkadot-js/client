@@ -139,6 +139,16 @@
     "@polkadot/util" "^0.13.1"
     babel-runtime "^6.26.0"
 
+"@polkadot/util-crypto@^0.13.4":
+  version "0.13.4"
+  resolved "https://registry.yarnpkg.com/@polkadot/util-crypto/-/util-crypto-0.13.4.tgz#76ece4da39b72bd2f3aa0f69b9b6fd21b6ba28ac"
+  dependencies:
+    babel-runtime "^6.26.0"
+    blakejs "^1.1.0"
+    keccak "^1.3.0"
+    tweetnacl "^1.0.0"
+    xxhashjs "^0.2.2"
+
 "@polkadot/util@^0.13.1":
   version "0.13.1"
   resolved "https://registry.yarnpkg.com/@polkadot/util/-/util-0.13.1.tgz#17373a04e8310f2a06ffcf3e4cc7b47eb7693be8"
@@ -148,9 +158,9 @@
     deasync "^0.1.12"
     ip-regex "^2.1.0"
 
-"@polkadot/util@^0.13.2":
-  version "0.13.2"
-  resolved "https://registry.yarnpkg.com/@polkadot/util/-/util-0.13.2.tgz#0969295aed0b5c171c7f104ee450dcad8eef6edc"
+"@polkadot/util@^0.13.4":
+  version "0.13.4"
+  resolved "https://registry.yarnpkg.com/@polkadot/util/-/util-0.13.4.tgz#d0c3b484191c64dcd25f363435b3439e0f85d559"
   dependencies:
     babel-runtime "^6.26.0"
     bn.js "^4.11.8"
@@ -1767,6 +1777,10 @@ cssom@0.3.x, "cssom@>= 0.3.2 < 0.4.0":
   resolved "https://registry.yarnpkg.com/cssstyle/-/cssstyle-0.2.37.tgz#541097234cb2513c83ceed3acddc27ff27987d54"
   dependencies:
     cssom "0.3.x"
+
+cuint@^0.2.2:
+  version "0.2.2"
+  resolved "https://registry.yarnpkg.com/cuint/-/cuint-0.2.2.tgz#408086d409550c2631155619e9fa7bcadc3b991b"
 
 currently-unhandled@^0.4.1:
   version "0.4.1"
@@ -3811,7 +3825,7 @@ k-bucket@^3.3.0:
     inherits "^2.0.1"
     randombytes "^2.0.3"
 
-keccak@^1.0.2:
+keccak@^1.0.2, keccak@^1.3.0:
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/keccak/-/keccak-1.4.0.tgz#572f8a6dbee8e7b3aa421550f9e6408ca2186f80"
   dependencies:
@@ -6833,6 +6847,12 @@ xtend@~2.1.1:
   resolved "https://registry.yarnpkg.com/xtend/-/xtend-2.1.2.tgz#6efecc2a4dad8e6962c4901b337ce7ba87b5d28b"
   dependencies:
     object-keys "~0.4.0"
+
+xxhashjs@^0.2.2:
+  version "0.2.2"
+  resolved "https://registry.yarnpkg.com/xxhashjs/-/xxhashjs-0.2.2.tgz#8a6251567621a1c46a5ae204da0249c7f8caa9d8"
+  dependencies:
+    cuint "^0.2.2"
 
 y18n@^3.2.1:
   version "3.2.1"
