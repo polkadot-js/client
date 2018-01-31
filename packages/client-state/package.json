@@ -30,7 +30,7 @@
   },
   "dependencies": {
     "@polkadot/primitives": "^0.4.10",
-    "@polkadot/util": "^0.13.5",
+    "@polkadot/util": "^0.13.6",
     "babel-runtime": "^6.26.0"
   },
   "devDependencies": {
