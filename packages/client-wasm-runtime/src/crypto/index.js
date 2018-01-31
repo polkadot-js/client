@@ -14,15 +14,15 @@ module.exports = function crypto ({ heap }: RuntimeEnv): RuntimeInterface$Crypto
   return {
     blake2_256: (data: PointerType, len: number, out: PointerType): void =>
       heap.set(out, blake256(heap.get(data, len))),
-    twox_128: (data: PointerType, len: number, out: PointerType): void =>
-      heap.set(out, twox128(heap.get(data, len))),
-    twox_256: (data: PointerType, len: number, out: PointerType): void =>
-      heap.set(out, twox256(heap.get(data, len))),
     ed25519_verify: (msgPtr: PointerType, msgLen: number, sigPtr: PointerType, pubkeyPtr: PointerType): number =>
       ed25519Verify(
         heap.get(msgPtr, msgLen),
         heap.get(sigPtr, 64),
         heap.get(pubkeyPtr, 32)
-      )
+      ),
+    twox_128: (data: PointerType, len: number, out: PointerType): void =>
+      heap.set(out, twox128(heap.get(data, len))),
+    twox_256: (data: PointerType, len: number, out: PointerType): void =>
+      heap.set(out, twox256(heap.get(data, len)))
   };
 };

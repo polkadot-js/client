@@ -32,6 +32,7 @@ export type RuntimeEnv = {
 
 export type RuntimeInterface$Crypto = {
   blake2_256: (data: PointerType, len: number, out: PointerType) => void,
+  ed25519_verify: (msgPtr: PointerType, msgLen: number, sigPtr: PointerType, pubkeyPtr: PointerType) => number,
   twox_128: (data: PointerType, len: number, out: PointerType) => void,
   twox_256: (data: PointerType, len: number, out: PointerType) => void
 }
