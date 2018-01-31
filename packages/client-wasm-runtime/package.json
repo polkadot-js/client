@@ -1,6 +1,6 @@
 {
   "name": "@polkadot/client-wasm-runtime",
-  "version": "0.7.10",
+  "version": "0.7.11",
   "description": "Basic libc-compatible interace for WASM programs",
   "main": "index.js",
   "engines": {
