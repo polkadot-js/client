@@ -6,7 +6,6 @@
 import type { ChainConfigType$Params } from '../types';
 
 const assert = require('@polkadot/util/assert');
-const isHex = require('@polkadot/util/is/hex');
 
 const validateObject = require('./object');
 
@@ -16,7 +15,7 @@ const PREFIX = 'Chain.params';
 module.exports = function validateParams (params: ChainConfigType$Params, strict: boolean = false): boolean {
   validateObject(PREFIX, params, KNOWN_KEYS, strict);
 
-  assert(isHex(params.networkId), `${PREFIX}.networkId should be a Hex`);
+  assert(Number.isInteger(params.networkId), `${PREFIX}.networkId should be an integer`);
 
   return true;
 };

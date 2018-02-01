@@ -3,6 +3,7 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
+import type { ChainConfigType } from '@polkadot/client-chains/types';
 import type { DbInterface } from '@polkadot/client-db/types';
 import type { Logger } from '@polkadot/util/types';
 
@@ -25,10 +26,15 @@ export type RuntimeEnv$Heap = {
 };
 
 export type RuntimeEnv = {
+  chain: ChainConfigType,
   heap: RuntimeEnv$Heap,
   l: Logger,
   storage: DbInterface
 };
+
+export type RuntimeInterface$Chain = {
+  chain_id: () => number
+}
 
 export type RuntimeInterface$Crypto = {
   blake2_256: (data: PointerType, len: number, out: PointerType) => void,
@@ -55,6 +61,7 @@ export type RuntimeInterface$Storage = {
 }
 
 export type RuntimeInterface = {
+  chain: RuntimeInterface$Chain,
   crypto: RuntimeInterface$Crypto,
   io: RuntimeInterface$Io,
   memory: RuntimeInterface$Memory,

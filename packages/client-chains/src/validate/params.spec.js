@@ -3,7 +3,7 @@
 // of the ISC license. See the LICENSE file for details.
 
 const test = {
-  networkId: '0x1f'
+  networkId: 123
 };
 
 describe('validateParams', () => {
@@ -36,11 +36,11 @@ describe('validateParams', () => {
     expect(mockValidateObject).toHaveBeenCalledWith('Chain.params', test, validateParams.KNOWN_KEYS, true);
   });
 
-  it('validates networkId as hex', () => {
+  it('validates networkId as integer number', () => {
     expect(
       () => validateParams(
-        Object.assign({}, test, { networkId: 123 })
+        Object.assign({}, test, { networkId: 123.123 })
       )
-    ).toThrow(/networkId should be a Hex/);
+    ).toThrow(/networkId should be an integer/);
   });
 });

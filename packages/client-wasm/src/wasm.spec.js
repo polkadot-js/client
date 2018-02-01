@@ -11,7 +11,7 @@ describe('wasm', () => {
   describe('valid modules', () => {
     beforeEach(() => {
       instance = wasm(
-        { wasm: {} }, {},
+        { wasm: {} }, {}, {},
         loadWasm('addTwo.wasm')
       );
     });
@@ -30,7 +30,7 @@ describe('wasm', () => {
     beforeEach(() => {
       callback = jest.fn();
       instance = wasm(
-        { wasm: {} }, {},
+        { wasm: {} }, {}, {},
         loadWasm('import.wasm'),
         { js: { callback } }
       );
@@ -49,7 +49,7 @@ describe('wasm', () => {
     beforeEach(() => {
       callback = jest.fn();
       instance = wasm(
-        { wasm: {} }, {},
+        { wasm: {} }, {}, {},
         loadWasm('start.wasm'),
         { js: { callback } }
       );

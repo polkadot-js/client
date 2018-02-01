@@ -10,7 +10,7 @@ module.exports = ({
   description: 'An initial @polkadot/client test network. Will be deprecated once the @polkadot/client aligns with the official implementations in terms of networking and features.',
   nodes: [],
   params: {
-    networkId: '0x6f'
+    networkId: 111
   },
   genesis: {
     author: '0x0000000000000000000000000000000000000000',
