@@ -13,11 +13,12 @@ const crypto = require('./crypto');
 const io = require('./io');
 const memory = require('./memory');
 const storage = require('./storage');
+const trie = require('./trie');
 
 module.exports = function runtime (wasmMemory: WebAssembly.Memory, chainInstance: ChainConfigType, dbInstance: DbInterface): RuntimeExports {
   const env = createEnv(wasmMemory, chainInstance, dbInstance);
   const exports = Object.assign(
-    {}, chain(env), crypto(env), io(env), memory(env), storage(env)
+    {}, chain(env), crypto(env), io(env), memory(env), storage(env), trie(env)
   );
 
   return Object

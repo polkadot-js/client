@@ -60,13 +60,18 @@ export type RuntimeInterface$Storage = {
   set_storage: (keyPtr: PointerType, keyLength: number, dataPtr: PointerType, dataLength: number) => void
 }
 
-export type RuntimeInterface = {
-  chain: RuntimeInterface$Chain,
-  crypto: RuntimeInterface$Crypto,
-  io: RuntimeInterface$Io,
-  memory: RuntimeInterface$Memory,
-  storage: RuntimeInterface$Storage
-};
+export type RuntimeInterface$Trie = {
+  enumerated_trie_root: () => void
+}
+
+// export type RuntimeInterface = {
+//   chain: RuntimeInterface$Chain,
+//   crypto: RuntimeInterface$Crypto,
+//   io: RuntimeInterface$Io,
+//   memory: RuntimeInterface$Memory,
+//   storage: RuntimeInterface$Storage,
+//   trie: RuntimeInterface$Trie
+// };
 
 export type RuntimeExports = {
   // flowlint-next-line unclear-type:off
