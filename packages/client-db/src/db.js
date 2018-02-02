@@ -39,4 +39,8 @@ module.exports = class DB implements DbInterface {
 
     return value;
   }
+
+  getRoot (): Buffer {
+    return this._trie.root;
+  }
 };

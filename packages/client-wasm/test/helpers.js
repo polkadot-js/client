@@ -21,7 +21,7 @@ function loadWasmTest (filename) {
 
 function loadWasmExt (filename) {
   return loadWasm(
-    path.join(__dirname, '../../../node_modules/@polkadot/wasm-bin/target/wasm32-unknown-unknown/release', filename)
+    path.join(__dirname, '../../../node_modules/@polkadot/wasm-bin/wasm32-unknown-unknown', filename)
   );
 }
 
