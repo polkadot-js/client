@@ -8,8 +8,10 @@ import type { RuntimeEnv, RuntimeInterface$Storage, PointerType } from '../types
 const get = require('./get');
 const set = require('./set');
 
-module.exports = function storage ({ heap, storage }: RuntimeEnv): RuntimeInterface$Storage {
+module.exports = function storage ({ heap, l, storage }: RuntimeEnv): RuntimeInterface$Storage {
   return {
+    enumerated_trie_root: () => l.error('enumerated_trie_root not implemented'),
+    storage_root: () => l.error('storage_root not implemented'),
     get_storage_into: (keyPtr: PointerType, keyLength: number, dataPtr: PointerType, dataLength: number): number => {
       const data = get(storage, heap.get(keyPtr, keyLength), dataLength);
 
