@@ -167,6 +167,10 @@
     deasync "^0.1.12"
     ip-regex "^2.1.0"
 
+"@polkadot/wasm-bin@jacogr/test-bin":
+  version "20180202.103114"
+  resolved "https://codeload.github.com/jacogr/test-bin/tar.gz/93e75ed72044336ca036125744d635f99d09cf22"
+
 "@types/node@*":
   version "8.5.2"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-8.5.2.tgz#83b8103fa9a2c2e83d78f701a9aa7c9539739aa5"

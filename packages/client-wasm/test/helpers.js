@@ -9,12 +9,23 @@ const bufferToU8a = require('@polkadot/util/buffer/toU8a');
 
 function loadWasm (filename) {
   return bufferToU8a(
-    fs.readFileSync(
-      path.join(__dirname, 'wasm', filename)
-    )
+    fs.readFileSync(filename)
+  );
+}
+
+function loadWasmTest (filename) {
+  return loadWasm(
+    path.join(__dirname, 'wasm', filename)
+  );
+}
+
+function loadWasmExt (filename) {
+  return loadWasm(
+    path.join(__dirname, '../../../node_modules/@polkadot/wasm-bin/target/wasm32-unknown-unknown/release', filename)
   );
 }
 
 module.exports = {
-  loadWasm
+  loadWasmExt,
+  loadWasmTest
 };
