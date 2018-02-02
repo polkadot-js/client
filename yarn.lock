@@ -139,9 +139,9 @@
     "@polkadot/util" "^0.13.1"
     babel-runtime "^6.26.0"
 
-"@polkadot/util-crypto@^0.13.6":
-  version "0.13.6"
-  resolved "https://registry.yarnpkg.com/@polkadot/util-crypto/-/util-crypto-0.13.6.tgz#f9bae48fa51f5053223edff59c1dd9e940db2ab7"
+"@polkadot/util-crypto@^0.13.8":
+  version "0.13.8"
+  resolved "https://registry.yarnpkg.com/@polkadot/util-crypto/-/util-crypto-0.13.8.tgz#37263a4ac176739843847d59b19671c6d3b3d540"
   dependencies:
     babel-runtime "^6.26.0"
     blakejs "^1.1.0"
@@ -158,18 +158,18 @@
     deasync "^0.1.12"
     ip-regex "^2.1.0"
 
-"@polkadot/util@^0.13.6":
-  version "0.13.6"
-  resolved "https://registry.yarnpkg.com/@polkadot/util/-/util-0.13.6.tgz#3924fe7beb4bc1e58b04cbf51b5b208d526675ae"
+"@polkadot/util@^0.13.8":
+  version "0.13.8"
+  resolved "https://registry.yarnpkg.com/@polkadot/util/-/util-0.13.8.tgz#930b9b314b9b64b2f73ef6f0daee53aa81396877"
   dependencies:
     babel-runtime "^6.26.0"
     bn.js "^4.11.8"
     deasync "^0.1.12"
     ip-regex "^2.1.0"
 
-"@polkadot/wasm-bin@jacogr/test-bin":
-  version "20180202.103114"
-  resolved "https://codeload.github.com/jacogr/test-bin/tar.gz/93e75ed72044336ca036125744d635f99d09cf22"
+"@polkadot/wasm-bin@jacogr/test-bin#dad9a13e093298cb99aea2b0dd4cafb91dc6dba3":
+  version "0.0.0"
+  resolved "https://codeload.github.com/jacogr/test-bin/tar.gz/dad9a13e093298cb99aea2b0dd4cafb91dc6dba3"
 
 "@types/node@*":
   version "8.5.2"
