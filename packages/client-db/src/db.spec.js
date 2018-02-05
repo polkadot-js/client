@@ -75,12 +75,4 @@ describe('DB', () => {
       });
     });
   });
-
-  describe('getRoot', () => {
-    it('retrieves a valid root', () => {
-      expect(
-        db.getRoot()
-      ).toHaveLength(32);
-    });
-  });
 });
