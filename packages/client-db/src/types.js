@@ -26,9 +26,9 @@ export type Db$Pair = {
 export type Db$Pairs = Array<Db$Pair>;
 
 export type BaseDbInterface = {
+  commit (values?: Db$Pairs): void,
   del (key: Uint8Array): void,
   get (key: Uint8Array): Uint8Array,
   pairs: () => Db$Pairs,
-  set (key: Uint8Array, value: Uint8Array): void,
-  update (values: Db$Pairs): void
+  set (key: Uint8Array, value: Uint8Array): void
 }

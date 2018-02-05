@@ -8,8 +8,8 @@ import type { Memory$Storage } from '../memory/types';
 
 const pairs = require('./pairs');
 
-module.exports = function update (pending: Memory$Storage, backend: BaseDbInterface, values: Db$Pairs): void {
-  backend.update(
+module.exports = function commit (pending: Memory$Storage, backend: BaseDbInterface, values: Db$Pairs): void {
+  backend.commit(
     pairs(pending).concat(values)
   );
 };

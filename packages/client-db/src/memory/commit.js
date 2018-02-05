@@ -9,7 +9,7 @@ import type { Memory$Storage } from './types';
 const del = require('./del');
 const set = require('./set');
 
-module.exports = function update (storage: Memory$Storage, values: Db$Pairs): void {
+module.exports = function commit (storage: Memory$Storage, values: Db$Pairs): void {
   values.forEach(({ key, value }) => {
     if (value && value.length) {
       set(storage, key, value);
