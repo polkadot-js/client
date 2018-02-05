@@ -35,7 +35,7 @@
   "dependencies": {
     "@polkadot/client-wasm-runtime": "^0.7.11",
     "@polkadot/util": "^0.13.8",
-    "@polkadot/wasm-bin": "jacogr/test-bin#dbe1eedf364ba3b8bd680e0993285566d2df96c5",
+    "@polkadot/wasm-bin": "paritytech/polkadot-wasm-bin#b64976ce263d42f35e873f4f340adb4be429b443",
     "babel-runtime": "^6.26.0"
   }
 }
