@@ -10,12 +10,13 @@ import type { RuntimeEnv } from '../types';
 const l = require('@polkadot/util/logger')('runtime');
 
 const envHeap = require('./heap');
+const envStorage = require('./storage');
 
-module.exports = function environment (memory: WebAssembly.Memory, chain: ChainConfigType, storage: DbInterface): RuntimeEnv {
+module.exports = function environment (memory: WebAssembly.Memory, chain: ChainConfigType, db: DbInterface): RuntimeEnv {
   return {
     l,
     chain,
-    storage,
+    storage: envStorage(db),
     heap: envHeap(memory)
   };
 };

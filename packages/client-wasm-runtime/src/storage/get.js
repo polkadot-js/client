@@ -3,19 +3,13 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { DbInterface } from '@polkadot/client-db/types';
+import type { RuntimeEnv$Storage } from '../types';
 
-const syncify = require('@polkadot/util/syncify');
-const bufferToU8a = require('@polkadot/util/buffer/toU8a');
-const u8aToUtf8 = require('@polkadot/util/u8a/toUtf8');
+const u8aToHex = require('@polkadot/util/u8a/toHex');
 
-module.exports = function get (storage: DbInterface, key: Uint8Array, maxLength: number): Uint8Array {
-  const data = bufferToU8a(
-    syncify(
-      storage.get(
-        u8aToUtf8(key)
-      )
-    )
+module.exports = function get (storage: RuntimeEnv$Storage, key: Uint8Array, maxLength: number): Uint8Array {
+  const data = storage.get(
+    u8aToHex(key)
   );
   const dataLength = data.length < maxLength
     ? data.length

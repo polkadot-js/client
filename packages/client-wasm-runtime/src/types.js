@@ -4,7 +4,6 @@
 // @flow
 
 import type { ChainConfigType } from '@polkadot/client-chains/types';
-import type { DbInterface } from '@polkadot/client-db/types';
 import type { Logger } from '@polkadot/util/types';
 
 export type PointerType = number;
@@ -25,11 +24,17 @@ export type RuntimeEnv$Heap = {
   set: (ptr: PointerType, data: Uint8Array) => void
 };
 
+export type RuntimeEnv$Storage = {
+  keys: () => Array<string>,
+  get: (key: string) => Uint8Array,
+  set: (key: string, value: Uint8Array) => Uint8Array
+};
+
 export type RuntimeEnv = {
   chain: ChainConfigType,
   heap: RuntimeEnv$Heap,
   l: Logger,
-  storage: DbInterface
+  storage: RuntimeEnv$Storage
 };
 
 export type RuntimeInterface$Chain = {
