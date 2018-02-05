@@ -17,3 +17,18 @@ export interface DbInterface {
   get (key: string): Promise<Buffer>,
   put (key: string, value: Buffer | string): Promise<Buffer | string>
 }
+
+export type Db$Pair = {
+  key: Uint8Array,
+  value: Uint8Array
+};
+
+export type Db$Pairs = Array<Db$Pair>;
+
+export type BaseDbInterface = {
+  del (key: Uint8Array): void,
+  get (key: Uint8Array): Uint8Array,
+  pairs: () => Db$Pairs,
+  set (key: Uint8Array, value: Uint8Array): void,
+  update (values: Db$Pairs): void
+}
