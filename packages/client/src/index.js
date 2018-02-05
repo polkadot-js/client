@@ -15,10 +15,7 @@ const createP2p = require('./create/p2p');
 const createState = require('./create/state');
 
 (async function main (): Promise<void> {
-  const verNpm = await clientId.getNpmVersion();
-  const verStatus = verNpm === clientId.version
-    ? 'up to date'
-    : `outdated, ${verNpm} available`;
+  const verStatus = await clientId.getNpmStatus();
 
   l.log(`Running version ${clientId.version} (${verStatus})`);
   l.log(`Initialising for roles=${config.roles.join(',')} on chain=${config.chain}`);

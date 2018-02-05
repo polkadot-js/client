@@ -38,4 +38,36 @@ describe('clientId', () => {
       });
     });
   });
+
+  describe('getNpmStatus', () => {
+    it('handles errors, returning unknown', () => {
+      npmJson.mockImplementation(() => {
+        return Promise.reject(new Error('some error'));
+      });
+
+      return clientId.getNpmStatus().then((version) => {
+        expect(version).toEqual('cannot retrieve from npmjs.org');
+      });
+    });
+
+    it('returns up-to-date when matching', () => {
+      npmJson.mockImplementation(() => {
+        return Promise.resolve({ version: clientId.version });
+      });
+
+      return clientId.getNpmStatus().then((version) => {
+        expect(version).toEqual('up to date');
+      });
+    });
+
+    it('queries the registry, returning latest', () => {
+      npmJson.mockImplementation(() => {
+        return Promise.resolve({ version: 'test' });
+      });
+
+      return clientId.getNpmStatus().then((version) => {
+        expect(version).toEqual('outdated, test available');
+      });
+    });
+  });
 });

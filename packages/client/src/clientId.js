@@ -33,9 +33,24 @@ async function getNpmVersion (): Promise<string> {
     .catch(() => 'unknown');
 }
 
+async function getNpmStatus (): Promimse<string> {
+  const verNpm = await getNpmVersion();
+
+  if (verNpm === pkgJson.version) {
+    return 'up to date';
+  }
+
+  if (verNpm === 'unknown') {
+    return 'cannot retrieve from npmjs.org';
+  }
+
+  return `outdated, ${verNpm} available`;
+}
+
 module.exports = {
   clientId: `${name}/${pkgJson.version}-${stability}`,
   isDevelopment,
+  getNpmStatus,
   getNpmVersion,
   name,
   stability,
