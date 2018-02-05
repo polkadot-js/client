@@ -11,7 +11,8 @@ describe('wasm', () => {
   describe('valid modules', () => {
     beforeEach(() => {
       instance = wasm(
-        { wasm: {} }, {}, {},
+        { wasm: {} },
+        { chain: {}, db: {} },
         loadWasmTest('addTwo.wasm')
       );
     });
@@ -30,7 +31,8 @@ describe('wasm', () => {
     beforeEach(() => {
       callback = jest.fn();
       instance = wasm(
-        { wasm: {} }, {}, {},
+        { wasm: {} },
+        { chain: {}, db: {} },
         loadWasmTest('import.wasm'),
         { js: { callback } }
       );
@@ -49,7 +51,8 @@ describe('wasm', () => {
     beforeEach(() => {
       callback = jest.fn();
       instance = wasm(
-        { wasm: {} }, {}, {},
+        { wasm: {} },
+        { chain: {}, db: {} },
         loadWasmTest('start.wasm'),
         { js: { callback } }
       );
@@ -63,7 +66,8 @@ describe('wasm', () => {
   describe('runtime modules', () => {
     beforeEach(() => {
       instance = wasm(
-        { wasm: {} }, {}, {},
+        { wasm: {} },
+        { chain: {}, db: {} },
         loadWasmExt('runtime_polkadot.wasm')
       );
     });
