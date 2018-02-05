@@ -33,18 +33,19 @@ async function getNpmVersion (): Promise<string> {
     .catch(() => 'unknown');
 }
 
-async function getNpmStatus (): Promimse<string> {
+async function getNpmStatus (): Promise<string> {
   const verNpm = await getNpmVersion();
 
-  if (verNpm === pkgJson.version) {
-    return 'up to date';
-  }
+  switch (verNpm) {
+    case pkgJson.version:
+      return 'up to date';
 
-  if (verNpm === 'unknown') {
-    return 'cannot retrieve from npmjs.org';
-  }
+    case 'unknown':
+      return 'cannot retrieve from npmjs.org';
 
-  return `outdated, ${verNpm} available`;
+    default:
+      return `outdated, ${verNpm} available`;
+  }
 }
 
 module.exports = {
