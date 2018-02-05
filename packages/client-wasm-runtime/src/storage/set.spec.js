@@ -18,7 +18,7 @@ describe('set_storage', () => {
     };
 
     storage = {
-      put: jest.fn((key, value) => Promise.resolve(true))
+      set: jest.fn((key, value) => value)
     };
 
     set_storage = index({ heap, storage }).set_storage;
@@ -28,7 +28,10 @@ describe('set_storage', () => {
     set_storage(0, 3, 3, 5);
 
     expect(
-      storage.put
-    ).toHaveBeenCalledWith('Say', Buffer.from('Hello'));
+      storage.set
+    ).toHaveBeenCalledWith(
+      '0x536179',
+      new Uint8Array([72, 101, 108, 108, 111])
+    );
   });
 });
