@@ -27,7 +27,7 @@ export type RuntimeEnv$Heap = {
 export type RuntimeEnv$Storage = {
   keys: () => Array<string>,
   get: (key: string) => Uint8Array,
-  set: (key: string, value: Uint8Array) => Uint8Array
+  set: (key: string, value: Uint8Array) => void
 };
 
 export type RuntimeEnv = {

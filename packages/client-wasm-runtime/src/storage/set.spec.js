@@ -18,7 +18,7 @@ describe('set_storage', () => {
     };
 
     storage = {
-      set: jest.fn((key, value) => value)
+      set: jest.fn()
     };
 
     set_storage = index({ heap, storage }).set_storage;
