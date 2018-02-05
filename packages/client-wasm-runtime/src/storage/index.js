@@ -28,7 +28,7 @@ module.exports = function storage ({ heap, storage }: RuntimeEnv): RuntimeInterf
 
       heap.set(
         resultPtr,
-        enumerateRoot(values)
+        enumerateRoot(storage, values, new Uint8Array([]))
       );
     },
     storage_root: (resultPtr: PointerType): void =>

@@ -3,8 +3,10 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { DbInterface } from '@polkadot/client-db/types';
+import type { RuntimeEnv$Storage } from '../types';
 
-module.exports = function enumerateRoot (storage: DbInterface, values: Uint8Array, lens: Uint8Array): Uint8Array {
+module.exports = function enumerateRoot (storage: RuntimeEnv$Storage, values: Array<Uint8Array>, lens: Uint8Array): Uint8Array {
+  console.error('@polkadot/wasm-runtime: enumerated_trie_root not implemented', values, lens);
+
   return new Uint8Array([]);
 };

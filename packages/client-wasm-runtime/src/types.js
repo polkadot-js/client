@@ -21,7 +21,9 @@ export type RuntimeEnv$Heap = {
 
   dup: (ptr: PointerType, length: number) => Uint8Array,
   get: (ptr: PointerType, length: number) => Uint8Array,
-  set: (ptr: PointerType, data: Uint8Array) => void
+  getLU32: (ptr: PointerType) => number,
+  set: (ptr: PointerType, data: Uint8Array) => void,
+  setLU32: (ptr: PointerType, value: number) => void,
 };
 
 export type RuntimeEnv$Storage = {
@@ -49,7 +51,8 @@ export type RuntimeInterface$Crypto = {
 }
 
 export type RuntimeInterface$Io = {
-  print: (ptr: PointerType, length: number) => void,
+  print_hex: (ptr: PointerType, len: number) => void,
+  print_utf8: (ptr: PointerType, len: number) => void,
   print_num: (num: number) => void
 }
 

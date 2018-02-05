@@ -3,12 +3,10 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { DbInterface } from '@polkadot/client-db/types';
+import type { RuntimeEnv$Storage } from '../types';
 
-const bufferToU8a = require('@polkadot/util/buffer/toU8a');
+module.exports = function root (storage: RuntimeEnv$Storage): Uint8Array {
+  console.error('@polkadot/wasm-runtime: storage_root not implemented');
 
-module.exports = function root (storage: DbInterface): Uint8Array {
-  return bufferToU8a(
-    storage.getRoot()
-  );
+  return new Uint8Array([]);
 };
