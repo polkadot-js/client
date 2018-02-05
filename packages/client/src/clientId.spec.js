@@ -18,13 +18,13 @@ describe('clientId', () => {
   });
 
   describe('getNpmVersion', () => {
-    it('handles errors, returning current', () => {
+    it('handles errors, returning unknown', () => {
       npmJson.mockImplementation(() => {
         return Promise.reject(new Error('some error'));
       });
 
       return clientId.getNpmVersion().then((version) => {
-        expect(version).toEqual(clientId.version);
+        expect(version).toEqual('unknown');
       });
     });
 

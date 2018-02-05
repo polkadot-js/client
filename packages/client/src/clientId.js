@@ -30,7 +30,7 @@ const isDevelopment = stability === DEVELOPMENT;
 async function getNpmVersion (): Promise<string> {
   return npmQuery(pkgJson.name)
     .then((npmJson: PackageJsonType) => npmJson.version)
-    .catch(() => pkgJson.version);
+    .catch(() => 'unknown');
 }
 
 module.exports = {
