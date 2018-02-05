@@ -19,9 +19,7 @@ describe('get_storage_into', () => {
     };
 
     storage = {
-      get: jest.fn((key) => Promise.resolve(
-        new Uint8Array([0x1, 0x2, 0x3, 0x4, 0x5]))
-      )
+      get: jest.fn((key) => new Uint8Array([0x1, 0x2, 0x3, 0x4, 0x5]))
     };
 
     get_storage_into = index({ heap, storage }).get_storage_into;
@@ -32,7 +30,7 @@ describe('get_storage_into', () => {
 
     expect(
       storage.get
-    ).toHaveBeenCalledWith('Say');
+    ).toHaveBeenCalledWith('0x536179');
   });
 
   it('retrieves the full value when length >= available', () => {

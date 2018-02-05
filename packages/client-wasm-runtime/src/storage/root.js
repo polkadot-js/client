@@ -5,11 +5,8 @@
 
 import type { RuntimeEnv$Storage } from '../types';
 
-const u8aToHex = require('@polkadot/util/u8a/toHex');
+module.exports = function root (storage: RuntimeEnv$Storage): Uint8Array {
+  console.error('@polkadot/wasm-runtime: storage_root not implemented');
 
-module.exports = function set (storage: RuntimeEnv$Storage, key: Uint8Array, data: Uint8Array): void {
-  storage.set(
-    u8aToHex(key),
-    data
-  );
+  return new Uint8Array([]);
 };

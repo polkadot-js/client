@@ -8,6 +8,7 @@ import type { PointerType, RuntimeEnv, RuntimeInterface$Memory } from '../types'
 const free = require('./free');
 const malloc = require('./malloc');
 const memcpy = require('./memcpy');
+const memcmp = require('./memcmp');
 const memmove = require('./memmove');
 const memset = require('./memset');
 
@@ -19,6 +20,8 @@ module.exports = function memory ({ heap }: RuntimeEnv): RuntimeInterface$Memory
       malloc(heap, size),
     memcpy: (dst: PointerType, src: PointerType, num: number): PointerType =>
       memcpy(heap, dst, src, num),
+    memcmp: (s1: PointerType, s2: PointerType, length: number): number =>
+      memcmp(heap, s1, s2, length),
     memmove: (dst: PointerType, src: PointerType, num: number): PointerType =>
       memmove(heap, dst, src, num),
     memset: (dst: PointerType, val: number, num: number): PointerType =>

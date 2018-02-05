@@ -4,7 +4,7 @@
 
 const isInstanceOf = require('@polkadot/util/is/instanceOf');
 
-const { loadWasm } = require('../../test/helpers');
+const { loadWasmTest } = require('../../test/helpers');
 const { createModule } = require('./index');
 
 describe('createModule', () => {
@@ -13,7 +13,7 @@ describe('createModule', () => {
   let constructSpy;
 
   beforeEach(() => {
-    code = loadWasm('addTwo.wasm');
+    code = loadWasmTest('addTwo.wasm');
     constructSpy = jest.fn();
     origModule = WebAssembly.Module;
 

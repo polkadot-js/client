@@ -2,7 +2,7 @@
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
 
-const { loadWasm } = require('../test/helpers');
+const { loadWasmExt, loadWasmTest } = require('../test/helpers');
 const wasm = require('./wasm');
 
 describe('wasm', () => {
@@ -11,8 +11,9 @@ describe('wasm', () => {
   describe('valid modules', () => {
     beforeEach(() => {
       instance = wasm(
-        { wasm: {} }, {},
-        loadWasm('addTwo.wasm')
+        { wasm: {} },
+        { chain: {}, db: {} },
+        loadWasmTest('addTwo.wasm')
       );
     });
 
@@ -30,8 +31,9 @@ describe('wasm', () => {
     beforeEach(() => {
       callback = jest.fn();
       instance = wasm(
-        { wasm: {} }, {},
-        loadWasm('import.wasm'),
+        { wasm: {} },
+        { chain: {}, db: {} },
+        loadWasmTest('import.wasm'),
         { js: { callback } }
       );
     });
@@ -49,14 +51,31 @@ describe('wasm', () => {
     beforeEach(() => {
       callback = jest.fn();
       instance = wasm(
-        { wasm: {} }, {},
-        loadWasm('start.wasm'),
+        { wasm: {} },
+        { chain: {}, db: {} },
+        loadWasmTest('start.wasm'),
         { js: { callback } }
       );
     });
 
     it('allows imports to be called', () => {
       expect(callback).toHaveBeenCalledWith(1337);
+    });
+  });
+
+  describe('runtime modules', () => {
+    beforeEach(() => {
+      instance = wasm(
+        { wasm: {} },
+        { chain: {}, db: {} },
+        loadWasmExt('runtime_polkadot.wasm')
+      );
+    });
+
+    it('loads the actual runtime', () => {
+      expect(
+        instance.execute_transaction
+      ).toBeDefined();
     });
   });
 });

@@ -30,12 +30,28 @@ const isDevelopment = stability === DEVELOPMENT;
 async function getNpmVersion (): Promise<string> {
   return npmQuery(pkgJson.name)
     .then((npmJson: PackageJsonType) => npmJson.version)
-    .catch(() => pkgJson.version);
+    .catch(() => 'unknown');
+}
+
+async function getNpmStatus (): Promise<string> {
+  const verNpm = await getNpmVersion();
+
+  switch (verNpm) {
+    case pkgJson.version:
+      return 'up to date';
+
+    case 'unknown':
+      return 'cannot retrieve from npmjs.org';
+
+    default:
+      return `outdated, ${verNpm} available`;
+  }
 }
 
 module.exports = {
   clientId: `${name}/${pkgJson.version}-${stability}`,
   isDevelopment,
+  getNpmStatus,
   getNpmVersion,
   name,
   stability,
