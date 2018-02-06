@@ -3,7 +3,8 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { BaseDbInterface, Db$Pairs } from '../types';
+import type { BaseDbInterface } from '../types';
+import type { Trie$Pairs } from '../trie/types';
 import type { Memory$Storage } from './types';
 
 const commit = require('./commit');
@@ -13,18 +14,21 @@ const pairs = require('./pairs');
 const set = require('./set');
 
 module.exports = function memory (): BaseDbInterface {
-  const storage: Memory$Storage = {};
+  let storage: Memory$Storage = {};
 
   return {
-    commit: (values: Db$Pairs = []): void =>
+    clear: (): void => {
+      storage = {};
+    },
+    commit: (values: Trie$Pairs = []): void =>
       commit(storage, values),
-    del: (key: Uint8Array): void =>
-      del(storage, key),
-    get: (key: Uint8Array): Uint8Array =>
-      get(storage, key),
-    pairs: (): Db$Pairs =>
+    del: (k: Uint8Array): void =>
+      del(storage, k),
+    get: (k: Uint8Array): Uint8Array =>
+      get(storage, k),
+    pairs: (): Trie$Pairs =>
       pairs(storage),
-    set: (key: Uint8Array, value: Uint8Array): void =>
-      set(storage, key, value)
+    set: (k: Uint8Array, v: Uint8Array): void =>
+      set(storage, k, v)
   };
 };

@@ -3,18 +3,18 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { Db$Pairs } from '../types';
+import type { Trie$Pairs } from '../trie/types';
 import type { Memory$Storage } from './types';
 
 const del = require('./del');
 const set = require('./set');
 
-module.exports = function commit (storage: Memory$Storage, values: Db$Pairs): void {
-  values.forEach(({ key, value }) => {
-    if (value && value.length) {
-      set(storage, key, value);
+module.exports = function commit (storage: Memory$Storage, values: Trie$Pairs): void {
+  values.forEach(({ k, v }) => {
+    if (v && v.length) {
+      set(storage, k, v);
     } else {
-      del(storage, value);
+      del(storage, v);
     }
   });
 };

@@ -3,7 +3,8 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { BaseDbInterface, Db$Pairs } from '../types';
+import type { BaseDbInterface } from '../types';
+import type { Trie$Pairs } from '../trie/types';
 import type { Memory$Storage } from '../memory/types';
 
 const commit = require('./commit');
@@ -16,17 +17,20 @@ module.exports = function overlay (backend: BaseDbInterface): BaseDbInterface {
   let pending: Memory$Storage = {};
 
   return {
-    commit: (values: Db$Pairs = []): void => {
+    clear: (): void => {
+      pending = {};
+    },
+    commit: (values: Trie$Pairs = []): void => {
       commit(pending, backend, values);
       pending = {};
     },
-    del: (key: Uint8Array): void =>
-      del(pending, backend, key),
-    get: (key: Uint8Array): Uint8Array =>
-      get(pending, backend, key),
-    pairs: (): Db$Pairs =>
+    del: (k: Uint8Array): void =>
+      del(pending, backend, k),
+    get: (k: Uint8Array): Uint8Array =>
+      get(pending, backend, k),
+    pairs: (): Trie$Pairs =>
       pairs(pending, backend),
-    set: (key: Uint8Array, value: Uint8Array): void =>
-      set(pending, backend, key, value)
+    set: (k: Uint8Array, v: Uint8Array): void =>
+      set(pending, backend, k, v)
   };
 };

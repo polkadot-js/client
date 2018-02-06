@@ -3,6 +3,8 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
+import type { Trie$Pairs } from './trie/types';
+
 export type PathPrefixType = 'database';
 
 export type DbConfigType$Type = 'disk' | 'memory';
@@ -18,17 +20,11 @@ export interface DbInterface {
   put (key: string, value: Buffer | string): Promise<Buffer | string>
 }
 
-export type Db$Pair = {
-  key: Uint8Array,
-  value: Uint8Array
-};
-
-export type Db$Pairs = Array<Db$Pair>;
-
 export type BaseDbInterface = {
-  commit (values?: Db$Pairs): void,
+  clear (): void,
+  commit (values?: Trie$Pairs): void,
   del (key: Uint8Array): void,
   get (key: Uint8Array): Uint8Array,
-  pairs: () => Db$Pairs,
+  pairs: () => Trie$Pairs,
   set (key: Uint8Array, value: Uint8Array): void
 }

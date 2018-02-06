@@ -8,9 +8,9 @@ import type { Memory$Storage } from '../memory/types';
 
 const u8aToHex = require('@polkadot/util/u8a/toHex');
 
-module.exports = function set (pending: Memory$Storage, backend: BaseDbInterface, key: Uint8Array, value: Uint8Array): void {
-  pending[u8aToHex(key)] = {
-    key,
-    value
+module.exports = function set (pending: Memory$Storage, backend: BaseDbInterface, k: Uint8Array, v: Uint8Array): void {
+  pending[u8aToHex(k)] = {
+    k,
+    v
   };
 };

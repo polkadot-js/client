@@ -3,8 +3,8 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { Db$Pair } from '../types';
+import type { Trie$Pair } from '../trie/types';
 
 export type Memory$Storage = {
-  [string]: Db$Pair
+  [string]: Trie$Pair
 };

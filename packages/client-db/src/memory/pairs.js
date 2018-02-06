@@ -3,11 +3,11 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { Db$Pairs } from '../types';
+import type { Trie$Pairs } from '../trie/types';
 import type { Memory$Storage } from './types';
 
-module.exports = function pairs (storage: Memory$Storage): Db$Pairs {
+module.exports = function pairs (storage: Memory$Storage): Trie$Pairs {
   return Object
     .keys(storage)
-    .map((key) => storage[key]);
+    .map((k) => storage[k]);
 };

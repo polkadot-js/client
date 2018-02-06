@@ -3,12 +3,13 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { BaseDbInterface, Db$Pairs } from '../types';
+import type { BaseDbInterface } from '../types';
+import type { Trie$Pairs } from '../trie/types';
 import type { Memory$Storage } from '../memory/types';
 
 const pairs = require('./pairs');
 
-module.exports = function commit (pending: Memory$Storage, backend: BaseDbInterface, values: Db$Pairs): void {
+module.exports = function commit (pending: Memory$Storage, backend: BaseDbInterface, values: Trie$Pairs): void {
   backend.commit(
     pairs(pending).concat(values)
   );

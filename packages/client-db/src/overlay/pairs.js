@@ -3,14 +3,15 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { BaseDbInterface, Db$Pairs } from '../types';
+import type { BaseDbInterface } from '../types';
+import type { Trie$Pairs } from '../trie/types';
 import type { Memory$Storage } from '../memory/types';
 
-module.exports = function pairs (pending: Memory$Storage, backend?: BaseDbInterface): Db$Pairs {
+module.exports = function pairs (pending: Memory$Storage, backend?: BaseDbInterface): Trie$Pairs {
   return (backend ? backend.pairs() : [])
     .concat(
       Object
         .keys(pending)
-        .map((key) => pending[key])
+        .map((k) => pending[k])
     );
 };

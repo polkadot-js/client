@@ -7,8 +7,8 @@ import type { Memory$Storage } from './types';
 
 const u8aToHex = require('@polkadot/util/u8a/toHex');
 
-module.exports = function get (storage: Memory$Storage, key: Uint8Array): Uint8Array {
-  return storage[u8aToHex(key)]
-    ? storage[u8aToHex(key)].value
+module.exports = function get (storage: Memory$Storage, k: Uint8Array): Uint8Array {
+  return storage[u8aToHex(k)]
+    ? storage[u8aToHex(k)].v
     : new Uint8Array([]);
 };
