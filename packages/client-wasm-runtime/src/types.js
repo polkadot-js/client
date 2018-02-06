@@ -4,6 +4,7 @@
 // @flow
 
 import type { ChainConfigType } from '@polkadot/client-chains/types';
+import type { BaseDbInterface } from '@polkadot/client-db/types';
 import type { Logger } from '@polkadot/util/types';
 
 export type PointerType = number;
@@ -26,17 +27,11 @@ export type RuntimeEnv$Heap = {
   setLU32: (ptr: PointerType, value: number) => void,
 };
 
-export type RuntimeEnv$Storage = {
-  keys: () => Array<string>,
-  get: (key: string) => Uint8Array,
-  set: (key: string, value: Uint8Array) => void
-};
-
 export type RuntimeEnv = {
   chain: ChainConfigType,
   heap: RuntimeEnv$Heap,
   l: Logger,
-  storage: RuntimeEnv$Storage
+  storage: BaseDbInterface
 };
 
 export type RuntimeInterface$Chain = {
@@ -71,15 +66,6 @@ export type RuntimeInterface$Storage = {
 export type RuntimeInterface$Trie = {
   enumerated_trie_root: () => void
 }
-
-// export type RuntimeInterface = {
-//   chain: RuntimeInterface$Chain,
-//   crypto: RuntimeInterface$Crypto,
-//   io: RuntimeInterface$Io,
-//   memory: RuntimeInterface$Memory,
-//   storage: RuntimeInterface$Storage,
-//   trie: RuntimeInterface$Trie
-// };
 
 export type RuntimeExports = {
   // flowlint-next-line unclear-type:off

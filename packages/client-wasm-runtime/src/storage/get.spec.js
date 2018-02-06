@@ -30,7 +30,9 @@ describe('get_storage_into', () => {
 
     expect(
       storage.get
-    ).toHaveBeenCalledWith('0x536179');
+    ).toHaveBeenCalledWith(
+      new Uint8Array([0x53, 0x61, 0x79])
+    );
   });
 
   it('retrieves the full value when length >= available', () => {

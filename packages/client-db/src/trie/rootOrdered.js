@@ -9,7 +9,7 @@ const asNibbles = require('./util/asNibbles');
 const genRoot = require('./util/genRoot');
 const pairsUniq = require('./util/pairsUniq');
 
-module.exports = function trieRootOrdered (values: Array<Uint8Array>): string {
+module.exports = function trieRootOrdered (values: Array<Uint8Array>): Uint8Array {
   return genRoot(
     pairsUniq(
       values.map((v, index) => ({

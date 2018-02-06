@@ -3,9 +3,9 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { BaseDbInterface } from '../types';
-import type { Trie$Pairs } from '../trie/types';
-import type { Memory$Storage } from '../memory/types';
+import type { BaseDbInterface } from '@polkadot/client-db/types';
+import type { Trie$Pairs } from '@polkadot/client-db/trie/types';
+import type { Memory$Storage } from '@polkadot/client-db/memory/types';
 
 const commit = require('./commit');
 const del = require('./del');
@@ -13,7 +13,7 @@ const get = require('./get');
 const pairs = require('./pairs');
 const set = require('./set');
 
-module.exports = function overlay (backend: BaseDbInterface): BaseDbInterface {
+module.exports = function envStorage (backend: BaseDbInterface): BaseDbInterface {
   let pending: Memory$Storage = {};
 
   return {

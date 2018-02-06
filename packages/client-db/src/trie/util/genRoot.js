@@ -5,16 +5,19 @@
 
 import type { Trie$Pairs } from '../types';
 
-const keccakAsHex = require('@polkadot/util-crypto/keccak/asHex');
+const bufferToU8a = require('@polkadot/util/buffer/toU8a');
+const keccakAsBuffer = require('@polkadot/util-crypto/keccak/asBuffer');
 const rlp = require('rlp');
 
 const encode = require('./encode');
 
 module.exports = function genRoot (pairs: Trie$Pairs): string {
-  return keccakAsHex(
-    rlp.encode(
-      // $FlowFixMe rlp definition is not 100%
-      encode(pairs, 0)
+  return bufferToU8a(
+    keccakAsBuffer(
+      rlp.encode(
+        // $FlowFixMe rlp definition is not 100%
+        encode(pairs, 0)
+      )
     )
   );
 };

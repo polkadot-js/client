@@ -5,12 +5,8 @@
 
 import type { RuntimeEnv$Storage } from '../types';
 
-const u8aToHex = require('@polkadot/util/u8a/toHex');
-
 module.exports = function get (storage: RuntimeEnv$Storage, key: Uint8Array, maxLength: number): Uint8Array {
-  const data = storage.get(
-    u8aToHex(key)
-  );
+  const data = storage.get(key);
   const dataLength = data.length < maxLength
     ? data.length
     : maxLength;

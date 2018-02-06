@@ -3,6 +3,7 @@
 // of the ISC license. See the LICENSE file for details.
 
 const u8aFromString = require('@polkadot/util/u8a/fromString');
+const hexToU8a = require('@polkadot/util/hex/toU8a');
 
 const { trieRoot } = require('./index');
 
@@ -11,7 +12,9 @@ describe('trieRoot', () => {
     expect(
       trieRoot([])
     ).toEqual(
-      '0x1dcc4de8dec75d7aab85b567b6ccd41ad312451b948a7413f0a142fd40d49347'
+      hexToU8a(
+        '0x1dcc4de8dec75d7aab85b567b6ccd41ad312451b948a7413f0a142fd40d49347'
+      )
     );
   });
 
@@ -23,7 +26,9 @@ describe('trieRoot', () => {
         v: u8aFromString('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
       }])
     ).toEqual(
-      '0xd23786fb4a010da3ce639d66d5e904a11dbc02746d1ce25029e53290cabf28ab'
+      hexToU8a(
+        '0xd23786fb4a010da3ce639d66d5e904a11dbc02746d1ce25029e53290cabf28ab'
+      )
     );
   });
 
@@ -34,7 +39,9 @@ describe('trieRoot', () => {
         { k: u8aFromString('B'), v: u8aFromString('bbbb') }
       ])
     ).toEqual(
-      '0x59262fe132edbc936eeeec3450ab442c81dcbc6168fb558c61e7a8cc883108e3'
+      hexToU8a(
+        '0x59262fe132edbc936eeeec3450ab442c81dcbc6168fb558c61e7a8cc883108e3'
+      )
     );
   });
 
@@ -56,7 +63,9 @@ describe('trieRoot', () => {
         }
       ])
     ).toEqual(
-      '0x8aad789dff2f538bca5d8ea56e8abe10f4c7ba3a5dea95fea4cd6e7c3a1168d3'
+      hexToU8a(
+        '0x8aad789dff2f538bca5d8ea56e8abe10f4c7ba3a5dea95fea4cd6e7c3a1168d3'
+      )
     );
   });
 

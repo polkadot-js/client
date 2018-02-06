@@ -5,8 +5,10 @@
 
 import type { RuntimeEnv$Storage } from '../types';
 
-module.exports = function root (storage: RuntimeEnv$Storage): Uint8Array {
-  console.error('@polkadot/wasm-runtime: storage_root not implemented');
+const trieRoot = require('@polkadot/client-db/trie/root');
 
-  return new Uint8Array([]);
+module.exports = function root (storage: RuntimeEnv$Storage): Uint8Array {
+  return trieRoot(
+    storage.pairs()
+  );
 };

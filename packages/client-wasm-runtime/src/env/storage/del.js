@@ -3,8 +3,8 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { BaseDbInterface } from '../types';
-import type { Memory$Storage } from '../memory/types';
+import type { BaseDbInterface } from '@polkadot/client-db/types';
+import type { Memory$Storage } from '@polkadot/client-db/memory/types';
 
 const u8aToHex = require('@polkadot/util/u8a/toHex');
 

@@ -30,7 +30,7 @@ describe('set_storage', () => {
     expect(
       storage.set
     ).toHaveBeenCalledWith(
-      '0x536179',
+      new Uint8Array([0x53, 0x61, 0x79]),
       new Uint8Array([72, 101, 108, 108, 111])
     );
   });

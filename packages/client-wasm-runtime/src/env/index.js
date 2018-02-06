@@ -4,7 +4,7 @@
 // @flow
 
 import type { ChainConfigType } from '@polkadot/client-chains/types';
-import type { DbInterface } from '@polkadot/client-db/types';
+import type { BaseDbInterface } from '@polkadot/client-db/types';
 import type { RuntimeEnv } from '../types';
 
 const l = require('@polkadot/util/logger')('runtime');
@@ -12,7 +12,7 @@ const l = require('@polkadot/util/logger')('runtime');
 const envHeap = require('./heap');
 const envStorage = require('./storage');
 
-module.exports = function environment (memory: WebAssembly.Memory, chain: ChainConfigType, db: DbInterface): RuntimeEnv {
+module.exports = function environment (memory: WebAssembly.Memory, chain: ChainConfigType, db: BaseDbInterface): RuntimeEnv {
   return {
     l,
     chain,
