@@ -139,9 +139,9 @@
     "@polkadot/util" "^0.13.1"
     babel-runtime "^6.26.0"
 
-"@polkadot/util-crypto@^0.13.8":
-  version "0.13.8"
-  resolved "https://registry.yarnpkg.com/@polkadot/util-crypto/-/util-crypto-0.13.8.tgz#37263a4ac176739843847d59b19671c6d3b3d540"
+"@polkadot/util-crypto@^0.13.9":
+  version "0.13.9"
+  resolved "https://registry.yarnpkg.com/@polkadot/util-crypto/-/util-crypto-0.13.9.tgz#401f204e55486981eddafdc8640d04b77c2920ad"
   dependencies:
     babel-runtime "^6.26.0"
     blakejs "^1.1.0"
@@ -158,9 +158,9 @@
     deasync "^0.1.12"
     ip-regex "^2.1.0"
 
-"@polkadot/util@^0.13.8":
-  version "0.13.8"
-  resolved "https://registry.yarnpkg.com/@polkadot/util/-/util-0.13.8.tgz#930b9b314b9b64b2f73ef6f0daee53aa81396877"
+"@polkadot/util@^0.13.9":
+  version "0.13.9"
+  resolved "https://registry.yarnpkg.com/@polkadot/util/-/util-0.13.9.tgz#a9d8038aa7ef372f190ff52bdad37d6d88284906"
   dependencies:
     babel-runtime "^6.26.0"
     bn.js "^4.11.8"
