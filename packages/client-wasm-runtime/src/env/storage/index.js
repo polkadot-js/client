@@ -26,6 +26,8 @@ module.exports = function envStorage (backend: BaseDbInterface): BaseDbInterface
     },
     del: (k: Uint8Array): void =>
       del(pending, backend, k),
+    isEmpty: (): boolean =>
+      Object.keys(pending).length === 0,
     get: (k: Uint8Array): Uint8Array =>
       get(pending, backend, k),
     pairs: (): Trie$Pairs =>

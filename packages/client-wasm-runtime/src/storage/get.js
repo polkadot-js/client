@@ -3,9 +3,9 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { RuntimeEnv$Storage } from '../types';
+import type { BaseDbInterface } from '@polkadot/client-db/types';
 
-module.exports = function get (storage: RuntimeEnv$Storage, key: Uint8Array, maxLength: number): Uint8Array {
+module.exports = function get (storage: BaseDbInterface, key: Uint8Array, maxLength: number): Uint8Array {
   const data = storage.get(key);
   const dataLength = data.length < maxLength
     ? data.length

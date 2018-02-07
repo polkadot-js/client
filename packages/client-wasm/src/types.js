@@ -4,7 +4,7 @@
 // @flow
 
 import type { ChainConfigType } from '@polkadot/client-chains/types';
-import type { DbInterface } from '@polkadot/client-db/types';
+import type { BaseDbInterface } from '@polkadot/client-db/types';
 
 export type WasmExports = {
   // flowlint-next-line unclear-type:off
@@ -21,5 +21,5 @@ export type WasmExtraImports = Object;
 
 export type WasmStateInstances = {
   chain: ChainConfigType,
-  db: DbInterface
+  db: BaseDbInterface
 };

@@ -3,8 +3,8 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { RuntimeEnv$Storage } from '../types';
+import type { BaseDbInterface } from '@polkadot/client-db/types';
 
-module.exports = function set (storage: RuntimeEnv$Storage, key: Uint8Array, data: Uint8Array): void {
+module.exports = function set (storage: BaseDbInterface, key: Uint8Array, data: Uint8Array): void {
   storage.set(key, data);
 };

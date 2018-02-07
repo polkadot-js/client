@@ -3,11 +3,11 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { RuntimeEnv$Storage } from '../types';
+import type { BaseDbInterface } from '@polkadot/client-db/types';
 
 const trieRoot = require('@polkadot/client-db/trie/root');
 
-module.exports = function root (storage: RuntimeEnv$Storage): Uint8Array {
+module.exports = function root (storage: BaseDbInterface): Uint8Array {
   return trieRoot(
     storage.pairs()
   );

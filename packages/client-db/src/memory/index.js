@@ -24,6 +24,8 @@ module.exports = function memory (): BaseDbInterface {
       commit(storage, values),
     del: (k: Uint8Array): void =>
       del(storage, k),
+    isEmpty: (): boolean =>
+      Object.keys(storage).length === 0,
     get: (k: Uint8Array): Uint8Array =>
       get(storage, k),
     pairs: (): Trie$Pairs =>

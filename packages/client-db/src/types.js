@@ -24,6 +24,7 @@ export type BaseDbInterface = {
   clear (): void,
   commit (values?: Trie$Pairs): void,
   del (key: Uint8Array): void,
+  isEmpty: () => boolean,
   get (key: Uint8Array): Uint8Array,
   pairs: () => Trie$Pairs,
   set (key: Uint8Array, value: Uint8Array): void

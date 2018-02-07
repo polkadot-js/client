@@ -11,7 +11,7 @@ const rlp = require('rlp');
 
 const encode = require('./encode');
 
-module.exports = function genRoot (pairs: Trie$Pairs): string {
+module.exports = function genRoot (pairs: Trie$Pairs): Uint8Array {
   return bufferToU8a(
     keccakAsBuffer(
       rlp.encode(
