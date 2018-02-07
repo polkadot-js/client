@@ -5814,6 +5814,10 @@ rlp@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/rlp/-/rlp-2.0.0.tgz#9db384ff4b89a8f61563d92395d8625b18f3afb0"
 
+rlp@jacogr/rlp:
+  version "2.0.0"
+  resolved "https://codeload.github.com/jacogr/rlp/tar.gz/ca33b296fc43d7a3543d8a8f172adc9b66826f5f"
+
 rsa-pem-to-jwk@^1.1.3:
   version "1.1.3"
   resolved "https://registry.yarnpkg.com/rsa-pem-to-jwk/-/rsa-pem-to-jwk-1.1.3.tgz#245e76bdb7e7234cfee7ca032d31b54c38fab98e"

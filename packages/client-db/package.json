@@ -37,7 +37,8 @@
     "levelup": "^2.0.1",
     "memdown": "^1.4.1",
     "merkle-patricia-tree": "^2.3.0",
-    "mkdirp": "^0.5.1"
+    "mkdirp": "^0.5.1",
+    "rlp": "jacogr/rlp"
   },
   "devDependencies": {
     "@polkadot/client": "^0.7.12",

@@ -3,7 +3,7 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-module.exports = function encodeHexPrefix (nibbles: Uint8Array | Array<number>, isLeaf: boolean): Buffer {
+module.exports = function encodeHexPrefix (nibbles: Uint8Array | Array<number>, isLeaf: boolean): Uint8Array {
   const bits = ((nibbles.length & 1) + (2 * (isLeaf ? 1 : 0))) << 4;
   const result = [];
   let offset = nibbles.length % 2;
@@ -15,5 +15,5 @@ module.exports = function encodeHexPrefix (nibbles: Uint8Array | Array<number>, 
     offset += 2;
   }
 
-  return Buffer.from(result);
+  return new Uint8Array(result);
 };

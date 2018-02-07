@@ -5,8 +5,7 @@
 
 import type { Trie$Pairs } from '../types';
 
-const u8aToBuffer = require('@polkadot/util/u8a/toBuffer');
-const keccakAsBuffer = require('@polkadot/util-crypto/keccak/asBuffer');
+const keccakAsU8a = require('@polkadot/util-crypto/keccak/asU8a');
 const rlp = require('rlp');
 
 const encodeHexPrefix = require('./encodeHexPrefix');
@@ -22,7 +21,7 @@ function encodeAux (pairs: Trie$Pairs, preLength: number): any {
     return encoded;
   }
 
-  return keccakAsBuffer(rlped);
+  return keccakAsU8a(rlped);
 }
 
 // flowlint-next-line unclear-type:off
@@ -39,7 +38,7 @@ function encode (pairs: Trie$Pairs, preLength: number): Array<any> {
         firstKey.slice(preLength),
         true
       ),
-      u8aToBuffer(pairs[0].v)
+      pairs[0].v
     ];
   }
 
@@ -86,7 +85,7 @@ function encode (pairs: Trie$Pairs, preLength: number): Array<any> {
   result.push(
     preLength !== firstKey.length
       ? ''
-      : u8aToBuffer(pairs[0].v)
+      : pairs[0].v
   );
 
   return result;

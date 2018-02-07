@@ -12,7 +12,7 @@ describe('encodeHexPrefix', () => {
         false
       )
     ).toEqual(
-      Buffer.from([0x10, 0x01, 0x23, 0x45])
+      new Uint8Array([0x10, 0x01, 0x23, 0x45])
     );
   });
 
@@ -23,7 +23,7 @@ describe('encodeHexPrefix', () => {
         false
       )
     ).toEqual(
-      Buffer.from([0x00, 0x01, 0x23, 0x45])
+      new Uint8Array([0x00, 0x01, 0x23, 0x45])
     );
   });
 
@@ -34,7 +34,7 @@ describe('encodeHexPrefix', () => {
         true
       )
     ).toEqual(
-      Buffer.from([0x20, 0x01, 0x23, 0x45])
+      new Uint8Array([0x20, 0x01, 0x23, 0x45])
     );
   });
 
@@ -45,7 +45,7 @@ describe('encodeHexPrefix', () => {
         true
       )
     ).toEqual(
-      Buffer.from([0x31, 0x23, 0x45])
+      new Uint8Array([0x31, 0x23, 0x45])
     );
   });
 
@@ -56,7 +56,7 @@ describe('encodeHexPrefix', () => {
         false
       )
     ).toEqual(
-      Buffer.from([0x00, 0x12, 0x34])
+      new Uint8Array([0x00, 0x12, 0x34])
     );
   });
 
@@ -67,7 +67,7 @@ describe('encodeHexPrefix', () => {
         true
       )
     ).toEqual(
-      Buffer.from([0x20, 0x41])
+      new Uint8Array([0x20, 0x41])
     );
   });
 });
