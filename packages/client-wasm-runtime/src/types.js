@@ -60,11 +60,11 @@ export type RuntimeInterface$Memory = {
 };
 
 export type RuntimeInterface$Storage = {
+  enumerated_trie_root: (valuesPtr: PointerType, lensPtr: PointerType, lensLen: number, resultPtr: PointerType) => void,
+  storage_root: (resultPtr: PointerType) => void,
+  get_allocated_storage: () => number,
+  get_storage_into: (keyPtr: PointerType, keyLength: number, dataPtr: PointerType, dataLength: number) => number,
   set_storage: (keyPtr: PointerType, keyLength: number, dataPtr: PointerType, dataLength: number) => void
-}
-
-export type RuntimeInterface$Trie = {
-  enumerated_trie_root: () => void
 }
 
 export type RuntimeExports = {
