@@ -68,7 +68,7 @@ describe('wasm', () => {
       instance = wasm(
         { wasm: {} },
         { chain: {}, db: {} },
-        loadWasmExt('runtime_polkadot.wasm')
+        loadWasmExt('polkadot_runtime.wasm')
       );
     });
 

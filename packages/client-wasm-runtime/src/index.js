@@ -4,7 +4,7 @@
 // @flow
 
 import type { ChainConfigType } from '@polkadot/client-chains/types';
-import type { DbInterface } from '@polkadot/client-db/types';
+import type { BaseDbInterface } from '@polkadot/client-db/types';
 import type { RuntimeExports } from './types';
 
 const createEnv = require('./env');
@@ -14,7 +14,7 @@ const io = require('./io');
 const memory = require('./memory');
 const storage = require('./storage');
 
-module.exports = function runtime (wasmMemory: WebAssembly.Memory, chainInstance: ChainConfigType, dbInstance: DbInterface): RuntimeExports {
+module.exports = function runtime (wasmMemory: WebAssembly.Memory, chainInstance: ChainConfigType, dbInstance: BaseDbInterface): RuntimeExports {
   const env = createEnv(wasmMemory, chainInstance, dbInstance);
   const exports = Object.assign(
     {}, chain(env), crypto(env), io(env), memory(env), storage(env)

@@ -3,10 +3,12 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { RuntimeEnv$Storage } from '../types';
+import type { BaseDbInterface } from '@polkadot/client-db/types';
 
-module.exports = function root (storage: RuntimeEnv$Storage): Uint8Array {
-  console.error('@polkadot/wasm-runtime: storage_root not implemented');
+const trieRoot = require('@polkadot/util-triehash/root');
 
-  return new Uint8Array([]);
+module.exports = function root (storage: BaseDbInterface): Uint8Array {
+  return trieRoot(
+    storage.pairs()
+  );
 };

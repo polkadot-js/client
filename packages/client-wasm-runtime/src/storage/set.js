@@ -3,13 +3,8 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { RuntimeEnv$Storage } from '../types';
+import type { BaseDbInterface } from '@polkadot/client-db/types';
 
-const u8aToHex = require('@polkadot/util/u8a/toHex');
-
-module.exports = function set (storage: RuntimeEnv$Storage, key: Uint8Array, data: Uint8Array): void {
-  storage.set(
-    u8aToHex(key),
-    data
-  );
+module.exports = function set (storage: BaseDbInterface, key: Uint8Array, data: Uint8Array): void {
+  storage.set(key, data);
 };

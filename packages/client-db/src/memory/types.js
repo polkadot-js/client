@@ -3,8 +3,8 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-const xxhashAsU8a128 = require('@polkadot/util-crypto/xxhash/asU8a128');
+import type { Trie$Pair } from '@polkadot/util-triehash/types';
 
-module.exports = function twox128 (data: Uint8Array): Uint8Array {
-  return xxhashAsU8a128(data);
+export type Memory$Storage = {
+  [string]: Trie$Pair
 };
