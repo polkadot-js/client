@@ -3,11 +3,8 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-const hexToU8a = require('@polkadot/util/hex/toU8a');
-const xxhashAsHex128 = require('@polkadot/util-crypto/xxhash/asHex128');
+const xxhashAsU8A128 = require('@polkadot/util-crypto/xxhash/asU8A128');
 
 module.exports = function twox128 (data: Uint8Array): Uint8Array {
-  return hexToU8a(
-    xxhashAsHex128(data)
-  );
+  return xxhashAsU8A128(data);
 };

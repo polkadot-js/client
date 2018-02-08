@@ -4,8 +4,8 @@
 // @flow
 
 import type { BaseDbInterface } from '@polkadot/client-db/types';
-import type { Trie$Pairs } from '@polkadot/client-db/trie/types';
 import type { Memory$Storage } from '@polkadot/client-db/memory/types';
+import type { Trie$Pairs } from '@polkadot/util-triehash/types';
 
 module.exports = function pairs (pending: Memory$Storage, backend?: BaseDbInterface): Trie$Pairs {
   return (backend ? backend.pairs() : [])

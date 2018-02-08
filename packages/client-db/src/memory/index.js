@@ -3,8 +3,8 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
+import type { Trie$Pairs } from '@polkadot/util-triehash/types';
 import type { BaseDbInterface } from '../types';
-import type { Trie$Pairs } from '../trie/types';
 import type { Memory$Storage } from './types';
 
 const commit = require('./commit');

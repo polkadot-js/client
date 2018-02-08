@@ -3,7 +3,7 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { Trie$Pair } from '../trie/types';
+import type { Trie$Pair } from '@polkadot/util-triehash/types';
 
 export type Memory$Storage = {
   [string]: Trie$Pair
