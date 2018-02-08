@@ -78,9 +78,9 @@
     isomorphic-fetch "^2.2.1"
     websocket "^1.0.25"
 
-"@polkadot/dev@^0.15.2":
-  version "0.15.2"
-  resolved "https://registry.yarnpkg.com/@polkadot/dev/-/dev-0.15.2.tgz#496350e1ca3dfa30d73bd64206c221fa6e96b3ec"
+"@polkadot/dev@^0.15.6":
+  version "0.15.6"
+  resolved "https://registry.yarnpkg.com/@polkadot/dev/-/dev-0.15.6.tgz#9ca3ec886bc60206851cb2e780723629e53d19f7"
   dependencies:
     babel-cli "^6.26.0"
     babel-core "^6.26.0"
@@ -100,11 +100,11 @@
     eslint-plugin-flowtype "^2.39.1"
     eslint-plugin-import "^2.8.0"
     eslint-plugin-jest "^21.3.2"
-    eslint-plugin-node "^5.2.1"
+    eslint-plugin-node "^6.0.0"
     eslint-plugin-promise "^3.6.0"
     eslint-plugin-react "^7.4.0"
     eslint-plugin-standard "^3.0.1"
-    flow-bin "^0.64.0"
+    flow-bin "^0.65.0"
     flow-copy-source "^1.2.1"
     jest "^22.0.0"
     makeshift "^1.1.0"
@@ -139,15 +139,24 @@
     "@polkadot/util" "^0.13.1"
     babel-runtime "^6.26.0"
 
-"@polkadot/util-crypto@^0.13.9":
-  version "0.13.9"
-  resolved "https://registry.yarnpkg.com/@polkadot/util-crypto/-/util-crypto-0.13.9.tgz#401f204e55486981eddafdc8640d04b77c2920ad"
+"@polkadot/util-crypto@^0.14.1":
+  version "0.14.1"
+  resolved "https://registry.yarnpkg.com/@polkadot/util-crypto/-/util-crypto-0.14.1.tgz#4a6150689e474a191a062f4c0e9755e7e3fea66a"
   dependencies:
     babel-runtime "^6.26.0"
     blakejs "^1.1.0"
     keccak "^1.3.0"
     tweetnacl "^1.0.0"
     xxhashjs "^0.2.2"
+
+"@polkadot/util-triehash@^0.14.1":
+  version "0.14.1"
+  resolved "https://registry.yarnpkg.com/@polkadot/util-triehash/-/util-triehash-0.14.1.tgz#314a4f3b5474d2baac151b6cf79cc34c293a311e"
+  dependencies:
+    "@polkadot/util" "^0.14.1"
+    "@polkadot/util-crypto" "^0.14.1"
+    babel-runtime "^6.26.0"
+    rlp jacogr/rlp
 
 "@polkadot/util@^0.13.1":
   version "0.13.1"
@@ -158,9 +167,9 @@
     deasync "^0.1.12"
     ip-regex "^2.1.0"
 
-"@polkadot/util@^0.13.9":
-  version "0.13.9"
-  resolved "https://registry.yarnpkg.com/@polkadot/util/-/util-0.13.9.tgz#a9d8038aa7ef372f190ff52bdad37d6d88284906"
+"@polkadot/util@^0.14.1":
+  version "0.14.1"
+  resolved "https://registry.yarnpkg.com/@polkadot/util/-/util-0.14.1.tgz#854c10e745a2235e7c25f70dddbb6f7d5b4d4c02"
   dependencies:
     babel-runtime "^6.26.0"
     bn.js "^4.11.8"
@@ -2187,14 +2196,14 @@ eslint-plugin-jest@^21.3.2:
   version "21.4.2"
   resolved "https://registry.yarnpkg.com/eslint-plugin-jest/-/eslint-plugin-jest-21.4.2.tgz#0e8ec03687259169cef46656827a0a0715e8a8d4"
 
-eslint-plugin-node@^5.2.1:
-  version "5.2.1"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-node/-/eslint-plugin-node-5.2.1.tgz#80df3253c4d7901045ec87fa660a284e32bdca29"
+eslint-plugin-node@^6.0.0:
+  version "6.0.0"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-node/-/eslint-plugin-node-6.0.0.tgz#5ad5ee6b5346aec6cc9cde0b8619caed2c6d8f25"
   dependencies:
     ignore "^3.3.6"
     minimatch "^3.0.4"
     resolve "^1.3.3"
-    semver "5.3.0"
+    semver "^5.4.1"
 
 eslint-plugin-promise@^3.6.0:
   version "3.6.0"
@@ -2519,9 +2528,9 @@ flat-cache@^1.2.1:
     graceful-fs "^4.1.2"
     write "^0.2.1"
 
-flow-bin@^0.64.0:
-  version "0.64.0"
-  resolved "https://registry.yarnpkg.com/flow-bin/-/flow-bin-0.64.0.tgz#ddd3fb3b183ab1ab35a5d5dec9caf5ebbcded167"
+flow-bin@^0.65.0:
+  version "0.65.0"
+  resolved "https://registry.yarnpkg.com/flow-bin/-/flow-bin-0.65.0.tgz#64ffeca27211c786e2d68508c65686ba1b8a2169"
 
 flow-copy-source@^1.2.1:
   version "1.2.1"
@@ -5810,11 +5819,7 @@ ripemd160@^2.0.0:
     hash-base "^2.0.0"
     inherits "^2.0.1"
 
-rlp@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/rlp/-/rlp-2.0.0.tgz#9db384ff4b89a8f61563d92395d8625b18f3afb0"
-
-rlp@jacogr/rlp:
+rlp@^2.0.0, rlp@jacogr/rlp:
   version "2.0.0"
   resolved "https://codeload.github.com/jacogr/rlp/tar.gz/ca33b296fc43d7a3543d8a8f172adc9b66826f5f"
 
@@ -5893,10 +5898,6 @@ semaphore@>=1.0.1:
 "semver@2 || 3 || 4 || 5", semver@^5.0.1, semver@^5.1.0, semver@^5.3.0, semver@^5.4.1, semver@~5.4.1:
   version "5.4.1"
   resolved "https://registry.yarnpkg.com/semver/-/semver-5.4.1.tgz#e059c09d8571f0540823733433505d3a2f00b18e"
-
-semver@5.3.0:
-  version "5.3.0"
-  resolved "https://registry.yarnpkg.com/semver/-/semver-5.3.0.tgz#9b2ce5d3de02d17c6012ad326aa6b4d0cf54f94f"
 
 set-blocking@^2.0.0, set-blocking@~2.0.0:
   version "2.0.0"

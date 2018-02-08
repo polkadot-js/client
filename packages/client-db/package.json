@@ -31,14 +31,13 @@
   },
   "dependencies": {
     "@polkadot/client-state": "^0.7.12",
-    "@polkadot/util": "^0.13.9",
+    "@polkadot/util": "^0.14.1",
     "babel-runtime": "^6.26.0",
     "leveldown": "^2.1.1",
     "levelup": "^2.0.1",
     "memdown": "^1.4.1",
     "merkle-patricia-tree": "^2.3.0",
-    "mkdirp": "^0.5.1",
-    "rlp": "jacogr/rlp"
+    "mkdirp": "^0.5.1"
   },
   "devDependencies": {
     "@polkadot/client": "^0.7.12",
