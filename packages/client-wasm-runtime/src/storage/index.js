@@ -36,7 +36,7 @@ module.exports = function storage ({ heap, storage }: RuntimeEnv): RuntimeInterf
         resultPtr,
         root(storage)
       ),
-    get_allocated_storage: (keyPtr: PointerType, keyLength: number, writtenPtr: PointerType): number =>
+    get_allocated_storage: (keyPtr: PointerType, keyLength: number, writtenPtr: PointerType): PointerType =>
       0,
     get_storage_into: (keyPtr: PointerType, keyLength: number, dataPtr: PointerType, dataLength: number): number => {
       const data = get(storage, heap.get(keyPtr, keyLength), dataLength);
