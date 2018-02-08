@@ -5,7 +5,7 @@
 
 import type { BaseDbInterface } from '@polkadot/client-db/types';
 
-const trieRoot = require('@polkadot/client-db/trie/root');
+const trieRoot = require('@polkadot/util-triehash/root');
 
 module.exports = function root (storage: BaseDbInterface): Uint8Array {
   return trieRoot(

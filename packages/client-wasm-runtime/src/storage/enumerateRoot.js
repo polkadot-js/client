@@ -5,7 +5,7 @@
 
 import type { BaseDbInterface } from '@polkadot/client-db/types';
 
-const trieRootOrdered = require('@polkadot/client-db/trie/rootOrdered');
+const trieRootOrdered = require('@polkadot/util-triehash/rootOrdered');
 
 module.exports = function enumerateRoot (storage: BaseDbInterface, values: Array<Uint8Array>): Uint8Array {
   return trieRootOrdered(values);
