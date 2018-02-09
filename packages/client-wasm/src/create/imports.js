@@ -3,12 +3,18 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { RuntimeExports } from '@polkadot/client-wasm-runtime/types';
+import type { RuntimeInterface } from '@polkadot/client-wasm-runtime/types';
 
 // flowlint-next-line unclear-type:off
-module.exports = function createImports (memory: WebAssembly.Memory, table: WebAssembly.Table, runtime: RuntimeExports, imports?: Object = {}): WebAssemblyImports {
+module.exports = function createImports (memory: WebAssembly.Memory, table: WebAssembly.Table, runtime: RuntimeInterface, imports?: Object = {}): WebAssemblyImports {
+  const rtImports = Object.keys(runtime).reduce((result, key) => {
+    result[`ext_${key}`] = runtime[key];
+
+    return result;
+  }, {});
+
   return Object.assign({}, imports, {
-    env: Object.assign({}, runtime, {
+    env: Object.assign({}, rtImports, {
       memory,
       memoryBase: 0,
       table,

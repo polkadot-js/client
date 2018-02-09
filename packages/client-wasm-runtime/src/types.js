@@ -14,8 +14,8 @@ export type RuntimeEnv$Heap = {
   dup: (ptr: PointerType, length: number) => Uint8Array,
   get: (ptr: PointerType, length: number) => Uint8Array,
   getU32: (ptr: PointerType) => number,
-  set: (ptr: PointerType, data: Uint8Array) => void,
-  setU32: (ptr: PointerType, value: number) => void,
+  set: (ptr: PointerType, data: Uint8Array) => PointerType,
+  setU32: (ptr: PointerType, value: number) => PointerType,
   size: () => number,
   sizeAllocated: () => number,
   sizeDeallocated: () => number
@@ -61,7 +61,4 @@ export type RuntimeInterface$Storage = {
   set_storage: (keyPtr: PointerType, keyLength: number, dataPtr: PointerType, dataLength: number) => void
 }
 
-export type RuntimeExports = {
-  // flowlint-next-line unclear-type:off
-  [string]: (any) => any
-};
+export type RuntimeInterface = RuntimeInterface$Chain & RuntimeInterface$Crypto & RuntimeInterface$Io & RuntimeInterface$Memory & RuntimeInterface$Storage;

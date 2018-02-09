@@ -35,10 +35,11 @@ describe('createImports', () => {
   });
 
   it('exposes the runtime imports on the env', () => {
-    const runtime = { 'ext_foo': 1, 'ext_bar': 2, 'ext_baz': 3 };
-
     expect(
-      createImports({}, {}, runtime).env
-    ).toMatchObject(runtime);
+      createImports({}, {}, { foo: 'bar', baz: 'biz' }).env
+    ).toMatchObject({
+      'ext_foo': 'bar',
+      'ext_baz': 'biz'
+    });
   });
 });

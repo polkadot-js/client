@@ -37,10 +37,16 @@ module.exports = function envHeap ({ buffer }: WebAssembly.Memory): RuntimeEnv$H
       uint8.subarray(ptr, ptr + len),
     getU32: (ptr: PointerType): number =>
       view.getUint32(ptr, true),
-    set: (ptr: PointerType, data: Uint8Array): void =>
-      uint8.set(data, ptr),
-    setU32: (ptr: PointerType, value: number): void =>
-      view.setUint32(ptr, value, true),
+    set: (ptr: PointerType, data: Uint8Array): PointerType => {
+      uint8.set(data, ptr);
+
+      return ptr;
+    },
+    setU32: (ptr: PointerType, value: number): PointerType => {
+      view.setUint32(ptr, value, true);
+
+      return ptr;
+    },
     size: (): number =>
       memory.size,
     sizeAllocated: (): number =>

@@ -2,7 +2,7 @@
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
 
-const { loadWasmExt, loadWasmTest } = require('../test/helpers');
+const { loadWasmTest } = require('../test/helpers');
 const wasm = require('./wasm');
 
 describe('wasm', () => {
@@ -60,22 +60,6 @@ describe('wasm', () => {
 
     it('allows imports to be called', () => {
       expect(callback).toHaveBeenCalledWith(1337);
-    });
-  });
-
-  describe('runtime modules', () => {
-    beforeEach(() => {
-      instance = wasm(
-        { wasm: {} },
-        { chain: {}, db: {} },
-        loadWasmExt('polkadot_runtime.wasm')
-      );
-    });
-
-    it('loads the actual runtime', () => {
-      expect(
-        instance.execute_transaction
-      ).toBeDefined();
     });
   });
 });

@@ -14,8 +14,9 @@ fi
 
 BIN_PATH=tmp/wabt/out/gcc/Release
 DST=${SRC/wasm/wat}
+BASEDIR=$(dirname "$0")
 
-./wabtbuild.sh
+$BASEDIR/wabtbuild.sh
 
 echo "*** Compiling $SRC -o $DST"
 $BIN_PATH/wasm2wat $SRC -o $DST

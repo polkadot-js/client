@@ -8,7 +8,7 @@
   },
   "bin": {
     "polkadot-wat2wasm": "./scripts/wat2wasm.sh",
-    "polkadot-wasm2wat": "./scripts/wat2wasm.sh",
+    "polkadot-wasm2wat": "./scripts/wasm2wat.sh",
     "polkadot-wabtbuild": "./scripts/wabtbuild.sh"
   },
   "publishConfig": {
