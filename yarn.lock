@@ -183,9 +183,9 @@
     deasync "^0.1.12"
     ip-regex "^2.1.0"
 
-"@polkadot/wasm-bin@paritytech/polkadot-wasm-bin#7a0b3d150932d04e7e7f1165e1b5bff086174197":
-  version "20180209.155531"
-  resolved "https://codeload.github.com/paritytech/polkadot-wasm-bin/tar.gz/7a0b3d150932d04e7e7f1165e1b5bff086174197"
+"@polkadot/wasm-bin@paritytech/polkadot-wasm-bin#e25f467cce26878e23fe6ec79b03d21edd67ca2d":
+  version "20180209.161837"
+  resolved "https://codeload.github.com/paritytech/polkadot-wasm-bin/tar.gz/e25f467cce26878e23fe6ec79b03d21edd67ca2d"
 
 "@types/node@*":
   version "8.5.2"
