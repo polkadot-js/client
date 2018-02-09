@@ -7,7 +7,9 @@
     "node": ">=8.0"
   },
   "bin": {
-    "polkadot-wat2wasm": "./scripts/wat2wasm.sh"
+    "polkadot-wat2wasm": "./scripts/wat2wasm.sh",
+    "polkadot-wasm2wat": "./scripts/wat2wasm.sh",
+    "polkadot-wabtbuild": "./scripts/wabtbuild.sh"
   },
   "publishConfig": {
     "access": "public",

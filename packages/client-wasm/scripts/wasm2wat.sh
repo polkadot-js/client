@@ -8,17 +8,17 @@ set -e
 SRC=$1
 
 if [ "$SRC" == "" ]; then
-  echo "Usage: wat2wasm <file>"
+  echo "Usage: wasm2wat <file>"
   exit 1
 fi
 
 BIN_PATH=tmp/wabt/out/gcc/Release
-DST=${SRC/wat/wasm}
+DST=${SRC/wasm/wat}
 
 ./wabtbuild.sh
 
 echo "*** Compiling $SRC -o $DST"
-$BIN_PATH/wat2wasm $SRC -o $DST
+$BIN_PATH/wasm2wat $SRC -o $DST
 
 echo "*** Completed"
 
