@@ -22,10 +22,10 @@ describe('envHeap', () => {
   });
 
   it('allows retrieval of LE u32 values', () => {
-    heap.setU32(4, 0x12345);
-
     expect(
-      heap.getU32(4)
+      heap.getU32(
+        heap.setU32(4, 0x12345)
+      )
     ).toEqual(
       0x12345
     );

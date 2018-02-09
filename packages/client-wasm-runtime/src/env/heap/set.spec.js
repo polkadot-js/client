@@ -16,18 +16,14 @@ describe('envHeap', () => {
   it('uses set to set a part of the buffer', () => {
     const TEST = new Uint8Array([0x6, 0x7, 0x8]);
 
-    heap.set(3, TEST);
-
     expect(
-      heap.get(3, 3)
+      heap.get(heap.set(3, TEST), 3)
     ).toEqual(TEST);
   });
 
   it('allows set of LE u32 values', () => {
-    heap.setU32(4, 0x12345);
-
     expect(
-      heap.get(4, 4)
+      heap.get(heap.setU32(4, 0x12345), 4)
     ).toEqual(
       new Uint8Array([0x45, 0x23, 0x01, 0])
     );
