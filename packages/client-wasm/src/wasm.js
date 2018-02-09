@@ -32,8 +32,8 @@ module.exports = function wasm ({ wasm: { memoryInitial, memoryMaximum } }: Conf
       ? instance.exports[name]
       : (data: Uint8Array) =>
         instance.exports[name](
-          runtime.env.heap.set(
-            runtime.env.heap.allocate(data.length),
+          runtime.environment.heap.set(
+            runtime.environment.heap.allocate(data.length),
             data
           ),
           data.length

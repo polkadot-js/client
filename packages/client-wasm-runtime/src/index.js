@@ -3,21 +3,22 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { ChainConfigType } from '@polkadot/client-chains/types';
-import type { BaseDbInterface } from '@polkadot/client-db/types';
 import type { RuntimeInterface } from './types';
 
-const createEnv = require('./env');
 const chain = require('./chain');
 const crypto = require('./crypto');
+const createEnv = require('./environment');
 const io = require('./io');
 const memory = require('./memory');
 const storage = require('./storage');
 
-module.exports = function runtime (wasmMemory: WebAssembly.Memory, chainInstance: ChainConfigType, dbInstance: BaseDbInterface): RuntimeInterface {
-  const env = createEnv(wasmMemory, chainInstance, dbInstance);
+module.exports = function runtime (memoryInterface: WebAssembly.Memory, chainInterface: ChainConfigType, dbInterface: BaseDbInterface): RuntimeInterface {
+  const environment = createEnv(memoryInterface, chainInterface, dbInterface);
 
-  return Object.assign(
-    { env }, chain(env), crypto(env), io(env), memory(env), storage(env)
-  );
+  return {
+    environment,
+    exports: Object.assign(
+      chain(environment), crypto(environment), io(environment), memory(environment), storage(environment)
+    )
+  };
 };

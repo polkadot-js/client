@@ -5,8 +5,8 @@
 
 const u8aFromString = require('@polkadot/util/u8a/fromString');
 
-const envHeap = require('../env/heap');
-const envStorage = require('../env/storage');
+const envHeap = require('../environment/heap');
+const envStorage = require('../environment/storage');
 const index = require('./index');
 
 describe('get_allocated_storage', () => {

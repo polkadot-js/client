@@ -5,7 +5,7 @@
 
 const u8aFromUtf8 = require('@polkadot/util/u8a/fromUtf8');
 
-const env = require('../env');
+const env = require('../environment');
 const index = require('./index');
 
 describe('print_utf8', () => {

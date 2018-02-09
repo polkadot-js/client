@@ -6,15 +6,15 @@
 import type { RuntimeInterface } from '@polkadot/client-wasm-runtime/types';
 
 // flowlint-next-line unclear-type:off
-module.exports = function createImports (memory: WebAssembly.Memory, table: WebAssembly.Table, runtime: RuntimeInterface, imports?: Object = {}): WebAssemblyImports {
-  const rtImports = Object.keys(runtime).reduce((result, key) => {
-    result[`ext_${key}`] = runtime[key];
+module.exports = function createImports (memory: WebAssembly.Memory, table: WebAssembly.Table, runtime: RuntimeInterface, imported?: Object = {}): WebAssemblyImports {
+  const exported = Object.keys(runtime.exports).reduce((result, key) => {
+    result[`ext_${key}`] = runtime.exports[key];
 
     return result;
   }, {});
 
-  return Object.assign({}, imports, {
-    env: Object.assign({}, rtImports, {
+  return Object.assign({}, imported, {
+    env: Object.assign({}, exported, {
       memory,
       memoryBase: 0,
       table,

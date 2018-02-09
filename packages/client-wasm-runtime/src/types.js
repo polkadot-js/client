@@ -61,4 +61,7 @@ export type RuntimeInterface$Storage = {
   set_storage: (keyPtr: PointerType, keyLength: number, dataPtr: PointerType, dataLength: number) => void
 }
 
-export type RuntimeInterface = RuntimeInterface$Chain & RuntimeInterface$Crypto & RuntimeInterface$Io & RuntimeInterface$Memory & RuntimeInterface$Storage;
+export type RuntimeInterface = {
+  environment: RuntimeEnv,
+  exports: RuntimeInterface$Chain & RuntimeInterface$Crypto & RuntimeInterface$Io & RuntimeInterface$Memory & RuntimeInterface$Storage
+};

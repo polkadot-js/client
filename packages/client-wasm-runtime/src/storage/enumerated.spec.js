@@ -6,7 +6,7 @@
 const hexToU8a = require('@polkadot/util/hex/toU8a');
 const u8aFromString = require('@polkadot/util/u8a/fromString');
 
-const envHeap = require('../env/heap');
+const envHeap = require('../environment/heap');
 const index = require('./index');
 
 describe('enumerated_trie_root', () => {
