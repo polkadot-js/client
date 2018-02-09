@@ -9,22 +9,14 @@ import type { Logger } from '@polkadot/util/types';
 
 export type PointerType = number;
 
-export type RuntimeEnv$Heap$Alloc = {
-  [PointerType]: number // offset -> size
-}
-
 export type RuntimeEnv$Heap = {
-  alloc: RuntimeEnv$Heap$Alloc,
-  freed: RuntimeEnv$Heap$Alloc,
-  offset: number,
-  size: number,
-  uint8: Uint8Array,
-
+  allocate: (size: number) => PointerType,
   dup: (ptr: PointerType, length: number) => Uint8Array,
   get: (ptr: PointerType, length: number) => Uint8Array,
   getLU32: (ptr: PointerType) => number,
   set: (ptr: PointerType, data: Uint8Array) => void,
   setLU32: (ptr: PointerType, value: number) => void,
+  size: () => number
 };
 
 export type RuntimeEnv = {

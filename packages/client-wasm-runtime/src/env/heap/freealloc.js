@@ -3,21 +3,22 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { RuntimeEnv$Heap, PointerType } from '../types';
+import type { PointerType } from '../../types';
+import type { Memory } from './types';
 
 // 1. find all free blocks that can contain the current requested amount
 // 2. sort by smallest -> largest
 // 3. return the smallest slot
-function findContaining ({ freed }: RuntimeEnv$Heap, size: number): PointerType {
+function findContaining (memory: Memory, size: number): PointerType {
   const [ptr] = Object
-    .keys(freed)
+    .keys(memory.freed)
     // flowlint-next-line unclear-type:off
-    .filter((offset) => freed[((offset: any): number)] >= size)
+    .filter((offset) => memory.freed[((offset: any): number)] >= size)
     .sort((a, b) => {
       // flowlint-next-line unclear-type:off
-      const sizeA = freed[((a: any): number)];
+      const sizeA = memory.freed[((a: any): number)];
       // flowlint-next-line unclear-type:off
-      const sizeB = freed[((b: any): number)];
+      const sizeB = memory.freed[((b: any): number)];
 
       if (sizeA < sizeB) {
         return -1;
@@ -35,17 +36,17 @@ function findContaining ({ freed }: RuntimeEnv$Heap, size: number): PointerType 
   return -1;
 }
 
-module.exports = function freealloc (heap: RuntimeEnv$Heap, size: number): PointerType {
-  const ptr = findContaining(heap, size);
+module.exports = function freealloc (memory: HeapMemory, size: number): PointerType {
+  const ptr = findContaining(memory, size);
 
   if (ptr === -1) {
-    console.warn(`malloc(${size}) failed, consider increasing the default runtime memory size`);
+    console.warn(`allocate(${size}) failed, consider increasing the default runtime memory size`);
     return 0;
   }
 
   // FIXME: We are being wasteful here, i.e. we should just un-free the requested size instead of everything (long-term fragmentation and loss)
-  delete heap.freed[ptr];
-  heap.alloc[ptr] = size;
+  delete memory.freed[ptr];
+  memory.allocated[ptr] = size;
 
   return ptr;
 };

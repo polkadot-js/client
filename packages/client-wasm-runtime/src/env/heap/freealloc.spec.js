@@ -5,48 +5,48 @@
 const freealloc = require('./freealloc');
 
 describe('freealloc', () => {
-  let heap;
+  let memory;
 
   beforeEach(() => {
-    heap = {
+    memory = {
+      allocated: {},
       // ok, these don't make much sense as a layout, but it allows for sorting inside the actual findContaining function to find the first & smallest
       freed: {
         0: 200,
         3: 120,
         4: 120,
         122: 500
-      },
-      alloc: {}
+      }
     };
   });
 
   it('returns 0 when matching size is not found', () => {
     expect(
-      freealloc(heap, 501)
+      freealloc(memory, 501)
     ).toEqual(0);
   });
 
   it('returns the smallest matching slot (exact)', () => {
     expect(
-      freealloc(heap, 120)
+      freealloc(memory, 120)
     ).toEqual(3);
   });
 
   it('returns the smallest matching slot (lesser)', () => {
     expect(
-      freealloc(heap, 100)
+      freealloc(memory, 100)
     ).toEqual(3);
   });
 
   it('removes the previous freed slot', () => {
-    freealloc(heap, 100);
+    freealloc(memory, 100);
 
-    expect(heap.freed[3]).not.toBeDefined();
+    expect(memory.freed[3]).not.toBeDefined();
   });
 
   it('adds the allocated slot', () => {
-    freealloc(heap, 100);
+    freealloc(memory, 100);
 
-    expect(heap.alloc[3]).toEqual(100);
+    expect(memory.allocated[3]).toEqual(100);
   });
 });

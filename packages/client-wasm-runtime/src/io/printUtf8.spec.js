@@ -25,7 +25,7 @@ describe('print_utf8', () => {
   });
 
   it('logs the memory using the supplied logger', () => {
-    print_utf8(0, heap.uint8.length);
+    print_utf8(0, heap.size());
 
     expect(
       l.log

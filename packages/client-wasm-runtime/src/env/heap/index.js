@@ -3,21 +3,30 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { RuntimeEnv$Heap, PointerType } from '../types';
+import type { RuntimeEnv$Heap, PointerType } from '../../types';
+import type { Memory } from './types';
+
+const allocate = require('./allocate');
+const deallocate = require('./deallocate');
 
 const STACK_SIZE = 32768;
 
 module.exports = function envHeap ({ buffer }: WebAssembly.Memory): RuntimeEnv$Heap {
   const uint8 = new Uint8Array(buffer);
   const view = new DataView(uint8.buffer);
-
-  return {
+  const memory: Memory = {
     uint8,
-    alloc: {},
+    allocated: {},
     freed: {},
     offset: STACK_SIZE,
-    size: buffer.byteLength,
+    size: buffer.byteLength
+  };
 
+  return {
+    allocate: (size: number): PointerType =>
+      allocate(memory, size),
+    deallocate: (ptr: PointerType): void =>
+      deallocate(memory, ptr),
     dup: (ptr: PointerType, len: number): Uint8Array =>
       uint8.slice(ptr, ptr + len),
     get: (ptr: PointerType, len: number): Uint8Array =>
@@ -27,6 +36,8 @@ module.exports = function envHeap ({ buffer }: WebAssembly.Memory): RuntimeEnv$H
     set: (ptr: PointerType, data: Uint8Array): void =>
       uint8.set(data, ptr),
     setLU32: (ptr: PointerType, value: number): void =>
-      view.setUint32(ptr, value, true)
+      view.setUint32(ptr, value, true),
+    size: (): number =>
+      memory.size
   };
 };

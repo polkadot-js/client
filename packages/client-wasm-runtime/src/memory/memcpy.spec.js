@@ -18,7 +18,7 @@ describe('memcpy', () => {
     memcpy(4, 2, 3);
 
     expect(
-      runtime.heap.uint8.toString()
+      runtime.heap.get(0, 8).toString()
     ).toEqual('1,2,3,4,3,4,5,8');
   });
 });

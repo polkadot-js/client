@@ -18,7 +18,7 @@ describe('memmove', () => {
     memmove(0, 2, 2);
 
     expect(
-      runtime.heap.uint8.toString()
+      runtime.heap.get(0, 5).toString()
     ).toEqual('3,4,3,4,5');
   });
 });

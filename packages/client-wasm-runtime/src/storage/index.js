@@ -5,39 +5,39 @@
 
 import type { RuntimeEnv, RuntimeInterface$Storage, PointerType } from '../types';
 
-const enumerateRoot = require('./enumerateRoot');
+const trieRoot = require('@polkadot/util-triehash/root');
+const trieRootOrdered = require('@polkadot/util-triehash/rootOrdered');
+
 const get = require('./get');
-const root = require('./root');
 const set = require('./set');
 
 module.exports = function storage ({ heap, storage }: RuntimeEnv): RuntimeInterface$Storage {
   return {
-    enumerated_trie_root: (valuesPtr: PointerType, lensPtr: PointerType, lensLen: number, resultPtr: PointerType): void => {
-      const lenses = [];
-
-      for (let index = 0; index < lensLen; index++) {
-        lenses.push(
-          heap.getLU32(lensPtr + (index * 4))
-        );
-      }
-
+    enumerated_trie_root: (valuesPtr: PointerType, lenPtr: PointerType, count: number, resultPtr: PointerType): void => {
       let offset = 0;
-      const values = lenses
-        .map((value) => offset += value) // eslint-disable-line
-        .map((offset, index) => heap.get(valuesPtr + offset, index));
 
-      heap.set(
-        resultPtr,
-        enumerateRoot(storage, values)
-      );
+      heap.set(resultPtr, trieRootOrdered(
+        Array.from(new Array(count), (_, index) => {
+          const length = heap.getLU32(lenPtr + (index * 4));
+          const data = heap.get(valuesPtr + offset, length);
+
+          offset += length;
+
+          return data;
+        })
+      ));
     },
     storage_root: (resultPtr: PointerType): void =>
-      heap.set(
-        resultPtr,
-        root(storage)
-      ),
-    get_allocated_storage: (keyPtr: PointerType, keyLength: number, writtenPtr: PointerType): PointerType =>
-      0,
+      heap.set(resultPtr, trieRoot(storage.pairs())),
+    get_allocated_storage: (keyPtr: PointerType, keyLength: number, dateLenPtr: PointerType): PointerType => {
+      const data = get(storage, heap.get(keyPtr, keyLength));
+      const dataPtr = heap.allocate(data.length);
+
+      heap.set(dataPtr, data);
+      heap.setLU32(dateLenPtr, data.length);
+
+      return dataPtr;
+    },
     get_storage_into: (keyPtr: PointerType, keyLength: number, dataPtr: PointerType, dataLength: number): number => {
       const data = get(storage, heap.get(keyPtr, keyLength), dataLength);
 

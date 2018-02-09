@@ -3,19 +3,20 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { RuntimeEnv$Heap, PointerType } from '../types';
+import type { PointerType } from '../../types';
+import type { Memory } from './types';
 
 const ExtError = require('@polkadot/util/ext/error');
 const isUndefined = require('@polkadot/util/is/undefined');
 
-module.exports = function free (heap: RuntimeEnv$Heap, ptr: PointerType): void {
-  const size = heap.alloc[ptr];
+module.exports = function deallocate (memory: Memory, ptr: PointerType): void {
+  const size = memory.allocated[ptr];
 
   if (isUndefined(size)) {
     throw new ExtError('Calling free() on unallocated memory');
   }
 
-  delete heap.alloc[ptr];
+  delete memory.allocated[ptr];
 
-  heap.freed[ptr] = size;
+  memory.freed[ptr] = size;
 };

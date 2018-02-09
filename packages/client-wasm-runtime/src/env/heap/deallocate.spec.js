@@ -2,41 +2,37 @@
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
 
-const index = require('./index');
+const deallocate = require('./deallocate');
 
-describe('free', () => {
-  let runtime;
-  let free;
+describe('deallocate', () => {
+  let memory;
 
   beforeEach(() => {
-    runtime = {
-      heap: {
-        alloc: { 123: 456 },
-        freed: {}
-      }
+    memory = {
+      allocated: { 123: 456 },
+      freed: {}
     };
-    free = index(runtime).free;
   });
 
   it('throws when no allocation found', () => {
     expect(
-      () => free(456)
+      () => deallocate(memory, 456)
     ).toThrow(/on unallocated memory/);
   });
 
   it('removes the allocation from the allocation table', () => {
-    free(123);
+    deallocate(memory, 123);
 
     expect(
-      runtime.heap.alloc
+      memory.allocated
     ).toEqual({});
   });
 
   it('adds the allocation from the freed table', () => {
-    free(123);
+    deallocate(memory, 123);
 
     expect(
-      runtime.heap.freed
+      memory.freed
     ).toEqual({ 123: 456 });
   });
 });

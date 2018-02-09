@@ -3,7 +3,7 @@
 // of the ISC license. See the LICENSE file for details.
 /* eslint camelcase: 0 */
 
-const index = require('../index');
+const index = require('./index');
 
 describe('ed25519Verify', () => {
   let heap;
