@@ -5,40 +5,65 @@
 const { loadWasmExt } = require('../test/helpers');
 const wasm = require('./wasm');
 
-describe('wasm (polkadot-runtime)', () => {
+describe('wasm (runtimes)', () => {
   let instance;
+  let config;
+  let chain;
+  let db;
 
   beforeEach(() => {
-    const config = {
+    config = {
       wasm: {}
     };
-    const chain = {
+    chain = {
       params: {
         networkId: 42
       }
     };
-    const db = {
+    db = {
       pairs: () => []
     };
-
-    instance = wasm(
-      config,
-      { chain, db },
-      loadWasmExt('polkadot_runtime.wasm')
-    );
   });
 
-  it('loads the actual runtime', () => {
-    expect(
-      instance.execute_transaction
-    ).toBeDefined();
+  describe('polkadot_runtime', () => {
+    beforeEach(() => {
+      instance = wasm(
+        config,
+        { chain, db },
+        loadWasmExt('polkadot_runtime.wasm')
+      );
+    });
+
+    it('loads the actual runtime', () => {
+      expect(
+        instance.execute_block
+      ).toBeDefined();
+    });
+
+    it('executes a basic block', () => {
+      console.log('functions', instance);
+
+      expect(
+        instance.execute_block(new Uint8Array([]))
+      ).toBeDefined();
+    });
   });
 
-  it('executes actual runtime tests', () => {
-    console.log('instance.run_tests', instance.run_tests, typeof instance.run_tests);
+  describe.skip('substrate_test_runtime', () => {
+    beforeEach(() => {
+      instance = wasm(
+        config,
+        { chain, db },
+        loadWasmExt('substrate_test_runtime.wasm')
+      );
+    });
 
-    expect(
-      instance.run_tests(new Uint8Array([]))
-    ).toBeDefined();
+    it('executes actual runtime tests', () => {
+      console.log('functions', instance);
+
+      expect(
+        instance.run_tests(new Uint8Array([]))
+      ).toBeDefined();
+    });
   });
 });
