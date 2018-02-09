@@ -4,12 +4,16 @@
 // @flow
 
 import type { RuntimeEnv$Heap, PointerType } from '../../types';
-import type { Memory } from './types';
+import type { Memory, Memory$Buffer } from './types';
 
 const allocate = require('./allocate');
 const deallocate = require('./deallocate');
 
 const STACK_SIZE = 32768;
+
+function reduceSize (buffer: Memory$Buffer): number {
+  return Object.values(buffer).reduce((total, size) => total + size, 0);
+}
 
 module.exports = function envHeap ({ buffer }: WebAssembly.Memory): RuntimeEnv$Heap {
   const uint8 = new Uint8Array(buffer);
@@ -17,7 +21,7 @@ module.exports = function envHeap ({ buffer }: WebAssembly.Memory): RuntimeEnv$H
   const memory: Memory = {
     uint8,
     allocated: {},
-    freed: {},
+    deallocated: {},
     offset: STACK_SIZE,
     size: buffer.byteLength
   };
@@ -31,13 +35,17 @@ module.exports = function envHeap ({ buffer }: WebAssembly.Memory): RuntimeEnv$H
       uint8.slice(ptr, ptr + len),
     get: (ptr: PointerType, len: number): Uint8Array =>
       uint8.subarray(ptr, ptr + len),
-    getLU32: (ptr: PointerType): number =>
+    getU32: (ptr: PointerType): number =>
       view.getUint32(ptr, true),
     set: (ptr: PointerType, data: Uint8Array): void =>
       uint8.set(data, ptr),
-    setLU32: (ptr: PointerType, value: number): void =>
+    setU32: (ptr: PointerType, value: number): void =>
       view.setUint32(ptr, value, true),
     size: (): number =>
-      memory.size
+      memory.size,
+    sizeAllocated: (): number =>
+      reduceSize(memory.allocated),
+    sizeDeallocated: (): number =>
+      reduceSize(memory.deallocated)
   };
 };

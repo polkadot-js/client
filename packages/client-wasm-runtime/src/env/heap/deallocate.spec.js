@@ -10,7 +10,7 @@ describe('deallocate', () => {
   beforeEach(() => {
     memory = {
       allocated: { 123: 456 },
-      freed: {}
+      deallocated: {}
     };
   });
 
@@ -28,11 +28,11 @@ describe('deallocate', () => {
     ).toEqual({});
   });
 
-  it('adds the allocation from the freed table', () => {
+  it('adds the allocation from the deallocated table', () => {
     deallocate(memory, 123);
 
     expect(
-      memory.freed
+      memory.deallocated
     ).toEqual({ 123: 456 });
   });
 });

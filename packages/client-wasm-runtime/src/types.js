@@ -13,10 +13,12 @@ export type RuntimeEnv$Heap = {
   allocate: (size: number) => PointerType,
   dup: (ptr: PointerType, length: number) => Uint8Array,
   get: (ptr: PointerType, length: number) => Uint8Array,
-  getLU32: (ptr: PointerType) => number,
+  getU32: (ptr: PointerType) => number,
   set: (ptr: PointerType, data: Uint8Array) => void,
-  setLU32: (ptr: PointerType, value: number) => void,
-  size: () => number
+  setU32: (ptr: PointerType, value: number) => void,
+  size: () => number,
+  sizeAllocated: () => number,
+  sizeDeallocated: () => number
 };
 
 export type RuntimeEnv = {

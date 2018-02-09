@@ -9,7 +9,7 @@ describe('allocate', () => {
 
   beforeEach(() => {
     memory = {
-      freed: {
+      deallocated: {
         0: 3,
         3: 120
       },

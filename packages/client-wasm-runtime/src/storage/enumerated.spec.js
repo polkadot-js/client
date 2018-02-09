@@ -25,7 +25,7 @@ describe('enumerated_trie_root', () => {
 
       arr.forEach((item, index) => {
         heap.set(ptrVal + offset, item);
-        heap.setLU32(ptrLen + (index * 4), item.length);
+        heap.setU32(ptrLen + (index * 4), item.length);
 
         offset += item.length;
       });

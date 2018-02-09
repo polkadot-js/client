@@ -11,7 +11,7 @@ describe('freealloc', () => {
     memory = {
       allocated: {},
       // ok, these don't make much sense as a layout, but it allows for sorting inside the actual findContaining function to find the first & smallest
-      freed: {
+      deallocated: {
         0: 200,
         3: 120,
         4: 120,
@@ -38,10 +38,10 @@ describe('freealloc', () => {
     ).toEqual(3);
   });
 
-  it('removes the previous freed slot', () => {
+  it('removes the previous deallocated slot', () => {
     freealloc(memory, 100);
 
-    expect(memory.freed[3]).not.toBeDefined();
+    expect(memory.deallocated[3]).not.toBeDefined();
   });
 
   it('adds the allocated slot', () => {

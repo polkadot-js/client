@@ -11,14 +11,14 @@ import type { Memory } from './types';
 // 3. return the smallest slot
 function findContaining (memory: Memory, size: number): PointerType {
   const [ptr] = Object
-    .keys(memory.freed)
+    .keys(memory.deallocated)
     // flowlint-next-line unclear-type:off
-    .filter((offset) => memory.freed[((offset: any): number)] >= size)
+    .filter((offset) => memory.deallocated[((offset: any): number)] >= size)
     .sort((a, b) => {
       // flowlint-next-line unclear-type:off
-      const sizeA = memory.freed[((a: any): number)];
+      const sizeA = memory.deallocated[((a: any): number)];
       // flowlint-next-line unclear-type:off
-      const sizeB = memory.freed[((b: any): number)];
+      const sizeB = memory.deallocated[((b: any): number)];
 
       if (sizeA < sizeB) {
         return -1;
@@ -45,7 +45,7 @@ module.exports = function freealloc (memory: HeapMemory, size: number): PointerT
   }
 
   // FIXME: We are being wasteful here, i.e. we should just un-free the requested size instead of everything (long-term fragmentation and loss)
-  delete memory.freed[ptr];
+  delete memory.deallocated[ptr];
   memory.allocated[ptr] = size;
 
   return ptr;

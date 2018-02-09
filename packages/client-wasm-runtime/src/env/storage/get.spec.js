@@ -8,16 +8,26 @@ describe('get', () => {
   let int;
 
   beforeEach(() => {
-    int = index({});
+    int = index({
+      get: jest.fn(() => new Uint8Array([3, 4, 5]))
+    });
   });
 
   it('retrieves a value', () => {
-    int.set(new Uint8Array([1]), new Uint8Array([2]));
+    int.set(new Uint8Array([1]), new Uint8Array([2, 3, 4]));
 
     expect(
       int.get(new Uint8Array([1]))
     ).toEqual(
-      new Uint8Array([2])
+      new Uint8Array([2, 3, 4])
+    );
+  });
+
+  it('retrieves a value from backed storage', () => {
+    expect(
+      int.get(new Uint8Array([1]))
+    ).toEqual(
+      new Uint8Array([3, 4, 5])
     );
   });
 });

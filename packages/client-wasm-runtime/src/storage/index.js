@@ -9,7 +9,6 @@ const trieRoot = require('@polkadot/util-triehash/root');
 const trieRootOrdered = require('@polkadot/util-triehash/rootOrdered');
 
 const get = require('./get');
-const set = require('./set');
 
 module.exports = function storage ({ heap, storage }: RuntimeEnv): RuntimeInterface$Storage {
   return {
@@ -17,8 +16,8 @@ module.exports = function storage ({ heap, storage }: RuntimeEnv): RuntimeInterf
       let offset = 0;
 
       heap.set(resultPtr, trieRootOrdered(
-        Array.from(new Array(count), (_, index) => {
-          const length = heap.getLU32(lenPtr + (index * 4));
+        Array.apply(null, { length: count }).map((_, index) => {
+          const length = heap.getU32(lenPtr + (index * 4));
           const data = heap.get(valuesPtr + offset, length);
 
           offset += length;
@@ -29,12 +28,12 @@ module.exports = function storage ({ heap, storage }: RuntimeEnv): RuntimeInterf
     },
     storage_root: (resultPtr: PointerType): void =>
       heap.set(resultPtr, trieRoot(storage.pairs())),
-    get_allocated_storage: (keyPtr: PointerType, keyLength: number, dateLenPtr: PointerType): PointerType => {
+    get_allocated_storage: (keyPtr: PointerType, keyLength: number, lenPtr: PointerType): PointerType => {
       const data = get(storage, heap.get(keyPtr, keyLength));
       const dataPtr = heap.allocate(data.length);
 
       heap.set(dataPtr, data);
-      heap.setLU32(dateLenPtr, data.length);
+      heap.setU32(lenPtr, data.length);
 
       return dataPtr;
     },
@@ -46,6 +45,6 @@ module.exports = function storage ({ heap, storage }: RuntimeEnv): RuntimeInterf
       return data.length;
     },
     set_storage: (keyPtr: PointerType, keyLength: number, dataPtr: PointerType, dataLength: number): void =>
-      set(storage, heap.get(keyPtr, keyLength), heap.get(dataPtr, dataLength))
+      storage.set(heap.get(keyPtr, keyLength), heap.get(dataPtr, dataLength))
   };
 };

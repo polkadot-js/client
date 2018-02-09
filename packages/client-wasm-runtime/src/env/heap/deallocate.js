@@ -18,5 +18,5 @@ module.exports = function deallocate (memory: Memory, ptr: PointerType): void {
 
   delete memory.allocated[ptr];
 
-  memory.freed[ptr] = size;
+  memory.deallocated[ptr] = size;
 };

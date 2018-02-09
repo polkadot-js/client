@@ -11,7 +11,7 @@ export type Memory$Buffer = {
 
 export type Memory = {
   allocated: Memory$Buffer,
-  freed: Memory$Buffer,
+  deallocated: Memory$Buffer,
   offset: number,
   size: number,
   uint8: Uint8Array

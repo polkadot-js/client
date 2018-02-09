@@ -24,7 +24,7 @@ describe('envHeap', () => {
   });
 
   it('allows set of LE u32 values', () => {
-    heap.setLU32(4, 0x12345);
+    heap.setU32(4, 0x12345);
 
     expect(
       heap.get(4, 4)
