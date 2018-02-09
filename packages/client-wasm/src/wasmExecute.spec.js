@@ -34,8 +34,8 @@ describe('wasm (polkadot-runtime)', () => {
     ).toBeDefined();
   });
 
-  it('executes an actual transaction', () => {
-    console.log('instance.execute_transaction', instance.execute_transaction, typeof instance.execute_transaction);
+  it('executes actual runtime tests', () => {
+    console.log('instance.run_tests', instance.run_tests, typeof instance.run_tests);
 
     expect(
       instance.run_tests(new Uint8Array([]))
