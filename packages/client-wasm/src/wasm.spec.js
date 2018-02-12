@@ -19,8 +19,26 @@ describe('wasm', () => {
 
     it('allows calls into the module', () => {
       expect(
-        instance.addTwo(22, 33)
+        instance.addTwoSimple(22, 33)
       ).toEqual(55);
+    });
+
+    it('allows proxy calls into the module', () => {
+      expect(
+        instance.addTwoProxy(111, 111)
+      ).toEqual(222);
+    });
+
+    it('allows typed calls into the module', () => {
+      expect(
+        instance.addTwoType(62, 45)
+      ).toEqual(107);
+    });
+
+    it('allows proxy type calls into the module', () => {
+      expect(
+        instance.addTwoProxyType(55, 21)
+      ).toEqual(76);
     });
   });
 
