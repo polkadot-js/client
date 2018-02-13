@@ -8,6 +8,7 @@ import type { WasmExtraImports, WasmStateInstances } from './types';
 
 const createRuntime = require('@polkadot/client-wasm-runtime');
 
+const createFn = require('./create/fn');
 const createImports = require('./create/imports');
 const createInstance = require('./create/instance');
 const createMemory = require('./create/memory');
@@ -27,18 +28,13 @@ module.exports = function wasm ({ wasm: { memoryInitial, memoryMaximum } }: Conf
     createImports(memory, table, runtime, imports)
   );
 
-  return Object.keys(instance.exports).reduce((result, name) => {
-    result[name] = !OVERLAYS.includes(name)
-      ? instance.exports[name]
-      : (data: Uint8Array) =>
-        instance.exports[name](
-          runtime.environment.heap.set(
-            runtime.environment.heap.allocate(data.length),
-            data
-          ),
-          data.length
-        );
+  return Object
+    .keys(instance.exports)
+    .reduce((result, name) => {
+      result[name] = !OVERLAYS.includes(name)
+        ? instance.exports[name]
+        : createFn(instance.exports, name, runtime);
 
-    return result;
-  }, {});
+      return result;
+    }, {});
 };
