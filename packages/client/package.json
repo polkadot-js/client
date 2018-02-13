@@ -40,8 +40,8 @@
     "@polkadot/client-rpc": "^0.8.1",
     "@polkadot/client-state": "^0.8.1",
     "@polkadot/client-wasm": "^0.8.1",
-    "@polkadot/primitives": "^0.4.10",
-    "@polkadot/util": "^0.14.3",
+    "@polkadot/primitives": "^0.5.1",
+    "@polkadot/util": "^0.14.9",
     "package-json": "^4.0.1",
     "yargs": "^10.0.3"
   },
