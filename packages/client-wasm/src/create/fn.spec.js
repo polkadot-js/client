@@ -2,6 +2,7 @@
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
 
+const l = require('@polkadot/util/logger')('test');
 const isFunction = require('@polkadot/util/is/function');
 
 const { createFn } = require('./index');
@@ -15,6 +16,7 @@ describe('createFn', () => {
 
     runtime = {
       environment: {
+        l,
         heap: {
           allocate: jest.fn(() => ++callId),
           set: jest.fn((ptr) => ptr)

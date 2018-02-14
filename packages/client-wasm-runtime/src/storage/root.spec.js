@@ -3,6 +3,7 @@
 // of the ISC license. See the LICENSE file for details.
 /* eslint camelcase: 0 */
 
+const l = require('@polkadot/util/logger')('test');
 const hexToU8a = require('@polkadot/util/hex/toU8a');
 const u8aFromString = require('@polkadot/util/u8a/fromString');
 
@@ -20,7 +21,7 @@ describe('storage_root', () => {
 
     storage = {};
 
-    storage_root = index({ heap, storage }).storage_root;
+    storage_root = index({ l, heap, storage }).storage_root;
   });
 
   it('creates a basic storage root', () => {

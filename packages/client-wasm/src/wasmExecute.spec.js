@@ -46,8 +46,7 @@ describe('wasm (runtimes)', () => {
     instance = wasm(
       config,
       { chain, db },
-      loadWasmExt('../../../../polkadot_runtime.compact.wasm')
-      // loadWasmExt('polkadot_runtime.wasm')
+      loadWasmExt('polkadot_runtime.wasm')
     );
   });
 
@@ -57,15 +56,7 @@ describe('wasm (runtimes)', () => {
     ).toBeDefined();
   });
 
-  describe('testing', () => {
-    it('runs', () => {
-      expect(
-        instance.testing_something(1, 2)
-      ).toEqual(3);
-    });
-  });
-
-  describe('execute_block', () => {
+  describe.skip('execute_block', () => {
     it('executes a basic block', () => {
       // const block = encodeBlock({
       //   header: {

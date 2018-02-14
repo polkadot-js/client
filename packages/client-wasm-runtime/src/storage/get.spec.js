@@ -3,6 +3,8 @@
 // of the ISC license. See the LICENSE file for details.
 /* eslint camelcase: 0 */
 
+const l = require('@polkadot/util/logger')('test');
+
 const index = require('./index');
 
 describe('get_storage_into', () => {
@@ -22,7 +24,7 @@ describe('get_storage_into', () => {
       get: jest.fn((key) => new Uint8Array([0x1, 0x2, 0x3, 0x4, 0x5]))
     };
 
-    get_storage_into = index({ heap, storage }).get_storage_into;
+    get_storage_into = index({ l, heap, storage }).get_storage_into;
   });
 
   it('retrieves the correct value from storage', () => {

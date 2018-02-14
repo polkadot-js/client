@@ -3,6 +3,8 @@
 // of the ISC license. See the LICENSE file for details.
 /* eslint camelcase: 0 */
 
+const l = require('@polkadot/util/logger')('test');
+
 const index = require('./index');
 
 describe('ed25519Verify', () => {
@@ -24,7 +26,7 @@ describe('ed25519Verify', () => {
       get: (ptr, len) => uint8.subarray(ptr, ptr + len)
     };
 
-    ed25519_verify = index({ heap }).ed25519_verify;
+    ed25519_verify = index({ l, heap }).ed25519_verify;
   });
 
   it('verifies correct signatures', () => {

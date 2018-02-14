@@ -7,9 +7,10 @@
     "node": ">=8.0"
   },
   "bin": {
-    "polkadot-wat2wasm": "./scripts/wat2wasm.sh",
-    "polkadot-wasm2wat": "./scripts/wasm2wat.sh",
-    "polkadot-wabtbuild": "./scripts/wabtbuild.sh"
+    "polkadot-wasm-wat2wasm": "./scripts/polkadot-wasm-wat2wasm.sh",
+    "polkadot-wasm-wasm2wat": "./scripts/polkadot-wasm-wasm2wat.sh",
+    "polkadot-wasm-build-wabt": "./scripts/polkadot-wasm-build-wabt.sh",
+    "polkadot-wasm-build-binaryen": "./scripts/polkadot-wasm-build-binaryen.sh"
   },
   "publishConfig": {
     "access": "public",

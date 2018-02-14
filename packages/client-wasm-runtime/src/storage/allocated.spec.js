@@ -3,6 +3,7 @@
 // of the ISC license. See the LICENSE file for details.
 /* eslint camelcase: 0 */
 
+const l = require('@polkadot/util/logger')('test');
 const u8aFromString = require('@polkadot/util/u8a/fromString');
 
 const envHeap = require('../environment/heap');
@@ -18,7 +19,7 @@ describe('get_allocated_storage', () => {
     heap = envHeap({ buffer: new Uint8Array(64 * 1024) });
     storage = envStorage({});
 
-    get_allocated_storage = index({ heap, storage }).get_allocated_storage;
+    get_allocated_storage = index({ l, heap, storage }).get_allocated_storage;
   });
 
   it('retrieves allocated storage for a key', () => {

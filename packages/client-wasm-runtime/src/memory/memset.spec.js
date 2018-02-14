@@ -2,6 +2,8 @@
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
 
+const l = require('@polkadot/util/logger')('test');
+
 const index = require('./index');
 
 describe('memset', () => {
@@ -10,6 +12,7 @@ describe('memset', () => {
 
   beforeEach(() => {
     runtime = {
+      l,
       heap: {
         uint8: new Uint8Array(5)
       }

@@ -3,6 +3,8 @@
 // of the ISC license. See the LICENSE file for details.
 /* eslint camelcase: 0 */
 
+const l = require('@polkadot/util/logger')('test');
+
 const index = require('./index');
 
 describe('twox_256', () => {
@@ -17,7 +19,7 @@ describe('twox_256', () => {
       set: jest.fn()
     };
 
-    twox_256 = index({ heap }).twox_256;
+    twox_256 = index({ l, heap }).twox_256;
   });
 
   it('stores the retrieved value', () => {

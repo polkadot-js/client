@@ -3,6 +3,7 @@
 // of the ISC license. See the LICENSE file for details.
 /* eslint camelcase: 0 */
 
+const l = require('@polkadot/util/logger')('test');
 const hexToU8a = require('@polkadot/util/hex/toU8a');
 const u8aFromString = require('@polkadot/util/u8a/fromString');
 
@@ -30,7 +31,7 @@ describe('enumerated_trie_root', () => {
         offset += item.length;
       });
 
-      index({ heap }).enumerated_trie_root(ptrVal, ptrLen, arr.length, ptrRes);
+      index({ l, heap }).enumerated_trie_root(ptrVal, ptrLen, arr.length, ptrRes);
 
       return heap.get(ptrRes, 32);
     };

@@ -3,6 +3,8 @@
 // of the ISC license. See the LICENSE file for details.
 /* eslint camelcase: 0 */
 
+const l = require('@polkadot/util/logger')('test');
+
 const index = require('./index');
 
 describe('set_storage', () => {
@@ -21,7 +23,7 @@ describe('set_storage', () => {
       set: jest.fn()
     };
 
-    set_storage = index({ heap, storage }).set_storage;
+    set_storage = index({ l, heap, storage }).set_storage;
   });
 
   it('sets the value into storage', () => {
