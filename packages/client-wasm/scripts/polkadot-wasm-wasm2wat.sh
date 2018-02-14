@@ -13,7 +13,7 @@ if [ "$SRC" == "" ]; then
 fi
 
 BIN_PATH=tmp/wabt/out/gcc/Release
-DST=${SRC/wasm/wat}
+DST=${SRC/.wasm/.wat}
 BASEDIR=$(dirname "$0")
 
 $BASEDIR/polkadot-wasm-build-wabt.sh
