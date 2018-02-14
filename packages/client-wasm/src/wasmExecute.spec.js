@@ -2,7 +2,7 @@
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
 
-const encodeBlock = require('@polkadot/primitives-codec/block/encode');
+// const encodeBlock = require('@polkadot/primitives-codec/block/encode');
 const hexToU8a = require('@polkadot/util/hex/toU8a');
 
 const { loadWasmExt } = require('../test/helpers');
@@ -56,7 +56,7 @@ describe('wasm (runtimes)', () => {
     ).toBeDefined();
   });
 
-  describe.skip('execute_block', () => {
+  describe('execute_block', () => {
     it('executes a basic block', () => {
       // const block = encodeBlock({
       //   header: {
