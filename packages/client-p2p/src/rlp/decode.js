@@ -5,15 +5,14 @@
 
 import type { MessageInterface } from '../types';
 
-const rlp = require('rlp');
-
-const bufferToNumber = require('@polkadot/util/buffer/toNumber');
+const rlp = require('@polkadot/util-rlp/decode');
+const u8aToBn = require('@polkadot/util/u8a/toBn');
 
 const message = require('../message');
 
-module.exports = function rlpDecode (buffer: Buffer): MessageInterface {
-  const [idBuffer, raw] = rlp.decode(buffer);
-  const id = bufferToNumber(idBuffer);
+module.exports = function rlpDecode (u8a: Uint8Array): MessageInterface {
+  const [idU8a, raw] = rlp(u8a);
+  const id = u8aToBn(idU8a).toNumber();
   const instance: MessageInterface = message(id);
 
   instance.decode(id, raw);

@@ -115,35 +115,35 @@
     stylelint "^8.2.0"
     stylelint-config-standard "^18.0.0"
 
-"@polkadot/primitives-codec@^0.6.1":
-  version "0.6.1"
-  resolved "https://registry.yarnpkg.com/@polkadot/primitives-codec/-/primitives-codec-0.6.1.tgz#7b07ebb44f9540869db54cd598ab6e7d0c27e2c7"
+"@polkadot/primitives-codec@^0.6.3":
+  version "0.6.3"
+  resolved "https://registry.yarnpkg.com/@polkadot/primitives-codec/-/primitives-codec-0.6.3.tgz#677494c0f9a5e62c118967e17b636a270eefaebe"
   dependencies:
-    "@polkadot/primitives" "^0.6.1"
-    "@polkadot/primitives-rlp" "^0.6.1"
+    "@polkadot/primitives" "^0.6.3"
+    "@polkadot/primitives-rlp" "^0.6.3"
     "@polkadot/util" "^0.14.11"
     babel-runtime "^6.26.0"
 
-"@polkadot/primitives-json@^0.6.1":
-  version "0.6.1"
-  resolved "https://registry.yarnpkg.com/@polkadot/primitives-json/-/primitives-json-0.6.1.tgz#4556d9e5d4cfdb5cbc93f95c6a761e225dfc1874"
+"@polkadot/primitives-json@^0.6.3":
+  version "0.6.3"
+  resolved "https://registry.yarnpkg.com/@polkadot/primitives-json/-/primitives-json-0.6.3.tgz#553e3d48d8ea4537d2e2c56d88c8336556016019"
   dependencies:
-    "@polkadot/primitives" "^0.6.1"
+    "@polkadot/primitives" "^0.6.3"
     "@polkadot/util" "^0.14.11"
     babel-runtime "^6.26.0"
 
-"@polkadot/primitives-rlp@^0.6.1":
-  version "0.6.1"
-  resolved "https://registry.yarnpkg.com/@polkadot/primitives-rlp/-/primitives-rlp-0.6.1.tgz#669523c0403a6ece6dc6376a089fc94c17c88156"
+"@polkadot/primitives-rlp@^0.6.3":
+  version "0.6.3"
+  resolved "https://registry.yarnpkg.com/@polkadot/primitives-rlp/-/primitives-rlp-0.6.3.tgz#968eec603b3a221b5e9b80feb1ebbf5dfe0ea5cd"
   dependencies:
-    "@polkadot/primitives" "^0.6.1"
-    "@polkadot/primitives-json" "^0.6.1"
+    "@polkadot/primitives" "^0.6.3"
+    "@polkadot/primitives-json" "^0.6.3"
     "@polkadot/util" "^0.14.11"
     babel-runtime "^6.26.0"
 
-"@polkadot/primitives@^0.6.1":
-  version "0.6.1"
-  resolved "https://registry.yarnpkg.com/@polkadot/primitives/-/primitives-0.6.1.tgz#c98111ecf7625a8bbfb87356c49f712c032fad37"
+"@polkadot/primitives@^0.6.3":
+  version "0.6.3"
+  resolved "https://registry.yarnpkg.com/@polkadot/primitives/-/primitives-0.6.3.tgz#8fa9050aa995d175904072b5f63e02b51475b63b"
   dependencies:
     "@polkadot/util" "^0.14.11"
     babel-runtime "^6.26.0"
@@ -5839,7 +5839,7 @@ ripemd160@^2.0.0:
     hash-base "^2.0.0"
     inherits "^2.0.1"
 
-rlp@^2.0.0, rlp@jacogr/rlp:
+rlp@^2.0.0:
   version "2.0.0"
   resolved "https://codeload.github.com/jacogr/rlp/tar.gz/ca33b296fc43d7a3543d8a8f172adc9b66826f5f"
 

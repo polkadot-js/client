@@ -56,7 +56,7 @@ describe('wasm (runtimes)', () => {
     ).toBeDefined();
   });
 
-  describe('execute_block', () => {
+  describe.skip('execute_block', () => {
     it('executes a basic block', () => {
       // const block = encodeBlock({
       //   header: {

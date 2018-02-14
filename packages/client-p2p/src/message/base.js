@@ -5,7 +5,7 @@
 
 const assert = require('@polkadot/util/assert');
 const ExtError = require('@polkadot/util/ext/error');
-const numberToBuffer = require('@polkadot/util/number/toBuffer');
+const numberToU8a = require('@polkadot/util/number/toU8a');
 
 module.exports = class BaseMessage {
   id: number;
@@ -22,9 +22,9 @@ module.exports = class BaseMessage {
   }
 
   // flowlint-next-line unclear-type:off
-  encode (): [Buffer, Array<any>] {
+  encode (): [Uint8Array, Array<any>] {
     return [
-      numberToBuffer(this.id),
+      numberToU8a(this.id),
       this._rawEncode()
     ];
   }

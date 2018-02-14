@@ -5,10 +5,10 @@
 
 import type { MessageInterface } from '../types';
 
-const rlp = require('rlp');
+const rlp = require('@polkadot/util-rlp/encode');
 
-module.exports = function rlpEncode (message: MessageInterface): Buffer {
-  return rlp.encode(
+module.exports = function rlpEncode (message: MessageInterface): Uint8Array {
+  return rlp(
     message.encode()
   );
 };

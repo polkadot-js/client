@@ -9,7 +9,7 @@ export interface MessageInterface {
   constructor (data: mixed): mixed;
 
   // flowlint-next-line unclear-type:off
-  encode (): [Buffer, Array<any>];
+  encode (): [Uint8Array, Array<any>];
   // flowlint-next-line unclear-type:off
   decode (id: number, raw: Array<any>): void;
 }

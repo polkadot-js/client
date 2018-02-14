@@ -39,7 +39,9 @@ describe('BaseMessage', () => {
 
       expect(
         base.encode()
-      ).toEqual([Buffer.from([123]), raw]);
+      ).toEqual([
+        new Uint8Array([123]), raw
+      ]);
     });
   });
 });

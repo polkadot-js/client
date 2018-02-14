@@ -18,6 +18,7 @@ else
   if [ ! -d "binaryen" ]; then
     echo "*** Cloning binaryen"
     git clone --recursive https://github.com/WebAssembly/binaryen.git
+    rm -rf binaryen/test
   fi
 
   echo "*** Building wasm-opt"

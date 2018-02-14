@@ -3,22 +3,29 @@
 // of the ISC license. See the LICENSE file for details.
 
 const BN = require('bn.js');
+const hexToU8a = require('@polkadot/util/hex/toU8a');
 
 const StatusMessage = require('./status');
 
 describe('StatusMessage', () => {
   it('assigns sane defaults', () => {
     expect(
-      new StatusMessage()
-    ).toMatchObject({
-      roles: ['none'],
-      bestNumber: new BN(0),
-      bestHash: '0x00',
-      genesisHash: '0x00',
-      validatorSignature: '0x00',
-      validatorId: '0x00',
-      parachainId: new BN(0)
-    });
+      JSON.stringify(
+        new StatusMessage()
+      )
+    ).toEqual(
+      JSON.stringify({
+        id: 0,
+        version: 0,
+        roles: ['none'],
+        bestNumber: new BN(0),
+        bestHash: hexToU8a('0x0', 256),
+        genesisHash: hexToU8a('0x0', 256),
+        validatorSignature: hexToU8a('0x0', 512),
+        validatorId: hexToU8a('0x0', 160),
+        parachainId: new BN(0)
+      })
+    );
   });
 
   it('assigns constructor values', () => {
@@ -50,10 +57,10 @@ describe('StatusMessage', () => {
       new StatusMessage({
         roles: ['full', 'validator'],
         // bestNumber: new BN(1),
-        bestHash: '0x2',
-        genesisHash: '0x3',
-        validatorSignature: '0x4',
-        validatorId: '0x5'
+        bestHash: hexToU8a('0x2', 256),
+        genesisHash: hexToU8a('0x3', 256),
+        validatorSignature: hexToU8a('0x4', 512),
+        validatorId: hexToU8a('0x5', 160)
         // parachainId: new BN(6)
       })._rawEncode()
     );
@@ -63,10 +70,10 @@ describe('StatusMessage', () => {
     ).toMatchObject({
       roles: ['full', 'validator'],
       // bestNumber: new BN(1),
-      bestHash: '0x02',
-      genesisHash: '0x03',
-      validatorSignature: '0x04',
-      validatorId: '0x05'
+      bestHash: hexToU8a('0x2', 256),
+      genesisHash: hexToU8a('0x3', 256),
+      validatorSignature: hexToU8a('0x4', 512),
+      validatorId: hexToU8a('0x5', 160)
       // parachainId: new BN(6)
     });
   });

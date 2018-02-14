@@ -14,6 +14,8 @@ const EventEmitter = require('eventemitter3');
 const pull = require('pull-stream');
 const pushable = require('pull-pushable');
 
+const bufferToU8a = require('@polkadot/util/buffer/toU8a');
+const u8aToBuffer = require('@polkadot/util/u8a/toBuffer');
 const stringShorten = require('@polkadot/util/string/shorten');
 
 const rlpDecode = require('./rlp/decode');
@@ -62,7 +64,7 @@ module.exports = class Peer extends EventEmitter implements PeerInterface {
     return this._receive(connection);
   }
 
-  _decodeMessage = (encoded: Buffer): void => {
+  _decodeMessage = (encoded: Uint8Array): void => {
     console.log('R', encoded);
 
     const message = rlpDecode(encoded);
@@ -70,7 +72,7 @@ module.exports = class Peer extends EventEmitter implements PeerInterface {
     this.emit('message', message);
   }
 
-  _encodeMessage = (message: MessageInterface): Buffer => {
+  _encodeMessage = (message: MessageInterface): Uint8Array => {
     const encoded = rlpEncode(message);
 
     console.log('W', encoded);
@@ -87,7 +89,13 @@ module.exports = class Peer extends EventEmitter implements PeerInterface {
 
       pull(
         connection,
-        pull.drain(this._decodeMessage, () => false)
+        pull.drain(
+          (buffer: Buffer) =>
+            this._decodeMessage(
+              bufferToU8a(buffer)
+            ),
+          () => false
+        )
       );
     } catch (error) {
       return false;
@@ -99,7 +107,9 @@ module.exports = class Peer extends EventEmitter implements PeerInterface {
   send (message: MessageInterface): boolean {
     try {
       this._pushable.push(
-        this._encodeMessage(message)
+        u8aToBuffer(
+          this._encodeMessage(message)
+        )
       );
     } catch (error) {
       return false;
