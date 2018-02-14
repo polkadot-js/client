@@ -10,9 +10,11 @@ const trieRootOrdered = require('@polkadot/util-triehash/rootOrdered');
 
 const get = require('./get');
 
-module.exports = function storage ({ heap, storage }: RuntimeEnv): RuntimeInterface$Storage {
+module.exports = function storage ({ l, heap, storage }: RuntimeEnv): RuntimeInterface$Storage {
   return {
     enumerated_trie_root: (valuesPtr: PointerType, lenPtr: PointerType, count: number, resultPtr: PointerType): void => {
+      l.debug('enumerated_trie_root', valuesPtr, lenPtr, count, resultPtr);
+
       let offset = 0;
 
       heap.set(resultPtr, trieRootOrdered(
@@ -27,9 +29,13 @@ module.exports = function storage ({ heap, storage }: RuntimeEnv): RuntimeInterf
       ));
     },
     storage_root: (resultPtr: PointerType): void => {
+      l.debug('storage_root', resultPtr);
+
       heap.set(resultPtr, trieRoot(storage.pairs()));
     },
     get_allocated_storage: (keyPtr: PointerType, keyLength: number, lenPtr: PointerType): PointerType => {
+      l.debug('get_allocated_storage', keyPtr, keyLength, lenPtr);
+
       const data = get(
         storage,
         heap.get(keyPtr, keyLength)
@@ -43,6 +49,8 @@ module.exports = function storage ({ heap, storage }: RuntimeEnv): RuntimeInterf
       );
     },
     get_storage_into: (keyPtr: PointerType, keyLength: number, dataPtr: PointerType, dataLength: number): number => {
+      l.debug('get_storage_into', keyPtr, keyLength, dataPtr, dataLength);
+
       const data = get(
         storage,
         heap.get(keyPtr, keyLength),
@@ -54,6 +62,8 @@ module.exports = function storage ({ heap, storage }: RuntimeEnv): RuntimeInterf
       return data.length;
     },
     set_storage: (keyPtr: PointerType, keyLength: number, dataPtr: PointerType, dataLength: number): void => {
+      l.debug('set_storage', keyPtr, keyLength, dataPtr, dataLength);
+
       storage.set(
         heap.get(keyPtr, keyLength),
         heap.get(dataPtr, dataLength)

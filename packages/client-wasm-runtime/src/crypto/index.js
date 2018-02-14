@@ -10,19 +10,31 @@ const naclVerify = require('@polkadot/util-crypto/nacl/verify');
 const xxhashAsU8a128 = require('@polkadot/util-crypto/xxhash/asU8a128');
 const xxhashAsU8a256 = require('@polkadot/util-crypto/xxhash/asU8a256');
 
-module.exports = function crypto ({ heap }: RuntimeEnv): RuntimeInterface$Crypto {
+module.exports = function crypto ({ l, heap }: RuntimeEnv): RuntimeInterface$Crypto {
   return {
-    blake2_256: (data: PointerType, len: number, out: PointerType): void =>
-      heap.set(out, blake2AsU8a256(heap.get(data, len))),
-    ed25519_verify: (msgPtr: PointerType, msgLen: number, sigPtr: PointerType, pubkeyPtr: PointerType): number =>
-      naclVerify(
+    blake2_256: (dataPtr: PointerType, dataLen: number, outPtr: PointerType): void => {
+      l.debug('blake2_256', dataPtr, dataLen, outPtr);
+
+      heap.set(outPtr, blake2AsU8a256(heap.get(dataPtr, dataLen)));
+    },
+    ed25519_verify: (msgPtr: PointerType, msgLen: number, sigPtr: PointerType, pubkeyPtr: PointerType): number => {
+      l.debug('ed25519_verify', msgPtr, msgLen, sigPtr, pubkeyPtr);
+
+      return naclVerify(
         heap.get(msgPtr, msgLen),
         heap.get(sigPtr, 64),
         heap.get(pubkeyPtr, 32)
-      ) ? 0 : 5,
-    twox_128: (data: PointerType, len: number, out: PointerType): void =>
-      heap.set(out, xxhashAsU8a128(heap.get(data, len))),
-    twox_256: (data: PointerType, len: number, out: PointerType): void =>
-      heap.set(out, xxhashAsU8a256(heap.get(data, len)))
+      ) ? 0 : 5;
+    },
+    twox_128: (dataPtr: PointerType, dataLen: number, outPtr: PointerType): void => {
+      l.debug('twox_128', dataPtr, dataLen, outPtr);
+
+      heap.set(outPtr, xxhashAsU8a128(heap.get(dataPtr, dataLen)));
+    },
+    twox_256: (dataPtr: PointerType, dataLen: number, outPtr: PointerType): void => {
+      l.debug('twox_256', dataPtr, dataLen, outPtr);
+
+      heap.set(outPtr, xxhashAsU8a256(heap.get(dataPtr, dataLen)));
+    }
   };
 };
