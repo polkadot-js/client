@@ -5,21 +5,23 @@
 
 import type { RuntimeInterface } from '@polkadot/client-wasm-runtime/types';
 
-// flowlint-next-line unclear-type:off
-module.exports = function createFn (exports: Object, name: string, runtime: RuntimeInterface): Function {
-  return (...data: Array<Uint8Array>) =>
-    exports[name].apply(
-      exports,
-      data.reduce((params, data) => {
-        params.push(
-          runtime.environment.heap.set(
-            runtime.environment.heap.allocate(data.length),
-            data
-          )
-        );
-        params.push(data.length);
+const u8aToHex = require('@polkadot/util/u8a/toHex');
 
-        return params;
-      }, [])
-    );
+const FnType = (...data: Array<Uint8Array>) => Uint8Array;
+
+module.exports = function createFn ({ exports }: WebAssemblyInstance, name: string, { environment: { l, heap } }: RuntimeInterface): FnType {
+  return (...data: Array<Uint8Array>): Uint8Array => {
+    const params = data.reduce((params, data) => {
+      l.debug('storing data', u8aToHex(data));
+
+      params.push(heap.set(heap.allocate(data.length), data));
+      params.push(data.length);
+
+      return params;
+    }, []);
+
+    l.debug('executing', name, params);
+
+    return exports[name].apply(exports, params);
+  };
 };

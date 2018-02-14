@@ -7,7 +7,7 @@ const isFunction = require('@polkadot/util/is/function');
 const { createFn } = require('./index');
 
 describe('createFn', () => {
-  let int;
+  let instance;
   let runtime;
 
   beforeEach(() => {
@@ -21,21 +21,23 @@ describe('createFn', () => {
         }
       }
     };
-    int = {
-      test: jest.fn()
+    instance = {
+      exports: {
+        test: jest.fn()
+      }
     };
   });
 
   it('returns a callable function', () => {
     expect(
       isFunction(
-        createFn(int, 'test', runtime)
+        createFn(instance, 'test', runtime)
       )
     ).toEqual(true);
   });
 
   it('stores the inputs (upon call)', () => {
-    createFn(int, 'test', runtime)(
+    createFn(instance, 'test', runtime)(
       new Uint8Array([9, 8, 7]),
       new Uint8Array([1, 2, 3])
     );
@@ -49,13 +51,13 @@ describe('createFn', () => {
   });
 
   it('passes the offsets & length (upon call)', () => {
-    createFn(int, 'test', runtime)(
+    createFn(instance, 'test', runtime)(
       new Uint8Array([9, 8, 7, 6, 5]),
       new Uint8Array([1, 2, 3])
     );
 
     expect(
-      int.test
+      instance.exports.test
     ).toHaveBeenCalledWith(
       6, 5, // offset, length
       7, 3 // offset, length

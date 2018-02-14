@@ -33,7 +33,7 @@ module.exports = function wasm ({ wasm: { memoryInitial, memoryMaximum } }: Conf
     .reduce((result, name) => {
       result[name] = !OVERLAYS.includes(name)
         ? instance.exports[name]
-        : createFn(instance.exports, name, runtime);
+        : createFn(instance, name, runtime);
 
       return result;
     }, {});
