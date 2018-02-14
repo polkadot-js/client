@@ -12,7 +12,7 @@ if [ "$SRC" == "" ]; then
   exit 1
 fi
 
-BIN_PATH=tmp/wabt/out/gcc/Release
+BIN_PATH=tmp/wabt/bin
 DST=${SRC/.wat/.wasm}
 BASEDIR=$(dirname "$0")
 

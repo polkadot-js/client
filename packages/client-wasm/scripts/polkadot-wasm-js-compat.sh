@@ -26,7 +26,7 @@ for SRC in "${SOURCES[@]}"; do
 
   cat $INFILE.wat | sed 's/(global $tempRet0 (mut i32) (i32.const 0))/& (func (export "getTempRet0") (result i32) (get_global $tempRet0))/' > $INFILE.legal.wat
 
-  tmp/wabt/out/gcc/Release/wat2wasm $INFILE.legal.wat -o $DST/$SRC
+  tmp/wabt/bin/wat2wasm $INFILE.legal.wat -o $DST/$SRC
 done
 
 exit 0
