@@ -8,5 +8,10 @@ import type { Logger } from '@polkadot/util/types';
 const BN = require('bn.js');
 
 module.exports = function printNum (l: Logger, hi: number, lo: number): void {
-  l.log(new BN(hi).iushln(32).iaddn(lo).toString());
+  l.log(
+    new BN(hi)
+      .iushln(32)
+      .iaddn(lo)
+      .toString()
+  );
 };
