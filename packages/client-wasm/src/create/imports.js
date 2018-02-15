@@ -19,6 +19,6 @@ module.exports = function createImports (memory: WebAssembly.Memory, table: WebA
       memoryBase: 0,
       table,
       tableBase: 0
-    })
+    }, imported.env || {})
   });
 };

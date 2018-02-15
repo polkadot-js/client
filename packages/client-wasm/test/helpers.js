@@ -19,13 +19,21 @@ function loadWasmTest (filename) {
   );
 }
 
+function loadWasmRt (filename) {
+  return loadWasm(
+    path.join(__dirname, '../../client-wasm-runtime/wasm', filename)
+  );
+}
+
 function loadWasmExt (filename) {
   return loadWasm(
-    path.join(__dirname, 'wasm-bin', filename)
+    // path.join(__dirname, 'wasm-bin', filename)
+    path.join(__dirname, '../../../node_modules/@polkadot/wasm-bin/wasm32-unknown-unknown', filename)
   );
 }
 
 module.exports = {
   loadWasmExt,
+  loadWasmRt,
   loadWasmTest
 };

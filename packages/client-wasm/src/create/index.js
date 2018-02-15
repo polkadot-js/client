@@ -9,6 +9,7 @@ const createInstance = require('./instance');
 const createMemory = require('./memory');
 const createModule = require('./module');
 const createTable = require('./table');
+const createWrapper = require('./wrapper');
 
 module.exports = {
   createFn,
@@ -16,5 +17,6 @@ module.exports = {
   createInstance,
   createMemory,
   createModule,
-  createTable
+  createTable,
+  createWrapper
 };

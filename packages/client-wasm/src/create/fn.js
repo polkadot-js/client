@@ -9,8 +9,8 @@ const u8aToHex = require('@polkadot/util/u8a/toHex');
 
 const FnType = (...data: Array<Uint8Array>) => Uint8Array;
 
-module.exports = function createFn ({ exports }: WebAssemblyInstance, name: string, { environment: { l, heap } }: RuntimeInterface): FnType {
-  return (...data: Array<Uint8Array>): Uint8Array => {
+module.exports = function createFn (fns: WebAssemblyInstance$Exports, name: string, { environment: { l, heap } }: RuntimeInterface): FnType {
+  return (...data: Array<Uint8Array>): number => {
     const params = data.reduce((params, data) => {
       l.debug('storing data', u8aToHex(data));
 
@@ -22,6 +22,6 @@ module.exports = function createFn ({ exports }: WebAssemblyInstance, name: stri
 
     l.debug('executing', name, params);
 
-    return exports[name].apply(exports, params);
+    return fns[name].apply(null, params);
   };
 };

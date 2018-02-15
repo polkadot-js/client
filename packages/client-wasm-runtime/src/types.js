@@ -44,7 +44,7 @@ export type RuntimeInterface$Crypto = {
 export type RuntimeInterface$Io = {
   print_hex: (ptr: PointerType, len: number) => void,
   print_utf8: (ptr: PointerType, len: number) => void,
-  print_num: (num: number) => void
+  print_num: (hi: number, lo: number) => void
 }
 
 export type RuntimeInterface$Memory = {

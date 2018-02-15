@@ -5,6 +5,8 @@
 
 import type { Logger } from '@polkadot/util/types';
 
-module.exports = function printNum (l: Logger, num: number): void {
-  l.log(num);
+const BN = require('bn.js');
+
+module.exports = function printNum (l: Logger, hi: number, lo: number): void {
+  l.log(new BN(hi).iushln(32).iaddn(lo).toString());
 };
