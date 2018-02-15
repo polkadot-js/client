@@ -10,9 +10,6 @@ NODEDIR=$BASEDIR/../../../node_modules/@polkadot/wasm-bin/wasm32-unknown-unknown
 DST=$BASEDIR/../test/wasm-bin
 SOURCES=( "polkadot_runtime.wasm" "polkadot_runtime.compact.wasm" )
 
-$BASEDIR/polkadot-wasm-build-binaryen.sh
-$BASEDIR/polkadot-wasm-build-wabt.sh
-
 rm -rf $DST
 mkdir -p $DST/input
 

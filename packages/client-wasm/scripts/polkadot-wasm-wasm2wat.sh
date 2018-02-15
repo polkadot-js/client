@@ -16,8 +16,6 @@ BIN_PATH=tmp/wabt/bin
 DST=${SRC/.wasm/.wat}
 BASEDIR=$(dirname "$0")
 
-$BASEDIR/polkadot-wasm-build-wabt.sh
-
 echo "*** Compiling $SRC -o $DST"
 $BIN_PATH/wasm2wat $SRC -o $DST
 
