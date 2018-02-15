@@ -3,7 +3,7 @@
 // of the ISC license. See the LICENSE file for details.
 
 const pull = require('pull-stream');
-const isU8a = require('@polkadot/util/is/uint8Array');
+const isU8a = require('@polkadot/util/is/u8a');
 
 const StatusMessage = require('./message/status');
 // const rlpEncode = require('./rlp/encode');

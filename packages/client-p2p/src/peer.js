@@ -65,19 +65,11 @@ module.exports = class Peer extends EventEmitter implements PeerInterface {
   }
 
   _decodeMessage = (encoded: Uint8Array): void => {
-    console.log('R', encoded);
-
-    const message = rlpDecode(encoded);
-
-    this.emit('message', message);
+    this.emit('message', rlpDecode(encoded));
   }
 
   _encodeMessage = (message: MessageInterface): Uint8Array => {
-    const encoded = rlpEncode(message);
-
-    console.log('W', encoded);
-
-    return encoded;
+    return rlpEncode(message);
   }
 
   _receive (connection: LibP2P$Connection): boolean {

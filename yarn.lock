@@ -148,9 +148,9 @@
     "@polkadot/util" "^0.14.11"
     babel-runtime "^6.26.0"
 
-"@polkadot/util-crypto@^0.14.11":
-  version "0.14.11"
-  resolved "https://registry.yarnpkg.com/@polkadot/util-crypto/-/util-crypto-0.14.11.tgz#054e3b4fccb4786eacb7ecb131dac1b5e035f8df"
+"@polkadot/util-crypto@^0.15.1":
+  version "0.15.1"
+  resolved "https://registry.yarnpkg.com/@polkadot/util-crypto/-/util-crypto-0.15.1.tgz#692f2e3b1c097b0635362cb309d7fcb480113b12"
   dependencies:
     babel-runtime "^6.26.0"
     blakejs "^1.1.0"
@@ -158,20 +158,20 @@
     tweetnacl "^1.0.0"
     xxhashjs "^0.2.2"
 
-"@polkadot/util-rlp@^0.14.11":
-  version "0.14.11"
-  resolved "https://registry.yarnpkg.com/@polkadot/util-rlp/-/util-rlp-0.14.11.tgz#c095cd61946860c97bbe511429e7f125c3028f42"
+"@polkadot/util-rlp@^0.15.1":
+  version "0.15.1"
+  resolved "https://registry.yarnpkg.com/@polkadot/util-rlp/-/util-rlp-0.15.1.tgz#85b0850960e530344893b4d0ae873f39e0366950"
   dependencies:
-    "@polkadot/util" "^0.14.11"
+    "@polkadot/util" "^0.15.1"
     babel-runtime "^6.26.0"
 
-"@polkadot/util-triehash@^0.14.11":
-  version "0.14.11"
-  resolved "https://registry.yarnpkg.com/@polkadot/util-triehash/-/util-triehash-0.14.11.tgz#9bbead2e9392222ef89e94a2369d66d4941d9d63"
+"@polkadot/util-triehash@^0.15.1":
+  version "0.15.1"
+  resolved "https://registry.yarnpkg.com/@polkadot/util-triehash/-/util-triehash-0.15.1.tgz#ffe5f15e972066339f6e02c409e864a3b2e472cb"
   dependencies:
-    "@polkadot/util" "^0.14.11"
-    "@polkadot/util-crypto" "^0.14.11"
-    "@polkadot/util-rlp" "^0.14.11"
+    "@polkadot/util" "^0.15.1"
+    "@polkadot/util-crypto" "^0.15.1"
+    "@polkadot/util-rlp" "^0.15.1"
     babel-runtime "^6.26.0"
 
 "@polkadot/util@^0.13.1":
@@ -186,6 +186,15 @@
 "@polkadot/util@^0.14.11":
   version "0.14.11"
   resolved "https://registry.yarnpkg.com/@polkadot/util/-/util-0.14.11.tgz#7f77c21eac0bb13feee08f3d2aa300e9fb889735"
+  dependencies:
+    babel-runtime "^6.26.0"
+    bn.js "^4.11.8"
+    deasync "^0.1.12"
+    ip-regex "^2.1.0"
+
+"@polkadot/util@^0.15.1":
+  version "0.15.1"
+  resolved "https://registry.yarnpkg.com/@polkadot/util/-/util-0.15.1.tgz#59c7a60337abc5f1ff8c84779ea19068cceac353"
   dependencies:
     babel-runtime "^6.26.0"
     bn.js "^4.11.8"

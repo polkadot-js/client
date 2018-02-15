@@ -2,7 +2,7 @@
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
 
-const isU8a = require('@polkadot/util/is/uint8Array');
+const isU8a = require('@polkadot/util/is/u8a');
 
 const StatusMessage = require('../message/status');
 const rlpEncode = require('./encode');
