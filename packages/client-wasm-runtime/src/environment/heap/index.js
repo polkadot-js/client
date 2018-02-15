@@ -12,7 +12,10 @@ const deallocate = require('./deallocate');
 const STACK_SIZE = 32768;
 
 function reduceSize (buffer: Memory$Buffer): number {
-  return Object.values(buffer).reduce((total, size) => total + size, 0);
+  return Object
+    .values(buffer)
+    // flowlint-next-line unclear-type:off
+    .reduce((total, size) => total + ((size: any): number), 0);
 }
 
 module.exports = function envHeap ({ buffer }: WebAssembly.Memory): RuntimeEnv$Heap {
@@ -33,6 +36,8 @@ module.exports = function envHeap ({ buffer }: WebAssembly.Memory): RuntimeEnv$H
       deallocate(memory, ptr),
     dup: (ptr: PointerType, len: number): Uint8Array =>
       uint8.slice(ptr, ptr + len),
+    fill: (ptr: PointerType, value: number, len: number): Uint8Array =>
+      uint8.fill(value, ptr, len),
     get: (ptr: PointerType, len: number): Uint8Array =>
       uint8.subarray(ptr, ptr + len),
     getU32: (ptr: PointerType): number =>

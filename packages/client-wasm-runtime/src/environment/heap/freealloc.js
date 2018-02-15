@@ -36,7 +36,7 @@ function findContaining (memory: Memory, size: number): PointerType {
   return -1;
 }
 
-module.exports = function freealloc (memory: HeapMemory, size: number): PointerType {
+module.exports = function freealloc (memory: Memory, size: number): PointerType {
   const ptr = findContaining(memory, size);
 
   if (ptr === -1) {

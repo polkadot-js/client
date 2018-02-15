@@ -2,6 +2,8 @@
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
 
+const hexToU8a = require('@polkadot/util/hex/toU8a');
+
 const State = require('./state');
 
 describe('State', () => {
@@ -22,10 +24,14 @@ describe('State', () => {
   });
 
   it('stores genesis', () => {
-    expect(state.genesis.hash).toEqual(chain.genesis.hash);
+    expect(state.genesis.hash).toEqual(
+      hexToU8a(chain.genesis.hash, 256)
+    );
   });
 
   it('starts with best being genesis', () => {
-    expect(state.best.hash).toEqual(chain.genesis.hash);
+    expect(state.best.hash).toEqual(
+      hexToU8a(chain.genesis.hash, 256)
+    );
   });
 });

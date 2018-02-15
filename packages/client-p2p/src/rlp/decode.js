@@ -11,7 +11,8 @@ const u8aToBn = require('@polkadot/util/u8a/toBn');
 const message = require('../message');
 
 module.exports = function rlpDecode (u8a: Uint8Array): MessageInterface {
-  const [idU8a, raw] = rlp(u8a);
+  // flowlint-next-line unclear-type:off
+  const [idU8a, raw] = ((rlp(u8a): any): [Uint8Array, Array<*>]);
   const id = u8aToBn(idU8a).toNumber();
   const instance: MessageInterface = message(id);
 

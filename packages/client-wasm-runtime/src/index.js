@@ -3,7 +3,9 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { RuntimeInterface } from './types';
+import type { ChainConfigType } from '@polkadot/client-chains/types';
+import type { BaseDbInterface } from '@polkadot/client-db/types';
+import type { RuntimeInterface, RuntimeInterface$Exports } from './types';
 
 const chain = require('./chain');
 const crypto = require('./crypto');
@@ -17,8 +19,10 @@ module.exports = function runtime (memoryInterface: WebAssembly.Memory, chainInt
 
   return {
     environment,
-    exports: Object.assign(
+    exports: (Object.assign(
+      // flowlint-next-line unclear-type:off
+      ({}: any),
       chain(environment), crypto(environment), io(environment), memory(environment), storage(environment)
-    )
+    ): $Shape<RuntimeInterface$Exports>)
   };
 };

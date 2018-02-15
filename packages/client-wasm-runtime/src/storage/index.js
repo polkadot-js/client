@@ -18,6 +18,7 @@ module.exports = function storage ({ l, heap, storage }: RuntimeEnv): RuntimeInt
       let offset = 0;
 
       heap.set(resultPtr, trieRootOrdered(
+        // $FlowFixMe yes, the range approach here works
         Array.apply(null, { length: count }).map((_, index) => {
           const length = heap.getU32(lenPtr + (index * 4));
           const data = heap.get(valuesPtr + offset, length);

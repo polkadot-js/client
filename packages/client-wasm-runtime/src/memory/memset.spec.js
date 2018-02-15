@@ -5,6 +5,7 @@
 const l = require('@polkadot/util/logger')('test');
 
 const index = require('./index');
+const envHeap = require('../environment/heap');
 
 describe('memset', () => {
   let runtime;
@@ -13,9 +14,7 @@ describe('memset', () => {
   beforeEach(() => {
     runtime = {
       l,
-      heap: {
-        uint8: new Uint8Array(5)
-      }
+      heap: envHeap({ buffer: new Uint8Array(5) })
     };
     memset = index(runtime).memset;
   });
@@ -24,7 +23,7 @@ describe('memset', () => {
     memset(0, 2, 3);
 
     expect(
-      runtime.heap.uint8.toString()
+      runtime.heap.get(0, 5).toString()
     ).toEqual('2,2,2,0,0');
   });
 });
