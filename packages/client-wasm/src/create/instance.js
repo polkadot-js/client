@@ -4,5 +4,6 @@
 // @flow
 
 module.exports = function createInstance (wasmModule: WebAssemblyModule, imports: WebAssemblyImports): WebAssemblyInstance {
+  console.log('imports', imports);
   return new WebAssembly.Instance(wasmModule, imports);
 };

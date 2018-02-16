@@ -4,22 +4,10 @@
 // of the ISC license. See the LICENSE file for details.
 
 const fs = require('fs');
-const { input } = require('yargs').argv;
-
-function chunk (arr, size = 8) {
-  const chunks = [];
-
-  for (let i = 0; i < arr.length; i += size) {
-    chunks.push(
-      [...arr.slice(i, i + size)].map((v) => '0x' + (`0${v.toString(16)}`.slice(-2)))
-    );
-  }
-
-  return chunks;
-}
+const { input, output } = require('yargs').argv;
 
 if (!input) {
-  console.error('Usage: wasm2js --input <file>');
+  console.error('Usage: wasm2js --input <file> --output <file>');
   process.exit(1);
 }
 
@@ -28,9 +16,5 @@ if (!fs.existsSync(input)) {
   process.exit(1);
 }
 
-const preamble = '// Copyright 2017-2018 Jaco Greeff\n// This software may be modified and distributed under the terms\n// of the ISC license. See the LICENSE file for details.\n\n// Generated with polkadot-wasm-wasm2js\n';
-const contents = chunk(fs.readFileSync(input))
-  .map((line) => `  ${line.join(', ')}`)
-  .join(',\n');
-
-fs.writeFileSync(input.replace('.wasm', '.js'), `${preamble}module.exports = new Uint8Array([\n${contents}\n]);\n`);
+const bytes = fs.readFileSync(input);
+fs.writeFileSync(output, `// Copyright 2017-2018 Jaco Greeff\n// This software may be modified and distributed under the terms\n// of the ISC license. See the LICENSE file for details.\n\n// Generated with polkadot-wasm-wasm2js (${bytes.length} bytes)\nmodule.exports = new Uint8Array([${bytes.join(', ')}]);\n`);

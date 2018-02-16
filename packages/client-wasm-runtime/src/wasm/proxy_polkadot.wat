@@ -6,12 +6,13 @@
   ;; imports, compliant as per spec
   (import "proxy" "execute_block" (func $execute_block (param i32 i32) (result i64)))
   (import "proxy" "execute_transaction" (func $execute_transaction (param i32 i32) (result i64)))
+  (import "proxy" "rust_begin_unwind" (func $rust_begin_unwind (param i32 i32 i32 i32)))
 
   ;; storage for the return values
   (global $ret_hi (mut i32) (i32.const 0))
   (global $ret_lo (mut i32) (i32.const 0))
 
-  ;; takes the i64 value, spliutting into hi & lo
+  ;; takes the i64 value, splitting into hi & lo
   (func $return_wrap (param $result i64) (result i32)
     (set_global $ret_hi
       (i32.wrap/i64
@@ -60,4 +61,7 @@
   (func (export "get_return_lo") (result i32)
     (get_global $ret_lo)
   )
+
+  ;; exports non-wrapped
+  (export "rust_begin_unwind" (func $rust_begin_unwind))
 )

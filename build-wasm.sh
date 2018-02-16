@@ -6,13 +6,22 @@
 DIRBIN="packages/client-wasm/scripts"
 DIRCT="packages/client-wasm/test/wasm"
 DIRRT="packages/client-wasm-runtime/src/wasm"
+DIRWB="node_modules/@polkadot/wasm-bin/wasm32-unknown-unknown"
 
-SRC=( "$DIRRT/proxy-exports.wat" "$DIRRT/proxy-imports.wat" "$DIRCT/addTwo.wat" "$DIRCT/import.wat" "$DIRCT/start.wat" )
+WSRC=( "$DIRRT/proxy_polkadot.wat" "$DIRRT/proxy_runtime.wat" "$DIRCT/addTwo.wat" "$DIRCT/import.wat" "$DIRCT/start.wat" )
+JSRC=( "$DIRWB/polkadot_runtime.wasm" )
 
 $DIRBIN/polkadot-wasm-build-wabt.sh
 
-for S in "${SRC[@]}"; do
-  D=${S/.wat/.wasm}
+for S in "${WSRC[@]}"; do
+  W=${S/.wat/.wasm}
+  J=${W/.wasm/_wasm.js}
   $DIRBIN/polkadot-wasm-wat2wasm.sh $S
-  $DIRBIN/polkadot-wasm-wasm2js.js --input $D
+  $DIRBIN/polkadot-wasm-wasm2js.js --input $W --output $J
+done
+
+for W in "${JSRC[@]}"; do
+  J=${W/.wasm/_wasm.js}
+  P=${J/#$DIRWB/$DIRCT}
+  $DIRBIN/polkadot-wasm-wasm2js.js --input $W --output $P
 done

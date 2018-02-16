@@ -7,7 +7,7 @@ const { createImports } = require('./index');
 describe('createImports', () => {
   it('sets the memoryBase & tableBase', () => {
     expect(
-      createImports({}, {}, { exports: {} }).env
+      createImports({}, {}, {}).env
     ).toMatchObject({
       memoryBase: 0,
       tableBase: 0
@@ -18,7 +18,7 @@ describe('createImports', () => {
     const memory = { 'some': { 'memory': { 'object': true } } };
 
     expect(
-      createImports(memory, {}, { exports: {} }).env
+      createImports(memory, {}, {}).env
     ).toMatchObject({
       memory
     });
@@ -28,18 +28,29 @@ describe('createImports', () => {
     const table = { 'some': { 'table': { 'object': true } } };
 
     expect(
-      createImports({}, table, { exports: {} }).env
+      createImports({}, table, {}).env
     ).toMatchObject({
       table
     });
   });
 
-  it('exposes the runtime imports on the env', () => {
+  it('exposes the runtime imports', () => {
     expect(
-      createImports({}, {}, { exports: { foo: 'bar', baz: 'biz' } }).env
+      createImports({}, {}, { test: { foo: 'bar', baz: 'biz' } })
     ).toMatchObject({
-      'ext_foo': 'bar',
-      'ext_baz': 'biz'
+      test: {
+        'foo': 'bar',
+        'baz': 'biz'
+      }
+    });
+  });
+
+  it('exposes the runtime imports (env)', () => {
+    expect(
+      createImports({}, {}, { env: { foo: 'bar', baz: 'biz' } }).env
+    ).toMatchObject({
+      'foo': 'bar',
+      'baz': 'biz'
     });
   });
 });
