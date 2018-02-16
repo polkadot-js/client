@@ -3,6 +3,7 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
+import type { WasmStateInstances } from '@polkadot/client-wasm/types';
 import type { RuntimeInterface, RuntimeInterface$Exports } from './types';
 
 const createChain = require('./chain');

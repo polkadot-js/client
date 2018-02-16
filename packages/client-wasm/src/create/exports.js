@@ -11,7 +11,7 @@ const createMemory = require('./memory');
 const createModule = require('./module');
 const createTable = require('./table');
 
-module.exports = function exports (memory: ?WebAssembly.memory, bytecode: Uint8Array, imports: WasmExtraImports): WebAssemblyInstance$Exports {
+module.exports = function exports (memory: ?WebAssembly.Memory, bytecode: Uint8Array, imports?: WasmExtraImports = {}): WebAssemblyInstance$Exports {
   const table = createTable();
   const instance = createInstance(
     createModule(bytecode),

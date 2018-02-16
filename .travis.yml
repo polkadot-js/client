@@ -11,5 +11,4 @@ install:
   - yarn install
   - lerna bootstrap
 script:
-  - ./build-wasm.sh
   - yarn polkadot-dev-build-travis
