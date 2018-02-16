@@ -9,6 +9,7 @@
   "bin": {
     "polkadot-wasm-wat2wasm": "./scripts/polkadot-wasm-wat2wasm.sh",
     "polkadot-wasm-wasm2wat": "./scripts/polkadot-wasm-wasm2wat.sh",
+    "polkadot-wasm-wasm2js": "./scripts/polkadot-wasm-wasm2js.js",
     "polkadot-wasm-build-wabt": "./scripts/polkadot-wasm-build-wabt.sh",
     "polkadot-wasm-build-binaryen": "./scripts/polkadot-wasm-build-binaryen.sh"
   },
@@ -40,6 +41,7 @@
     "@polkadot/primitives-codec": "^0.6.3",
     "@polkadot/util": "^0.15.1",
     "@polkadot/wasm-bin": "paritytech/polkadot-wasm-bin#e25f467cce26878e23fe6ec79b03d21edd67ca2d",
-    "babel-runtime": "^6.26.0"
+    "babel-runtime": "^6.26.0",
+    "yargs": "^11.0.0"
   }
 }

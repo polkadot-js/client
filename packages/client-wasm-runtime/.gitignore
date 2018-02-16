@@ -1,1 +1,1 @@
-wasm/*.wasm
+src/wasm/*.wasm

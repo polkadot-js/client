@@ -43,7 +43,7 @@
     "@polkadot/primitives": "^0.6.3",
     "@polkadot/util": "^0.15.1",
     "package-json": "^4.0.1",
-    "yargs": "^10.0.3"
+    "yargs": "^11.0.0"
   },
   "devDependencies": {
     "babel-plugin-module-resolver": "^3.0.0"
