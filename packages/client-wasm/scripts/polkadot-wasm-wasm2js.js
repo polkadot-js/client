@@ -6,14 +6,12 @@
 const fs = require('fs');
 const { input } = require('yargs').argv;
 
-function chunk (arr, size = 16) {
+function chunk (arr, size = 8) {
   const chunks = [];
 
   for (let i = 0; i < arr.length; i += size) {
     chunks.push(
-      arr
-        .slice(i, i + size)
-        .map((v) => '0x' + (`0${v.toString(16)}`.slice(-2)))
+      [...arr.slice(i, i + size)].map((v) => '0x' + (`0${v.toString(16)}`.slice(-2)))
     );
   }
 
