@@ -9,8 +9,6 @@ import type { Memory, Memory$Buffer } from './types';
 const allocate = require('./allocate');
 const deallocate = require('./deallocate');
 
-const STACK_SIZE = 32768;
-
 function reduceSize (buffer: Memory$Buffer): number {
   return Object
     .values(buffer)
@@ -25,7 +23,7 @@ module.exports = function envHeap ({ buffer }: WebAssembly.Memory): RuntimeEnv$H
     uint8,
     allocated: {},
     deallocated: {},
-    offset: STACK_SIZE,
+    end: buffer.byteLength - 1,
     size: buffer.byteLength
   };
 

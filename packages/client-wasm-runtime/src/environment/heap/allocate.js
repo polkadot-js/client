@@ -13,11 +13,10 @@ module.exports = function allocate (memory: Memory, size: number): PointerType {
     return 0;
   }
 
-  const ptr = memory.offset;
-  const end = ptr + size;
+  const ptr = memory.end - size;
 
-  if (end <= memory.size) {
-    memory.offset = end;
+  if (ptr > 0) {
+    memory.end = ptr;
     memory.allocated[ptr] = size;
 
     return ptr;
