@@ -20,6 +20,6 @@ describe('printNum', () => {
 
     expect(
       l.log
-    ).toHaveBeenCalledWith('12356');
+    ).toHaveBeenCalledWith('12345');
   });
 });

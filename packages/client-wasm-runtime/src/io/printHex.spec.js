@@ -16,6 +16,7 @@ describe('print_hex', () => {
 
     heap = runtime.heap;
     l = {
+      debug: () => void 0,
       log: jest.fn(() => void 0)
     };
     print_hex = index({ l, heap }).print_hex;

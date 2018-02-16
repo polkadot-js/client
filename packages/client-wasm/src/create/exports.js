@@ -7,14 +7,15 @@ import type { WasmExtraImports } from '../types';
 
 const createImports = require('./imports');
 const createInstance = require('./instance');
+const createMemory = require('./memory');
 const createModule = require('./module');
 const createTable = require('./table');
 
-module.exports = function exports (memory: WebAssembly.memory, bytecode: Uint8Array, imports: WasmExtraImports): WebAssemblyInstance$Exports {
+module.exports = function exports (memory: ?WebAssembly.memory, bytecode: Uint8Array, imports: WasmExtraImports): WebAssemblyInstance$Exports {
   const table = createTable();
   const instance = createInstance(
     createModule(bytecode),
-    createImports(memory, table, imports)
+    createImports(memory || createMemory(1, 1), table, imports)
   );
 
   return instance.exports;

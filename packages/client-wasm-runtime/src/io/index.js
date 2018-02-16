@@ -13,10 +13,12 @@ module.exports = function io ({ heap, l }: RuntimeEnv): RuntimeInterface$Io {
   return {
     print_hex: (ptr: PointerType, len: number): void => {
       l.debug('print_hex', [ptr, len]);
+
       printHex(l, heap.get(ptr, len));
     },
     print_utf8: (ptr: PointerType, len: number): void => {
       l.debug('print_utf8', [ptr, len], heap.get(ptr, len));
+
       printUtf8(l, heap.get(ptr, len));
     },
     print_num: (hi: number, lo: number): void =>

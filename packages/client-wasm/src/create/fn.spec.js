@@ -24,9 +24,7 @@ describe('createFn', () => {
       }
     };
     instance = {
-      exports: {
-        test: jest.fn()
-      }
+      test: jest.fn()
     };
   });
 
@@ -59,7 +57,7 @@ describe('createFn', () => {
     );
 
     expect(
-      instance.exports.test
+      instance.test
     ).toHaveBeenCalledWith(
       6, 5, // offset, length
       7, 3 // offset, length

@@ -4,9 +4,9 @@
 
 (module
   ;; imports, compliant as per spec
-  (import "proxy" "execute_block" (func $execute_block (param i32 i32) (result i64)))
-  (import "proxy" "execute_transaction" (func $execute_transaction (param i32 i32) (result i64)))
-  (import "proxy" "rust_begin_unwind" (func $rust_begin_unwind (param i32 i32 i32 i32)))
+  (import "polkadot" "execute_block" (func $execute_block (param i32 i32) (result i64)))
+  (import "polkadot" "execute_transaction" (func $execute_transaction (param i32 i32) (result i64)))
+  (import "polkadot" "rust_begin_unwind" (func $rust_begin_unwind (param i32 i32 i32 i32)))
 
   ;; storage for the return values
   (global $ret_hi (mut i32) (i32.const 0))
