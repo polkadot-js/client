@@ -15,7 +15,7 @@ describe('enumerated_trie_root', () => {
   let heap;
 
   beforeEach(() => {
-    heap = envHeap({ buffer: new Uint8Array(64 * 1024) });
+    heap = envHeap({ buffer: new Uint8Array(1024 * 1024) });
 
     enumerated = (arr) => {
       const totalLength = arr.reduce((total, item) => total + item.length, 0);

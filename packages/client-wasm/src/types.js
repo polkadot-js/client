@@ -5,6 +5,7 @@
 
 import type { ChainConfigType } from '@polkadot/client-chains/types';
 import type { BaseDbInterface } from '@polkadot/client-db/types';
+import type { RuntimeInterface } from '@polkadot/client-wasm-runtime/types';
 
 export type WasmExports = {
   // flowlint-next-line unclear-type:off
@@ -22,4 +23,9 @@ export type WasmExtraImports = Object;
 export type WasmStateInstances = {
   chain: ChainConfigType,
   db: BaseDbInterface
+};
+
+export type ExecutorInstance = {
+  exports: WebAssemblyInstance$Exports,
+  runtime: RuntimeInterface
 };

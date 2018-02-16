@@ -4,7 +4,7 @@
 // @flow
 
 import type { ConfigType } from '@polkadot/client/types';
-import type { WasmStateInstances } from './types';
+import type { ExecutorInstance, WasmStateInstances } from './types';
 
 const createRuntime = require('@polkadot/client-wasm-runtime');
 const proxyPolkadot = require('@polkadot/client-wasm-runtime/wasm/proxy_polkadot_wasm');
@@ -18,7 +18,7 @@ const OVERLAYS = [
   'execute_block', 'execute_transaction', 'finalise_block'
 ];
 
-module.exports = function polkadotWasm ({ wasm: { memoryInitial, memoryMaximum } }: ConfigType, state: WasmStateInstances, polkadotCode: Uint8Array): WebAssemblyInstance$Exports {
+module.exports = function polkadotWasm ({ wasm: { memoryInitial, memoryMaximum } }: ConfigType, state: WasmStateInstances, polkadotCode: Uint8Array): ExecutorInstance {
   const memory = createMemory(memoryInitial, memoryMaximum);
   const runtime = createRuntime(memory, state);
   const env = createExports(null, proxyRuntime, { runtime: runtime.exports });
@@ -28,10 +28,10 @@ module.exports = function polkadotWasm ({ wasm: { memoryInitial, memoryMaximum }
   return Object
     .keys(executor)
     .reduce((result, name) => {
-      result[name] = !OVERLAYS.includes(name)
+      result.exports[name] = !OVERLAYS.includes(name)
         ? executor[name]
         : createFn(executor, name, runtime);
 
       return result;
-    }, {});
+    }, { exports: {}, runtime });
 };
