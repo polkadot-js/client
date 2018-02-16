@@ -40,7 +40,7 @@
     "@polkadot/client-wasm-runtime": "^0.8.1",
     "@polkadot/primitives-codec": "^0.6.5",
     "@polkadot/util": "^0.15.2",
-    "@polkadot/wasm-bin": "paritytech/polkadot-wasm-bin#e25f467cce26878e23fe6ec79b03d21edd67ca2d",
+    "@polkadot/wasm-bin": "paritytech/polkadot-wasm-bin#be644d32fe1e46e20b09fabed998bc6b1aad1e1b",
     "babel-runtime": "^6.26.0",
     "yargs": "^11.0.0"
   }

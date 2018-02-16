@@ -8,7 +8,9 @@ module.exports = function createImports (memory: WebAssembly.Memory, table: WebA
   return Object.assign({}, imported, {
     env: Object.assign({
       memory,
-      table
+      memoryBase: 0,
+      table,
+      tableBase: 0
     }, imported.env || {})
   });
 };

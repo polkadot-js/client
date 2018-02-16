@@ -14,7 +14,7 @@ describe('allocate', () => {
         3: 120
       },
       allocated: {},
-      offset: 150,
+      end: 110,
       size: 250
     };
   });
@@ -34,13 +34,13 @@ describe('allocate', () => {
   it('returns a pointer as allocated', () => {
     expect(
       allocate(memory, 100)
-    ).toEqual(150);
+    ).toEqual(10);
   });
 
   it('adds the allocated map to the alloc heap section', () => {
-    allocate(memory, 100);
+    allocate(memory, 10);
 
-    expect(memory.allocated).toEqual({ 150: 100 });
+    expect(memory.allocated).toEqual({ 100: 10 });
   });
 
   it('updates the internal offset for next allocation', () => {
@@ -48,7 +48,7 @@ describe('allocate', () => {
 
     expect(
       allocate(memory, 50)
-    ).toEqual(170);
+    ).toEqual(40);
   });
 
   it('re-allocates previous de-allocated spece', () => {
