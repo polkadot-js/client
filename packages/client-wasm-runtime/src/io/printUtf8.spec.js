@@ -5,7 +5,7 @@
 
 const u8aFromUtf8 = require('@polkadot/util/u8a/fromUtf8');
 
-const env = require('../env');
+const env = require('../environment');
 const index = require('./index');
 
 describe('print_utf8', () => {
@@ -19,13 +19,14 @@ describe('print_utf8', () => {
 
     heap = runtime.heap;
     l = {
+      debug: () => void 0,
       log: jest.fn(() => void 0)
     };
     print_utf8 = index({ l, heap }).print_utf8;
   });
 
   it('logs the memory using the supplied logger', () => {
-    print_utf8(0, heap.uint8.length);
+    print_utf8(0, heap.size());
 
     expect(
       l.log

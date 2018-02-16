@@ -9,22 +9,18 @@ import type { Logger } from '@polkadot/util/types';
 
 export type PointerType = number;
 
-export type RuntimeEnv$Heap$Alloc = {
-  [PointerType]: number // offset -> size
-}
-
 export type RuntimeEnv$Heap = {
-  alloc: RuntimeEnv$Heap$Alloc,
-  freed: RuntimeEnv$Heap$Alloc,
-  offset: number,
-  size: number,
-  uint8: Uint8Array,
-
+  allocate: (size: number) => PointerType,
+  deallocate: (ptr: PointerType) => void,
   dup: (ptr: PointerType, length: number) => Uint8Array,
+  fill: (ptr: PointerType, value: number, len: number) => Uint8Array,
   get: (ptr: PointerType, length: number) => Uint8Array,
-  getLU32: (ptr: PointerType) => number,
-  set: (ptr: PointerType, data: Uint8Array) => void,
-  setLU32: (ptr: PointerType, value: number) => void,
+  getU32: (ptr: PointerType) => number,
+  set: (ptr: PointerType, data: Uint8Array) => PointerType,
+  setU32: (ptr: PointerType, value: number) => PointerType,
+  size: () => number,
+  sizeAllocated: () => number,
+  sizeDeallocated: () => number
 };
 
 export type RuntimeEnv = {
@@ -48,7 +44,7 @@ export type RuntimeInterface$Crypto = {
 export type RuntimeInterface$Io = {
   print_hex: (ptr: PointerType, len: number) => void,
   print_utf8: (ptr: PointerType, len: number) => void,
-  print_num: (num: number) => void
+  print_num: (hi: number, lo: number) => void
 }
 
 export type RuntimeInterface$Memory = {
@@ -67,7 +63,9 @@ export type RuntimeInterface$Storage = {
   set_storage: (keyPtr: PointerType, keyLength: number, dataPtr: PointerType, dataLength: number) => void
 }
 
-export type RuntimeExports = {
-  // flowlint-next-line unclear-type:off
-  [string]: (any) => any
+export type RuntimeInterface$Exports = RuntimeInterface$Chain & RuntimeInterface$Crypto & RuntimeInterface$Io & RuntimeInterface$Memory & RuntimeInterface$Storage;
+
+export type RuntimeInterface = {
+  environment: RuntimeEnv,
+  exports: RuntimeInterface$Exports
 };

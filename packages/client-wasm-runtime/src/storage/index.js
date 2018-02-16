@@ -5,47 +5,70 @@
 
 import type { RuntimeEnv, RuntimeInterface$Storage, PointerType } from '../types';
 
-const enumerateRoot = require('./enumerateRoot');
+const trieRoot = require('@polkadot/util-triehash/root');
+const trieRootOrdered = require('@polkadot/util-triehash/rootOrdered');
+
 const get = require('./get');
-const root = require('./root');
-const set = require('./set');
 
-module.exports = function storage ({ heap, storage }: RuntimeEnv): RuntimeInterface$Storage {
+module.exports = function storage ({ l, heap, storage }: RuntimeEnv): RuntimeInterface$Storage {
   return {
-    enumerated_trie_root: (valuesPtr: PointerType, lensPtr: PointerType, lensLen: number, resultPtr: PointerType): void => {
-      const lenses = [];
-
-      for (let index = 0; index < lensLen; index++) {
-        lenses.push(
-          heap.getLU32(lensPtr + (index * 4))
-        );
-      }
+    enumerated_trie_root: (valuesPtr: PointerType, lenPtr: PointerType, count: number, resultPtr: PointerType): void => {
+      l.debug('enumerated_trie_root', valuesPtr, lenPtr, count, resultPtr);
 
       let offset = 0;
-      const values = lenses
-        .map((value) => offset += value) // eslint-disable-line
-        .map((offset, index) => heap.get(valuesPtr + offset, index));
 
-      heap.set(
-        resultPtr,
-        enumerateRoot(storage, values)
+      heap.set(resultPtr, trieRootOrdered(
+        // $FlowFixMe yes, the range approach here works
+        Array.apply(null, { length: count }).map((_, index) => {
+          const length = heap.getU32(lenPtr + (index * 4));
+          const data = heap.get(valuesPtr + offset, length);
+
+          offset += length;
+
+          return data;
+        })
+      ));
+    },
+    storage_root: (resultPtr: PointerType): void => {
+      l.debug('storage_root', resultPtr);
+
+      heap.set(resultPtr, trieRoot(storage.pairs()));
+    },
+    get_allocated_storage: (keyPtr: PointerType, keyLength: number, lenPtr: PointerType): PointerType => {
+      l.debug('get_allocated_storage', keyPtr, keyLength, lenPtr);
+
+      const data = get(
+        storage,
+        heap.get(keyPtr, keyLength)
+      );
+
+      heap.setU32(lenPtr, data.length);
+
+      return heap.set(
+        heap.allocate(data.length),
+        data
       );
     },
-    storage_root: (resultPtr: PointerType): void =>
-      heap.set(
-        resultPtr,
-        root(storage)
-      ),
-    get_allocated_storage: (keyPtr: PointerType, keyLength: number, writtenPtr: PointerType): PointerType =>
-      0,
     get_storage_into: (keyPtr: PointerType, keyLength: number, dataPtr: PointerType, dataLength: number): number => {
-      const data = get(storage, heap.get(keyPtr, keyLength), dataLength);
+      l.debug('get_storage_into', keyPtr, keyLength, dataPtr, dataLength);
+
+      const data = get(
+        storage,
+        heap.get(keyPtr, keyLength),
+        dataLength
+      );
 
       heap.set(dataPtr, data);
 
       return data.length;
     },
-    set_storage: (keyPtr: PointerType, keyLength: number, dataPtr: PointerType, dataLength: number): void =>
-      set(storage, heap.get(keyPtr, keyLength), heap.get(dataPtr, dataLength))
+    set_storage: (keyPtr: PointerType, keyLength: number, dataPtr: PointerType, dataLength: number): void => {
+      l.debug('set_storage', keyPtr, keyLength, dataPtr, dataLength);
+
+      storage.set(
+        heap.get(keyPtr, keyLength),
+        heap.get(dataPtr, dataLength)
+      );
+    }
   };
 };

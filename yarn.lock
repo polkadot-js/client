@@ -78,9 +78,9 @@
     isomorphic-fetch "^2.2.1"
     websocket "^1.0.25"
 
-"@polkadot/dev@^0.15.6":
-  version "0.15.6"
-  resolved "https://registry.yarnpkg.com/@polkadot/dev/-/dev-0.15.6.tgz#9ca3ec886bc60206851cb2e780723629e53d19f7"
+"@polkadot/dev@^0.16.4":
+  version "0.16.4"
+  resolved "https://registry.yarnpkg.com/@polkadot/dev/-/dev-0.16.4.tgz#21cc30e3266573e732301cf3f132ca2d8fc5937a"
   dependencies:
     babel-cli "^6.26.0"
     babel-core "^6.26.0"
@@ -115,33 +115,42 @@
     stylelint "^8.2.0"
     stylelint-config-standard "^18.0.0"
 
-"@polkadot/primitives-json@^0.4.10":
-  version "0.4.10"
-  resolved "https://registry.yarnpkg.com/@polkadot/primitives-json/-/primitives-json-0.4.10.tgz#93ecf3d1ccd178bcbb11d8721fd323bf3d161df3"
+"@polkadot/primitives-codec@^0.6.5":
+  version "0.6.5"
+  resolved "https://registry.yarnpkg.com/@polkadot/primitives-codec/-/primitives-codec-0.6.5.tgz#58273fab4a225dba7396c68e0feb64a8f0816fbb"
   dependencies:
-    "@polkadot/primitives" "^0.4.10"
-    "@polkadot/util" "^0.13.1"
+    "@polkadot/primitives" "^0.6.5"
+    "@polkadot/primitives-rlp" "^0.6.5"
+    "@polkadot/util" "^0.15.1"
     babel-runtime "^6.26.0"
 
-"@polkadot/primitives-rlp@^0.4.10":
-  version "0.4.10"
-  resolved "https://registry.yarnpkg.com/@polkadot/primitives-rlp/-/primitives-rlp-0.4.10.tgz#6c986175cc7d04ab58e9c14ec8e97594b0063640"
+"@polkadot/primitives-json@^0.6.5":
+  version "0.6.5"
+  resolved "https://registry.yarnpkg.com/@polkadot/primitives-json/-/primitives-json-0.6.5.tgz#cefaad087bf6c727aaf239c4dd2d5660edceb1c4"
   dependencies:
-    "@polkadot/primitives" "^0.4.10"
-    "@polkadot/primitives-json" "^0.4.10"
-    "@polkadot/util" "^0.13.1"
+    "@polkadot/primitives" "^0.6.5"
+    "@polkadot/util" "^0.15.1"
     babel-runtime "^6.26.0"
 
-"@polkadot/primitives@^0.4.10":
-  version "0.4.10"
-  resolved "https://registry.yarnpkg.com/@polkadot/primitives/-/primitives-0.4.10.tgz#5ec557cf0ecdb608697d31e3ac17224bedd90572"
+"@polkadot/primitives-rlp@^0.6.5":
+  version "0.6.5"
+  resolved "https://registry.yarnpkg.com/@polkadot/primitives-rlp/-/primitives-rlp-0.6.5.tgz#7c9cc4cf845480e9b84b1cede7ea9a6584a38eea"
   dependencies:
-    "@polkadot/util" "^0.13.1"
+    "@polkadot/primitives" "^0.6.5"
+    "@polkadot/primitives-json" "^0.6.5"
+    "@polkadot/util" "^0.15.1"
     babel-runtime "^6.26.0"
 
-"@polkadot/util-crypto@^0.14.3":
-  version "0.14.3"
-  resolved "https://registry.yarnpkg.com/@polkadot/util-crypto/-/util-crypto-0.14.3.tgz#cb971c06a66ab690ee72b8d8b29d16fd97ce94bb"
+"@polkadot/primitives@^0.6.5":
+  version "0.6.5"
+  resolved "https://registry.yarnpkg.com/@polkadot/primitives/-/primitives-0.6.5.tgz#1f4b74223f3097f2e6e9262b71743a8587ad89e4"
+  dependencies:
+    "@polkadot/util" "^0.15.1"
+    babel-runtime "^6.26.0"
+
+"@polkadot/util-crypto@^0.15.2":
+  version "0.15.2"
+  resolved "https://registry.yarnpkg.com/@polkadot/util-crypto/-/util-crypto-0.15.2.tgz#66b7a57842ae70f2839f96d631d5ea9e30be2b2c"
   dependencies:
     babel-runtime "^6.26.0"
     blakejs "^1.1.0"
@@ -149,20 +158,20 @@
     tweetnacl "^1.0.0"
     xxhashjs "^0.2.2"
 
-"@polkadot/util-rlp@^0.14.3":
-  version "0.14.3"
-  resolved "https://registry.yarnpkg.com/@polkadot/util-rlp/-/util-rlp-0.14.3.tgz#98b412df61fffb200f1c825522eb237b66fa467a"
+"@polkadot/util-rlp@^0.15.2":
+  version "0.15.2"
+  resolved "https://registry.yarnpkg.com/@polkadot/util-rlp/-/util-rlp-0.15.2.tgz#5cc61a4e2ee22897ae1847e3940de5b3f4ab6194"
   dependencies:
-    "@polkadot/util" "^0.14.3"
+    "@polkadot/util" "^0.15.2"
     babel-runtime "^6.26.0"
 
-"@polkadot/util-triehash@^0.14.3":
-  version "0.14.3"
-  resolved "https://registry.yarnpkg.com/@polkadot/util-triehash/-/util-triehash-0.14.3.tgz#b3009b2007489c0710231438ee72455b6e2ef39d"
+"@polkadot/util-triehash@^0.15.2":
+  version "0.15.2"
+  resolved "https://registry.yarnpkg.com/@polkadot/util-triehash/-/util-triehash-0.15.2.tgz#270f3d91aa57e358f3e44c34822d18b7c92e85bb"
   dependencies:
-    "@polkadot/util" "^0.14.3"
-    "@polkadot/util-crypto" "^0.14.3"
-    "@polkadot/util-rlp" "^0.14.3"
+    "@polkadot/util" "^0.15.2"
+    "@polkadot/util-crypto" "^0.15.2"
+    "@polkadot/util-rlp" "^0.15.2"
     babel-runtime "^6.26.0"
 
 "@polkadot/util@^0.13.1":
@@ -174,18 +183,27 @@
     deasync "^0.1.12"
     ip-regex "^2.1.0"
 
-"@polkadot/util@^0.14.3":
-  version "0.14.3"
-  resolved "https://registry.yarnpkg.com/@polkadot/util/-/util-0.14.3.tgz#cafcac242f8b27e4a0851200e3b8c34592dfc981"
+"@polkadot/util@^0.15.1":
+  version "0.15.1"
+  resolved "https://registry.yarnpkg.com/@polkadot/util/-/util-0.15.1.tgz#59c7a60337abc5f1ff8c84779ea19068cceac353"
   dependencies:
     babel-runtime "^6.26.0"
     bn.js "^4.11.8"
     deasync "^0.1.12"
     ip-regex "^2.1.0"
 
-"@polkadot/wasm-bin@paritytech/polkadot-wasm-bin#4d130dee72787b76332c547d704c44b985525124":
-  version "20180208.151937"
-  resolved "https://codeload.github.com/paritytech/polkadot-wasm-bin/tar.gz/4d130dee72787b76332c547d704c44b985525124"
+"@polkadot/util@^0.15.2":
+  version "0.15.2"
+  resolved "https://registry.yarnpkg.com/@polkadot/util/-/util-0.15.2.tgz#4278b4982cbbbe47f9fae5e55a679395a7cb866e"
+  dependencies:
+    babel-runtime "^6.26.0"
+    bn.js "^4.11.8"
+    deasync "^0.1.12"
+    ip-regex "^2.1.0"
+
+"@polkadot/wasm-bin@paritytech/polkadot-wasm-bin#be644d32fe1e46e20b09fabed998bc6b1aad1e1b":
+  version "20180215.155954"
+  resolved "https://codeload.github.com/paritytech/polkadot-wasm-bin/tar.gz/be644d32fe1e46e20b09fabed998bc6b1aad1e1b"
 
 "@types/node@*":
   version "8.5.2"
@@ -1438,6 +1456,14 @@ cliui@^3.2.0:
   dependencies:
     string-width "^1.0.1"
     strip-ansi "^3.0.1"
+    wrap-ansi "^2.0.0"
+
+cliui@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/cliui/-/cliui-4.0.0.tgz#743d4650e05f36d1ed2575b59638d87322bfbbcc"
+  dependencies:
+    string-width "^2.1.1"
+    strip-ansi "^4.0.0"
     wrap-ansi "^2.0.0"
 
 clone-regexp@^1.0.0:
@@ -5830,7 +5856,7 @@ ripemd160@^2.0.0:
     hash-base "^2.0.0"
     inherits "^2.0.1"
 
-rlp@^2.0.0, rlp@jacogr/rlp:
+rlp@^2.0.0:
   version "2.0.0"
   resolved "https://codeload.github.com/jacogr/rlp/tar.gz/ca33b296fc43d7a3543d8a8f172adc9b66826f5f"
 
@@ -6898,6 +6924,12 @@ yargs-parser@^8.0.0:
   dependencies:
     camelcase "^4.1.0"
 
+yargs-parser@^9.0.2:
+  version "9.0.2"
+  resolved "https://registry.yarnpkg.com/yargs-parser/-/yargs-parser-9.0.2.tgz#9ccf6a43460fe4ed40a9bb68f48d43b8a68cc077"
+  dependencies:
+    camelcase "^4.1.0"
+
 yargs@^10.0.3:
   version "10.0.3"
   resolved "https://registry.yarnpkg.com/yargs/-/yargs-10.0.3.tgz#6542debd9080ad517ec5048fb454efe9e4d4aaae"
@@ -6914,6 +6946,23 @@ yargs@^10.0.3:
     which-module "^2.0.0"
     y18n "^3.2.1"
     yargs-parser "^8.0.0"
+
+yargs@^11.0.0:
+  version "11.0.0"
+  resolved "https://registry.yarnpkg.com/yargs/-/yargs-11.0.0.tgz#c052931006c5eee74610e5fc0354bedfd08a201b"
+  dependencies:
+    cliui "^4.0.0"
+    decamelize "^1.1.1"
+    find-up "^2.1.0"
+    get-caller-file "^1.0.1"
+    os-locale "^2.0.0"
+    require-directory "^2.1.1"
+    require-main-filename "^1.0.1"
+    set-blocking "^2.0.0"
+    string-width "^2.0.0"
+    which-module "^2.0.0"
+    y18n "^3.2.1"
+    yargs-parser "^9.0.2"
 
 yargs@^8.0.2:
   version "8.0.2"

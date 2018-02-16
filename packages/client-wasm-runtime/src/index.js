@@ -3,28 +3,25 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { ChainConfigType } from '@polkadot/client-chains/types';
-import type { BaseDbInterface } from '@polkadot/client-db/types';
-import type { RuntimeExports } from './types';
+import type { WasmStateInstances } from '@polkadot/client-wasm/types';
+import type { RuntimeInterface, RuntimeInterface$Exports } from './types';
 
-const createEnv = require('./env');
-const chain = require('./chain');
-const crypto = require('./crypto');
-const io = require('./io');
-const memory = require('./memory');
-const storage = require('./storage');
+const createChain = require('./chain');
+const createCrypto = require('./crypto');
+const createEnv = require('./environment');
+const createIo = require('./io');
+const createMemory = require('./memory');
+const createStorage = require('./storage');
 
-module.exports = function runtime (wasmMemory: WebAssembly.Memory, chainInstance: ChainConfigType, dbInstance: BaseDbInterface): RuntimeExports {
-  const env = createEnv(wasmMemory, chainInstance, dbInstance);
-  const exports = Object.assign(
-    {}, chain(env), crypto(env), io(env), memory(env), storage(env)
-  );
+module.exports = function runtime (memory: WebAssembly.Memory, { chain, db }: WasmStateInstances): RuntimeInterface {
+  const environment = createEnv(memory, chain, db);
 
-  return Object
-    .keys(exports)
-    .reduce((result, key) => {
-      result[`ext_${key}`] = exports[key];
-
-      return result;
-    }, {});
+  return {
+    environment,
+    exports: (Object.assign(
+      // flowlint-next-line unclear-type:off
+      ({}: any),
+      createChain(environment), createCrypto(environment), createIo(environment), createMemory(environment), createStorage(environment)
+    ): $Shape<RuntimeInterface$Exports>)
+  };
 };

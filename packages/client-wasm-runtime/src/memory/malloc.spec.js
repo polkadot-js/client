@@ -2,62 +2,32 @@
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
 
+const env = require('../environment');
 const index = require('./index');
 
-describe('malloc', () => {
+describe('memcmp', () => {
   let runtime;
-  let malloc;
+  let mem;
 
   beforeEach(() => {
-    runtime = {
-      heap: {
-        freed: {
-          0: 3,
-          3: 120
-        },
-        alloc: {},
-        offset: 150,
-        size: 250
-      }
-    };
-    malloc = index(runtime).malloc;
+    runtime = env({ buffer: new Uint8Array(64 * 1024) });
+
+    mem = index(runtime);
   });
 
-  it('returns 0 when size is 0', () => {
-    expect(
-      malloc(0)
-    ).toEqual(0);
-  });
-
-  it('returns 0 when requested is > available', () => {
-    expect(
-      malloc(1024)
-    ).toEqual(0);
-  });
-
-  it('returns a pointer as allocated', () => {
-    expect(
-      malloc(100)
-    ).toEqual(150);
-  });
-
-  it('adds the allocated map to the alloc heap section', () => {
-    malloc(100);
-
-    expect(runtime.heap.alloc).toEqual({ 150: 100 });
-  });
-
-  it('updates the internal offset for next allocation', () => {
-    malloc(20);
+  it('allocates space', () => {
+    mem.malloc(50);
 
     expect(
-      malloc(50)
-    ).toEqual(170);
+      runtime.heap.sizeAllocated()
+    ).toEqual(50);
   });
 
-  it('re-allocates previous de-allocated spece', () => {
+  it('deallocates space', () => {
+    mem.free(mem.malloc(666));
+
     expect(
-      malloc(120)
-    ).toEqual(3);
+      runtime.heap.sizeDeallocated()
+    ).toEqual(666);
   });
 });

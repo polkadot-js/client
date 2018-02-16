@@ -2,6 +2,8 @@
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
 
+const isU8a = require('@polkadot/util/is/u8a');
+
 const StatusMessage = require('../message/status');
 const rlpEncode = require('./encode');
 
@@ -12,9 +14,9 @@ describe('rlpEncode', () => {
     message = new StatusMessage();
   });
 
-  it('returns an encoded Buffer', () => {
+  it('returns an encoded Uint8Array', () => {
     expect(
-      Buffer.isBuffer(
+      isU8a(
         rlpEncode(message)
       )
     ).toEqual(true);

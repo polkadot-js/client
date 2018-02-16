@@ -34,11 +34,23 @@ describe('createImports', () => {
     });
   });
 
-  it('exposes the runtime imports on the env', () => {
-    const runtime = { 'ext_foo': 1, 'ext_bar': 2, 'ext_baz': 3 };
-
+  it('exposes the runtime imports', () => {
     expect(
-      createImports({}, {}, runtime).env
-    ).toMatchObject(runtime);
+      createImports({}, {}, { test: { foo: 'bar', baz: 'biz' } })
+    ).toMatchObject({
+      test: {
+        'foo': 'bar',
+        'baz': 'biz'
+      }
+    });
+  });
+
+  it('exposes the runtime imports (env)', () => {
+    expect(
+      createImports({}, {}, { env: { foo: 'bar', baz: 'biz' } }).env
+    ).toMatchObject({
+      'foo': 'bar',
+      'baz': 'biz'
+    });
   });
 });

@@ -5,7 +5,7 @@
 
 const assert = require('@polkadot/util/assert');
 const ExtError = require('@polkadot/util/ext/error');
-const numberToBuffer = require('@polkadot/util/number/toBuffer');
+const numberToU8a = require('@polkadot/util/number/toU8a');
 
 module.exports = class BaseMessage {
   id: number;
@@ -14,28 +14,24 @@ module.exports = class BaseMessage {
     this.id = id;
   }
 
-  // flowlint-next-line unclear-type:off
-  decode (id: number, raw: Array<any>): void {
+  decode (id: number, raw: Array<*>): void {
     assert(id === this.id, 'Expected message id to match');
 
     this._rawDecode(raw);
   }
 
-  // flowlint-next-line unclear-type:off
-  encode (): [Buffer, Array<any>] {
+  encode (): [Uint8Array, Array<*>] {
     return [
-      numberToBuffer(this.id),
+      numberToU8a(this.id),
       this._rawEncode()
     ];
   }
 
-  // flowlint-next-line unclear-type:off
-  _rawDecode (raw: Array<any>): void {
+  _rawDecode (raw: Array<*>): void {
     throw new ExtError('Expected _rawDecode() to be implemented');
   }
 
-  // flowlint-next-line unclear-type:off
-  _rawEncode (): Array<any> {
+  _rawEncode (): Array<*> {
     throw new ExtError('Expected _rawEncode() to be implemented');
   }
 };

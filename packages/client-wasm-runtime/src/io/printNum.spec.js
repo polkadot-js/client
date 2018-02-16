@@ -16,10 +16,10 @@ describe('printNum', () => {
   });
 
   it('logs the number using the supplied logger', () => {
-    printNum(12345);
+    printNum(0, 12345);
 
     expect(
       l.log
-    ).toHaveBeenCalledWith(12345);
+    ).toHaveBeenCalledWith('12345');
   });
 });

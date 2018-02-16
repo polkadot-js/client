@@ -7,7 +7,11 @@
     "node": ">=8.0"
   },
   "bin": {
-    "polkadot-wat2wasm": "./scripts/wat2wasm.sh"
+    "polkadot-wasm-wat2wasm": "./scripts/polkadot-wasm-wat2wasm.sh",
+    "polkadot-wasm-wasm2wat": "./scripts/polkadot-wasm-wasm2wat.sh",
+    "polkadot-wasm-wasm2js": "./scripts/polkadot-wasm-wasm2js.js",
+    "polkadot-wasm-build-wabt": "./scripts/polkadot-wasm-build-wabt.sh",
+    "polkadot-wasm-build-binaryen": "./scripts/polkadot-wasm-build-binaryen.sh"
   },
   "publishConfig": {
     "access": "public",
@@ -34,8 +38,10 @@
   },
   "dependencies": {
     "@polkadot/client-wasm-runtime": "^0.8.1",
-    "@polkadot/util": "^0.14.3",
-    "@polkadot/wasm-bin": "paritytech/polkadot-wasm-bin#4d130dee72787b76332c547d704c44b985525124",
-    "babel-runtime": "^6.26.0"
+    "@polkadot/primitives-codec": "^0.6.5",
+    "@polkadot/util": "^0.15.2",
+    "@polkadot/wasm-bin": "paritytech/polkadot-wasm-bin#be644d32fe1e46e20b09fabed998bc6b1aad1e1b",
+    "babel-runtime": "^6.26.0",
+    "yargs": "^11.0.0"
   }
 }

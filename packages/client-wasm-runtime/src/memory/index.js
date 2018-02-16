@@ -5,26 +5,42 @@
 
 import type { PointerType, RuntimeEnv, RuntimeInterface$Memory } from '../types';
 
-const free = require('./free');
-const malloc = require('./malloc');
 const memcpy = require('./memcpy');
 const memcmp = require('./memcmp');
 const memmove = require('./memmove');
 const memset = require('./memset');
 
-module.exports = function memory ({ heap }: RuntimeEnv): RuntimeInterface$Memory {
+module.exports = function memory ({ l, heap }: RuntimeEnv): RuntimeInterface$Memory {
   return {
-    free: (ptr: PointerType): void =>
-      free(heap, ptr),
-    malloc: (size: number): PointerType =>
-      malloc(heap, size),
-    memcpy: (dst: PointerType, src: PointerType, num: number): PointerType =>
-      memcpy(heap, dst, src, num),
-    memcmp: (s1: PointerType, s2: PointerType, length: number): number =>
-      memcmp(heap, s1, s2, length),
-    memmove: (dst: PointerType, src: PointerType, num: number): PointerType =>
-      memmove(heap, dst, src, num),
-    memset: (dst: PointerType, val: number, num: number): PointerType =>
-      memset(heap, dst, val, num)
+    free: (ptr: PointerType): void => {
+      l.debug('free', [ptr]);
+
+      heap.deallocate(ptr);
+    },
+    malloc: (size: number): PointerType => {
+      l.debug('malloc', [size]);
+
+      return heap.allocate(size);
+    },
+    memcpy: (dst: PointerType, src: PointerType, num: number): PointerType => {
+      l.debug('memcpy', [dst, src, num]);
+
+      return memcpy(heap, dst, src, num);
+    },
+    memcmp: (s1: PointerType, s2: PointerType, length: number): number => {
+      l.debug('memcmp', [s1, s2, length]);
+
+      return memcmp(heap, s1, s2, length);
+    },
+    memmove: (dst: PointerType, src: PointerType, num: number): PointerType => {
+      l.debug('memmove', [dst, src, num]);
+
+      return memmove(heap, dst, src, num);
+    },
+    memset: (dst: PointerType, val: number, num: number): PointerType => {
+      l.debug('memset', [dst, val, num]);
+
+      return memset(heap, dst, val, num);
+    }
   };
 };

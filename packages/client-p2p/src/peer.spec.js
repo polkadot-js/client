@@ -3,6 +3,7 @@
 // of the ISC license. See the LICENSE file for details.
 
 const pull = require('pull-stream');
+const isU8a = require('@polkadot/util/is/u8a');
 
 const StatusMessage = require('./message/status');
 // const rlpEncode = require('./rlp/encode');
@@ -94,9 +95,9 @@ describe('Peer', () => {
   });
 
   describe('_encodeMessage', () => {
-    it('returns an encoded Buffer', () => {
+    it('returns an encoded Uint8ASrray', () => {
       expect(
-        Buffer.isBuffer(
+        isU8a(
           peer._encodeMessage(
             new StatusMessage()
           )

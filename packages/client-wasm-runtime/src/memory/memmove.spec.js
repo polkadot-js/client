@@ -2,7 +2,7 @@
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
 
-const env = require('../env');
+const env = require('../environment');
 const index = require('./index');
 
 describe('memmove', () => {
@@ -18,7 +18,7 @@ describe('memmove', () => {
     memmove(0, 2, 2);
 
     expect(
-      runtime.heap.uint8.toString()
+      runtime.heap.get(0, 5).toString()
     ).toEqual('3,4,3,4,5');
   });
 });

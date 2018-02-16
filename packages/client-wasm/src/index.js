@@ -3,6 +3,6 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-const wasm = require('./wasm');
+const polkadot = require('./polkadot');
 
-module.exports = wasm;
+module.exports = polkadot;
