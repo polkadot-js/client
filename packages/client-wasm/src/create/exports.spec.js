@@ -26,7 +26,7 @@ describe('wasm', () => {
   describe('valid modules, with memory', () => {
     beforeEach(() => {
       instance = createExports(
-        createMemory(2, 2),
+        createMemory(1, 1),
         require('../../test/wasm/addTwo_wasm')
       );
     });

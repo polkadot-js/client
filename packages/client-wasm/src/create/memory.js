@@ -15,7 +15,7 @@ module.exports = function createMemory (initial: number = HEAP_SIZE_MB, maximum:
   assert(initial <= maximum, 'Expected initial size to be <= maximum');
 
   return new WebAssembly.Memory({
-    initial: (initial * PAGE_PER_MB),
-    maximum: (maximum * PAGE_PER_MB)
+    initial: (initial * PAGE_PER_MB) || 8,
+    maximum: (maximum * PAGE_PER_MB) || 8
   });
 };

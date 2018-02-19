@@ -15,7 +15,7 @@ module.exports = function exports (memory: ?WebAssembly.Memory, bytecode: Uint8A
   const table = createTable();
   const instance = createInstance(
     createModule(bytecode),
-    createImports(memory || createMemory(1, 1), table, imports)
+    createImports(memory || createMemory(0, 0), table, imports)
   );
 
   return instance.exports;
