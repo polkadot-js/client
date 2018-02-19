@@ -13,7 +13,7 @@ const get = require('./get');
 module.exports = function storage ({ l, heap, storage }: RuntimeEnv): RuntimeInterface$Storage {
   return {
     enumerated_trie_root: (valuesPtr: PointerType, lenPtr: PointerType, count: number, resultPtr: PointerType): void => {
-      l.debug('enumerated_trie_root', valuesPtr, lenPtr, count, resultPtr);
+      l.debug('enumerated_trie_root', [valuesPtr, lenPtr, count, resultPtr]);
 
       let offset = 0;
 
@@ -30,12 +30,12 @@ module.exports = function storage ({ l, heap, storage }: RuntimeEnv): RuntimeInt
       ));
     },
     storage_root: (resultPtr: PointerType): void => {
-      l.debug('storage_root', resultPtr);
+      l.debug('storage_root', [resultPtr]);
 
       heap.set(resultPtr, trieRoot(storage.pairs()));
     },
     get_allocated_storage: (keyPtr: PointerType, keyLength: number, lenPtr: PointerType): PointerType => {
-      l.debug('get_allocated_storage', keyPtr, keyLength, lenPtr);
+      l.debug('get_allocated_storage', [keyPtr, keyLength, lenPtr], heap.get(keyPtr, keyLength));
 
       const data = get(
         storage,
@@ -50,7 +50,7 @@ module.exports = function storage ({ l, heap, storage }: RuntimeEnv): RuntimeInt
       );
     },
     get_storage_into: (keyPtr: PointerType, keyLength: number, dataPtr: PointerType, dataLength: number): number => {
-      l.debug('get_storage_into', keyPtr, keyLength, dataPtr, dataLength);
+      l.debug('get_storage_into', [keyPtr, keyLength, dataPtr, dataLength]);
 
       const data = get(
         storage,
@@ -63,7 +63,7 @@ module.exports = function storage ({ l, heap, storage }: RuntimeEnv): RuntimeInt
       return data.length;
     },
     set_storage: (keyPtr: PointerType, keyLength: number, dataPtr: PointerType, dataLength: number): void => {
-      l.debug('set_storage', keyPtr, keyLength, dataPtr, dataLength);
+      l.debug('set_storage', [keyPtr, keyLength, dataPtr, dataLength]);
 
       storage.set(
         heap.get(keyPtr, keyLength),

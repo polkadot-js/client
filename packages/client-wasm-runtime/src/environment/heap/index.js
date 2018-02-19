@@ -23,7 +23,7 @@ module.exports = function envHeap ({ buffer }: WebAssembly.Memory): RuntimeEnv$H
     uint8,
     allocated: {},
     deallocated: {},
-    end: 156 * 1024, // buffer.byteLength - 1,
+    end: buffer.byteLength - 1,
     size: buffer.byteLength
   };
 

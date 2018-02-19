@@ -17,7 +17,7 @@ module.exports = function io ({ heap, l }: RuntimeEnv): RuntimeInterface$Io {
       printHex(l, heap.get(ptr, len));
     },
     print_utf8: (ptr: PointerType, len: number): void => {
-      l.debug('print_utf8', [ptr, len], heap.get(ptr, len));
+      l.debug('print_utf8', [ptr, len]);
 
       printUtf8(l, heap.get(ptr, len));
     },
