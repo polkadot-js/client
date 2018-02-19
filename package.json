@@ -9,7 +9,8 @@
     "check": "eslint packages && flow check",
     "start": "node packages/client/scripts/polkadot.js",
     "start2": "node packages/client/scripts/polkadot.js --db-path=./tmp --p2p-peers=/ip4/127.0.0.1/tcp/39933 --p2p-port=39934 --rpc-port=9934",
-    "test": "jest --coverage"
+    "test": "jest --coverage",
+    "postinstall": "./build-wasm.sh"
   },
   "devDependencies": {
     "@polkadot/dev": "^0.16.7",
