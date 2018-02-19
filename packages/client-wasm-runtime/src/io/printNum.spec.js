@@ -10,6 +10,7 @@ describe('printNum', () => {
 
   beforeEach(() => {
     l = {
+      debug: () => void 0,
       log: jest.fn(() => void 0)
     };
     printNum = index({ l }).print_num;

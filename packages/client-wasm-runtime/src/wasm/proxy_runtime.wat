@@ -8,6 +8,11 @@
       (param i32 i32 i32)
     )
   )
+  (import "runtime" "chain_id"
+    (func $chain_id
+      (result i32)
+    )
+  )
   (import "runtime" "ed25519_verify"
     (func $ed25519_verify
       (param i32 i32 i32 i32) (result i32)
@@ -103,6 +108,15 @@
       (i32.wrap/i64
         (get_local $num)
       )
+    )
+  )
+
+  ;; spec compliant chain_id
+  (func (export "ext_chain_id")
+    (result i64)
+
+    (i64.extend_u/i32
+      (call $chain_id)
     )
   )
 

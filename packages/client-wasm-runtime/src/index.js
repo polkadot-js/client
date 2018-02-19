@@ -13,8 +13,8 @@ const createIo = require('./io');
 const createMemory = require('./memory');
 const createStorage = require('./storage');
 
-module.exports = function runtime (memory: WebAssembly.Memory, { chain, db }: WasmStateInstances): RuntimeInterface {
-  const environment = createEnv(memory, chain, db);
+module.exports = function runtime ({ chain, db }: WasmStateInstances): RuntimeInterface {
+  const environment = createEnv(chain, db);
 
   return {
     environment,

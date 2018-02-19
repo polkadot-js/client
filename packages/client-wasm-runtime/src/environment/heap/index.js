@@ -16,16 +16,24 @@ function reduceSize (buffer: Memory$Buffer): number {
     .reduce((total, size) => total + ((size: any): number), 0);
 }
 
-module.exports = function envHeap ({ buffer }: WebAssembly.Memory): RuntimeEnv$Heap {
-  const uint8 = new Uint8Array(buffer);
-  const view = new DataView(uint8.buffer);
-  const memory: Memory = {
-    uint8,
-    allocated: {},
-    deallocated: {},
-    end: buffer.byteLength - 1,
-    size: buffer.byteLength
-  };
+module.exports = function envHeap (): RuntimeEnv$Heap {
+  let memory: Memory;
+  let uint8: Uint8Array;
+  let view: DataView;
+
+  function setWasmMemory ({ buffer }: WebAssembly.Memory): void {
+    uint8 = new Uint8Array(buffer);
+    view = new DataView(uint8.buffer);
+
+    memory = {
+      uint8,
+      allocated: {},
+      deallocated: {},
+      end: buffer.byteLength - 1, // when allocating from top
+      offset: 256 * 1024, // aligned with Rust
+      size: buffer.byteLength
+    };
+  }
 
   return {
     allocate: (size: number): PointerType =>
@@ -50,6 +58,7 @@ module.exports = function envHeap ({ buffer }: WebAssembly.Memory): RuntimeEnv$H
 
       return ptr;
     },
+    setWasmMemory,
     size: (): number =>
       memory.size,
     sizeAllocated: (): number =>

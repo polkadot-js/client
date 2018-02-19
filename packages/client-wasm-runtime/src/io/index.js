@@ -21,7 +21,10 @@ module.exports = function io ({ heap, l }: RuntimeEnv): RuntimeInterface$Io {
 
       printUtf8(l, heap.get(ptr, len));
     },
-    print_num: (hi: number, lo: number): void =>
-      printNum(l, hi, lo)
+    print_num: (hi: number, lo: number): void => {
+      l.debug('print_num', [hi, lo]);
+
+      printNum(l, hi, lo);
+    }
   };
 };

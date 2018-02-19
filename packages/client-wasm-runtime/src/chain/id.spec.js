@@ -10,6 +10,9 @@ describe('chain_id', () => {
 
   beforeEach(() => {
     chain_id = index({
+      l: {
+        debug: () => void 0
+      },
       chain: {
         params: {
           networkId: 1337

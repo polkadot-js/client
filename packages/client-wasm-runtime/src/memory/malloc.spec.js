@@ -5,12 +5,12 @@
 const env = require('../environment');
 const index = require('./index');
 
-describe('memcmp', () => {
+describe('malloc', () => {
   let runtime;
   let mem;
 
   beforeEach(() => {
-    runtime = env({ buffer: new Uint8Array(64 * 1024) });
+    runtime = env({ buffer: new Uint8Array(512 * 1024) });
 
     mem = index(runtime);
   });

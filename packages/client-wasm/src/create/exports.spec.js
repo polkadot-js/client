@@ -8,25 +8,10 @@ const createMemory = require('./memory');
 describe('wasm', () => {
   let instance;
 
-  describe('valid modules, default creation', () => {
-    beforeEach(() => {
-      instance = createExports(
-        null,
-        require('../../test/wasm/addTwo_wasm')
-      );
-    });
-
-    it('allows calls into the module', () => {
-      expect(
-        instance.addTwo(22, 33)
-      ).toEqual(55);
-    });
-  });
-
   describe('valid modules, with memory', () => {
     beforeEach(() => {
       instance = createExports(
-        createMemory(1, 1),
+        createMemory(0, 0),
         require('../../test/wasm/addTwo_wasm')
       );
     });
@@ -45,7 +30,7 @@ describe('wasm', () => {
     beforeEach(() => {
       callback = jest.fn();
       instance = createExports(
-        null,
+        createMemory(0, 0),
         require('../../test/wasm/import_wasm'),
         { js: { callback } }
       );
@@ -64,7 +49,7 @@ describe('wasm', () => {
     beforeEach(() => {
       callback = jest.fn();
       instance = createExports(
-        null,
+        createMemory(0, 0),
         require('../../test/wasm/start_wasm'),
         { js: { callback } }
       );
