@@ -13,8 +13,7 @@ export type WasmExports = {
 };
 
 export type WasmConfigType = {
-  memoryInitial: number,
-  memoryMaximum: number
+  heapSize: number
 };
 
 // flowlint-next-line unclear-type:off

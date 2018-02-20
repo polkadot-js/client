@@ -11,13 +11,14 @@ export type PointerType = number;
 
 export type RuntimeEnv$Heap = {
   allocate: (size: number) => PointerType,
-  deallocate: (ptr: PointerType) => void,
+  deallocate: (ptr: PointerType) => number,
   dup: (ptr: PointerType, length: number) => Uint8Array,
   fill: (ptr: PointerType, value: number, len: number) => Uint8Array,
   get: (ptr: PointerType, length: number) => Uint8Array,
   getU32: (ptr: PointerType) => number,
   set: (ptr: PointerType, data: Uint8Array) => PointerType,
   setU32: (ptr: PointerType, value: number) => PointerType,
+  setWasmMemory: (memory: WebAssembly.Memory, offset?: number) => void,
   size: () => number,
   sizeAllocated: () => number,
   sizeDeallocated: () => number

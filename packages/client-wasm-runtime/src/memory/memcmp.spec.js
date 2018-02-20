@@ -10,7 +10,8 @@ describe('memcmp', () => {
   let memcmp;
 
   beforeEach(() => {
-    runtime = env({ buffer: new Uint8Array([0, 1, 2, 3, 4, 5, 0, 1, 2, 3, 4, 5]) });
+    runtime = env();
+    runtime.heap.setWasmMemory({ buffer: new Uint8Array([0, 1, 2, 3, 4, 5, 0, 1, 2, 3, 4, 5]) });
     memcmp = index(runtime).memcmp;
   });
 

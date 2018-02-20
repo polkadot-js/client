@@ -14,8 +14,9 @@ describe('memset', () => {
   beforeEach(() => {
     runtime = {
       l,
-      heap: envHeap({ buffer: new Uint8Array(5) })
+      heap: envHeap()
     };
+    runtime.heap.setWasmMemory({ buffer: new Uint8Array(5) });
     memset = index(runtime).memset;
   });
 

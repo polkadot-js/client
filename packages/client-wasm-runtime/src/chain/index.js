@@ -5,8 +5,12 @@
 
 import type { RuntimeEnv, RuntimeInterface$Chain } from '../types';
 
-module.exports = function ({ chain }: RuntimeEnv): RuntimeInterface$Chain {
+module.exports = function ({ l, chain }: RuntimeEnv): RuntimeInterface$Chain {
   return {
-    chain_id: () => chain.params.networkId
+    chain_id: () => {
+      l.debug('chain_id', '->', chain.params.networkId);
+
+      return chain.params.networkId;
+    }
   };
 };

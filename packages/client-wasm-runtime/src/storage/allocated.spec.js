@@ -16,7 +16,8 @@ describe('get_allocated_storage', () => {
   let storage;
 
   beforeEach(() => {
-    heap = envHeap({ buffer: new Uint8Array(1024 * 1024) });
+    heap = envHeap();
+    heap.setWasmMemory({ buffer: new Uint8Array(1024 * 1024) });
     storage = envStorage({});
 
     get_allocated_storage = index({ l, heap, storage }).get_allocated_storage;

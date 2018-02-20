@@ -12,7 +12,7 @@ export type Memory$Buffer = {
 export type Memory = {
   allocated: Memory$Buffer,
   deallocated: Memory$Buffer,
-  end: number,
+  offset: number,
   size: number,
   uint8: Uint8Array
 };

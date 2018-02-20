@@ -12,9 +12,11 @@ describe('print_hex', () => {
   let print_hex;
 
   beforeEach(() => {
-    const runtime = env({ buffer: new Uint8Array([0x1, 0x3, 0x5, 0x7, 0x99]) });
+    const runtime = env();
 
     heap = runtime.heap;
+    heap.setWasmMemory({ buffer: new Uint8Array([0x1, 0x3, 0x5, 0x7, 0x99]) });
+
     l = {
       debug: () => void 0,
       log: jest.fn(() => void 0)

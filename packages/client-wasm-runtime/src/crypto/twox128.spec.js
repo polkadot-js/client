@@ -29,10 +29,7 @@ describe('twox_128', () => {
       heap.set
     ).toHaveBeenCalledWith(
       16,
-      new Uint8Array([
-        0x44, 0xbc, 0x2c, 0xf5, 0xad, 0x77, 0x09, 0x99,
-        0xbe, 0xa9, 0xca, 0x81, 0x99, 0x32, 0x89, 0x08
-      ])
+      new Uint8Array([153, 9, 119, 173, 245, 44, 188, 68, 8, 137, 50, 153, 129, 202, 169, 190])
     );
   });
 });

@@ -5,17 +5,15 @@
 
 const assert = require('@polkadot/util/assert');
 
-const { HEAP_SIZE_MB } = require('../defaults');
+const { HEAP_SIZE_KB } = require('../defaults');
 
-const PAGE_SIZE_K = 64 * 1024;
-const MB = 1024 * 1024;
-const PAGE_PER_MB = MB / PAGE_SIZE_K;
+const PAGE_PER_KB = 16;
 
-module.exports = function createMemory (initial: number = HEAP_SIZE_MB, maximum: number = HEAP_SIZE_MB): WebAssembly.Memory {
+module.exports = function createMemory (initial: number = HEAP_SIZE_KB, maximum: number = HEAP_SIZE_KB): WebAssembly.Memory {
   assert(initial <= maximum, 'Expected initial size to be <= maximum');
 
   return new WebAssembly.Memory({
-    initial: (initial * PAGE_PER_MB),
-    maximum: (maximum * PAGE_PER_MB)
+    initial: (initial / PAGE_PER_KB) || 8,
+    maximum: (maximum / PAGE_PER_KB) || 8
   });
 };

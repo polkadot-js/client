@@ -4,13 +4,19 @@
 // @flow
 
 // flowlint-next-line unclear-type:off
-module.exports = function createImports (memory: WebAssembly.Memory, table: WebAssembly.Table, imported: Object): WebAssemblyImports {
+module.exports = function createImports (memory: ?WebAssembly.Memory, table: ?WebAssembly.Table, imported: Object): WebAssemblyImports {
   return Object.assign({}, imported, {
     env: Object.assign({
       memory,
-      memoryBase: 0,
+      memoryBase:
+        memory
+          ? 0
+          : void 0,
       table,
-      tableBase: 0
+      tableBase:
+        table
+          ? 0
+          : void 0
     }, imported.env || {})
   });
 };

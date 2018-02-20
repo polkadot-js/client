@@ -5,10 +5,12 @@
 
 import type { Memory$Storage } from './types';
 
-const u8aToHex = require('@polkadot/util/u8a/toHex');
+const u8aToString = require('@polkadot/util/u8a/toString');
 
 module.exports = function del (storage: Memory$Storage, k: Uint8Array): void {
-  if (storage[u8aToHex(k)]) {
-    delete storage[u8aToHex(k)];
+  const ks = u8aToString(k);
+
+  if (storage[ks]) {
+    delete storage[ks];
   }
 };

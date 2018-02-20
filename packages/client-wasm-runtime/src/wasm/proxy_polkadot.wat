@@ -4,16 +4,26 @@
 
 (module
   ;; imports, compliant as per spec
-  (import "polkadot" "execute_block" (func $execute_block (param i32 i32) (result i64)))
-  (import "polkadot" "execute_transaction" (func $execute_transaction (param i32 i32) (result i64)))
+  (import "polkadot" "execute_block"
+    (func $execute_block
+      (param i32 i32) (result i64)
+    )
+  )
+  (import "polkadot" "execute_transaction"
+    (func $execute_transaction
+      (param i32 i32) (result i64)
+    )
+  )
 
   ;; storage for the return values
-  (global $ret_hi (mut i32) (i32.const 0))
-  (global $ret_lo (mut i32) (i32.const 0))
+  (global $result_hi (mut i32) (i32.const 0))
+  (global $result_lo (mut i32) (i32.const 0))
 
   ;; takes the i64 value, splitting into hi & lo
-  (func $return_wrap (param $result i64) (result i32)
-    (set_global $ret_hi
+  (func $result_wrap
+    (param $result i64) (result i32)
+
+    (set_global $result_hi
       (i32.wrap/i64
         (i64.shr_u
           (get_local $result)
@@ -22,18 +32,20 @@
       )
     )
 
-    (set_global $ret_lo
+    (set_global $result_lo
       (i32.wrap/i64
         (get_local $result)
       )
     )
 
-    (get_global $ret_lo)
+    (get_global $result_lo)
   )
 
   ;; proxied execute_block exported
-  (func (export "execute_block") (param i32 i32) (result i32)
-    (call $return_wrap
+  (func (export "execute_block")
+    (param i32 i32) (result i32)
+
+    (call $result_wrap
       (call $execute_block
         (get_local 0)
         (get_local 1)
@@ -42,8 +54,10 @@
   )
 
   ;; proxied execute_transaction exported
-  (func (export "execute_transaction") (param i32 i32) (result i32)
-    (call $return_wrap
+  (func (export "execute_transaction")
+    (param i32 i32) (result i32)
+
+    (call $result_wrap
       (call $execute_transaction
         (get_local 0)
         (get_local 1)
@@ -52,12 +66,16 @@
   )
 
   ;; returns the hi part of the i64
-  (func (export "get_return_hi") (result i32)
-    (get_global $ret_hi)
+  (func (export "get_result_hi")
+    (result i32)
+
+    (get_global $result_hi)
   )
 
   ;; returns the lo part of the i64 (also returned)
-  (func (export "get_return_lo") (result i32)
-    (get_global $ret_lo)
+  (func (export "get_result_lo")
+    (result i32)
+
+    (get_global $result_lo)
   )
 )

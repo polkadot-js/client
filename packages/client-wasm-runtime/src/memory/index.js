@@ -13,14 +13,14 @@ const memset = require('./memset');
 module.exports = function memory ({ l, heap }: RuntimeEnv): RuntimeInterface$Memory {
   return {
     free: (ptr: PointerType): void => {
-      l.debug('free', [ptr]);
-
-      heap.deallocate(ptr);
+      l.debug('free', [ptr], '->', heap.deallocate(ptr));
     },
     malloc: (size: number): PointerType => {
-      l.debug('malloc', [size]);
+      const ptr = heap.allocate(size);
 
-      return heap.allocate(size);
+      l.debug('malloc', [size], '->', ptr);
+
+      return ptr;
     },
     memcpy: (dst: PointerType, src: PointerType, num: number): PointerType => {
       l.debug('memcpy', [dst, src, num]);

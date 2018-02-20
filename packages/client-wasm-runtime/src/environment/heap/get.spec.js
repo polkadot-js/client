@@ -4,13 +4,14 @@
 
 const envHeap = require('./index');
 
-describe('envHeap', () => {
+describe('get', () => {
   let heap;
 
   beforeEach(() => {
     const buffer = [0x1, 0x2, 0x3, 0x4, 0x0, 0x0, 0x0, 0x0];
 
-    heap = envHeap({ buffer });
+    heap = envHeap();
+    heap.setWasmMemory({ buffer });
   });
 
   it('uses get to return data', () => {

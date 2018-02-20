@@ -5,12 +5,16 @@
 
 import type { RuntimeInterface } from '@polkadot/client-wasm-runtime/types';
 
+type FnResult = {
+  lo: number,
+  hi: number
+};
+type FnType = (...data: Array<Uint8Array>) => FnResult;
+
 const u8aToHex = require('@polkadot/util/u8a/toHex');
 
-const FnType = (...data: Array<Uint8Array>) => Uint8Array;
-
 module.exports = function createFn (fns: WebAssemblyInstance$Exports, name: string, { environment: { l, heap } }: RuntimeInterface): FnType {
-  return (...data: Array<Uint8Array>): number => {
+  return (...data: Array<Uint8Array>): FnResult => {
     const params = data.reduce((params, data) => {
       l.debug('storing data', u8aToHex(data));
 
@@ -22,6 +26,9 @@ module.exports = function createFn (fns: WebAssemblyInstance$Exports, name: stri
 
     l.debug('executing', name, params);
 
-    return fns[name].apply(null, params);
+    const lo: number = fns[name].apply(null, params);
+    const hi: number = fns['get_result_hi']();
+
+    return { lo, hi };
   };
 };

@@ -12,11 +12,11 @@ const l = require('@polkadot/util/logger')('runtime');
 const envHeap = require('./heap');
 const envStorage = require('./storage');
 
-module.exports = function environment (memory: WebAssembly.Memory, chain: ChainConfigType, db: BaseDbInterface): RuntimeEnv {
+module.exports = function environment (chain: ChainConfigType, db: BaseDbInterface): RuntimeEnv {
   return {
     l,
     chain,
     storage: envStorage(db),
-    heap: envHeap(memory)
+    heap: envHeap()
   };
 };
