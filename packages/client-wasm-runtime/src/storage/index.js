@@ -35,7 +35,7 @@ module.exports = function storage ({ l, heap, storage }: RuntimeEnv): RuntimeInt
       heap.set(resultPtr, trieRoot(storage.pairs()));
     },
     get_allocated_storage: (keyPtr: PointerType, keyLength: number, lenPtr: PointerType): PointerType => {
-      l.debug('get_allocated_storage', [keyPtr, keyLength, lenPtr], heap.get(keyPtr, keyLength));
+      l.debug('get_allocated_storage', [keyPtr, keyLength, lenPtr]);
 
       const data = get(
         storage,

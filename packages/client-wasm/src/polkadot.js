@@ -18,14 +18,12 @@ const OVERLAYS = [
   'execute_block', 'execute_transaction', 'finalise_block'
 ];
 
-module.exports = function polkadotWasm ({ wasm: { memoryInitial, memoryMaximum } }: ConfigType, state: WasmStateInstances, polkadotCode: Uint8Array): ExecutorInstance {
+module.exports = function polkadotWasm ({ wasm: { memoryHeapSize } }: ConfigType, state: WasmStateInstances, polkadotCode: Uint8Array): ExecutorInstance {
   const runtime = createRuntime(state);
   const env = createExports(proxyRuntime, { runtime: runtime.exports }, createMemory(0, 0));
   const polkadot = createExports(polkadotCode, { env });
   const executor = createExports(proxyPolkadot, { polkadot }, createMemory(0, 0));
 
-  // FIXME: This doesn't do anything?
-  // polkadot.memory.grow(memoryInitial * 16); // 1 * 1024 / 64
   runtime.environment.heap.setWasmMemory(polkadot.memory);
 
   return Object

@@ -5,17 +5,9 @@
 
 import type { RuntimeEnv$Heap, PointerType } from '../types';
 
-const u8aToHex = require('@polkadot/util/u8a/toHex');
-
 module.exports = function memcpy (heap: RuntimeEnv$Heap, dstPtr: PointerType, srcPtr: PointerType, num: number): PointerType {
-  // console.log(u8aToHex(heap.get(srcPtr, num)));
-
-  heap.set(
+  return heap.set(
     dstPtr,
     heap.get(srcPtr, num)
   );
-
-  console.log(u8aToHex(heap.get(dstPtr, num)));
-
-  return dstPtr;
 };
