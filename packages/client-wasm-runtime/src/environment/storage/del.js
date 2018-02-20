@@ -6,11 +6,13 @@
 import type { BaseDbInterface } from '@polkadot/client-db/types';
 import type { Memory$Storage } from '@polkadot/client-db/memory/types';
 
-const u8aToHex = require('@polkadot/util/u8a/toHex');
+const u8aToString = require('@polkadot/util/u8a/toString');
 
 module.exports = function del (pending: Memory$Storage, backend: BaseDbInterface, k: Uint8Array): void {
-  pending[u8aToHex(k)] = {
-    k,
+  const ks = u8aToString(k);
+
+  pending[ks] = {
+    k: k.slice(),
     v: new Uint8Array([])
   };
 };

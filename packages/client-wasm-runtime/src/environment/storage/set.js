@@ -6,13 +6,13 @@
 import type { BaseDbInterface } from '@polkadot/client-db/types';
 import type { Memory$Storage } from '@polkadot/client-db/memory/types';
 
-const u8aToHex = require('@polkadot/util/u8a/toHex');
+const u8aToString = require('@polkadot/util/u8a/toString');
 
 module.exports = function set (pending: Memory$Storage, backend: BaseDbInterface, k: Uint8Array, v: Uint8Array): void {
-  // console.log('setStorage', u8aToHex(k), k, v);
+  const ks = u8aToString(k);
 
-  pending[u8aToHex(k)] = {
-    k,
-    v
+  pending[ks] = {
+    k: k.slice(),
+    v: v.slice()
   };
 };

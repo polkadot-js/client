@@ -24,7 +24,8 @@ describe('createFn', () => {
       }
     };
     instance = {
-      test: jest.fn()
+      test: jest.fn(() => 42),
+      get_result_hi: jest.fn(() => 69)
     };
   });
 
@@ -62,5 +63,14 @@ describe('createFn', () => {
       6, 5, // offset, length
       7, 3 // offset, length
     );
+  });
+
+  it('returns the hi/lo result pair', () => {
+    expect(
+      createFn(instance, 'test', runtime)()
+    ).toEqual({
+      lo: 42,
+      hi: 69
+    });
   });
 });
