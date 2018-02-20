@@ -13,7 +13,7 @@
     "postinstall": "./build-wasm.sh"
   },
   "devDependencies": {
-    "@polkadot/dev": "^0.16.7",
+    "@polkadot/dev": "^0.16.9",
     "lerna": "^2.5.1"
   }
 }

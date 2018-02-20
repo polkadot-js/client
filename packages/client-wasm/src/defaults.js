@@ -3,7 +3,7 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-const HEAP_SIZE_KB = 512;
+const HEAP_SIZE_KB = 256;
 
 module.exports = {
   HEAP_SIZE_KB

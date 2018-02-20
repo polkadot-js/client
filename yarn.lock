@@ -78,9 +78,9 @@
     isomorphic-fetch "^2.2.1"
     websocket "^1.0.25"
 
-"@polkadot/dev@^0.16.7":
-  version "0.16.7"
-  resolved "https://registry.yarnpkg.com/@polkadot/dev/-/dev-0.16.7.tgz#072ca840f133d237767e2a737cfcf903ca0e6c6d"
+"@polkadot/dev@^0.16.9":
+  version "0.16.9"
+  resolved "https://registry.yarnpkg.com/@polkadot/dev/-/dev-0.16.9.tgz#bcb5a52bca06679fe69cc6a34e032724e2036361"
   dependencies:
     babel-cli "^6.26.0"
     babel-core "^6.26.0"
@@ -96,7 +96,7 @@
     eslint-config-semistandard "^12.0.0"
     eslint-config-standard "^11.0.0-beta.0"
     eslint-config-standard-jsx "^5.0.0"
-    eslint-config-standard-react "^5.0.0"
+    eslint-config-standard-react "^6.0.0"
     eslint-plugin-flowtype "^2.39.1"
     eslint-plugin-import "^2.8.0"
     eslint-plugin-jest "^21.3.2"
@@ -2226,19 +2226,15 @@ eslint-config-semistandard@^12.0.0:
   version "12.0.0"
   resolved "https://registry.yarnpkg.com/eslint-config-semistandard/-/eslint-config-semistandard-12.0.0.tgz#e6482de68e05c2dbdddaf45c3078f6a97fe23f1a"
 
-eslint-config-standard-jsx@^4.0.0:
-  version "4.0.2"
-  resolved "https://registry.yarnpkg.com/eslint-config-standard-jsx/-/eslint-config-standard-jsx-4.0.2.tgz#009e53c4ddb1e9ee70b4650ffe63a7f39f8836e1"
-
 eslint-config-standard-jsx@^5.0.0:
   version "5.0.0"
   resolved "https://registry.yarnpkg.com/eslint-config-standard-jsx/-/eslint-config-standard-jsx-5.0.0.tgz#4abfac554f38668e0078c664569e7b2384e5d2aa"
 
-eslint-config-standard-react@^5.0.0:
-  version "5.0.0"
-  resolved "https://registry.yarnpkg.com/eslint-config-standard-react/-/eslint-config-standard-react-5.0.0.tgz#64c7b8140172852be810a53d48ee87649ff178e3"
+eslint-config-standard-react@^6.0.0:
+  version "6.0.0"
+  resolved "https://registry.yarnpkg.com/eslint-config-standard-react/-/eslint-config-standard-react-6.0.0.tgz#d366d6c3c092426fd3ae794a4ca0b3cb131f2964"
   dependencies:
-    eslint-config-standard-jsx "^4.0.0"
+    eslint-config-standard-jsx "^5.0.0"
 
 eslint-config-standard@^11.0.0-beta.0:
   version "11.0.0-beta.0"
