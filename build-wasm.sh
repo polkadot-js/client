@@ -21,7 +21,11 @@ for S in "${WSRC[@]}"; do
 done
 
 for W in "${JSRC[@]}"; do
-  J=${W/.wasm/_wasm.js}
-  P=${J/#$DIRWB/$DIRCT}
-  $DIRBIN/polkadot-wasm-wasm2js.js --input $W --output $P
+  if [ -f $W ]; then
+    J=${W/.wasm/_wasm.js}
+    P=${J/#$DIRWB/$DIRCT}
+    $DIRBIN/polkadot-wasm-wasm2js.js --input $W --output $P
+  else
+    echo "Skipping $W"
+  done
 done
