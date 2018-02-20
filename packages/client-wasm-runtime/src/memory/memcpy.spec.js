@@ -10,7 +10,8 @@ describe('memcpy', () => {
   let memcpy;
 
   beforeEach(() => {
-    runtime = env({ buffer: new Uint8Array([1, 2, 3, 4, 5, 6, 7, 8]) });
+    runtime = env();
+    runtime.heap.setWasmMemory({ buffer: new Uint8Array([1, 2, 3, 4, 5, 6, 7, 8]) });
     memcpy = index(runtime).memcpy;
   });
 

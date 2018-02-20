@@ -21,20 +21,6 @@ module.exports = function envHeap (): RuntimeEnv$Heap {
   let uint8: Uint8Array;
   let view: DataView;
 
-  function setWasmMemory ({ buffer }: WebAssembly.Memory): void {
-    uint8 = new Uint8Array(buffer);
-    view = new DataView(uint8.buffer);
-
-    memory = {
-      uint8,
-      allocated: {},
-      deallocated: {},
-      end: buffer.byteLength - 1, // when allocating from top
-      offset: 256 * 1024, // aligned with Rust
-      size: buffer.byteLength
-    };
-  }
-
   return {
     allocate: (size: number): PointerType =>
       allocate(memory, size),
@@ -58,7 +44,18 @@ module.exports = function envHeap (): RuntimeEnv$Heap {
 
       return ptr;
     },
-    setWasmMemory,
+    setWasmMemory: ({ buffer }: WebAssembly.Memory, offset: number = 256 * 1024): void => {
+      uint8 = new Uint8Array(buffer);
+      view = new DataView(uint8.buffer);
+
+      memory = {
+        uint8,
+        allocated: {},
+        deallocated: {},
+        offset, // aligned with Rust (should have offset)
+        size: buffer.byteLength
+      };
+    },
     size: (): number =>
       memory.size,
     sizeAllocated: (): number =>

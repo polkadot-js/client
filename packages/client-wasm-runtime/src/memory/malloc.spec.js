@@ -10,7 +10,8 @@ describe('malloc', () => {
   let mem;
 
   beforeEach(() => {
-    runtime = env({ buffer: new Uint8Array(512 * 1024) });
+    runtime = env();
+    runtime.heap.setWasmMemory({ buffer: new Uint8Array(1024 * 1024) });
 
     mem = index(runtime);
   });

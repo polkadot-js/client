@@ -15,9 +15,11 @@ describe('print_utf8', () => {
   let print_utf8;
 
   beforeEach(() => {
-    const runtime = env({ buffer: u8aFromUtf8(TEST) });
+    const runtime = env();
 
     heap = runtime.heap;
+    heap.setWasmMemory({ buffer: u8aFromUtf8(TEST) });
+
     l = {
       debug: () => void 0,
       log: jest.fn(() => void 0)

@@ -10,7 +10,8 @@ describe('memmove', () => {
   let memmove;
 
   beforeEach(() => {
-    runtime = env({ buffer: new Uint8Array([1, 2, 3, 4, 5]) });
+    runtime = env();
+    runtime.heap.setWasmMemory({ buffer: new Uint8Array([1, 2, 3, 4, 5]) });
     memmove = index(runtime).memmove;
   });
 
