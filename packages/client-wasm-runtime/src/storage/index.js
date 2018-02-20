@@ -63,7 +63,7 @@ module.exports = function storage ({ l, heap, storage }: RuntimeEnv): RuntimeInt
       return data.length;
     },
     set_storage: (keyPtr: PointerType, keyLength: number, dataPtr: PointerType, dataLength: number): void => {
-      l.debug('set_storage', [keyPtr, keyLength, dataPtr, dataLength], heap.get(keyPtr, keyLength), heap.get(dataPtr, dataLength));
+      l.debug('set_storage', [keyPtr, keyLength, dataPtr, dataLength]);
 
       storage.set(
         heap.get(keyPtr, keyLength),
