@@ -1,6 +1,6 @@
 {
   "name": "@polkadot/client-p2p",
-  "version": "0.8.2",
+  "version": "0.8.3",
   "description": "Interfaces to P2P layers used in the Polkadot network",
   "main": "index.js",
   "keywords": [
@@ -46,6 +46,6 @@
     "pump": "^2.0.0"
   },
   "devDependencies": {
-    "@polkadot/client": "^0.8.2"
+    "@polkadot/client": "^0.8.3"
   }
 }
