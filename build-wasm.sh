@@ -27,5 +27,5 @@ for W in "${JSRC[@]}"; do
     $DIRBIN/polkadot-wasm-wasm2js.js --input $W --output $P
   else
     echo "Skipping $W"
-  done
+  fi
 done
