@@ -5,6 +5,12 @@
 const { createImports } = require('./index');
 
 describe('createImports', () => {
+  it('allows empry table & memory', () => {
+    expect(
+      createImports(void 0, void 0, {}).env
+    ).toMatchObject({});
+  });
+
   it('sets the memoryBase & tableBase', () => {
     expect(
       createImports({}, {}, {}).env

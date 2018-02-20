@@ -24,7 +24,10 @@ module.exports = function polkadotWasm ({ wasm: { memoryHeapSize } }: ConfigType
   const polkadot = createExports(polkadotCode, { env });
   const executor = createExports(proxyPolkadot, { polkadot }, createMemory(0, 0));
 
-  runtime.environment.heap.setWasmMemory(polkadot.memory);
+  runtime.environment.heap.setWasmMemory(
+    // flowlint-next-line unclear-type:off
+    ((polkadot.memory: any): WebAssembly.Memory)
+  );
 
   return Object
     .keys(executor)

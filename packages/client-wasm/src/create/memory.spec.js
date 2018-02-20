@@ -4,7 +4,7 @@
 
 const isInstanceOf = require('@polkadot/util/is/instanceOf');
 
-const { HEAP_SIZE_MB } = require('../defaults');
+const { HEAP_SIZE_KB } = require('../defaults');
 const { createMemory } = require('./index');
 
 describe('createMemory', () => {
@@ -40,19 +40,19 @@ describe('createMemory', () => {
     expect(
       constructInstanceSpy
     ).toHaveBeenCalledWith({
-      initial: HEAP_SIZE_MB * 16,
-      maximum: HEAP_SIZE_MB * 16
+      initial: HEAP_SIZE_KB / 16,
+      maximum: HEAP_SIZE_KB / 16
     });
   });
 
   it('constructs WebAssembly.Memory with provided values', () => {
-    createMemory(4, 4);
+    createMemory(256, 512);
 
     expect(
       constructInstanceSpy
     ).toHaveBeenCalledWith({
-      initial: 4 * 16,
-      maximum: 4 * 16
+      initial: 256 / 16,
+      maximum: 512 / 16
     });
   });
 

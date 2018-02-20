@@ -17,7 +17,5 @@ module.exports = function exports (bytecode: Uint8Array, imports?: WasmExtraImpo
     createImports(memory, table, imports)
   );
 
-  console.log('instance', instance, instance.memory);
-
   return instance.exports;
 };

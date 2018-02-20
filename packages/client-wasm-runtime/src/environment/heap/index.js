@@ -24,7 +24,7 @@ module.exports = function envHeap (): RuntimeEnv$Heap {
   return {
     allocate: (size: number): PointerType =>
       allocate(memory, size),
-    deallocate: (ptr: PointerType): void =>
+    deallocate: (ptr: PointerType): number =>
       deallocate(memory, ptr),
     dup: (ptr: PointerType, len: number): Uint8Array =>
       uint8.slice(ptr, ptr + len),
@@ -44,7 +44,7 @@ module.exports = function envHeap (): RuntimeEnv$Heap {
 
       return ptr;
     },
-    setWasmMemory: ({ buffer }: WebAssembly.Memory, offset: number = 256 * 1024): void => {
+    setWasmMemory: ({ buffer }: WebAssembly.Memory, offset?: number = 256 * 1024): void => {
       uint8 = new Uint8Array(buffer);
       view = new DataView(uint8.buffer);
 
