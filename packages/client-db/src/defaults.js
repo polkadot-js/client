@@ -10,7 +10,7 @@ const path = require('path');
 
 const PREFIX_DB: PathPrefixType = 'database';
 const PATH = path.join(os.homedir(), '.@polkadot');
-const TYPE: DbConfigType$Type = 'disk';
+const TYPE: DbConfigType$Type = 'memory';
 
 module.exports = {
   PREFIX_DB,
