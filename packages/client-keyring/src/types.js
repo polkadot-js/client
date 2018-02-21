@@ -7,8 +7,8 @@ export type KeyringPair = {
   id: string,
   publicKey: Uint8Array,
 
-  sign (data: Uint8Array): Uint8Array,
-  verify (signedData: Uint8Array): boolean
+  sign (message: Uint8Array): Uint8Array,
+  verify (message: Uint8Array, signature: Uint8Array): boolean
 };
 
 export type KeyringInstance = {

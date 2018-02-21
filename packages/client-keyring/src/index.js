@@ -17,7 +17,8 @@ const createPair = require('./pair');
 module.exports = function keyring (): KeyringInstance {
   const pairs: KeyringPairMap = {};
   const getPairs = (): Array<KeyringPair> =>
-    Object.values(pairs);
+    // flowlint-next-line unclear-type:off
+    ((Object.values(pairs): any): Array<KeyringPair>);
 
   return {
     addFromSeed: (seed: Uint8Array | string): KeyringPair => {
