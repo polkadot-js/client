@@ -8,10 +8,10 @@ const memoryDb = require('@polkadot/client-db/memory');
 const createPolkadot = require('@polkadot/client-polkadot');
 const keyring = require('@polkadot/client-keyring/testing')();
 
-const wasm = require('./polkadot');
+const wasm = require('./wasm');
 const code = require('../test/wasm/polkadot_runtime_wasm');
 
-describe('polkadot (runtimes)', () => {
+describe('wasm', () => {
   let instance;
   let config;
   let chain;

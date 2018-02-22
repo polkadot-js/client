@@ -15,14 +15,15 @@ const set = require('./set');
 
 module.exports = function envStorage (backend: BaseDbInterface): BaseDbInterface {
   let pending: Memory$Storage = {};
+  const clear = (): void => {
+    pending = {};
+  };
 
   return {
-    clear: (): void => {
-      pending = {};
-    },
+    clear,
     commit: (values: Trie$Pairs = []): void => {
       commit(pending, backend, values);
-      pending = {};
+      clear();
     },
     del: (k: Uint8Array): void =>
       del(pending, backend, k),

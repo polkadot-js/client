@@ -1,5 +1,5 @@
 {
-  "name": "@polkadot/client-wasm-runtime",
+  "name": "@polkadot/client-runtime",
   "version": "0.8.3",
   "description": "Basic execution wrapper interface for WASM programs",
   "main": "index.js",
@@ -23,7 +23,7 @@
   "bugs": {
     "url": "https://github.com/polkadot-js/client/issues"
   },
-  "homepage": "https://github.com/polkadot-js/client/tree/master/packages/client-wasm-runtime#readme",
+  "homepage": "https://github.com/polkadot-js/client/tree/master/packages/client-runtime#readme",
   "scripts": {
     "build": "polkadot-dev-build-babel",
     "check": "eslint src && flow check",

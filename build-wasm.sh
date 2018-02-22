@@ -5,11 +5,13 @@
 
 DIRBIN="packages/client-wasm/scripts"
 DIRCT="packages/client-wasm/test/wasm"
-DIRRT="packages/client-wasm-runtime/src/wasm"
+DIRPD="packages/client-polkadot/src/wasm"
+DIRPT="packages/client-polkadot/test/wasm"
+DIRRT="packages/client-runtime/src/wasm"
 DIRWB="node_modules/@polkadot/wasm-bin/wasm32-unknown-unknown"
 
-WSRC=( "$DIRRT/proxy_polkadot.wat" "$DIRRT/proxy_runtime.wat" "$DIRCT/addTwo.wat" "$DIRCT/import.wat" "$DIRCT/start.wat" )
-JSRC=( "$DIRWB/polkadot_runtime.wasm" "$DIRRT/genesis_polkadot.wasm" )
+WSRC=( "$DIRPD/proxy_polkadot.wat" "$DIRRT/proxy_runtime.wat" "$DIRCT/addTwo.wat" "$DIRCT/import.wat" "$DIRCT/start.wat" )
+PSRC=( "$DIRWB/polkadot_runtime.wasm" "$DIRPT/genesis_polkadot.wasm" )
 
 $DIRBIN/polkadot-wasm-build-wabt.sh
 
@@ -20,10 +22,10 @@ for S in "${WSRC[@]}"; do
   $DIRBIN/polkadot-wasm-wasm2js.js --input $W --output $J
 done
 
-for W in "${JSRC[@]}"; do
+for W in "${PSRC[@]}"; do
   if [ -f $W ]; then
     J=${W/.wasm/_wasm.js}
-    P=${J/#$DIRWB/$DIRCT}
+    P=${J/#$DIRWB/$DIRPT}
     $DIRBIN/polkadot-wasm-wasm2js.js --input $W --output $P
   else
     echo "Skipping $W"

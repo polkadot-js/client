@@ -5,7 +5,7 @@
 
 import type { ChainConfigType } from '@polkadot/client-chains/types';
 import type { BaseDbInterface } from '@polkadot/client-db/types';
-import type { RuntimeInterface } from '@polkadot/client-wasm-runtime/types';
+import type { RuntimeInterface } from '@polkadot/client-runtime/types';
 
 export type WasmExports = {
   // flowlint-next-line unclear-type:off
