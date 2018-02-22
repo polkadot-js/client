@@ -1,6 +1,6 @@
 {
   "name": "@polkadot/client-keyring",
-  "version": "0.8.3",
+  "version": "0.8.4",
   "description": "Keyring management",
   "main": "index.js",
   "engines": {
@@ -36,6 +36,6 @@
     "babel-runtime": "^6.26.0"
   },
   "devDependencies": {
-    "@polkadot/client": "^0.8.3"
+    "@polkadot/client": "^0.8.4"
   }
 }
