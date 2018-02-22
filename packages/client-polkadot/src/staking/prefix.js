@@ -9,6 +9,8 @@ const BALANCE_OF: Uint8Array = u8aFromString('sta:bal:');
 const BONDAGE_OF: Uint8Array = u8aFromString('sta:bon:');
 const BONDING_DURATION: Uint8Array = u8aFromString('sta:loc');
 const CURRENT_ERA: Uint8Array = u8aFromString('sta:era');
+const INTENT_WILL: Uint8Array = u8aFromString('sta:wil:');
+const INTENT_WILL_LENGTH: Uint8Array = u8aFromString('sta:wil:len');
 const LAST_ERA_LENGTH_CHANGE: Uint8Array = u8aFromString('sta:lec');
 const NEXT_SESSIONS_PER_ERA: Uint8Array = u8aFromString('sta:nse');
 const SESSIONS_PER_ERA: Uint8Array = u8aFromString('sta:spe');
@@ -19,6 +21,8 @@ module.exports = {
   BONDAGE_OF,
   BONDING_DURATION,
   CURRENT_ERA,
+  INTENT_WILL,
+  INTENT_WILL_LENGTH,
   LAST_ERA_LENGTH_CHANGE,
   NEXT_SESSIONS_PER_ERA,
   SESSIONS_PER_ERA,

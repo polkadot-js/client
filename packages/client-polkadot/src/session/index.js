@@ -6,6 +6,17 @@
 import type { BaseDbInterface } from '@polkadot/client-db/types';
 import type { PolkadotInterface$Session } from '../types';
 
+const setLength = require('./setLength');
+const setValue = require('./setValue');
+const setValueLength = require('./setValueLength');
+
 module.exports = function session (db: BaseDbInterface): PolkadotInterface$Session {
-  return {};
+  return {
+    setLength: (length: BN | number): void =>
+      setLength(db, length),
+    setValue: (id: BN | number, publicKey: Uint8Array): void =>
+      setValue(db, id, publicKey),
+    setValueLength: (length: BN | number): void =>
+      setValueLength(db, length)
+  };
 };

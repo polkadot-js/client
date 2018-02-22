@@ -30,7 +30,7 @@
   },
   "dependencies": {
     "@polkadot/client-db": "^0.8.3",
-    "@polkadot/util": "^0.15.9",
+    "@polkadot/util": "^0.15.10",
     "babel-runtime": "^6.26.0"
   },
   "devDependencies": {

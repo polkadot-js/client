@@ -5,7 +5,7 @@
 // const encodeBlock = require('@polkadot/primitives-codec/block/encode');
 const hexToU8a = require('@polkadot/util/hex/toU8a');
 const memoryDb = require('@polkadot/client-db/memory');
-const polkadot = require('@polkadot/client-polkadot');
+const createPolkadot = require('@polkadot/client-polkadot');
 const keyring = require('@polkadot/client-keyring/testing')();
 
 const wasm = require('./polkadot');
@@ -16,8 +16,7 @@ describe('polkadot (runtimes)', () => {
   let config;
   let chain;
   let db;
-  let setStorage;
-  let staking;
+  let polkadot;
 
   beforeEach(() => {
     config = {
@@ -31,13 +30,11 @@ describe('polkadot (runtimes)', () => {
     db = memoryDb();
 
     instance = wasm(config, { chain, db }, code);
-    staking = polkadot(instance.runtime.environment.storage).staking;
-
-    setStorage = instance.runtime.environment.storage.set;
+    polkadot = createPolkadot(instance.runtime.environment.storage);
   });
 
   beforeEach(() => {
-    staking.setBalance(keyring.one.publicKey, 69 + 42);
+    polkadot.staking.setBalance(keyring.one.publicKey, 69 + 42);
   });
 
   it('loads the actual runtime', () => {
@@ -53,72 +50,32 @@ describe('polkadot (runtimes)', () => {
       );
 
       expect(
-        staking.getBalance(keyring.one.publicKey).toNumber()
+        polkadot.staking.getBalance(keyring.one.publicKey).toNumber()
       ).toEqual(42);
       expect(
-        staking.getBalance(keyring.two.publicKey).toNumber()
+        polkadot.staking.getBalance(keyring.two.publicKey).toNumber()
       ).toEqual(69);
     });
   });
 
   describe('execute_block', () => {
     beforeEach(() => {
-      setStorage(
-        new Uint8Array([227, 27, 90, 220, 100, 62, 66, 228, 126, 109, 210, 39, 74, 56, 186, 92]),
-        new Uint8Array([155, 2, 0, 0])
-      );
-      setStorage(
-        new Uint8Array([74, 215, 5, 152, 26, 184, 197, 20, 148, 83, 182, 214, 54, 193, 144, 48]),
-        new Uint8Array([47, 140, 97, 41, 216, 22, 207, 81, 195, 116, 188, 127, 8, 195, 230, 62, 209, 86, 207, 120, 174, 251, 74, 101, 80, 217, 123, 135, 153, 121, 119, 238])
-      );
-      setStorage(
-        new Uint8Array([173, 131, 186, 108, 113, 203, 161, 69, 135, 211, 123, 231, 166, 36, 173, 128]),
-        new Uint8Array([69, 69, 69, 69, 69, 69, 69, 69, 69, 69, 69, 69, 69, 69, 69, 69, 69, 69, 69, 69, 69, 69, 69, 69, 69, 69, 69, 69, 69, 69, 69, 69])
-      );
-      setStorage(
-        new Uint8Array([188, 93, 14, 33, 249, 40, 238, 172, 61, 208, 176, 90, 20, 29, 55, 223]),
-        new Uint8Array([3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3])
-      );
-      setStorage(
-        new Uint8Array([157, 210, 64, 19, 228, 146, 189, 187, 53, 68, 251, 160, 103, 52, 186, 247]),
-        new Uint8Array([2, 0, 0, 0, 0, 0, 0, 0])
-      );
-      setStorage(
-        new Uint8Array([11, 131, 44, 74, 180, 231, 189, 216, 164, 122, 140, 77, 105, 137, 189, 231]),
-        new Uint8Array([3, 0, 0, 0])
-      );
-      setStorage(
-        new Uint8Array([3, 121, 200, 224, 48, 161, 59, 149, 150, 206, 96, 235, 245, 25, 110, 169]),
-        new Uint8Array([3, 0, 0, 0])
-      );
-      setStorage(
-        new Uint8Array([194, 31, 127, 33, 171, 6, 99, 233, 182, 141, 213, 146, 43, 51, 169, 244]),
-        new Uint8Array([215, 90, 152, 1, 130, 177, 10, 183, 213, 75, 254, 211, 201, 100, 7, 58, 14, 225, 114, 243, 218, 166, 35, 37, 175, 2, 26, 104, 247, 7, 81, 26])
-      );
-      setStorage(
-        new Uint8Array([69, 43, 85, 12, 130, 93, 53, 142, 66, 96, 18, 54, 165, 41, 226, 237]),
-        new Uint8Array([3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3])
-      );
-      setStorage(
-        new Uint8Array([59, 112, 6, 135, 254, 205, 255, 94, 193, 196, 165, 183, 20, 82, 30, 182]),
-        new Uint8Array([0, 0, 0, 0, 0, 0, 0, 0])
-      );
-      setStorage(
-        new Uint8Array([243, 125, 44, 38, 198, 149, 59, 24, 135, 141, 188, 29, 198, 94, 219, 192]),
-        new Uint8Array([2, 0, 0, 0, 0, 0, 0, 0])
-      );
-      setStorage(
-        new Uint8Array([162, 202, 229, 105, 184, 14, 224, 88, 11, 41, 104, 35, 55, 4, 93, 0]),
-        new Uint8Array([215, 90, 152, 1, 130, 177, 10, 183, 213, 75, 254, 211, 201, 100, 7, 58, 14, 225, 114, 243, 218, 166, 35, 37, 175, 2, 26, 104, 247, 7, 81, 26])
-      );
-      setStorage(
-        new Uint8Array([41, 48, 212, 112, 57, 112, 101, 173, 231, 171, 105, 95, 166, 156, 45, 141]),
-        new Uint8Array([47, 140, 97, 41, 216, 22, 207, 81, 195, 116, 188, 127, 8, 195, 230, 62, 209, 86, 207, 120, 174, 251, 74, 101, 80, 217, 123, 135, 153, 121, 119, 238])
-      );
-      setStorage(
-        new Uint8Array([160, 89, 174, 59, 62, 247, 37, 114, 30, 151, 69, 38, 66, 128, 59, 97]),
-        new Uint8Array([3, 0, 0, 0, 0, 0, 0, 0])
-      );
+      const threePublicKey = hexToU8a('0x0303030303030303030303030303030303030303030303030303030303030303');
+
+      polkadot.governance.setApprovalsRequired(667);
+      polkadot.session.setLength(2);
+      polkadot.session.setValueLength(3);
+      polkadot.session.setValue(0, keyring.one.publicKey);
+      polkadot.session.setValue(1, keyring.two.publicKey);
+      polkadot.session.setValue(2, threePublicKey);
+      polkadot.staking.setCurrentEra(0);
+      polkadot.staking.setIntentLength(3);
+      polkadot.staking.setIntent(0, keyring.one.publicKey);
+      polkadot.staking.setIntent(1, keyring.two.publicKey);
+      polkadot.staking.setIntent(2, threePublicKey);
+      polkadot.staking.setSessionsPerEra(2);
+      polkadot.staking.setValidatorCount(3);
+      polkadot.system.setBlockHash(0, hexToU8a('0x4545454545454545454545454545454545454545454545454545454545454545'));
     });
 
     it('executes a basic block', () => {
@@ -128,11 +85,16 @@ describe('polkadot (runtimes)', () => {
       );
 
       expect(
-        staking.getBalance(keyring.one.publicKey).toNumber()
+        polkadot.staking.getBalance(keyring.one.publicKey).toNumber()
       ).toEqual(42);
       expect(
-        staking.getBalance(keyring.two.publicKey).toNumber()
+        polkadot.staking.getBalance(keyring.two.publicKey).toNumber()
       ).toEqual(69);
+      expect(
+        polkadot.system.getBlockHash(1)
+      ).toEqual(
+        hexToU8a('0x1025e5db74fdaf4d2818822dccf0e1604ae9ccc62f26cecfde23448ff0248abf')
+      );
 
       // block2
       instance.exports.execute_block(
@@ -140,10 +102,10 @@ describe('polkadot (runtimes)', () => {
       );
 
       expect(
-        staking.getBalance(keyring.one.publicKey).toNumber()
+        polkadot.staking.getBalance(keyring.one.publicKey).toNumber()
       ).toEqual(32);
       expect(
-        staking.getBalance(keyring.two.publicKey).toNumber()
+        polkadot.staking.getBalance(keyring.two.publicKey).toNumber()
       ).toEqual(79);
     });
   });

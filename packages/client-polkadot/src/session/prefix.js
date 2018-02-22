@@ -10,11 +10,15 @@ const LAST_LENGTH_CHANGE: Uint8Array = u8aFromString('ses:llc');
 const NEXT_KEY_FOR: Uint8Array = u8aFromString('ses:nxt:');
 const NEXT_SESSION_LENGTH: Uint8Array = u8aFromString('ses:nln');
 const SESSION_LENGTH: Uint8Array = u8aFromString('ses:len');
+const VALUE: Uint8Array = u8aFromString('ses:val:');
+const VALUE_LENGTH: Uint8Array = u8aFromString('ses:val:len');
 
 module.exports = {
   CURRENT_INDEX,
   LAST_LENGTH_CHANGE,
   NEXT_KEY_FOR,
   NEXT_SESSION_LENGTH,
-  SESSION_LENGTH
+  SESSION_LENGTH,
+  VALUE,
+  VALUE_LENGTH
 };

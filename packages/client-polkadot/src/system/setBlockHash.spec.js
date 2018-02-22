@@ -3,29 +3,28 @@
 // of the ISC license. See the LICENSE file for details.
 
 const u8aToHex = require('@polkadot/util/u8a/toHex');
-const keyring = require('@polkadot/client-keyring/testing')();
 
 const index = require('../index');
 
-describe('setBalance', () => {
-  let staking;
+describe('setBlockHash', () => {
+  let system;
 
   beforeEach(() => {
     const store = {};
 
-    staking = index({
+    system = index({
       get: (key) => store[u8aToHex(key)] || new Uint8Array([]),
       set: (key, value) => {
         store[u8aToHex(key)] = value;
       }
-    }).staking;
+    }).system;
   });
 
   it('sets balances', () => {
-    staking.setBalance(keyring.one.publicKey, 123);
+    system.setBlockHash(5, new Uint8Array([123]));
 
     expect(
-      staking.getBalance(keyring.one.publicKey).toNumber()
-    ).toEqual(123);
+      system.getBlockHash(5)
+    ).toEqual(new Uint8Array([123]));
   });
 });
