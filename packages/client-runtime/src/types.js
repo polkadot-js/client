@@ -28,7 +28,7 @@ export type RuntimeEnv = {
   chain: ChainConfigType,
   heap: RuntimeEnv$Heap,
   l: Logger,
-  storage: BaseDbInterface
+  db: BaseDbInterface
 };
 
 export type RuntimeInterface$Chain = {

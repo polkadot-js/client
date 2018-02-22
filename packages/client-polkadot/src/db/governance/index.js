@@ -5,11 +5,11 @@
 
 import type BN from 'bn.js';
 import type { BaseDbInterface } from '@polkadot/client-db/types';
-import type { PolkadotInterface$Session } from '../types';
+import type { PolkadotDb$Governance } from '../../types';
 
 const setApprovalsRequired = require('./setApprovalsRequired');
 
-module.exports = function governance (db: BaseDbInterface): PolkadotInterface$Session {
+module.exports = function governance (db: BaseDbInterface): PolkadotDb$Governance {
   return {
     setApprovalsRequired: (count: BN | number): void =>
       setApprovalsRequired(db, count)

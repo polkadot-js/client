@@ -3,7 +3,8 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { WasmStateInstances } from '@polkadot/client-wasm/types';
+import type { ChainConfigType } from '@polkadot/client-chains/types';
+import type { BaseDbInterface } from '@polkadot/client-db/types';
 import type { RuntimeInterface, RuntimeInterface$Exports } from './types';
 
 const createChain = require('./chain');
@@ -13,7 +14,7 @@ const createIo = require('./io');
 const createMemory = require('./memory');
 const createStorage = require('./storage');
 
-module.exports = function runtime ({ chain, db }: WasmStateInstances): RuntimeInterface {
+module.exports = function runtime (chain: ChainConfigType, db: BaseDbInterface): RuntimeInterface {
   const environment = createEnv(chain, db);
 
   return {

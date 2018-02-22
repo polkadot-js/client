@@ -4,12 +4,12 @@
 
 (module
   ;; imports, compliant as per spec
-  (import "polkadot" "execute_block"
+  (import "proxy" "execute_block"
     (func $execute_block
       (param i32 i32) (result i64)
     )
   )
-  (import "polkadot" "execute_transaction"
+  (import "proxy" "execute_transaction"
     (func $execute_transaction
       (param i32 i32) (result i64)
     )

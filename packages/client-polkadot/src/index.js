@@ -3,19 +3,19 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
+import type { ConfigType } from '@polkadot/client/types';
+import type { ChainConfigType } from '@polkadot/client-chains/types';
 import type { BaseDbInterface } from '@polkadot/client-db/types';
 import type { PolkadotInterface } from './types';
 
-const governance = require('./governance');
-const session = require('./session');
-const staking = require('./staking');
-const system = require('./system');
+const createDb = require('./db');
+const createWasm = require('./wasm');
 
-module.exports = function polkadot (db: BaseDbInterface): PolkadotInterface {
+module.exports = function polkadot (config: ConfigType, chain: ChainConfigType, db: BaseDbInterface, code: Uint8Array): PolkadotInterface {
+  const { instance, runtime } = createWasm(config, chain, db, code);
+
   return {
-    governance: governance(db),
-    session: session(db),
-    staking: staking(db),
-    system: system(db)
+    db: createDb(runtime.environment.db),
+    instance
   };
 };

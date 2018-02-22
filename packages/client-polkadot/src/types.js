@@ -5,17 +5,40 @@
 
 import type BN from 'bn.js';
 
-export type PolkadotInterface$Session = {}
-
-export type PolkadotInterface$Staking = {
-  getBalance (accountId: Uint8Array): BN,
-  setBalance (accountId: Uint8Array, BN): void
+export type PolkadotDb$Governance = {
+  setApprovalsRequired (count: BN | number): void
 }
 
-export type PolkadotInterface$System = {}
+export type PolkadotDb$Session = {
+  setLength (length: BN | number): void,
+  setValue (id: BN | number, publicKey: Uint8Array): void,
+  setValueLength (length: BN | number): void
+}
+
+export type PolkadotDb$Staking = {
+  getBalance (publicKey: Uint8Array): BN,
+  setBalance (publicKey: Uint8Array, value: BN | number): void,
+  setCurrentEra (era: BN | number): void,
+  setIntent (id: BN | number, publicKey: Uint8Array): void,
+  setIntentLength (length: BN | number): void,
+  setSessionsPerEra (count: BN | number): void,
+  setValidatorCount (count: BN | number): void
+}
+
+export type PolkadotDb$System = {
+  getBlockHash (block: BN | number): Uint8Array,
+  getCode (): Uint8Array,
+  getNonce (publicKey: Uint8Array): BN,
+  setBlockHash (block: BN | number, hash: Uint8Array): void
+}
+
+export type PolkadotDb = {
+  session: PolkadotDb$Session,
+  staking: PolkadotDb$Staking,
+  system: PolkadotDb$System
+}
 
 export type PolkadotInterface = {
-  session: PolkadotInterface$Session,
-  staking: PolkadotInterface$Staking,
-  system: PolkadotInterface$System
+  db: PolkadotDb,
+  instance: WebAssemblyInstance$Exports
 }

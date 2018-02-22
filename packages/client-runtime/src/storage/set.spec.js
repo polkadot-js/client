@@ -9,7 +9,7 @@ const index = require('./index');
 
 describe('set_storage', () => {
   let heap;
-  let storage;
+  let db;
   let set_storage;
 
   beforeEach(() => {
@@ -19,18 +19,18 @@ describe('set_storage', () => {
       get: (ptr, len) => uint8.subarray(ptr, ptr + len)
     };
 
-    storage = {
+    db = {
       set: jest.fn()
     };
 
-    set_storage = index({ l, heap, storage }).set_storage;
+    set_storage = index({ l, heap, db }).set_storage;
   });
 
   it('sets the value into storage', () => {
     set_storage(0, 3, 3, 5);
 
     expect(
-      storage.set
+      db.set
     ).toHaveBeenCalledWith(
       new Uint8Array([0x53, 0x61, 0x79]),
       new Uint8Array([72, 101, 108, 108, 111])

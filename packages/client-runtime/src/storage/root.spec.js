@@ -11,7 +11,7 @@ const index = require('./index');
 
 describe('storage_root', () => {
   let heap;
-  let storage;
+  let db;
   let storage_root;
 
   beforeEach(() => {
@@ -19,13 +19,13 @@ describe('storage_root', () => {
       set: jest.fn()
     };
 
-    storage = {};
+    db = {};
 
-    storage_root = index({ l, heap, storage }).storage_root;
+    storage_root = index({ l, heap, db }).storage_root;
   });
 
   it('creates a basic storage root', () => {
-    storage.pairs = () => ([
+    db.pairs = () => ([
       { k: u8aFromString('doe'), v: u8aFromString('reindeer') },
       { k: u8aFromString('dog'), v: u8aFromString('puppy') },
       { k: u8aFromString('dogglesworth'), v: u8aFromString('cat') }

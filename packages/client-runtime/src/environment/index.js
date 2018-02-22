@@ -9,14 +9,14 @@ import type { RuntimeEnv } from '../types';
 
 const l = require('@polkadot/util/logger')('runtime');
 
+const envDb = require('./db');
 const envHeap = require('./heap');
-const envStorage = require('./storage');
 
 module.exports = function environment (chain: ChainConfigType, db: BaseDbInterface): RuntimeEnv {
   return {
     l,
     chain,
-    storage: envStorage(db),
+    db: envDb(db),
     heap: envHeap()
   };
 };

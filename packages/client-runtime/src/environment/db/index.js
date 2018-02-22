@@ -13,7 +13,7 @@ const get = require('./get');
 const pairs = require('./pairs');
 const set = require('./set');
 
-module.exports = function envStorage (backend: BaseDbInterface): BaseDbInterface {
+module.exports = function envDb (backend: BaseDbInterface): BaseDbInterface {
   let pending: Memory$Storage = {};
   const clear = (): void => {
     pending = {};

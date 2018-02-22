@@ -5,8 +5,8 @@
 
 import type { BaseDbInterface } from '@polkadot/client-db/types';
 
-module.exports = function get (storage: BaseDbInterface, key: Uint8Array, maxLength: number = -1): Uint8Array {
-  const data = storage.get(key);
+module.exports = function get (db: BaseDbInterface, key: Uint8Array, maxLength: number = -1): Uint8Array {
+  const data = db.get(key);
   const dataLength = maxLength === -1 || data.length < maxLength
     ? data.length
     : maxLength;

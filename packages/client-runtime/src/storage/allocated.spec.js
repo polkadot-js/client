@@ -6,28 +6,28 @@
 const l = require('@polkadot/util/logger')('test');
 const u8aFromString = require('@polkadot/util/u8a/fromString');
 
+const envDb = require('../environment/db');
 const envHeap = require('../environment/heap');
-const envStorage = require('../environment/storage');
 const index = require('./index');
 
 describe('get_allocated_storage', () => {
   let get_allocated_storage;
   let heap;
-  let storage;
+  let db;
 
   beforeEach(() => {
     heap = envHeap();
     heap.setWasmMemory({ buffer: new Uint8Array(1024 * 1024) });
-    storage = envStorage({});
+    db = envDb({});
 
-    get_allocated_storage = index({ l, heap, storage }).get_allocated_storage;
+    get_allocated_storage = index({ l, heap, db }).get_allocated_storage;
   });
 
   it('retrieves allocated storage for a key', () => {
     const key = u8aFromString('key');
     const value = u8aFromString('some value');
 
-    storage.set(key, value);
+    db.set(key, value);
 
     const keyPtr = heap.allocate(key.length);
     const lenPtr = heap.allocate(4);

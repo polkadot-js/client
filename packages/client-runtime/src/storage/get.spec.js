@@ -9,7 +9,7 @@ const index = require('./index');
 
 describe('get_storage_into', () => {
   let heap;
-  let storage;
+  let db;
   let get_storage_into;
 
   beforeEach(() => {
@@ -20,18 +20,18 @@ describe('get_storage_into', () => {
       set: jest.fn()
     };
 
-    storage = {
+    db = {
       get: jest.fn((key) => new Uint8Array([0x1, 0x2, 0x3, 0x4, 0x5]))
     };
 
-    get_storage_into = index({ l, heap, storage }).get_storage_into;
+    get_storage_into = index({ l, heap, db }).get_storage_into;
   });
 
   it('retrieves the correct value from storage', () => {
     get_storage_into(0, 3, 3, 3);
 
     expect(
-      storage.get
+      db.get
     ).toHaveBeenCalledWith(
       new Uint8Array([0x53, 0x61, 0x79])
     );

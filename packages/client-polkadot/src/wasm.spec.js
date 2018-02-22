@@ -5,55 +5,53 @@
 // const encodeBlock = require('@polkadot/primitives-codec/block/encode');
 const hexToU8a = require('@polkadot/util/hex/toU8a');
 const memoryDb = require('@polkadot/client-db/memory');
-const createPolkadot = require('@polkadot/client-polkadot');
 const keyring = require('@polkadot/client-keyring/testing')();
 
+const createDb = require('./db');
 const wasm = require('./wasm');
 const code = require('../test/wasm/polkadot_runtime_wasm');
 
 describe('wasm', () => {
   let instance;
-  let config;
-  let chain;
   let db;
-  let polkadot;
 
   beforeEach(() => {
-    config = {
+    const config = {
       wasm: {}
     };
-    chain = {
+    const chain = {
       params: {
         networkId: 42
       }
     };
-    db = memoryDb();
+    const memdb = memoryDb();
+    const executor = wasm(config, chain, memdb, code);
 
-    instance = wasm(config, { chain, db }, code);
-    polkadot = createPolkadot(instance.runtime.environment.storage);
+    instance = executor.instance;
+    db = createDb(executor.runtime.environment.db);
   });
 
   beforeEach(() => {
-    polkadot.staking.setBalance(keyring.one.publicKey, 69 + 42);
+    db.staking.setBalance(keyring.one.publicKey, 69 + 42);
   });
 
   it('loads the actual runtime', () => {
     expect(
-      instance.exports.execute_block
+      instance.execute_block
     ).toBeDefined();
   });
 
   describe('execute_transaction', () => {
     it('executes a basic transaction', () => {
-      instance.exports.execute_transaction(
+      instance.execute_transaction(
         hexToU8a('0x000000000000000000000000000000000000000000000000000000000000000001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000910000002f8c6129d816cf51c374bc7f08c3e63ed156cf78aefb4a6550d97b87997977ee000000000000000022d75a980182b10ab7d54bfed3c964073a0ee172f3daa62325af021a68f707511a45000000000000005f9832c5a4a39e2dd4a3a0c5b400e9836beb362cb8f7d845a8291a2ae6fe366612e080e4acd0b5a75c3d0b6ee69614a68fb63698c1e76bf1f2dcd8fa617ddf05')
       );
 
       expect(
-        polkadot.staking.getBalance(keyring.one.publicKey).toNumber()
+        db.staking.getBalance(keyring.one.publicKey).toNumber()
       ).toEqual(42);
       expect(
-        polkadot.staking.getBalance(keyring.two.publicKey).toNumber()
+        db.staking.getBalance(keyring.two.publicKey).toNumber()
       ).toEqual(69);
     });
   });
@@ -62,50 +60,50 @@ describe('wasm', () => {
     beforeEach(() => {
       const threePublicKey = hexToU8a('0x0303030303030303030303030303030303030303030303030303030303030303');
 
-      polkadot.governance.setApprovalsRequired(667);
-      polkadot.session.setLength(2);
-      polkadot.session.setValueLength(3);
-      polkadot.session.setValue(0, keyring.one.publicKey);
-      polkadot.session.setValue(1, keyring.two.publicKey);
-      polkadot.session.setValue(2, threePublicKey);
-      polkadot.staking.setCurrentEra(0);
-      polkadot.staking.setIntentLength(3);
-      polkadot.staking.setIntent(0, keyring.one.publicKey);
-      polkadot.staking.setIntent(1, keyring.two.publicKey);
-      polkadot.staking.setIntent(2, threePublicKey);
-      polkadot.staking.setSessionsPerEra(2);
-      polkadot.staking.setValidatorCount(3);
-      polkadot.system.setBlockHash(0, hexToU8a('0x4545454545454545454545454545454545454545454545454545454545454545'));
+      db.governance.setApprovalsRequired(667);
+      db.session.setLength(2);
+      db.session.setValueLength(3);
+      db.session.setValue(0, keyring.one.publicKey);
+      db.session.setValue(1, keyring.two.publicKey);
+      db.session.setValue(2, threePublicKey);
+      db.staking.setCurrentEra(0);
+      db.staking.setIntentLength(3);
+      db.staking.setIntent(0, keyring.one.publicKey);
+      db.staking.setIntent(1, keyring.two.publicKey);
+      db.staking.setIntent(2, threePublicKey);
+      db.staking.setSessionsPerEra(2);
+      db.staking.setValidatorCount(3);
+      db.system.setBlockHash(0, hexToU8a('0x4545454545454545454545454545454545454545454545454545454545454545'));
     });
 
     it('executes a basic block', () => {
       // block1
-      instance.exports.execute_block(
+      instance.execute_block(
         hexToU8a('0x454545454545454545454545454545454545454545454545454545454545454501000000000000002481853da20b9f4322f34650fea5f240dcbfb266d02db94bfa0153c31f4a29dbdbf025dd4a69a6f4ee6e1577b251b655097e298b692cb34c18d3182cac3de0dc0000000001000000910000002f8c6129d816cf51c374bc7f08c3e63ed156cf78aefb4a6550d97b87997977ee000000000000000022d75a980182b10ab7d54bfed3c964073a0ee172f3daa62325af021a68f707511a45000000000000005f9832c5a4a39e2dd4a3a0c5b400e9836beb362cb8f7d845a8291a2ae6fe366612e080e4acd0b5a75c3d0b6ee69614a68fb63698c1e76bf1f2dcd8fa617ddf05')
       );
 
       expect(
-        polkadot.staking.getBalance(keyring.one.publicKey).toNumber()
+        db.staking.getBalance(keyring.one.publicKey).toNumber()
       ).toEqual(42);
       expect(
-        polkadot.staking.getBalance(keyring.two.publicKey).toNumber()
+        db.staking.getBalance(keyring.two.publicKey).toNumber()
       ).toEqual(69);
       expect(
-        polkadot.system.getBlockHash(1)
+        db.system.getBlockHash(1)
       ).toEqual(
         hexToU8a('0x1025e5db74fdaf4d2818822dccf0e1604ae9ccc62f26cecfde23448ff0248abf')
       );
 
       // block2
-      instance.exports.execute_block(
+      instance.execute_block(
         hexToU8a('0x1025e5db74fdaf4d2818822dccf0e1604ae9ccc62f26cecfde23448ff0248abf02000000000000001feb4d3a2e587079e6ce1685fa79994efd995e33cb289d39cded67aac1bb46a900d8a0c8ff582dc27623a82c88e1c44a5735c6f2657c26a26064114fb4e7cbfd000000000200000091000000d75a980182b10ab7d54bfed3c964073a0ee172f3daa62325af021a68f707511a0000000000000000222f8c6129d816cf51c374bc7f08c3e63ed156cf78aefb4a6550d97b87997977ee05000000000000001a292d71129e96e30552ca9f5c8583a5f236aae8415e3fd62ff55d7274d66e805ef7a69332fdddde84fee8c3ca62fc3742e9325fa9c62b93ef2433cb395f350c910000002f8c6129d816cf51c374bc7f08c3e63ed156cf78aefb4a6550d97b87997977ee010000000000000022d75a980182b10ab7d54bfed3c964073a0ee172f3daa62325af021a68f707511a0f00000000000000e178173342922ad27a3fd664f239e00dd90a68d3daea076c3fd5a6e36be4b105bd30442d2b0c13533022319c512df38443dda3eab9dff6e16e0103b81bf5c50a')
       );
 
       expect(
-        polkadot.staking.getBalance(keyring.one.publicKey).toNumber()
+        db.staking.getBalance(keyring.one.publicKey).toNumber()
       ).toEqual(32);
       expect(
-        polkadot.staking.getBalance(keyring.two.publicKey).toNumber()
+        db.staking.getBalance(keyring.two.publicKey).toNumber()
       ).toEqual(79);
     });
   });

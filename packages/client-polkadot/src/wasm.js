@@ -4,7 +4,9 @@
 // @flow
 
 import type { ConfigType } from '@polkadot/client/types';
-import type { ExecutorInstance, WasmStateInstances } from './types';
+import type { ChainConfigType } from '@polkadot/client-chains/types';
+import type { BaseDbInterface } from '@polkadot/client-db/types';
+import type { ExecutorInstance } from '@polkadot/client-wasm/types';
 
 const proxy = require('@polkadot/client-polkadot/wasm/proxy_polkadot_wasm');
 
@@ -15,16 +17,16 @@ const OVERLAYS = [
   'execute_block', 'execute_transaction', 'finalise_block'
 ];
 
-module.exports = function wasm (config: ConfigType, state: WasmStateInstances, code: Uint8Array): ExecutorInstance {
-  const executor = createWasm(config, state, code, proxy);
+module.exports = function wasm (config: ConfigType, chain: ChainConfigType, db: BaseDbInterface, code: Uint8Array): ExecutorInstance {
+  const { instance, runtime } = createWasm(config, chain, db, code, proxy);
 
   return Object
-    .keys(executor.exports)
+    .keys(instance)
     .reduce((result, name) => {
-      result.exports[name] = !OVERLAYS.includes(name)
-        ? executor[name]
-        : createFn(executor, name, executor.runtime);
+      result.instance[name] = !OVERLAYS.includes(name)
+        ? instance[name]
+        : createFn(instance, name, runtime);
 
       return result;
-    }, { exports: {}, runtime: executor.runtime });
+    }, { instance: {}, runtime });
 };

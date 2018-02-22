@@ -5,13 +5,13 @@
 
 import type BN from 'bn.js';
 import type { BaseDbInterface } from '@polkadot/client-db/types';
-import type { PolkadotInterface$Session } from '../types';
+import type { PolkadotDb$Session } from '../../types';
 
 const setLength = require('./setLength');
 const setValue = require('./setValue');
 const setValueLength = require('./setValueLength');
 
-module.exports = function session (db: BaseDbInterface): PolkadotInterface$Session {
+module.exports = function session (db: BaseDbInterface): PolkadotDb$Session {
   return {
     setLength: (length: BN | number): void =>
       setLength(db, length),
