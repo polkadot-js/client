@@ -3,9 +3,7 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { ChainConfigType } from '@polkadot/client-chains/types';
-import type { BaseDbInterface } from '@polkadot/client-db/types';
-import type { RuntimeInterface } from '@polkadot/client-wasm-runtime/types';
+import type { RuntimeInterface } from '@polkadot/client-runtime/types';
 
 export type WasmExports = {
   // flowlint-next-line unclear-type:off
@@ -19,12 +17,7 @@ export type WasmConfigType = {
 // flowlint-next-line unclear-type:off
 export type WasmExtraImports = Object;
 
-export type WasmStateInstances = {
-  chain: ChainConfigType,
-  db: BaseDbInterface
-};
-
 export type ExecutorInstance = {
-  exports: WebAssemblyInstance$Exports,
+  instance: WebAssemblyInstance$Exports,
   runtime: RuntimeInterface
 };

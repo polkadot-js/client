@@ -1,0 +1,2 @@
+src/wasm/*.wasm
+test/wasm/*.wasm

@@ -3,6 +3,6 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-const DB = require('./db');
+const createDb = require('./memory');
 
-module.exports = DB;
+module.exports = createDb;

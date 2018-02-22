@@ -3,7 +3,7 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { RuntimeInterface } from '@polkadot/client-wasm-runtime/types';
+import type { RuntimeInterface } from '@polkadot/client-runtime/types';
 
 type FnResult = {
   lo: number,

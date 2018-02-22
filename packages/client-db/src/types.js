@@ -5,7 +5,7 @@
 
 import type { Trie$Pairs } from '@polkadot/util-triehash/types';
 
-export type PathPrefixType = 'database';
+export type DbPathPrefixType = 'database';
 
 export type DbConfigType$Type = 'disk' | 'memory';
 
@@ -13,12 +13,6 @@ export type DbConfigType = {
   path: string,
   type: DbConfigType$Type
 };
-
-export interface DbInterface {
-  del (key: string): Promise<boolean>,
-  get (key: string): Promise<Buffer>,
-  put (key: string, value: Buffer | string): Promise<Buffer | string>
-}
 
 export type BaseDbInterface = {
   clear (): void,
