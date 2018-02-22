@@ -37,11 +37,9 @@
     "test": "echo \"Tests only available from root wrapper\""
   },
   "dependencies": {
-    "@polkadot/client-polkadot": "^0.8.3",
     "@polkadot/client-runtime": "^0.8.3",
     "@polkadot/primitives-codec": "^0.6.5",
     "@polkadot/util": "^0.15.10",
-    "@polkadot/wasm-bin": "paritytech/polkadot-wasm-bin#5b52b20d8f5446fa1c1dc7c822dbf7179e906954",
     "babel-runtime": "^6.26.0",
     "yargs": "^11.0.0"
   }
