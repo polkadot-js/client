@@ -8,6 +8,7 @@ import type { Memory, Memory$Buffer } from './types';
 
 const allocate = require('./allocate');
 const deallocate = require('./deallocate');
+const setMemory = require('./setMemory');
 
 function reduceSize (buffer: Memory$Buffer): number {
   return Object
@@ -18,8 +19,6 @@ function reduceSize (buffer: Memory$Buffer): number {
 
 module.exports = function envHeap (): RuntimeEnv$Heap {
   let memory: Memory;
-  let uint8: Uint8Array;
-  let view: DataView;
 
   return {
     allocate: (size: number): PointerType =>
@@ -27,34 +26,25 @@ module.exports = function envHeap (): RuntimeEnv$Heap {
     deallocate: (ptr: PointerType): number =>
       deallocate(memory, ptr),
     dup: (ptr: PointerType, len: number): Uint8Array =>
-      uint8.slice(ptr, ptr + len),
+      memory.uint8.slice(ptr, ptr + len),
     fill: (ptr: PointerType, value: number, len: number): Uint8Array =>
-      uint8.fill(value, ptr, len),
+      memory.uint8.fill(value, ptr, len),
     get: (ptr: PointerType, len: number): Uint8Array =>
-      uint8.subarray(ptr, ptr + len),
+      memory.uint8.subarray(ptr, ptr + len),
     getU32: (ptr: PointerType): number =>
-      view.getUint32(ptr, true),
+      memory.view.getUint32(ptr, true),
     set: (ptr: PointerType, data: Uint8Array): PointerType => {
-      uint8.set(data, ptr);
+      memory.uint8.set(data, ptr);
 
       return ptr;
     },
     setU32: (ptr: PointerType, value: number): PointerType => {
-      view.setUint32(ptr, value, true);
+      memory.view.setUint32(ptr, value, true);
 
       return ptr;
     },
-    setWasmMemory: ({ buffer }: WebAssembly.Memory, offset?: number = 256 * 1024): void => {
-      uint8 = new Uint8Array(buffer);
-      view = new DataView(uint8.buffer);
-
-      memory = {
-        uint8,
-        allocated: {},
-        deallocated: {},
-        offset, // aligned with Rust (should have offset)
-        size: buffer.byteLength
-      };
+    setWasmMemory: (wasmMemory: WebAssembly.Memory, offset?: number): void => {
+      memory = setMemory(wasmMemory, offset);
     },
     size: (): number =>
       memory.size,

@@ -14,5 +14,6 @@ export type Memory = {
   deallocated: Memory$Buffer,
   offset: number,
   size: number,
-  uint8: Uint8Array
+  uint8: Uint8Array,
+  view: DataView
 };
