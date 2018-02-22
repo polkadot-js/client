@@ -1,7 +1,7 @@
 {
   "name": "@polkadot/client-polkadot",
   "version": "0.8.3",
-  "description": "Database interface layer for network client",
+  "description": "Polkadot-specific chain wrapper",
   "main": "index.js",
   "engines": {
     "node": ">=8.0"

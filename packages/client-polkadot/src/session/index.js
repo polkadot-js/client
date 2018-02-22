@@ -3,6 +3,7 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
+import type BN from 'bn.js';
 import type { BaseDbInterface } from '@polkadot/client-db/types';
 import type { PolkadotInterface$Session } from '../types';
 

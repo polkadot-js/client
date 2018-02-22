@@ -1,7 +1,7 @@
 {
   "name": "@polkadot/client-keyring",
   "version": "0.8.3",
-  "description": "Database interface layer for network client",
+  "description": "Keyring management",
   "main": "index.js",
   "engines": {
     "node": ">=8.0"
