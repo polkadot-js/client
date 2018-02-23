@@ -3,7 +3,7 @@
 // of the ISC license. See the LICENSE file for details.
 
 const u8aToHex = require('@polkadot/util/u8a/toHex');
-const keyring = require('@polkadot/client-keyring/testing')();
+const keyring = require('@polkadot/util-keyring/testing')();
 
 const index = require('../index');
 
