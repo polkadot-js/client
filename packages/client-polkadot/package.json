@@ -30,14 +30,16 @@
   },
   "dependencies": {
     "@polkadot/client-wasm": "^0.8.4",
-    "@polkadot/util": "^0.15.10",
-    "@polkadot/util-crypto": "^0.15.10",
+    "@polkadot/util": "^0.16.1",
+    "@polkadot/util-crypto": "^0.16.1",
     "babel-runtime": "^6.26.0"
   },
   "devDependencies": {
     "@polkadot/client": "^0.8.4",
     "@polkadot/client-db": "^0.8.4",
-    "@polkadot/client-keyring": "^0.8.4",
+    "@polkadot/primitives-builder": "^0.7.3",
+    "@polkadot/primitives-codec": "^0.7.3",
+    "@polkadot/util-keyring": "^0.16.1",
     "@polkadot/wasm-bin": "paritytech/polkadot-wasm-bin#5b52b20d8f5446fa1c1dc7c822dbf7179e906954"
   }
 }
