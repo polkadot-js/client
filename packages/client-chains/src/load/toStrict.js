@@ -22,28 +22,23 @@ function valueToBn (value: ChainConfigType$Number): BN {
   return bnToBn(value);
 }
 
-function arrToU8a (values: Array<string>): Array<Uint8Array> {
-  return values.map(hexToU8a);
-}
-
-function mapToBn (map: { [string]: ChainConfigType$Number }): { [string]: BN } {
-  return Object.keys(map).reduce((result, id) => {
-    result[id] = valueToBn(map[id]);
-
-    return result;
-  }, {});
-}
-
 module.exports = function toStrict ({ authorities, balances, code, description, name, nodes, params, type, validators }: ChainConfigTypeLoose): $Shape<ChainConfigType> {
   return {
-    authorities: arrToU8a(authorities),
-    balances: mapToBn(balances),
+    authorities: authorities.map(hexToU8a),
+    balances: Object.keys(balances).map((accountId) => ({
+      accountId: hexToU8a(accountId),
+      balance: valueToBn(balances[accountId])
+    })),
     code,
     description,
     name,
     nodes,
-    params: mapToBn(params),
+    params: Object.keys(params).reduce((result, key) => {
+      result[key] = valueToBn(params[key]);
+
+      return result;
+    }, {}),
     type,
-    validators: arrToU8a(validators)
+    validators: validators.map(hexToU8a)
   };
 };

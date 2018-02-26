@@ -11,12 +11,12 @@ const encodeHeader = require('@polkadot/primitives-codec/blockHeader/encode');
 const encodeUnchecked = require('@polkadot/primitives-codec/unchecked/encode');
 const hexToU8a = require('@polkadot/util/hex/toU8a');
 const u8aConcat = require('@polkadot/util/u8a/concat');
+const chain = require('@polkadot/client-chains/chains/nelson');
 const memoryDb = require('@polkadot/client-db/memory');
 const keyring = require('@polkadot/util-keyring/testing')();
 
 const createDb = require('./db');
 const wasm = require('./wasm');
-const code = require('../test/wasm/polkadot_runtime_wasm');
 
 describe('wasm', () => {
   let instance;
@@ -26,13 +26,8 @@ describe('wasm', () => {
     const config = {
       wasm: {}
     };
-    const chain = {
-      params: {
-        networkId: 42
-      }
-    };
     const memdb = memoryDb();
-    const executor = wasm(config, chain, memdb, code);
+    const executor = wasm(config, chain, memdb);
 
     instance = executor.instance;
     db = createDb(executor.runtime.environment.db);
@@ -79,9 +74,9 @@ describe('wasm', () => {
     beforeEach(() => {
       const threePublicKey = hexToU8a('0x0303030303030303030303030303030303030303030303030303030303030303');
 
-      db.governance.setApprovalsRequired(667);
+      db.governance.setApprovalsRatio(667);
       db.session.setLength(2);
-      db.session.setValueLength(3);
+      db.session.setValueCount(3);
       db.session.setValue(0, keyring.one.publicKey);
       db.session.setValue(1, keyring.two.publicKey);
       db.session.setValue(2, threePublicKey);

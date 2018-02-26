@@ -6,7 +6,7 @@
 DIRBIN="packages/client-wasm/scripts"
 DIRCT="packages/client-wasm/test/wasm"
 DIRPD="packages/client-polkadot/src/wasm"
-DIRPT="packages/client-polkadot/test/wasm"
+DIRPT="packages/client-chains/src/wasm"
 DIRRT="packages/client-runtime/src/wasm"
 DIRWB="node_modules/@polkadot/wasm-bin/wasm32-unknown-unknown"
 

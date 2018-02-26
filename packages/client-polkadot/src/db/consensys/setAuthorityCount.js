@@ -9,11 +9,11 @@ const BN = require('bn.js');
 const bnToU8a = require('@polkadot/util/bn/toU8a');
 
 const key = require('../key');
-const { VALIDATOR_COUNT } = require('./prefix');
+const { AUTHORITY_LENGTH } = require('./prefix');
 
-module.exports = function setValidatorCount (db: BaseDbInterface, count: BN | number): void {
+module.exports = function setAuthorityCount (db: BaseDbInterface, count: BN | number): void {
   db.set(
-    key(VALIDATOR_COUNT),
+    key(AUTHORITY_LENGTH, null, false),
     bnToU8a(count, 32, true)
   );
 };

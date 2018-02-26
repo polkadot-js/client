@@ -8,17 +8,19 @@ import type { ChainConfigType } from '@polkadot/client-chains/types';
 import type { BaseDbInterface } from '@polkadot/client-db/types';
 import type { ExecutorInstance } from '@polkadot/client-wasm/types';
 
-const proxy = require('@polkadot/client-polkadot/wasm/proxy_polkadot_wasm');
-
+const createRuntime = require('@polkadot/client-runtime');
 const createWasm = require('@polkadot/client-wasm');
 const createFn = require('@polkadot/client-wasm/create/fn');
+
+const proxy = require('./wasm/proxy_polkadot_wasm');
 
 const OVERLAYS = [
   'execute_block', 'execute_transaction', 'finalise_block'
 ];
 
-module.exports = function wasm (config: ConfigType, chain: ChainConfigType, db: BaseDbInterface, code: Uint8Array): ExecutorInstance {
-  const { instance, runtime } = createWasm(config, chain, db, code, proxy);
+module.exports = function wasm (config: ConfigType, chain: ChainConfigType, db: BaseDbInterface): ExecutorInstance {
+  const runtime = createRuntime(chain, db);
+  const instance = createWasm(config, runtime, chain.code, proxy);
 
   return Object
     .keys(instance)

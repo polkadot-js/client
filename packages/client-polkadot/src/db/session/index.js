@@ -9,7 +9,7 @@ import type { PolkadotDb$Session } from '../../types';
 
 const setLength = require('./setLength');
 const setValue = require('./setValue');
-const setValueLength = require('./setValueLength');
+const setValueCount = require('./setValueCount');
 
 module.exports = function session (db: BaseDbInterface): PolkadotDb$Session {
   return {
@@ -17,7 +17,7 @@ module.exports = function session (db: BaseDbInterface): PolkadotDb$Session {
       setLength(db, length),
     setValue: (id: BN | number, publicKey: Uint8Array): void =>
       setValue(db, id, publicKey),
-    setValueLength: (length: BN | number): void =>
-      setValueLength(db, length)
+    setValueCount: (count: BN | number): void =>
+      setValueCount(db, count)
   };
 };

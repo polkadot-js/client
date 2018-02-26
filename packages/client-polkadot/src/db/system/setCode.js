@@ -5,15 +5,12 @@
 
 import type { BaseDbInterface } from '@polkadot/client-db/types';
 
-const BN = require('bn.js');
-const bnToU8a = require('@polkadot/util/bn/toU8a');
-
 const key = require('../key');
-const { VALIDATOR_COUNT } = require('./prefix');
+const { CODE } = require('./prefix');
 
-module.exports = function setValidatorCount (db: BaseDbInterface, count: BN | number): void {
+module.exports = function setCode (db: BaseDbInterface, code: Uint8Array): void {
   db.set(
-    key(VALIDATOR_COUNT),
-    bnToU8a(count, 32, true)
+    key(CODE, null, false),
+    code
   );
 };

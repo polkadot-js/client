@@ -5,12 +5,10 @@
 
 const u8aFromString = require('@polkadot/util/u8a/fromString');
 
-const APPROVAL_OF: Uint8Array = u8aFromString('gov:app:');
-const APPROVALS_RATIO: Uint8Array = u8aFromString('gov:apr');
-const CURRENT_PROPOSAL: Uint8Array = u8aFromString('gov:pro');
+const AUTHORITY: Uint8Array = u8aFromString(':auth:');
+const AUTHORITY_LENGTH: Uint8Array = u8aFromString(':auth:len');
 
 module.exports = {
-  APPROVAL_OF,
-  APPROVALS_RATIO,
-  CURRENT_PROPOSAL
+  AUTHORITY,
+  AUTHORITY_LENGTH
 };

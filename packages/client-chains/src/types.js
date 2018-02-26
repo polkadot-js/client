@@ -8,9 +8,10 @@ import type BN from 'bn.js';
 export type ChainConfigType$Node = string;
 export type ChainConfigType$Nodes = Array<ChainConfigType$Node>;
 
-export type ChainConfigType$Balances = {
-  [string]: BN
-};
+export type ChainConfigType$Balances = Array<{
+  accountId: Uint8Array,
+  balance: BN
+}>;
 
 export type ChainConfigType$Genesis = {
   author: Uint8Array,

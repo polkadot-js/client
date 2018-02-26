@@ -15,7 +15,7 @@ module.exports = function findAndLoad (name: string): ChainConfigTypeLoose {
   if (!/\.json$/.test(name)) {
     try {
       // $FlowFixMe naughty, not a literal
-      return require(`./chains/${name}`);
+      return require(`../chains/${name}`);
     } catch (error) {
       throw new ExtError(`Unable to load builtin chain '${name}'`);
     }

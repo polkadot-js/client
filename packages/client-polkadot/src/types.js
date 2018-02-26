@@ -4,6 +4,7 @@
 // @flow
 
 import type BN from 'bn.js';
+import type { PolkadotBlock } from '@polkadot/primitives/block';
 
 export type PolkadotDb$Governance = {
   setApprovalsRequired (count: BN | number): void
@@ -33,12 +34,16 @@ export type PolkadotDb$System = {
 }
 
 export type PolkadotDb = {
+  consensys: PolkadotDb$Consensys,
+  governance: PolkadotDb$Governance,
   session: PolkadotDb$Session,
   staking: PolkadotDb$Staking,
-  system: PolkadotDb$System
+  system: PolkadotDb$System,
+  trieRoot: () => Uint8Array
 }
 
 export type PolkadotInterface = {
   db: PolkadotDb,
+  block: PolkadotBlock,
   instance: WebAssemblyInstance$Exports
 }

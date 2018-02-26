@@ -4,22 +4,19 @@
 // @flow
 
 import type { ConfigType } from '@polkadot/client/types';
-import type { ChainConfigType } from '@polkadot/client-chains/types';
-import type { BaseDbInterface } from '@polkadot/client-db/types';
+import type { RuntimeInterface } from '@polkadot/client-runtime/types';
 import type { ExecutorInstance } from './types';
 
-const createRuntime = require('@polkadot/client-runtime');
-const runtimeCode = require('@polkadot/client-runtime/wasm/proxy_runtime_wasm');
+const runtimeProxy = require('@polkadot/client-runtime/wasm/proxy_runtime_wasm');
 
 const { HEAP_SIZE_KB } = require('./defaults');
 const createExports = require('./create/exports');
 const createMemory = require('./create/memory');
 
-module.exports = function wasm ({ wasm: { heapSize = HEAP_SIZE_KB } }: ConfigType, chain: ChainConfigType, db: BaseDbInterface, chainCode: Uint8Array, proxyCode: Uint8Array): ExecutorInstance {
-  const runtime = createRuntime(chain, db);
-  const env = createExports(runtimeCode, { runtime: runtime.exports }, createMemory(0, 0));
+module.exports = function wasm ({ wasm: { heapSize = HEAP_SIZE_KB } }: ConfigType, runtime: RuntimeInterface, chainCode: Uint8Array, chainProxy: Uint8Array): ExecutorInstance {
+  const env = createExports(runtimeProxy, { runtime: runtime.exports }, createMemory(0, 0));
   const proxy = createExports(chainCode, { env });
-  const instance = createExports(proxyCode, { proxy }, createMemory(0, 0));
+  const instance = createExports(chainProxy, { proxy }, createMemory(0, 0));
 
   // flowlint-next-line unclear-type:off
   const memory = ((proxy.memory: any): WebAssembly.Memory);
@@ -27,8 +24,5 @@ module.exports = function wasm ({ wasm: { heapSize = HEAP_SIZE_KB } }: ConfigTyp
 
   runtime.environment.heap.setWasmMemory(memory, offset * 64 * 1024);
 
-  return {
-    instance,
-    runtime
-  };
+  return instance;
 };

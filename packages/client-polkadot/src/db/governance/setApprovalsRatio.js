@@ -9,11 +9,11 @@ const BN = require('bn.js');
 const bnToU8a = require('@polkadot/util/bn/toU8a');
 
 const key = require('../key');
-const { VALUE_LENGTH } = require('./prefix');
+const { APPROVALS_RATIO } = require('./prefix');
 
-module.exports = function setValueLength (db: BaseDbInterface, length: BN | number): void {
+module.exports = function setApprovalsRatio (db: BaseDbInterface, ratio: BN | number): void {
   db.set(
-    key(VALUE_LENGTH),
-    bnToU8a(length, 32, true)
+    key(APPROVALS_RATIO),
+    bnToU8a(ratio, 32, true)
   );
 };

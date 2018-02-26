@@ -12,6 +12,13 @@ const get = require('./get');
 
 module.exports = function storage ({ l, heap, db }: RuntimeEnv): RuntimeInterface$Storage {
   return {
+    clear_storage: (keyPtr: PointerType, keyLength: number): void => {
+      l.debug('clear_storage', [keyPtr, keyLength]);
+
+      db.del(
+        heap.get(keyPtr, keyLength)
+      );
+    },
     enumerated_trie_root: (valuesPtr: PointerType, lenPtr: PointerType, count: number, resultPtr: PointerType): void => {
       l.debug('enumerated_trie_root', [valuesPtr, lenPtr, count, resultPtr]);
 
