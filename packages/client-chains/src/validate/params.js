@@ -3,19 +3,28 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { ChainConfigType$Params } from '../types';
+import type { ChainConfigType$Number } from '../types';
 
 const assert = require('@polkadot/util/assert');
+const isBn = require('@polkadot/util/is/bn');
+const isHex = require('@polkadot/util/is/hex');
 
 const validateObject = require('./object');
 
-const KNOWN_KEYS = ['networkId'];
+const KNOWN_KEYS = ['approvalRatio', 'blockTime', 'bondingDuration', 'networkId', 'sessionLength', 'sessionsPerEra'];
 const PREFIX = 'Chain.params';
 
-module.exports = function validateParams (params: ChainConfigType$Params, strict: boolean = false): boolean {
+// flowlint-next-line unclear-type:off
+function isNumber (value: any): boolean {
+  return Number.isInteger(value) || isBn(value) || isHex(value);
+}
+
+module.exports = function validateParams (params: { [string]: ChainConfigType$Number }, strict: boolean = false): boolean {
   validateObject(PREFIX, params, KNOWN_KEYS, strict);
 
-  assert(Number.isInteger(params.networkId), `${PREFIX}.networkId should be an integer`);
+  KNOWN_KEYS.forEach((key) => {
+    assert(isNumber(params[key]), `${PREFIX}.${key} should be an integer, BN or hex string`);
+  });
 
   return true;
 };

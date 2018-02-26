@@ -3,10 +3,10 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { ChainConfigType, ChainNameType } from '../types';
+import type { ChainConfigTypeLoose, ChainNameType } from '../types';
 
 const nelson = require('./nelson');
 
 module.exports = ({
   nelson
-}: { [ChainNameType]: ChainConfigType });
+}: { [ChainNameType]: ChainConfigTypeLoose });

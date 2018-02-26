@@ -6,8 +6,6 @@
 import type { ChainConfigType } from '@polkadot/client-chains/types';
 import type { StateInterface, StateType$Genesis, StateType$Best, StateType$Parachain, StateType$Validator } from './types';
 
-const hexToU8a = require('@polkadot/util/hex/toU8a');
-
 const StateBest = require('./state/best');
 const StateGenesis = require('./state/genesis');
 const StateParachain = require('./state/parachain');
@@ -23,7 +21,7 @@ module.exports = class State implements StateInterface {
   constructor (chain: ChainConfigType) {
     this.chain = chain;
 
-    this.best = new StateBest(hexToU8a(chain.genesis.hash, 256));
+    this.best = new StateBest(chain.genesis.hash);
     this.genesis = new StateGenesis(chain.genesis);
     this.parachain = new StateParachain();
     this.validator = new StateValidator();
