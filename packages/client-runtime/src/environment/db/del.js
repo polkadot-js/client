@@ -13,6 +13,6 @@ module.exports = function del (pending: Memory$Storage, backend: BaseDbInterface
 
   pending[ks] = {
     k: k.slice(),
-    v: new Uint8Array([])
+    v: null
   };
 };

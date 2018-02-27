@@ -14,6 +14,6 @@ const { VALIDATOR_COUNT } = require('./prefix');
 module.exports = function setValidatorCount (db: BaseDbInterface, count: BN | number): void {
   db.set(
     key(VALIDATOR_COUNT),
-    bnToU8a(count, 32, true)
+    bnToU8a(count, 64, true)
   );
 };

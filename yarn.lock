@@ -115,47 +115,47 @@
     stylelint "^9.0.0"
     stylelint-config-standard "^18.1.0"
 
-"@polkadot/primitives-builder@^0.7.4":
-  version "0.7.4"
-  resolved "https://registry.yarnpkg.com/@polkadot/primitives-builder/-/primitives-builder-0.7.4.tgz#051f149f8282e2100b57e736aa5c36f573d5bd79"
+"@polkadot/primitives-builder@^0.7.6":
+  version "0.7.6"
+  resolved "https://registry.yarnpkg.com/@polkadot/primitives-builder/-/primitives-builder-0.7.6.tgz#5f71e546a1016fa1f66e7246f01ea4053cfc2027"
   dependencies:
-    "@polkadot/primitives" "^0.7.4"
+    "@polkadot/primitives" "^0.7.6"
     "@polkadot/util" "^0.16.3"
     "@polkadot/util-crypto" "^0.16.3"
     "@polkadot/util-triehash" "^0.16.3"
     babel-runtime "^6.26.0"
 
-"@polkadot/primitives-codec@^0.7.4":
-  version "0.7.4"
-  resolved "https://registry.yarnpkg.com/@polkadot/primitives-codec/-/primitives-codec-0.7.4.tgz#05a6b825e1829f023608febfae8c14fd1bb59ccb"
+"@polkadot/primitives-codec@^0.7.6":
+  version "0.7.6"
+  resolved "https://registry.yarnpkg.com/@polkadot/primitives-codec/-/primitives-codec-0.7.6.tgz#c41e7561cb93609dad5b529285654bc9f27e417d"
   dependencies:
-    "@polkadot/primitives" "^0.7.4"
-    "@polkadot/primitives-rlp" "^0.7.4"
+    "@polkadot/primitives" "^0.7.6"
+    "@polkadot/primitives-rlp" "^0.7.6"
     "@polkadot/util" "^0.16.3"
     "@polkadot/util-keyring" "^0.16.3"
     babel-runtime "^6.26.0"
 
-"@polkadot/primitives-json@^0.7.4":
-  version "0.7.4"
-  resolved "https://registry.yarnpkg.com/@polkadot/primitives-json/-/primitives-json-0.7.4.tgz#60b2f3a9201eab44acec82e846e624505755752e"
+"@polkadot/primitives-json@^0.7.6":
+  version "0.7.6"
+  resolved "https://registry.yarnpkg.com/@polkadot/primitives-json/-/primitives-json-0.7.6.tgz#c3af120add90785bcd95ff125aa61a9fa272e535"
   dependencies:
-    "@polkadot/primitives" "^0.7.4"
+    "@polkadot/primitives" "^0.7.6"
     "@polkadot/util" "^0.16.3"
     babel-runtime "^6.26.0"
 
-"@polkadot/primitives-rlp@^0.7.4":
-  version "0.7.4"
-  resolved "https://registry.yarnpkg.com/@polkadot/primitives-rlp/-/primitives-rlp-0.7.4.tgz#76aba91b07306020cdacc924a84e3af9aa67e880"
+"@polkadot/primitives-rlp@^0.7.6":
+  version "0.7.6"
+  resolved "https://registry.yarnpkg.com/@polkadot/primitives-rlp/-/primitives-rlp-0.7.6.tgz#7a82a43ab954700a65a03bbe2e530265b00530f5"
   dependencies:
-    "@polkadot/primitives" "^0.7.4"
-    "@polkadot/primitives-json" "^0.7.4"
+    "@polkadot/primitives" "^0.7.6"
+    "@polkadot/primitives-json" "^0.7.6"
     "@polkadot/util" "^0.16.3"
     "@polkadot/util-crypto" "^0.16.3"
     babel-runtime "^6.26.0"
 
-"@polkadot/primitives@^0.7.4":
-  version "0.7.4"
-  resolved "https://registry.yarnpkg.com/@polkadot/primitives/-/primitives-0.7.4.tgz#8501294eb21a1f5b5c5b0d8114f56e7753979cf7"
+"@polkadot/primitives@^0.7.6":
+  version "0.7.6"
+  resolved "https://registry.yarnpkg.com/@polkadot/primitives/-/primitives-0.7.6.tgz#5e917c673d8e94b4e21170e2a0d88d987700fdb3"
   dependencies:
     "@polkadot/util" "^0.16.3"
     babel-runtime "^6.26.0"
@@ -212,9 +212,9 @@
     deasync "^0.1.12"
     ip-regex "^2.1.0"
 
-"@polkadot/wasm-bin@paritytech/polkadot-wasm-bin#5b52b20d8f5446fa1c1dc7c822dbf7179e906954":
-  version "20180216.164417"
-  resolved "https://codeload.github.com/paritytech/polkadot-wasm-bin/tar.gz/5b52b20d8f5446fa1c1dc7c822dbf7179e906954"
+"@polkadot/wasm-bin@paritytech/polkadot-wasm-bin#b587722dc3df44ea6e19814c1e042480b1d5ee4f":
+  version "20180225.103249"
+  resolved "https://codeload.github.com/paritytech/polkadot-wasm-bin/tar.gz/b587722dc3df44ea6e19814c1e042480b1d5ee4f"
 
 "@types/node@*":
   version "8.5.2"

@@ -18,9 +18,9 @@ const OVERLAYS = [
   'execute_block', 'execute_transaction', 'finalise_block'
 ];
 
-module.exports = function wasm (config: ConfigType, chain: ChainConfigType, db: BaseDbInterface): ExecutorInstance {
+module.exports = function wasm (config: ConfigType, chain: ChainConfigType, db: BaseDbInterface, code?: Uint8Array = chain.code): ExecutorInstance {
   const runtime = createRuntime(chain, db);
-  const instance = createWasm(config, runtime, chain.code, proxy);
+  const instance = createWasm(config, runtime, code, proxy);
 
   return Object
     .keys(instance)

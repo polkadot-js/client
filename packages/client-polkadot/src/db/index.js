@@ -22,6 +22,12 @@ module.exports = function db (dbInstance: BaseDbInterface): PolkadotDb {
     staking: staking(dbInstance),
     system: system(dbInstance),
     trieRoot: (): Uint8Array =>
-      trieRoot(dbInstance.pairs())
+      trieRoot(dbInstance.pairs()),
+    debug: (): { [string]: string } =>
+      dbInstance.pairs().reduce((result, { k, v }) => {
+        result[k.toString()] = `[${v.toString()}]`;
+
+        return result;
+      }, {})
   };
 };

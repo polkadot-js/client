@@ -44,6 +44,6 @@ export type PolkadotDb = {
 
 export type PolkadotInterface = {
   db: PolkadotDb,
-  block: PolkadotBlock,
+  genesis: PolkadotBlock,
   instance: WebAssemblyInstance$Exports
 }

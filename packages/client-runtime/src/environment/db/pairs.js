@@ -12,6 +12,7 @@ module.exports = function pairs (pending: Memory$Storage, backend?: BaseDbInterf
     .concat(
       Object
         .keys(pending)
+        .filter((k) => pending[k].v)
         .map((k) => pending[k])
     );
 };

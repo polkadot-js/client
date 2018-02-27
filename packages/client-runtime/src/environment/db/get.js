@@ -11,7 +11,11 @@ const u8aToString = require('@polkadot/util/u8a/toString');
 module.exports = function get (pending: Memory$Storage, backend: BaseDbInterface, k: Uint8Array): Uint8Array {
   const ks = u8aToString(k);
 
-  return pending[ks]
-    ? pending[ks].v.slice()
-    : backend.get(k);
+  if (pending[ks]) {
+    return pending[ks].v
+      ? pending[ks].v.slice()
+      : new Uint8Array([]);
+  }
+
+  return backend.get(k);
 };

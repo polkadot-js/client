@@ -6,7 +6,6 @@ const BN = require('bn.js');
 const memDb = require('@polkadot/client-db/memory');
 const code = require('@polkadot/client-chains/wasm/genesis_polkadot_wasm');
 const hexToU8a = require('@polkadot/util/hex/toU8a');
-const u8aToHex = require('@polkadot/util/u8a/toHex');
 const keyring = require('@polkadot/util-keyring/testing')();
 
 const createDb = require('../db');

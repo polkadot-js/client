@@ -7,7 +7,7 @@ import type { PolkadotBlock } from '@polkadot/primitives/block';
 import type { ChainConfigType } from '@polkadot/client-chains/types';
 import type { PolkadotDb } from '../types';
 
-const createBlock = require('@polkadot/primitives-builder/block/block');
+const createBlock = require('@polkadot/primitives-builder/block');
 const trieRoot = require('@polkadot/util-triehash/root');
 
 module.exports = function genesisBlock (chain: ChainConfigType, db: PolkadotDb): PolkadotBlock {

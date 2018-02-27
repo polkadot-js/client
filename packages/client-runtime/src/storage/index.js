@@ -13,14 +13,14 @@ const get = require('./get');
 module.exports = function storage ({ l, heap, db }: RuntimeEnv): RuntimeInterface$Storage {
   return {
     clear_storage: (keyPtr: PointerType, keyLength: number): void => {
-      l.debug('clear_storage', [keyPtr, keyLength]);
+      const key = heap.get(keyPtr, keyLength);
 
-      db.del(
-        heap.get(keyPtr, keyLength)
-      );
+      l.debug('clear_storage', [keyPtr, keyLength], key);
+
+      db.del(key);
     },
     enumerated_trie_root: (valuesPtr: PointerType, lenPtr: PointerType, count: number, resultPtr: PointerType): void => {
-      l.debug('enumerated_trie_root', [valuesPtr, lenPtr, count, resultPtr]);
+      // l.debug('enumerated_trie_root', [valuesPtr, lenPtr, count, resultPtr]);
 
       let offset = 0;
 
@@ -37,17 +37,15 @@ module.exports = function storage ({ l, heap, db }: RuntimeEnv): RuntimeInterfac
       ));
     },
     storage_root: (resultPtr: PointerType): void => {
-      l.debug('storage_root', [resultPtr]);
+      // l.debug('storage_root', [resultPtr]);
 
       heap.set(resultPtr, trieRoot(db.pairs()));
     },
     get_allocated_storage: (keyPtr: PointerType, keyLength: number, lenPtr: PointerType): PointerType => {
-      l.debug('get_allocated_storage', [keyPtr, keyLength, lenPtr]);
+      const key = heap.get(keyPtr, keyLength);
+      const data = get(db, key);
 
-      const data = get(
-        db,
-        heap.get(keyPtr, keyLength)
-      );
+      // l.debug('get_allocated_storage', [keyPtr, keyLength, lenPtr], '<-', key);
 
       heap.setU32(lenPtr, data.length);
 
@@ -57,25 +55,22 @@ module.exports = function storage ({ l, heap, db }: RuntimeEnv): RuntimeInterfac
       );
     },
     get_storage_into: (keyPtr: PointerType, keyLength: number, dataPtr: PointerType, dataLength: number): number => {
-      l.debug('get_storage_into', [keyPtr, keyLength, dataPtr, dataLength]);
+      const key = heap.get(keyPtr, keyLength);
+      const data = get(db, key, dataLength);
 
-      const data = get(
-        db,
-        heap.get(keyPtr, keyLength),
-        dataLength
-      );
+      l.debug('get_storage_into', [keyPtr, keyLength, dataPtr, dataLength], '<-', key, '->', data);
 
       heap.set(dataPtr, data);
 
       return data.length;
     },
     set_storage: (keyPtr: PointerType, keyLength: number, dataPtr: PointerType, dataLength: number): void => {
-      l.debug('set_storage', [keyPtr, keyLength, dataPtr, dataLength]);
+      const key = heap.get(keyPtr, keyLength);
+      const data = heap.get(dataPtr, dataLength);
 
-      db.set(
-        heap.get(keyPtr, keyLength),
-        heap.get(dataPtr, dataLength)
-      );
+      l.debug('set_storage', [keyPtr, keyLength, dataPtr, dataLength], '<-', key, data);
+
+      db.set(key, data);
     }
   };
 };
