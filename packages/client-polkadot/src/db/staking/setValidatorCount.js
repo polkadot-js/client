@@ -11,7 +11,7 @@ const bnToU8a = require('@polkadot/util/bn/toU8a');
 const key = require('../key');
 const { VALIDATOR_COUNT } = require('./prefix');
 
-module.exports = function setSessionsPerEra (db: BaseDbInterface, count: BN | number): void {
+module.exports = function setValidatorCount (db: BaseDbInterface, count: BN | number): void {
   db.set(
     key(VALIDATOR_COUNT),
     bnToU8a(count, 64, true)

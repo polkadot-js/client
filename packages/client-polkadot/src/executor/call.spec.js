@@ -5,9 +5,9 @@
 const l = require('@polkadot/util/logger')('test');
 const isFunction = require('@polkadot/util/is/function');
 
-const { createFn } = require('./index');
+const call = require('./call');
 
-describe('createFn', () => {
+describe('call', () => {
   let instance;
   let runtime;
 
@@ -32,13 +32,13 @@ describe('createFn', () => {
   it('returns a callable function', () => {
     expect(
       isFunction(
-        createFn(instance, 'test', runtime)
+        call(instance, runtime, 'test')
       )
     ).toEqual(true);
   });
 
   it('stores the inputs (upon call)', () => {
-    createFn(instance, 'test', runtime)(
+    call(instance, runtime, 'test')(
       new Uint8Array([9, 8, 7]),
       new Uint8Array([1, 2, 3])
     );
@@ -52,7 +52,7 @@ describe('createFn', () => {
   });
 
   it('passes the offsets & length (upon call)', () => {
-    createFn(instance, 'test', runtime)(
+    call(instance, runtime, 'test')(
       new Uint8Array([9, 8, 7, 6, 5]),
       new Uint8Array([1, 2, 3])
     );
@@ -67,7 +67,7 @@ describe('createFn', () => {
 
   it('returns the hi/lo result pair', () => {
     expect(
-      createFn(instance, 'test', runtime)()
+      call(instance, runtime, 'test')()
     ).toEqual({
       lo: 42,
       hi: 69

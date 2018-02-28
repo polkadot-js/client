@@ -9,6 +9,5 @@ before_install:
   - npm install --global lerna yarn --cache-min 999999999
 install:
   - yarn install
-  - lerna bootstrap
 script:
   - yarn polkadot-dev-build-travis

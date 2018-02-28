@@ -13,22 +13,30 @@ describe('get_storage_into', () => {
   let get_storage_into;
 
   beforeEach(() => {
-    const uint8 = new Uint8Array([0x53, 0x61, 0x79, 0x48, 0x65, 0x6c, 0x6c, 0x6f]);
+    const uint8 = new Uint8Array([0xff, 0x53, 0x61, 0x79, 0x48, 0x65, 0x6c, 0x6c, 0x6f]);
 
     heap = {
-      get: (ptr, len) => uint8.subarray(ptr, ptr + len),
+      get: (ptr, len) => {
+        return ptr !== -1
+          ? uint8.subarray(ptr, ptr + len)
+          : new Uint8Array(0);
+      },
       set: jest.fn()
     };
 
     db = {
-      get: jest.fn((key) => new Uint8Array([0x1, 0x2, 0x3, 0x4, 0x5]))
+      get: jest.fn((key) => {
+        return key[0] !== 0xff
+          ? new Uint8Array([0x1, 0x2, 0x3, 0x4, 0x5])
+          : new Uint8Array(20);
+      })
     };
 
     get_storage_into = index({ l, heap, db }).get_storage_into;
   });
 
   it('retrieves the correct value from storage', () => {
-    get_storage_into(0, 3, 3, 3);
+    get_storage_into(1, 3, 3, 3);
 
     expect(
       db.get
@@ -39,7 +47,7 @@ describe('get_storage_into', () => {
 
   it('retrieves the full value when length >= available', () => {
     expect(
-      get_storage_into(0, 0, 3, 10)
+      get_storage_into(1, 0, 3, 10)
     ).toEqual(5);
     expect(
       heap.set
@@ -48,10 +56,19 @@ describe('get_storage_into', () => {
 
   it('retrieves a partial value when length < available', () => {
     expect(
-      get_storage_into(0, 0, 3, 3)
+      get_storage_into(1, 0, 3, 3)
     ).toEqual(3);
     expect(
       heap.set
     ).toHaveBeenCalledWith(3, new Uint8Array([0x1, 0x2, 0x3]));
+  });
+
+  it('retrieves zero value when not available', () => {
+    expect(
+      get_storage_into(0, 3, 3, 5)
+    ).toEqual(5);
+    expect(
+      heap.set
+    ).toHaveBeenCalledWith(3, new Uint8Array(5));
   });
 });

@@ -30,16 +30,16 @@
   },
   "dependencies": {
     "@polkadot/client-wasm": "^0.8.5",
-    "@polkadot/util": "^0.16.1",
-    "@polkadot/util-crypto": "^0.16.1",
+    "@polkadot/util": "^0.16.5",
+    "@polkadot/util-crypto": "^0.16.5",
     "babel-runtime": "^6.26.0"
   },
   "devDependencies": {
     "@polkadot/client": "^0.8.5",
     "@polkadot/client-db": "^0.8.5",
-    "@polkadot/primitives-builder": "^0.7.3",
-    "@polkadot/primitives-codec": "^0.7.3",
-    "@polkadot/util-keyring": "^0.16.1",
-    "@polkadot/wasm-bin": "paritytech/polkadot-wasm-bin#5b52b20d8f5446fa1c1dc7c822dbf7179e906954"
+    "@polkadot/primitives-builder": "^0.7.6",
+    "@polkadot/primitives-codec": "^0.7.6",
+    "@polkadot/util-keyring": "^0.16.5",
+    "@polkadot/wasm-bin": "paritytech/polkadot-wasm-bin#b587722dc3df44ea6e19814c1e042480b1d5ee4f"
   }
 }

@@ -4,24 +4,20 @@
 
 const test = {
   name: 'Test Chain',
-  genesis: { author: '0x0' },
   params: { networkId: 666 }
 };
 
 describe('validateChain', () => {
   let validateChain;
-  let mockValidateGenesis;
   let mockValidateObject;
   let mockValidateParams;
 
   beforeEach(() => {
     jest.resetModules();
 
-    mockValidateGenesis = jest.fn(() => true);
     mockValidateObject = jest.fn(() => true);
     mockValidateParams = jest.fn(() => true);
 
-    jest.mock('./genesis', () => mockValidateGenesis);
     jest.mock('./object', () => mockValidateObject);
     jest.mock('./params', () => mockValidateParams);
 
@@ -38,12 +34,6 @@ describe('validateChain', () => {
     expect(mockValidateObject).toHaveBeenCalledWith('Chain', test, validateChain.KNOWN_KEYS, false);
   });
 
-  it('validates the genesis', () => {
-    validateChain(test);
-
-    expect(mockValidateGenesis).toHaveBeenCalledWith(test.genesis, false);
-  });
-
   it('validates the params', () => {
     validateChain(test);
 
@@ -58,7 +48,7 @@ describe('validateChain', () => {
 
     expect(mockValidateObject).toHaveBeenCalledWith('Chain', anyObject, anyArray, true);
 
-    [mockValidateGenesis, mockValidateParams].forEach((mock) => {
+    [mockValidateParams].forEach((mock) => {
       expect(mock).toHaveBeenCalledWith(anyObject, true);
     });
   });

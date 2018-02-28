@@ -25,22 +25,28 @@ describe('validateParams', () => {
   });
 
   it('validates the keys', () => {
-    validateParams(test);
+    try {
+      validateParams(test);
+    } catch (error) {
+    }
 
     expect(mockValidateObject).toHaveBeenCalledWith('Chain.params', test, validateParams.KNOWN_KEYS, false);
   });
 
   it('validates the keys (strict)', () => {
-    validateParams(test, true);
+    try {
+      validateParams(test, true);
+    } catch (error) {
+    }
 
     expect(mockValidateObject).toHaveBeenCalledWith('Chain.params', test, validateParams.KNOWN_KEYS, true);
   });
 
-  it('validates networkId as integer number', () => {
+  it('validates params as integer number', () => {
     expect(
       () => validateParams(
         Object.assign({}, test, { networkId: 123.123 })
       )
-    ).toThrow(/networkId should be an integer/);
+    ).toThrow(/should be an integer/);
   });
 });

@@ -4,7 +4,6 @@
 // @flow
 
 import type { HeaderHashType } from '@polkadot/primitives/base';
-import type { ChainConfigType$Genesis } from '@polkadot/client-chains/types';
 import type { StateType$Genesis } from '../types';
 
 const hexToU8a = require('@polkadot/util/hex/toU8a');
@@ -12,7 +11,7 @@ const hexToU8a = require('@polkadot/util/hex/toU8a');
 module.exports = class Genesis implements StateType$Genesis {
   hash: HeaderHashType;
 
-  constructor ({ hash = '0x00' }: ChainConfigType$Genesis) {
-    this.hash = hexToU8a(hash, 256);
+  constructor ({ hash = hexToU8a('0x00', 256) }: StateType$Genesis) {
+    this.hash = hash;
   }
 };

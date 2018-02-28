@@ -13,6 +13,7 @@ module.exports = function del (pending: Memory$Storage, backend: BaseDbInterface
 
   pending[ks] = {
     k: k.slice(),
-    v: new Uint8Array([])
+    // $FlowFixMe yes, this shouldn't be null
+    v: null
   };
 };

@@ -17,7 +17,9 @@ describe('Genesis', () => {
 
   it('assigns supplied values', () => {
     expect(
-      new Genesis({ hash: '0x1234' })
+      new Genesis({
+        hash: hexToU8a('0x1234', 256)
+      })
     ).toEqual({
       hash: hexToU8a('0x1234', 256)
     });

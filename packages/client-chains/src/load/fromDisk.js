@@ -3,16 +3,14 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { ChainConfigType } from './types';
+import type { ChainConfigTypeLoose } from '../types';
 
 const path = require('path');
 
 const ExtError = require('@polkadot/util/ext/error');
 
-const validateChain = require('./validate');
-
 // chain is specified as '<something>.json', load file
-function loadFromDisk (name: string): ChainConfigType {
+module.exports = function loadFromDisk (name: string): ChainConfigTypeLoose {
   try {
     // $FlowFixMe naughty, not a literal
     return require(name);
@@ -26,20 +24,4 @@ function loadFromDisk (name: string): ChainConfigType {
       throw new ExtError(`Unable to locate and load chain file '${name}'`);
     }
   }
-}
-
-module.exports = function loadChain (name: string): ChainConfigType {
-  // builtin?
-  if (!/\.json$/.test(name)) {
-    try {
-      // $FlowFixMe naughty, not a literal
-      return require(`./chains/${name}`);
-    } catch (error) {
-      throw new ExtError(`Unable to load builtin chain '${name}'`);
-    }
-  }
-
-  return validateChain(
-    loadFromDisk(name)
-  );
 };

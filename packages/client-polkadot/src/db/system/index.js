@@ -11,6 +11,7 @@ const getBlockHash = require('./getBlockHash');
 const getCode = require('./getCode');
 const getNonce = require('./getNonce');
 const setBlockHash = require('./setBlockHash');
+const setCode = require('./setCode');
 
 module.exports = function system (db: BaseDbInterface): PolkadotDb$System {
   return {
@@ -21,6 +22,8 @@ module.exports = function system (db: BaseDbInterface): PolkadotDb$System {
     getNonce: (publicKey: Uint8Array): BN =>
       getNonce(db, publicKey),
     setBlockHash: (block: BN | number, hash: Uint8Array): void =>
-      setBlockHash(db, block, hash)
+      setBlockHash(db, block, hash),
+    setCode: (code: Uint8Array): void =>
+      setCode(db, code)
   };
 };

@@ -28,4 +28,16 @@ describe('key', () => {
       hexToU8a('0xe14daa763fce793346d4b7e131240849')
     );
   });
+
+  it('does not hash when not required', () => {
+    expect(
+      key(
+        u8aFromString(':code'),
+        null,
+        false
+      )
+    ).toEqual(
+      u8aFromString(':code')
+    );
+  });
 });
