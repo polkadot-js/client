@@ -15,7 +15,7 @@ module.exports = function storage ({ l, heap, db }: RuntimeEnv): RuntimeInterfac
     clear_storage: (keyPtr: PointerType, keyLength: number): void => {
       const key = heap.get(keyPtr, keyLength);
 
-      l.debug('clear_storage', [keyPtr, keyLength], key);
+      l.debug('clear_storage', [keyPtr, keyLength], '<-', key.toString());
 
       db.del(key);
     },
@@ -45,7 +45,7 @@ module.exports = function storage ({ l, heap, db }: RuntimeEnv): RuntimeInterfac
       const key = heap.get(keyPtr, keyLength);
       const data = get(db, key);
 
-      // l.debug('get_allocated_storage', [keyPtr, keyLength, lenPtr], '<-', key);
+      // l.debug('get_allocated_storage', [keyPtr, keyLength, lenPtr], '<-', key.toString());
 
       heap.setU32(lenPtr, data.length);
 
@@ -58,7 +58,7 @@ module.exports = function storage ({ l, heap, db }: RuntimeEnv): RuntimeInterfac
       const key = heap.get(keyPtr, keyLength);
       const data = get(db, key, dataLength);
 
-      l.debug('get_storage_into', [keyPtr, keyLength, dataPtr, dataLength], '<-', key, '->', data);
+      l.debug('get_storage_into', [keyPtr, keyLength, dataPtr, dataLength], '<-', key.toString(), '->', data.toString());
 
       heap.set(dataPtr, data);
 
@@ -68,7 +68,7 @@ module.exports = function storage ({ l, heap, db }: RuntimeEnv): RuntimeInterfac
       const key = heap.get(keyPtr, keyLength);
       const data = heap.get(dataPtr, dataLength);
 
-      l.debug('set_storage', [keyPtr, keyLength, dataPtr, dataLength], '<-', key, data);
+      l.debug('set_storage', [keyPtr, keyLength, dataPtr, dataLength], '<-', key.toString(), data.toString());
 
       db.set(key, data);
     }
