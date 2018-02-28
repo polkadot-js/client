@@ -10,8 +10,10 @@ const u8aToHex = require('@polkadot/util/u8a/toHex');
 
 module.exports = function call (instance: WebAssemblyInstance$Exports, { environment: { l, heap } }: RuntimeInterface, name: string): CallType {
   return (...data: Array<Uint8Array>): CallResult => {
+    l.debug(() => ['preparing', name]);
+
     const params = data.reduce((params, data) => {
-      l.debug(() => ['storing data', u8aToHex(data)]);
+      l.debug(() => ['storing', u8aToHex(data)]);
 
       params.push(heap.set(heap.allocate(data.length), data));
       params.push(data.length);

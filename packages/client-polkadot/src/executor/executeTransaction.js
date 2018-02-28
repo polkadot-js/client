@@ -11,6 +11,7 @@ const decodeHeader = require('@polkadot/primitives-codec/blockHeader/decode');
 const encodeHeader = require('@polkadot/primitives-codec/blockHeader/encode');
 const encodeUtx = require('@polkadot/primitives-codec/unchecked/encode');
 const u8aConcat = require('@polkadot/util/u8a/concat');
+const u8aToHex = require('@polkadot/util/u8a/toHex');
 
 const call = require('./call');
 
@@ -21,8 +22,9 @@ module.exports = function executeTransaction (instance: WebAssemblyInstance$Expo
       encodeUtx(utx)
     ])
   );
+  const data = runtime.environment.heap.get(lo, hi);
 
-  return decodeHeader(
-    runtime.environment.heap.get(lo, hi)
-  );
+  runtime.environment.l.debug(() => ['received', u8aToHex(data)]);
+
+  return decodeHeader(data);
 };

@@ -40,7 +40,7 @@ module.exports = function data ({ l, heap, db }: RuntimeEnv): RuntimeInterface$S
       const key = heap.get(keyPtr, keyLength);
       const data = heap.get(dataPtr, dataLength);
 
-      l.debug(() => ['set_storage', [keyPtr, keyLength, dataPtr, dataLength], '<-', key.toString(), data.toString()]);
+      l.debug(() => ['set_storage', [keyPtr, keyLength, dataPtr, dataLength], '<-', key.toString(), '=', data.toString()]);
 
       db.set(key, data);
     }
