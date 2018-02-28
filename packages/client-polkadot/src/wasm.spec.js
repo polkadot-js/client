@@ -121,7 +121,7 @@ describe('wasm', () => {
             header: {
               parentHash: db.system.getBlockHash(1),
               number: 2,
-              stateRoot: hexToU8a('0x0x6b1df261bab7dc96a7428bff9fa740f26cc08cd1214834e52e3bdd4fed5557a5')
+              stateRoot: hexToU8a('0x6b1df261bab7dc96a7428bff9fa740f26cc08cd1214834e52e3bdd4fed5557a5')
             },
             timestamp: 200000,
             transactions: [
