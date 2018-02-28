@@ -8,21 +8,29 @@ import type { RuntimeEnv, RuntimeInterface$Crypto, PointerType } from '../types'
 const u8aToUtf8 = require('@polkadot/util/u8a/toUtf8');
 const blake2AsU8a256 = require('@polkadot/util-crypto/blake2/asU8a256');
 const naclVerify = require('@polkadot/util-crypto/nacl/verify');
-const xxhashAsU8a128 = require('@polkadot/util-crypto/xxhash/asU8a128');
-const xxhashAsU8a256 = require('@polkadot/util-crypto/xxhash/asU8a256');
+const xxhashAsU8a = require('@polkadot/util-crypto/xxhash/asU8a');
 
 module.exports = function crypto ({ l, heap }: RuntimeEnv): RuntimeInterface$Crypto {
+  const twox = (bitLength: number, dataPtr: PointerType, dataLen: number, outPtr: PointerType): void => {
+    const data = heap.get(dataPtr, dataLen);
+    const hash = xxhashAsU8a(data, bitLength);
+
+    l.debug(() => [`twox_${bitLength}`, [dataPtr, dataLen, outPtr], '<-', u8aToUtf8(data), '->', hash.toString()]);
+
+    heap.set(outPtr, hash);
+  };
+
   return {
     blake2_256: (dataPtr: PointerType, dataLen: number, outPtr: PointerType): void => {
       const data = heap.get(dataPtr, dataLen);
       const hash = blake2AsU8a256(data);
 
-      l.debug('blake2_256', [dataPtr, dataLen, outPtr], '<-', data.toString(), '->', hash.toString());
+      l.debug(() => ['blake2_256', [dataPtr, dataLen, outPtr], '<-', data.toString(), '->', hash.toString()]);
 
       heap.set(outPtr, hash);
     },
     ed25519_verify: (msgPtr: PointerType, msgLen: number, sigPtr: PointerType, pubkeyPtr: PointerType): number => {
-      l.debug('ed25519_verify', [msgPtr, msgLen, sigPtr, pubkeyPtr]);
+      l.debug(() => ['ed25519_verify', [msgPtr, msgLen, sigPtr, pubkeyPtr]]);
 
       return naclVerify(
         heap.get(msgPtr, msgLen),
@@ -30,21 +38,9 @@ module.exports = function crypto ({ l, heap }: RuntimeEnv): RuntimeInterface$Cry
         heap.get(pubkeyPtr, 32)
       ) ? 0 : 5;
     },
-    twox_128: (dataPtr: PointerType, dataLen: number, outPtr: PointerType): void => {
-      const data = heap.get(dataPtr, dataLen);
-      const hash = xxhashAsU8a128(data);
-
-      l.debug('twox_128', [dataPtr, dataLen, outPtr], '<-', u8aToUtf8(data), '->', hash.toString());
-
-      heap.set(outPtr, hash);
-    },
-    twox_256: (dataPtr: PointerType, dataLen: number, outPtr: PointerType): void => {
-      const data = heap.get(dataPtr, dataLen);
-      const hash = xxhashAsU8a256(data);
-
-      l.debug('twox_256', [dataPtr, dataLen, outPtr], '<-', u8aToUtf8(data), '->', hash.toString());
-
-      heap.set(outPtr, hash);
-    }
+    twox_128: (dataPtr: PointerType, dataLen: number, outPtr: PointerType): void =>
+      twox(128, dataPtr, dataLen, outPtr),
+    twox_256: (dataPtr: PointerType, dataLen: number, outPtr: PointerType): void =>
+      twox(256, dataPtr, dataLen, outPtr)
   };
 };

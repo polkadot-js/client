@@ -12,17 +12,17 @@ const printNum = require('./printNum');
 module.exports = function io ({ heap, l }: RuntimeEnv): RuntimeInterface$Io {
   return {
     print_hex: (ptr: PointerType, len: number): void => {
-      l.debug('print_hex', [ptr, len]);
+      l.debug(() => ['print_hex', [ptr, len]]);
 
       printHex(l, heap.get(ptr, len));
     },
     print_utf8: (ptr: PointerType, len: number): void => {
-      l.debug('print_utf8', [ptr, len]);
+      l.debug(() => ['print_utf8', [ptr, len]]);
 
       printUtf8(l, heap.get(ptr, len));
     },
     print_num: (hi: number, lo: number): void => {
-      l.debug('print_num', [hi, lo]);
+      l.debug(() => ['print_num', [hi, lo]]);
 
       printNum(l, hi, lo);
     }

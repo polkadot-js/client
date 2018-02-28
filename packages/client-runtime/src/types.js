@@ -56,13 +56,19 @@ export type RuntimeInterface$Memory = {
   memset: (dst: PointerType, val: number, num: number) => PointerType
 };
 
-export type RuntimeInterface$Storage = {
-  enumerated_trie_root: (valuesPtr: PointerType, lensPtr: PointerType, lensLen: number, resultPtr: PointerType) => void,
-  storage_root: (resultPtr: PointerType) => void,
+export type RuntimeInterface$Storage$Data = {
+  clear_storage: (keyPtr: PointerType, keyLength: number) => void,
   get_allocated_storage: (keyPtr: PointerType, keyLength: number, writtenPtr: PointerType) => PointerType,
   get_storage_into: (keyPtr: PointerType, keyLength: number, dataPtr: PointerType, dataLength: number) => number,
   set_storage: (keyPtr: PointerType, keyLength: number, dataPtr: PointerType, dataLength: number) => void
 }
+
+export type RuntimeInterface$Storage$Trie = {
+  enumerated_trie_root: (valuesPtr: PointerType, lensPtr: PointerType, lensLen: number, resultPtr: PointerType) => void,
+  storage_root: (resultPtr: PointerType) => void
+}
+
+export type RuntimeInterface$Storage = RuntimeInterface$Storage$Data & RuntimeInterface$Storage$Trie;
 
 export type RuntimeInterface$Exports = RuntimeInterface$Chain & RuntimeInterface$Crypto & RuntimeInterface$Io & RuntimeInterface$Memory & RuntimeInterface$Storage;
 
