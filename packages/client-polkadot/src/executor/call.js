@@ -24,6 +24,8 @@ module.exports = function call (instance: WebAssemblyInstance$Exports, { environ
     const lo: number = instance[name].apply(null, params);
     const hi: number = instance['get_result_hi']();
 
+    l.debug(() => ['returned', [lo, hi]]);
+
     return { lo, hi };
   };
 };

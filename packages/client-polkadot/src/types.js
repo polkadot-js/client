@@ -52,9 +52,9 @@ export type PolkadotDb = {
 
 export type ChainExecutor = {
   // flowlint-next-line unclear-type:off
-  executeBlock (block: PolkadotBlock): any,
+  executeBlock (block: PolkadotBlock): boolean,
   // flowlint-next-line unclear-type:off
-  executeTransaction (header: BlockHeaderType, utx: PolkadotUnchecked): any
+  executeTransaction (header: BlockHeaderType, utx: PolkadotUnchecked): BlockHeaderType
 };
 
 export type PolkadotInterface = {

@@ -5,6 +5,7 @@
 const createHeader = require('@polkadot/primitives-builder/blockHeader');
 const stakingTransfer = require('@polkadot/primitives-builder/transaction/stakingTransfer');
 const uncheckedSign = require('@polkadot/primitives-builder/unchecked/uncheckedSign');
+const timestampSet = require('@polkadot/primitives-builder/unchecked/timestampSet');
 const chain = require('@polkadot/client-chains/chains/nelson');
 const code = require('@polkadot/client-chains/wasm/polkadot_runtime_wasm');
 const memoryDb = require('@polkadot/client-db/memory');
@@ -14,10 +15,16 @@ const keyring = require('@polkadot/util-keyring/testing')();
 const createDb = require('../db');
 const createExecutor = require('./index');
 
-// FIXME: skipped to get the header correct, i.e. with timestamp set
-describe.skip('executeTransaction', () => {
+describe('executeTransaction', () => {
   let executor;
   let db;
+
+  function getNextHeader (header) {
+    return executor.executeTransaction(
+      header,
+      timestampSet(100000)
+    );
+  }
 
   beforeEach(() => {
     const config = {
@@ -35,10 +42,12 @@ describe.skip('executeTransaction', () => {
 
   it('executes a basic transaction', () => {
     executor.executeTransaction(
-      createHeader({
-        number: 1,
-        transactionRoot: new Uint8Array([])
-      }),
+      getNextHeader(
+        createHeader({
+          number: 1,
+          transactionRoot: new Uint8Array([])
+        })
+      ),
       uncheckedSign(keyring.one, stakingTransfer(
         keyring.one.publicKey, keyring.two.publicKey, 69, 0
       ))
