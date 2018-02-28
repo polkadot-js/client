@@ -6,35 +6,19 @@
 import type { RuntimeEnv, RuntimeInterface$Storage, PointerType } from '../types';
 
 const trieRoot = require('@polkadot/util-triehash/root');
-const trieRootOrdered = require('@polkadot/util-triehash/rootOrdered');
 
+const clear = require('./clear');
+const enumerated = require('./enumerated');
 const get = require('./get');
 
-module.exports = function storage ({ l, heap, db }: RuntimeEnv): RuntimeInterface$Storage {
+module.exports = function storage (env: RuntimeEnv): RuntimeInterface$Storage {
+  const { l, heap, db } = env;
+
   return {
-    clear_storage: (keyPtr: PointerType, keyLength: number): void => {
-      const key = heap.get(keyPtr, keyLength);
-
-      l.debug('clear_storage', [keyPtr, keyLength], '<-', key.toString());
-
-      db.del(key);
-    },
+    clear_storage: (keyPtr: PointerType, keyLength: number): void =>
+      clear(env, heap.get(keyPtr, keyLength)),
     enumerated_trie_root: (valuesPtr: PointerType, lenPtr: PointerType, count: number, resultPtr: PointerType): void => {
-      // l.debug('enumerated_trie_root', [valuesPtr, lenPtr, count, resultPtr]);
-
-      let offset = 0;
-
-      heap.set(resultPtr, trieRootOrdered(
-        // $FlowFixMe yes, the range approach here works
-        Array.apply(null, { length: count }).map((_, index) => {
-          const length = heap.getU32(lenPtr + (index * 4));
-          const data = heap.get(valuesPtr + offset, length);
-
-          offset += length;
-
-          return data;
-        })
-      ));
+      heap.set(resultPtr, enumerated(env, valuesPtr, lenPtr, count));
     },
     storage_root: (resultPtr: PointerType): void => {
       // l.debug('storage_root', [resultPtr]);

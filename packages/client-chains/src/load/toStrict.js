@@ -22,7 +22,7 @@ function valueToBn (value: ChainConfigType$Number): BN {
   return bnToBn(value);
 }
 
-module.exports = function toStrict ({ authorities, balances, code, description, name, nodes, params, type, validators }: ChainConfigTypeLoose): $Shape<ChainConfigType> {
+module.exports = function toStrict ({ authorities, balances, code, description, name, nodes, params: { approvalRatio, blockTime, bondingDuration, networkId, sessionLength, sessionsPerEra }, type, validators }: ChainConfigTypeLoose): $Shape<ChainConfigType> {
   return {
     authorities: authorities.map(hexToU8a),
     balances: Object.keys(balances).map((accountId) => ({
@@ -33,11 +33,14 @@ module.exports = function toStrict ({ authorities, balances, code, description, 
     description,
     name,
     nodes,
-    params: Object.keys(params).reduce((result, key) => {
-      result[key] = valueToBn(params[key]);
-
-      return result;
-    }, {}),
+    params: {
+      approvalRatio: valueToBn(approvalRatio),
+      blockTime: valueToBn(blockTime),
+      bondingDuration: valueToBn(bondingDuration),
+      networkId: valueToBn(networkId),
+      sessionLength: valueToBn(sessionLength),
+      sessionsPerEra: valueToBn(sessionsPerEra)
+    },
     type,
     validators: validators.map(hexToU8a)
   };

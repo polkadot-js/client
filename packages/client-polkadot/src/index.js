@@ -8,18 +8,19 @@ import type { ChainConfigType } from '@polkadot/client-chains/types';
 import type { BaseDbInterface } from '@polkadot/client-db/types';
 import type { PolkadotInterface } from './types';
 
+const createRuntime = require('@polkadot/client-runtime');
+
 const createDb = require('./db');
 const initGenesis = require('./genesis');
-const createWasm = require('./wasm');
+const createExecutor = require('./executor');
 
-module.exports = function polkadot (config: ConfigType, chain: ChainConfigType, baseDb: BaseDbInterface, code: Uint8Array): PolkadotInterface {
-  const { instance, runtime } = createWasm(config, chain, baseDb, code);
-  const db = createDb(runtime.environment.db);
-  const genesis = initGenesis(chain, db);
+module.exports = function polkadot (config: ConfigType, chain: ChainConfigType, db: BaseDbInterface): PolkadotInterface {
+  const runtime = createRuntime(chain, db);
+  const executor = createExecutor(config, runtime, chain.code);
+  const genesis = initGenesis(chain, createDb(runtime.environment.db));
 
   return {
-    db,
-    genesis,
-    instance
+    executor,
+    genesis
   };
 };

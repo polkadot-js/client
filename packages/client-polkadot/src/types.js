@@ -5,15 +5,22 @@
 
 import type BN from 'bn.js';
 import type { PolkadotBlock } from '@polkadot/primitives/block';
+import type { BlockHeaderType } from '@polkadot/primitives/blockHeader';
+import type { PolkadotUnchecked } from '@polkadot/primitives/transaction';
+
+export type PolkadotDb$Consensys = {
+  setAuthority (id: BN | number, publicKey: Uint8Array, isHashed?: boolean): void,
+  setAuthorityCount (count: BN | number): void
+}
 
 export type PolkadotDb$Governance = {
-  setApprovalsRequired (count: BN | number): void
+  setApprovalsRatio (ratio: BN | number): void
 }
 
 export type PolkadotDb$Session = {
   setLength (length: BN | number): void,
   setValue (id: BN | number, publicKey: Uint8Array): void,
-  setValueLength (length: BN | number): void
+  setValueCount (count: BN | number): void
 }
 
 export type PolkadotDb$Staking = {
@@ -30,7 +37,8 @@ export type PolkadotDb$System = {
   getBlockHash (block: BN | number): Uint8Array,
   getCode (): Uint8Array,
   getNonce (publicKey: Uint8Array): BN,
-  setBlockHash (block: BN | number, hash: Uint8Array): void
+  setBlockHash (block: BN | number, hash: Uint8Array): void,
+  setCode (code: Uint8Array): void
 }
 
 export type PolkadotDb = {
@@ -42,8 +50,14 @@ export type PolkadotDb = {
   trieRoot: () => Uint8Array
 }
 
+export type ChainExecutor = {
+  // flowlint-next-line unclear-type:off
+  executeBlock (block: PolkadotBlock): any,
+  // flowlint-next-line unclear-type:off
+  executeTransaction (header: BlockHeaderType, utx: PolkadotUnchecked): any
+};
+
 export type PolkadotInterface = {
-  db: PolkadotDb,
-  genesis: PolkadotBlock,
-  instance: WebAssemblyInstance$Exports
+  executor: ChainExecutor,
+  genesis: PolkadotBlock
 }

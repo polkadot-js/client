@@ -4,17 +4,12 @@
 // @flow
 
 import type { RuntimeInterface } from '@polkadot/client-runtime/types';
-
-type FnResult = {
-  lo: number,
-  hi: number
-};
-type FnType = (...data: Array<Uint8Array>) => FnResult;
+import type { CallType, CallResult } from './types';
 
 const u8aToHex = require('@polkadot/util/u8a/toHex');
 
-module.exports = function createFn (fns: WebAssemblyInstance$Exports, name: string, { environment: { l, heap } }: RuntimeInterface): FnType {
-  return (...data: Array<Uint8Array>): FnResult => {
+module.exports = function call (instance: WebAssemblyInstance$Exports, { environment: { l, heap } }: RuntimeInterface, name: string): CallType {
+  return (...data: Array<Uint8Array>): CallResult => {
     const params = data.reduce((params, data) => {
       l.debug('storing data', u8aToHex(data));
 
@@ -26,8 +21,8 @@ module.exports = function createFn (fns: WebAssemblyInstance$Exports, name: stri
 
     l.debug('executing', name, params);
 
-    const lo: number = fns[name].apply(null, params);
-    const hi: number = fns['get_result_hi']();
+    const lo: number = instance[name].apply(null, params);
+    const hi: number = instance['get_result_hi']();
 
     return { lo, hi };
   };

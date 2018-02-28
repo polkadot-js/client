@@ -12,7 +12,7 @@ const setAuthorityCount = require('./setAuthorityCount');
 
 module.exports = function consensys (db: BaseDbInterface): PolkadotDb$Consensys {
   return {
-    setAuthority: (id: BN | number, publicKey: Uint8Array, isHashed: boolean = false): void =>
+    setAuthority: (id: BN | number, publicKey: Uint8Array, isHashed?: boolean = false): void =>
       setAuthority(db, id, publicKey, isHashed),
     setAuthorityCount: (count: BN | number): void =>
       setAuthorityCount(db, count)

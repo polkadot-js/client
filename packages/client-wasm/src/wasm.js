@@ -5,7 +5,6 @@
 
 import type { ConfigType } from '@polkadot/client/types';
 import type { RuntimeInterface } from '@polkadot/client-runtime/types';
-import type { ExecutorInstance } from './types';
 
 const runtimeProxy = require('@polkadot/client-runtime/wasm/proxy_runtime_wasm');
 
@@ -13,7 +12,7 @@ const { HEAP_SIZE_KB } = require('./defaults');
 const createExports = require('./create/exports');
 const createMemory = require('./create/memory');
 
-module.exports = function wasm ({ wasm: { heapSize = HEAP_SIZE_KB } }: ConfigType, runtime: RuntimeInterface, chainCode: Uint8Array, chainProxy: Uint8Array): ExecutorInstance {
+module.exports = function wasm ({ wasm: { heapSize = HEAP_SIZE_KB } }: ConfigType, runtime: RuntimeInterface, chainCode: Uint8Array, chainProxy: Uint8Array): WebAssemblyInstance$Exports {
   const env = createExports(runtimeProxy, { runtime: runtime.exports }, createMemory(0, 0));
   const proxy = createExports(chainCode, { env });
   const instance = createExports(chainProxy, { proxy }, createMemory(0, 0));
