@@ -4,27 +4,13 @@
 // @flow
 
 import type { RuntimeInterface } from '@polkadot/client-runtime/types';
-import type { BlockHeaderType } from '@polkadot/primitives/blockHeader';
-import type { PolkadotUnchecked } from '@polkadot/primitives/transaction';
 
-const decodeHeader = require('@polkadot/primitives-codec/blockHeader/decode');
-const encodeHeader = require('@polkadot/primitives-codec/blockHeader/encode');
-const encodeUtx = require('@polkadot/primitives-codec/unchecked/encode');
 const u8aConcat = require('@polkadot/util/u8a/concat');
-const u8aToHex = require('@polkadot/util/u8a/toHex');
 
-const call = require('./call');
+const callAsU8a = require('./callAsU8a');
 
-module.exports = function executeTransaction (instance: WebAssemblyInstance$Exports, runtime: RuntimeInterface, header: BlockHeaderType, utx: PolkadotUnchecked): BlockHeaderType {
-  const { hi, lo } = call(instance, runtime, 'execute_transaction')(
-    u8aConcat([
-      encodeHeader(header),
-      encodeUtx(utx)
-    ])
+module.exports = function executeTransaction (createInstance: () => WebAssemblyInstance$Exports, runtime: RuntimeInterface, header: Uint8Array, utx: Uint8Array): Uint8Array {
+  return callAsU8a(createInstance(), runtime, 'execute_transaction')(
+    u8aConcat([ header, utx ])
   );
-  const data = runtime.environment.heap.get(lo, hi);
-
-  runtime.environment.l.debug(() => ['received', u8aToHex(data)]);
-
-  return decodeHeader(data);
 };

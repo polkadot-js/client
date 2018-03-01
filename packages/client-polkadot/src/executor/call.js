@@ -23,11 +23,17 @@ module.exports = function call (instance: WebAssemblyInstance$Exports, { environ
 
     l.debug(() => ['executing', name, params]);
 
-    const lo: number = instance[name].apply(null, params);
-    const hi: number = instance['get_result_hi']();
+    try {
+      const lo: number = instance[name].apply(null, params);
+      const hi: number = instance['get_result_hi']();
 
-    l.debug(() => ['returned', [lo, hi]]);
+      l.debug(() => ['returned', [lo, hi]]);
 
-    return { lo, hi };
+      return { lo, hi };
+    } catch (error) {
+      l.error('execution error', error);
+    }
+
+    return { lo: 0, hi: 0 };
   };
 };

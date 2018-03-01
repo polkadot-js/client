@@ -14,10 +14,11 @@ const createDb = require('./db');
 const initGenesis = require('./genesis');
 const createExecutor = require('./executor');
 
-module.exports = function polkadot (config: ConfigType, chain: ChainConfigType, db: BaseDbInterface): PolkadotInterface {
-  const runtime = createRuntime(chain, db);
+module.exports = function polkadot (config: ConfigType, chain: ChainConfigType, baseDb: BaseDbInterface): PolkadotInterface {
+  const runtime = createRuntime(chain, baseDb);
+  const db = createDb(runtime.environment.db);
   const executor = createExecutor(config, runtime, chain.code);
-  const genesis = initGenesis(chain, createDb(runtime.environment.db));
+  const genesis = initGenesis(chain, db);
 
   return {
     executor,

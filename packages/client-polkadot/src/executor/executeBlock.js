@@ -4,16 +4,11 @@
 // @flow
 
 import type { RuntimeInterface } from '@polkadot/client-runtime/types';
-import type { PolkadotBlock } from '@polkadot/primitives/block';
-
-const encodeBlock = require('@polkadot/primitives-codec/block/encode');
 
 const call = require('./call');
 
-module.exports = function executeBlock (instance: WebAssemblyInstance$Exports, runtime: RuntimeInterface, block: PolkadotBlock): boolean {
-  const result = call(instance, runtime, 'execute_block')(
-    encodeBlock(block)
-  );
+module.exports = function executeBlock (createInstance: () => WebAssemblyInstance$Exports, runtime: RuntimeInterface, block: Uint8Array): boolean {
+  const result = call(createInstance(), runtime, 'execute_block')(block);
 
   return result.lo === 1;
 };

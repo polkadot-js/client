@@ -14,6 +14,11 @@
       (param i32 i32) (result i64)
     )
   )
+  (import "proxy" "finalise_block"
+    (func $finalise_block
+      (param i32 i32) (result i64)
+    )
+  )
 
   ;; storage for the return values
   (global $result_hi (mut i32) (i32.const 0))
@@ -59,6 +64,18 @@
 
     (call $result_wrap
       (call $execute_transaction
+        (get_local 0)
+        (get_local 1)
+      )
+    )
+  )
+
+  ;; proxied finalise_block exported
+  (func (export "finalise_block")
+    (param i32 i32) (result i32)
+
+    (call $result_wrap
+      (call $finalise_block
         (get_local 0)
         (get_local 1)
       )

@@ -6,6 +6,8 @@ const createHeader = require('@polkadot/primitives-builder/blockHeader');
 const stakingTransfer = require('@polkadot/primitives-builder/transaction/stakingTransfer');
 const uncheckedSign = require('@polkadot/primitives-builder/unchecked/uncheckedSign');
 const timestampSet = require('@polkadot/primitives-builder/unchecked/timestampSet');
+const encodeHeader = require('@polkadot/primitives-codec/blockHeader/encode');
+const encodeUtx = require('@polkadot/primitives-codec/unchecked/encode');
 const chain = require('@polkadot/client-chains/chains/nelson');
 const code = require('@polkadot/client-chains/wasm/polkadot_runtime_wasm');
 const memoryDb = require('@polkadot/client-db/memory');
@@ -22,7 +24,9 @@ describe('executeTransaction', () => {
   function getNextHeader (header) {
     return executor.executeTransaction(
       header,
-      timestampSet(100000)
+      encodeUtx(
+        timestampSet(100000)
+      )
     );
   }
 
@@ -43,14 +47,18 @@ describe('executeTransaction', () => {
   it('executes a basic transaction', () => {
     executor.executeTransaction(
       getNextHeader(
-        createHeader({
-          number: 1,
-          transactionRoot: new Uint8Array([])
-        })
+        encodeHeader(
+          createHeader({
+            number: 1,
+            transactionRoot: new Uint8Array([])
+          })
+        )
       ),
-      uncheckedSign(keyring.one, stakingTransfer(
-        keyring.one.publicKey, keyring.two.publicKey, 69, 0
-      ))
+      encodeUtx(
+        uncheckedSign(keyring.one, stakingTransfer(
+          keyring.one.publicKey, keyring.two.publicKey, 69, 0
+        ))
+      )
     );
 
     expect(
