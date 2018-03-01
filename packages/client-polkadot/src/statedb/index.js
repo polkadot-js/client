@@ -4,7 +4,7 @@
 // @flow
 
 import type { BaseDbInterface } from '@polkadot/client-db/types';
-import type { PolkadotDb } from '../types';
+import type { PolkadotStateDb } from '../types';
 
 const trieRoot = require('@polkadot/util-triehash/root');
 
@@ -14,17 +14,21 @@ const session = require('./session');
 const staking = require('./staking');
 const system = require('./system');
 
-module.exports = function db (dbInstance: BaseDbInterface): PolkadotDb {
+module.exports = function db (stateDb: BaseDbInterface): PolkadotStateDb {
   return {
-    consensys: consensys(dbInstance),
-    governance: governance(dbInstance),
-    session: session(dbInstance),
-    staking: staking(dbInstance),
-    system: system(dbInstance),
+    clear: (): void =>
+      stateDb.clear(),
+    commit: (): void =>
+      stateDb.commit(),
+    consensys: consensys(stateDb),
+    governance: governance(stateDb),
+    session: session(stateDb),
+    staking: staking(stateDb),
+    system: system(stateDb),
     trieRoot: (): Uint8Array =>
-      trieRoot(dbInstance.pairs()),
+      trieRoot(stateDb.pairs()),
     debug: (): { [string]: string } =>
-      dbInstance.pairs().reduce((result, { k, v }) => {
+      stateDb.pairs().reduce((result, { k, v }) => {
         result[k.toString()] = `[${v.toString()}]`;
 
         return result;

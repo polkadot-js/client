@@ -4,9 +4,8 @@
 // @flow
 
 import type { ConfigType } from '@polkadot/client/types';
-import type { ChainConfigType } from '@polkadot/client-chains/types';
+import type { ChainConfigType, ChainInterface } from '@polkadot/client-chains/types';
 import type { BaseDbInterface } from '@polkadot/client-db/types';
-import type { PolkadotInterface } from './types';
 
 const createRuntime = require('@polkadot/client-runtime');
 
@@ -14,14 +13,24 @@ const createDb = require('./db');
 const initGenesis = require('./genesis');
 const createExecutor = require('./executor');
 
-module.exports = function polkadot (config: ConfigType, chain: ChainConfigType, baseDb: BaseDbInterface): PolkadotInterface {
-  const runtime = createRuntime(chain, baseDb);
-  const db = createDb(runtime.environment.db);
+module.exports = function polkadot (config: ConfigType, chain: ChainConfigType, stateDb: BaseDbInterface, blockDb: BaseDbInterface): ChainInterface {
+  const runtime = createRuntime(chain, stateDb);
+  const polkadb = createDb(runtime.environment.db);
   const executor = createExecutor(config, runtime, chain.code);
-  const genesis = initGenesis(chain, db);
+  const genesis = initGenesis(chain, polkadb);
+  const { getBlockHash, getNonce } = polkadb.system;
 
   return {
+    blocks: {
+      // getBlock: (hash: Uint8Array) => Uint8Array,
+      // getLatestHash: () => Uint8Array,
+      // getLatestNumber: () => BN
+    },
     executor,
-    genesis
+    genesis,
+    state: {
+      getBlockHash,
+      getNonce
+    }
   };
 };

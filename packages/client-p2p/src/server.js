@@ -6,7 +6,7 @@
 
 import type LibP2P, { LibP2P$Connection } from 'libp2p';
 import type { ConfigType } from '@polkadot/client/types';
-import type { StateInterface } from '@polkadot/client-state/types';
+import type { ChainInterface } from '@polkadot/client-chains/types';
 import type { MessageInterface, P2pInterface } from './types';
 import type Peer from './peer';
 
@@ -21,16 +21,16 @@ const StatusMessage = require('./message/status');
 const defaults = require('./defaults');
 
 module.exports = class Server extends EventEmitter implements P2pInterface {
+  _chain: ChainInterface;
   _config: ConfigType;
   _node: LibP2P;
   _peers: Peers;
-  _state: StateInterface;
 
-  constructor (config: ConfigType, state: StateInterface, autoStart: boolean = true) {
+  constructor (config: ConfigType, chain: ChainInterface, autoStart: boolean = true) {
     super();
 
     this._config = config;
-    this._state = state;
+    this._chain = chain;
 
     if (autoStart) {
       this.start();
@@ -48,7 +48,7 @@ module.exports = class Server extends EventEmitter implements P2pInterface {
   async start (): Promise<boolean> {
     this.stop();
 
-    this._node = await createNode(this._config.p2p.address, this._config.p2p.port, this._state.chain, this._config.p2p.peers);
+    this._node = await createNode(this._config.p2p.address, this._config.p2p.port, this._chain, this._config.p2p.peers);
     this._node.handle(defaults.PROTOCOL, this._onProtocol);
 
     this._peers = new Peers(this._node);
@@ -125,9 +125,9 @@ module.exports = class Server extends EventEmitter implements P2pInterface {
     return peer.send(
       new StatusMessage({
         roles: this._config.roles,
-        bestNumber: this._state.best.number,
-        bestHash: this._state.best.hash,
-        genesisHash: this._state.genesis.hash
+        bestNumber: this._chain.blocks.getLatestNumber(),
+        bestHash: this._chain.blocks.getLatestHash(),
+        genesisHash: this._chain.genesis.hash
       })
     );
   }

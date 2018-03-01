@@ -5,7 +5,7 @@
 
 import type BN from 'bn.js';
 import type { BaseDbInterface } from '@polkadot/client-db/types';
-import type { PolkadotDb$System } from '../../types';
+import type { PolkadotStateDb$System } from '../../types';
 
 const getBlockHash = require('./getBlockHash');
 const getCode = require('./getCode');
@@ -13,7 +13,7 @@ const getNonce = require('./getNonce');
 const setBlockHash = require('./setBlockHash');
 const setCode = require('./setCode');
 
-module.exports = function system (db: BaseDbInterface): PolkadotDb$System {
+module.exports = function system (db: BaseDbInterface): PolkadotStateDb$System {
   return {
     getBlockHash: (block: BN | number): Uint8Array =>
       getBlockHash(db, block),

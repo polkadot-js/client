@@ -5,7 +5,7 @@
 
 import type BN from 'bn.js';
 import type { BaseDbInterface } from '@polkadot/client-db/types';
-import type { PolkadotDb$Staking } from '../../types';
+import type { PolkadotStateDb$Staking } from '../../types';
 
 const getBalance = require('./getBalance');
 const setBalance = require('./setBalance');
@@ -15,7 +15,7 @@ const setIntentLength = require('./setIntentLength');
 const setSessionsPerEra = require('./setSessionsPerEra');
 const setValidatorCount = require('./setValidatorCount');
 
-module.exports = function staking (db: BaseDbInterface): PolkadotDb$Staking {
+module.exports = function staking (db: BaseDbInterface): PolkadotStateDb$Staking {
   return {
     getBalance: (publicKey: Uint8Array): BN =>
       getBalance(db, publicKey),

@@ -11,8 +11,7 @@ import type { WasmConfigType } from '@polkadot/client-wasm/types';
 import type { RoleType } from '@polkadot/primitives/role';
 
 export type DevConfigType = {
-  genBlocks: boolean,
-  genInterval: number
+  genBlocks: boolean
 };
 
 export type ConfigType = {

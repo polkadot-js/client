@@ -6,7 +6,7 @@
 import type { ChainConfigType } from '@polkadot/client-chains/types';
 import type { PolkadotDb } from '../types';
 
-module.exports = function genesisStorage ({ authorities, balances, code, params, validators }: ChainConfigType, db: PolkadotDb): void {
+module.exports = function genesisState ({ authorities, balances, code, params, validators }: ChainConfigType, db: PolkadotDb): void {
   db.consensys.setAuthorityCount(authorities.length);
   authorities.forEach((authority, index) => {
     db.consensys.setAuthority(index, authority);
@@ -26,4 +26,6 @@ module.exports = function genesisStorage ({ authorities, balances, code, params,
   db.staking.setSessionsPerEra(params.sessionsPerEra);
   db.staking.setValidatorCount(validators.length);
   db.system.setCode(code);
+
+  db.commit();
 };

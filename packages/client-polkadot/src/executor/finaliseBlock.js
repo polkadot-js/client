@@ -3,10 +3,8 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { RuntimeInterface } from '@polkadot/client-runtime/types';
+import type { CallCreatorU8a } from './types';
 
-const callAsU8a = require('./callAsU8a');
-
-module.exports = function finaliseBlock (createInstance: () => WebAssemblyInstance$Exports, runtime: RuntimeInterface, header: Uint8Array): Uint8Array {
-  return callAsU8a(createInstance(), runtime, 'finalise_block')(header);
+module.exports = function finaliseBlock (createCaller: CallCreatorU8a, header: Uint8Array): Uint8Array {
+  return createCaller('finalise_block')(header);
 };

@@ -4,24 +4,32 @@
 // @flow
 
 import type BN from 'bn.js';
-import type { PolkadotBlock } from '@polkadot/primitives/block';
 
-export type PolkadotDb$Consensys = {
+export type PolkadotBlockDb = {
+  getBlock: (hash: Uint8Array) => void,
+  getLatestHash: () => Uint8Array,
+  getLatestNumber: () => BN,
+  setBlock: (hash: Uint8Array, block: Uint8Array) => void,
+  setLatestHash: (hash: Uint8Array) => void,
+  setLatestNumber: (number: BN | number) => void
+};
+
+export type PolkadotStateDb$Consensys = {
   setAuthority (id: BN | number, publicKey: Uint8Array, isHashed?: boolean): void,
   setAuthorityCount (count: BN | number): void
 }
 
-export type PolkadotDb$Governance = {
+export type PolkadotStateDb$Governance = {
   setApprovalsRatio (ratio: BN | number): void
 }
 
-export type PolkadotDb$Session = {
+export type PolkadotStateDb$Session = {
   setLength (length: BN | number): void,
   setValue (id: BN | number, publicKey: Uint8Array): void,
   setValueCount (count: BN | number): void
 }
 
-export type PolkadotDb$Staking = {
+export type PolkadotStateDb$Staking = {
   getBalance (publicKey: Uint8Array): BN,
   setBalance (publicKey: Uint8Array, value: BN | number): void,
   setCurrentEra (era: BN | number): void,
@@ -31,7 +39,7 @@ export type PolkadotDb$Staking = {
   setValidatorCount (count: BN | number): void
 }
 
-export type PolkadotDb$System = {
+export type PolkadotStateDb$System = {
   getBlockHash (block: BN | number): Uint8Array,
   getCode (): Uint8Array,
   getNonce (publicKey: Uint8Array): BN,
@@ -39,24 +47,12 @@ export type PolkadotDb$System = {
   setCode (code: Uint8Array): void
 }
 
-export type PolkadotDb = {
+export type PolkadotStateDb = {
+  commit: () => void,
   consensys: PolkadotDb$Consensys,
   governance: PolkadotDb$Governance,
   session: PolkadotDb$Session,
   staking: PolkadotDb$Staking,
   system: PolkadotDb$System,
   trieRoot: () => Uint8Array
-}
-
-export type ChainExecutor = {
-  executeBlock (block: Uint8Array): boolean,
-  executeTransaction (header: Uint8Array, utx: Uint8Array): Uint8Array,
-  finaliseBlock (header: Uint8Array): Uint8Array,
-  generateBlock (number: number, transactions: Array<Uint8Array>): Uint8Array,
-  importBlock (block: Uint8Array): boolean
-};
-
-export type PolkadotInterface = {
-  executor: ChainExecutor,
-  genesis: PolkadotBlock
 }

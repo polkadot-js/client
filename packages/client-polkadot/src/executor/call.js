@@ -34,6 +34,9 @@ module.exports = function call (instance: WebAssemblyInstance$Exports, { environ
       l.error('execution error', error);
     }
 
-    return { lo: 0, hi: 0 };
+    return {
+      lo: 0,
+      hi: 0
+    };
   };
 };
