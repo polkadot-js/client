@@ -3,7 +3,6 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type BN from 'bn.js';
 import type { ConfigType } from '@polkadot/client/types';
 import type { RuntimeInterface } from '@polkadot/client-runtime/types';
 import type { ChainExecutor } from '../types';
@@ -28,7 +27,7 @@ module.exports = function executor (config: ConfigType, runtime: RuntimeInterfac
       executeTransaction(creator, runtime, header, utx),
     finaliseBlock: (header: Uint8Array): Uint8Array =>
       finaliseBlock(creator, runtime, header),
-    generateBlock: (number: BN | number, transactions: Array<Uint8Array>, timestamp?: number = Date.now()): Uint8Array =>
+    generateBlock: (number: number, transactions: Array<Uint8Array>, timestamp?: number = Date.now()): Uint8Array =>
       generateBlock(creator, runtime, { number, timestamp, transactions }),
     importBlock: (block: Uint8Array): boolean =>
       importBlock(creator, runtime, block)

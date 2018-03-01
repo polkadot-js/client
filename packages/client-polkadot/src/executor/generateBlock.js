@@ -3,11 +3,10 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type BN from 'bn.js';
 import type { RuntimeInterface } from '@polkadot/client-runtime/types';
 
 type BlockValues = {
-  number: BN | number,
+  number: number,
   timestamp: number,
   transactions: Array<Uint8Array>
 };
