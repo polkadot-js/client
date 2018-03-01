@@ -25,6 +25,9 @@ describe('call', () => {
     };
     instance = {
       test: jest.fn(() => 42),
+      testError: jest.fn(() => {
+        throw new Error('some error');
+      }),
       get_result_hi: jest.fn(() => 69)
     };
   });
@@ -71,6 +74,15 @@ describe('call', () => {
     ).toEqual({
       lo: 42,
       hi: 69
+    });
+  });
+
+  it('returns hi/low set to 0 on error', () => {
+    expect(
+      call(instance, runtime, 'testError')()
+    ).toEqual({
+      lo: 0,
+      hi: 0
     });
   });
 });

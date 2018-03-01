@@ -4,35 +4,13 @@
 // @flow
 
 import type { RuntimeInterface } from '@polkadot/client-runtime/types';
-import type { BlockHeaderType } from '@polkadot/primitives/blockHeader';
-import type { PolkadotUnchecked } from '@polkadot/primitives/transaction';
-import type { CallResult } from './types';
 
-const encodeHeader = require('@polkadot/primitives-codec/blockHeader/encode');
-const encodeUtx = require('@polkadot/primitives-codec/unchecked/encode');
 const u8aConcat = require('@polkadot/util/u8a/concat');
 
-const call = require('./call');
+const callAsU8a = require('./callAsU8a');
 
-module.exports = function executeTransaction (instance: WebAssemblyInstance$Exports, runtime: RuntimeInterface, header: BlockHeaderType, utx: PolkadotUnchecked): CallResult {
-  // u8aConcat([
-  //   encodeHeader(
-  //     createHeader({
-  //       number: 1,
-  //       transactionRoot: new Uint8Array([])
-  //     })
-  //   ),
-  //   encodeUnchecked(
-  //     uncheckedSign(keyring.one, stakingTransfer(
-  //       keyring.one.publicKey, keyring.two.publicKey, 69, 0
-  //     ))
-  //   )
-  // ])
-
-  return call(instance, runtime, 'execute_transaction')(
-    u8aConcat([
-      encodeHeader(header),
-      encodeUtx(utx)
-    ])
+module.exports = function executeTransaction (createInstance: () => WebAssemblyInstance$Exports, runtime: RuntimeInterface, header: Uint8Array, utx: Uint8Array): Uint8Array {
+  return callAsU8a(createInstance(), runtime, 'execute_transaction')(
+    u8aConcat([ header, utx ])
   );
 };

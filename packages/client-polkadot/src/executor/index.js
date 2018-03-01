@@ -5,26 +5,31 @@
 
 import type { ConfigType } from '@polkadot/client/types';
 import type { RuntimeInterface } from '@polkadot/client-runtime/types';
-import type { PolkadotBlock } from '@polkadot/primitives/block';
-import type { BlockHeaderType } from '@polkadot/primitives/blockHeader';
-import type { PolkadotUnchecked } from '@polkadot/primitives/transaction';
 import type { ChainExecutor } from '../types';
-import type { CallResult } from './types';
 
 const createWasm = require('@polkadot/client-wasm');
 
 const proxy = require('../wasm/proxy_polkadot_wasm');
 const executeBlock = require('./executeBlock');
 const executeTransaction = require('./executeTransaction');
+const finaliseBlock = require('./finaliseBlock');
+const generateBlock = require('./generateBlock');
+const importBlock = require('./importBlock');
 
 module.exports = function executor (config: ConfigType, runtime: RuntimeInterface, code: Uint8Array): ChainExecutor {
-  const createInstance = (): WebAssemblyInstance$Exports =>
+  const creator = (): WebAssemblyInstance$Exports =>
     createWasm(config, runtime, code, proxy);
 
   return {
-    executeBlock: (block: PolkadotBlock): CallResult =>
-      executeBlock(createInstance(), runtime, block),
-    executeTransaction: (header: BlockHeaderType, utx: PolkadotUnchecked): CallResult =>
-      executeTransaction(createInstance(), runtime, header, utx)
+    executeBlock: (block: Uint8Array): boolean =>
+      executeBlock(creator, runtime, block),
+    executeTransaction: (header: Uint8Array, utx: Uint8Array): Uint8Array =>
+      executeTransaction(creator, runtime, header, utx),
+    finaliseBlock: (header: Uint8Array): Uint8Array =>
+      finaliseBlock(creator, runtime, header),
+    generateBlock: (number: number, transactions: Array<Uint8Array>, timestamp?: number = Date.now()): Uint8Array =>
+      generateBlock(creator, runtime, { number, timestamp, transactions }),
+    importBlock: (block: Uint8Array): boolean =>
+      importBlock(creator, runtime, block)
   };
 };

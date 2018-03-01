@@ -5,8 +5,6 @@
 
 import type BN from 'bn.js';
 import type { PolkadotBlock } from '@polkadot/primitives/block';
-import type { BlockHeaderType } from '@polkadot/primitives/blockHeader';
-import type { PolkadotUnchecked } from '@polkadot/primitives/transaction';
 
 export type PolkadotDb$Consensys = {
   setAuthority (id: BN | number, publicKey: Uint8Array, isHashed?: boolean): void,
@@ -51,10 +49,11 @@ export type PolkadotDb = {
 }
 
 export type ChainExecutor = {
-  // flowlint-next-line unclear-type:off
-  executeBlock (block: PolkadotBlock): any,
-  // flowlint-next-line unclear-type:off
-  executeTransaction (header: BlockHeaderType, utx: PolkadotUnchecked): any
+  executeBlock (block: Uint8Array): boolean,
+  executeTransaction (header: Uint8Array, utx: Uint8Array): Uint8Array,
+  finaliseBlock (header: Uint8Array): Uint8Array,
+  generateBlock (number: number, transactions: Array<Uint8Array>): Uint8Array,
+  importBlock (block: Uint8Array): boolean
 };
 
 export type PolkadotInterface = {

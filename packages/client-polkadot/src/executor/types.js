@@ -9,3 +9,5 @@ export type CallResult = {
 };
 
 export type CallType = (...data: Array<Uint8Array>) => CallResult;
+
+export type CallU8aType = (...data: Array<Uint8Array>) => Uint8Array;
