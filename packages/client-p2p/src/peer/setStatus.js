@@ -5,6 +5,7 @@
 
 import type { MessageInterface } from '../types';
 import type StatusMessage from '../message/status';
+import type { PeerState } from './types';
 
 module.exports = function setStatus (self: PeerState, message: MessageInterface): void {
   // flowlint-next-line unclear-type:off

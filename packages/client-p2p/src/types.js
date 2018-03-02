@@ -43,13 +43,15 @@ export type PeerInterface = {
   on (type: PeerInterface$Events, (message: MessageInterface) => any): any;
 }
 
-export type PeersInterface$Events = 'connected' | 'disconnected' | 'discovered';
+export type PeersInterface$Events = 'connected' | 'disconnected' | 'discovered' | 'message';
 
-export interface PeersInterface {
-  +count: number;
-
+export type PeersInterface = {
+  add: (peerInfo: PeerInfo) => PeerInterface,
+  count: () => number,
+  get: (peerInfo: PeerInfo) => ?PeerInterface,
   // flowlint-next-line unclear-type:off
-  on (type: PeersInterface$Events, (peer: mixed) => any): any;
+  on: (type: PeersInterface$Events, (peer: mixed) => any) => any,
+  peers: () => Array<PeerInterface>
 }
 
 export type P2pInterface$Events = 'message' | 'started' | 'stopped';

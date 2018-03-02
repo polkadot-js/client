@@ -7,14 +7,14 @@
 import type LibP2P, { LibP2P$Connection } from 'libp2p';
 import type { ConfigType } from '@polkadot/client/types';
 import type { ChainInterface } from '@polkadot/client-chains/types';
-import type { MessageInterface, P2pInterface, PeerInterface } from './types';
+import type { MessageInterface, P2pInterface, PeerInterface, PeersInterface } from './types';
 
 const EventEmitter = require('eventemitter3');
 
 const promisify = require('@polkadot/util/promisify');
 const l = require('@polkadot/util/logger')('p2p');
 
-const Peers = require('./peers');
+const createPeers = require('./peers');
 const createNode = require('./create/node');
 const StatusMessage = require('./message/status');
 const defaults = require('./defaults');
@@ -23,7 +23,7 @@ module.exports = class Server extends EventEmitter implements P2pInterface {
   _chain: ChainInterface;
   _config: ConfigType;
   _node: LibP2P;
-  _peers: Peers;
+  _peers: PeersInterface;
 
   constructor (config: ConfigType, chain: ChainInterface, autoStart: boolean = true) {
     super();
@@ -36,7 +36,7 @@ module.exports = class Server extends EventEmitter implements P2pInterface {
     }
   }
 
-  get peers (): Peers {
+  get peers (): PeersInterface {
     return this._peers;
   }
 
@@ -50,7 +50,7 @@ module.exports = class Server extends EventEmitter implements P2pInterface {
     this._node = await createNode(this._config.p2p.address, this._config.p2p.port, this._chain, this._config.p2p.peers);
     this._node.handle(defaults.PROTOCOL, this._onProtocol);
 
-    this._peers = new Peers(this._node);
+    this._peers = createPeers(this._node);
     this._peers.on('connected', this._onPeerConnected);
     this._peers.on('discovered', this._onPeerDiscovery);
     this._peers.on('message', this._onMessage);

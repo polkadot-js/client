@@ -5,7 +5,7 @@
 
 import type { LibP2P$Connection } from 'libp2p';
 import type PeerInfo from 'peer-info';
-import type { MessageInterface, PeerInterface } from '../types';
+import type { MessageInterface, PeerInterface, PeerInterface$Events } from '../types';
 import type { PeerState } from './types';
 
 const EventEmitter = require('eventemitter3');

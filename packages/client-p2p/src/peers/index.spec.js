@@ -4,7 +4,7 @@
 
 const EventEmitter = require('eventemitter3');
 
-const Peers = require('./peers');
+const createPeers = require('./index');
 
 describe('Peers', () => {
   const connection = {
@@ -21,7 +21,7 @@ describe('Peers', () => {
 
   beforeEach(() => {
     node = new EventEmitter();
-    peers = new Peers(node);
+    peers = createPeers(node);
   });
 
   it('creates an instance', () => {

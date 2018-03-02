@@ -5,7 +5,7 @@
 
 import type { ConfigType } from '@polkadot/client/types';
 import type { ChainInterface } from '@polkadot/client-chains/types';
-import type { HandlersType, RpcInterface } from './types';
+import type { HandlersType, RpcInterface, RpcInterface$Events } from './types';
 
 const EventEmitter = require('eventemitter3');
 
