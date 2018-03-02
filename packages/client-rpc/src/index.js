@@ -36,7 +36,9 @@ module.exports = function server (config: ConfigType, chain: ChainInterface, han
   }
 
   return {
-    on: emitter.on,
+    // flowlint-next-line unclear-type:off
+    on: (type: RpcInterface$Events, cb: () => any): any =>
+      self.emitter.on(type, cb),
     start: (): Promise<boolean> =>
       start(self),
     stop: (): Promise<boolean> =>

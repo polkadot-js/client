@@ -19,6 +19,9 @@ describe('handleWs', () => {
           path: '/',
           types: ['ws']
         }
+      },
+      handlers: {
+        test: jest.fn(() => Promise.resolve('test'))
       }
     };
     context = {

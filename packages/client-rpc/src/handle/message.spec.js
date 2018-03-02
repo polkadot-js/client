@@ -8,7 +8,6 @@ const handleMessage = require('./message');
 
 describe('handleMessage', () => {
   let self;
-  let testSpy;
 
   beforeEach(() => {
     self = {
@@ -32,11 +31,10 @@ describe('handleMessage', () => {
         errorRetEx: () => {
           return Promise.resolve(new ExtError('errorRetEx', -456));
         },
-        test: testSpy,
+        test: jest.fn(() => Promise.resolve('test')),
         echo: (...params) => Promise.resolve(`echo: ${params.join(', ')}`)
       }
     };
-    testSpy = jest.fn(() => Promise.resolve('test'));
   });
 
   it('fails when invalid JSON', () => {
@@ -93,7 +91,7 @@ describe('handleMessage', () => {
     });
 
     return handleMessage(self, message).then((result) => {
-      expect(testSpy).toHaveBeenCalledWith(['a', 'b']);
+      expect(self.handlers.test).toHaveBeenCalledWith(['a', 'b']);
     });
   });
 

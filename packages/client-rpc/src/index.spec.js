@@ -6,7 +6,7 @@ const ExtError = require('@polkadot/util/ext/error');
 const HttpProvider = require('@polkadot/api-provider/http');
 const WsProvider = require('@polkadot/api-provider/ws');
 
-const createServer = require('./server');
+const createServer = require('./index');
 
 describe('server', () => {
   let config;

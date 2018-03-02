@@ -38,7 +38,9 @@ module.exports = function createPeer (peerInfo: PeerInfo): PeerInterface {
       !!self.connections.length,
     hasStatus: (): boolean =>
       !!self.status,
-    on: self.emitter.on,
+    // flowlint-next-line unclear-type:off
+    on: (type: PeerInterface$Events, cb: (message: MessageInterface) => any): any =>
+      self.emitter.on(type, cb),
     send: (message: MessageInterface): boolean =>
       send(self, message),
     setStatus: (message: MessageInterface): void => {

@@ -5,15 +5,13 @@
 const PeerId = require('peer-id');
 const PeerInfo = require('peer-info');
 
-const State = require('@polkadot/client-state');
-
 const StatusMessage = require('./message/status');
 const defaults = require('./defaults');
 const Server = require('./index');
 
 describe('Server', () => {
   let config;
-  let state;
+  let chain;
   let origPeerInfoCreate;
   let count = 0;
   let server;
@@ -27,17 +25,22 @@ describe('Server', () => {
         peers: []
       }
     };
-    state = new State({
+    chain = {
+      blocks: {
+        getLatestHash: jest.fn(() => new Uint8Array([1, 2, 3, 4, 5])),
+        getLatestNumber: jest.fn(() => 12345)
+      },
+      config: {},
       genesis: {
         hash: '0x1234'
       }
-    });
+    };
 
     origPeerInfoCreate = PeerInfo.create;
     PeerInfo.create = (callback) => {
       origPeerInfoCreate(new PeerId(Buffer.from([count++])), callback);
     };
-    server = new Server(config, state, false);
+    server = new Server(config, chain, false);
   });
 
   afterEach(() => {
@@ -167,7 +170,11 @@ describe('Server', () => {
     let status;
 
     beforeEach(() => {
-      peer = { id: '123456', shortId: '123456' };
+      peer = {
+        id: '123456',
+        shortId: '123456',
+        setStatus: jest.fn()
+      };
       status = new StatusMessage();
 
       server._sendStatus = jest.fn(() => true);
@@ -185,13 +192,13 @@ describe('Server', () => {
     it('add status to peer status is received', () => {
       server._onMessage({ peer, message: status });
 
-      expect(peer.status).toEqual(status);
+      expect(peer.setStatus).toHaveBeenCalledWith(status);
     });
 
     it('does not add status to peer non-status is received', () => {
       server._onMessage({ peer, message: { id: 666 } });
 
-      expect(peer.status).not.toBeDefined();
+      expect(peer.setStatus).not.toHaveBeenCalled();
     });
   });
 

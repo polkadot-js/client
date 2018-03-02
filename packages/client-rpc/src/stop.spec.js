@@ -16,8 +16,11 @@ describe('stop', () => {
           port: 9901,
           path: '/',
           types: ['http']
-        },
-        emitter: new EventEmitter()
+        }
+      },
+      emitter: new EventEmitter(),
+      l: {
+        log: jest.fn()
       },
       server: {
         close: () => true
@@ -45,6 +48,8 @@ describe('stop', () => {
   });
 
   it('emits the stopped event', (done) => {
+    console.log('self', self.emitter);
+
     self.emitter.on('stopped', () => {
       done();
     });
