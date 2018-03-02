@@ -15,12 +15,12 @@ const setLatest = require('./setLatest');
 
 module.exports = function blockDb (baseDb: BaseDbInterface): PolkadotBlockDb {
   return {
-    debug: (): { [string]: string } =>
-      baseDb.pairs().reduce((result, { k, v }) => {
-        result[k.toString()] = `[${v.toString()}]`;
-
-        return result;
-      }, {}),
+    // debug: (): { [string]: string } =>
+    //   baseDb.pairs().reduce((result, { k, v }) => {
+    //     result[k.toString()] = `[${v.toString()}]`;
+    //
+    //     return result;
+    //   }, {}),
     getBlock: (hash: Uint8Array): Uint8Array =>
       getBlock(baseDb, hash),
     getLatestHash: (): Uint8Array =>

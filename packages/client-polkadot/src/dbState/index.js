@@ -16,6 +16,12 @@ const system = require('./system');
 
 module.exports = function stateDb (baseDb: BaseDbInterface): PolkadotStateDb {
   return {
+    // debug: (): { [string]: string } =>
+    //   baseDb.pairs().reduce((result, { k, v }) => {
+    //     result[k.toString()] = `[${v.toString()}]`;
+    //
+    //     return result;
+    //   }, {}),
     clear: (): void =>
       baseDb.clear(),
     commit: (): void =>
@@ -26,12 +32,6 @@ module.exports = function stateDb (baseDb: BaseDbInterface): PolkadotStateDb {
     staking: staking(baseDb),
     system: system(baseDb),
     trieRoot: (): Uint8Array =>
-      trieRoot(baseDb.pairs()),
-    debug: (): { [string]: string } =>
-      baseDb.pairs().reduce((result, { k, v }) => {
-        result[k.toString()] = `[${v.toString()}]`;
-
-        return result;
-      }, {})
+      trieRoot(baseDb.pairs())
   };
 };

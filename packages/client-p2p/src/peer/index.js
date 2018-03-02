@@ -16,10 +16,10 @@ const stringShorten = require('@polkadot/util/string/shorten');
 
 const addConnection = require('./addConnection');
 const send = require('./send');
+const setStatus = require('./setStatus');
 
 module.exports = function createPeer (peerInfo: PeerInfo): PeerInterface {
   const id = peerInfo.id.toB58String();
-  const shortId = stringShorten(id);
   const self: PeerState = {
     connections: [],
     emitter: new EventEmitter(),
@@ -30,7 +30,7 @@ module.exports = function createPeer (peerInfo: PeerInfo): PeerInterface {
   return {
     id,
     peerInfo,
-    shortId,
+    shortId: stringShorten(id),
     status: null,
     addConnection: (connection: LibP2P$Connection): boolean =>
       addConnection(self, connection),
@@ -43,9 +43,7 @@ module.exports = function createPeer (peerInfo: PeerInfo): PeerInterface {
       self.emitter.on(type, cb),
     send: (message: MessageInterface): boolean =>
       send(self, message),
-    setStatus: (message: MessageInterface): void => {
-      // flowlint-next-line unclear-type:off
-      self.status = ((message: any): StatusMessage);
-    }
+    setStatus: (message: MessageInterface): void =>
+      setStatus(self, message)
   };
 };
