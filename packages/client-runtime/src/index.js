@@ -14,8 +14,8 @@ const createIo = require('./io');
 const createMemory = require('./memory');
 const createStorage = require('./storage');
 
-module.exports = function runtime (chain: ChainConfigType, db: BaseDbInterface): RuntimeInterface {
-  const environment = createEnv(chain, db);
+module.exports = function runtime (chain: ChainConfigType, stateDb: BaseDbInterface): RuntimeInterface {
+  const environment = createEnv(chain, stateDb);
 
   return {
     environment,

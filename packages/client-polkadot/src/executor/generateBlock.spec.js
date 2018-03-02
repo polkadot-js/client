@@ -7,19 +7,20 @@ const uncheckedSign = require('@polkadot/primitives-builder/unchecked/uncheckedS
 const encodeUtx = require('@polkadot/primitives-codec/unchecked/encode');
 const hexToU8a = require('@polkadot/util/hex/toU8a');
 const chain = require('@polkadot/client-chains/chains/nelson');
-const code = require('@polkadot/client-chains/wasm/polkadot_runtime_wasm');
 const memoryDb = require('@polkadot/client-db/memory');
 const createRuntime = require('@polkadot/client-runtime');
 const keyring = require('@polkadot/util-keyring/testing')();
 
-const createDb = require('../db');
+const createBlockDb = require('../dbblock');
+const createStateDb = require('../dbstate');
 const createExecutor = require('./index');
 
 const TIMESTAMP = '71000000ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff00000000000000000020a107000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000';
 const TRANSFER = '910000002f8c6129d816cf51c374bc7f08c3e63ed156cf78aefb4a6550d97b87997977ee000000000000000022d75a980182b10ab7d54bfed3c964073a0ee172f3daa62325af021a68f707511a45000000000000005f9832c5a4a39e2dd4a3a0c5b400e9836beb362cb8f7d845a8291a2ae6fe366612e080e4acd0b5a75c3d0b6ee69614a68fb63698c1e76bf1f2dcd8fa617ddf05';
 
-describe.skip('generateBlock', () => {
+describe('generateBlock', () => {
   let executor;
+  let blockDb;
   let stateDb;
 
   beforeEach(() => {
@@ -28,8 +29,9 @@ describe.skip('generateBlock', () => {
     };
     const runtime = createRuntime(chain, memoryDb());
 
-    stateDb = createDb(runtime.environment.db);
-    executor = createExecutor({ config, runtime, chain: { code }, stateDb });
+    blockDb = createBlockDb(memoryDb());
+    stateDb = createStateDb(runtime.environment.db);
+    executor = createExecutor({ config, runtime, chain, blockDb, stateDb });
 
     const threePublicKey = hexToU8a('0x0303030303030303030303030303030303030303030303030303030303030303');
 
@@ -49,7 +51,7 @@ describe.skip('generateBlock', () => {
     stateDb.staking.setValidatorCount(3);
     stateDb.system.setBlockHash(0, hexToU8a('0x4545454545454545454545454545454545454545454545454545454545454545'));
 
-    runtime.environment.stateDb.commit();
+    stateDb.commit();
   });
 
   it('generates a basic block', () => {

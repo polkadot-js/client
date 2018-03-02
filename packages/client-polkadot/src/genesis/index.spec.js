@@ -8,7 +8,7 @@ const code = require('@polkadot/client-chains/wasm/genesis_polkadot_wasm');
 const hexToU8a = require('@polkadot/util/hex/toU8a');
 const keyring = require('@polkadot/util-keyring/testing')();
 
-const createDb = require('../db');
+const createDb = require('../dbState');
 const genesis = require('./index');
 
 describe('genesis', () => {

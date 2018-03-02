@@ -8,15 +8,14 @@ const createBlock = require('@polkadot/primitives-builder/block');
 const encodeBlock = require('@polkadot/primitives-codec/block/encode');
 const hexToU8a = require('@polkadot/util/hex/toU8a');
 const chain = require('@polkadot/client-chains/chains/nelson');
-const code = require('@polkadot/client-chains/wasm/polkadot_runtime_wasm');
 const memoryDb = require('@polkadot/client-db/memory');
 const createRuntime = require('@polkadot/client-runtime');
 const keyring = require('@polkadot/util-keyring/testing')();
 
-const createStateDb = require('../statedb');
+const createStateDb = require('../dbstate');
 const createExecutor = require('./index');
 
-describe.skip('executeBlock', () => {
+describe('executeBlock', () => {
   let executor;
   let stateDb;
 
@@ -27,7 +26,7 @@ describe.skip('executeBlock', () => {
     const runtime = createRuntime(chain, memoryDb());
 
     stateDb = createStateDb(runtime.environment.db);
-    executor = createExecutor({ config, runtime, chain: { code }, stateDb });
+    executor = createExecutor({ config, runtime, chain, stateDb });
   });
 
   beforeEach(() => {
