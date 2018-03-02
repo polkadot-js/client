@@ -3,8 +3,10 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { CallCreatorU8a } from './types';
+import type { PolkadotState } from '../types';
 
-module.exports = function finaliseBlock (createCaller: CallCreatorU8a, header: Uint8Array): Uint8Array {
-  return createCaller('finalise_block')(header);
+const call = require('./callAsU8a');
+
+module.exports = function finaliseBlock (self: PolkadotState, header: Uint8Array): Uint8Array {
+  return call(self, 'finalise_block')(header);
 };

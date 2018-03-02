@@ -3,31 +3,29 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { PolkadotBlockDb } from '../types';
-import type { CallCreatorU8a } from './types';
+import type { PolkadotState } from '../types';
 
 const decodeHeader = require('@polkadot/primitives-codec/blockHeader/decodePartial');
 const blake2Asu8a256 = require('@polkadot/util-crypto/blake2/asU8a256');
 
 const executeBlock = require('./executeBlock');
 
-module.exports = function importBlock (createCaller: CallCreatorU8a, stateDb: PolkadotStateDb, blockDb: PolkadotBlockDb, block: Uint8Array): boolean {
-  const result = executeBlock(createCaller, block);
+module.exports = function importBlock (self: PolkadotState, block: Uint8Array): boolean {
+  const result = executeBlock(self, block);
 
   if (!result) {
     return false;
   }
 
-  stateDb.commit();
+  self.stateDb.commit();
 
-  const { data, header } = decodeHeader(block);
-  const hash = blake2Asu8a256(data);
+  const { header: { number }, raw } = decodeHeader(block);
+  const hash = blake2Asu8a256(raw);
 
-  console.log('decoded', data, hash);
+  console.log('decoded', raw, hash);
 
-  blockDb.setBlock(hash, block);
-  blockDb.setLatestNumber(header.number);
-  blockDb.setLatestHash(hash);
+  self.blockDb.setBlock(hash, block);
+  self.blockDb.setLatest(number, hash);
 
   return true;
 };

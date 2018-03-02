@@ -71,7 +71,9 @@ export type ChainNameType = 'nelson';
 export type ChainInterface$Blocks = {
   getBlock: (hash: Uint8Array) => Uint8Array,
   getLatestHash: () => Uint8Array,
-  getLatestNumber: () => BN
+  getLatestNumber: () => BN,
+  setBlock: (hash: Uint8Array, block: Uint8Array) => void,
+  setLatest: (number: BN | number, hash: Uint8Array) => void
 };
 
 export type ChainInterface$Executor = {
@@ -94,7 +96,8 @@ export type ChainInterface$StateDb = {
 
 export type ChainInterface = {
   blocks: ChainInterface$Blocks,
+  config: ChainConfigType,
   executor: ChainInterface$Executor,
-  genesis: PolkadotBlock,
+  genesis: ChainInterface$Genesis,
   state: ChainInterface$StateDb
 };

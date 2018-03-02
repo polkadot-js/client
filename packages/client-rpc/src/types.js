@@ -3,6 +3,11 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
+import type EventEmitter from 'eventemitter3';
+import type { ConfigType } from '@polkadot/client/types';
+import type { ChainInterface } from '@polkadot/client-chains/types';
+import type { Logger } from '@polkadot/util/types';
+
 export type JsonRpcBase = {
   id: number,
   jsonrpc: '2.0'
@@ -40,11 +45,6 @@ export type RpcConfigType = {
 
 export type RpcInterface$Events = 'started' | 'stopped';
 
-export interface RpcInterface {
-  // flowlint-next-line unclear-type:off
-  on (type: RpcInterface$Events, () => any): any;
-}
-
 export type PostContextType = {
   body: string,
   req: http$IncomingMessage,
@@ -58,3 +58,19 @@ export type WsContextType = {
     send: (message: string) => void
   }
 };
+
+export type RpcState = {
+  chain: ChainInterface,
+  config: ConfigType,
+  emitter: EventEmitter,
+  handlers: HandlersType,
+  l: Logger,
+  server: ?net$Server
+};
+
+export type RpcInterface = {
+  // flowlint-next-line unclear-type:off
+  on (type: RpcInterface$Events, () => any): any,
+  start (): Promise<boolean>,
+  stop (): Promise<boolean>
+}

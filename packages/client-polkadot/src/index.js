@@ -6,26 +6,35 @@
 import type { ConfigType } from '@polkadot/client/types';
 import type { ChainConfigType, ChainInterface } from '@polkadot/client-chains/types';
 import type { BaseDbInterface } from '@polkadot/client-db/types';
+import type { PolkadotState } from './types';
 
 const createRuntime = require('@polkadot/client-runtime');
 
-const createDb = require('./db');
+const createBlockDb = require('./dbBlock');
+const createStateDb = require('./dbState');
 const initGenesis = require('./genesis');
 const createExecutor = require('./executor');
 
-module.exports = function polkadot (config: ConfigType, chain: ChainConfigType, stateDb: BaseDbInterface, blockDb: BaseDbInterface): ChainInterface {
-  const runtime = createRuntime(chain, stateDb);
-  const polkadb = createDb(runtime.environment.db);
-  const executor = createExecutor(config, runtime, chain.code);
-  const genesis = initGenesis(chain, polkadb);
-  const { getBlockHash, getNonce } = polkadb.system;
+module.exports = function polkadot (config: ConfigType, chain: ChainConfigType, baseStateDb: BaseDbInterface, baseBlockDb: BaseDbInterface): ChainInterface {
+  const runtime = createRuntime(chain, baseStateDb);
+  const blockDb = createBlockDb(baseBlockDb);
+  const stateDb = createStateDb(runtime.environment.db);
+
+  const self: PolkadotState = {
+    blockDb,
+    config,
+    chain,
+    runtime,
+    stateDb
+  };
+
+  const executor = createExecutor(self);
+  const genesis = initGenesis(self);
+  const { getBlockHash, getNonce } = stateDb.system;
 
   return {
-    blocks: {
-      // getBlock: (hash: Uint8Array) => Uint8Array,
-      // getLatestHash: () => Uint8Array,
-      // getLatestNumber: () => BN
-    },
+    blocks: blockDb,
+    config: chain,
     executor,
     genesis,
     state: {

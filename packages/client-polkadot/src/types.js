@@ -4,15 +4,11 @@
 // @flow
 
 import type BN from 'bn.js';
+import type { ConfigType } from '@polkadot/client/types';
+import type { ChainConfigType, ChainInterface$Blocks } from '@polkadot/client-chains/types';
+import type { RuntimeInterface } from '@polkadot/client-runtime/types';
 
-export type PolkadotBlockDb = {
-  getBlock: (hash: Uint8Array) => void,
-  getLatestHash: () => Uint8Array,
-  getLatestNumber: () => BN,
-  setBlock: (hash: Uint8Array, block: Uint8Array) => void,
-  setLatestHash: (hash: Uint8Array) => void,
-  setLatestNumber: (number: BN | number) => void
-};
+export type PolkadotBlockDb = ChainInterface$Blocks;
 
 export type PolkadotStateDb$Consensys = {
   setAuthority (id: BN | number, publicKey: Uint8Array, isHashed?: boolean): void,
@@ -48,11 +44,20 @@ export type PolkadotStateDb$System = {
 }
 
 export type PolkadotStateDb = {
+  clear: () => void,
   commit: () => void,
-  consensys: PolkadotDb$Consensys,
-  governance: PolkadotDb$Governance,
-  session: PolkadotDb$Session,
-  staking: PolkadotDb$Staking,
-  system: PolkadotDb$System,
+  consensys: PolkadotStateDb$Consensys,
+  governance: PolkadotStateDb$Governance,
+  session: PolkadotStateDb$Session,
+  staking: PolkadotStateDb$Staking,
+  system: PolkadotStateDb$System,
   trieRoot: () => Uint8Array
 }
+
+export type PolkadotState = {
+  blockDb: PolkadotBlockDb,
+  config: ConfigType,
+  chain: ChainConfigType,
+  runtime: RuntimeInterface,
+  stateDb: PolkadotStateDb
+};

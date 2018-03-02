@@ -14,21 +14,21 @@ const session = require('./session');
 const staking = require('./staking');
 const system = require('./system');
 
-module.exports = function db (stateDb: BaseDbInterface): PolkadotStateDb {
+module.exports = function stateDb (baseDb: BaseDbInterface): PolkadotStateDb {
   return {
     clear: (): void =>
-      stateDb.clear(),
+      baseDb.clear(),
     commit: (): void =>
-      stateDb.commit(),
-    consensys: consensys(stateDb),
-    governance: governance(stateDb),
-    session: session(stateDb),
-    staking: staking(stateDb),
-    system: system(stateDb),
+      baseDb.commit(),
+    consensys: consensys(baseDb),
+    governance: governance(baseDb),
+    session: session(baseDb),
+    staking: staking(baseDb),
+    system: system(baseDb),
     trieRoot: (): Uint8Array =>
-      trieRoot(stateDb.pairs()),
+      trieRoot(baseDb.pairs()),
     debug: (): { [string]: string } =>
-      stateDb.pairs().reduce((result, { k, v }) => {
+      baseDb.pairs().reduce((result, { k, v }) => {
         result[k.toString()] = `[${v.toString()}]`;
 
         return result;

@@ -4,7 +4,7 @@
 // @flow
 // flowlint unsafe-getters-setters:off
 
-import type { MessageInterface, PeersInterface, PeersInterface$Events } from './types';
+import type { MessageInterface, PeerInterface, PeersInterface, PeersInterface$Events } from './types';
 import type LibP2P from 'libp2p';
 import type PeerInfo from 'peer-info';
 
@@ -12,10 +12,10 @@ const EventEmitter = require('eventemitter3');
 
 const l = require('@polkadot/util/logger')('p2p/peers');
 
-const Peer = require('./peer');
+const createPeer = require('./peer');
 
 module.exports = class Peers extends EventEmitter implements PeersInterface {
-  _peers: { [string]: Peer };
+  _peers: { [string]: PeerInterface };
 
   constructor (node: LibP2P) {
     super();
@@ -31,23 +31,23 @@ module.exports = class Peers extends EventEmitter implements PeersInterface {
     return Object.keys(this._peers).length;
   }
 
-  get peers (): Array<Peer> {
+  get peers (): Array<PeerInterface> {
     // flowlint-next-line unclear-type:off
-    return ((Object.values(this._peers): any): Array<Peer>);
+    return ((Object.values(this._peers): any): Array<PeerInterface>);
   }
 
-  get (peerInfo: PeerInfo): ?Peer {
+  get (peerInfo: PeerInfo): ?PeerInterface {
     const id = peerInfo.id.toB58String();
 
     return this._peers[id];
   }
 
-  add (peerInfo: PeerInfo): Peer {
+  add (peerInfo: PeerInfo): PeerInterface {
     const id = peerInfo.id.toB58String();
     let peer = this._peers[id];
 
     if (!peer) {
-      this._peers[id] = peer = new Peer(peerInfo);
+      this._peers[id] = peer = createPeer(peerInfo);
       peer.on('message', (message: MessageInterface) => {
         this.emit('message', {
           message,
@@ -59,7 +59,7 @@ module.exports = class Peers extends EventEmitter implements PeersInterface {
     return peer;
   }
 
-  _logPeer (event: PeersInterface$Events, peer: Peer): void {
+  _logPeer (event: PeersInterface$Events, peer: PeerInterface): void {
     l.log(peer.shortId, event);
     this.emit(event, peer);
   }

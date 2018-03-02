@@ -3,10 +3,12 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { CallCreator } from './types';
+import type { PolkadotState } from '../types';
 
-module.exports = function executeBlock (createCaller: CallCreator, block: Uint8Array): boolean {
-  const result = createCaller('execute_block')(block);
+const call = require('./call');
+
+module.exports = function executeBlock (self: PolkadotState, block: Uint8Array): boolean {
+  const result = call(self, 'execute_block')(block);
 
   return result.lo === 1;
 };

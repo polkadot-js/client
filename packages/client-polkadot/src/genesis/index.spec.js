@@ -32,9 +32,9 @@ describe('genesis', () => {
         sessionsPerEra: new BN(24)
       }
     };
-    const db = createDb(memDb());
+    const stateDb = createDb(memDb());
 
-    block = genesis(chain, db);
+    block = genesis({ chain, stateDb });
   });
 
   it.skip('creates a correct genesis block (stateRoot)', () => {

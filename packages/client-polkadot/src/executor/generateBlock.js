@@ -3,13 +3,7 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { CallCreatorU8a } from './types';
-
-type BlockValues = {
-  number: number,
-  timestamp: number,
-  transactions: Array<Uint8Array>
-};
+import type { PolkadotState } from '../types';
 
 const createHeader = require('@polkadot/primitives-builder/blockHeader');
 const rootRaw = require('@polkadot/primitives-builder/transaction/rootRaw');
@@ -21,24 +15,22 @@ const encodeUtx = require('@polkadot/primitives-codec/unchecked/encode');
 const executeTx = require('./executeTransaction');
 const finaliseBlock = require('./finaliseBlock');
 
-module.exports = function generateBlock (createCaller: CallCreatorU8a, stateDb: PolkadotStateDb, { number, timestamp, transactions }: BlockValues): Uint8Array {
-  const alltxs = [ encodeUtx(timestampSet(timestamp)) ].concat(transactions);
-  const transactionRoot = rootRaw(alltxs);
+module.exports = function generateBlock (self: PolkadotState, number: number, utxs: Array<Uint8Array>, timestamp: number): Uint8Array {
+  const txs = [ encodeUtx(timestampSet(timestamp)) ].concat(utxs);
+  const transactionRoot = rootRaw(txs);
   const empty = encodeHeader(
     createHeader({
       number,
-      parentHash: stateDb.system.getBlockHash(number - 1),
+      parentHash: self.stateDb.system.getBlockHash(number - 1),
       transactionRoot
     })
   );
-  const header = finaliseBlock(
-    createCaller, alltxs.reduce((hdr, utx) => {
-      return executeTx(createCaller, hdr, utx);
-    }, empty)
-  );
-  const block = encodeBlockRaw(header, timestamp, transactions);
+  const header = finaliseBlock(self, txs.reduce((hdr, utx) => {
+    return executeTx(self, hdr, utx);
+  }, empty));
+  const block = encodeBlockRaw(header, timestamp, utxs);
 
-  stateDb.clear();
+  self.stateDb.clear();
 
   return block;
 };

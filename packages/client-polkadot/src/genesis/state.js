@@ -3,29 +3,31 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { ChainConfigType } from '@polkadot/client-chains/types';
-import type { PolkadotDb } from '../types';
+import type { PolkadotState } from '../types';
 
-module.exports = function genesisState ({ authorities, balances, code, params, validators }: ChainConfigType, db: PolkadotDb): void {
-  db.consensys.setAuthorityCount(authorities.length);
+module.exports = function genesisState ({ chain: { authorities, balances, code, params, validators }, stateDb }: PolkadotState): void {
+  stateDb.consensys.setAuthorityCount(authorities.length);
   authorities.forEach((authority, index) => {
-    db.consensys.setAuthority(index, authority);
-    db.consensys.setAuthority(index, authority, true);
+    stateDb.consensys.setAuthority(index, authority);
+    stateDb.consensys.setAuthority(index, authority, true);
   });
-  db.governance.setApprovalsRatio(params.approvalRatio);
-  db.session.setLength(params.sessionLength);
-  db.session.setValueCount(validators.length);
-  validators.forEach((validator, index) => {
-    db.session.setValue(index, validator);
-  });
-  balances.forEach(({ accountId, balance }) => {
-    db.staking.setBalance(accountId, balance);
-  });
-  db.staking.setCurrentEra(0);
-  db.staking.setIntentLength(0);
-  db.staking.setSessionsPerEra(params.sessionsPerEra);
-  db.staking.setValidatorCount(validators.length);
-  db.system.setCode(code);
 
-  db.commit();
+  stateDb.governance.setApprovalsRatio(params.approvalRatio);
+
+  stateDb.session.setLength(params.sessionLength);
+  stateDb.session.setValueCount(validators.length);
+  validators.forEach((validator, index) => {
+    stateDb.session.setValue(index, validator);
+  });
+
+  balances.forEach(({ accountId, balance }) => {
+    stateDb.staking.setBalance(accountId, balance);
+  });
+  stateDb.staking.setCurrentEra(0);
+  stateDb.staking.setIntentLength(0);
+  stateDb.staking.setSessionsPerEra(params.sessionsPerEra);
+  stateDb.staking.setValidatorCount(validators.length);
+  stateDb.system.setCode(code);
+
+  stateDb.commit();
 };

@@ -3,6 +3,7 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
+import type { LibP2P$Connection } from 'libp2p';
 import type { ChainConfigType$Nodes } from '@polkadot/client-chains/types';
 
 export interface MessageInterface {
@@ -29,7 +30,15 @@ export type P2pConfigType = {
 
 export type PeerInterface$Events = 'message';
 
-export interface PeerInterface {
+export type PeerInterface = {
+  id: string,
+  peerInfo: PeerInfo,
+  shortId: string,
+  addConnection: (connection: LibP2P$Connection) => boolean,
+  isConnected: () => boolean,
+  hasStatus: () => boolean,
+  send: (message: MessageInterface) => boolean,
+  setStatus: (status: MessageInterface) => void,
   // flowlint-next-line unclear-type:off
   on (type: PeerInterface$Events, (message: MessageInterface) => any): any;
 }
