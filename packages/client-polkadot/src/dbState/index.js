@@ -9,6 +9,7 @@ import type { PolkadotStateDb } from '../types';
 const trieRoot = require('@polkadot/util-triehash/root');
 
 const consensys = require('./consensys');
+const debug = require('./debug');
 const governance = require('./governance');
 const session = require('./session');
 const staking = require('./staking');
@@ -16,16 +17,12 @@ const system = require('./system');
 
 module.exports = function stateDb (baseDb: BaseDbInterface): PolkadotStateDb {
   return {
-    // debug: (): { [string]: string } =>
-    //   baseDb.pairs().reduce((result, { k, v }) => {
-    //     result[k.toString()] = `[${v.toString()}]`;
-    //
-    //     return result;
-    //   }, {}),
     clear: (): void =>
       baseDb.clear(),
     commit: (): void =>
       baseDb.commit(),
+    debug: (): { [string]: string } =>
+      debug(baseDb),
     consensys: consensys(baseDb),
     governance: governance(baseDb),
     session: session(baseDb),

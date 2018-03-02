@@ -7,6 +7,7 @@ import type BN from 'bn.js';
 import type { BaseDbInterface } from '@polkadot/client-db/types';
 import type { PolkadotBlockDb } from '../types';
 
+const debug = require('../dbState/debug');
 const getBlock = require('./getBlock');
 const getLatestHash = require('./getLatestHash');
 const getLatestNumber = require('./getLatestNumber');
@@ -15,12 +16,8 @@ const setLatest = require('./setLatest');
 
 module.exports = function blockDb (baseDb: BaseDbInterface): PolkadotBlockDb {
   return {
-    // debug: (): { [string]: string } =>
-    //   baseDb.pairs().reduce((result, { k, v }) => {
-    //     result[k.toString()] = `[${v.toString()}]`;
-    //
-    //     return result;
-    //   }, {}),
+    debug: (): { [string]: string } =>
+      debug(baseDb),
     getBlock: (hash: Uint8Array): Uint8Array =>
       getBlock(baseDb, hash),
     getLatestHash: (): Uint8Array =>
