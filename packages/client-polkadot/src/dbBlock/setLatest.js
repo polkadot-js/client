@@ -8,7 +8,7 @@ import type { BaseDbInterface } from '@polkadot/client-db/types';
 
 const bnToU8a = require('@polkadot/util/bn/toU8a');
 
-const key = require('../dbstate/key');
+const key = require('../dbState/key');
 const { LATEST_HASH, LATEST_NUMBER } = require('./prefix');
 
 module.exports = function setLatest (db: BaseDbInterface, number: BN | number, hash: Uint8Array): void {

@@ -8,7 +8,7 @@ import type { BaseDbInterface } from '@polkadot/client-db/types';
 
 const u8aToBn = require('@polkadot/util/u8a/toBn');
 
-const key = require('../dbstate/key');
+const key = require('../dbState/key');
 const { LATEST_NUMBER } = require('./prefix');
 
 module.exports = function getLatestNumber (db: BaseDbInterface): BN {

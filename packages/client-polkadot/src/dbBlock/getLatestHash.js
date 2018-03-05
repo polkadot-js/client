@@ -5,7 +5,7 @@
 
 import type { BaseDbInterface } from '@polkadot/client-db/types';
 
-const key = require('../dbstate/key');
+const key = require('../dbState/key');
 const { LATEST_HASH } = require('./prefix');
 
 module.exports = function getLatestHash (db: BaseDbInterface): Uint8Array {

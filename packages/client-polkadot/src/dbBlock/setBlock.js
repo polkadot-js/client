@@ -5,7 +5,7 @@
 
 import type { BaseDbInterface } from '@polkadot/client-db/types';
 
-const key = require('../dbstate/key');
+const key = require('../dbState/key');
 const { BLOCK_BY_HASH } = require('./prefix');
 
 module.exports = function setBlock (db: BaseDbInterface, hash: Uint8Array, block: Uint8Array): void {
