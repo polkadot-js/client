@@ -14,19 +14,19 @@ const signatureDecode = require('@polkadot/primitives-rlp/signature/decode');
 const assert = require('@polkadot/util/assert');
 const u8aToBn = require('@polkadot/util/u8a/toBn');
 
-module.exports = function rawDecode (self: StatusMessage, data: Array<*>): StatusMessage {
+module.exports = function rawDecode (raw: StatusMessage, data: Array<*>): StatusMessage {
   assert(data.length >= 5, 'Expected correct message length');
 
   const [version, roles, bestNumber, bestHash, genesisHash, validatorSignature, validatorId, parachainId] = data;
 
-  self.version = u8aToBn((version: Uint8Array)).toNumber();
-  self.roles = roles.map((role) => u8aToBn(role).toNumber()).map(roleFromId);
-  self.bestNumber = blockNumberDecode(bestNumber);
-  self.bestHash = hashDecode(bestHash);
-  self.genesisHash = hashDecode(genesisHash);
-  self.validatorSignature = signatureDecode(validatorSignature);
-  self.validatorId = accountIdDecode(validatorId);
-  self.parachainId = parachainIdDecode(parachainId);
+  raw.version = u8aToBn((version: Uint8Array)).toNumber();
+  raw.roles = roles.map((role) => u8aToBn(role).toNumber()).map(roleFromId);
+  raw.bestNumber = blockNumberDecode(bestNumber);
+  raw.bestHash = hashDecode(bestHash);
+  raw.genesisHash = hashDecode(genesisHash);
+  raw.validatorSignature = signatureDecode(validatorSignature);
+  raw.validatorId = accountIdDecode(validatorId);
+  raw.parachainId = parachainIdDecode(parachainId);
 
-  return self;
+  return raw;
 };

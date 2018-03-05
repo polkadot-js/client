@@ -5,6 +5,6 @@
 
 import type { BlockRequestMessage } from '../types';
 
-module.exports = function rawDecode (self: BlockRequestMessage, data: Array<*>): BlockRequestMessage {
-  return self;
+module.exports = function rawDecode (raw: BlockRequestMessage, data: Array<*>): BlockRequestMessage {
+  return raw;
 };

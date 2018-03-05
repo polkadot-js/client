@@ -18,7 +18,7 @@ const rawEncode = require('./rawEncode');
 const MESSAGE_ID: number = 0;
 
 module.exports = function status ({ bestNumber = new BN(0), bestHash = hexToU8a('0x00', 256), genesisHash = hexToU8a('0x00', 256), roles = ['none'], validatorSignature = hexToU8a('0x00', 512), validatorId = hexToU8a('0x00', 160), parachainId = new BN(0) }: $Shape<StatusMessage> = {}): MessageInterface {
-  const self: StatusMessage = {
+  const raw: StatusMessage = {
     bestHash,
     bestNumber,
     genesisHash,
@@ -30,11 +30,11 @@ module.exports = function status ({ bestNumber = new BN(0), bestHash = hexToU8a(
   };
 
   return base(MESSAGE_ID, {
-    raw: self,
+    raw,
     rawDecode: (data: Array<*>): StatusMessage =>
-      rawDecode(self, data),
+      rawDecode(raw, data),
     rawEncode: (): Array<*> =>
-      rawEncode(self)
+      rawEncode(raw)
   });
 };
 

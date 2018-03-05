@@ -5,6 +5,6 @@
 
 import type { BlockResponseMessage } from '../types';
 
-module.exports = function rawDecode (self: BlockResponseMessage, data: Array<*>): BlockResponseMessage {
-  return self;
+module.exports = function rawDecode (raw: BlockResponseMessage, data: Array<*>): BlockResponseMessage {
+  return raw;
 };

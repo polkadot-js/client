@@ -13,15 +13,15 @@ const parachainIdEncode = require('@polkadot/primitives-rlp/parachainId/encode')
 const signatureEncode = require('@polkadot/primitives-rlp/signature/encode');
 const numberToU8a = require('@polkadot/util/number/toU8a');
 
-module.exports = function rawEncode (self: StatusMessage): Array<*> {
+module.exports = function rawEncode ({ bestHash, bestNumber, genesisHash, parachainId, roles, validatorId, validatorSignature, version }: StatusMessage): Array<*> {
   return [
-    numberToU8a(self.version),
-    self.roles.map(roleToId).map(numberToU8a),
-    blockNumberEncode(self.bestNumber),
-    hashEncode(self.bestHash, 256),
-    hashEncode(self.genesisHash, 256),
-    signatureEncode(self.validatorSignature),
-    accountIdEncode(self.validatorId),
-    parachainIdEncode(self.parachainId)
+    numberToU8a(version),
+    roles.map(roleToId).map(numberToU8a),
+    blockNumberEncode(bestNumber),
+    hashEncode(bestHash, 256),
+    hashEncode(genesisHash, 256),
+    signatureEncode(validatorSignature),
+    accountIdEncode(validatorId),
+    parachainIdEncode(parachainId)
   ];
 };

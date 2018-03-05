@@ -13,15 +13,15 @@ const rawEncode = require('./rawEncode');
 const MESSAGE_ID: number = 2;
 
 module.exports = function blockResponse (): MessageInterface {
-  const self: BlockResponseMessage = {
+  const raw: BlockResponseMessage = {
   };
 
   return base(MESSAGE_ID, {
-    raw: self,
+    raw,
     rawDecode: (data: Array<*>): BlockResponseMessage =>
-      rawDecode(self, data),
+      rawDecode(raw, data),
     rawEncode: (): Array<*> =>
-      rawEncode(self)
+      rawEncode(raw)
   });
 };
 

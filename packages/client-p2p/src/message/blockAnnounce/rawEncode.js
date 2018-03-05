@@ -7,8 +7,8 @@ import type { BlockAnnounceMessage } from '../types';
 
 const blockHeaderEncode = require('@polkadot/primitives-rlp/blockHeader/encode');
 
-module.exports = function rawEncode (self: BlockAnnounceMessage): Array<*> {
+module.exports = function rawEncode ({ header }: BlockAnnounceMessage): Array<*> {
   return [
-    blockHeaderEncode(self.header)
+    blockHeaderEncode(header)
   ];
 };

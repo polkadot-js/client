@@ -5,7 +5,7 @@
 
 import type { BlockRequestMessage } from '../types';
 
-module.exports = function rawEncode (self: BlockRequestMessage): Array<*> {
+module.exports = function rawEncode (raw: BlockRequestMessage): Array<*> {
   return [
   ];
 };

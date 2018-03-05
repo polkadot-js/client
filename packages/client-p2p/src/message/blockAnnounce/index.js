@@ -15,16 +15,16 @@ const rawEncode = require('./rawEncode');
 const MESSAGE_ID: number = 3;
 
 module.exports = function blockAnnounce ({ header = createHeader({}) }: $Shape<BlockAnnounceMessage>): MessageInterface {
-  const self: BlockAnnounceMessage = {
+  const raw: BlockAnnounceMessage = {
     header
   };
 
   return base(MESSAGE_ID, {
-    raw: self,
+    raw,
     rawDecode: (data: Array<*>): BlockAnnounceMessage =>
-      rawDecode(self, data),
+      rawDecode(raw, data),
     rawEncode: (): Array<*> =>
-      rawEncode(self)
+      rawEncode(raw)
   });
 };
 

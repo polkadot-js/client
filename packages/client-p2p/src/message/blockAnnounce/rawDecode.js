@@ -8,12 +8,12 @@ import type { BlockAnnounceMessage } from '../types';
 const blockHeaderDecode = require('@polkadot/primitives-rlp/blockHeader/decode');
 const assert = require('@polkadot/util/assert');
 
-module.exports = function rawDecode (self: BlockAnnounceMessage, data: Array<*>): BlockAnnounceMessage {
+module.exports = function rawDecode (raw: BlockAnnounceMessage, data: Array<*>): BlockAnnounceMessage {
   assert(data.length >= 1, 'Expected correct message length');
 
   const [header] = data;
 
-  self.header = blockHeaderDecode(header);
+  raw.header = blockHeaderDecode(header);
 
-  return self;
+  return raw;
 };
