@@ -3,11 +3,6 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type EventEmitter from 'eventemitter3';
-import type { ConfigType } from '@polkadot/client/types';
-import type { ChainInterface } from '@polkadot/client-chains/types';
-import type { Logger } from '@polkadot/util/types';
-
 export type JsonRpcBase = {
   id: number,
   jsonrpc: '2.0'
@@ -57,15 +52,6 @@ export type WsContextType = {
     on: (type: 'message', (message: string) => any) => any,
     send: (message: string) => void
   }
-};
-
-export type RpcState = {
-  chain: ChainInterface,
-  config: ConfigType,
-  emitter: EventEmitter,
-  handlers: HandlersType,
-  l: Logger,
-  server: ?net$Server
 };
 
 export type RpcInterface = {
