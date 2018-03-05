@@ -50,7 +50,7 @@ export type PeersInterface = {
   count: () => number,
   get: (peerInfo: PeerInfo) => ?PeerInterface,
   // flowlint-next-line unclear-type:off
-  on: (type: PeersInterface$Events, (peer: mixed) => any) => any,
+  on: (type: PeersInterface$Events, (peer: any) => any) => any,
   peers: () => Array<PeerInterface>
 }
 

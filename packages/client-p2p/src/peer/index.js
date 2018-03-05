@@ -5,7 +5,7 @@
 
 import type { LibP2P$Connection } from 'libp2p';
 import type PeerInfo from 'peer-info';
-import type { MessageInterface, PeerInterface, PeerInterface$Events } from '../types';
+import type { MessageInterface, PeerInterface } from '../types';
 import type { PeerState } from './types';
 
 const EventEmitter = require('eventemitter3');
@@ -14,6 +14,7 @@ const pushable = require('pull-pushable');
 const stringShorten = require('@polkadot/util/string/shorten');
 
 const addConnection = require('./addConnection');
+const emitterOn = require('./emitterOn');
 const send = require('./send');
 const setStatus = require('./setStatus');
 
@@ -37,9 +38,7 @@ module.exports = function createPeer (peerInfo: PeerInfo): PeerInterface {
       !!self.connections.length,
     hasStatus: (): boolean =>
       !!self.status,
-    // flowlint-next-line unclear-type:off
-    on: (type: PeerInterface$Events, cb: (message: MessageInterface) => any): any =>
-      self.emitter.on(type, cb),
+    on: emitterOn(self),
     send: (message: MessageInterface): boolean =>
       send(self, message),
     setStatus: (message: MessageInterface): void =>
