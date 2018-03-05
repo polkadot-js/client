@@ -16,11 +16,12 @@ A very early, WIP and POC JavaScript version of a simplified Polkadot network cl
 It is split up into a number of internal packages -
 
 - [packages/client](packages/client/) The main JavaScript client
+- [packages/client-chains](packages/client-chains/) Chain definitions
 - [packages/client-db](packages/client-db/) Database interface
 - [packages/client-p2p](packages/client-p2p/) Peer-to-peer server
 - [packages/client-rpc](packages/client-rpc/) RPC server
+- [packages/client-runtime](packages/client-runtime/) Basic Wasm runtime wrapper
 - [packages/client-wasm](packages/client-wasm/) Wasm interface wrapper
-- [packages/client-wasm-runtime](packages/client-wasm-runtime/) Basic Wasm libc replacement wrapper
 
 ## Local development node
 
