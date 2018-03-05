@@ -7,8 +7,10 @@ import type { RpcType, PostContextType, WsContextType } from '../types';
 
 type CreateKoaOptionType = {
   handlers: {
-    http: (ctx: PostContextType) => Promise<void>,
-    ws: (ctx: WsContextType) => Promise<void>
+    // flowlint-next-line unclear-type:off
+    http: (ctx: PostContextType) => any,
+    // flowlint-next-line unclear-type:off
+    ws: (ctx: WsContextType) => any
   },
   path: string,
   types: Array<RpcType>
