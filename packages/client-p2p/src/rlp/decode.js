@@ -12,11 +12,11 @@ const message = require('../message');
 
 module.exports = function rlpDecode (u8a: Uint8Array): MessageInterface {
   // flowlint-next-line unclear-type:off
-  const [idU8a, raw] = ((rlp(u8a): any): [Uint8Array, Array<*>]);
-  const id = u8aToBn(idU8a).toNumber();
+  const data = ((rlp(u8a): any): [Uint8Array, Array<*>]);
+  const id = u8aToBn(data[0]).toNumber();
   const instance: MessageInterface = message(id);
 
-  instance.decode(id, raw);
+  instance.decode(data);
 
   return instance;
 };

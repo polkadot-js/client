@@ -6,6 +6,8 @@
 import type { MessageInterface } from '../../types';
 import type { MessageImpl } from '../types';
 
+type EnodedType = [Uint8Array, Array<*>];
+
 const decode = require('./decode');
 const encode = require('./encode');
 
@@ -18,9 +20,9 @@ module.exports = function base (id: number, impl: MessageImpl): MessageInterface
   return {
     id,
     // flowlint-next-line unclear-type: off
-    decode: (id: number, data: Array<*>): any =>
+    decode: ([ id, data ]: EnodedType): any =>
       decode(self, id, data),
-    encode: (): [Uint8Array, Array<*>] =>
+    encode: (): EnodedType =>
       encode(self),
     raw: impl.raw
   };

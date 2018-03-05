@@ -11,7 +11,7 @@ export interface MessageInterface {
   // flowlint-next-line unclear-type:off
   encode: () => [Uint8Array, Array<any>],
   // flowlint-next-line unclear-type:off
-  decode: (id: number, raw: Array<any>) => any,
+  decode: ([Uint8Array, Array<any>]) => any,
   // flowlint-next-line unclear-type:off
   raw: any
 }

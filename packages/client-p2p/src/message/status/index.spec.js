@@ -10,18 +10,19 @@ const status = require('./index');
 describe('status', () => {
   it('assigns sane defaults', () => {
     expect(
-      status().raw
+      JSON.stringify(
+        status().raw
+      )
     ).toEqual(
       JSON.stringify({
-        id: 0,
-        version: 0,
-        roles: ['none'],
-        bestNumber: new BN(0),
         bestHash: hexToU8a('0x0', 256),
+        bestNumber: new BN(0),
         genesisHash: hexToU8a('0x0', 256),
-        validatorSignature: hexToU8a('0x0', 512),
+        parachainId: new BN(0),
+        roles: ['none'],
         validatorId: hexToU8a('0x0', 160),
-        parachainId: new BN(0)
+        validatorSignature: hexToU8a('0x0', 512),
+        version: 0
       })
     );
   });
@@ -51,7 +52,7 @@ describe('status', () => {
   it('encodes and decodes via rawDecode/Encode', () => {
     const result = status();
 
-    result.rawDecode(
+    result.decode(
       status({
         roles: ['full', 'validator'],
         // bestNumber: new BN(1),
@@ -60,11 +61,11 @@ describe('status', () => {
         validatorSignature: hexToU8a('0x4', 512),
         validatorId: hexToU8a('0x5', 160)
         // parachainId: new BN(6)
-      })._rawEncode()
+      }).encode()
     );
 
     expect(
-      result
+      result.raw
     ).toMatchObject({
       roles: ['full', 'validator'],
       // bestNumber: new BN(1),

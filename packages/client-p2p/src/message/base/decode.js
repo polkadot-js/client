@@ -6,9 +6,12 @@
 import type { MessageState } from '../types';
 
 const assert = require('@polkadot/util/assert');
+const u8aToBn = require('@polkadot/util/u8a/toBn');
 
 // flowlint-next-line unclear-type: off
-module.exports = function decode (self: MessageState, id: number, data: Array<*>): any {
+module.exports = function decode (self: MessageState, _id: Uint8Array, data: Array<*>): any {
+  const id = u8aToBn(_id).toNumber();
+
   assert(id === self.id, 'Expected message id to match');
 
   return self.impl.rawDecode(data);
