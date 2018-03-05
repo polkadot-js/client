@@ -8,5 +8,7 @@ import type { PolkadotState } from '../types';
 const call = require('./callAsU8a');
 
 module.exports = function finaliseBlock (self: PolkadotState, header: Uint8Array): Uint8Array {
+  // self.l.log('Finalising block');
+
   return call(self, 'finalise_block')(header);
 };

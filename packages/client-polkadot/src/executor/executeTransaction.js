@@ -10,6 +10,8 @@ const u8aConcat = require('@polkadot/util/u8a/concat');
 const call = require('./callAsU8a');
 
 module.exports = function executeTransaction (self: PolkadotState, header: Uint8Array, utx: Uint8Array): Uint8Array {
+  // self.l.log('Executing transaction');
+
   return call(self, 'execute_transaction')(
     u8aConcat([ header, utx ])
   );

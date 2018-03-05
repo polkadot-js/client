@@ -11,6 +11,7 @@ const chain = require('@polkadot/client-chains/chains/nelson');
 const memoryDb = require('@polkadot/client-db/memory');
 const createRuntime = require('@polkadot/client-runtime');
 const keyring = require('@polkadot/util-keyring/testing')();
+const l = require('@polkadot/util/logger')('test');
 
 const createStateDb = require('../dbState');
 const createExecutor = require('./index');
@@ -26,7 +27,7 @@ describe('executeBlock', () => {
     const runtime = createRuntime(chain, memoryDb());
 
     stateDb = createStateDb(runtime.environment.db);
-    executor = createExecutor({ config, runtime, chain, stateDb });
+    executor = createExecutor({ config, runtime, chain, stateDb, l });
   });
 
   beforeEach(() => {

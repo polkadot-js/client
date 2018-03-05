@@ -7,6 +7,7 @@ import type { Options } from 'yargs';
 
 module.exports = ({
   'dev-gen-blocks': {
+    default: false,
     description: '(unused) Generate sample blocks',
     type: 'boolean'
   }
