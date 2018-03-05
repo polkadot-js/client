@@ -4,14 +4,37 @@
 // @flow
 
 import type { AccountIdType, BlockNumberType, HeaderHashType, ParachainIdType, SignatureType } from '@polkadot/primitives/base';
+import type { BlockHeaderType } from '@polkadot/primitives/blockHeader';
 import type { RoleType } from '@polkadot/primitives/role';
 
-export interface StatusMessageInterface {
-  roles: Array<RoleType>;
-  bestNumber: BlockNumberType;
-  bestHash: HeaderHashType;
-  genesisHash: HeaderHashType;
-  validatorSignature: SignatureType;
-  validatorId: AccountIdType;
-  parachainId: ParachainIdType;
+export type BlockAnnounceMessage = {
+  header: BlockHeaderType
 }
+
+export type BlockRequestMessage = {}
+
+export type BlockResponseMessage = {}
+
+export type StatusMessage = {
+  bestHash: HeaderHashType,
+  bestNumber: BlockNumberType,
+  genesisHash: HeaderHashType,
+  parachainId: ParachainIdType,
+  roles: Array<RoleType>,
+  validatorSignature: SignatureType,
+  validatorId: AccountIdType,
+  version: number
+}
+
+export type MessageImpl = {
+  // flowlint-next-line unclear-type:off
+  raw: any,
+  // flowlint-next-line unclear-type:off
+  rawDecode: (data: Array<*>) => any,
+  rawEncode: () => Array<*>
+};
+
+export type MessageState = {
+  id: number,
+  impl: MessageImpl
+};

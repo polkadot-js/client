@@ -4,7 +4,7 @@
 // @flow
 
 import type { MessageInterface } from '../types';
-import type StatusMessage from '../message/status';
+import type { StatusMessage } from '../message/types';
 import type { PeerState } from './types';
 
 module.exports = function setStatus (self: PeerState, message: MessageInterface): void {

@@ -7,12 +7,13 @@ import type { LibP2P$Connection } from 'libp2p';
 import type { ChainConfigType$Nodes } from '@polkadot/client-chains/types';
 
 export interface MessageInterface {
-  constructor (data: mixed): mixed;
-
+  id: number,
   // flowlint-next-line unclear-type:off
-  encode (): [Uint8Array, Array<any>];
+  encode: () => [Uint8Array, Array<any>],
   // flowlint-next-line unclear-type:off
-  decode (id: number, raw: Array<any>): void;
+  decode: (id: number, raw: Array<any>) => any,
+  // flowlint-next-line unclear-type:off
+  raw: any
 }
 
 export type P2pNodeType = {

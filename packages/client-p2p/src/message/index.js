@@ -5,20 +5,30 @@
 
 import type { MessageInterface } from '../types';
 
+// flowlint-next-line unclear-type:off
+type CreateType = (any) => MessageInterface;
+
 const assert = require('@polkadot/util/assert');
 const isUndefined = require('@polkadot/util/is/undefined');
 
-const StatusMessage = require('./status');
+const blockAnnounce = require('./blockAnnounce');
+const blockRequest = require('./blockRequest');
+const blockResponse = require('./blockResponse');
+const status = require('./status');
 
-const CLASSES: Array<Class<MessageInterface>> = [
-  StatusMessage
+const CREATORS: Array<CreateType> = [
+  status,
+  blockRequest,
+  blockResponse,
+  blockAnnounce
 ];
 
-module.exports = function message (id: number): MessageInterface {
+// flowlint-next-line unclear-type: off
+module.exports = function message (id: number, data?: any): MessageInterface {
+  const creator = CREATORS.find((c) => c.MESSAGE_ID === id);
+
+  assert(!isUndefined(creator), `No message found for id '${id}'`);
+
   // $FlowFixMe undefined check with assert
-  const Clazz: Class<MessageInterface> = CLASSES.find((Clazz) => Clazz.MESSAGE_ID === id);
-
-  assert(!isUndefined(Clazz), `No message found for id '${id}'`);
-
-  return new Clazz();
+  return creator(data);
 };

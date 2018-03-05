@@ -4,14 +4,14 @@
 
 const isU8a = require('@polkadot/util/is/u8a');
 
-const StatusMessage = require('../message/status');
+const status = require('../message/status');
 const rlpEncode = require('./encode');
 
 describe('rlpEncode', () => {
   let message;
 
   beforeEach(() => {
-    message = new StatusMessage();
+    message = status();
   });
 
   it('returns an encoded Uint8Array', () => {

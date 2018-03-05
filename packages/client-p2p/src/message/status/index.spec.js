@@ -5,14 +5,12 @@
 const BN = require('bn.js');
 const hexToU8a = require('@polkadot/util/hex/toU8a');
 
-const StatusMessage = require('./status');
+const status = require('./index');
 
-describe('StatusMessage', () => {
+describe('status', () => {
   it('assigns sane defaults', () => {
     expect(
-      JSON.stringify(
-        new StatusMessage()
-      )
+      status().raw
     ).toEqual(
       JSON.stringify({
         id: 0,
@@ -30,7 +28,7 @@ describe('StatusMessage', () => {
 
   it('assigns constructor values', () => {
     expect(
-      new StatusMessage({
+      status({
         roles: ['full', 'validator'],
         bestNumber: new BN(1),
         bestHash: '0x2',
@@ -38,7 +36,7 @@ describe('StatusMessage', () => {
         validatorSignature: '0x4',
         validatorId: '0x5',
         parachainId: new BN(6)
-      })
+      }).raw
     ).toMatchObject({
       roles: ['full', 'validator'],
       bestNumber: new BN(1),
@@ -51,10 +49,10 @@ describe('StatusMessage', () => {
   });
 
   it('encodes and decodes via rawDecode/Encode', () => {
-    const result = new StatusMessage();
+    const result = status();
 
-    result._rawDecode(
-      new StatusMessage({
+    result.rawDecode(
+      status({
         roles: ['full', 'validator'],
         // bestNumber: new BN(1),
         bestHash: hexToU8a('0x2', 256),

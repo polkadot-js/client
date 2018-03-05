@@ -6,12 +6,12 @@
 import type { PeerInterface } from '../types';
 import type { P2pState } from './types';
 
-const StatusMessage = require('../message/status');
+const statusMessage = require('../message/status');
 
 module.exports = function onPeerConnected (self: P2pState): void {
   self.peers.on('connected', (peer: PeerInterface): boolean => {
     return peer.send(
-      new StatusMessage({
+      statusMessage({
         roles: self.config.roles,
         bestNumber: self.chain.blocks.getLatestNumber(),
         bestHash: self.chain.blocks.getLatestHash(),

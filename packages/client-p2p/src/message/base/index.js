@@ -1,0 +1,27 @@
+// Copyright 2017-2018 Jaco Greeff
+// This software may be modified and distributed under the terms
+// of the ISC license. See the LICENSE file for details.
+// @flow
+
+import type { MessageInterface } from '../../types';
+import type { MessageImpl } from '../types';
+
+const decode = require('./decode');
+const encode = require('./encode');
+
+module.exports = function base (id: number, impl: MessageImpl): MessageInterface {
+  const self = {
+    id,
+    impl
+  };
+
+  return {
+    id,
+    // flowlint-next-line unclear-type: off
+    decode: (id: number, data: Array<*>): any =>
+      decode(self, id, data),
+    encode: (): [Uint8Array, Array<*>] =>
+      encode(self),
+    raw: impl.raw
+  };
+};

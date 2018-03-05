@@ -4,7 +4,7 @@
 
 const u8aToBuffer = require('@polkadot/util/u8a/toBuffer');
 
-const StatusMessage = require('../message/status');
+const status = require('../message/status');
 const rlpEncode = require('../rlp/encode');
 const send = require('./send');
 
@@ -27,12 +27,12 @@ describe('send', () => {
 
   it('returns true when sent', () => {
     expect(
-      send(self, new StatusMessage())
+      send(self, status())
     ).toEqual(true);
   });
 
   it('upopn sending, message is added to pushable', () => {
-    const message = new StatusMessage();
+    const message = status();
 
     send(self, message);
 
