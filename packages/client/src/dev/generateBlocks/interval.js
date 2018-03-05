@@ -12,8 +12,11 @@ module.exports = function interval (l: Logger, { blocks, executor }: ChainInterf
 
   const number = blocks.getLatestNumber().toNumber() + 1;
   const block = executor.generateBlock(number, []);
+  const result = executor.importBlock(block);
 
-  if (executor.importBlock(block)) {
-    // p2p.accounceBlock(block);
+  if (result) {
+    const { body, hash, header } = result;
+
+    p2p._accounceBlock(hash, header, body);
   }
 };

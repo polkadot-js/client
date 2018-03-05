@@ -58,6 +58,7 @@ export type PeersInterface = {
 export type P2pInterface$Events = 'message' | 'started' | 'stopped';
 
 export type P2pInterface = {
+  _announceBlock: (hash: Uint8Array, header: Uint8Array, body: Uint8Array) => void,
   isStarted: () => boolean,
   // flowlint-next-line unclear-type:off
   on: (type: P2pInterface$Events, () => any) => any,

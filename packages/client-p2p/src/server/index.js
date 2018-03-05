@@ -12,6 +12,7 @@ const EventEmitter = require('eventemitter3');
 
 const l = require('@polkadot/util/logger')('p2p');
 
+const announceBlock = require('./announceBlock');
 const emitterOn = require('./emitterOn');
 const start = require('./start');
 const stop = require('./stop');
@@ -33,6 +34,8 @@ module.exports = function server (config: ConfigType, chain: ChainInterface, aut
   }
 
   return {
+    _announceBlock: (hash: Uint8Array, header: Uint8Array, body: Uint8Array): void =>
+      announceBlock(self, hash, header, body),
     isStarted: (): boolean =>
       !!self.node,
     on: emitterOn(self),

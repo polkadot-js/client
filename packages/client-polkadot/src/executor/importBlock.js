@@ -5,12 +5,18 @@
 
 import type { PolkadotState } from '../types';
 
+type ImportResult = {
+  body: Uint8Array,
+  hash: Uint8Array,
+  header: Uint8Array
+};
+
 const decodeHeader = require('@polkadot/primitives-codec/blockHeader/decodePartial');
 const blake2Asu8a256 = require('@polkadot/util-crypto/blake2/asU8a256');
 
 const executeBlock = require('./executeBlock');
 
-module.exports = function importBlock (self: PolkadotState, block: Uint8Array): boolean {
+module.exports = function importBlock (self: PolkadotState, block: Uint8Array): ?ImportResult {
   // self.l.log('Importing block');
 
   const start = Date.now();
@@ -18,12 +24,12 @@ module.exports = function importBlock (self: PolkadotState, block: Uint8Array): 
 
   if (!result) {
     self.l.error(`Block import failed (${Date.now() - start}ms elapsed)`);
-    return false;
+    return null;
   }
 
   self.stateDb.commit();
 
-  const { header: { number }, raw } = decodeHeader(block);
+  const { header: { number }, raw, remainder } = decodeHeader(block);
   const hash = blake2Asu8a256(raw);
 
   // console.log('decoded', raw, hash);
@@ -33,5 +39,9 @@ module.exports = function importBlock (self: PolkadotState, block: Uint8Array): 
 
   self.l.log(`Imported block ${number.toNumber()} (${Date.now() - start}ms elapsed)`);
 
-  return true;
+  return {
+    body: remainder,
+    hash,
+    header: raw
+  };
 };
