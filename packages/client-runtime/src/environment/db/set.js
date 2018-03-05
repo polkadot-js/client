@@ -3,12 +3,11 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { BaseDbInterface } from '@polkadot/client-db/types';
-import type { Memory$Storage } from '@polkadot/client-db/memory/types';
+import type { DbState } from './types';
 
 const u8aToString = require('@polkadot/util/u8a/toString');
 
-module.exports = function set (pending: Memory$Storage, backend: BaseDbInterface, k: Uint8Array, v: Uint8Array): void {
+module.exports = function set ({ pending }: DbState, k: Uint8Array, v: Uint8Array): void {
   const ks = u8aToString(k);
 
   pending[ks] = {

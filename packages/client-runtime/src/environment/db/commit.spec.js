@@ -10,7 +10,8 @@ describe('commit', () => {
 
   beforeEach(() => {
     backend = {
-      commit: jest.fn()
+      commit: jest.fn(),
+      pairs: jest.fn(() => [])
     };
 
     int = index(backend);

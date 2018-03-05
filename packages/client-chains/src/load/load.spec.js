@@ -9,19 +9,19 @@ const { loadChain } = require('../index');
 describe('loadChain', () => {
   it('loads a chain from chains/*', () => {
     expect(
-      loadChain('nelson')
+      loadChain({ chain: 'nelson' })
     ).toBeDefined();
   });
 
   it('fails when builtin not found', () => {
     expect(
-      () => loadChain('not-a-chain')
+      () => loadChain({ chain: 'not-a-chain' })
     ).toThrow(/Unable to load builtin/);
   });
 
   it.skip('loads a chain from a json specification (absolute)', () => {
     expect(
-      loadChain(path.join(__dirname, 'chains', 'nelson.json'))
+      loadChain({ chain: path.join(__dirname, 'chains', 'nelson.json') })
     ).toBeDefined();
   });
 
@@ -33,13 +33,13 @@ describe('loadChain', () => {
 
   it('fails when json file not found', () => {
     expect(
-      () => loadChain('packages/client-chains/chains/not-a-chain.json')
+      () => loadChain({ chain: 'packages/not-a-chain.json' })
     ).toThrow(/Unable to locate and load chain file/);
   });
 
   it('validates the definitions, failing when not valid', () => {
     expect(
-      () => loadChain('package.json')
+      () => loadChain({ chain: 'package.json' })
     ).toThrow(/should be an object/);
   });
 });

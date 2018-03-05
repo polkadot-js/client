@@ -67,3 +67,37 @@ export type ChainConfigType = {
 };
 
 export type ChainNameType = 'nelson';
+
+export type ChainInterface$Blocks = {
+  getBlock: (hash: Uint8Array) => Uint8Array,
+  getLatestHash: () => Uint8Array,
+  getLatestNumber: () => BN,
+  setBlock: (hash: Uint8Array, block: Uint8Array) => void,
+  setLatest: (number: BN | number, hash: Uint8Array) => void
+};
+
+export type ChainInterface$Executor = {
+  executeBlock (block: Uint8Array): boolean,
+  executeTransaction (header: Uint8Array, utx: Uint8Array): Uint8Array,
+  finaliseBlock (header: Uint8Array): Uint8Array,
+  generateBlock (number: number, transactions: Array<Uint8Array>): Uint8Array,
+  importBlock (block: Uint8Array): boolean
+};
+
+export type ChainInterface$Genesis = {
+  header: Uint8Array,
+  hash: Uint8Array
+};
+
+export type ChainInterface$StateDb = {
+  getBlockHash: (number: BN | number) => Uint8Array,
+  getNonce: (publicKey: Uint8Array) => BN
+};
+
+export type ChainInterface = {
+  blocks: ChainInterface$Blocks,
+  config: ChainConfigType,
+  executor: ChainInterface$Executor,
+  genesis: ChainInterface$Genesis,
+  state: ChainInterface$StateDb
+};

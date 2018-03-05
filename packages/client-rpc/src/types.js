@@ -40,11 +40,6 @@ export type RpcConfigType = {
 
 export type RpcInterface$Events = 'started' | 'stopped';
 
-export interface RpcInterface {
-  // flowlint-next-line unclear-type:off
-  on (type: RpcInterface$Events, () => any): any;
-}
-
 export type PostContextType = {
   body: string,
   req: http$IncomingMessage,
@@ -58,3 +53,10 @@ export type WsContextType = {
     send: (message: string) => void
   }
 };
+
+export type RpcInterface = {
+  // flowlint-next-line unclear-type:off
+  on (type: RpcInterface$Events, () => any): any,
+  start (): Promise<boolean>,
+  stop (): Promise<boolean>
+}

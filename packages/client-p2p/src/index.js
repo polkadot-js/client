@@ -3,6 +3,6 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-const Server = require('./server');
+const server = require('./server');
 
-module.exports = Server;
+module.exports = server;

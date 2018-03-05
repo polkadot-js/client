@@ -7,12 +7,12 @@ const uncheckedSign = require('@polkadot/primitives-builder/unchecked/uncheckedS
 const encodeUtx = require('@polkadot/primitives-codec/unchecked/encode');
 const hexToU8a = require('@polkadot/util/hex/toU8a');
 const chain = require('@polkadot/client-chains/chains/nelson');
-const code = require('@polkadot/client-chains/wasm/polkadot_runtime_wasm');
 const memoryDb = require('@polkadot/client-db/memory');
 const createRuntime = require('@polkadot/client-runtime');
 const keyring = require('@polkadot/util-keyring/testing')();
 
-const createDb = require('../db');
+const createBlockDb = require('../dbBlock');
+const createStateDb = require('../dbState');
 const createExecutor = require('./index');
 
 const TIMESTAMP = '71000000ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff00000000000000000020a107000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000';
@@ -20,7 +20,8 @@ const TRANSFER = '910000002f8c6129d816cf51c374bc7f08c3e63ed156cf78aefb4a6550d97b
 
 describe('generateBlock', () => {
   let executor;
-  let db;
+  let blockDb;
+  let stateDb;
 
   beforeEach(() => {
     const config = {
@@ -28,28 +29,29 @@ describe('generateBlock', () => {
     };
     const runtime = createRuntime(chain, memoryDb());
 
-    executor = createExecutor(config, runtime, code);
-    db = createDb(runtime.environment.db);
+    blockDb = createBlockDb(memoryDb());
+    stateDb = createStateDb(runtime.environment.db);
+    executor = createExecutor({ config, runtime, chain, blockDb, stateDb });
 
     const threePublicKey = hexToU8a('0x0303030303030303030303030303030303030303030303030303030303030303');
 
-    db.governance.setApprovalsRatio(667);
-    db.session.setLength(2);
-    db.session.setValueCount(3);
-    db.session.setValue(0, keyring.one.publicKey);
-    db.session.setValue(1, keyring.two.publicKey);
-    db.session.setValue(2, threePublicKey);
-    db.staking.setBalance(keyring.one.publicKey, 69 + 42);
-    db.staking.setCurrentEra(0);
-    db.staking.setIntentLength(3);
-    db.staking.setIntent(0, keyring.one.publicKey);
-    db.staking.setIntent(1, keyring.two.publicKey);
-    db.staking.setIntent(2, threePublicKey);
-    db.staking.setSessionsPerEra(2);
-    db.staking.setValidatorCount(3);
-    db.system.setBlockHash(0, hexToU8a('0x4545454545454545454545454545454545454545454545454545454545454545'));
+    stateDb.governance.setApprovalsRatio(667);
+    stateDb.session.setLength(2);
+    stateDb.session.setValueCount(3);
+    stateDb.session.setValue(0, keyring.one.publicKey);
+    stateDb.session.setValue(1, keyring.two.publicKey);
+    stateDb.session.setValue(2, threePublicKey);
+    stateDb.staking.setBalance(keyring.one.publicKey, 69 + 42);
+    stateDb.staking.setCurrentEra(0);
+    stateDb.staking.setIntentLength(3);
+    stateDb.staking.setIntent(0, keyring.one.publicKey);
+    stateDb.staking.setIntent(1, keyring.two.publicKey);
+    stateDb.staking.setIntent(2, threePublicKey);
+    stateDb.staking.setSessionsPerEra(2);
+    stateDb.staking.setValidatorCount(3);
+    stateDb.system.setBlockHash(0, hexToU8a('0x4545454545454545454545454545454545454545454545454545454545454545'));
 
-    runtime.environment.db.commit();
+    stateDb.commit();
   });
 
   it('generates a basic block', () => {

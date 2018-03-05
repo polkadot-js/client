@@ -3,12 +3,24 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { RuntimeInterface } from '@polkadot/client-runtime/types';
-import type { CallType, CallResult } from './types';
+import type { PolkadotState } from '../types';
 
+type CallResult = {
+  lo: number,
+  hi: number
+};
+
+type CallType = (...data: Array<Uint8Array>) => CallResult;
+
+const createWasm = require('@polkadot/client-wasm');
 const u8aToHex = require('@polkadot/util/u8a/toHex');
 
-module.exports = function call (instance: WebAssemblyInstance$Exports, { environment: { l, heap } }: RuntimeInterface, name: string): CallType {
+const proxy = require('../wasm/proxy_polkadot_wasm');
+
+module.exports = function call ({ chain: { code }, config, runtime }: PolkadotState, name: string): CallType {
+  const instance = createWasm(config, runtime, code, proxy);
+  const { l, heap } = runtime.environment;
+
   return (...data: Array<Uint8Array>): CallResult => {
     l.debug(() => ['preparing', name]);
 
@@ -34,6 +46,9 @@ module.exports = function call (instance: WebAssemblyInstance$Exports, { environ
       l.error('execution error', error);
     }
 
-    return { lo: 0, hi: 0 };
+    return {
+      lo: 0,
+      hi: 0
+    };
   };
 };

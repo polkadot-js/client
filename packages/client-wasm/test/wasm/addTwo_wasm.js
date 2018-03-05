@@ -4,4 +4,7 @@
 // @flow
 
 // Generated with polkadot-wasm-wasm2js (44 bytes)
-module.exports = new Uint8Array([0, 97, 115, 109, 1, 0, 0, 0, 1, 7, 1, 96, 2, 127, 127, 1, 127, 3, 2, 1, 0, 7, 10, 1, 6, 97, 100, 100, 84, 119, 111, 0, 0, 10, 9, 1, 7, 0, 32, 0, 32, 1, 106, 11]);
+
+const hexToU8a = require('@polkadot/util/hex/toU8a');
+
+module.exports = hexToU8a('0x0061736d0100000001070160027f7f017f03020100070a010661646454776f00000a09010700200020016a0b');

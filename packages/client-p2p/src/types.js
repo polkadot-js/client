@@ -3,6 +3,7 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
+import type { LibP2P$Connection } from 'libp2p';
 import type { ChainConfigType$Nodes } from '@polkadot/client-chains/types';
 
 export interface MessageInterface {
@@ -29,25 +30,37 @@ export type P2pConfigType = {
 
 export type PeerInterface$Events = 'message';
 
-export interface PeerInterface {
+export type PeerInterface = {
+  id: string,
+  peerInfo: PeerInfo,
+  shortId: string,
+  addConnection: (connection: LibP2P$Connection) => boolean,
+  isConnected: () => boolean,
+  hasStatus: () => boolean,
+  send: (message: MessageInterface) => boolean,
+  setStatus: (status: MessageInterface) => void,
   // flowlint-next-line unclear-type:off
   on (type: PeerInterface$Events, (message: MessageInterface) => any): any;
 }
 
-export type PeersInterface$Events = 'connected' | 'disconnected' | 'discovered';
+export type PeersInterface$Events = 'connected' | 'disconnected' | 'discovered' | 'message';
 
-export interface PeersInterface {
-  +count: number;
-
+export type PeersInterface = {
+  add: (peerInfo: PeerInfo) => PeerInterface,
+  count: () => number,
+  get: (peerInfo: PeerInfo) => ?PeerInterface,
   // flowlint-next-line unclear-type:off
-  on (type: PeersInterface$Events, (peer: mixed) => any): any;
+  on: (type: PeersInterface$Events, (peer: any) => any) => any,
+  peers: () => Array<PeerInterface>
 }
 
 export type P2pInterface$Events = 'message' | 'started' | 'stopped';
 
-export interface P2pInterface {
-  +peers: PeersInterface;
-
+export type P2pInterface = {
+  isStarted: () => boolean,
   // flowlint-next-line unclear-type:off
-  on (type: P2pInterface$Events, () => any): any;
+  on: (type: P2pInterface$Events, () => any) => any,
+  peers: () => PeersInterface,
+  start: () => Promise<boolean>,
+  stop: () => Promise<boolean>
 }

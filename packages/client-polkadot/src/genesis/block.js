@@ -4,16 +4,15 @@
 // @flow
 
 import type { PolkadotBlock } from '@polkadot/primitives/block';
-import type { ChainConfigType } from '@polkadot/client-chains/types';
-import type { PolkadotDb } from '../types';
+import type { PolkadotState } from '../types';
 
 const createBlock = require('@polkadot/primitives-builder/block');
 const trieRoot = require('@polkadot/util-triehash/root');
 
-module.exports = function genesisBlock (chain: ChainConfigType, db: PolkadotDb): PolkadotBlock {
+module.exports = function genesisBlock ({ stateDb }: PolkadotState): PolkadotBlock {
   return createBlock({
     header: {
-      stateRoot: db.trieRoot(),
+      stateRoot: stateDb.trieRoot(),
       transactionRoot: trieRoot([])
     }
   });

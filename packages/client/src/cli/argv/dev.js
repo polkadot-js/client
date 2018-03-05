@@ -9,10 +9,5 @@ module.exports = ({
   'dev-gen-blocks': {
     description: '(unused) Generate sample blocks',
     type: 'boolean'
-  },
-  'dev-gen-interval': {
-    default: 5,
-    description: '(unused) Generation interval (seconds)',
-    type: 'number'
   }
 }: { [key: string]: Options });

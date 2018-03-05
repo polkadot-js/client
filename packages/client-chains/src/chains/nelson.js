@@ -7,7 +7,7 @@ import type { ChainConfigTypeLoose } from '../types';
 
 const BN = require('bn.js');
 
-const code = require('../wasm/genesis_polkadot_wasm');
+const code = require('../wasm/polkadot_runtime_wasm');
 
 const GOD_KEY = '0x3d866ec8a9190c8343c2fc593d21d8a6d0c5c4763aaab2349de3a6111d64d124';
 

@@ -3,7 +3,7 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { ChainConfigType, ChainConfigType$Nodes } from '@polkadot/client-chains/types';
+import type { ChainInterface, ChainConfigType$Nodes } from '@polkadot/client-chains/types';
 
 const Libp2p = require('libp2p');
 
@@ -11,7 +11,7 @@ const createConfig = require('./config');
 const createListener = require('./listener');
 const createPeerBook = require('./peerBook');
 
-module.exports = async function createNode (address: string, port: number, { nodes = [] }: ChainConfigType, peers: ChainConfigType$Nodes = []): Promise<Libp2p> {
+module.exports = async function createNode (address: string, port: number, { config: { nodes = [] } }: ChainInterface, peers: ChainConfigType$Nodes = []): Promise<Libp2p> {
   const listener = await createListener(address, port);
   const peerBook = await createPeerBook(peers);
   const nodeConfig = createConfig(listener, nodes);

@@ -3,11 +3,10 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { BaseDbInterface } from '@polkadot/client-db/types';
-import type { Memory$Storage } from '@polkadot/client-db/memory/types';
 import type { Trie$Pairs } from '@polkadot/util-triehash/types';
+import type { DbState } from './types';
 
-module.exports = function pairs (pending: Memory$Storage, backend?: BaseDbInterface): Trie$Pairs {
+module.exports = function pairs ({ backend, pending }: DbState): Trie$Pairs {
   return (backend ? backend.pairs() : [])
     .concat(
       Object

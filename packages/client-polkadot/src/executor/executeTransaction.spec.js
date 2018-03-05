@@ -9,17 +9,16 @@ const timestampSet = require('@polkadot/primitives-builder/unchecked/timestampSe
 const encodeHeader = require('@polkadot/primitives-codec/blockHeader/encode');
 const encodeUtx = require('@polkadot/primitives-codec/unchecked/encode');
 const chain = require('@polkadot/client-chains/chains/nelson');
-const code = require('@polkadot/client-chains/wasm/polkadot_runtime_wasm');
 const memoryDb = require('@polkadot/client-db/memory');
 const createRuntime = require('@polkadot/client-runtime');
 const keyring = require('@polkadot/util-keyring/testing')();
 
-const createDb = require('../db');
+const createDb = require('../dbState');
 const createExecutor = require('./index');
 
 describe('executeTransaction', () => {
   let executor;
-  let db;
+  let stateDb;
 
   function getNextHeader (header) {
     return executor.executeTransaction(
@@ -36,12 +35,12 @@ describe('executeTransaction', () => {
     };
     const runtime = createRuntime(chain, memoryDb());
 
-    executor = createExecutor(config, runtime, code);
-    db = createDb(runtime.environment.db);
+    stateDb = createDb(runtime.environment.db);
+    executor = createExecutor({ config, runtime, chain, stateDb });
   });
 
   beforeEach(() => {
-    db.staking.setBalance(keyring.one.publicKey, 69 + 42);
+    stateDb.staking.setBalance(keyring.one.publicKey, 69 + 42);
   });
 
   it('executes a basic transaction', () => {
@@ -62,10 +61,10 @@ describe('executeTransaction', () => {
     );
 
     expect(
-      db.staking.getBalance(keyring.one.publicKey).toNumber()
+      stateDb.staking.getBalance(keyring.one.publicKey).toNumber()
     ).toEqual(42);
     expect(
-      db.staking.getBalance(keyring.two.publicKey).toNumber()
+      stateDb.staking.getBalance(keyring.two.publicKey).toNumber()
     ).toEqual(69);
   });
 });
