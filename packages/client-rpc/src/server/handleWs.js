@@ -6,12 +6,12 @@
 import type { WsContextType } from '../types';
 import type { RpcState } from './types';
 
-type HandlerType = (ctx: WsContextType) => Promise<void>;
+type HandlerType = (ctx: WsContextType) => void;
 
 const handleMessage = require('./handleMessage');
 
 module.exports = function handleWs (self: RpcState): HandlerType {
-  return async (ctx: WsContextType): Promise<void> => {
+  return (ctx: WsContextType): void => {
     ctx.websocket.on('message', async (message: string) => {
       const response = await handleMessage(self, message);
 
