@@ -4,7 +4,7 @@
 
 const ExtError = require('@polkadot/util/ext/error');
 
-const handleMessage = require('./message');
+const handleMessage = require('./handleMessage');
 
 describe('handleMessage', () => {
   let self;

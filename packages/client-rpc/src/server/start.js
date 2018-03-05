@@ -3,12 +3,12 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { RpcState, PostContextType, WsContextType } from './types';
+import type { RpcState } from './types';
 
-const createKoa = require('./create/koa');
+const createKoa = require('../create/koa');
 
-const handlePost = require('./handle/post');
-const handleWs = require('./handle/ws');
+const handlePost = require('./handlePost');
+const handleWs = require('./handleWs');
 const stop = require('./stop');
 
 module.exports = async function start (self: RpcState): Promise<boolean> {
@@ -16,10 +16,8 @@ module.exports = async function start (self: RpcState): Promise<boolean> {
 
   const app = createKoa({
     handlers: {
-      http: (ctx: PostContextType): Promise<void> =>
-        handlePost(self, ctx),
-      ws: (ctx: WsContextType): Promise<void> =>
-        handleWs(self, ctx)
+      http: handlePost(self),
+      ws: handleWs(self)
     },
     path: self.config.rpc.path,
     types: self.config.rpc.types

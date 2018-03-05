@@ -4,7 +4,7 @@
 
 const isFunction = require('@polkadot/util/is/function');
 
-const handleWs = require('./ws');
+const handleWs = require('./handleWs');
 
 describe('handleWs', () => {
   let self;
@@ -38,7 +38,7 @@ describe('handleWs', () => {
   });
 
   it('registers a handler for messages', () => {
-    handleWs(self, context);
+    handleWs(self)(context);
 
     expect(
       isFunction(handler)
@@ -46,7 +46,7 @@ describe('handleWs', () => {
   });
 
   it('calls the socket with the result', () => {
-    handleWs(self, context);
+    handleWs(self)(context);
 
     return handler(
       JSON.stringify({

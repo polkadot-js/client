@@ -7,15 +7,6 @@ const EventEmitter = require('eventemitter3');
 const createPeers = require('./index');
 
 describe('Peers', () => {
-  const connection = {
-    toString: () => '123'
-  };
-  const peerInfo = {
-    id: {
-      toB58String: () => '1234567890'
-    },
-    isConnected: () => connection
-  };
   let node;
   let peers;
 
