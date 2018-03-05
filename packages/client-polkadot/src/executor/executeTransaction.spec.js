@@ -13,7 +13,7 @@ const memoryDb = require('@polkadot/client-db/memory');
 const createRuntime = require('@polkadot/client-runtime');
 const keyring = require('@polkadot/util-keyring/testing')();
 
-const createDb = require('../dbstate');
+const createDb = require('../dbState');
 const createExecutor = require('./index');
 
 describe('executeTransaction', () => {

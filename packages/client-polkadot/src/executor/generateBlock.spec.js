@@ -11,8 +11,8 @@ const memoryDb = require('@polkadot/client-db/memory');
 const createRuntime = require('@polkadot/client-runtime');
 const keyring = require('@polkadot/util-keyring/testing')();
 
-const createBlockDb = require('../dbblock');
-const createStateDb = require('../dbstate');
+const createBlockDb = require('../dbBlock');
+const createStateDb = require('../dbState');
 const createExecutor = require('./index');
 
 const TIMESTAMP = '71000000ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff00000000000000000020a107000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000';
