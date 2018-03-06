@@ -3,13 +3,13 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { PointerType } from '../../types';
+import type { Pointer } from '../../types';
 import type { Memory } from './types';
 
 const ExtError = require('@polkadot/util/ext/error');
 const isUndefined = require('@polkadot/util/is/undefined');
 
-module.exports = function deallocate (memory: Memory, ptr: PointerType): number {
+module.exports = function deallocate (memory: Memory, ptr: Pointer): number {
   const size = memory.allocated[ptr];
 
   if (isUndefined(size)) {

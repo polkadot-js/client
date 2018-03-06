@@ -3,7 +3,7 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { ChainConfigTypeLoose } from '../types';
+import type { ChainConfigLoose } from '../types';
 
 const BN = require('bn.js');
 
@@ -34,4 +34,4 @@ module.exports = ({
   validators: [
     GOD_KEY
   ]
-}: ChainConfigTypeLoose);
+}: ChainConfigLoose);

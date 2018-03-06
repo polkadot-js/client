@@ -6,13 +6,13 @@
 import type { MessageInterface, PeerInterface } from '../types';
 import type { P2pState } from './types';
 
-type MessageType = {
+type Message = {
   peer: PeerInterface,
   message: MessageInterface
 };
 
 module.exports = function onPeerMessage (self: P2pState): void {
-  self.peers.on('message', ({ peer, message }: MessageType): void => {
+  self.peers.on('message', ({ peer, message }: Message): void => {
     self.emitter.emit('message', {
       peer,
       message

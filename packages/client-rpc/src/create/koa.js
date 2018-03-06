@@ -3,24 +3,24 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { RpcType, PostContextType, WsContextType } from '../types';
+import type { Rpc, PostContext, WsContext } from '../types';
 
-type CreateKoaOptionType = {
+type CreateKoaOption = {
   handlers: {
     // flowlint-next-line unclear-type:off
-    http: (ctx: PostContextType) => any,
+    http: (ctx: PostContext) => any,
     // flowlint-next-line unclear-type:off
-    ws: (ctx: WsContextType) => any
+    ws: (ctx: WsContext) => any
   },
   path: string,
-  types: Array<RpcType>
+  types: Array<Rpc>
 };
 
 const Koa = require('koa');
 const koaRoute = require('koa-route');
 const koaWebsocket = require('koa-websocket');
 
-module.exports = function createKoa ({ handlers, path, types }: CreateKoaOptionType): Koa {
+module.exports = function createKoa ({ handlers, path, types }: CreateKoaOption): Koa {
   let app = new Koa();
 
   if (types.includes('http')) {

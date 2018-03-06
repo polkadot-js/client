@@ -3,20 +3,20 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { RuntimeEnv, RuntimeInterface$Storage$Data, PointerType } from '../types';
+import type { RuntimeEnv, RuntimeInterface$Storage$Data, Pointer } from '../types';
 
 const get = require('./get');
 
 module.exports = function data ({ l, heap, db }: RuntimeEnv): RuntimeInterface$Storage$Data {
   return {
-    clear_storage: (keyPtr: PointerType, keyLength: number): void => {
+    clear_storage: (keyPtr: Pointer, keyLength: number): void => {
       const key = heap.get(keyPtr, keyLength);
 
       l.debug(() => ['clear_storage', [keyPtr, keyLength], '<-', key.toString()]);
 
       db.del(key);
     },
-    get_allocated_storage: (keyPtr: PointerType, keyLength: number, lenPtr: PointerType): PointerType => {
+    get_allocated_storage: (keyPtr: Pointer, keyLength: number, lenPtr: Pointer): Pointer => {
       const key = heap.get(keyPtr, keyLength);
       const data = get(db, key);
 
@@ -26,7 +26,7 @@ module.exports = function data ({ l, heap, db }: RuntimeEnv): RuntimeInterface$S
 
       return heap.set(heap.allocate(data.length), data);
     },
-    get_storage_into: (keyPtr: PointerType, keyLength: number, dataPtr: PointerType, dataLength: number): number => {
+    get_storage_into: (keyPtr: Pointer, keyLength: number, dataPtr: Pointer, dataLength: number): number => {
       const key = heap.get(keyPtr, keyLength);
       const data = get(db, key, dataLength);
 
@@ -36,7 +36,7 @@ module.exports = function data ({ l, heap, db }: RuntimeEnv): RuntimeInterface$S
 
       return data.length;
     },
-    set_storage: (keyPtr: PointerType, keyLength: number, dataPtr: PointerType, dataLength: number): void => {
+    set_storage: (keyPtr: Pointer, keyLength: number, dataPtr: Pointer, dataLength: number): void => {
       const key = heap.get(keyPtr, keyLength);
       const data = heap.get(dataPtr, dataLength);
 

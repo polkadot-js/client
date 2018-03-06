@@ -24,29 +24,29 @@ export type JsonRpcResponse = JsonRpcBase & {
   result: mixed
 };
 
-export type HandlerType = (mixed) => Promise<mixed>;
+export type Handler = (mixed) => Promise<mixed>;
 
-export type HandlersType = {
-  [string]: HandlerType
+export type Handlers = {
+  [string]: Handler
 };
 
-export type RpcType = 'http' | 'ws';
+export type Rpc = 'http' | 'ws';
 
-export type RpcConfigType = {
+export type RpcConfig = {
   path: string,
   port: number,
-  types: Array<RpcType>
+  types: Array<Rpc>
 };
 
 export type RpcInterface$Events = 'started' | 'stopped';
 
-export type PostContextType = {
+export type PostContext = {
   body: string,
   req: http$IncomingMessage,
   type: 'application/json'
 };
 
-export type WsContextType = {
+export type WsContext = {
   websocket: {
     // flowlint-next-line unclear-type:off
     on: (type: 'message', (message: string) => any) => any,

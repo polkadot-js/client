@@ -3,13 +3,13 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { ConfigType } from '@polkadot/client/types';
-import type { ChainConfigType } from '../types';
+import type { Config } from '@polkadot/client/types';
+import type { ChainConfig } from '../types';
 
 const findAndLoad = require('./find');
 const looseToStrict = require('./toStrict');
 
-module.exports = function load ({ chain }: ConfigType): ChainConfigType {
+module.exports = function load ({ chain }: Config): ChainConfig {
   return looseToStrict(
     findAndLoad(chain)
   );

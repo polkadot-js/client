@@ -3,9 +3,9 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { RuntimeEnv$Heap, PointerType } from '../types';
+import type { RuntimeEnv$Heap, Pointer } from '../types';
 
-module.exports = function memcmp (heap: RuntimeEnv$Heap, s1: PointerType, s2: PointerType, length: number): number {
+module.exports = function memcmp (heap: RuntimeEnv$Heap, s1: Pointer, s2: Pointer, length: number): number {
   const v1 = heap.get(s1, length);
   const v2 = heap.get(s2, length);
 

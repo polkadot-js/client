@@ -4,13 +4,13 @@
 // @flow
 
 import type BN from 'bn.js';
-import type { AccountId, BlockNumber, HeaderHash, ParachainIdType, Signature } from '@polkadot/primitives/base';
+import type { AccountId, BlockNumber, HeaderHash, ParachainId, Signature } from '@polkadot/primitives/base';
 import type { Justification } from '@polkadot/primitives/bft';
 import type { Header } from '@polkadot/primitives/header';
 import type { Role } from '@polkadot/primitives/role';
 
 export type BlockAnnounceMessage = {
-  header: BlockHeaderType
+  header: Header
 }
 
 export type BlockRequestMessage$BlockAttribute = 'header' | 'body' | 'receipt' | 'messageQueue' | 'justification';
@@ -32,12 +32,12 @@ export type BlockRequestMessage = {
 export type BlockResponseMessage$BlockData$Justification = {};
 
 export type BlockResponseMessage$BlockData = {
-  hash: HeaderHashType,
+  hash: HeaderHash,
   header?: Uint8Array,
   body?: Uint8Array,
   receipt?: Uint8Array,
   messageQueue?: Uint8Array,
-  justification?: JustificationType,
+  justification?: Justification,
 }
 
 export type BlockResponseMessage = {
@@ -46,13 +46,13 @@ export type BlockResponseMessage = {
 }
 
 export type StatusMessage = {
-  bestHash: HeaderHashType,
-  bestNumber: BlockNumberType,
-  genesisHash: HeaderHashType,
-  parachainId: ParachainIdType,
-  roles: Array<RoleType>,
-  validatorSignature: SignatureType,
-  validatorId: AccountIdType,
+  bestHash: HeaderHash,
+  bestNumber: BlockNumber,
+  genesisHash: HeaderHash,
+  parachainId: ParachainId,
+  roles: Array<Role>,
+  validatorSignature: Signature,
+  validatorId: AccountId,
   version: number
 }
 

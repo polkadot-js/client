@@ -4,16 +4,16 @@
 // @flow
 
 import type EventEmitter from 'eventemitter3';
-import type { ConfigType } from '@polkadot/client/types';
+import type { Config } from '@polkadot/client/types';
 import type { ChainInterface } from '@polkadot/client-chains/types';
 import type { Logger } from '@polkadot/util/types';
-import type { HandlersType } from '../types';
+import type { Handlers } from '../types';
 
 export type RpcState = {
   chain: ChainInterface,
-  config: ConfigType,
+  config: Config,
   emitter: EventEmitter,
-  handlers: HandlersType,
+  handlers: Handlers,
   l: Logger,
   server: ?net$Server
 };

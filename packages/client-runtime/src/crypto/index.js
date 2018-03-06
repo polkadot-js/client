@@ -3,7 +3,7 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { RuntimeEnv, RuntimeInterface$Crypto, PointerType } from '../types';
+import type { RuntimeEnv, RuntimeInterface$Crypto, Pointer } from '../types';
 
 const blake2AsU8a256 = require('@polkadot/util-crypto/blake2/asU8a256');
 const naclVerify = require('@polkadot/util-crypto/nacl/verify');
@@ -28,7 +28,7 @@ function u8aDisplay (u8a: Uint8Array): string {
 }
 
 module.exports = function crypto ({ l, heap }: RuntimeEnv): RuntimeInterface$Crypto {
-  const twox = (bitLength: number, dataPtr: PointerType, dataLen: number, outPtr: PointerType): void => {
+  const twox = (bitLength: number, dataPtr: Pointer, dataLen: number, outPtr: Pointer): void => {
     const data = heap.get(dataPtr, dataLen);
     const hash = xxhashAsU8a(data, bitLength);
 
@@ -38,7 +38,7 @@ module.exports = function crypto ({ l, heap }: RuntimeEnv): RuntimeInterface$Cry
   };
 
   return {
-    blake2_256: (dataPtr: PointerType, dataLen: number, outPtr: PointerType): void => {
+    blake2_256: (dataPtr: Pointer, dataLen: number, outPtr: Pointer): void => {
       const data = heap.get(dataPtr, dataLen);
       const hash = blake2AsU8a256(data);
 
@@ -46,7 +46,7 @@ module.exports = function crypto ({ l, heap }: RuntimeEnv): RuntimeInterface$Cry
 
       heap.set(outPtr, hash);
     },
-    ed25519_verify: (msgPtr: PointerType, msgLen: number, sigPtr: PointerType, pubkeyPtr: PointerType): number => {
+    ed25519_verify: (msgPtr: Pointer, msgLen: number, sigPtr: Pointer, pubkeyPtr: Pointer): number => {
       l.debug(() => ['ed25519_verify', [msgPtr, msgLen, sigPtr, pubkeyPtr]]);
 
       return naclVerify(
@@ -55,9 +55,9 @@ module.exports = function crypto ({ l, heap }: RuntimeEnv): RuntimeInterface$Cry
         heap.get(pubkeyPtr, 32)
       ) ? 0 : 5;
     },
-    twox_128: (dataPtr: PointerType, dataLen: number, outPtr: PointerType): void =>
+    twox_128: (dataPtr: Pointer, dataLen: number, outPtr: Pointer): void =>
       twox(128, dataPtr, dataLen, outPtr),
-    twox_256: (dataPtr: PointerType, dataLen: number, outPtr: PointerType): void =>
+    twox_256: (dataPtr: Pointer, dataLen: number, outPtr: Pointer): void =>
       twox(256, dataPtr, dataLen, outPtr)
   };
 };

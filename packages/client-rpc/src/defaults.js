@@ -3,11 +3,11 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { RpcType } from './types';
+import type { Rpc } from './types';
 
 const PATH: string = '/';
 const PORT: number = 9933;
-const TYPES: Array<RpcType> = ['http', 'ws'];
+const TYPES: Array<Rpc> = ['http', 'ws'];
 
 module.exports = {
   PATH,

@@ -3,13 +3,13 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { PointerType } from '../../types';
+import type { Pointer } from '../../types';
 import type { Memory } from './types';
 
 // 1. find all free blocks that can contain the current requested amount
 // 2. sort by smallest -> largest
 // 3. return the smallest slot
-function findContaining (memory: Memory, size: number): PointerType {
+function findContaining (memory: Memory, size: number): Pointer {
   const [ptr] = Object
     .keys(memory.deallocated)
     // flowlint-next-line unclear-type:off
@@ -36,7 +36,7 @@ function findContaining (memory: Memory, size: number): PointerType {
   return -1;
 }
 
-module.exports = function freealloc (memory: Memory, size: number): PointerType {
+module.exports = function freealloc (memory: Memory, size: number): Pointer {
   const ptr = findContaining(memory, size);
 
   if (ptr === -1) {

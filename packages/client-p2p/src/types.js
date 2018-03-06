@@ -5,7 +5,7 @@
 
 import type BN from 'bn.js';
 import type { LibP2P$Connection } from 'libp2p';
-import type { ChainConfigType$Nodes } from '@polkadot/client-chains/types';
+import type { ChainConfig$Nodes } from '@polkadot/client-chains/types';
 
 export interface MessageInterface {
   id: number,
@@ -17,16 +17,16 @@ export interface MessageInterface {
   raw: any
 }
 
-export type P2pNodeType = {
+export type P2pNode = {
   address: string,
   port: number
 };
 
-export type P2pConfigType = {
+export type P2pConfig = {
   address: string,
   clientId: string,
   maxPeers: number,
-  peers?: ChainConfigType$Nodes,
+  peers?: ChainConfig$Nodes,
   port: number
 };
 

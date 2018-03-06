@@ -6,7 +6,7 @@
 import type { ChainInterface$Executor$BlockImportResult } from '@polkadot/client-chains/types';
 import type { PolkadotState } from '../types';
 
-const decodeHeader = require('@polkadot/primitives-codec/blockHeader/decodePartial');
+const decodeHeader = require('@polkadot/primitives-codec/header/decodePartial');
 const blake2Asu8a256 = require('@polkadot/util-crypto/blake2/asU8a256');
 
 const executeBlock = require('./executeBlock');

@@ -3,9 +3,9 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { ConfigType } from '@polkadot/client/types';
+import type { Config } from '@polkadot/client/types';
 import type { ChainInterface } from '@polkadot/client-chains/types';
-import type { HandlersType, RpcInterface } from '../types';
+import type { Handlers, RpcInterface } from '../types';
 import type { RpcState } from './types';
 
 const EventEmitter = require('eventemitter3');
@@ -19,7 +19,7 @@ const emitterOn = require('./emitterOn');
 const start = require('./start');
 const stop = require('./stop');
 
-module.exports = function server (config: ConfigType, chain: ChainInterface, handlers: HandlersType, autoStart?: boolean = true): RpcInterface {
+module.exports = function server (config: Config, chain: ChainInterface, handlers: Handlers, autoStart?: boolean = true): RpcInterface {
   const emitter = new EventEmitter();
   const self: RpcState = {
     chain,

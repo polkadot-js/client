@@ -3,14 +3,14 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { ChainConfigTypeLoose } from '../types';
+import type { ChainConfigLoose } from '../types';
 
 const ExtError = require('@polkadot/util/ext/error');
 
 const fromDisk = require('./fromDisk');
 const validateChain = require('../validate');
 
-module.exports = function findAndLoad (name: string): ChainConfigTypeLoose {
+module.exports = function findAndLoad (name: string): ChainConfigLoose {
   // builtin?
   if (!/\.json$/.test(name)) {
     try {

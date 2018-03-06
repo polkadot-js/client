@@ -6,7 +6,7 @@
 import type { BlockAnnounceMessage } from '../types';
 import type { MessageInterface } from '../../types';
 
-const createHeader = require('@polkadot/primitives-builder/blockHeader');
+const createHeader = require('@polkadot/primitives-builder/header');
 
 const base = require('../base');
 const rawDecode = require('./rawDecode');

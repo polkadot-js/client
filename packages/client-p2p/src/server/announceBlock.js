@@ -5,7 +5,7 @@
 
 import type { P2pState } from './types';
 
-const decodeHeader = require('@polkadot/primitives-codec/blockHeader/decode');
+const decodeHeader = require('@polkadot/primitives-codec/header/decode');
 
 const announceMessage = require('../message/blockAnnounce');
 

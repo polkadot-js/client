@@ -3,7 +3,7 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { ChainConfigType } from '@polkadot/client-chains/types';
+import type { ChainConfig } from '@polkadot/client-chains/types';
 import type { BaseDbInterface } from '@polkadot/client-db/types';
 import type { RuntimeEnv } from '../types';
 
@@ -12,7 +12,7 @@ const l = require('@polkadot/util/logger')('runtime');
 const envDb = require('./db');
 const envHeap = require('./heap');
 
-module.exports = function environment (chain: ChainConfigType, stateDb: BaseDbInterface): RuntimeEnv {
+module.exports = function environment (chain: ChainConfig, stateDb: BaseDbInterface): RuntimeEnv {
   return {
     l,
     chain,

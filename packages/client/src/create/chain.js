@@ -5,12 +5,12 @@
 
 import type { ChainInterface } from '@polkadot/client-chains/types';
 import type { BaseDbInterface } from '@polkadot/client-db/types';
-import type { ConfigType } from '../types';
+import type { Config } from '../types';
 
 const loadChain = require('@polkadot/client-chains/load');
 const createPolkadot = require('@polkadot/client-polkadot');
 
-module.exports = function createChain (config: ConfigType, stateDb: BaseDbInterface, blockDb: BaseDbInterface): ChainInterface {
+module.exports = function createChain (config: Config, stateDb: BaseDbInterface, blockDb: BaseDbInterface): ChainInterface {
   const chain = loadChain(config);
 
   switch (chain.type) {

@@ -5,7 +5,7 @@
 
 import type { BlockAnnounceMessage } from '../types';
 
-const blockHeaderDecode = require('@polkadot/primitives-rlp/blockHeader/decode');
+const headerDecode = require('@polkadot/primitives-rlp/header/decode');
 const assert = require('@polkadot/util/assert');
 
 module.exports = function rawDecode (raw: BlockAnnounceMessage, data: Array<*>): BlockAnnounceMessage {
@@ -13,7 +13,7 @@ module.exports = function rawDecode (raw: BlockAnnounceMessage, data: Array<*>):
 
   const [header] = data;
 
-  raw.header = blockHeaderDecode(header);
+  raw.header = headerDecode(header);
 
   return raw;
 };

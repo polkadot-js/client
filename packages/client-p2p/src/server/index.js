@@ -3,7 +3,7 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { ConfigType } from '@polkadot/client/types';
+import type { Config } from '@polkadot/client/types';
 import type { ChainInterface } from '@polkadot/client-chains/types';
 import type { P2pInterface, PeersInterface } from '../types';
 import type { P2pState } from './types';
@@ -17,7 +17,7 @@ const emitterOn = require('./emitterOn');
 const start = require('./start');
 const stop = require('./stop');
 
-module.exports = function server (config: ConfigType, chain: ChainInterface, autoStart: boolean = true): P2pInterface {
+module.exports = function server (config: Config, chain: ChainInterface, autoStart: boolean = true): P2pInterface {
   const self: P2pState = {
     chain,
     config,

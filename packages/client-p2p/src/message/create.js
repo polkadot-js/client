@@ -6,7 +6,7 @@
 import type { MessageInterface } from '../types';
 
 // flowlint-next-line unclear-type:off
-type CreateType = (any) => MessageInterface;
+type Create = (any) => MessageInterface;
 
 const assert = require('@polkadot/util/assert');
 const isUndefined = require('@polkadot/util/is/undefined');
@@ -16,7 +16,7 @@ const blockRequest = require('./blockRequest');
 const blockResponse = require('./blockResponse');
 const status = require('./status');
 
-const CREATORS: Array<CreateType> = [
+const CREATORS: Array<Create> = [
   status,
   blockRequest,
   blockResponse,

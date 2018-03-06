@@ -5,14 +5,14 @@
 
 import type EventEmitter from 'eventemitter3';
 import type LibP2P from 'libp2p';
-import type { ConfigType } from '@polkadot/client/types';
+import type { Config } from '@polkadot/client/types';
 import type { ChainInterface } from '@polkadot/client-chains/types';
 import type { Logger } from '@polkadot/util/types';
 import type { PeersInterface } from '../types';
 
 export type P2pState = {
   chain: ChainInterface,
-  config: ConfigType,
+  config: Config,
   emitter: EventEmitter,
   l: Logger,
   node: LibP2P,

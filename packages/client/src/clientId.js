@@ -3,7 +3,7 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-type PackageJsonType = {
+type PackageJson = {
   name: string,
   version: string
 };
@@ -13,7 +13,7 @@ const npmQuery = require('package-json');
 const DEVELOPMENT = 'development';
 
 const name = '@polkadot';
-let pkgJson: PackageJsonType;
+let pkgJson: PackageJson;
 let stability = 'release';
 
 try {
@@ -29,7 +29,7 @@ const isDevelopment = stability === DEVELOPMENT;
 
 async function getNpmVersion (): Promise<string> {
   return npmQuery(pkgJson.name)
-    .then((npmJson: PackageJsonType) => npmJson.version)
+    .then((npmJson: PackageJson) => npmJson.version)
     .catch(() => 'unknown');
 }
 

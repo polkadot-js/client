@@ -5,11 +5,11 @@
 
 import type { PolkadotState } from '../types';
 
-const createHeader = require('@polkadot/primitives-builder/blockHeader');
+const createHeader = require('@polkadot/primitives-builder/header');
 const rootRaw = require('@polkadot/primitives-builder/transaction/rootRaw');
 const timestampSet = require('@polkadot/primitives-builder/unchecked/timestampSet');
 const encodeBlockRaw = require('@polkadot/primitives-codec/block/encodeRaw');
-const encodeHeader = require('@polkadot/primitives-codec/blockHeader/encode');
+const encodeHeader = require('@polkadot/primitives-codec/header/encode');
 const encodeUtx = require('@polkadot/primitives-codec/unchecked/encode');
 
 const executeTx = require('./executeTransaction');

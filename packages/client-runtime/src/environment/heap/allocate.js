@@ -3,12 +3,12 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { PointerType } from '../../types';
+import type { Pointer } from '../../types';
 import type { Memory } from './types';
 
 const freealloc = require('./freealloc');
 
-module.exports = function allocate (memory: Memory, size: number): PointerType {
+module.exports = function allocate (memory: Memory, size: number): Pointer {
   if (size === 0) {
     return 0;
   }

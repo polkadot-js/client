@@ -3,13 +3,13 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { RpcConfigType } from '../types';
+import type { RpcConfig } from '../types';
 
 const assert = require('@polkadot/util/assert');
 
 const { TYPES } = require('../defaults');
 
-module.exports = function validateConfig ({ path, types }: RpcConfigType): void {
+module.exports = function validateConfig ({ path, types }: RpcConfig): void {
   assert(/^\//.test(path), 'Expected valid path');
   assert(types.length !== 0, 'Expected non-empty type Array');
 

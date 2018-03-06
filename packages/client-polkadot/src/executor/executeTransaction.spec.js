@@ -2,11 +2,11 @@
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
 
-const createHeader = require('@polkadot/primitives-builder/blockHeader');
+const createHeader = require('@polkadot/primitives-builder/header');
 const stakingTransfer = require('@polkadot/primitives-builder/transaction/stakingTransfer');
 const uncheckedSign = require('@polkadot/primitives-builder/unchecked/uncheckedSign');
 const timestampSet = require('@polkadot/primitives-builder/unchecked/timestampSet');
-const encodeHeader = require('@polkadot/primitives-codec/blockHeader/encode');
+const encodeHeader = require('@polkadot/primitives-codec/header/encode');
 const encodeUtx = require('@polkadot/primitives-codec/unchecked/encode');
 const chain = require('@polkadot/client-chains/chains/nelson');
 const memoryDb = require('@polkadot/client-db/memory');

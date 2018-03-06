@@ -5,10 +5,10 @@
 
 import type { BlockAnnounceMessage } from '../types';
 
-const blockHeaderEncode = require('@polkadot/primitives-rlp/blockHeader/encode');
+const headerEncode = require('@polkadot/primitives-rlp/header/encode');
 
 module.exports = function rawEncode ({ header }: BlockAnnounceMessage): Array<*> {
   return [
-    blockHeaderEncode(header)
+    headerEncode(header)
   ];
 };

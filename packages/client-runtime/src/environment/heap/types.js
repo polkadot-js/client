@@ -3,10 +3,10 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { PointerType } from '../../types';
+import type { Pointer } from '../../types';
 
 export type Memory$Buffer = {
-  [PointerType]: number // offset -> size
+  [Pointer]: number // offset -> size
 }
 
 export type Memory = {

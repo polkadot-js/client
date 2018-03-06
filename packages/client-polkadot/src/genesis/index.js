@@ -6,7 +6,7 @@
 import type { ChainInterface$Genesis } from '@polkadot/client-chains/types';
 import type { PolkadotState } from '../types';
 
-const encodeHeader = require('@polkadot/primitives-codec/blockHeader/encode');
+const encodeHeader = require('@polkadot/primitives-codec/header/encode');
 const blake2Asu8a256 = require('@polkadot/util-crypto/blake2/asU8a256');
 
 const initBlock = require('./block');
