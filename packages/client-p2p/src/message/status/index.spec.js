@@ -57,9 +57,9 @@ describe('status', () => {
         roles: ['full', 'validator'],
         // bestNumber: new BN(1),
         bestHash: hexToU8a('0x2', 256),
-        genesisHash: hexToU8a('0x3', 256),
-        validatorSignature: hexToU8a('0x4', 512),
-        validatorId: hexToU8a('0x5', 160)
+        genesisHash: hexToU8a('0x3', 256)
+        // validatorSignature: hexToU8a('0x4', 512),
+        // validatorId: hexToU8a('0x5', 160),
         // parachainId: new BN(6)
       }).encode()
     );
@@ -70,9 +70,9 @@ describe('status', () => {
       roles: ['full', 'validator'],
       // bestNumber: new BN(1),
       bestHash: hexToU8a('0x2', 256),
-      genesisHash: hexToU8a('0x3', 256),
-      validatorSignature: hexToU8a('0x4', 512),
-      validatorId: hexToU8a('0x5', 160)
+      genesisHash: hexToU8a('0x3', 256)
+      // validatorSignature: hexToU8a('0x4', 512),
+      // validatorId: hexToU8a('0x5', 160)
       // parachainId: new BN(6)
     });
   });

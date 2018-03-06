@@ -6,11 +6,8 @@
 import type { StatusMessage } from '../types';
 
 const roleToId = require('@polkadot/primitives/role/toId');
-const accountIdEncode = require('@polkadot/primitives-rlp/accountId/encode');
 const blockNumberEncode = require('@polkadot/primitives-rlp/blockNumber/encode');
 const hashEncode = require('@polkadot/primitives-rlp/hash/encode');
-const parachainIdEncode = require('@polkadot/primitives-rlp/parachainId/encode');
-const signatureEncode = require('@polkadot/primitives-rlp/signature/encode');
 const numberToU8a = require('@polkadot/util/number/toU8a');
 
 module.exports = function rawEncode ({ bestHash, bestNumber, genesisHash, parachainId, roles, validatorId, validatorSignature, version }: StatusMessage): Array<*> {
@@ -19,9 +16,7 @@ module.exports = function rawEncode ({ bestHash, bestNumber, genesisHash, parach
     roles.map(roleToId).map(numberToU8a),
     blockNumberEncode(bestNumber),
     hashEncode(bestHash, 256),
-    hashEncode(genesisHash, 256),
-    signatureEncode(validatorSignature),
-    accountIdEncode(validatorId),
-    parachainIdEncode(parachainId)
+    hashEncode(genesisHash, 256)
+    // TODO: validatorId, validatorSignature, parachainId
   ];
 };

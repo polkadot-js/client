@@ -17,7 +17,7 @@ const u8aToBn = require('@polkadot/util/u8a/toBn');
 module.exports = function rawDecode (raw: StatusMessage, data: Array<*>): StatusMessage {
   assert(data.length >= 5, 'Expected correct message length');
 
-  const [version, roles, bestNumber, bestHash, genesisHash, validatorSignature, validatorId, parachainId] = data;
+  const [version, roles, bestNumber, bestHash, genesisHash, validatorSignature = new Uint8Array([]), validatorId = new Uint8Array([]), parachainId = new Uint8Array([])] = data;
 
   raw.version = u8aToBn((version: Uint8Array)).toNumber();
   raw.roles = roles.map((role) => u8aToBn(role).toNumber()).map(roleFromId);
