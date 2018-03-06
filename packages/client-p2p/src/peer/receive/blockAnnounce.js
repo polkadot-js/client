@@ -3,9 +3,9 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { BlockAnnounceMessage } from '../message/types';
-import type { MessageInterface } from '../types';
-import type { PeerState } from './types';
+import type { BlockAnnounceMessage } from '../../message/types';
+import type { MessageInterface } from '../../types';
+import type { PeerState } from '../types';
 
 const encodeHeader = require('@polkadot/primitives-codec/header/encode');
 const blake2Asu8a256 = require('@polkadot/util-crypto/blake2/asU8a256');

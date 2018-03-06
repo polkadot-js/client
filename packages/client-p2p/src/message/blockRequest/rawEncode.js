@@ -5,7 +5,23 @@
 
 import type { BlockRequestMessage } from '../types';
 
-module.exports = function rawEncode (raw: BlockRequestMessage): Array<*> {
+const bnEncode = require('@polkadot/primitives-rlp/bn/encode');
+const hashEncode = require('@polkadot/primitives-rlp/hash/encode');
+const numberToU8a = require('@polkadot/util/number/toU8a');
+
+const { ATTRIBUTES, DIRECTIONS } = require('./mapping');
+
+module.exports = function rawEncode ({ direction, fields, from }: BlockRequestMessage): Array<*> {
   return [
+    numberToU8a(
+      DIRECTIONS.indexOf(direction)
+    ),
+    numberToU8a(
+      fields.reduce((result, attr) => result | ATTRIBUTES[attr], 0)
+    ),
+    [
+      bnEncode(from.number, 64),
+      hashEncode(from.hash, 256)
+    ]
   ];
 };

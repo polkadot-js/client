@@ -3,13 +3,15 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { MessageInterface } from '../types';
-import type { PeerState } from './types';
+import type { MessageInterface } from '../../types';
+import type { PeerState } from '../types';
 
-const announceMessage = require('../message/blockAnnounce');
-const statusMessage = require('../message/status');
-const receiveBlockAnnounce = require('./receiveBlockAnnounce');
-const receiveStatus = require('./receiveStatus');
+const announceMessage = require('../../message/blockAnnounce');
+const requestMessage = require('../../message/blockRequest');
+const statusMessage = require('../../message/status');
+const receiveBlockAnnounce = require('./blockAnnounce');
+const receiveBlockRequest = require('./blockRequest');
+const receiveStatus = require('./status');
 
 module.exports = function receive (self: PeerState, message: MessageInterface): void {
   self.emitter.emit('message', message);
@@ -20,6 +22,9 @@ module.exports = function receive (self: PeerState, message: MessageInterface): 
 
     case announceMessage.MESSAGE_ID:
       return receiveBlockAnnounce(self, message);
+
+    case requestMessage.MESSAGE_ID:
+      return receiveBlockRequest(self, message);
 
     default:
       // Unhandled message
