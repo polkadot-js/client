@@ -25,23 +25,19 @@ module.exports = function createPeer (peerInfo: PeerInfo): PeerInterface {
     bestNumber: new BN(0),
     connections: [],
     emitter: new EventEmitter(),
-    pushable: pushable(),
-    status: null
+    pushable: pushable()
   };
 
   return {
     id,
     peerInfo,
     shortId: stringShorten(id),
-    status: null,
     addConnection: (connection: LibP2P$Connection): boolean =>
       addConnection(self, connection),
     getBestHash: (): Uint8Array =>
       self.bestHash,
     getBestNumber: (): BN =>
       self.bestNumber,
-    isConnected: (): boolean =>
-      !!self.connections.length,
     on: emitterOn(self),
     send: (message: MessageInterface): boolean =>
       send(self, message)

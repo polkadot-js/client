@@ -7,13 +7,11 @@ import type BN from 'bn.js';
 import type EventEmitter from 'eventemitter3';
 import type { LibP2P$Connection } from 'libp2p';
 import type { Pushable } from 'pull-pushable';
-import type { StatusMessage } from '../message/types';
 
 export type PeerState = {
   bestHash: Uint8Array,
   bestNumber: BN,
   connections: Array<LibP2P$Connection>,
   emitter: EventEmitter,
-  pushable: Pushable,
-  status: ?StatusMessage
+  pushable: Pushable
 }

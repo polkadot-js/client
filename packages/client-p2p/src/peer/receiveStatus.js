@@ -9,8 +9,8 @@ import type { PeerState } from './types';
 
 // TODO: We should check the genesisHash here and act appropriately
 module.exports = function receiveStatus (self: PeerState, message: MessageInterface): void {
-  self.status = (message.raw: StatusMessage);
+  const status = (message.raw: StatusMessage);
 
-  self.bestHash = self.status.bestHash;
-  self.bestNumber = self.status.bestNumber;
+  self.bestHash = status.bestHash;
+  self.bestNumber = status.bestNumber;
 };
