@@ -4,7 +4,7 @@
 // @flow
 
 import type BN from 'bn.js';
-import type { AccountId, BlockNumber, HeaderHash, ParachainId, Signature } from '@polkadot/primitives/base';
+import type { AccountId, BlockNumber, HeaderHash, ParaChainId, Signature } from '@polkadot/primitives/base';
 import type { Justification } from '@polkadot/primitives/bft';
 import type { Header } from '@polkadot/primitives/header';
 import type { Role } from '@polkadot/primitives/role';
@@ -49,7 +49,7 @@ export type StatusMessage = {
   bestHash: HeaderHash,
   bestNumber: BlockNumber,
   genesisHash: HeaderHash,
-  parachainId: ParachainId,
+  parachainId: ParaChainId,
   roles: Array<Role>,
   validatorSignature: Signature,
   validatorId: AccountId,

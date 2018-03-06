@@ -27,12 +27,12 @@ describe('send', () => {
 
   it('returns true when sent', () => {
     expect(
-      send(self, status())
+      send(self, status({}))
     ).toEqual(true);
   });
 
   it('upopn sending, message is added to pushable', () => {
-    const message = status();
+    const message = status({});
 
     send(self, message);
 

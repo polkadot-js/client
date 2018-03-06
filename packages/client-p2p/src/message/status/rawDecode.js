@@ -7,7 +7,7 @@ import type { StatusMessage } from '../types';
 
 const roleFromId = require('@polkadot/primitives/role/fromId');
 const accountIdDecode = require('@polkadot/primitives-rlp/accountId/decode');
-const blockNumberDecode = require('@polkadot/primitives-rlp/blockNumber/decode');
+const bnDecode = require('@polkadot/primitives-rlp/bn/decode');
 const hashDecode = require('@polkadot/primitives-rlp/hash/decode');
 const parachainIdDecode = require('@polkadot/primitives-rlp/parachainId/decode');
 const signatureDecode = require('@polkadot/primitives-rlp/signature/decode');
@@ -21,7 +21,7 @@ module.exports = function rawDecode (raw: StatusMessage, data: Array<*>): Status
 
   raw.version = u8aToBn((version: Uint8Array)).toNumber();
   raw.roles = roles.map((role) => u8aToBn(role).toNumber()).map(roleFromId);
-  raw.bestNumber = blockNumberDecode(bestNumber);
+  raw.bestNumber = bnDecode(bestNumber);
   raw.bestHash = hashDecode(bestHash);
   raw.genesisHash = hashDecode(genesisHash);
   raw.validatorSignature = signatureDecode(validatorSignature);

@@ -11,7 +11,7 @@ describe('encode', () => {
   let message;
 
   beforeEach(() => {
-    message = status();
+    message = status({});
   });
 
   it('returns an encoded Uint8Array', () => {
