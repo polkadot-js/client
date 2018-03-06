@@ -6,10 +6,10 @@
 import type { LibP2P$Connection } from 'libp2p';
 import type { PeerState } from './types';
 
-const receive = require('./receive');
+const onReceive = require('./onReceive');
 
 module.exports = function addConnection (self: PeerState, connection: LibP2P$Connection): boolean {
   self.connections.push(connection);
 
-  return receive(self, connection);
+  return onReceive(self, connection);
 };

@@ -9,7 +9,7 @@ const u8aToBuffer = require('@polkadot/util/u8a/toBuffer');
 const status = require('../message/status');
 const decode = require('../message/encode');
 
-const receive = require('./receive');
+const receive = require('./onReceive');
 
 describe('receive', () => {
   let self;
