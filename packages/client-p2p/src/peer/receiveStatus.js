@@ -7,7 +7,10 @@ import type { MessageInterface } from '../types';
 import type { StatusMessage } from '../message/types';
 import type { PeerState } from './types';
 
-module.exports = function setStatus (self: PeerState, message: MessageInterface): void {
-  // flowlint-next-line unclear-type:off
-  self.status = ((message: any): StatusMessage);
+// TODO: We should check the genesisHash here and act appropriately
+module.exports = function receiveStatus (self: PeerState, message: MessageInterface): void {
+  self.status = (message.raw: StatusMessage);
+
+  self.bestHash = self.status.bestHash;
+  self.bestNumber = self.status.bestNumber;
 };

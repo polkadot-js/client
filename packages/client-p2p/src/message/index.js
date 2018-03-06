@@ -24,7 +24,7 @@ const CREATORS: Array<CreateType> = [
 ];
 
 // flowlint-next-line unclear-type: off
-module.exports = function message (id: number, data?: any): MessageInterface {
+module.exports = function message (id: number, data?: any = {}): MessageInterface {
   const creator = CREATORS.find((c) => c.MESSAGE_ID === id);
 
   assert(!isUndefined(creator), `No message found for id '${id}'`);

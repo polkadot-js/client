@@ -8,9 +8,12 @@ import type { PolkadotState } from '../types';
 const call = require('./call');
 
 module.exports = function executeBlock (self: PolkadotState, block: Uint8Array): boolean {
-  // self.l.log('Executing block');
+  self.l.debug(() => 'Executing block');
 
+  const start = Date.now();
   const result = call(self, 'execute_block')(block);
+
+  self.l.debug(() => `Block execution completed (${Date.now() - start}ms)`);
 
   return result.lo === 1;
 };

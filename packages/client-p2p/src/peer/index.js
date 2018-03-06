@@ -8,6 +8,7 @@ import type PeerInfo from 'peer-info';
 import type { MessageInterface, PeerInterface } from '../types';
 import type { PeerState } from './types';
 
+const BN = require('bn.js');
 const EventEmitter = require('eventemitter3');
 const pushable = require('pull-pushable');
 
@@ -16,11 +17,12 @@ const stringShorten = require('@polkadot/util/string/shorten');
 const addConnection = require('./addConnection');
 const emitterOn = require('./emitterOn');
 const send = require('./send');
-const setStatus = require('./setStatus');
 
 module.exports = function createPeer (peerInfo: PeerInfo): PeerInterface {
   const id = peerInfo.id.toB58String();
   const self: PeerState = {
+    bestHash: new Uint8Array([]),
+    bestNumber: new BN(0),
     connections: [],
     emitter: new EventEmitter(),
     pushable: pushable(),
@@ -34,14 +36,14 @@ module.exports = function createPeer (peerInfo: PeerInfo): PeerInterface {
     status: null,
     addConnection: (connection: LibP2P$Connection): boolean =>
       addConnection(self, connection),
+    getBestHash: (): Uint8Array =>
+      self.bestHash,
+    getBestNumber: (): BN =>
+      self.bestNumber,
     isConnected: (): boolean =>
       !!self.connections.length,
-    hasStatus: (): boolean =>
-      !!self.status,
     on: emitterOn(self),
     send: (message: MessageInterface): boolean =>
-      send(self, message),
-    setStatus: (message: MessageInterface): void =>
-      setStatus(self, message)
+      send(self, message)
   };
 };

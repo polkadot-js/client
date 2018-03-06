@@ -17,6 +17,6 @@ module.exports = function interval (l: Logger, { blocks, executor }: ChainInterf
   if (result) {
     const { body, hash, header } = result;
 
-    p2p._accounceBlock(hash, header, body);
+    p2p._announceBlock(hash, header, body);
   }
 };

@@ -76,12 +76,18 @@ export type ChainInterface$Blocks = {
   setLatest: (number: BN | number, hash: Uint8Array) => void
 };
 
+export type ChainInterface$Executor$BlockImportResult = {
+  body: Uint8Array,
+  hash: Uint8Array,
+  header: Uint8Array
+};
+
 export type ChainInterface$Executor = {
   executeBlock (block: Uint8Array): boolean,
   executeTransaction (header: Uint8Array, utx: Uint8Array): Uint8Array,
   finaliseBlock (header: Uint8Array): Uint8Array,
   generateBlock (number: number, transactions: Array<Uint8Array>): Uint8Array,
-  importBlock (block: Uint8Array): boolean
+  importBlock (block: Uint8Array): ?ChainInterface$Executor$BlockImportResult
 };
 
 export type ChainInterface$Genesis = {

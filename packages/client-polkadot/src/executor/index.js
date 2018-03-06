@@ -3,7 +3,7 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { ChainInterface$Executor } from '@polkadot/client-chains/types';
+import type { ChainInterface$Executor, ChainInterface$Executor$BlockImportResult } from '@polkadot/client-chains/types';
 import type { PolkadotState } from '../types';
 
 const executeBlock = require('./executeBlock');
@@ -22,7 +22,7 @@ module.exports = function executor (self: PolkadotState): ChainInterface$Executo
       finaliseBlock(self, header),
     generateBlock: (number: number, utxs: Array<Uint8Array>, timestamp?: number = Date.now()): Uint8Array =>
       generateBlock(self, number, utxs, timestamp),
-    importBlock: (block: Uint8Array): boolean =>
+    importBlock: (block: Uint8Array): ?ChainInterface$Executor$BlockImportResult =>
       importBlock(self, block)
   };
 };

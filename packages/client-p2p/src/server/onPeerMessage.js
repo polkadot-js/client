@@ -6,14 +6,13 @@
 import type { MessageInterface, PeerInterface } from '../types';
 import type { P2pState } from './types';
 
-const StatusMessage = require('../message/status');
+type MessageType = {
+  peer: PeerInterface,
+  message: MessageInterface
+};
 
 module.exports = function onPeerMessage (self: P2pState): void {
-  self.peers.on('message', ({ peer, message }: { peer: PeerInterface, message: MessageInterface }): void => {
-    if (message.id === StatusMessage.MESSAGE_ID) {
-      peer.setStatus(message);
-    }
-
+  self.peers.on('message', ({ peer, message }: MessageType): void => {
     self.emitter.emit('message', {
       peer,
       message

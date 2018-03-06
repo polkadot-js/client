@@ -3,21 +3,16 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
+import type { ChainInterface$Executor$BlockImportResult } from '@polkadot/client-chains/types';
 import type { PolkadotState } from '../types';
-
-type ImportResult = {
-  body: Uint8Array,
-  hash: Uint8Array,
-  header: Uint8Array
-};
 
 const decodeHeader = require('@polkadot/primitives-codec/blockHeader/decodePartial');
 const blake2Asu8a256 = require('@polkadot/util-crypto/blake2/asU8a256');
 
 const executeBlock = require('./executeBlock');
 
-module.exports = function importBlock (self: PolkadotState, block: Uint8Array): ?ImportResult {
-  // self.l.log('Importing block');
+module.exports = function importBlock (self: PolkadotState, block: Uint8Array): ?ChainInterface$Executor$BlockImportResult {
+  self.l.debug(() => 'Importing block');
 
   const start = Date.now();
   const result = executeBlock(self, block);
@@ -37,7 +32,7 @@ module.exports = function importBlock (self: PolkadotState, block: Uint8Array): 
   self.blockDb.setBlock(hash, block);
   self.blockDb.setLatest(number, hash);
 
-  self.l.log(`Imported block ${number.toNumber()} (${Date.now() - start}ms elapsed)`);
+  self.l.log(`Imported block ${number.toNumber()} (${Date.now() - start}ms)`);
 
   return {
     body: remainder,

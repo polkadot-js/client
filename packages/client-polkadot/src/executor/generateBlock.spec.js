@@ -87,7 +87,7 @@ describe('generateBlock', () => {
 
     expect(
       executor.importBlock(block)
-    ).toEqual(true);
+    ).not.toBeNull();
   });
 
   it('blocks are importable on top of previous', () => {
@@ -107,6 +107,6 @@ describe('generateBlock', () => {
 
     expect(
       executor.importBlock(block)
-    ).toEqual(true);
+    ).not.toBeNull();
   });
 });
