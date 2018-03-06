@@ -4,12 +4,12 @@
 
 const hexToU8a = require('@polkadot/util/hex/toU8a');
 
-const rlpDecode = require('./decode');
+const decode = require('./decode');
 
-describe('rlpDecode', () => {
+describe('decode', () => {
   it('decodes, returning the message', () => {
     expect(
-      rlpDecode(
+      decode(
         hexToU8a('0xcb00c900c100000000000000')
       )
     ).toBeDefined();

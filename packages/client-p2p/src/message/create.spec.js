@@ -2,18 +2,18 @@
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
 
-const message = require('./index');
+const create = require('./create');
 
-describe('message', () => {
+describe('create', () => {
   it('throws when class is not found', () => {
     expect(
-      () => message(666)
+      () => create(666)
     ).toThrow(/No message found/);
   });
 
-  it('returns an instance of the message', () => {
+  it('returns an instance of the create', () => {
     expect(
-      message(0)
+      create(0)
     ).toBeDefined();
   });
 });

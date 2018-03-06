@@ -5,9 +5,9 @@
 const isU8a = require('@polkadot/util/is/u8a');
 
 const status = require('../message/status');
-const rlpEncode = require('./encode');
+const encode = require('./encode');
 
-describe('rlpEncode', () => {
+describe('encode', () => {
   let message;
 
   beforeEach(() => {
@@ -17,7 +17,7 @@ describe('rlpEncode', () => {
   it('returns an encoded Uint8Array', () => {
     expect(
       isU8a(
-        rlpEncode(message)
+        encode(message)
       )
     ).toEqual(true);
   });

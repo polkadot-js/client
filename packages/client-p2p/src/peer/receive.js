@@ -12,7 +12,7 @@ const bufferToU8a = require('@polkadot/util/buffer/toU8a');
 
 const announceMessage = require('../message/blockAnnounce');
 const statusMessage = require('../message/status');
-const rlpDecode = require('../rlp/decode');
+const decode = require('../message/decode');
 const receiveBlockAnnounce = require('./receiveBlockAnnounce');
 const receiveStatus = require('./receiveStatus');
 
@@ -43,7 +43,7 @@ module.exports = function receive (self: PeerState, connection: LibP2P$Connectio
       connection,
       pull.drain(
         (buffer: Buffer): void =>
-          handleMessage(self, rlpDecode(
+          handleMessage(self, decode(
             bufferToU8a(buffer)
           )),
         () => false

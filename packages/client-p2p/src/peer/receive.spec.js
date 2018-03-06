@@ -7,7 +7,7 @@ const pushable = require('pull-pushable');
 const u8aToBuffer = require('@polkadot/util/u8a/toBuffer');
 
 const status = require('../message/status');
-const rlpEncode = require('../rlp/encode');
+const decode = require('../message/encode');
 
 const receive = require('./receive');
 
@@ -38,7 +38,7 @@ describe('receive', () => {
   // FIXME: Not operational, make it work
   it.skip('emits the decoded message', (done) => {
     const message = u8aToBuffer(
-      rlpEncode(status().raw)
+      decode(status().raw)
     );
 
     self.emitter.emit = (type, _message) => {

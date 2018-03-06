@@ -8,13 +8,13 @@ import type { MessageInterface } from '../types';
 const rlp = require('@polkadot/util-rlp/decode');
 const u8aToBn = require('@polkadot/util/u8a/toBn');
 
-const message = require('../message');
+const message = require('./create');
 
-module.exports = function rlpDecode (u8a: Uint8Array): MessageInterface {
+module.exports = function decode (u8a: Uint8Array): MessageInterface {
   // flowlint-next-line unclear-type:off
   const data = ((rlp(u8a): any): [Uint8Array, Array<*>]);
   const id = u8aToBn(data[0]).toNumber();
-  const instance: MessageInterface = message(id);
+  const instance = message(id);
 
   instance.decode(data);
 

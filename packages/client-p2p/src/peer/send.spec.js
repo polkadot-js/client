@@ -5,7 +5,7 @@
 const u8aToBuffer = require('@polkadot/util/u8a/toBuffer');
 
 const status = require('../message/status');
-const rlpEncode = require('../rlp/encode');
+const encode = require('../message/encode');
 const send = require('./send');
 
 describe('send', () => {
@@ -40,7 +40,7 @@ describe('send', () => {
       self.pushable[0]
     ).toEqual(
       u8aToBuffer(
-        rlpEncode(message)
+        encode(message)
       )
     );
   });
