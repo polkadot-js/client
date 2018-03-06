@@ -7,7 +7,7 @@ import type { MessageInterface } from '../types';
 
 const rlp = require('@polkadot/util-rlp/encode');
 
-module.exports = function rlpEncode (message: MessageInterface): Uint8Array {
+module.exports = function encode (message: MessageInterface): Uint8Array {
   return rlp(
     message.encode()
   );

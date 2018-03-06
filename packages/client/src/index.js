@@ -13,6 +13,7 @@ const config = require('./cli')();
 const createChain = require('./create/chain');
 const createRpc = require('./create/rpc');
 const createP2p = require('./create/p2p');
+const initDev = require('./dev');
 
 (async function main (): Promise<void> {
   const verStatus = await clientId.getNpmStatus();
@@ -21,7 +22,8 @@ const createP2p = require('./create/p2p');
   l.log(`Initialising for roles=${config.roles.join(',')} on chain=${config.chain}`);
 
   const chain = createChain(config, memoryDb(), memoryDb());
+  const p2p = createP2p(config, chain);
+  const rpc = createRpc(config, chain);
 
-  createP2p(config, chain);
-  createRpc(config, chain);
+  initDev(config, { chain, p2p, rpc });
 })();

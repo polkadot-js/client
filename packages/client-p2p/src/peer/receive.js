@@ -3,35 +3,26 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { LibP2P$Connection } from 'libp2p';
+import type { MessageInterface } from '../types';
 import type { PeerState } from './types';
 
-const pull = require('pull-stream');
-const bufferToU8a = require('@polkadot/util/buffer/toU8a');
+const announceMessage = require('../message/blockAnnounce');
+const statusMessage = require('../message/status');
+const receiveBlockAnnounce = require('./receiveBlockAnnounce');
+const receiveStatus = require('./receiveStatus');
 
-const rlpDecode = require('../rlp/decode');
+module.exports = function receive (self: PeerState, message: MessageInterface): void {
+  self.emitter.emit('message', message);
 
-module.exports = function receive (self: PeerState, connection: LibP2P$Connection): boolean {
-  try {
-    pull(
-      self.pushable,
-      connection
-    );
+  switch (message.id) {
+    case statusMessage.MESSAGE_ID:
+      return receiveStatus(self, message);
 
-    pull(
-      connection,
-      pull.drain(
-        (buffer: Buffer): void => {
-          self.emitter.emit('message', rlpDecode(
-            bufferToU8a(buffer)
-          ));
-        },
-        () => false
-      )
-    );
-  } catch (error) {
-    return false;
+    case announceMessage.MESSAGE_ID:
+      return receiveBlockAnnounce(self, message);
+
+    default:
+      // Unhandled message
+      break;
   }
-
-  return true;
 };

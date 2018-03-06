@@ -10,6 +10,7 @@ const chain = require('@polkadot/client-chains/chains/nelson');
 const memoryDb = require('@polkadot/client-db/memory');
 const createRuntime = require('@polkadot/client-runtime');
 const keyring = require('@polkadot/util-keyring/testing')();
+const l = require('@polkadot/util/logger')('test');
 
 const createBlockDb = require('../dbBlock');
 const createStateDb = require('../dbState');
@@ -31,7 +32,7 @@ describe('generateBlock', () => {
 
     blockDb = createBlockDb(memoryDb());
     stateDb = createStateDb(runtime.environment.db);
-    executor = createExecutor({ config, runtime, chain, blockDb, stateDb });
+    executor = createExecutor({ config, runtime, chain, blockDb, stateDb, l });
 
     const threePublicKey = hexToU8a('0x0303030303030303030303030303030303030303030303030303030303030303');
 
@@ -86,7 +87,7 @@ describe('generateBlock', () => {
 
     expect(
       executor.importBlock(block)
-    ).toEqual(true);
+    ).not.toBeNull();
   });
 
   it('blocks are importable on top of previous', () => {
@@ -106,6 +107,6 @@ describe('generateBlock', () => {
 
     expect(
       executor.importBlock(block)
-    ).toEqual(true);
+    ).not.toBeNull();
   });
 });

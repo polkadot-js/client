@@ -16,6 +16,10 @@ const executeTx = require('./executeTransaction');
 const finaliseBlock = require('./finaliseBlock');
 
 module.exports = function generateBlock (self: PolkadotState, number: number, utxs: Array<Uint8Array>, timestamp: number): Uint8Array {
+  const start = Date.now();
+
+  self.l.debug(() => `Generating block ${number}`);
+
   const txs = [ encodeUtx(timestampSet(timestamp)) ].concat(utxs);
   const transactionRoot = rootRaw(txs);
   const empty = encodeHeader(
@@ -31,6 +35,8 @@ module.exports = function generateBlock (self: PolkadotState, number: number, ut
   const block = encodeBlockRaw(header, timestamp, utxs);
 
   self.stateDb.clear();
+
+  self.l.log(`Block ${number} generated (${Date.now() - start}ms)`);
 
   return block;
 };

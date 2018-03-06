@@ -9,6 +9,7 @@ import type { BaseDbInterface } from '@polkadot/client-db/types';
 import type { PolkadotState } from './types';
 
 const createRuntime = require('@polkadot/client-runtime');
+const l = require('@polkadot/util/logger')('polkadot');
 
 const createBlockDb = require('./dbBlock');
 const createStateDb = require('./dbState');
@@ -24,6 +25,7 @@ module.exports = function polkadot (config: ConfigType, chain: ChainConfigType, 
     blockDb,
     config,
     chain,
+    l,
     runtime,
     stateDb
   };

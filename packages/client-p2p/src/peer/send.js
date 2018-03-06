@@ -8,13 +8,13 @@ import type { PeerState } from './types';
 
 const u8aToBuffer = require('@polkadot/util/u8a/toBuffer');
 
-const rlpEncode = require('../rlp/encode');
+const encode = require('../message/encode');
 
 module.exports = function send (self: PeerState, message: MessageInterface): boolean {
   try {
     self.pushable.push(
       u8aToBuffer(
-        rlpEncode(message)
+        encode(message)
       )
     );
   } catch (error) {

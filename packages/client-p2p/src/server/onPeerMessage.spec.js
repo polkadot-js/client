@@ -4,7 +4,6 @@
 
 const EventEmitter = require('eventemitter3');
 
-const StatusMessage = require('../message/status');
 const onPeerMessage = require('./onPeerMessage');
 
 describe('onPeerMessage', () => {
@@ -20,21 +19,6 @@ describe('onPeerMessage', () => {
       id: '123456',
       shortId: '123456'
     };
-  });
-
-  it('sets status when status received', (done) => {
-    peer.setStatus = (message) => {
-      expect(message.id).toEqual(StatusMessage.MESSAGE_ID);
-
-      done();
-    };
-
-    onPeerMessage(self);
-
-    self.peers.emit('message', {
-      peer,
-      message: { id: StatusMessage.MESSAGE_ID }
-    });
   });
 
   it('it emits the received message', (done) => {
