@@ -12,8 +12,10 @@ const rawEncode = require('./rawEncode');
 
 const MESSAGE_ID: number = 2;
 
-module.exports = function blockResponse (): MessageInterface {
+module.exports = function blockResponse ({ blocks = [], id = 0 }: $Shape<BlockResponseMessage>): MessageInterface {
   const raw: BlockResponseMessage = {
+    blocks,
+    id
   };
 
   return base(MESSAGE_ID, {
