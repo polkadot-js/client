@@ -12,6 +12,7 @@ const { HEAP_SIZE_KB } = require('./defaults');
 const createExports = require('./create/exports');
 const createMemory = require('./create/memory');
 
+// TODO: Here we proxy _all_ the runtime functions, i.e. it calls into WASM itself. This _could_ have a performance impact, so a saner (unverified) approach could be to only proxy the couple of functions that do have i64 in the signatures. Hopefully by the time performance is an issue, i64 support is in the JS interfaces and the proxy can be removed completely.
 module.exports = function wasm ({ wasm: { heapSize = HEAP_SIZE_KB } }: ConfigType, runtime: RuntimeInterface, chainCode: Uint8Array, chainProxy: Uint8Array): WebAssemblyInstance$Exports {
   const env = createExports(runtimeProxy, { runtime: runtime.exports }, createMemory(0, 0));
   const proxy = createExports(chainCode, { env });

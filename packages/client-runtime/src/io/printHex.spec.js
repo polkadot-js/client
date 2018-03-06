@@ -18,7 +18,7 @@ describe('print_hex', () => {
     heap.setWasmMemory({ buffer: new Uint8Array([0x1, 0x3, 0x5, 0x7, 0x99]) });
 
     l = {
-      debug: () => void 0,
+      debug: jest.fn((cb) => cb()),
       log: jest.fn(() => void 0)
     };
     print_hex = index({ l, heap }).print_hex;

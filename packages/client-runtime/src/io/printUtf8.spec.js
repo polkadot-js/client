@@ -21,7 +21,7 @@ describe('print_utf8', () => {
     heap.setWasmMemory({ buffer: u8aFromUtf8(TEST) });
 
     l = {
-      debug: () => void 0,
+      debug: jest.fn((cb) => cb()),
       log: jest.fn(() => void 0)
     };
     print_utf8 = index({ l, heap }).print_utf8;
