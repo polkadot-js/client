@@ -13,14 +13,14 @@ const base = require('../base');
 const rawDecode = require('./rawDecode');
 const rawEncode = require('./rawEncode');
 
-const MESSAGE_ID: number = 3;
+const TYPE: number = 3;
 
 module.exports = function blockAnnounce ({ header = createHeader({}) }: $Shape<BlockAnnounceMessage>): MessageInterface {
   const raw: BlockAnnounceMessage = {
     header
   };
 
-  return base(MESSAGE_ID, {
+  return base(TYPE, {
     raw,
     rawDecode: (data: BlockAnnounceEncoded): BlockAnnounceMessage =>
       rawDecode(raw, data),
@@ -29,4 +29,4 @@ module.exports = function blockAnnounce ({ header = createHeader({}) }: $Shape<B
   });
 };
 
-module.exports.MESSAGE_ID = MESSAGE_ID;
+module.exports.TYPE = TYPE;

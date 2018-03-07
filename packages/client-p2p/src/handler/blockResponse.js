@@ -3,15 +3,17 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-// import type { BlockRequestMessage } from '../../message/types';
-import type { MessageInterface } from '../../types';
-import type { PeerState } from '../types';
+// import type { BlockResponseMessage } from '../../message/types';
+import type { MessageInterface, PeerInterface } from '../types';
+import type { P2pState } from '../server/types';
 
 // const encodeHeader = require('@polkadot/primitives-codec/header/encode');
 // const blake2Asu8a256 = require('@polkadot/util-crypto/blake2/asU8a256');
 
-module.exports = function receiveBlockRequest (self: PeerState, message: MessageInterface): void {
-  console.log('blockRequest', message.raw);
+const message = require('../message/blockResponse');
+
+module.exports = function handleBlockResponse (self: P2pState, peer: PeerInterface, message: MessageInterface): void {
+  self.l.debug(() => ['BlockResponse', JSON.stringify(message.encode().message)]);
 
   // const header = (message.raw: BlockRequestMessage).header;
   //
@@ -22,3 +24,5 @@ module.exports = function receiveBlockRequest (self: PeerState, message: Message
   //   );
   // }
 };
+
+module.exports.TYPE = message.TYPE;

@@ -11,11 +11,10 @@ type Message = {
   message: MessageInterface
 };
 
+const handleMessage = require('../handler');
+
 module.exports = function onPeerMessage (self: P2pState): void {
   self.peers.on('message', ({ peer, message }: Message): void => {
-    self.emitter.emit('message', {
-      peer,
-      message
-    });
+    handleMessage(self, peer, message);
   });
 };

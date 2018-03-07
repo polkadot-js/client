@@ -11,7 +11,7 @@ const base = require('../base');
 const rawDecode = require('./rawDecode');
 const rawEncode = require('./rawEncode');
 
-const MESSAGE_ID: number = 2;
+const TYPE: number = 2;
 
 module.exports = function blockResponse ({ blocks = [], id = 0 }: $Shape<BlockResponseMessage>): MessageInterface {
   const raw: BlockResponseMessage = {
@@ -19,7 +19,7 @@ module.exports = function blockResponse ({ blocks = [], id = 0 }: $Shape<BlockRe
     id
   };
 
-  return base(MESSAGE_ID, {
+  return base(TYPE, {
     raw,
     rawDecode: (data: BlockResponseEncoded): BlockResponseMessage =>
       rawDecode(raw, data),
@@ -28,4 +28,4 @@ module.exports = function blockResponse ({ blocks = [], id = 0 }: $Shape<BlockRe
   });
 };
 
-module.exports.MESSAGE_ID = MESSAGE_ID;
+module.exports.TYPE = TYPE;

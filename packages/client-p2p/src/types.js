@@ -44,9 +44,10 @@ export type PeerInterface = {
   addConnection: (connection: LibP2P$Connection) => boolean,
   getBestHash: () => Uint8Array,
   getBestNumber: () => BN,
-  send: (message: MessageInterface) => boolean,
   // flowlint-next-line unclear-type:off
-  on (type: PeerInterface$Events, (message: MessageInterface) => any): any;
+  on (type: PeerInterface$Events, (message: MessageInterface) => any): any,
+  send: (message: MessageInterface) => boolean,
+  setBest: (number: BN, hash: Uint8Array) => void
 }
 
 export type PeersInterface$Events = 'connected' | 'disconnected' | 'discovered' | 'message';

@@ -14,7 +14,7 @@ const base = require('../base');
 const rawDecode = require('./rawDecode');
 const rawEncode = require('./rawEncode');
 
-const MESSAGE_ID: number = 0;
+const TYPE: number = 0;
 
 module.exports = function status ({ bestHash = new Uint8Array(32), bestNumber = new BN(0), genesisHash = new Uint8Array(32), parachainId = new BN(0), roles = ['none'], validatorId = new Uint8Array(32), validatorSignature = new Uint8Array(64), version = defaults.PROTOCOL_VERSION }: $Shape<StatusMessage>): MessageInterface {
   const raw: StatusMessage = {
@@ -28,7 +28,7 @@ module.exports = function status ({ bestHash = new Uint8Array(32), bestNumber = 
     version
   };
 
-  return base(MESSAGE_ID, {
+  return base(TYPE, {
     raw,
     rawDecode: (data: StatusEncoded): StatusMessage =>
       rawDecode(raw, data),
@@ -37,4 +37,4 @@ module.exports = function status ({ bestHash = new Uint8Array(32), bestNumber = 
   });
 };
 
-module.exports.MESSAGE_ID = MESSAGE_ID;
+module.exports.TYPE = TYPE;

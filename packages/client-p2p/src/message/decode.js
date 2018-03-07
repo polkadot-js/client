@@ -13,7 +13,6 @@ module.exports = function decode (u8a: Uint8Array): MessageInterface {
   const message: RawMessage = JSON.parse(
     u8aToUtf8(u8a)
   );
-
   const instance = createMessage(message.type);
 
   instance.decode(message);

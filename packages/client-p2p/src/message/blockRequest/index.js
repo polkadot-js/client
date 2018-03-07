@@ -13,7 +13,7 @@ const base = require('../base');
 const rawDecode = require('./rawDecode');
 const rawEncode = require('./rawEncode');
 
-const MESSAGE_ID: number = 1;
+const TYPE: number = 1;
 
 module.exports = function blockRequest ({ direction = 'ascending', fields = ['header', 'body'], from = { hash: new Uint8Array(32), number: new BN(0) }, id = Date.now(), max = 64, to }: $Shape<BlockRequestMessage>): MessageInterface {
   const raw: BlockRequestMessage = {
@@ -25,7 +25,7 @@ module.exports = function blockRequest ({ direction = 'ascending', fields = ['he
     to
   };
 
-  return base(MESSAGE_ID, {
+  return base(TYPE, {
     raw,
     rawDecode: (data: BlockRequestEncoded): BlockRequestMessage =>
       rawDecode(raw, data),
@@ -34,4 +34,4 @@ module.exports = function blockRequest ({ direction = 'ascending', fields = ['he
   });
 };
 
-module.exports.MESSAGE_ID = MESSAGE_ID;
+module.exports.TYPE = TYPE;
