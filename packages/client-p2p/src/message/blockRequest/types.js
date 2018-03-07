@@ -8,10 +8,7 @@ import type { BlockRequestMessage$BlockAttribute, BlockRequestMessage$Direction 
 export type BlockRequestEncoded = {
   direction: BlockRequestMessage$Direction,
   fields: Array<BlockRequestMessage$BlockAttribute>,
-  from: {
-    hash: string,
-    number: string
-  },
+  from: string,
   id: number,
   max: number,
   to?: string

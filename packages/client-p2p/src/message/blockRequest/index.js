@@ -9,17 +9,18 @@ import type { BlockRequestEncoded } from './types';
 
 const BN = require('bn.js');
 
+const { MAX_SYNC_BLOCKS } = require('../../defaults');
 const base = require('../base');
 const rawDecode = require('./rawDecode');
 const rawEncode = require('./rawEncode');
 
 const TYPE: number = 1;
 
-module.exports = function blockRequest ({ direction = 'ascending', fields = ['header', 'body'], from = { hash: new Uint8Array(32), number: new BN(0) }, id = Date.now(), max = 64, to }: $Shape<BlockRequestMessage>): MessageInterface {
+module.exports = function blockRequest ({ direction = 'ascending', fields = ['header', 'body'], from, id, max = MAX_SYNC_BLOCKS, to }: $Shape<BlockRequestMessage>): MessageInterface {
   const raw: BlockRequestMessage = {
     direction,
     fields,
-    from,
+    from: from || new BN(0),
     id,
     max,
     to

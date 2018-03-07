@@ -13,8 +13,8 @@ module.exports = function onPeerConnected (self: P2pState): void {
     return peer.send(
       statusMessage({
         roles: self.config.roles,
-        bestNumber: self.chain.blocks.getLatestNumber(),
-        bestHash: self.chain.blocks.getLatestHash(),
+        bestNumber: self.chain.blocks.getBestNumber(),
+        bestHash: self.chain.blocks.getBestHash(),
         genesisHash: self.chain.genesis.hash
       })
     );

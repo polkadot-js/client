@@ -5,12 +5,12 @@
 
 const u8aFromString = require('@polkadot/util/u8a/fromString');
 
+const BEST_HASH: Uint8Array = u8aFromString('bst:hsh');
+const BEST_NUMBER: Uint8Array = u8aFromString('bst:num');
 const BLOCK_BY_HASH: Uint8Array = u8aFromString('blk:hsh:');
-const LATEST_HASH: Uint8Array = u8aFromString('lat:hsh');
-const LATEST_NUMBER: Uint8Array = u8aFromString('lat:num');
 
 module.exports = {
-  BLOCK_BY_HASH,
-  LATEST_HASH,
-  LATEST_NUMBER
+  BEST_HASH,
+  BEST_NUMBER,
+  BLOCK_BY_HASH
 };

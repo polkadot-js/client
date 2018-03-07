@@ -30,9 +30,9 @@ module.exports = function importBlock (self: PolkadotState, block: Uint8Array): 
   // console.log('decoded', raw, hash);
 
   self.blockDb.setBlock(hash, block);
-  self.blockDb.setLatest(number, hash);
+  self.blockDb.setBest(number, hash);
 
-  self.l.log(`Imported block ${number.toNumber()} (${Date.now() - start}ms)`);
+  self.l.log(`Imported block #${number.toString()} (${Date.now() - start}ms)`);
 
   return {
     body: remainder,

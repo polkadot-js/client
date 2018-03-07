@@ -6,15 +6,18 @@
 import type BN from 'bn.js';
 import type { BaseDbInterface } from '@polkadot/client-db/types';
 
-const u8aToBn = require('@polkadot/util/u8a/toBn');
+const bnToU8a = require('@polkadot/util/bn/toU8a');
 
 const key = require('../dbState/key');
-const { LATEST_NUMBER } = require('./prefix');
+const { BEST_HASH, BEST_NUMBER } = require('./prefix');
 
-module.exports = function getLatestNumber (db: BaseDbInterface): BN {
-  return u8aToBn(
-    db.get(
-      key(LATEST_NUMBER)
-    )
+module.exports = function setBest (db: BaseDbInterface, number: BN | number, hash: Uint8Array): void {
+  db.set(
+    key(BEST_NUMBER),
+    bnToU8a(number, 64)
+  );
+  db.set(
+    key(BEST_HASH),
+    hash
   );
 };

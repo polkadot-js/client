@@ -11,6 +11,7 @@ const encodeHeader = require('@polkadot/primitives-codec/header/encode');
 const blake2Asu8a256 = require('@polkadot/util-crypto/blake2/asU8a256');
 
 const message = require('../message/blockAnnounce');
+const requestsBlocks = require('../sync/requestBlocks');
 
 module.exports = function handleBlockAnnounce (self: P2pState, peer: PeerInterface, message: MessageInterface): void {
   self.l.debug(() => ['BlockAnnounce', JSON.stringify(message.encode().message)]);
@@ -22,6 +23,8 @@ module.exports = function handleBlockAnnounce (self: P2pState, peer: PeerInterfa
       encodeHeader(header)
     ));
   }
+
+  requestsBlocks(self, peer);
 };
 
 module.exports.TYPE = message.TYPE;

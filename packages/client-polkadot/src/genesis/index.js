@@ -18,7 +18,7 @@ module.exports = function genesis (self: PolkadotState): ChainInterface$Genesis 
   const header = encodeHeader(initBlock(self).header);
   const hash = blake2Asu8a256(header);
 
-  self.blockDb.setLatest(0, hash);
+  self.blockDb.setBest(0, hash);
 
   return {
     header,

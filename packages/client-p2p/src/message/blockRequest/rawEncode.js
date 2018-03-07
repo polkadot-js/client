@@ -8,15 +8,15 @@ import type { BlockRequestEncoded } from './types';
 
 const bnEncode = require('@polkadot/primitives-json/bn/encode');
 const hashEncode = require('@polkadot/primitives-json/hash/encode');
+const isBn = require('@polkadot/util/is/bn');
 
 module.exports = function rawEncode ({ direction, fields, from, id, max, to }: BlockRequestMessage): BlockRequestEncoded {
   return {
     direction,
     fields,
-    from: {
-      hash: hashEncode(from.hash, 256),
-      number: bnEncode(from.number, 64)
-    },
+    from: isBn(from)
+      ? bnEncode(from, 64)
+      : hashEncode(from, 256),
     id,
     max
   };

@@ -12,10 +12,9 @@ const hashDecode = require('@polkadot/primitives-json/hash/decode');
 module.exports = function rawDecode (raw: BlockRequestMessage, { direction, fields, from, id, max, to }: BlockRequestEncoded): BlockRequestMessage {
   raw.direction = direction;
   raw.fields = fields;
-  raw.from = {
-    number: bnDecode(from[0], 64),
-    hash: hashDecode(from[1], 256)
-  };
+  raw.from = from.length === 66
+    ? hashDecode(from, 256)
+    : bnDecode(from, 64);
   raw.id = id;
   raw.max = max;
 

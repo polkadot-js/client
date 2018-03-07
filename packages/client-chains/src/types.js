@@ -70,10 +70,10 @@ export type ChainName = 'nelson';
 
 export type ChainInterface$Blocks = {
   getBlock: (hash: Uint8Array) => Uint8Array,
-  getLatestHash: () => Uint8Array,
-  getLatestNumber: () => BN,
-  setBlock: (hash: Uint8Array, block: Uint8Array) => void,
-  setLatest: (number: BN | number, hash: Uint8Array) => void
+  getBestHash: () => Uint8Array,
+  getBestNumber: () => BN,
+  setBest: (number: BN | number, hash: Uint8Array) => void,
+  setBlock: (hash: Uint8Array, block: Uint8Array) => void
 };
 
 export type ChainInterface$Executor$BlockImportResult = {

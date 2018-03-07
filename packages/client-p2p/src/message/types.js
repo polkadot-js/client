@@ -20,13 +20,10 @@ export type BlockRequestMessage$Direction = 'ascending' | 'descending';
 export type BlockRequestMessage = {
   direction: BlockRequestMessage$Direction,
   fields: Array<BlockRequestMessage$BlockAttribute>,
-  from: {
-    hash: HeaderHash,
-    number: BN
-  },
+  from: HeaderHash | BN,
   id: number,
   max: number,
-  to: Uint8Array
+  to: HeaderHash
 }
 
 export type BlockResponseMessage$BlockData$Justification = {};

@@ -10,7 +10,7 @@ import type { Logger } from '@polkadot/util/types';
 module.exports = function interval (l: Logger, { blocks, executor }: ChainInterface, p2p: P2pInterface): void {
   l.log('Starting block generation');
 
-  const number = blocks.getLatestNumber().toNumber() + 1;
+  const number = blocks.getBestNumber().addn(1);
   const block = executor.generateBlock(number, []);
   const result = executor.importBlock(block);
 

@@ -11,21 +11,23 @@ const timestampSet = require('@polkadot/primitives-builder/unchecked/timestampSe
 const encodeBlockRaw = require('@polkadot/primitives-codec/block/encodeRaw');
 const encodeHeader = require('@polkadot/primitives-codec/header/encode');
 const encodeUtx = require('@polkadot/primitives-codec/unchecked/encode');
+const bnToBn = require('@polkadot/util/bn/toBn');
 
 const executeTx = require('./executeTransaction');
 const finaliseBlock = require('./finaliseBlock');
 
-module.exports = function generateBlock (self: PolkadotState, number: number, utxs: Array<Uint8Array>, timestamp: number): Uint8Array {
+module.exports = function generateBlock (self: PolkadotState, _number: number | BN, utxs: Array<Uint8Array>, timestamp: number): Uint8Array {
   const start = Date.now();
+  const number = bnToBn(_number);
 
-  self.l.debug(() => `Generating block ${number}`);
+  self.l.debug(() => `Generating block #${number.toString()}`);
 
   const txs = [ encodeUtx(timestampSet(timestamp)) ].concat(utxs);
   const transactionRoot = rootRaw(txs);
   const empty = encodeHeader(
     createHeader({
       number,
-      parentHash: self.stateDb.system.getBlockHash(number - 1),
+      parentHash: self.stateDb.system.getBlockHash(number.subn(1)),
       transactionRoot
     })
   );
@@ -36,7 +38,7 @@ module.exports = function generateBlock (self: PolkadotState, number: number, ut
 
   self.stateDb.clear();
 
-  self.l.log(`Block ${number} generated (${Date.now() - start}ms)`);
+  self.l.log(`Block #${number.toString()} generated (${Date.now() - start}ms)`);
 
   return block;
 };

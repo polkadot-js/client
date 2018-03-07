@@ -9,6 +9,7 @@ import type { Config } from '@polkadot/client/types';
 import type { ChainInterface } from '@polkadot/client-chains/types';
 import type { Logger } from '@polkadot/util/types';
 import type { PeersInterface } from '../types';
+import type { SyncState } from '../sync/types';
 
 export type P2pState = {
   chain: ChainInterface,
@@ -17,4 +18,5 @@ export type P2pState = {
   l: Logger,
   node: LibP2P,
   peers: PeersInterface,
+  sync: SyncState
 };
