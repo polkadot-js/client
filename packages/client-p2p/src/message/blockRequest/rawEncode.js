@@ -3,6 +3,7 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
+import type BN from 'bn.js';
 import type { BlockRequestMessage } from '../types';
 import type { BlockRequestEncoded } from './types';
 
@@ -15,8 +16,10 @@ module.exports = function rawEncode ({ direction, fields, from, id, max, to }: B
     direction,
     fields,
     from: isBn(from)
-      ? bnEncode(from, 64)
-      : hashEncode(from, 256),
+      // flowlint-next-line unclear-type:off
+      ? bnEncode(((from: any): BN), 64)
+      // flowlint-next-line unclear-type:off
+      : hashEncode(((from: any): Uint8Array), 256),
     id,
     max
   };

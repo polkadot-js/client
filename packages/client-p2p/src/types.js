@@ -68,7 +68,6 @@ export type P2pInterface = {
   isStarted: () => boolean,
   // flowlint-next-line unclear-type:off
   on: (type: P2pInterface$Events, () => any) => any,
-  peers: () => PeersInterface,
   start: () => Promise<boolean>,
   stop: () => Promise<boolean>
 }

@@ -3,6 +3,7 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
+import type BN from 'bn.js';
 import type { PolkadotState } from '../types';
 
 const createHeader = require('@polkadot/primitives-builder/header');

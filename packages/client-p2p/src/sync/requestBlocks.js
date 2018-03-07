@@ -3,6 +3,7 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
+import type { BlockRequestMessage } from '../message/types';
 import type { P2pState } from '../server/types';
 import type { PeerInterface } from '../types';
 
@@ -17,7 +18,7 @@ module.exports = function requestBlocks (self: P2pState, peer: PeerInterface): v
   let from = peerMax(self, peer);
 
   while (from.lt(peerBest)) {
-    self.l.debug(() => `Requesting blocks from ${peer.shortId}, #${from.toString()} - #${from.addn(MAX_SYNC_BLOCKS).toString()}`);
+    self.l.debug(() => `Requesting blocks from ${peer.shortId}, #${from.toString()} -`);
 
     const request = blockRequest({
       from,
@@ -28,7 +29,8 @@ module.exports = function requestBlocks (self: P2pState, peer: PeerInterface): v
 
     self.sync.blockRequests.push({
       peerId: peer.id,
-      request
+      // flowlint-next-line unclear-type:off
+      request: ((request.raw: any): BlockRequestMessage)
     });
 
     peer.send(request);

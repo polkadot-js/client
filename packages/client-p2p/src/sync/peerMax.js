@@ -15,7 +15,7 @@ module.exports = function peerMax (self: P2pState, peer: PeerInterface): BN {
   const first = self.chain.blocks.getBestNumber().addn(1);
   const requests = peerRequests(self, peer);
 
-  return requests.reduce((next, { peerId, request: { raw: { from } } }) => {
+  return requests.reduce((next, { peerId, request: { from } }) => {
     // flowlint-next-line unclear-type:off
     const last = new BN(((from: any): BN)).addn(MAX_SYNC_BLOCKS);
 
