@@ -29,8 +29,7 @@ module.exports = function requestBlocks (self: P2pState, peer: PeerInterface): v
 
     self.sync.blockRequests.push({
       peerId: peer.id,
-      // flowlint-next-line unclear-type:off
-      request: ((request.raw: any): BlockRequestMessage)
+      request: (request.raw: BlockRequestMessage)
     });
 
     peer.send(request);
