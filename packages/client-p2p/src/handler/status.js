@@ -11,7 +11,7 @@ const message = require('../message/status');
 
 // TODO: We should check the genesisHash here and act appropriately
 module.exports = function handleStatus (self: P2pState, peer: PeerInterface, message: MessageInterface): void {
-  self.l.debug(() => ['Status', JSON.stringify(message.encode().message)]);
+  self.l.debug(() => [peer.shortId, 'Status', JSON.stringify(message.encode().message)]);
 
   const { bestHash, bestNumber } = (message.raw: StatusMessage);
 

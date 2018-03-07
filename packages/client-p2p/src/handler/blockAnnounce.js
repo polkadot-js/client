@@ -14,7 +14,7 @@ const message = require('../message/blockAnnounce');
 const requestsBlocks = require('../sync/requestBlocks');
 
 module.exports = function handleBlockAnnounce (self: P2pState, peer: PeerInterface, message: MessageInterface): void {
-  self.l.debug(() => ['BlockAnnounce', JSON.stringify(message.encode().message)]);
+  self.l.debug(() => [peer.shortId, 'BlockAnnounce', JSON.stringify(message.encode().message)]);
 
   const header = (message.raw: BlockAnnounceMessage).header;
 

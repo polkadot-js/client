@@ -13,7 +13,7 @@ import type { P2pState } from '../server/types';
 const message = require('../message/blockRequest');
 
 module.exports = function handleBlockRequest (self: P2pState, peer: PeerInterface, message: MessageInterface): void {
-  self.l.debug(() => ['BlockRequest', JSON.stringify(message.encode().message)]);
+  self.l.debug(() => [peer.shortId, 'BlockRequest', JSON.stringify(message.encode().message)]);
 
   // const header = (message.raw: BlockRequestMessage).header;
   //
