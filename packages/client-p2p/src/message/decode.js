@@ -3,20 +3,20 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { MessageInterface } from '../types';
+import type { MessageInterface, RawMessage } from '../types';
 
-const rlp = require('@polkadot/util-rlp/decode');
-const u8aToBn = require('@polkadot/util/u8a/toBn');
+const u8aToUtf8 = require('@polkadot/util/u8a/toUtf8');
 
-const message = require('./create');
+const createMessage = require('./create');
 
 module.exports = function decode (u8a: Uint8Array): MessageInterface {
-  // flowlint-next-line unclear-type:off
-  const data = ((rlp(u8a): any): [Uint8Array, Array<*>]);
-  const id = u8aToBn(data[0]).toNumber();
-  const instance = message(id);
+  const message: RawMessage = JSON.parse(
+    u8aToUtf8(u8a)
+  );
 
-  instance.decode(data);
+  const instance = createMessage(message.type);
+
+  instance.decode(message);
 
   return instance;
 };

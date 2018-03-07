@@ -3,8 +3,9 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { BlockRequestMessage } from '../types';
 import type { MessageInterface } from '../../types';
+import type { BlockRequestMessage } from '../types';
+import type { BlockRequestEncoded } from './types';
 
 const BN = require('bn.js');
 
@@ -26,9 +27,9 @@ module.exports = function blockRequest ({ direction = 'ascending', fields = ['he
 
   return base(MESSAGE_ID, {
     raw,
-    rawDecode: (data: Array<*>): BlockRequestMessage =>
+    rawDecode: (data: BlockRequestEncoded): BlockRequestMessage =>
       rawDecode(raw, data),
-    rawEncode: (): Array<*> =>
+    rawEncode: (): BlockRequestEncoded =>
       rawEncode(raw)
   });
 };

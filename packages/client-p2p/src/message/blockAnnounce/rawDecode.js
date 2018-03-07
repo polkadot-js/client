@@ -4,15 +4,11 @@
 // @flow
 
 import type { BlockAnnounceMessage } from '../types';
+import type { BlockAnnounceEncoded } from './types';
 
-const headerDecode = require('@polkadot/primitives-rlp/header/decode');
-const assert = require('@polkadot/util/assert');
+const headerDecode = require('@polkadot/primitives-json/header/decode');
 
-module.exports = function rawDecode (raw: BlockAnnounceMessage, data: Array<*>): BlockAnnounceMessage {
-  assert(data.length >= 1, 'Expected correct message length');
-
-  const [header] = data;
-
+module.exports = function rawDecode (raw: BlockAnnounceMessage, { header }: BlockAnnounceEncoded): BlockAnnounceMessage {
   raw.header = headerDecode(header);
 
   return raw;

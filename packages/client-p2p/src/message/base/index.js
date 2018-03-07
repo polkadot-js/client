@@ -3,27 +3,25 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { MessageInterface } from '../../types';
+import type { MessageInterface, RawMessage } from '../../types';
 import type { MessageImpl } from '../types';
-
-type Enoded = [Uint8Array, Array<*>];
 
 const decode = require('./decode');
 const encode = require('./encode');
 
-module.exports = function base (id: number, impl: MessageImpl): MessageInterface {
+module.exports = function base (type: number, impl: MessageImpl): MessageInterface {
   const self = {
-    id,
+    type,
     impl
   };
 
   return {
-    id,
     // flowlint-next-line unclear-type: off
-    decode: ([ id, data ]: Enoded): any =>
-      decode(self, id, data),
-    encode: (): Enoded =>
+    decode: (data: RawMessage): any =>
+      decode(self, data),
+    encode: (): RawMessage =>
       encode(self),
-    raw: impl.raw
+    raw: impl.raw,
+    type
   };
 };

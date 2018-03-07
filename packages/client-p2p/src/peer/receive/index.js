@@ -16,7 +16,7 @@ const receiveStatus = require('./status');
 module.exports = function receive (self: PeerState, message: MessageInterface): void {
   self.emitter.emit('message', message);
 
-  switch (message.id) {
+  switch (message.type) {
     case statusMessage.MESSAGE_ID:
       return receiveStatus(self, message);
 

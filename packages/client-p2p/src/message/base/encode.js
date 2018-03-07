@@ -3,13 +3,12 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
+import type { RawMessage } from '../../types';
 import type { MessageState } from '../types';
 
-const numberToU8a = require('@polkadot/util/number/toU8a');
-
-module.exports = function encode (self: MessageState): [Uint8Array, Array<*>] {
-  return [
-    numberToU8a(self.id),
-    self.impl.rawEncode()
-  ];
+module.exports = function encode (self: MessageState): RawMessage {
+  return {
+    message: self.impl.rawEncode(),
+    type: self.type
+  };
 };

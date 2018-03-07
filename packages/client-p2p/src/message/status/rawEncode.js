@@ -4,19 +4,18 @@
 // @flow
 
 import type { StatusMessage } from '../types';
+import type { StatusEncoded } from './types';
 
-const roleToId = require('@polkadot/primitives/role/toId');
-const bnEncode = require('@polkadot/primitives-rlp/bn/encode');
-const hashEncode = require('@polkadot/primitives-rlp/hash/encode');
-const numberToU8a = require('@polkadot/util/number/toU8a');
+const bnEncode = require('@polkadot/primitives-json/bn/encode');
+const hashEncode = require('@polkadot/primitives-json/hash/encode');
 
-module.exports = function rawEncode ({ bestHash, bestNumber, genesisHash, parachainId, roles, validatorId, validatorSignature, version }: StatusMessage): Array<*> {
-  return [
-    numberToU8a(version),
-    roles.map(roleToId).map(numberToU8a),
-    bnEncode(bestNumber, 64),
-    hashEncode(bestHash, 256),
-    hashEncode(genesisHash, 256)
+module.exports = function rawEncode ({ bestHash, bestNumber, genesisHash, parachainId, roles, validatorId, validatorSignature, version }: StatusMessage): StatusEncoded {
+  return {
+    bestHash: hashEncode(bestHash, 256),
+    bestNumber: bnEncode(bestNumber, 64),
+    genesisHash: hashEncode(genesisHash, 256),
+    roles,
+    version
     // TODO: validatorId, validatorSignature, parachainId
-  ];
+  };
 };

@@ -5,6 +5,7 @@
 
 import type { MessageInterface } from '../../types';
 import type { StatusMessage } from '../types';
+import type { StatusEncoded } from './types';
 
 const BN = require('bn.js');
 
@@ -29,9 +30,9 @@ module.exports = function status ({ bestHash = new Uint8Array(32), bestNumber = 
 
   return base(MESSAGE_ID, {
     raw,
-    rawDecode: (data: Array<*>): StatusMessage =>
+    rawDecode: (data: StatusEncoded): StatusMessage =>
       rawDecode(raw, data),
-    rawEncode: (): Array<*> =>
+    rawEncode: (): StatusEncoded =>
       rawEncode(raw)
   });
 };

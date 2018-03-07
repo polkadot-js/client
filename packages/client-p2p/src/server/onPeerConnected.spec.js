@@ -33,7 +33,7 @@ describe('onPeerConnected', () => {
 
   it('send status when connection received', (done) => {
     peer.send = (message) => {
-      expect(message.id).toEqual(StatusMessage.MESSAGE_ID);
+      expect(message.type).toEqual(StatusMessage.MESSAGE_ID);
 
       done();
     };

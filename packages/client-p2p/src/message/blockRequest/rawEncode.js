@@ -4,24 +4,20 @@
 // @flow
 
 import type { BlockRequestMessage } from '../types';
+import type { BlockRequestEncoded } from './types';
 
-const bnEncode = require('@polkadot/primitives-rlp/bn/encode');
-const hashEncode = require('@polkadot/primitives-rlp/hash/encode');
-const numberToU8a = require('@polkadot/util/number/toU8a');
+const bnEncode = require('@polkadot/primitives-json/bn/encode');
+const hashEncode = require('@polkadot/primitives-json/hash/encode');
 
-const { ATTRIBUTES, DIRECTIONS } = require('./mapping');
-
-module.exports = function rawEncode ({ direction, fields, from }: BlockRequestMessage): Array<*> {
-  return [
-    numberToU8a(
-      DIRECTIONS.indexOf(direction)
-    ),
-    numberToU8a(
-      fields.reduce((result, attr) => result | ATTRIBUTES[attr], 0)
-    ),
-    [
-      bnEncode(from.number, 64),
-      hashEncode(from.hash, 256)
-    ]
-  ];
+module.exports = function rawEncode ({ direction, fields, from, id, max, to }: BlockRequestMessage): BlockRequestEncoded {
+  return {
+    direction,
+    fields,
+    from: {
+      hash: hashEncode(from.hash, 256),
+      number: bnEncode(from.number, 64)
+    },
+    id,
+    max
+  };
 };

@@ -3,16 +3,17 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
+import type { RawMessage } from '../../types';
 import type { MessageState } from '../types';
 
 const assert = require('@polkadot/util/assert');
-const u8aToBn = require('@polkadot/util/u8a/toBn');
 
-// flowlint-next-line unclear-type: off
-module.exports = function decode (self: MessageState, _id: Uint8Array, data: Array<*>): any {
-  const id = u8aToBn(_id).toNumber();
+// flowlint-next-line unclear-type:off
+module.exports = function decode (self: MessageState, { type, message }: RawMessage): any {
+  assert(type === self.type, 'Expected message id to match');
 
-  assert(id === self.id, 'Expected message id to match');
-
-  return self.impl.rawDecode(data);
+  return {
+    message: self.impl.rawDecode(message),
+    type
+  };
 };

@@ -4,8 +4,28 @@
 // @flow
 
 import type { BlockResponseMessage } from '../types';
+import type { BlockResponseEncoded, BlockResponseEncoded$BlockData } from './types';
 
-module.exports = function rawEncode (raw: BlockResponseMessage): Array<*> {
-  return [
-  ];
+const bytesEncode = require('@polkadot/primitives-json/bytes/encode');
+const hashEncode = require('@polkadot/primitives-json/hash/encode');
+
+module.exports = function rawEncode ({ id, blocks }: BlockResponseMessage): BlockResponseEncoded {
+  return {
+    id,
+    blocks: blocks.map(({ body, hash, header }) => {
+      const result: BlockResponseEncoded$BlockData = {
+        hash: hashEncode(hash, 256)
+      };
+
+      if (body) {
+        result.body = bytesEncode(body);
+      }
+
+      if (header) {
+        result.header = bytesEncode(header);
+      }
+
+      return result;
+    })
+  };
 };

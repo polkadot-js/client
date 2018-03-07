@@ -4,11 +4,12 @@
 // @flow
 
 import type { BlockAnnounceMessage } from '../types';
+import type { BlockAnnounceEncoded } from './types';
 
-const headerEncode = require('@polkadot/primitives-rlp/header/encode');
+const headerEncode = require('@polkadot/primitives-json/header/encode');
 
-module.exports = function rawEncode ({ header }: BlockAnnounceMessage): Array<*> {
-  return [
-    headerEncode(header)
-  ];
+module.exports = function rawEncode ({ header }: BlockAnnounceMessage): BlockAnnounceEncoded {
+  return {
+    header: headerEncode(header)
+  };
 };

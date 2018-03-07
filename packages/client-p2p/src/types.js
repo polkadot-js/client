@@ -7,14 +7,19 @@ import type BN from 'bn.js';
 import type { LibP2P$Connection } from 'libp2p';
 import type { ChainConfig$Nodes } from '@polkadot/client-chains/types';
 
+export type RawMessage = {
+  // flowlint-next-line unclear-type: off
+  message: any,
+  type: number
+};
+
 export interface MessageInterface {
-  id: number,
+  encode: () => RawMessage,
   // flowlint-next-line unclear-type:off
-  encode: () => [Uint8Array, Array<any>],
+  decode: (message: RawMessage) => any,
   // flowlint-next-line unclear-type:off
-  decode: ([Uint8Array, Array<any>]) => any,
-  // flowlint-next-line unclear-type:off
-  raw: any
+  raw: any,
+  type: number
 }
 
 export type P2pNode = {

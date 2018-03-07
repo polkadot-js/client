@@ -60,11 +60,12 @@ export type MessageImpl = {
   // flowlint-next-line unclear-type:off
   raw: any,
   // flowlint-next-line unclear-type:off
-  rawDecode: (data: Array<*>) => any,
-  rawEncode: () => Array<*>
+  rawDecode: (data: any) => any,
+  // flowlint-next-line unclear-type:off
+  rawEncode: () => any
 };
 
 export type MessageState = {
-  id: number,
+  type: number,
   impl: MessageImpl
 };
