@@ -9,7 +9,7 @@ const xxhash = require('@polkadot/util-crypto/xxhash/asU8a128');
 const EMPTY_KEY = new Uint8Array([]);
 
 module.exports = function key (prefix: Uint8Array, key?: ?Uint8Array, isHashed: boolean = true): Uint8Array {
-  const prefixedKey = u8aConcat([ prefix, key || EMPTY_KEY ]);
+  const prefixedKey = u8aConcat(prefix, key || EMPTY_KEY);
 
   return isHashed
     ? xxhash(prefixedKey)

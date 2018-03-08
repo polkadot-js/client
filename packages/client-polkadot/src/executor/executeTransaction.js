@@ -14,7 +14,7 @@ module.exports = function executeTransaction (self: PolkadotState, header: Uint8
 
   const start = Date.now();
   const result = call(self, 'execute_transaction')(
-    u8aConcat([ header, utx ])
+    u8aConcat(header, utx)
   );
 
   self.l.debug(() => `Transaction execution completed (${Date.now() - start}ms)`);

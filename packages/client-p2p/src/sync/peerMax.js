@@ -6,6 +6,7 @@
 import type { P2pState, PeerInterface } from '../types';
 
 const BN = require('bn.js');
+const isBn = require('@polkadot/util/is/bn');
 
 const peerRequests = require('./peerRequests');
 
@@ -14,6 +15,10 @@ module.exports = function peerMax (self: P2pState, peer: PeerInterface): BN {
   const requests = peerRequests(self, peer);
 
   return requests.reduce((next, { request: { from, max } }) => {
+    if (!isBn(from)) {
+      return next;
+    }
+
     // flowlint-next-line unclear-type:off
     const last = new BN(((from: any): BN)).addn(max);
 

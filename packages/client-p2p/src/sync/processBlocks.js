@@ -20,10 +20,10 @@ module.exports = function processBlocks ({ l, chain, sync }: P2pState, peer: Pee
   delete sync.blockRequests[id];
 
   const count = blocks.reduce((count, { hash, header, body }) => {
-    const block = u8aConcat([
+    const block = u8aConcat(
       // flowlint-next-line unclear-type:off
       ((header: any): Uint8Array), ((body: any): Uint8Array)
-    ]);
+    );
     const hasBlock = chain.blocks.getBlock(hash).length !== 0;
 
     if (hasBlock || !chain.executor.importBlock(block)) {
