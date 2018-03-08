@@ -7,6 +7,11 @@ import type { P2pState } from '../server/types';
 import type { PeerInterface } from '../types';
 import type { SyncState$Request } from './types';
 
-module.exports = function peerRequests ({ sync: { blockRequests } }: P2pState, peer: PeerInterface): Array<SyncState$Request> {
-  return blockRequests.filter(({ peerId }) => peer.id === peerId);
+type Requests = Array<SyncState$Request>;
+
+module.exports = function peerRequests ({ sync: { blockRequests } }: P2pState, peer: PeerInterface): Requests {
+  // flowlint-next-line unclear-type:off
+  const requests = ((Object.values(blockRequests): any): Requests);
+
+  return requests.filter(({ peer: { id } }) => peer.id === id);
 };

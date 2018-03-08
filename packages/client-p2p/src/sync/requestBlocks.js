@@ -20,17 +20,18 @@ module.exports = function requestBlocks (self: P2pState, peer: PeerInterface): v
   while (from.lt(peerBest)) {
     self.l.debug(() => `Requesting blocks from ${peer.shortId}, #${from.toString()} -`);
 
+    const id = ++requestId;
     const request = blockRequest({
       from,
-      id: ++requestId
+      id
     });
 
     from = from.addn(MAX_SYNC_BLOCKS);
 
-    self.sync.blockRequests.push({
-      peerId: peer.id,
+    self.sync.blockRequests[id] = {
+      peer,
       request: (request.raw: BlockRequestMessage)
-    });
+    };
 
     peer.send(request);
   }

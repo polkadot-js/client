@@ -6,7 +6,7 @@
 import type { ChainInterface$Executor$BlockImportResult } from '@polkadot/client-chains/types';
 import type { PolkadotState } from '../types';
 
-const decodeHeader = require('@polkadot/primitives-codec/header/decodePartial');
+const decodeRaw = require('@polkadot/primitives-codec/block/decodeRaw');
 const blake2Asu8a256 = require('@polkadot/util-crypto/blake2/asU8a256');
 
 const executeBlock = require('./executeBlock');
@@ -24,8 +24,8 @@ module.exports = function importBlock (self: PolkadotState, block: Uint8Array): 
 
   self.stateDb.commit();
 
-  const { header: { number }, raw, remainder } = decodeHeader(block);
-  const hash = blake2Asu8a256(raw);
+  const { body, header, number } = decodeRaw(block);
+  const hash = blake2Asu8a256(header);
 
   // console.log('decoded', raw, hash);
 
@@ -35,8 +35,8 @@ module.exports = function importBlock (self: PolkadotState, block: Uint8Array): 
   self.l.log(`Imported block #${number.toString()} (${Date.now() - start}ms)`);
 
   return {
-    body: remainder,
+    body,
     hash,
-    header: raw
+    header
   };
 };

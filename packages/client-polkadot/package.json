@@ -37,8 +37,8 @@
   "devDependencies": {
     "@polkadot/client": "^0.8.8",
     "@polkadot/client-db": "^0.8.8",
-    "@polkadot/primitives-builder": "^0.8.1",
-    "@polkadot/primitives-codec": "^0.8.1",
+    "@polkadot/primitives-builder": "^0.9.1",
+    "@polkadot/primitives-codec": "^0.9.1",
     "@polkadot/util-keyring": "^0.16.5",
     "@polkadot/wasm-bin": "paritytech/polkadot-wasm-bin#bfc718615463a2763b25f7b231792201a4593113"
   }

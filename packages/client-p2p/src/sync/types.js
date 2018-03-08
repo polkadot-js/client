@@ -4,12 +4,15 @@
 // @flow
 
 import type { BlockRequestMessage } from '../message/types';
+import type { PeerInterface } from '../types';
 
 export type SyncState$Request = {
-  peerId: string,
+  peer: PeerInterface,
   request: BlockRequestMessage
 }
 
 export type SyncState = {
-  blockRequests: Array<SyncState$Request>
+  blockRequests: {
+    [number]: SyncState$Request
+  }
 };
