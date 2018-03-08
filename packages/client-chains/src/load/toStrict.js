@@ -4,14 +4,14 @@
 // @flow
 
 import type BN from 'bn.js';
-import type { ChainConfigType, ChainConfigTypeLoose, ChainConfigType$Number } from '../types';
+import type { ChainConfig, ChainConfigLoose, ChainConfig$Number } from '../types';
 
 const bnToBn = require('@polkadot/util/bn/toBn');
 const isHex = require('@polkadot/util/is/hex');
 const hexToBn = require('@polkadot/util/hex/toBn');
 const hexToU8a = require('@polkadot/util/hex/toU8a');
 
-function valueToBn (value: ChainConfigType$Number): BN {
+function valueToBn (value: ChainConfig$Number): BN {
   // $FlowFixMe we are determining type
   if (isHex(value)) {
     // $FlowFixMe type has been determined
@@ -22,7 +22,7 @@ function valueToBn (value: ChainConfigType$Number): BN {
   return bnToBn(value);
 }
 
-module.exports = function toStrict ({ authorities, balances, code, description, name, nodes, params: { approvalRatio, blockTime, bondingDuration, networkId, sessionLength, sessionsPerEra }, type, validators }: ChainConfigTypeLoose): $Shape<ChainConfigType> {
+module.exports = function toStrict ({ authorities, balances, code, description, name, nodes, params: { approvalRatio, blockTime, bondingDuration, networkId, sessionLength, sessionsPerEra }, type, validators }: ChainConfigLoose): $Shape<ChainConfig> {
   return {
     authorities: authorities.map(hexToU8a),
     balances: Object.keys(balances).map((accountId) => ({

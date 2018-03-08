@@ -10,7 +10,7 @@ export type WasmExports = {
   env: Object
 };
 
-export type WasmConfigType = {
+export type WasmConfig = {
   heapSize: number
 };
 

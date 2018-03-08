@@ -3,7 +3,7 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { ChainConfigType$Number } from '../types';
+import type { ChainConfig$Number } from '../types';
 
 const assert = require('@polkadot/util/assert');
 const isBn = require('@polkadot/util/is/bn');
@@ -19,7 +19,7 @@ function isNumber (value: any): boolean {
   return Number.isInteger(value) || isBn(value) || isHex(value);
 }
 
-module.exports = function validateParams (params: { [string]: ChainConfigType$Number }, strict: boolean = false): boolean {
+module.exports = function validateParams (params: { [string]: ChainConfig$Number }, strict: boolean = false): boolean {
   validateObject(PREFIX, params, KNOWN_KEYS, strict);
 
   KNOWN_KEYS.forEach((key) => {

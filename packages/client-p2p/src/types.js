@@ -4,29 +4,38 @@
 // @flow
 
 import type BN from 'bn.js';
-import type { LibP2P$Connection } from 'libp2p';
-import type { ChainConfigType$Nodes } from '@polkadot/client-chains/types';
+import type LibP2P, { LibP2P$Connection } from 'libp2p';
+import type EventEmitter from 'eventemitter3';
+import type { Logger } from '@polkadot/util/types';
+import type { Config } from '@polkadot/client/types';
+import type { ChainInterface, ChainConfig$Nodes } from '@polkadot/client-chains/types';
+import type { SyncState } from './sync/types';
+
+export type RawMessage = {
+  // flowlint-next-line unclear-type: off
+  message: any,
+  type: number
+};
 
 export interface MessageInterface {
-  id: number,
+  encode: () => RawMessage,
   // flowlint-next-line unclear-type:off
-  encode: () => [Uint8Array, Array<any>],
+  decode: (message: RawMessage) => any,
   // flowlint-next-line unclear-type:off
-  decode: ([Uint8Array, Array<any>]) => any,
-  // flowlint-next-line unclear-type:off
-  raw: any
+  raw: any,
+  type: number
 }
 
-export type P2pNodeType = {
+export type P2pNode = {
   address: string,
   port: number
 };
 
-export type P2pConfigType = {
+export type P2pConfig = {
   address: string,
   clientId: string,
   maxPeers: number,
-  peers?: ChainConfigType$Nodes,
+  peers?: ChainConfig$Nodes,
   port: number
 };
 
@@ -39,9 +48,10 @@ export type PeerInterface = {
   addConnection: (connection: LibP2P$Connection) => boolean,
   getBestHash: () => Uint8Array,
   getBestNumber: () => BN,
-  send: (message: MessageInterface) => boolean,
   // flowlint-next-line unclear-type:off
-  on (type: PeerInterface$Events, (message: MessageInterface) => any): any;
+  on (type: PeerInterface$Events, (message: MessageInterface) => any): any,
+  send: (message: MessageInterface) => boolean,
+  setBest: (number: BN, hash: Uint8Array) => void
 }
 
 export type PeersInterface$Events = 'connected' | 'disconnected' | 'discovered' | 'message';
@@ -55,14 +65,23 @@ export type PeersInterface = {
   peers: () => Array<PeerInterface>
 }
 
-export type P2pInterface$Events = 'message' | 'started' | 'stopped';
+export type P2pInterface$Events = 'started' | 'stopped';
 
 export type P2pInterface = {
   _announceBlock: (hash: Uint8Array, header: Uint8Array, body: Uint8Array) => void,
   isStarted: () => boolean,
   // flowlint-next-line unclear-type:off
   on: (type: P2pInterface$Events, () => any) => any,
-  peers: () => PeersInterface,
   start: () => Promise<boolean>,
   stop: () => Promise<boolean>
 }
+
+export type P2pState = {
+  chain: ChainInterface,
+  config: Config,
+  emitter: EventEmitter,
+  l: Logger,
+  node: LibP2P,
+  peers: PeersInterface,
+  sync: SyncState
+};

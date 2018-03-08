@@ -4,7 +4,7 @@
 
 const EventEmitter = require('eventemitter3');
 
-const StatusMessage = require('../message/status');
+const StatusMessage = require('./message/status');
 const onPeerConnected = require('./onPeerConnected');
 
 describe('onPeerConnected', () => {
@@ -17,8 +17,8 @@ describe('onPeerConnected', () => {
       config: { roles: [] },
       chain: {
         blocks: {
-          getLatestNumber: jest.fn(() => 123),
-          getLatestHash: jest.fn(() => new Uint8Array([]))
+          getBestNumber: jest.fn(() => 123),
+          getBestHash: jest.fn(() => new Uint8Array([]))
         },
         genesis: {
           hash: new Uint8Array([])
@@ -33,7 +33,7 @@ describe('onPeerConnected', () => {
 
   it('send status when connection received', (done) => {
     peer.send = (message) => {
-      expect(message.id).toEqual(StatusMessage.MESSAGE_ID);
+      expect(message.type).toEqual(StatusMessage.TYPE);
 
       done();
     };

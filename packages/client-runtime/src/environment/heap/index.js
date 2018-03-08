@@ -3,7 +3,7 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { RuntimeEnv$Heap, PointerType } from '../../types';
+import type { RuntimeEnv$Heap, Pointer } from '../../types';
 import type { Memory, Memory$Buffer } from './types';
 
 const allocate = require('./allocate');
@@ -21,24 +21,24 @@ module.exports = function envHeap (): RuntimeEnv$Heap {
   let memory: Memory;
 
   return {
-    allocate: (size: number): PointerType =>
+    allocate: (size: number): Pointer =>
       allocate(memory, size),
-    deallocate: (ptr: PointerType): number =>
+    deallocate: (ptr: Pointer): number =>
       deallocate(memory, ptr),
-    dup: (ptr: PointerType, len: number): Uint8Array =>
+    dup: (ptr: Pointer, len: number): Uint8Array =>
       memory.uint8.slice(ptr, ptr + len),
-    fill: (ptr: PointerType, value: number, len: number): Uint8Array =>
+    fill: (ptr: Pointer, value: number, len: number): Uint8Array =>
       memory.uint8.fill(value, ptr, len),
-    get: (ptr: PointerType, len: number): Uint8Array =>
+    get: (ptr: Pointer, len: number): Uint8Array =>
       memory.uint8.subarray(ptr, ptr + len),
-    getU32: (ptr: PointerType): number =>
+    getU32: (ptr: Pointer): number =>
       memory.view.getUint32(ptr, true),
-    set: (ptr: PointerType, data: Uint8Array): PointerType => {
+    set: (ptr: Pointer, data: Uint8Array): Pointer => {
       memory.uint8.set(data, ptr);
 
       return ptr;
     },
-    setU32: (ptr: PointerType, value: number): PointerType => {
+    setU32: (ptr: Pointer, value: number): Pointer => {
       memory.view.setUint32(ptr, value, true);
 
       return ptr;

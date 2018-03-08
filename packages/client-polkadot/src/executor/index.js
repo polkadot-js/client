@@ -3,6 +3,7 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
+import type BN from 'bn.js';
 import type { ChainInterface$Executor, ChainInterface$Executor$BlockImportResult } from '@polkadot/client-chains/types';
 import type { PolkadotState } from '../types';
 
@@ -20,7 +21,7 @@ module.exports = function executor (self: PolkadotState): ChainInterface$Executo
       executeTransaction(self, header, utx),
     finaliseBlock: (header: Uint8Array): Uint8Array =>
       finaliseBlock(self, header),
-    generateBlock: (number: number, utxs: Array<Uint8Array>, timestamp?: number = Date.now()): Uint8Array =>
+    generateBlock: (number: BN | number, utxs: Array<Uint8Array>, timestamp?: number = Date.now()): Uint8Array =>
       generateBlock(self, number, utxs, timestamp),
     importBlock: (block: Uint8Array): ?ChainInterface$Executor$BlockImportResult =>
       importBlock(self, block)

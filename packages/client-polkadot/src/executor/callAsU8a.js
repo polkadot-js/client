@@ -5,13 +5,13 @@
 
 import type { PolkadotState } from '../types';
 
-export type CallU8aType = (...data: Array<Uint8Array>) => Uint8Array;
+export type CallU8a = (...data: Array<Uint8Array>) => Uint8Array;
 
 const u8aToHex = require('@polkadot/util/u8a/toHex');
 
 const call = require('./call');
 
-module.exports = function callAsU8a (self: PolkadotState, name: string): CallU8aType {
+module.exports = function callAsU8a (self: PolkadotState, name: string): CallU8a {
   const fn = call(self, name);
   const { l, heap } = self.runtime.environment;
 

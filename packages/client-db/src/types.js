@@ -5,13 +5,13 @@
 
 import type { Trie$Pairs } from '@polkadot/util-triehash/types';
 
-export type DbPathPrefixType = 'database';
+export type DbPathPrefix = 'database';
 
-export type DbConfigType$Type = 'disk' | 'memory';
+export type DbConfig$ = 'disk' | 'memory';
 
-export type DbConfigType = {
+export type DbConfig = {
   path: string,
-  type: DbConfigType$Type
+  type: DbConfig$
 };
 
 export type BaseDbInterface = {

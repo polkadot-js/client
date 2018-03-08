@@ -5,19 +5,18 @@
 
 import type { MessageInterface } from '../../types';
 import type { StatusMessage } from '../types';
+import type { StatusEncoded } from './types';
 
 const BN = require('bn.js');
-
-const hexToU8a = require('@polkadot/util/hex/toU8a');
 
 const defaults = require('../../defaults');
 const base = require('../base');
 const rawDecode = require('./rawDecode');
 const rawEncode = require('./rawEncode');
 
-const MESSAGE_ID: number = 0;
+const TYPE: number = 0;
 
-module.exports = function status ({ bestNumber = new BN(0), bestHash = hexToU8a('0x00', 256), genesisHash = hexToU8a('0x00', 256), roles = ['none'], validatorSignature = hexToU8a('0x00', 512), validatorId = hexToU8a('0x00', 160), parachainId = new BN(0) }: $Shape<StatusMessage> = {}): MessageInterface {
+module.exports = function status ({ bestHash = new Uint8Array(32), bestNumber = new BN(0), genesisHash = new Uint8Array(32), parachainId = new BN(0), roles = ['none'], validatorId = new Uint8Array(32), validatorSignature = new Uint8Array(64), version = defaults.PROTOCOL_VERSION }: $Shape<StatusMessage>): MessageInterface {
   const raw: StatusMessage = {
     bestHash,
     bestNumber,
@@ -26,16 +25,16 @@ module.exports = function status ({ bestNumber = new BN(0), bestHash = hexToU8a(
     roles,
     validatorId,
     validatorSignature,
-    version: defaults.PROTOCOL_VERSION
+    version
   };
 
-  return base(MESSAGE_ID, {
+  return base(TYPE, {
     raw,
-    rawDecode: (data: Array<*>): StatusMessage =>
+    rawDecode: (data: StatusEncoded): StatusMessage =>
       rawDecode(raw, data),
-    rawEncode: (): Array<*> =>
+    rawEncode: (): StatusEncoded =>
       rawEncode(raw)
   });
 };
 
-module.exports.MESSAGE_ID = MESSAGE_ID;
+module.exports.TYPE = TYPE;

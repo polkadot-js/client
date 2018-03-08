@@ -5,11 +5,15 @@
 
 import type { P2pState } from './types';
 
-const decodeHeader = require('@polkadot/primitives-codec/blockHeader/decode');
+const decodeHeader = require('@polkadot/primitives-codec/header/decode');
 
-const announceMessage = require('../message/blockAnnounce');
+const announceMessage = require('./message/blockAnnounce');
 
 module.exports = function announceBlock (self: P2pState, hash: Uint8Array, _header: Uint8Array, body: Uint8Array): void {
+  if (!self.peers) {
+    return;
+  }
+
   const header = decodeHeader(_header);
   const message = announceMessage({ header });
 

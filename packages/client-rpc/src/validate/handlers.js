@@ -3,12 +3,12 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { HandlersType } from '../types';
+import type { Handlers } from '../types';
 
 const assert = require('@polkadot/util/assert');
 const isFunction = require('@polkadot/util/is/function');
 
-module.exports = function validateHandlers (handlers: HandlersType = {}): void {
+module.exports = function validateHandlers (handlers: Handlers = {}): void {
   const handlerKeys = Object.keys(handlers);
 
   assert(handlerKeys.length !== 0, 'Expected non-empty handler mapping');

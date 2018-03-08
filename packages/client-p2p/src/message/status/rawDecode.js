@@ -4,29 +4,23 @@
 // @flow
 
 import type { StatusMessage } from '../types';
+import type { StatusEncoded } from './types';
 
-const roleFromId = require('@polkadot/primitives/role/fromId');
-const accountIdDecode = require('@polkadot/primitives-rlp/accountId/decode');
-const blockNumberDecode = require('@polkadot/primitives-rlp/blockNumber/decode');
-const hashDecode = require('@polkadot/primitives-rlp/hash/decode');
-const parachainIdDecode = require('@polkadot/primitives-rlp/parachainId/decode');
-const signatureDecode = require('@polkadot/primitives-rlp/signature/decode');
-const assert = require('@polkadot/util/assert');
-const u8aToBn = require('@polkadot/util/u8a/toBn');
+const accountIdDecode = require('@polkadot/primitives-json/accountId/decode');
+const bnDecode = require('@polkadot/primitives-json/bn/decode');
+const hashDecode = require('@polkadot/primitives-json/hash/decode');
+const parachainIdDecode = require('@polkadot/primitives-json/parachainId/decode');
+const signatureDecode = require('@polkadot/primitives-json/signature/decode');
 
-module.exports = function rawDecode (raw: StatusMessage, data: Array<*>): StatusMessage {
-  assert(data.length >= 5, 'Expected correct message length');
-
-  const [version, roles, bestNumber, bestHash, genesisHash, validatorSignature = new Uint8Array([]), validatorId = new Uint8Array([]), parachainId = new Uint8Array([])] = data;
-
-  raw.version = u8aToBn((version: Uint8Array)).toNumber();
-  raw.roles = roles.map((role) => u8aToBn(role).toNumber()).map(roleFromId);
-  raw.bestNumber = blockNumberDecode(bestNumber);
-  raw.bestHash = hashDecode(bestHash);
-  raw.genesisHash = hashDecode(genesisHash);
-  raw.validatorSignature = signatureDecode(validatorSignature);
-  raw.validatorId = accountIdDecode(validatorId);
+module.exports = function rawDecode (raw: StatusMessage, { bestHash, bestNumber, genesisHash, parachainId = '0x00', roles, validatorId = '0x00', validatorSignature = '0x00', version }: StatusEncoded): StatusMessage {
+  raw.bestNumber = bnDecode(bestNumber, 64);
+  raw.bestHash = hashDecode(bestHash, 256);
+  raw.genesisHash = hashDecode(genesisHash, 256);
   raw.parachainId = parachainIdDecode(parachainId);
+  raw.roles = roles;
+  raw.validatorId = accountIdDecode(validatorId);
+  raw.validatorSignature = signatureDecode(validatorSignature);
+  raw.version = version;
 
   return raw;
 };

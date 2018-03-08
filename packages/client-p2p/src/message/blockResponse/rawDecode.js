@@ -3,8 +3,31 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { BlockResponseMessage } from '../types';
+import type { BlockResponseMessage, BlockResponseMessage$BlockData } from '../types';
+import type { BlockResponseEncoded } from './types';
 
-module.exports = function rawDecode (raw: BlockResponseMessage, data: Array<*>): BlockResponseMessage {
+const bytesDecode = require('@polkadot/primitives-json/bytes/decode');
+const hashDecode = require('@polkadot/primitives-json/hash/decode');
+
+module.exports = function rawDecode (raw: BlockResponseMessage, { id, blocks }: BlockResponseEncoded): BlockResponseMessage {
+  raw.id = id;
+  raw.blocks = blocks.map(({ body, hash, header }) => {
+    const result: BlockResponseMessage$BlockData = {
+      hash: hashDecode(hash)
+    };
+
+    // flowlint-next-line sketchy-null-string:off
+    if (body) {
+      result.body = bytesDecode(body);
+    }
+
+    // flowlint-next-line sketchy-null-string:off
+    if (header) {
+      result.header = bytesDecode(header);
+    }
+
+    return result;
+  });
+
   return raw;
 };

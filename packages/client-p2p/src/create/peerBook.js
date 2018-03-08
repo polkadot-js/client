@@ -3,13 +3,13 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { ChainConfigType$Nodes } from '@polkadot/client-chains/types';
+import type { ChainConfig$Nodes } from '@polkadot/client-chains/types';
 
 const PeerBook = require('peer-book');
 
 const createPeerInfo = require('./peerInfo');
 
-module.exports = async function createPeerBook (peers: ChainConfigType$Nodes = []): Promise<PeerBook> {
+module.exports = async function createPeerBook (peers: ChainConfig$Nodes = []): Promise<PeerBook> {
   const peerBook = new PeerBook();
   const peerInfos = await Promise.all(
     peers.map((peer) => createPeerInfo([peer]))

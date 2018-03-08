@@ -2,7 +2,7 @@
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
 
-const defaults = require('../defaults');
+const defaults = require('./defaults');
 const onProtocol = require('./onProtocol');
 
 describe('onProtocol', () => {

@@ -9,10 +9,10 @@ import type { PolkadotBlockDb } from '../types';
 
 const debug = require('../dbState/debug');
 const getBlock = require('./getBlock');
-const getLatestHash = require('./getLatestHash');
-const getLatestNumber = require('./getLatestNumber');
+const getBestHash = require('./getBestHash');
+const getBestNumber = require('./getBestNumber');
 const setBlock = require('./setBlock');
-const setLatest = require('./setLatest');
+const setBest = require('./setBest');
 
 module.exports = function blockDb (baseDb: BaseDbInterface): PolkadotBlockDb {
   return {
@@ -20,13 +20,13 @@ module.exports = function blockDb (baseDb: BaseDbInterface): PolkadotBlockDb {
       debug(baseDb),
     getBlock: (hash: Uint8Array): Uint8Array =>
       getBlock(baseDb, hash),
-    getLatestHash: (): Uint8Array =>
-      getLatestHash(baseDb),
-    getLatestNumber: (): BN =>
-      getLatestNumber(baseDb),
+    getBestHash: (): Uint8Array =>
+      getBestHash(baseDb),
+    getBestNumber: (): BN =>
+      getBestNumber(baseDb),
     setBlock: (hash: Uint8Array, block: Uint8Array): void =>
       setBlock(baseDb, hash, block),
-    setLatest: (number: BN | number, hash: Uint8Array): void =>
-      setLatest(baseDb, number, hash)
+    setBest: (number: BN | number, hash: Uint8Array): void =>
+      setBest(baseDb, number, hash)
   };
 };

@@ -3,29 +3,30 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { BlockAnnounceMessage } from '../types';
 import type { MessageInterface } from '../../types';
+import type { BlockAnnounceMessage } from '../types';
+import type { BlockAnnounceEncoded } from './types';
 
-const createHeader = require('@polkadot/primitives-builder/blockHeader');
+const createHeader = require('@polkadot/primitives-builder/header');
 
 const base = require('../base');
 const rawDecode = require('./rawDecode');
 const rawEncode = require('./rawEncode');
 
-const MESSAGE_ID: number = 3;
+const TYPE: number = 3;
 
 module.exports = function blockAnnounce ({ header = createHeader({}) }: $Shape<BlockAnnounceMessage>): MessageInterface {
   const raw: BlockAnnounceMessage = {
     header
   };
 
-  return base(MESSAGE_ID, {
+  return base(TYPE, {
     raw,
-    rawDecode: (data: Array<*>): BlockAnnounceMessage =>
+    rawDecode: (data: BlockAnnounceEncoded): BlockAnnounceMessage =>
       rawDecode(raw, data),
-    rawEncode: (): Array<*> =>
+    rawEncode: (): BlockAnnounceEncoded =>
       rawEncode(raw)
   });
 };
 
-module.exports.MESSAGE_ID = MESSAGE_ID;
+module.exports.TYPE = TYPE;

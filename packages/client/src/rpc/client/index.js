@@ -3,10 +3,10 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { EndpointType } from '../../types';
+import type { Endpoint } from '../../types';
 
 const version = require('./version');
 
 module.exports = ({
   'client_version': version
-}: EndpointType);
+}: Endpoint);

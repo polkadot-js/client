@@ -3,7 +3,7 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { ConfigType } from '../../types';
+import type { Config } from '../../types';
 
 const yargs = require('yargs');
 
@@ -15,7 +15,7 @@ const p2p = require('./p2p');
 const rpc = require('./rpc');
 const wasm = require('./wasm');
 
-module.exports = function argv (cli?: string): ConfigType {
+module.exports = function argv (cli?: string): Config {
   const devOpts = isDevelopment
     ? dev
     : {};
@@ -42,5 +42,5 @@ module.exports = function argv (cli?: string): ConfigType {
     : parser.argv;
 
   // flowlint-next-line unclear-type:off
-  return ((parsed: any): ConfigType);
+  return ((parsed: any): Config);
 };

@@ -5,8 +5,11 @@
 
 import type { MessageInterface } from '../types';
 
-// flowlint-next-line unclear-type:off
-type CreateType = (any) => MessageInterface;
+type Create = {
+  // flowlint-next-line unclear-type:off
+  (any): MessageInterface,
+  TYPE: number
+};
 
 const assert = require('@polkadot/util/assert');
 const isUndefined = require('@polkadot/util/is/undefined');
@@ -16,16 +19,13 @@ const blockRequest = require('./blockRequest');
 const blockResponse = require('./blockResponse');
 const status = require('./status');
 
-const CREATORS: Array<CreateType> = [
-  status,
-  blockRequest,
-  blockResponse,
-  blockAnnounce
+const CREATORS: Array<Create> = [
+  blockAnnounce, blockRequest, blockResponse, status
 ];
 
 // flowlint-next-line unclear-type: off
 module.exports = function create (id: number, data?: any = {}): MessageInterface {
-  const creator = CREATORS.find((c) => c.MESSAGE_ID === id);
+  const creator = CREATORS.find((c) => c.TYPE === id);
 
   assert(!isUndefined(creator), `No message found for id '${id}'`);
 

@@ -3,26 +3,29 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { BlockResponseMessage } from '../types';
 import type { MessageInterface } from '../../types';
+import type { BlockResponseMessage } from '../types';
+import type { BlockResponseEncoded } from './types';
 
 const base = require('../base');
 const rawDecode = require('./rawDecode');
 const rawEncode = require('./rawEncode');
 
-const MESSAGE_ID: number = 2;
+const TYPE: number = 2;
 
-module.exports = function blockResponse (): MessageInterface {
+module.exports = function blockResponse ({ blocks = [], id = 0 }: $Shape<BlockResponseMessage>): MessageInterface {
   const raw: BlockResponseMessage = {
+    blocks,
+    id
   };
 
-  return base(MESSAGE_ID, {
+  return base(TYPE, {
     raw,
-    rawDecode: (data: Array<*>): BlockResponseMessage =>
+    rawDecode: (data: BlockResponseEncoded): BlockResponseMessage =>
       rawDecode(raw, data),
-    rawEncode: (): Array<*> =>
+    rawEncode: (): BlockResponseEncoded =>
       rawEncode(raw)
   });
 };
 
-module.exports.MESSAGE_ID = MESSAGE_ID;
+module.exports.TYPE = TYPE;

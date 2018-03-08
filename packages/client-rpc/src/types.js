@@ -3,6 +3,11 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
+import type EventEmitter from 'eventemitter3';
+import type { Config } from '@polkadot/client/types';
+import type { ChainInterface } from '@polkadot/client-chains/types';
+import type { Logger } from '@polkadot/util/types';
+
 export type JsonRpcBase = {
   id: number,
   jsonrpc: '2.0'
@@ -24,29 +29,29 @@ export type JsonRpcResponse = JsonRpcBase & {
   result: mixed
 };
 
-export type HandlerType = (mixed) => Promise<mixed>;
+export type Handler = (mixed) => Promise<mixed>;
 
-export type HandlersType = {
-  [string]: HandlerType
+export type Handlers = {
+  [string]: Handler
 };
 
-export type RpcType = 'http' | 'ws';
+export type Rpc = 'http' | 'ws';
 
-export type RpcConfigType = {
+export type RpcConfig = {
   path: string,
   port: number,
-  types: Array<RpcType>
+  types: Array<Rpc>
 };
 
 export type RpcInterface$Events = 'started' | 'stopped';
 
-export type PostContextType = {
+export type PostContext = {
   body: string,
   req: http$IncomingMessage,
   type: 'application/json'
 };
 
-export type WsContextType = {
+export type WsContext = {
   websocket: {
     // flowlint-next-line unclear-type:off
     on: (type: 'message', (message: string) => any) => any,
@@ -60,3 +65,12 @@ export type RpcInterface = {
   start (): Promise<boolean>,
   stop (): Promise<boolean>
 }
+
+export type RpcState = {
+  chain: ChainInterface,
+  config: Config,
+  emitter: EventEmitter,
+  handlers: Handlers,
+  l: Logger,
+  server: ?net$Server
+};

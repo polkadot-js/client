@@ -10,14 +10,14 @@ type CallResult = {
   hi: number
 };
 
-type CallType = (...data: Array<Uint8Array>) => CallResult;
+type Call = (...data: Array<Uint8Array>) => CallResult;
 
 const createWasm = require('@polkadot/client-wasm');
 const u8aToHex = require('@polkadot/util/u8a/toHex');
 
 const proxy = require('../wasm/proxy_polkadot_wasm');
 
-module.exports = function call ({ chain: { code }, config, runtime }: PolkadotState, name: string): CallType {
+module.exports = function call ({ chain: { code }, config, runtime }: PolkadotState, name: string): Call {
   const instance = createWasm(config, runtime, code, proxy);
   const { l, heap } = runtime.environment;
 

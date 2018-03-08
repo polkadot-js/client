@@ -3,7 +3,7 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { ConfigType } from '../types';
+import type { Config } from '../types';
 
 const getArgv = require('./argv');
 
@@ -17,7 +17,7 @@ function keyToCamel (key: string, startIndex: number = 0): string {
   }, '');
 }
 
-module.exports = function cli (params?: string): ConfigType {
+module.exports = function cli (params?: string): Config {
   const argv = getArgv(params);
 
   return Object
@@ -36,5 +36,5 @@ module.exports = function cli (params?: string): ConfigType {
       }
 
       return config;
-    }, ({}: $Shape<ConfigType>));
+    }, ({}: $Shape<Config>));
 };

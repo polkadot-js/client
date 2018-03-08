@@ -3,14 +3,14 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { DbPathPrefixType, DbConfigType$Type } from './types';
+import type { DbPathPrefix, DbConfig$ } from './types';
 
 const os = require('os');
 const path = require('path');
 
-const PREFIX_DB: DbPathPrefixType = 'database';
+const PREFIX_DB: DbPathPrefix = 'database';
 const PATH = path.join(os.homedir(), '.@polkadot');
-const TYPE: DbConfigType$Type = 'memory';
+const TYPE: DbConfig$ = 'memory';
 
 module.exports = {
   PREFIX_DB,

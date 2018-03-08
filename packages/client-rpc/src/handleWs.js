@@ -3,15 +3,14 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { WsContextType } from '../types';
-import type { RpcState } from './types';
+import type { RpcState, WsContext } from './types';
 
-type HandlerType = (ctx: WsContextType) => void;
+type Handler = (ctx: WsContext) => void;
 
 const handleMessage = require('./handleMessage');
 
-module.exports = function handleWs (self: RpcState): HandlerType {
-  return (ctx: WsContextType): void => {
+module.exports = function handleWs (self: RpcState): Handler {
+  return (ctx: WsContext): void => {
     ctx.websocket.on('message', async (message: string) => {
       const response = await handleMessage(self, message);
 

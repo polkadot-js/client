@@ -11,17 +11,17 @@ describe('status', () => {
   it('assigns sane defaults', () => {
     expect(
       JSON.stringify(
-        status().raw
+        status({}).raw
       )
     ).toEqual(
       JSON.stringify({
-        bestHash: hexToU8a('0x0', 256),
+        bestHash: new Uint8Array(32),
         bestNumber: new BN(0),
-        genesisHash: hexToU8a('0x0', 256),
+        genesisHash: new Uint8Array(32),
         parachainId: new BN(0),
         roles: ['none'],
-        validatorId: hexToU8a('0x0', 160),
-        validatorSignature: hexToU8a('0x0', 512),
+        validatorId: new Uint8Array(32),
+        validatorSignature: new Uint8Array(64),
         version: 0
       })
     );
@@ -33,24 +33,18 @@ describe('status', () => {
         roles: ['full', 'validator'],
         bestNumber: new BN(1),
         bestHash: '0x2',
-        genesisHash: '0x3',
-        validatorSignature: '0x4',
-        validatorId: '0x5',
-        parachainId: new BN(6)
+        genesisHash: '0x3'
       }).raw
     ).toMatchObject({
       roles: ['full', 'validator'],
       bestNumber: new BN(1),
       bestHash: '0x2',
-      genesisHash: '0x3',
-      validatorSignature: '0x4',
-      validatorId: '0x5',
-      parachainId: new BN(6)
+      genesisHash: '0x3'
     });
   });
 
   it('encodes and decodes via rawDecode/Encode', () => {
-    const result = status();
+    const result = status({});
 
     result.decode(
       status({

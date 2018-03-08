@@ -3,9 +3,9 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { RuntimeEnv$Heap, PointerType } from '../types';
+import type { RuntimeEnv$Heap, Pointer } from '../types';
 
-module.exports = function memset (heap: RuntimeEnv$Heap, dstPtr: PointerType, value: number, length: number): PointerType {
+module.exports = function memset (heap: RuntimeEnv$Heap, dstPtr: Pointer, value: number, length: number): Pointer {
   heap.fill(dstPtr, value, length);
 
   return dstPtr;

@@ -3,8 +3,7 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { RpcInterface$Events } from '../types';
-import type { RpcState } from './types';
+import type { RpcState, RpcInterface$Events } from './types';
 
 // flowlint-next-line unclear-type:off
 type EmitterOn = (type: RpcInterface$Events, cb: () => any) => any;

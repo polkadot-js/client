@@ -5,10 +5,12 @@
 
 import type { MessageInterface } from '../types';
 
-const rlp = require('@polkadot/util-rlp/encode');
+const u8aFromUtf8 = require('@polkadot/util/u8a/fromUtf8');
 
 module.exports = function encode (message: MessageInterface): Uint8Array {
-  return rlp(
-    message.encode()
+  return u8aFromUtf8(
+    JSON.stringify(
+      message.encode()
+    )
   );
 };

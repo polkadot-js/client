@@ -4,8 +4,8 @@
 // @flow
 
 import type BN from 'bn.js';
-import type { ConfigType } from '@polkadot/client/types';
-import type { ChainConfigType, ChainInterface$Blocks } from '@polkadot/client-chains/types';
+import type { Config } from '@polkadot/client/types';
+import type { ChainConfig, ChainInterface$Blocks } from '@polkadot/client-chains/types';
 import type { RuntimeInterface } from '@polkadot/client-runtime/types';
 import type { Logger } from '@polkadot/util/types';
 
@@ -57,8 +57,8 @@ export type PolkadotStateDb = {
 
 export type PolkadotState = {
   blockDb: PolkadotBlockDb,
-  config: ConfigType,
-  chain: ChainConfigType,
+  config: Config,
+  chain: ChainConfig,
   l: Logger,
   runtime: RuntimeInterface,
   stateDb: PolkadotStateDb
