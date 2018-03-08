@@ -10,7 +10,5 @@ const u8aToString = require('@polkadot/util/u8a/toString');
 module.exports = function del (storage: Memory$Storage, k: Uint8Array): void {
   const ks = u8aToString(k);
 
-  if (storage[ks]) {
-    delete storage[ks];
-  }
+  delete storage[ks];
 };

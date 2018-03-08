@@ -13,7 +13,7 @@ describe('chain_id', () => {
   beforeEach(() => {
     chain_id = index({
       l: {
-        debug: () => void 0
+        debug: (cb) => cb()
       },
       chain: {
         params: {
