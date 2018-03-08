@@ -21,7 +21,7 @@ export type BlockRequestMessage$Direction = 'ascending' | 'descending';
 
 export type BlockRequestMessage = {
   direction: BlockRequestMessage$Direction,
-  fields: BlockRequestMessage$Fields,
+  fields: Array<BlockRequestMessage$BlockAttribute>,
   from: HeaderHash | BN,
   id: number,
   max: number,

@@ -61,7 +61,7 @@ export type PeersInterface = {
   peers: () => Array<PeerInterface>
 }
 
-export type P2pInterface$Events = 'message' | 'started' | 'stopped';
+export type P2pInterface$Events = 'started' | 'stopped';
 
 export type P2pInterface = {
   _announceBlock: (hash: Uint8Array, header: Uint8Array, body: Uint8Array) => void,

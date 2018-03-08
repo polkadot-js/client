@@ -3,11 +3,11 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { MessageInterface, PeerInterface } from '../types';
-import type { StatusMessage } from '../message/types';
-import type { P2pState } from '../server/types';
+import type { StatusMessage } from '../../message/types';
+import type { P2pState } from '../../server/types';
+import type { MessageInterface, PeerInterface } from '../../types';
 
-const message = require('../message/status');
+const message = require('../../message/status');
 
 // TODO: We should check the genesisHash here and act appropriately
 module.exports = function handleStatus (self: P2pState, peer: PeerInterface, message: MessageInterface): void {
