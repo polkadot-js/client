@@ -3,8 +3,7 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { PostContext } from '../types';
-import type { RpcState } from './types';
+import type { RpcState, PostContext } from './types';
 
 type Handler = (ctx: PostContext) => Promise<void>;
 const coBody = require('co-body');

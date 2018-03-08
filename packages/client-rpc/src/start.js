@@ -5,7 +5,7 @@
 
 import type { RpcState } from './types';
 
-const createKoa = require('../create/koa');
+const createKoa = require('./create/koa');
 
 const handlePost = require('./handlePost');
 const handleWs = require('./handleWs');

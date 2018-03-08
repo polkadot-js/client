@@ -3,8 +3,7 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { WsContext } from '../types';
-import type { RpcState } from './types';
+import type { RpcState, WsContext } from './types';
 
 type Handler = (ctx: WsContext) => void;
 

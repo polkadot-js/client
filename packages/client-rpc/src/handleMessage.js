@@ -3,16 +3,14 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { JsonRpcError, JsonRpcRequest, JsonRpcResponse } from '../types';
-import type { RpcState } from './types';
-
+import type { JsonRpcError, JsonRpcRequest, JsonRpcResponse, RpcState } from './types';
 const assert = require('@polkadot/util/assert');
 const ExtError = require('@polkadot/util/ext/error');
 const isError = require('@polkadot/util/is/error');
 const isFunction = require('@polkadot/util/is/function');
 
-const { createError, createResponse } = require('../create');
-const validateRequest = require('../validate/request');
+const { createError, createResponse } = require('./create');
+const validateRequest = require('./validate/request');
 
 module.exports = async function handleMessage (self: RpcState, message: string): Promise<JsonRpcError | JsonRpcResponse> {
   try {
