@@ -3,10 +3,9 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { PeerInterface } from '../types';
-import type { P2pState } from './types';
+import type { P2pState, PeerInterface } from './types';
 
-const statusMessage = require('../message/status');
+const statusMessage = require('./message/status');
 
 module.exports = function onPeerConnected (self: P2pState): void {
   self.peers.on('connected', (peer: PeerInterface): boolean => {

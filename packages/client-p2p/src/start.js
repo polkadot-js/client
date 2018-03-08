@@ -7,12 +7,12 @@ import type { P2pState } from './types';
 
 const promisify = require('@polkadot/util/promisify');
 
-const createNode = require('../create/node');
-const createPeers = require('../peers');
-const defaults = require('../defaults');
+const createNode = require('./create/node');
+const createPeers = require('./peers');
+const defaults = require('./defaults');
 const onPeerConnected = require('./onPeerConnected');
 const onPeerDiscovery = require('./onPeerDiscovery');
-const onPeerMessage = require('./onPeerMessage');
+const onPeerMessage = require('./handler');
 const onProtocol = require('./onProtocol');
 const stop = require('./stop');
 

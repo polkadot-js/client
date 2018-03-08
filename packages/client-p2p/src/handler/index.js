@@ -3,8 +3,7 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { MessageInterface, PeerInterface } from '../../types';
-import type { P2pState } from '../types';
+import type { P2pState, MessageInterface, PeerInterface } from '../types';
 
 type Message = {
   peer: PeerInterface,

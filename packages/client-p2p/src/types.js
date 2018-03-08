@@ -4,8 +4,12 @@
 // @flow
 
 import type BN from 'bn.js';
-import type { LibP2P$Connection } from 'libp2p';
-import type { ChainConfig$Nodes } from '@polkadot/client-chains/types';
+import type LibP2P, { LibP2P$Connection } from 'libp2p';
+import type EventEmitter from 'eventemitter3';
+import type { Logger } from '@polkadot/util/types';
+import type { Config } from '@polkadot/client/types';
+import type { ChainInterface, ChainConfig$Nodes } from '@polkadot/client-chains/types';
+import type { SyncState } from './sync/types';
 
 export type RawMessage = {
   // flowlint-next-line unclear-type: off
@@ -71,3 +75,13 @@ export type P2pInterface = {
   start: () => Promise<boolean>,
   stop: () => Promise<boolean>
 }
+
+export type P2pState = {
+  chain: ChainInterface,
+  config: Config,
+  emitter: EventEmitter,
+  l: Logger,
+  node: LibP2P,
+  peers: PeersInterface,
+  sync: SyncState
+};

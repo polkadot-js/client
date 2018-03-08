@@ -3,8 +3,7 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { P2pState } from '../server/types';
-import type { PeerInterface } from '../types';
+import type { P2pState, PeerInterface } from '../types';
 import type { SyncState$Request } from './types';
 
 type Requests = Array<SyncState$Request>;

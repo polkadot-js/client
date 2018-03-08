@@ -4,8 +4,7 @@
 // @flow
 
 import type { BlockRequestMessage } from '../message/types';
-import type { P2pState } from '../server/types';
-import type { PeerInterface } from '../types';
+import type { P2pState, PeerInterface } from '../types';
 
 const { MAX_SYNC_BLOCKS } = require('../defaults');
 const blockRequest = require('../message/blockRequest');

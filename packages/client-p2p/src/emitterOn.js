@@ -3,8 +3,7 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { P2pInterface$Events } from '../types';
-import type { P2pState } from './types';
+import type { P2pState, P2pInterface$Events } from './types';
 
 // flowlint-next-line unclear-type:off
 type EmitterOn = (type: P2pInterface$Events, () => any) => any

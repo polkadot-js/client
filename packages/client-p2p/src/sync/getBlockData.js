@@ -4,7 +4,7 @@
 // @flow
 
 import type { BlockRequestMessage$Fields, BlockResponseMessage$BlockData } from '../message/types';
-import type { P2pState } from '../server/types';
+import type { P2pState } from '../types';
 
 const decodeBlock = require('@polkadot/primitives-codec/block/decodeRaw');
 

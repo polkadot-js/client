@@ -4,7 +4,7 @@
 
 const EventEmitter = require('eventemitter3');
 
-const StatusMessage = require('../message/status');
+const StatusMessage = require('./message/status');
 const onPeerConnected = require('./onPeerConnected');
 
 describe('onPeerConnected', () => {
