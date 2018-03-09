@@ -3,35 +3,35 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { BlockResponseMessage } from '../message/types';
-import type { P2pState, PeerInterface } from '../types';
+import type { P2pState } from '../types';
 
 const u8aConcat = require('@polkadot/util/u8a/concat');
 
-module.exports = function processBlocks ({ l, chain, sync }: P2pState, peer: PeerInterface, { blocks, id }: BlockResponseMessage): void {
+module.exports = function processBlocks ({ l, chain, sync }: P2pState): void {
   const start = Date.now();
-  const request = sync.blockRequests[id];
+  let nextNumber = chain.blocks.getBestNumber().addn(1);
+  let nextNumberS = nextNumber.toString();
+  let count = 0;
 
-  if (request.peer.id !== peer.id) {
-    l.error(`Response ${id} from ${peer.shortId}, expected ${request.peer.shortId}`);
-    return;
-  }
-
-  delete sync.blockRequests[id];
-
-  const count = blocks.reduce((count, { hash, header, body }) => {
+  while (sync.blockQueue[nextNumberS]) {
+    const { header, body } = sync.blockQueue[nextNumberS];
     const block = u8aConcat(
       // flowlint-next-line unclear-type:off
       ((header: any): Uint8Array), ((body: any): Uint8Array)
     );
-    const hasBlock = chain.blocks.getBlock(hash).length !== 0;
 
-    if (hasBlock || !chain.executor.importBlock(block)) {
-      return count;
+    if (!chain.executor.importBlock(block)) {
+      break;
     }
 
-    return count + 1;
-  }, 0);
+    delete sync.blockQueue[nextNumberS];
 
-  l.log(`Imported ${count} blocks from ${peer.shortId} (${Date.now() - start}ms)`);
+    count++;
+    nextNumber = nextNumber.addn(1);
+    nextNumberS = nextNumber.toString();
+  }
+
+  if (count) {
+    l.log(`Imported ${count} blocks (${Date.now() - start}ms)`);
+  }
 };
