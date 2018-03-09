@@ -5,12 +5,10 @@
 
 import type { Memory$Storage } from './types';
 
-const u8aToString = require('@polkadot/util/u8a/toString');
-
 module.exports = function get (storage: Memory$Storage, k: Uint8Array): Uint8Array {
-  const ks = u8aToString(k);
+  const value = storage[k];
 
-  return storage[ks]
-    ? storage[ks].v.slice()
+  return value
+    ? value.v.slice()
     : new Uint8Array([]);
 };

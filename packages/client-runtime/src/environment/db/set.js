@@ -5,12 +5,8 @@
 
 import type { DbState } from './types';
 
-const u8aToString = require('@polkadot/util/u8a/toString');
-
 module.exports = function set ({ pending }: DbState, k: Uint8Array, v: Uint8Array): void {
-  const ks = u8aToString(k);
-
-  pending[ks] = {
+  pending[k] = {
     k: k.slice(),
     v: v.slice()
   };

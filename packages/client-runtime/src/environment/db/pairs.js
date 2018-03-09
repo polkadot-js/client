@@ -7,10 +7,12 @@ import type { Trie$Pairs } from '@polkadot/util-triehash/types';
 import type { DbState } from './types';
 
 module.exports = function pairs ({ backend, pending }: DbState): Trie$Pairs {
+  // flowlint-next-line unclear-type:off
+  const pendingKeys = ((Object.keys(pending): any): Array<Uint8Array>);
+
   return (backend ? backend.pairs() : [])
     .concat(
-      Object
-        .keys(pending)
+      pendingKeys
         .filter((k) => pending[k].v)
         .map((k) => pending[k])
     );
