@@ -1,6 +1,6 @@
 {
   "name": "@polkadot/client-wasm",
-  "version": "0.8.9",
+  "version": "0.8.10",
   "description": "WASM compiler & call interface",
   "main": "index.js",
   "engines": {
@@ -37,7 +37,7 @@
     "test": "echo \"Tests only available from root wrapper\""
   },
   "dependencies": {
-    "@polkadot/client-runtime": "^0.8.9",
+    "@polkadot/client-runtime": "^0.8.10",
     "@polkadot/primitives-codec": "^0.9.3",
     "@polkadot/util": "^0.17.1",
     "babel-runtime": "^6.26.0",
