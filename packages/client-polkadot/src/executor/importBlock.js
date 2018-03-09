@@ -27,8 +27,6 @@ module.exports = function importBlock (self: PolkadotState, block: Uint8Array): 
   const { body, header, number } = decodeRaw(block);
   const hash = blake2Asu8a256(header);
 
-  // console.log('decoded', raw, hash);
-
   self.blockDb.setBlock(hash, block);
   self.blockDb.setBest(number, hash);
 

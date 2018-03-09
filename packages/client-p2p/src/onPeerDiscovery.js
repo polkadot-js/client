@@ -10,16 +10,9 @@ const promisify = require('@polkadot/util/promisify');
 const defaults = require('./defaults');
 
 module.exports = function onPeerDiscovery (self: P2pState): void {
-  // flowlint-next-line unclear-type:off
-  self.peers.on('discovered', async (peer: PeerInterface): any => {
-    try {
-      const connection = await promisify(self.node, self.node.dial, peer.peerInfo, defaults.PROTOCOL);
+  self.peers.on('discovered', async (peer: PeerInterface): Promise<void> => {
+    const connection = await promisify(self.node, self.node.dial, peer.peerInfo, defaults.PROTOCOL);
 
-      peer.addConnection(connection);
-    } catch (error) {
-      return false;
-    }
-
-    return true;
+    peer.addConnection(connection);
   });
 };
