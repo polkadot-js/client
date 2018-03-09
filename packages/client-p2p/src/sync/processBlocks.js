@@ -9,12 +9,12 @@ const u8aConcat = require('@polkadot/util/u8a/concat');
 
 module.exports = function processBlocks ({ l, chain, sync }: P2pState): void {
   const start = Date.now();
-  let nextNumber = chain.blocks.getBestNumber().addn(1);
-  let nextNumberS = nextNumber.toString();
+  const startNumber = chain.blocks.getBestNumber().addn(1);
+  let nextNumber = startNumber;
   let count = 0;
 
-  while (sync.blockQueue[nextNumberS]) {
-    const { header, body } = sync.blockQueue[nextNumberS];
+  while (sync.blockQueue[nextNumber]) {
+    const { header, body } = sync.blockQueue[nextNumber];
     const block = u8aConcat(
       // flowlint-next-line unclear-type:off
       ((header: any): Uint8Array), ((body: any): Uint8Array)
@@ -24,14 +24,13 @@ module.exports = function processBlocks ({ l, chain, sync }: P2pState): void {
       break;
     }
 
-    delete sync.blockQueue[nextNumberS];
+    delete sync.blockQueue[nextNumber];
 
     count++;
     nextNumber = nextNumber.addn(1);
-    nextNumberS = nextNumber.toString();
   }
 
   if (count) {
-    l.log(`Imported ${count} blocks (${Date.now() - start}ms)`);
+    l.log(`#${startNumber.toString()}- ${count} imported (${Date.now() - start}ms)`);
   }
 };

@@ -24,13 +24,13 @@ module.exports = function queueBlocks (self: P2pState, peer: PeerInterface, { bl
     const hasImported = self.chain.blocks.getBlock(block.hash).length !== 0;
     // flowlint-next-line unclear-type:off
     const { number } = decodeHeader(((block.header: any): Uint8Array));
-    const hasQueued = !!self.sync.blockQueue[number.toString()];
+    const hasQueued = !!self.sync.blockQueue[number];
 
     if (hasImported && hasQueued) {
       return count;
     }
 
-    self.sync.blockQueue[number.toString()] = block;
+    self.sync.blockQueue[number] = block;
 
     return count + 1;
   }, 0);
