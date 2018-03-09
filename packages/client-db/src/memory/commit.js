@@ -14,7 +14,7 @@ module.exports = function commit (storage: Memory$Storage, values: Trie$Pairs): 
     if (v && v.length) {
       set(storage, k, v);
     } else {
-      del(storage, v);
+      del(storage, k);
     }
   });
 };

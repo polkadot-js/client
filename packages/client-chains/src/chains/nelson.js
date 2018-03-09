@@ -27,7 +27,7 @@ module.exports = ({
     approvalRatio: 667,
     blockTime: 5,
     bondingDuration: 90,
-    networkId: 111,
+    networkId: '0x6f',
     sessionLength: 720,
     sessionsPerEra: 24
   },
