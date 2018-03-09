@@ -3,7 +3,8 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { BlockRequestMessage } from '../message/types';
+import type BN from 'bn.js';
+import type { BlockRequestMessage, BlockResponseMessage$BlockData } from '../message/types';
 import type { PeerInterface } from '../types';
 
 export type SyncState$Request = {
@@ -13,6 +14,9 @@ export type SyncState$Request = {
 
 export type SyncState = {
   blockRequests: {
-    [number]: SyncState$Request
+    [string]: SyncState$Request
+  },
+  blockQueue: {
+    [BN]: BlockResponseMessage$BlockData
   }
 };

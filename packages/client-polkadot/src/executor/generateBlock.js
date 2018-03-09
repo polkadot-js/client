@@ -39,7 +39,7 @@ module.exports = function generateBlock (self: PolkadotState, _number: number | 
 
   self.stateDb.clear();
 
-  self.l.log(`Block #${number.toString()} generated (${Date.now() - start}ms)`);
+  self.l.log(() => `Block #${number.toString()} generated (${Date.now() - start}ms)`);
 
   return block;
 };

@@ -7,6 +7,7 @@ import type { SyncState } from './types';
 
 module.exports = function state (): SyncState {
   return {
-    blockRequests: {}
+    blockRequests: {},
+    blockQueue: {}
   };
 };

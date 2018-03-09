@@ -6,5 +6,5 @@
 import type { Trie$Pair } from '@polkadot/util-triehash/types';
 
 export type Memory$Storage = {
-  [string]: Trie$Pair
+  [Uint8Array]: Trie$Pair
 };

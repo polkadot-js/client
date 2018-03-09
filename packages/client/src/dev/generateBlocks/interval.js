@@ -8,7 +8,7 @@ import type { P2pInterface } from '@polkadot/client-p2p/types';
 import type { Logger } from '@polkadot/util/types';
 
 module.exports = function interval (l: Logger, { blocks, executor }: ChainInterface, p2p: P2pInterface): void {
-  l.log('Starting block generation');
+  l.debug(() => 'Running block generation');
 
   const number = blocks.getBestNumber().addn(1);
   const block = executor.generateBlock(number, []);

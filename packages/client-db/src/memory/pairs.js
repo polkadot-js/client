@@ -7,7 +7,8 @@ import type { Trie$Pairs } from '@polkadot/util-triehash/types';
 import type { Memory$Storage } from './types';
 
 module.exports = function pairs (storage: Memory$Storage): Trie$Pairs {
-  return Object
-    .keys(storage)
-    .map((k) => storage[k]);
+  // flowlint-next-line unclear-type:off
+  const keys = ((Object.keys(storage): any): Array<Uint8Array>);
+
+  return keys.map((k) => storage[k]);
 };
