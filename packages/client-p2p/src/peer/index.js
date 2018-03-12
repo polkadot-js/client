@@ -27,6 +27,7 @@ module.exports = function createPeer (peerInfo: PeerInfo): PeerInterface {
     connections: [],
     emitter: new EventEmitter(),
     l,
+    nextId: 0,
     pushable: pushable()
   };
 
@@ -40,6 +41,8 @@ module.exports = function createPeer (peerInfo: PeerInfo): PeerInterface {
       self.bestHash,
     getBestNumber: (): BN =>
       self.bestNumber,
+    getNextId: (): number =>
+      ++self.nextId,
     on: emitterOn(self),
     send: (message: MessageInterface): boolean =>
       send(self, message),

@@ -48,6 +48,7 @@ export type PeerInterface = {
   addConnection: (connection: LibP2P$Connection) => boolean,
   getBestHash: () => Uint8Array,
   getBestNumber: () => BN,
+  getNextId: () => number,
   // flowlint-next-line unclear-type:off
   on (type: PeerInterface$Events, (message: MessageInterface) => any): any,
   send: (message: MessageInterface) => boolean,

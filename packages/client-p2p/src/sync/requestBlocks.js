@@ -8,8 +8,6 @@ import type { P2pState, PeerInterface } from '../types';
 
 const blockRequest = require('../message/blockRequest');
 
-let requestId: number = 0;
-
 module.exports = function requestBlocks (self: P2pState, peer: PeerInterface): void {
   const from = self.chain.blocks.getBestNumber().addn(1);
 
@@ -22,7 +20,7 @@ module.exports = function requestBlocks (self: P2pState, peer: PeerInterface): v
 
   const request = blockRequest({
     from,
-    id: ++requestId
+    id: peer.getNextId()
   });
 
   self.sync.blockRequests[peer.id] = {
