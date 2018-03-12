@@ -4,11 +4,8 @@
 // @flow
 
 import type { PeerInterface, PeersInterface } from '../types';
-import type { PeersState } from './types';
 import type LibP2P from 'libp2p';
 import type PeerInfo from 'peer-info';
-
-const EventEmitter = require('eventemitter3');
 
 const l = require('@polkadot/util/logger')('p2p/peers');
 
@@ -18,13 +15,10 @@ const get = require('./get');
 const onConnect = require('./onConnect');
 const onDisconnect = require('./onDisconnect');
 const onDiscovery = require('./onDiscovery');
+const state = require('./state');
 
 module.exports = function createPeers (node: LibP2P): PeersInterface {
-  const self: PeersState = {
-    emitter: new EventEmitter(),
-    l,
-    peers: {}
-  };
+  const self = state(l);
 
   onConnect(self, node);
   onDisconnect(self, node);

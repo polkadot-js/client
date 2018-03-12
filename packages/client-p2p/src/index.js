@@ -5,30 +5,18 @@
 
 import type { Config } from '@polkadot/client/types';
 import type { ChainInterface } from '@polkadot/client-chains/types';
-import type { P2pState, P2pInterface } from './types';
-
-const EventEmitter = require('eventemitter3');
+import type { P2pInterface } from './types';
 
 const l = require('@polkadot/util/logger')('p2p');
 
-const syncState = require('./sync/state');
 const announceBlock = require('./announceBlock');
 const emitterOn = require('./emitterOn');
 const start = require('./start');
+const state = require('./state');
 const stop = require('./stop');
 
 module.exports = function server (config: Config, chain: ChainInterface, autoStart: boolean = true): P2pInterface {
-  const self: P2pState = {
-    chain,
-    config,
-    emitter: new EventEmitter(),
-    l,
-    // $FlowFixMe
-    node: null,
-    // $FlowFixMe
-    peers: null,
-    sync: syncState()
-  };
+  const self = state(l, config, chain);
 
   if (autoStart) {
     start(self);
