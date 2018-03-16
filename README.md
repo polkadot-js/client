@@ -11,6 +11,8 @@
 
 # @polkadot/client
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/polkadot-js/client.svg)](https://greenkeeper.io/)
+
 A very early, WIP and POC JavaScript version of a simplified Polkadot network client. It is incomplete and may not evolve to be a full-featured client.
 
 It is split up into a number of internal packages -
