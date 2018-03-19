@@ -8,6 +8,10 @@ import type { HeapState, SizeUsed } from './types';
 
 const allocate = require('./allocate');
 const deallocate = require('./deallocate');
+const dup = require('./dup');
+const fill = require('./fill');
+const get = require('./get');
+const getU32 = require('./getU32');
 const set = require('./set');
 const setMemory = require('./setMemory');
 const setU32 = require('./setU32');
@@ -22,13 +26,13 @@ module.exports = function envHeap (): RuntimeEnv$Heap {
     deallocate: (ptr: Pointer): number =>
       deallocate(state.memory, ptr),
     dup: (ptr: Pointer, len: number): Uint8Array =>
-      state.memory.uint8.slice(ptr, ptr + len),
+      dup(state.memory, ptr, len),
     fill: (ptr: Pointer, value: number, len: number): Uint8Array =>
-      state.memory.uint8.fill(value, ptr, len),
+      fill(state.memory, ptr, value, len),
     get: (ptr: Pointer, len: number): Uint8Array =>
-      state.memory.uint8.subarray(ptr, ptr + len),
+      get(state.memory, ptr, len),
     getU32: (ptr: Pointer): number =>
-      state.memory.view.getUint32(ptr, true),
+      getU32(state.memory, ptr),
     set: (ptr: Pointer, data: Uint8Array): Pointer =>
       set(state.memory, ptr, data),
     setU32: (ptr: Pointer, value: number): Pointer =>
