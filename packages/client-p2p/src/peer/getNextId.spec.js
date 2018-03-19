@@ -4,7 +4,7 @@
 
 const createPeer = require('./index');
 
-describe('setBest', () => {
+describe('getNextId', () => {
   let peer;
 
   beforeEach(() => {
@@ -15,10 +15,8 @@ describe('setBest', () => {
     });
   });
 
-  it('sets the number & hash', () => {
-    peer.setBest('number', 'hash');
-
-    expect(peer.getBestHash()).toEqual('hash');
-    expect(peer.getBestNumber()).toEqual('number');
+  it('returns incrementing ids', () => {
+    expect(peer.getNextId()).toEqual(1);
+    expect(peer.getNextId()).toEqual(2);
   });
 });

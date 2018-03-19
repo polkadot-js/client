@@ -9,7 +9,6 @@ import type PeerInfo from 'peer-info';
 import type { MessageInterface, PeerInterface } from '../types';
 
 const stringShorten = require('@polkadot/util/string/shorten');
-const l = require('@polkadot/util/logger')('p2p/peer');
 
 const addConnection = require('./addConnection');
 const emitterOn = require('./emitterOn');
@@ -19,7 +18,7 @@ const state = require('./state');
 
 module.exports = function createPeer (peerInfo: PeerInfo): PeerInterface {
   const id = peerInfo.id.toB58String();
-  const self = state(l);
+  const self = state();
 
   return {
     id,
