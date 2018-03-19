@@ -3,12 +3,12 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { Memory } from './types';
+import type { HeapState } from './types';
 
-module.exports = function setMemory ({ buffer }: WebAssembly.Memory, offset?: number = 256 * 1024): Memory {
+module.exports = function setMemory (state: HeapState, { buffer }: WebAssembly.Memory, offset?: number = 256 * 1024): void {
   const uint8 = new Uint8Array(buffer);
 
-  return {
+  state.memory = {
     allocated: {},
     deallocated: {},
     offset, // aligned with Rust (should have offset)

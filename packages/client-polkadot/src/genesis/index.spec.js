@@ -11,7 +11,7 @@ const keyring = require('@polkadot/util-keyring/testing')();
 const createDb = require('../dbState');
 const genesis = require('./index');
 
-describe('genesis', () => {
+describe.skip('genesis', () => {
   let block;
 
   beforeEach(() => {
@@ -37,7 +37,7 @@ describe('genesis', () => {
     block = genesis({ chain, stateDb });
   });
 
-  it.skip('creates a correct genesis block (stateRoot)', () => {
+  it('creates a correct genesis block (stateRoot)', () => {
     expect(
       block.header.stateRoot
     ).toEqual(
@@ -45,7 +45,7 @@ describe('genesis', () => {
     );
   });
 
-  it.skip('creates a correct genesis block (transactionRoot)', () => {
+  it('creates a correct genesis block (transactionRoot)', () => {
     expect(
       block.header.transactionRoot
     ).toEqual(
@@ -53,7 +53,7 @@ describe('genesis', () => {
     );
   });
 
-  it.skip('creates a correct block hash', () => {
+  it('creates a correct block hash', () => {
     expect(
       block.header.hash
     ).toEqual(

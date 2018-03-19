@@ -17,3 +17,12 @@ export type Memory = {
   uint8: Uint8Array,
   view: DataView
 };
+
+export type HeapState = {
+  memory: Memory
+};
+
+export type SizeUsed = {
+  allocated: number,
+  deallocated: number
+};
