@@ -1,6 +1,6 @@
 {
   "name": "@polkadot/client-polkadot",
-  "version": "0.8.12",
+  "version": "0.8.13",
   "description": "Polkadot-specific chain wrapper",
   "main": "index.js",
   "engines": {
@@ -29,14 +29,14 @@
     "test": "echo \"Tests only available from root wrapper\""
   },
   "dependencies": {
-    "@polkadot/client-wasm": "^0.8.12",
+    "@polkadot/client-wasm": "^0.8.13",
     "@polkadot/util": "^0.17.4",
     "@polkadot/util-crypto": "^0.17.4",
     "babel-runtime": "^6.26.0"
   },
   "devDependencies": {
-    "@polkadot/client": "^0.8.12",
-    "@polkadot/client-db": "^0.8.12",
+    "@polkadot/client": "^0.8.13",
+    "@polkadot/client-db": "^0.8.13",
     "@polkadot/primitives-builder": "^0.9.5",
     "@polkadot/primitives-codec": "^0.9.5",
     "@polkadot/util-keyring": "^0.17.4",
