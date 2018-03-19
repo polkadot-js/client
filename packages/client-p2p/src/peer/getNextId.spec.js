@@ -1,10 +1,11 @@
 // Copyright 2017-2018 Jaco Greeff
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
+// @flow
 
 const createPeer = require('./index');
 
-describe('setBest', () => {
+describe('getNextId', () => {
   let peer;
 
   beforeEach(() => {
@@ -15,10 +16,8 @@ describe('setBest', () => {
     });
   });
 
-  it('sets the number & hash', () => {
-    peer.setBest('number', 'hash');
-
-    expect(peer.getBestHash()).toEqual('hash');
-    expect(peer.getBestNumber()).toEqual('number');
+  it('returns incrementing ids', () => {
+    expect(peer.getNextId()).toEqual(1);
+    expect(peer.getNextId()).toEqual(2);
   });
 });

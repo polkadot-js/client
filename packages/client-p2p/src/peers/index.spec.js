@@ -25,45 +25,4 @@ describe('Peers', () => {
     expect(peers.count()).toEqual(0);
     expect(peers.peers()).toHaveLength(0);
   });
-
-  describe('add', () => {
-    let peerInfo;
-
-    beforeEach(() => {
-      peerInfo = {
-        id: {
-          toB58String: () => '0x1234'
-        }
-      };
-    });
-
-    it('adds the peer', () => {
-      peers.add(peerInfo);
-
-      expect(peers.count()).toEqual(1);
-    });
-
-    it('does not re-add a peer', () => {
-      peers.add(peerInfo);
-      peers.add(peerInfo);
-
-      expect(peers.count()).toEqual(1);
-    });
-
-    // FIXME: peer doesn't have emit anymore, find a workaround?
-    it.skip('emits message when peer receives', (done) => {
-      const peer = peers.add(peerInfo);
-      const message = { 'something': 'else' };
-
-      peers.on('message', (info) => {
-        expect(info).toEqual({
-          peer,
-          message
-        });
-        done();
-      });
-
-      peer.emit('message', message);
-    });
-  });
 });

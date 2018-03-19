@@ -3,14 +3,14 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { Logger } from '@polkadot/util/types';
 import type { PeerState } from './types';
 
 const BN = require('bn.js');
 const EventEmitter = require('eventemitter3');
 const pushable = require('pull-pushable');
+const l = require('@polkadot/util/logger')('p2p/peer');
 
-module.exports = function state (l: Logger): PeerState {
+module.exports = function state (): PeerState {
   return {
     bestHash: new Uint8Array([]),
     bestNumber: new BN(0),

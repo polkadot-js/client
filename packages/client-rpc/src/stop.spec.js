@@ -48,8 +48,6 @@ describe('stop', () => {
   });
 
   it('emits the stopped event', (done) => {
-    console.log('self', self.emitter);
-
     self.emitter.on('stopped', () => {
       done();
     });

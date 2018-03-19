@@ -3,12 +3,12 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { Logger } from '@polkadot/util/types';
 import type { PeersState } from './types';
 
 const EventEmitter = require('eventemitter3');
+const l = require('@polkadot/util/logger')('p2p/peers');
 
-module.exports = function state (l: Logger): PeersState {
+module.exports = function state (): PeersState {
   return {
     emitter: new EventEmitter(),
     l,
