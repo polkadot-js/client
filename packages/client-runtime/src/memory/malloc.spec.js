@@ -20,7 +20,7 @@ describe('malloc', () => {
     mem.malloc(50);
 
     expect(
-      runtime.heap.sizeAllocated()
+      runtime.heap.used().allocated
     ).toEqual(50);
   });
 
@@ -28,7 +28,7 @@ describe('malloc', () => {
     mem.free(mem.malloc(666));
 
     expect(
-      runtime.heap.sizeDeallocated()
+      runtime.heap.used().deallocated
     ).toEqual(666);
   });
 });

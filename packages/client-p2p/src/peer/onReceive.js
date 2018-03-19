@@ -12,23 +12,18 @@ const bufferToU8a = require('@polkadot/util/buffer/toU8a');
 const decode = require('../message/decode');
 
 module.exports = function onReceive ({ emitter, pushable }: PeerState, connection: LibP2P$Connection): boolean {
-  try {
-    pull(
-      pushable,
-      connection
-    );
+  const drain = pull.drain(
+    (buffer: Buffer): void => {
+      emitter.emit('message', decode(
+        bufferToU8a(buffer)
+      ));
+    },
+    () => false
+  );
 
-    pull(
-      connection,
-      pull.drain(
-        (buffer: Buffer): void => {
-          emitter.emit('message', decode(
-            bufferToU8a(buffer)
-          ));
-        },
-        () => false
-      )
-    );
+  try {
+    pull(pushable, connection);
+    pull(connection, drain);
   } catch (error) {
     return false;
   }

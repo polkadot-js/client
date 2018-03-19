@@ -4,53 +4,44 @@
 // @flow
 
 import type { RuntimeEnv$Heap, Pointer } from '../../types';
-import type { Memory, Memory$Buffer } from './types';
+import type { HeapState, SizeUsed } from './types';
 
 const allocate = require('./allocate');
 const deallocate = require('./deallocate');
+const dup = require('./dup');
+const fill = require('./fill');
+const get = require('./get');
+const getU32 = require('./getU32');
+const set = require('./set');
 const setMemory = require('./setMemory');
-
-function reduceSize (buffer: Memory$Buffer): number {
-  return Object
-    .values(buffer)
-    // flowlint-next-line unclear-type:off
-    .reduce((total, size) => total + ((size: any): number), 0);
-}
+const setU32 = require('./setU32');
+const used = require('./used');
 
 module.exports = function envHeap (): RuntimeEnv$Heap {
-  let memory: Memory;
+  let state = ({}: $Shape<HeapState>);
 
   return {
     allocate: (size: number): Pointer =>
-      allocate(memory, size),
+      allocate(state.memory, size),
     deallocate: (ptr: Pointer): number =>
-      deallocate(memory, ptr),
+      deallocate(state.memory, ptr),
     dup: (ptr: Pointer, len: number): Uint8Array =>
-      memory.uint8.slice(ptr, ptr + len),
+      dup(state.memory, ptr, len),
     fill: (ptr: Pointer, value: number, len: number): Uint8Array =>
-      memory.uint8.fill(value, ptr, len),
+      fill(state.memory, ptr, value, len),
     get: (ptr: Pointer, len: number): Uint8Array =>
-      memory.uint8.subarray(ptr, ptr + len),
+      get(state.memory, ptr, len),
     getU32: (ptr: Pointer): number =>
-      memory.view.getUint32(ptr, true),
-    set: (ptr: Pointer, data: Uint8Array): Pointer => {
-      memory.uint8.set(data, ptr);
-
-      return ptr;
-    },
-    setU32: (ptr: Pointer, value: number): Pointer => {
-      memory.view.setUint32(ptr, value, true);
-
-      return ptr;
-    },
-    setWasmMemory: (wasmMemory: WebAssembly.Memory, offset?: number): void => {
-      memory = setMemory(wasmMemory, offset);
-    },
+      getU32(state.memory, ptr),
+    set: (ptr: Pointer, data: Uint8Array): Pointer =>
+      set(state.memory, ptr, data),
+    setU32: (ptr: Pointer, value: number): Pointer =>
+      setU32(state.memory, ptr, value),
+    setWasmMemory: (wasmMemory: WebAssembly.Memory, offset?: number): void =>
+      setMemory(state, wasmMemory, offset),
     size: (): number =>
-      memory.size,
-    sizeAllocated: (): number =>
-      reduceSize(memory.allocated),
-    sizeDeallocated: (): number =>
-      reduceSize(memory.deallocated)
+      state.memory.size,
+    used: (): SizeUsed =>
+      used(state.memory)
   };
 };

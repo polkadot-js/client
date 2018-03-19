@@ -15,5 +15,6 @@ export type PeerState = {
   connections: Array<LibP2P$Connection>,
   emitter: EventEmitter,
   l: Logger,
+  nextId: number,
   pushable: Pushable
 }
