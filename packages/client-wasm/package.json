@@ -38,8 +38,8 @@
   },
   "dependencies": {
     "@polkadot/client-runtime": "^0.8.11",
-    "@polkadot/primitives-codec": "^0.9.3",
-    "@polkadot/util": "^0.17.1",
+    "@polkadot/primitives-codec": "^0.9.5",
+    "@polkadot/util": "^0.17.4",
     "babel-runtime": "^6.26.0",
     "yargs": "^11.0.0"
   }
