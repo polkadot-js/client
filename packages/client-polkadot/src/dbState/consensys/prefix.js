@@ -5,10 +5,7 @@
 
 const u8aFromString = require('@polkadot/util/u8a/fromString');
 
-const AUTHORITY: Uint8Array = u8aFromString(':auth:');
-const AUTHORITY_LENGTH: Uint8Array = u8aFromString(':auth:len');
-
 module.exports = {
-  AUTHORITY,
-  AUTHORITY_LENGTH
+  AUTHORITY: u8aFromString(':auth:'),
+  AUTHORITY_LENGTH: u8aFromString(':auth:len')
 };

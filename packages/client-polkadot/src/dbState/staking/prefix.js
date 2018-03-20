@@ -5,26 +5,15 @@
 
 const u8aFromString = require('@polkadot/util/u8a/fromString');
 
-const BALANCE_OF: Uint8Array = u8aFromString('sta:bal:');
-const BONDAGE_OF: Uint8Array = u8aFromString('sta:bon:');
-const BONDING_DURATION: Uint8Array = u8aFromString('sta:loc');
-const CURRENT_ERA: Uint8Array = u8aFromString('sta:era');
-const INTENT_WILL: Uint8Array = u8aFromString('sta:wil:');
-const INTENT_WILL_LENGTH: Uint8Array = u8aFromString('sta:wil:len');
-const LAST_ERA_LENGTH_CHANGE: Uint8Array = u8aFromString('sta:lec');
-const NEXT_SESSIONS_PER_ERA: Uint8Array = u8aFromString('sta:nse');
-const SESSIONS_PER_ERA: Uint8Array = u8aFromString('sta:spe');
-const VALIDATOR_COUNT: Uint8Array = u8aFromString('sta:vac');
-
 module.exports = {
-  BALANCE_OF,
-  BONDAGE_OF,
-  BONDING_DURATION,
-  CURRENT_ERA,
-  INTENT_WILL,
-  INTENT_WILL_LENGTH,
-  LAST_ERA_LENGTH_CHANGE,
-  NEXT_SESSIONS_PER_ERA,
-  SESSIONS_PER_ERA,
-  VALIDATOR_COUNT
+  BALANCE_OF: u8aFromString('sta:bal:'),
+  BONDAGE_OF: u8aFromString('sta:bon:'),
+  BONDING_DURATION: u8aFromString('sta:loc'),
+  CURRENT_ERA: u8aFromString('sta:era'),
+  INTENT_WILL: u8aFromString('sta:wil:'),
+  INTENT_WILL_LENGTH: u8aFromString('sta:wil:len'),
+  LAST_ERA_LENGTH_CHANGE: u8aFromString('sta:lec'),
+  NEXT_SESSIONS_PER_ERA: u8aFromString('sta:nse'),
+  SESSIONS_PER_ERA: u8aFromString('sta:spe'),
+  VALIDATOR_COUNT: u8aFromString('sta:vac')
 };

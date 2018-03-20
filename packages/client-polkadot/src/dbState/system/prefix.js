@@ -5,14 +5,9 @@
 
 const u8aFromString = require('@polkadot/util/u8a/fromString');
 
-const BLOCK_HASH_AT: Uint8Array = u8aFromString('sys:old:');
-const CODE: Uint8Array = u8aFromString(':code');
-const NONCE_OF: Uint8Array = u8aFromString('sys:non:');
-const TEMP_TRANSACTION_NUMBER: Uint8Array = u8aFromString('temp:txcount:');
-
 module.exports = {
-  BLOCK_HASH_AT,
-  CODE,
-  NONCE_OF,
-  TEMP_TRANSACTION_NUMBER
+  BLOCK_HASH_AT: u8aFromString('sys:old:'),
+  CODE: u8aFromString(':code'),
+  NONCE_OF: u8aFromString('sys:non:'),
+  TEMP_TRANSACTION_NUMBER: u8aFromString('temp:txcount:')
 };
