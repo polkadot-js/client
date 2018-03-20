@@ -3,14 +3,12 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-const u8aFromString = require('@polkadot/util/u8a/fromString');
-
 module.exports = {
-  CURRENT_INDEX: u8aFromString('ses:ind'),
-  LAST_LENGTH_CHANGE: u8aFromString('ses:llc'),
-  NEXT_KEY_FOR: u8aFromString('ses:nxt:'),
-  NEXT_SESSION_LENGTH: u8aFromString('ses:nln'),
-  SESSION_LENGTH: u8aFromString('ses:len'),
-  VALUE: u8aFromString('ses:val:'),
-  VALUE_LENGTH: u8aFromString('ses:val:len')
+  CURRENT_INDEX: 'ses:ind',
+  LAST_LENGTH_CHANGE: 'ses:llc',
+  NEXT_KEY_FOR: 'ses:nxt:',
+  NEXT_SESSION_LENGTH: 'ses:nln',
+  SESSION_LENGTH: 'ses:len',
+  VALUE: 'ses:val:',
+  VALUE_LENGTH: 'ses:val:len'
 };
