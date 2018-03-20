@@ -30,17 +30,17 @@ describe('getBalance', () => {
 
   it('returns balances', () => {
     expect(
-      staking.getBalance(keyring.one.publicKey).toNumber()
+      staking.getBalance(keyring.one.publicKey()).toNumber()
     ).toEqual(42);
 
     expect(
-      staking.getBalance(keyring.two.publicKey).toNumber()
+      staking.getBalance(keyring.two.publicKey()).toNumber()
     ).toEqual(69);
   });
 
   it('returns zero balances', () => {
     expect(
-      staking.getBalance(keyring.alice.publicKey).toNumber()
+      staking.getBalance(keyring.alice.publicKey()).toNumber()
     ).toEqual(0);
   });
 });

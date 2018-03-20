@@ -39,14 +39,14 @@ describe('generateBlock', () => {
     stateDb.governance.setApprovalsRatio(667);
     stateDb.session.setLength(2);
     stateDb.session.setValueCount(3);
-    stateDb.session.setValue(0, keyring.one.publicKey);
-    stateDb.session.setValue(1, keyring.two.publicKey);
+    stateDb.session.setValue(0, keyring.one.publicKey());
+    stateDb.session.setValue(1, keyring.two.publicKey());
     stateDb.session.setValue(2, threePublicKey);
-    stateDb.staking.setBalance(keyring.one.publicKey, 69 + 42);
+    stateDb.staking.setBalance(keyring.one.publicKey(), 69 + 42);
     stateDb.staking.setCurrentEra(0);
     stateDb.staking.setIntentLength(3);
-    stateDb.staking.setIntent(0, keyring.one.publicKey);
-    stateDb.staking.setIntent(1, keyring.two.publicKey);
+    stateDb.staking.setIntent(0, keyring.one.publicKey());
+    stateDb.staking.setIntent(1, keyring.two.publicKey());
     stateDb.staking.setIntent(2, threePublicKey);
     stateDb.staking.setSessionsPerEra(2);
     stateDb.staking.setValidatorCount(3);
@@ -59,7 +59,7 @@ describe('generateBlock', () => {
     expect(
       executor.generateBlock(1, [
         uncheckedSign(keyring.one, stakingTransfer(
-          keyring.one.publicKey, keyring.two.publicKey, 69, 0
+          keyring.one.publicKey(), keyring.two.publicKey(), 69, 0
         ))
       ].map(encodeUtx), 500000)
     ).toEqual(
@@ -81,7 +81,7 @@ describe('generateBlock', () => {
   it('generated blocks are importable', () => {
     const block = executor.generateBlock(1, [
       uncheckedSign(keyring.one, stakingTransfer(
-        keyring.one.publicKey, keyring.two.publicKey, 69, 0
+        keyring.one.publicKey(), keyring.two.publicKey(), 69, 0
       ))
     ].map(encodeUtx));
 
@@ -94,14 +94,14 @@ describe('generateBlock', () => {
     executor.importBlock(
       executor.generateBlock(1, [
         uncheckedSign(keyring.one, stakingTransfer(
-          keyring.one.publicKey, keyring.two.publicKey, 69, 0
+          keyring.one.publicKey(), keyring.two.publicKey(), 69, 0
         ))
       ].map(encodeUtx))
     );
 
     const block = executor.generateBlock(2, [
       uncheckedSign(keyring.two, stakingTransfer(
-        keyring.two.publicKey, keyring.one.publicKey, 5, 0
+        keyring.two.publicKey(), keyring.one.publicKey(), 5, 0
       ))
     ].map(encodeUtx));
 

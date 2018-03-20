@@ -41,7 +41,7 @@
     "@polkadot/client-state": "^0.8.6",
     "@polkadot/client-wasm": "^0.8.13",
     "@polkadot/primitives": "^0.9.5",
-    "@polkadot/util": "^0.17.4",
+    "@polkadot/util": "^0.18.1",
     "package-json": "^4.0.1",
     "yargs": "^11.0.0"
   },

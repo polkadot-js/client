@@ -11,7 +11,7 @@ describe('key', () => {
   it('concats the values', () => {
     expect(
       key(
-        u8aFromString('sys:old:'),
+        'sys:old:',
         hexToU8a('0x0100000000000000')
       )
     ).toEqual(
@@ -22,7 +22,7 @@ describe('key', () => {
   it('concats with empty key', () => {
     expect(
       key(
-        u8aFromString('ses:llc')
+        'ses:llc'
       )
     ).toEqual(
       hexToU8a('0xe14daa763fce793346d4b7e131240849')
@@ -32,7 +32,7 @@ describe('key', () => {
   it('does not hash when not required', () => {
     expect(
       key(
-        u8aFromString(':code'),
+        ':code',
         null,
         false
       )

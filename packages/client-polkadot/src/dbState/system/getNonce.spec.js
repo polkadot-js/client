@@ -27,13 +27,13 @@ describe('getNonce', () => {
 
   it('returns nonce', () => {
     expect(
-      system.getNonce(keyring.one.publicKey).toNumber()
+      system.getNonce(keyring.one.publicKey()).toNumber()
     ).toEqual(1);
   });
 
   it('returns zero nonces', () => {
     expect(
-      system.getNonce(keyring.alice.publicKey).toNumber()
+      system.getNonce(keyring.alice.publicKey()).toNumber()
     ).toEqual(0);
   });
 });
