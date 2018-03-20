@@ -79,17 +79,17 @@
     lodash "^4.2.0"
     to-fast-properties "^2.0.0"
 
-"@polkadot/api-jsonrpc@^0.8.4":
-  version "0.8.4"
-  resolved "https://registry.yarnpkg.com/@polkadot/api-jsonrpc/-/api-jsonrpc-0.8.4.tgz#e4f34523a42e1772abf6c25ac604fb9b387ad10e"
+"@polkadot/api-jsonrpc@^0.8.5":
+  version "0.8.5"
+  resolved "https://registry.yarnpkg.com/@polkadot/api-jsonrpc/-/api-jsonrpc-0.8.5.tgz#f27afc6304dcf94b0e95f62b33b2091ba6b690e5"
   dependencies:
     babel-runtime "^6.26.0"
 
-"@polkadot/api-provider@^0.8.4":
-  version "0.8.4"
-  resolved "https://registry.yarnpkg.com/@polkadot/api-provider/-/api-provider-0.8.4.tgz#831b02d2dbd17bf671c894a54a848bef7e521cbe"
+"@polkadot/api-provider@^0.8.5":
+  version "0.8.5"
+  resolved "https://registry.yarnpkg.com/@polkadot/api-provider/-/api-provider-0.8.5.tgz#2b527f216dfebbf513400362aec31d1b6f6c5d82"
   dependencies:
-    "@polkadot/util" "^0.17.2"
+    "@polkadot/util" "^0.17.3"
     babel-runtime "^6.26.0"
     isomorphic-fetch "^2.2.1"
     websocket "^1.0.25"
@@ -267,15 +267,6 @@
 "@polkadot/util@^0.16.5":
   version "0.16.5"
   resolved "https://registry.yarnpkg.com/@polkadot/util/-/util-0.16.5.tgz#72a669714631dc33b9c7085dc92a289a579a4a6b"
-  dependencies:
-    babel-runtime "^6.26.0"
-    bn.js "^4.11.8"
-    deasync "^0.1.12"
-    ip-regex "^2.1.0"
-
-"@polkadot/util@^0.17.2":
-  version "0.17.2"
-  resolved "https://registry.yarnpkg.com/@polkadot/util/-/util-0.17.2.tgz#f37a989c15f30d706d036da02c5d1699b8abcecb"
   dependencies:
     babel-runtime "^6.26.0"
     bn.js "^4.11.8"
