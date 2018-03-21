@@ -22,7 +22,7 @@
   "bugs": {
     "url": "https://github.com/polkadot-js/client/issues"
   },
-  "homepage": "https://github.com/polkadot-js/client/tree/master/packages/client-polkadot#readme",
+  "homepage": "https://github.com/polkadot-js/client/tree/master/packages/client-chain-polkadot#readme",
   "scripts": {
     "build": "polkadot-dev-build-babel",
     "check": "eslint src && flow check",
