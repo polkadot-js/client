@@ -16,9 +16,7 @@ describe('chain_id', () => {
         debug: (cb) => cb()
       },
       chain: {
-        params: {
-          networkId: new BN(1337)
-        }
+        networkId: new BN(1337)
       }
     }).chain_id;
   });

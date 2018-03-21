@@ -3,7 +3,7 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { ChainConfigLoose } from '../types';
+import type { ChainConfigLoose } from '../../types';
 
 const validateObject = require('./object');
 const validateParams = require('./params');
@@ -14,7 +14,7 @@ const GENESIS_KNOWN_KEYS = ['authorities', 'balances', 'code', 'params', 'valida
 module.exports = function validateChain (chain: ChainConfigLoose, strict: boolean = false): ChainConfigLoose {
   validateObject('Chain', chain, CHAIN_KNOWN_KEYS, strict);
   validateObject('Genesis', chain.genesis, GENESIS_KNOWN_KEYS, strict);
-  validateParams(chain.genesis.params, strict);
+  validateParams(chain.genesis.params);
 
   return chain;
 };

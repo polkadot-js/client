@@ -45,20 +45,24 @@ export type ChainConfigLoose = {
   nodes: ChainConfig$Nodes
 };
 
+export type ChainConfig$Genesis = {
+  authorities: Array<Uint8Array>,
+  balances: ChainConfig$Balances,
+  block: ChainConfig$Genesis$Block,
+  code: Uint8Array,
+  codeHash: Uint8Array,
+  params: {
+    [string]: BN
+  },
+  validators: Array<Uint8Array>
+};
+
 export type ChainConfig = {
   blockTime: BN,
+  code: Uint8Array,
+  codeHash: Uint8Array,
   description: string,
-  genesis: {
-    authorities: Array<Uint8Array>,
-    balances: ChainConfig$Balances,
-    block: ChainConfig$Genesis$Block,
-    code: Uint8Array,
-    codeHash: Uint8Array,
-    params: {
-      [string]: BN
-    },
-    validators: Array<Uint8Array>
-  },
+  genesis: ChainConfig$Genesis,
   name: string,
   networkId: BN,
   nodes: ChainConfig$Nodes,

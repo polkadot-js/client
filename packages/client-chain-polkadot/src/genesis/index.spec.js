@@ -4,7 +4,7 @@
 
 const BN = require('bn.js');
 const memDb = require('@polkadot/client-db/memory');
-const code = require('@polkadot/client-chains/wasm/genesis_polkadot_wasm');
+// const code = require('@polkadot/client-chains/wasm/genesis_polkadot_wasm');
 const hexToU8a = require('@polkadot/util/hex/toU8a');
 const keyring = require('@polkadot/util-keyring/testing')();
 
@@ -23,7 +23,7 @@ describe.skip('genesis', () => {
         accountId,
         balance: new BN(1000)
       })),
-      code,
+      code: null,
       params: {
         approvalRatio: new BN(667),
         blockTime: new BN(5),

@@ -14,7 +14,7 @@ module.exports = function onPeerConnected (self: P2pState): void {
         roles: self.config.roles,
         bestNumber: self.chain.blocks.getBestNumber(),
         bestHash: self.chain.blocks.getBestHash(),
-        genesisHash: self.chain.genesis.hash
+        genesisHash: self.chain.config.genesis.block.hash
       })
     );
   });

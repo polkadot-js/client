@@ -4,7 +4,12 @@
 
 const test = {
   name: 'Test Chain',
-  networkId: 666
+  networkId: 666,
+  genesis: {
+    params: {
+      something: 123
+    }
+  }
 };
 
 describe('validateChain', () => {
@@ -31,13 +36,14 @@ describe('validateChain', () => {
   it('validates the sections', () => {
     validateChain(test);
 
-    expect(mockValidateObject).toHaveBeenCalledWith('Chain', test, validateChain.KNOWN_KEYS, false);
+    expect(mockValidateObject).toHaveBeenCalledWith('Chain', test, validateChain.CHAIN_KNOWN_KEYS, false);
+    expect(mockValidateObject).toHaveBeenCalledWith('Genesis', test.genesis, validateChain.GENESIS_KNOWN_KEYS, false);
   });
 
-  it('validates the params', () => {
+  it('validates the genesis params', () => {
     validateChain(test);
 
-    expect(mockValidateParams).toHaveBeenCalledWith(test.params, false);
+    expect(mockValidateParams).toHaveBeenCalledWith(test.genesis.params);
   });
 
   it('validates using strict', () => {
@@ -47,9 +53,10 @@ describe('validateChain', () => {
     validateChain(test, true);
 
     expect(mockValidateObject).toHaveBeenCalledWith('Chain', anyObject, anyArray, true);
+    expect(mockValidateObject).toHaveBeenCalledWith('Genesis', anyObject, anyArray, true);
 
     [mockValidateParams].forEach((mock) => {
-      expect(mock).toHaveBeenCalledWith(anyObject, true);
+      expect(mock).toHaveBeenCalledWith(anyObject);
     });
   });
 });

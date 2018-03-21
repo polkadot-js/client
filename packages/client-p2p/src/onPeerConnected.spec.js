@@ -20,8 +20,12 @@ describe('onPeerConnected', () => {
           getBestNumber: jest.fn(() => 123),
           getBestHash: jest.fn(() => new Uint8Array([]))
         },
-        genesis: {
-          hash: new Uint8Array([])
+        config: {
+          genesis: {
+            block: {
+              hash: new Uint8Array([])
+            }
+          }
         }
       }
     };

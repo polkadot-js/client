@@ -9,7 +9,7 @@ const assert = require('@polkadot/util/assert');
 
 const chains = require('../chains');
 const fromDisk = require('./fromDisk');
-const validateChain = require('../validate');
+const validateChain = require('./validate');
 
 module.exports = function findAndLoad (name: string): ChainConfigLoose {
   // builtin?
