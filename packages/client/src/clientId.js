@@ -9,6 +9,7 @@ type PackageJson = {
 };
 
 const npmQuery = require('package-json');
+const semcmp = require('semver-compare');
 
 const DEVELOPMENT = 'development';
 
@@ -36,12 +37,16 @@ async function getNpmVersion (): Promise<string> {
 async function getNpmStatus (): Promise<string> {
   const verNpm = await getNpmVersion();
 
-  switch (verNpm) {
-    case pkgJson.version:
+  if (verNpm === 'unknown') {
+    return 'cannot retrieve from npmjs.org';
+  }
+
+  switch (semcmp(pkgJson.version, verNpm)) {
+    case 0:
       return 'up to date';
 
-    case 'unknown':
-      return 'cannot retrieve from npmjs.org';
+    case 1:
+      return `newer, ${verNpm} published`;
 
     default:
       return `outdated, ${verNpm} available`;

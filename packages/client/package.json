@@ -43,6 +43,7 @@
     "@polkadot/primitives": "^0.9.5",
     "@polkadot/util": "^0.18.1",
     "package-json": "^4.0.1",
+    "semver-compare": "^1.0.0",
     "yargs": "^11.0.0"
   },
   "devDependencies": {

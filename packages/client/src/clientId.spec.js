@@ -60,13 +60,23 @@ describe('clientId', () => {
       });
     });
 
-    it('queries the registry, returning latest', () => {
+    it('queries the registry, showing outdated', () => {
       npmJson.mockImplementation(() => {
-        return Promise.resolve({ version: 'test' });
+        return Promise.resolve({ version: '99.99.99' });
       });
 
       return clientId.getNpmStatus().then((version) => {
-        expect(version).toEqual('outdated, test available');
+        expect(version).toEqual('outdated, 99.99.99 available');
+      });
+    });
+
+    it('queries the registry, showing newer', () => {
+      npmJson.mockImplementation(() => {
+        return Promise.resolve({ version: '0.0.0' });
+      });
+
+      return clientId.getNpmStatus().then((version) => {
+        expect(version).toEqual('newer, 0.0.0 published');
       });
     });
   });
