@@ -3,22 +3,23 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { ChainConfigLoose } from '../types';
+import type { ChainConfigLoose, ChainName } from '../types';
 
-const ExtError = require('@polkadot/util/ext/error');
+const assert = require('@polkadot/util/assert');
 
+const chains = require('../chains');
 const fromDisk = require('./fromDisk');
 const validateChain = require('../validate');
 
 module.exports = function findAndLoad (name: string): ChainConfigLoose {
   // builtin?
   if (!/\.json$/.test(name)) {
-    try {
-      // $FlowFixMe naughty, not a literal
-      return require(`../chains/${name}`);
-    } catch (error) {
-      throw new ExtError(`Unable to load builtin chain '${name}'`);
-    }
+    // flowlint-next-line unclear-type:off
+    const chain = chains[((name: any): ChainName)];
+
+    assert(chain, `Unable to find builtin chain '${name}'`);
+
+    return chain;
   }
 
   return validateChain(

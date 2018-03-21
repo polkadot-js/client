@@ -2,14 +2,34 @@
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
 
-const { chains, validateChain } = require('./index');
+const memoryDb = require('@polkadot/client-db/memory');
+
+const createChain = require('./index');
 
 describe('client-chains', () => {
-  Object.values(chains).forEach((chain) => {
-    it(`validates chain '${chain.name}' (strict)`, () => {
-      expect(
-        validateChain(chain, true)
-      ).toBeDefined();
-    });
+  let config;
+  let blockDb;
+  let stateDb;
+
+  beforeEach(() => {
+    config = {
+      chain: 'nelson'
+    };
+    blockDb = memoryDb();
+    stateDb = memoryDb();
+  });
+
+  it('instantiates a known chain', () => {
+    expect(
+      createChain(config, stateDb, blockDb).executor
+    ).toBeDefined();
+  });
+
+  it('throws when chain not found', () => {
+    config.chain = 'someUnknown';
+
+    expect(
+      () => createChain(config, stateDb, blockDb)
+    ).toThrow(/Unable to find builtin chain/);
   });
 });

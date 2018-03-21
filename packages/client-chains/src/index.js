@@ -3,12 +3,22 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-const chains = require('./chains');
-const loadChain = require('./load');
-const validateChain = require('./validate');
+import type { Config } from '@polkadot/client/types';
+import type { BaseDbInterface } from '@polkadot/client-db/types';
+import type { ChainInterface } from './types';
 
-module.exports = {
-  chains,
-  loadChain,
-  validateChain
+const createPolkadot = require('@polkadot/client-chain-polkadot');
+
+const loadChain = require('./load');
+
+module.exports = function chains (config: Config, stateDb: BaseDbInterface, blockDb: BaseDbInterface): ChainInterface {
+  const chain = loadChain(config);
+
+  switch (chain.type) {
+    case 'polkadot':
+      return createPolkadot(config, chain, stateDb, blockDb);
+
+    default:
+      throw new Error(`Handler for chain type '${chain.type}' not available`);
+  }
 };
