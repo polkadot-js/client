@@ -3,7 +3,8 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-const HEAP_SIZE_KB = 256;
+// NOTE: Aligned with Rust implementation
+const HEAP_SIZE_KB = 8 * 64;
 
 module.exports = {
   HEAP_SIZE_KB
