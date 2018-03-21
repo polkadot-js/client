@@ -39,7 +39,7 @@
   "dependencies": {
     "@polkadot/client-runtime": "^0.9.0",
     "@polkadot/primitives-codec": "^0.9.5",
-    "@polkadot/util": "^0.18.1",
+    "@polkadot/util": "^0.18.2",
     "babel-runtime": "^6.26.0",
     "yargs": "^11.0.0"
   }
