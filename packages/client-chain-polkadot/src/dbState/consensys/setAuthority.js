@@ -6,12 +6,12 @@
 import type { BaseDbInterface } from '@polkadot/client-db/types';
 
 const BN = require('bn.js');
+const key = require('@polkadot/client-db/key');
 const bnToU8a = require('@polkadot/util/bn/toU8a');
 
-const key = require('../key');
 const { AUTHORITY } = require('./prefix');
 
-module.exports = function setAuthority (db: BaseDbInterface, id: BN | number, publicKey: Uint8Array, isHashed: boolean): void {
+module.exports = function setAuthority (db: BaseDbInterface, id: BN | number, publicKey: Uint8Array, isHashed: boolean = false): void {
   db.set(
     key(AUTHORITY, bnToU8a(id, 32, true), isHashed),
     publicKey

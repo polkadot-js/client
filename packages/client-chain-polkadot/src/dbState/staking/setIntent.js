@@ -6,9 +6,9 @@
 import type { BaseDbInterface } from '@polkadot/client-db/types';
 
 const BN = require('bn.js');
+const key = require('@polkadot/client-db/key');
 const bnToU8a = require('@polkadot/util/bn/toU8a');
 
-const key = require('../key');
 const { INTENT_WILL } = require('./prefix');
 
 module.exports = function setIntent (db: BaseDbInterface, id: BN | number, publicKey: Uint8Array): void {

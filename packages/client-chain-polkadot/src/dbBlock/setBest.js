@@ -6,9 +6,9 @@
 import type BN from 'bn.js';
 import type { BaseDbInterface } from '@polkadot/client-db/types';
 
+const key = require('@polkadot/client-db/key');
 const bnToU8a = require('@polkadot/util/bn/toU8a');
 
-const key = require('../dbState/key');
 const { BEST_HASH, BEST_NUMBER } = require('./prefix');
 
 module.exports = function setBest (db: BaseDbInterface, number: BN | number, hash: Uint8Array): void {

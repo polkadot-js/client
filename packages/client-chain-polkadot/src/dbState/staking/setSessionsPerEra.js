@@ -6,9 +6,9 @@
 import type { BaseDbInterface } from '@polkadot/client-db/types';
 
 const BN = require('bn.js');
+const key = require('@polkadot/client-db/key');
 const bnToU8a = require('@polkadot/util/bn/toU8a');
 
-const key = require('../key');
 const { SESSIONS_PER_ERA } = require('./prefix');
 
 module.exports = function setSessionsPerEra (db: BaseDbInterface, count: BN | number): void {

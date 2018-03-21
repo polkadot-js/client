@@ -5,7 +5,8 @@
 
 import type { BaseDbInterface } from '@polkadot/client-db/types';
 
-const key = require('../key');
+const key = require('@polkadot/client-db/key');
+
 const { CODE } = require('./prefix');
 
 module.exports = function getCode (db: BaseDbInterface): Uint8Array {

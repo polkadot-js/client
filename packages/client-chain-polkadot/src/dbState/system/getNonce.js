@@ -6,9 +6,9 @@
 import type BN from 'bn.js';
 import type { BaseDbInterface } from '@polkadot/client-db/types';
 
+const key = require('@polkadot/client-db/key');
 const u8aToBn = require('@polkadot/util/u8a/toBn');
 
-const key = require('../key');
 const { NONCE_OF } = require('./prefix');
 
 module.exports = function getNonce (db: BaseDbInterface, publicKey: Uint8Array): BN {
