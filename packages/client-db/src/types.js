@@ -3,6 +3,7 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
+import type BN from 'bn.js';
 import type { Trie$Pairs } from '@polkadot/util-triehash/types';
 
 export type DbPathPrefix = 'database';
@@ -23,3 +24,8 @@ export type BaseDbInterface = {
   pairs: () => Trie$Pairs,
   set (key: Uint8Array, value: Uint8Array): void
 }
+
+export type WrapDbInterface = BaseDbInterface & {
+  getBn (key: Uint8Array, bitLength: number): BN,
+  setBn (key: Uint8Array, value: BN | number, bitLength: number): void
+};

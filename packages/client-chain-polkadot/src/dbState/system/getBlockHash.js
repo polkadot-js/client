@@ -4,14 +4,14 @@
 // @flow
 
 import type BN from 'bn.js';
-import type { BaseDbInterface } from '@polkadot/client-db/types';
+import type { WrapDbInterface } from '@polkadot/client-db/types';
 
 const key = require('@polkadot/client-db/key');
 const bnToU8a = require('@polkadot/util/bn/toU8a');
 
 const { BLOCK_HASH_AT } = require('./prefix');
 
-module.exports = function getBlockHash (db: BaseDbInterface, block: BN | number): Uint8Array {
+module.exports = function getBlockHash (db: WrapDbInterface, block: BN | number): Uint8Array {
   return db.get(
     key(BLOCK_HASH_AT, bnToU8a(block, 64, true))
   );

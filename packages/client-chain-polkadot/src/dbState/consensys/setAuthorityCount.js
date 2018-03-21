@@ -3,17 +3,13 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { BaseDbInterface } from '@polkadot/client-db/types';
+import type { WrapDbInterface } from '@polkadot/client-db/types';
 
 const BN = require('bn.js');
 const key = require('@polkadot/client-db/key');
-const bnToU8a = require('@polkadot/util/bn/toU8a');
 
 const { AUTHORITY_LENGTH } = require('./prefix');
 
-module.exports = function setAuthorityCount (db: BaseDbInterface, count: BN | number): void {
-  db.set(
-    key(AUTHORITY_LENGTH, null, false),
-    bnToU8a(count, 32, true)
-  );
+module.exports = function setAuthorityCount (db: WrapDbInterface, count: BN | number): void {
+  db.setBn(key(AUTHORITY_LENGTH, null, false), count, 32);
 };

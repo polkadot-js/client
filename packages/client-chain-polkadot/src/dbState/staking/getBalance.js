@@ -4,16 +4,12 @@
 // @flow
 
 import type BN from 'bn.js';
-import type { BaseDbInterface } from '@polkadot/client-db/types';
+import type { WrapDbInterface } from '@polkadot/client-db/types';
 
 const key = require('@polkadot/client-db/key');
-const u8aToBn = require('@polkadot/util/u8a/toBn');
 
 const { BALANCE_OF } = require('./prefix');
 
-module.exports = function getBalance (db: BaseDbInterface, publicKey: Uint8Array): BN {
-  return u8aToBn(
-    db.get(key(BALANCE_OF, publicKey)),
-    true
-  );
+module.exports = function getBalance (db: WrapDbInterface, publicKey: Uint8Array): BN {
+  return db.getBn(key(BALANCE_OF, publicKey), 64);
 };

@@ -6,6 +6,7 @@
 import type { BaseDbInterface } from '@polkadot/client-db/types';
 import type { PolkadotStateDb } from '../types';
 
+const wrapDb = require('@polkadot/client-db/wrap');
 const trieRoot = require('@polkadot/util-triehash/root');
 
 const consensys = require('./consensys');
@@ -16,19 +17,21 @@ const staking = require('./staking');
 const system = require('./system');
 
 module.exports = function stateDb (baseDb: BaseDbInterface): PolkadotStateDb {
+  const db = wrapDb(baseDb);
+
   return {
     clear: (): void =>
-      baseDb.clear(),
+      db.clear(),
     commit: (): void =>
-      baseDb.commit(),
+      db.commit(),
     debug: (): { [string]: string } =>
-      debug(baseDb),
-    consensys: consensys(baseDb),
-    governance: governance(baseDb),
-    session: session(baseDb),
-    staking: staking(baseDb),
-    system: system(baseDb),
+      debug(db),
+    consensys: consensys(db),
+    governance: governance(db),
+    session: session(db),
+    staking: staking(db),
+    system: system(db),
     trieRoot: (): Uint8Array =>
-      trieRoot(baseDb.pairs())
+      trieRoot(db.pairs())
   };
 };

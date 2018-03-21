@@ -3,17 +3,13 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { BaseDbInterface } from '@polkadot/client-db/types';
+import type { WrapDbInterface } from '@polkadot/client-db/types';
 
 const BN = require('bn.js');
 const key = require('@polkadot/client-db/key');
-const bnToU8a = require('@polkadot/util/bn/toU8a');
 
 const { SESSIONS_PER_ERA } = require('./prefix');
 
-module.exports = function setSessionsPerEra (db: BaseDbInterface, count: BN | number): void {
-  db.set(
-    key(SESSIONS_PER_ERA),
-    bnToU8a(count, 64, true)
-  );
+module.exports = function setSessionsPerEra (db: WrapDbInterface, count: BN | number): void {
+  db.setBn(key(SESSIONS_PER_ERA), count, 64);
 };

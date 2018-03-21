@@ -4,13 +4,13 @@
 // @flow
 
 import type BN from 'bn.js';
-import type { BaseDbInterface } from '@polkadot/client-db/types';
+import type { WrapDbInterface } from '@polkadot/client-db/types';
 import type { PolkadotStateDb$Consensys } from '../../types';
 
 const setAuthority = require('./setAuthority');
 const setAuthorityCount = require('./setAuthorityCount');
 
-module.exports = function consensys (db: BaseDbInterface): PolkadotStateDb$Consensys {
+module.exports = function consensys (db: WrapDbInterface): PolkadotStateDb$Consensys {
   return {
     setAuthority: (id: BN | number, publicKey: Uint8Array, isHashed?: boolean = false): void =>
       setAuthority(db, id, publicKey, isHashed),

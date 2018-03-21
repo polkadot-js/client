@@ -4,14 +4,14 @@
 // @flow
 
 import type BN from 'bn.js';
-import type { BaseDbInterface } from '@polkadot/client-db/types';
+import type { WrapDbInterface } from '@polkadot/client-db/types';
 import type { PolkadotStateDb$Session } from '../../types';
 
 const setLength = require('./setLength');
 const setValue = require('./setValue');
 const setValueCount = require('./setValueCount');
 
-module.exports = function session (db: BaseDbInterface): PolkadotStateDb$Session {
+module.exports = function session (db: WrapDbInterface): PolkadotStateDb$Session {
   return {
     setLength: (length: BN | number): void =>
       setLength(db, length),

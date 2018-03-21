@@ -4,17 +4,12 @@
 // @flow
 
 import type BN from 'bn.js';
-import type { BaseDbInterface } from '@polkadot/client-db/types';
+import type { WrapDbInterface } from '@polkadot/client-db/types';
 
 const key = require('@polkadot/client-db/key');
-const u8aToBn = require('@polkadot/util/u8a/toBn');
 
 const { BEST_NUMBER } = require('./prefix');
 
-module.exports = function getBestNumber (db: BaseDbInterface): BN {
-  return u8aToBn(
-    db.get(
-      key(BEST_NUMBER)
-    )
-  );
+module.exports = function getBestNumber (db: WrapDbInterface): BN {
+  return db.getBn(key(BEST_NUMBER), 64);
 };

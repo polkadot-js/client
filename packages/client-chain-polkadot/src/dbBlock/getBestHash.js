@@ -3,14 +3,12 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { BaseDbInterface } from '@polkadot/client-db/types';
+import type { WrapDbInterface } from '@polkadot/client-db/types';
 
 const key = require('@polkadot/client-db/key');
 
 const { BEST_HASH } = require('./prefix');
 
-module.exports = function getBestHash (db: BaseDbInterface): Uint8Array {
-  return db.get(
-    key(BEST_HASH)
-  );
+module.exports = function getBestHash (db: WrapDbInterface): Uint8Array {
+  return db.get(key(BEST_HASH));
 };

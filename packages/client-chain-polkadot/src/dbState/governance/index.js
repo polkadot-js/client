@@ -4,12 +4,12 @@
 // @flow
 
 import type BN from 'bn.js';
-import type { BaseDbInterface } from '@polkadot/client-db/types';
+import type { WrapDbInterface } from '@polkadot/client-db/types';
 import type { PolkadotStateDb$Governance } from '../../types';
 
 const setApprovalsRatio = require('./setApprovalsRatio');
 
-module.exports = function governance (db: BaseDbInterface): PolkadotStateDb$Governance {
+module.exports = function governance (db: WrapDbInterface): PolkadotStateDb$Governance {
   return {
     setApprovalsRatio: (ratio: BN | number): void =>
       setApprovalsRatio(db, ratio)

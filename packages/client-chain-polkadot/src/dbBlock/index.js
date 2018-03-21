@@ -7,6 +7,8 @@ import type BN from 'bn.js';
 import type { BaseDbInterface } from '@polkadot/client-db/types';
 import type { PolkadotBlockDb } from '../types';
 
+const wrapDb = require('@polkadot/client-db/wrap');
+
 const debug = require('../dbState/debug');
 const getBlock = require('./getBlock');
 const getBestHash = require('./getBestHash');
@@ -15,18 +17,20 @@ const setBlock = require('./setBlock');
 const setBest = require('./setBest');
 
 module.exports = function blockDb (baseDb: BaseDbInterface): PolkadotBlockDb {
+  const db = wrapDb(baseDb);
+
   return {
     debug: (): { [string]: string } =>
-      debug(baseDb),
+      debug(db),
     getBlock: (hash: Uint8Array): Uint8Array =>
-      getBlock(baseDb, hash),
+      getBlock(db, hash),
     getBestHash: (): Uint8Array =>
-      getBestHash(baseDb),
+      getBestHash(db),
     getBestNumber: (): BN =>
-      getBestNumber(baseDb),
+      getBestNumber(db),
     setBlock: (hash: Uint8Array, block: Uint8Array): void =>
-      setBlock(baseDb, hash, block),
+      setBlock(db, hash, block),
     setBest: (number: BN | number, hash: Uint8Array): void =>
-      setBest(baseDb, number, hash)
+      setBest(db, number, hash)
   };
 };
