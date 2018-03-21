@@ -4,7 +4,7 @@
 
 const test = {
   name: 'Test Chain',
-  params: { networkId: 666 }
+  networkId: 666
 };
 
 describe('validateChain', () => {

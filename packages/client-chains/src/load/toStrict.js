@@ -10,6 +10,7 @@ const bnToBn = require('@polkadot/util/bn/toBn');
 const isHex = require('@polkadot/util/is/hex');
 const hexToBn = require('@polkadot/util/hex/toBn');
 const hexToU8a = require('@polkadot/util/hex/toU8a');
+const blake2AsU8a256 = require('@polkadot/util-crypto/blake2/asU8a256');
 
 function valueToBn (value: ChainConfig$Number): BN {
   // $FlowFixMe we are determining type
@@ -22,26 +23,28 @@ function valueToBn (value: ChainConfig$Number): BN {
   return bnToBn(value);
 }
 
-module.exports = function toStrict ({ authorities, balances, code, description, name, nodes, params: { approvalRatio, blockTime, bondingDuration, networkId, sessionLength, sessionsPerEra }, type, validators }: ChainConfigLoose): $Shape<ChainConfig> {
+module.exports = function toStrict ({ blockTime, description, genesis: { authorities, balances, code, params, validators }, name, networkId, nodes, type }: ChainConfigLoose): $Shape<ChainConfig> {
   return {
-    authorities: authorities.map(hexToU8a),
-    balances: Object.keys(balances).map((accountId) => ({
-      accountId: hexToU8a(accountId),
-      balance: valueToBn(balances[accountId])
-    })),
-    code,
-    description,
     name,
-    nodes,
-    params: {
-      approvalRatio: valueToBn(approvalRatio),
-      blockTime: valueToBn(blockTime),
-      bondingDuration: valueToBn(bondingDuration),
-      networkId: valueToBn(networkId),
-      sessionLength: valueToBn(sessionLength),
-      sessionsPerEra: valueToBn(sessionsPerEra)
-    },
+    description,
     type,
-    validators: validators.map(hexToU8a)
+    blockTime: valueToBn(blockTime),
+    networkId: valueToBn(networkId),
+    genesis: {
+      authorities: authorities.map(hexToU8a),
+      balances: Object.keys(balances).map((accountId) => ({
+        accountId: hexToU8a(accountId),
+        balance: valueToBn(balances[accountId])
+      })),
+      code,
+      codeHash: blake2AsU8a256(code),
+      params: Object.keys(params).reduce((result, param) => {
+        result[param] = valueToBn(params[param]);
+
+        return result;
+      }, {}),
+      validators: validators.map(hexToU8a)
+    },
+    nodes
   };
 };

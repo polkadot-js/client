@@ -3,7 +3,7 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { ChainInterface$Genesis } from '@polkadot/client-chains/types';
+import type { ChainConfig$Genesis$Block } from '@polkadot/client-chains/types';
 import type { PolkadotState } from '../types';
 
 const encodeHeader = require('@polkadot/primitives-codec/header/encode');
@@ -12,7 +12,7 @@ const blake2Asu8a256 = require('@polkadot/util-crypto/blake2/asU8a256');
 const initBlock = require('./block');
 const initState = require('./state');
 
-module.exports = function genesis (self: PolkadotState): ChainInterface$Genesis {
+module.exports = function genesis (self: PolkadotState): ChainConfig$Genesis$Block {
   initState(self);
 
   const header = encodeHeader(initBlock(self).header);

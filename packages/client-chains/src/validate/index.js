@@ -8,13 +8,16 @@ import type { ChainConfigLoose } from '../types';
 const validateObject = require('./object');
 const validateParams = require('./params');
 
-const KNOWN_KEYS = ['authorities', 'balances', 'code', 'description', 'name', 'nodes', 'params', 'type', 'validators'];
+const CHAIN_KNOWN_KEYS = ['blockTime', 'description', 'genesis', 'name', 'networkId', 'nodes', 'type'];
+const GENESIS_KNOWN_KEYS = ['authorities', 'balances', 'code', 'params', 'validators'];
 
 module.exports = function validateChain (chain: ChainConfigLoose, strict: boolean = false): ChainConfigLoose {
-  validateObject('Chain', chain, KNOWN_KEYS, strict);
-  validateParams(chain.params, strict);
+  validateObject('Chain', chain, CHAIN_KNOWN_KEYS, strict);
+  validateObject('Genesis', chain.genesis, GENESIS_KNOWN_KEYS, strict);
+  validateParams(chain.genesis.params, strict);
 
   return chain;
 };
 
-module.exports.KNOWN_KEYS = KNOWN_KEYS;
+module.exports.CHAIN_KNOWN_KEYS = CHAIN_KNOWN_KEYS;
+module.exports.GENESIS_KNOWN_KEYS = GENESIS_KNOWN_KEYS;

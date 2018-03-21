@@ -5,7 +5,7 @@
 
 import type { PolkadotState } from '../types';
 
-module.exports = function genesisState ({ blockDb, chain: { authorities, balances, code, params, validators }, stateDb }: PolkadotState): void {
+module.exports = function genesisState ({ blockDb, chain: { genesis: { authorities, balances, code, params, validators } }, stateDb }: PolkadotState): void {
   stateDb.consensys.setAuthorityCount(authorities.length);
   authorities.forEach((authority, index) => {
     stateDb.consensys.setAuthority(index, authority);

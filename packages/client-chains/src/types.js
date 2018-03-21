@@ -5,6 +5,9 @@
 
 import type BN from 'bn.js';
 
+export type ChainName = 'demo' | 'nelson';
+export type ChainType = 'polkadot' | 'substrate';
+
 export type ChainConfig$Node = string;
 export type ChainConfig$Nodes = Array<ChainConfig$Node>;
 
@@ -13,60 +16,54 @@ export type ChainConfig$Balances = Array<{
   balance: BN
 }>;
 
-export type ChainConfig$Genesis = {
-  author: Uint8Array,
-  hash: Uint8Array,
-  stateRoot: Uint8Array
+export type ChainConfig$Genesis$Block = {
+  header: Uint8Array,
+  hash: Uint8Array
 };
 
-export type ChainConfig$Params = {
-  approvalRatio: BN,
-  blockTime: BN,
-  bondingDuration: BN,
-  networkId: BN,
-  sessionLength: BN,
-  sessionsPerEra: BN
+export type ChainConfigLoose$Number = BN | number | string;
+
+export type ChainConfigLoose$Params = {
+  [string]: ChainConfigLoose$Number
 };
-
-export type ChainConfig$Number = BN | number | string;
-
-export type ChainConfig$s = 'polkadot';
 
 export type ChainConfigLoose = {
-  authorities: Array<string>,
-  balances: {
-    [string]: ChainConfig$Number
-  },
-  code: Uint8Array,
-  description: string,
   name: string,
-  nodes: ChainConfig$Nodes,
-  params: {
-    approvalRatio: ChainConfig$Number,
-    blockTime: ChainConfig$Number,
-    bondingDuration: ChainConfig$Number,
-    networkId: ChainConfig$Number,
-    sessionLength: ChainConfig$Number,
-    sessionsPerEra: ChainConfig$Number
+  description: string,
+  blockTime: ChainConfigLoose$Number,
+  networkId: ChainConfigLoose$Number,
+  type: ChainType,
+  genesis: {
+    authorities: Array<string>,
+    balances: {
+      [string]: ChainConfigLoose$Number
+    },
+    code: Uint8Array,
+    params: ChainConfigLoose$Params,
+    validators: Array<string>
   },
-  type: ChainConfig$s,
-  validators: Array<string>
+  nodes: ChainConfig$Nodes
 };
 
 export type ChainConfig = {
-  authorities: Array<Uint8Array>,
-  balances: ChainConfig$Balances,
-  code: Uint8Array,
+  blockTime: BN,
   description: string,
-  genesis: ChainConfig$Genesis,
+  genesis: {
+    authorities: Array<Uint8Array>,
+    balances: ChainConfig$Balances,
+    block: ChainConfig$Genesis$Block,
+    code: Uint8Array,
+    codeHash: Uint8Array,
+    params: {
+      [string]: BN
+    },
+    validators: Array<Uint8Array>
+  },
   name: string,
+  networkId: BN,
   nodes: ChainConfig$Nodes,
-  params: ChainConfig$Params,
-  type: ChainConfig$s,
-  validators: Array<Uint8Array>
+  type: ChainType
 };
-
-export type ChainName = 'nelson';
 
 export type ChainInterface$Blocks = {
   getBlock: (hash: Uint8Array) => Uint8Array,
@@ -90,11 +87,6 @@ export type ChainInterface$Executor = {
   importBlock (block: Uint8Array): ?ChainInterface$Executor$BlockImportResult
 };
 
-export type ChainInterface$Genesis = {
-  header: Uint8Array,
-  hash: Uint8Array
-};
-
 export type ChainInterface$StateDb = {
   getBlockHash: (number: BN | number) => Uint8Array,
   getNonce: (publicKey: Uint8Array) => BN
@@ -104,6 +96,5 @@ export type ChainInterface = {
   blocks: ChainInterface$Blocks,
   config: ChainConfig,
   executor: ChainInterface$Executor,
-  genesis: ChainInterface$Genesis,
   state: ChainInterface$StateDb
 };

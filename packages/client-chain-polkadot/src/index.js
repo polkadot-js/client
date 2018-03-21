@@ -31,14 +31,15 @@ module.exports = function polkadot (config: Config, chain: ChainConfig, baseStat
   };
 
   const executor = createExecutor(self);
-  const genesis = initGenesis(self);
+  const genesisBlock = initGenesis(self);
   const { getBlockHash, getNonce } = stateDb.system;
+
+  chain.genesis.block = genesisBlock;
 
   return {
     blocks: blockDb,
     config: chain,
     executor,
-    genesis,
     state: {
       getBlockHash,
       getNonce

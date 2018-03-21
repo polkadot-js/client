@@ -5,8 +5,10 @@
 
 import type { ChainConfigLoose, ChainName } from '../types';
 
+const demo = require('./demo');
 const nelson = require('./nelson');
 
 module.exports = ({
+  demo,
   nelson
 }: { [ChainName]: ChainConfigLoose });
