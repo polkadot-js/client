@@ -15,16 +15,15 @@ const bnToU8a = require('@polkadot/util/bn/toU8a');
 
 const { BLOCK_HASH_AT } = require('./keys');
 
+function key (block: BN | number): Uint8Array {
+  return BLOCK_HASH_AT(bnToU8a(block, 64, true));
+}
+
 module.exports = function blockHash (db: WrapDbInterface): BlockHash {
   return {
     get: (block: BN | number): Uint8Array =>
-      db.get(
-        BLOCK_HASH_AT(bnToU8a(block, 64, true))
-      ),
+      db.get(key(block)),
     set: (block: BN | number, hash: Uint8Array): void =>
-      db.set(
-        BLOCK_HASH_AT(bnToU8a(block, 64, true)),
-        hash
-      )
+      db.set(key(block), hash)
   };
 };
