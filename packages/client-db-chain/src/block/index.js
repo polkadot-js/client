@@ -10,27 +10,26 @@ import type { ChainDb$Block } from '../types';
 const wrapDb = require('@polkadot/client-db/wrap');
 
 const debug = require('../debug');
-const getBlock = require('./getBlock');
-const getBestHash = require('./getBestHash');
-const getBestNumber = require('./getBestNumber');
-const setBlock = require('./setBlock');
-const setBest = require('./setBest');
+const createBestHash = require('./bestHash');
+const createBestNumber = require('./bestNumber');
+const createBlock = require('./block');
 
-module.exports = function block (baseDb: BaseDbInterface): ChainDb$Block {
+module.exports = function blockDb (baseDb: BaseDbInterface): ChainDb$Block {
   const db = wrapDb(baseDb);
+  const bestHash = createBestHash(db);
+  const bestNumber = createBestNumber(db);
+  const block = createBlock(db);
 
   return {
     debug: (): { [string]: string } =>
       debug(db),
-    getBlock: (hash: Uint8Array): Uint8Array =>
-      getBlock(db, hash),
-    getBestHash: (): Uint8Array =>
-      getBestHash(db),
-    getBestNumber: (): BN =>
-      getBestNumber(db),
-    setBlock: (hash: Uint8Array, block: Uint8Array): void =>
-      setBlock(db, hash, block),
-    setBest: (number: BN | number, hash: Uint8Array): void =>
-      setBest(db, number, hash)
+    getBlock: block.get,
+    getBestHash: bestHash.get,
+    getBestNumber: bestNumber.get,
+    setBlock: block.set,
+    setBest: (number: BN | number, hash: Uint8Array): void => {
+      bestHash.set(hash);
+      bestNumber.set(number);
+    }
   };
 };

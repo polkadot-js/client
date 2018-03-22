@@ -7,23 +7,20 @@ import type BN from 'bn.js';
 import type { WrapDbInterface } from '@polkadot/client-db/types';
 import type { ChainDb$State$System } from '../../types';
 
-const getBlockHash = require('./getBlockHash');
-const getCode = require('./getCode');
+const createBlockHash = require('./blockHash');
+const createCode = require('./code');
 const getNonce = require('./getNonce');
-const setBlockHash = require('./setBlockHash');
-const setCode = require('./setCode');
 
 module.exports = function system (db: WrapDbInterface): ChainDb$State$System {
+  const blockHash = createBlockHash(db);
+  const code = createCode(db);
+
   return {
-    getBlockHash: (block: BN | number): Uint8Array =>
-      getBlockHash(db, block),
-    getCode: (): Uint8Array =>
-      getCode(db),
+    getBlockHash: blockHash.get,
+    getCode: code.get,
     getNonce: (publicKey: Uint8Array): BN =>
       getNonce(db, publicKey),
-    setBlockHash: (block: BN | number, hash: Uint8Array): void =>
-      setBlockHash(db, block, hash),
-    setCode: (code: Uint8Array): void =>
-      setCode(db, code)
+    setBlockHash: blockHash.set,
+    setCode: code.set
   };
 };
