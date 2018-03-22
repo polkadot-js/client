@@ -8,7 +8,7 @@ import type { ChainState } from '../types';
 const substrateState = require('../substrate/state');
 
 module.exports = function state (self: ChainState): void {
-  const { chain: { config: { genesis: { params: { approvalRatio, sessionLength, sessionsPerEra } } } }, stateDb } = self;
+  const { chain: { genesis: { params: { approvalRatio, sessionLength, sessionsPerEra } } }, stateDb } = self;
 
   stateDb.governance.setApprovalsRatio(approvalRatio);
   stateDb.session.setLength(sessionLength);

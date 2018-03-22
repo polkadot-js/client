@@ -16,10 +16,4 @@ describe('loadChain', () => {
       () => loadChain('not-a-chain')
     ).toThrow(/Unable to find builtin/);
   });
-
-  it('validates the definitions, failing when not valid', () => {
-    expect(
-      () => loadChain('package.json')
-    ).toThrow(/should be an object/);
-  });
 });

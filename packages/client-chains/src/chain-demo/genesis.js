@@ -3,7 +3,7 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { ChainConfig$Genesis$Block } from '../types';
+import type { ChainConfig$Genesis$Block, ChainState } from '../types';
 
 const initBlock = require('./block');
 const initState = require('./state');

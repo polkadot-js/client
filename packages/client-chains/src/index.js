@@ -5,7 +5,7 @@
 
 import type { Config } from '@polkadot/client/types';
 import type { BaseDbInterface } from '@polkadot/client-db/types';
-import type { ChainInterface } from './types';
+import type { ChainInterface, ChainState } from './types';
 
 const createBlockDb = require('@polkadot/client-db-chain/block');
 const createStateDb = require('@polkadot/client-db-chain/state');
@@ -24,7 +24,7 @@ module.exports = function chains (config: Config, baseStateDb: BaseDbInterface, 
   const self: ChainState = {
     blockDb,
     config,
-    chain,
+    chain: chain.config,
     l,
     runtime,
     stateDb

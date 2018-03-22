@@ -5,7 +5,7 @@
 
 import type { ChainState } from '../types';
 
-module.exports = function genesisState ({ chain: { config: { genesis: { authorities, balances, code, validators } } }, stateDb }: ChainState): void {
+module.exports = function genesisState ({ chain: { genesis: { authorities, balances, code, validators } }, stateDb }: ChainState): void {
   stateDb.consensys.setAuthorityCount(authorities.length);
   authorities.forEach((authority, index) => {
     stateDb.consensys.setAuthority(index, authority);

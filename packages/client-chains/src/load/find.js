@@ -8,21 +8,12 @@ import type { ChainDefinitionLoose, ChainName } from '../types';
 const assert = require('@polkadot/util/assert');
 
 const chains = require('../chains');
-const fromDisk = require('./fromDisk');
-const validateChain = require('./validate');
 
-module.exports = function findAndLoad (name: string): ChainDefinitionLoose {
-  // builtin?
-  if (!/\.json$/.test(name)) {
-    // flowlint-next-line unclear-type:off
-    const chain = chains[((name: any): ChainName)];
+module.exports = function find (name: string): ChainDefinitionLoose {
+  // flowlint-next-line unclear-type:off
+  const chain = chains[((name: any): ChainName)];
 
-    assert(chain, `Unable to find builtin chain '${name}'`);
+  assert(chain, `Unable to find builtin chain '${name}'`);
 
-    return chain;
-  }
-
-  return validateChain(
-    fromDisk(name)
-  );
+  return chain;
 };

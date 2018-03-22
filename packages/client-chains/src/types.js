@@ -2,6 +2,7 @@
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
 // @flow
+/* eslint no-use-before-define:0 */
 
 import type BN from 'bn.js';
 import type { Config } from '@polkadot/client/types';
@@ -118,12 +119,12 @@ export type ChainState = {
 
 export type ChainDefinitionLoose = {
   config: ChainConfigLoose,
-  executor: () => ChainInterface$Executor,
-  genesis: () => void
+  executor: (self: ChainState) => ChainInterface$Executor,
+  genesis: (self: ChainState) => ChainConfig$Genesis$Block
 };
 
 export type ChainDefinition = {
   config: ChainConfig,
-  executor: () => ChainInterface$Executor,
-  genesis: () => void
+  executor: (self: ChainState) => ChainInterface$Executor,
+  genesis: (self: ChainState) => ChainConfig$Genesis$Block
 };
