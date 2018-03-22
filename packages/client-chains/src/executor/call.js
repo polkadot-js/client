@@ -3,7 +3,7 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { ChainState } from '../../types';
+import type { ChainState } from '../types';
 
 type CallResult = {
   lo: number,
@@ -15,7 +15,7 @@ type Call = (...data: Array<Uint8Array>) => CallResult;
 const createWasm = require('@polkadot/client-wasm');
 const u8aToHex = require('@polkadot/util/u8a/toHex');
 
-const proxy = require('../../wasm/proxy_substrate_wasm');
+const proxy = require('../wasm/proxy_substrate_wasm');
 
 module.exports = function call ({ chain: { code, genesis }, config, runtime }: ChainState, name: string): Call {
   const instance = createWasm(config, runtime, code || genesis.code, proxy);

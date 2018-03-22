@@ -3,7 +3,7 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { ChainState, ChainInterface$Executor$BlockImportResult } from '../../types';
+import type { ChainState, ChainInterface$Executor$BlockImportResult } from '../types';
 
 const decodeRaw = require('@polkadot/primitives-codec/block/decodeRaw');
 const blake2Asu8a256 = require('@polkadot/util-crypto/blake2/asU8a256');

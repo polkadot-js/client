@@ -3,7 +3,7 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { ChainState } from '../../types';
+import type { ChainState } from '../types';
 
 const u8aConcat = require('@polkadot/util/u8a/concat');
 

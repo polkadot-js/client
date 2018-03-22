@@ -4,7 +4,7 @@
 // @flow
 
 import type BN from 'bn.js';
-import type { ChainState, ChainInterface$Executor, ChainInterface$Executor$BlockImportResult } from '../../types';
+import type { ChainState, ChainInterface$Executor, ChainInterface$Executor$BlockImportResult } from '../types';
 
 const executeBlock = require('./executeBlock');
 const executeTransaction = require('./executeTransaction');

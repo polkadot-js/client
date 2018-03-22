@@ -4,7 +4,7 @@
 // @flow
 
 import type BN from 'bn.js';
-import type { ChainState } from '../../types';
+import type { ChainState } from '../types';
 
 const createHeader = require('@polkadot/primitives-builder/header');
 const rootRaw = require('@polkadot/primitives-builder/transaction/rootRaw');

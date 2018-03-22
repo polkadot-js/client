@@ -3,7 +3,7 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { ChainState } from '../../types';
+import type { ChainState } from '../types';
 
 export type CallU8a = (...data: Array<Uint8Array>) => Uint8Array;
 

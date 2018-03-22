@@ -3,6 +3,6 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-const executor = require('../substrate/executor');
+const executor = require('../executor');
 
 module.exports = executor;
