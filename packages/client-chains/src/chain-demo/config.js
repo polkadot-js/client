@@ -3,15 +3,14 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { ChainConfigLoose } from '../types';
-
 const BN = require('bn.js');
 
+const config = require('../config');
 const code = require('../wasm/demo_genesis_wasm');
 
 const GOD_KEY = '0x3d866ec8a9190c8343c2fc593d21d8a6d0c5c4763aaab2349de3a6111d64d124';
 
-module.exports = ({
+module.exports = config({
   name: 'Demo',
   description: 'The Subtrate-Demo network.',
   type: 'substrate',
@@ -49,4 +48,4 @@ module.exports = ({
     ]
   },
   nodes: []
-}: ChainConfigLoose);
+});

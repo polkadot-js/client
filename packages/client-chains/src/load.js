@@ -3,13 +3,13 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { ChainDefinitionLoose, ChainName } from '../types';
+import type { ChainDefinition, ChainName } from './types';
 
 const assert = require('@polkadot/util/assert');
 
-const chains = require('../chains');
+const chains = require('./chains');
 
-module.exports = function find (name: string): ChainDefinitionLoose {
+module.exports = function load (name: string): ChainDefinition {
   // flowlint-next-line unclear-type:off
   const chain = chains[((name: any): ChainName)];
 

@@ -4,7 +4,7 @@
 // @flow
 
 import type BN from 'bn.js';
-import type { ChainConfig, ChainConfig$Genesis, ChainConfigLoose, ChainConfigLoose$Number } from '../types';
+import type { ChainConfig, ChainConfig$Genesis, ChainConfigLoose, ChainConfigLoose$Number } from './types';
 
 const bnToBn = require('@polkadot/util/bn/toBn');
 const isHex = require('@polkadot/util/is/hex');
@@ -23,7 +23,7 @@ function valueToBn (value: ChainConfigLoose$Number): BN {
   return bnToBn(value);
 }
 
-module.exports = function toStrict ({ blockTime, description, genesis: { authorities, balances, code, params, validators }, name, networkId, nodes, type }: ChainConfigLoose): $Shape<ChainConfig> {
+module.exports = function config ({ blockTime, description, genesis: { authorities, balances, code, params, validators }, name, networkId, nodes, type }: ChainConfigLoose): $Shape<ChainConfig> {
   const codeHash = blake2AsU8a256(code);
   const genesis: $Shape<ChainConfig$Genesis> = {
     authorities: authorities.map(hexToU8a),

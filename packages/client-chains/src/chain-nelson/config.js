@@ -3,15 +3,14 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { ChainConfigLoose } from '../types';
-
 const BN = require('bn.js');
 
+const config = require('../config');
 const code = require('../wasm/polkadot_runtime_wasm');
 
 const GOD_KEY = '0x3d866ec8a9190c8343c2fc593d21d8a6d0c5c4763aaab2349de3a6111d64d124';
 
-module.exports = ({
+module.exports = config({
   name: 'Nelson',
   description: 'An initial @polkadot/client test network. Will be deprecated once the @polkadot/client aligns with the official implementations in terms of networking and features.',
   type: 'polkadot',
@@ -36,4 +35,4 @@ module.exports = ({
     ]
   },
   nodes: []
-}: ChainConfigLoose);
+});
