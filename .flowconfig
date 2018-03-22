@@ -12,5 +12,5 @@ all=warn
 
 [options]
 include_warnings=true
-module.name_mapper='^@polkadot/client-\(chain-polkadot\|chains\|db\|keyring\|p2p\|rpc\|runtime\|wasm\)\(.*\)$' -> '<PROJECT_ROOT>/packages/client-\1/src\2'
+module.name_mapper='^@polkadot/client-\(chains\|db-chain\|db\|keyring\|p2p\|rpc\|runtime\|wasm\)\(.*\)$' -> '<PROJECT_ROOT>/packages/client-\1/src\2'
 module.name_mapper='^@polkadot/client\(.*\)$' -> '<PROJECT_ROOT>/packages/client/src\1'

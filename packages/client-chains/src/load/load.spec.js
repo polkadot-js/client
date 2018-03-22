@@ -7,19 +7,19 @@ const loadChain = require('./index');
 describe('loadChain', () => {
   it('loads a chain from chains/*', () => {
     expect(
-      loadChain({ chain: 'nelson' })
+      loadChain('nelson')
     ).toBeDefined();
   });
 
   it('fails when builtin not found', () => {
     expect(
-      () => loadChain({ chain: 'not-a-chain' })
+      () => loadChain('not-a-chain')
     ).toThrow(/Unable to find builtin/);
   });
 
   it('validates the definitions, failing when not valid', () => {
     expect(
-      () => loadChain({ chain: 'package.json' })
+      () => loadChain('package.json')
     ).toThrow(/should be an object/);
   });
 });

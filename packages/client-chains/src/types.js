@@ -4,6 +4,10 @@
 // @flow
 
 import type BN from 'bn.js';
+import type { Config } from '@polkadot/client/types';
+import type { ChainDb$Block, ChainDb$State } from '@polkadot/client-db-chain/types';
+import type { RuntimeInterface } from '@polkadot/client-runtime/types';
+import type { Logger } from '@polkadot/util/types';
 
 export type ChainName = 'demo' | 'nelson';
 export type ChainType = 'polkadot' | 'substrate';
@@ -101,4 +105,25 @@ export type ChainInterface = {
   config: ChainConfig,
   executor: ChainInterface$Executor,
   state: ChainInterface$StateDb
+};
+
+export type ChainState = {
+  blockDb: ChainDb$Block,
+  config: Config,
+  chain: ChainConfig,
+  l: Logger,
+  runtime: RuntimeInterface,
+  stateDb: ChainDb$State
+};
+
+export type ChainDefinitionLoose = {
+  config: ChainConfigLoose,
+  executor: () => ChainInterface$Executor,
+  genesis: () => void
+};
+
+export type ChainDefinition = {
+  config: ChainConfig,
+  executor: () => ChainInterface$Executor,
+  genesis: () => void
 };

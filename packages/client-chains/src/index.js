@@ -7,18 +7,42 @@ import type { Config } from '@polkadot/client/types';
 import type { BaseDbInterface } from '@polkadot/client-db/types';
 import type { ChainInterface } from './types';
 
-const createPolkadot = require('@polkadot/client-chain-polkadot');
+const createBlockDb = require('@polkadot/client-db-chain/block');
+const createStateDb = require('@polkadot/client-db-chain/state');
+const createRuntime = require('@polkadot/client-runtime');
+const logger = require('@polkadot/util/logger');
 
 const loadChain = require('./load');
 
-module.exports = function chains (config: Config, stateDb: BaseDbInterface, blockDb: BaseDbInterface): ChainInterface {
-  const chain = loadChain(config);
+module.exports = function chains (config: Config, baseStateDb: BaseDbInterface, baseBlockDb: BaseDbInterface): ChainInterface {
+  const l = logger(`chain-${config.chain}`);
+  const chain = loadChain(config.chain);
+  const runtime = createRuntime(chain.config, baseStateDb);
+  const blockDb = createBlockDb(baseBlockDb);
+  const stateDb = createStateDb(runtime.environment.db);
 
-  switch (chain.type) {
-    case 'polkadot':
-      return createPolkadot(config, chain, stateDb, blockDb);
+  const self: ChainState = {
+    blockDb,
+    config,
+    chain,
+    l,
+    runtime,
+    stateDb
+  };
 
-    default:
-      throw new Error(`Handler for chain type '${chain.type}' not available`);
-  }
+  const executor = chain.executor(self);
+  const genesisBlock = chain.genesis(self);
+  const { getBlockHash, getNonce } = stateDb.system;
+
+  chain.genesis.block = genesisBlock;
+
+  return {
+    blocks: blockDb,
+    config: chain.config,
+    executor,
+    state: {
+      getBlockHash,
+      getNonce
+    }
+  };
 };
