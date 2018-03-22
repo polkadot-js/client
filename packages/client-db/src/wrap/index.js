@@ -17,11 +17,11 @@ module.exports = function wrap (db: BaseDbInterface): WrapDbInterface {
     del,
     isEmpty,
     get,
-    getBn32: getBn(db, 64),
-    getBn64: getBn(db, 64),
     pairs,
     set,
+    getBn32: getBn(db, 32),
     setBn32: setBn(db, 32),
-    setBn64: setBn(db, 32)
+    getBn64: getBn(db, 64),
+    setBn64: setBn(db, 64)
   };
 };
