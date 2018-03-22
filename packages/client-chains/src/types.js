@@ -117,14 +117,15 @@ export type ChainState = {
   stateDb: ChainDb$State
 };
 
-export type ChainDefinitionLoose = {
-  config: ChainConfigLoose,
+export type ChainDefinition$Execute = {
   executor: (self: ChainState) => ChainInterface$Executor,
-  genesis: (self: ChainState) => ChainConfig$Genesis$Block
+  genesis: (self: ChainState) => void
 };
 
-export type ChainDefinition = {
-  config: ChainConfig,
-  executor: (self: ChainState) => ChainInterface$Executor,
-  genesis: (self: ChainState) => ChainConfig$Genesis$Block
+export type ChainDefinitionLoose = ChainDefinition$Execute & {
+  config: ChainConfigLoose
+};
+
+export type ChainDefinition = ChainDefinition$Execute & {
+  config: ChainConfig
 };

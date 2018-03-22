@@ -30,16 +30,14 @@ module.exports = function chains (config: Config, baseStateDb: BaseDbInterface, 
     stateDb
   };
 
-  const executor = chain.executor(self);
-  const genesisBlock = chain.genesis(self);
-  const { getBlockHash, getNonce } = stateDb.system;
+  chain.genesis(self);
 
-  chain.genesis.block = genesisBlock;
+  const { getBlockHash, getNonce } = stateDb.system;
 
   return {
     blocks: blockDb,
     config: chain.config,
-    executor,
+    executor: chain.executor(self),
     state: {
       getBlockHash,
       getNonce
