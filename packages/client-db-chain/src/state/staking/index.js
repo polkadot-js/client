@@ -7,8 +7,7 @@ import type BN from 'bn.js';
 import type { WrapDbInterface } from '@polkadot/client-db/types';
 import type { ChainDb$State$Staking } from '../../types';
 
-const getBalance = require('./getBalance');
-const setBalance = require('./setBalance');
+const createBalance = require('./balance');
 const setCurrentEra = require('./setCurrentEra');
 const setIntent = require('./setIntent');
 const setIntentLength = require('./setIntentLength');
@@ -16,11 +15,11 @@ const setSessionsPerEra = require('./setSessionsPerEra');
 const setValidatorCount = require('./setValidatorCount');
 
 module.exports = function staking (db: WrapDbInterface): ChainDb$State$Staking {
+  const balance = createBalance(db);
+
   return {
-    getBalance: (publicKey: Uint8Array): BN =>
-      getBalance(db, publicKey),
-    setBalance: (publicKey: Uint8Array, value: BN | number): void =>
-      setBalance(db, publicKey, value),
+    getBalance: balance.get,
+    setBalance: balance.set,
     setCurrentEra: (era: BN | number): void =>
       setCurrentEra(db, era),
     setIntent: (id: BN | number, publicKey: Uint8Array): void =>
