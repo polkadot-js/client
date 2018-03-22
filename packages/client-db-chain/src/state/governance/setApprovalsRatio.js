@@ -11,5 +11,5 @@ const key = require('@polkadot/client-db/key');
 const { APPROVALS_RATIO } = require('./prefix');
 
 module.exports = function setApprovalsRatio (db: WrapDbInterface, ratio: BN | number): void {
-  db.setBn(key(APPROVALS_RATIO), ratio, 32);
+  db.setBn(key(APPROVALS_RATIO)(), ratio, 32);
 };

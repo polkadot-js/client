@@ -10,5 +10,5 @@ const key = require('@polkadot/client-db/key');
 const { BLOCK_BY_HASH } = require('./prefix');
 
 module.exports = function setBlock (db: WrapDbInterface, hash: Uint8Array, block: Uint8Array): void {
-  db.set(key(BLOCK_BY_HASH, hash), block);
+  db.set(key(BLOCK_BY_HASH)(hash), block);
 };

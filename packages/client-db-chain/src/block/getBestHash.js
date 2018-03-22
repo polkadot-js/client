@@ -10,5 +10,5 @@ const key = require('@polkadot/client-db/key');
 const { BEST_HASH } = require('./prefix');
 
 module.exports = function getBestHash (db: WrapDbInterface): Uint8Array {
-  return db.get(key(BEST_HASH));
+  return db.get(key(BEST_HASH)());
 };

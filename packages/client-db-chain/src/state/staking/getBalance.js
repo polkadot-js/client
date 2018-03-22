@@ -11,5 +11,5 @@ const key = require('@polkadot/client-db/key');
 const { BALANCE_OF } = require('./prefix');
 
 module.exports = function getBalance (db: WrapDbInterface, publicKey: Uint8Array): BN {
-  return db.getBn(key(BALANCE_OF, publicKey), 64);
+  return db.getBn(key(BALANCE_OF)(publicKey), 64);
 };

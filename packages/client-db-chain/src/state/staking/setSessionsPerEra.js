@@ -11,5 +11,5 @@ const key = require('@polkadot/client-db/key');
 const { SESSIONS_PER_ERA } = require('./prefix');
 
 module.exports = function setSessionsPerEra (db: WrapDbInterface, count: BN | number): void {
-  db.setBn(key(SESSIONS_PER_ERA), count, 64);
+  db.setBn(key(SESSIONS_PER_ERA)(), count, 64);
 };

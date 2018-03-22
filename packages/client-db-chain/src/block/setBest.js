@@ -11,6 +11,6 @@ const key = require('@polkadot/client-db/key');
 const { BEST_HASH, BEST_NUMBER } = require('./prefix');
 
 module.exports = function setBest (db: WrapDbInterface, number: BN | number, hash: Uint8Array): void {
-  db.setBn(key(BEST_NUMBER), number, 64);
-  db.set(key(BEST_HASH), hash);
+  db.setBn(key(BEST_NUMBER)(), number, 64);
+  db.set(key(BEST_HASH)(), hash);
 };

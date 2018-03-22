@@ -13,6 +13,6 @@ const { BLOCK_HASH_AT } = require('./prefix');
 
 module.exports = function getBlockHash (db: WrapDbInterface, block: BN | number): Uint8Array {
   return db.get(
-    key(BLOCK_HASH_AT, bnToU8a(block, 64, true))
+    key(BLOCK_HASH_AT)(bnToU8a(block, 64, true))
   );
 };

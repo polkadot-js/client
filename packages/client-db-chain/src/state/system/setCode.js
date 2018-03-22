@@ -11,7 +11,7 @@ const { CODE } = require('./prefix');
 
 module.exports = function setCode (db: WrapDbInterface, code: Uint8Array): void {
   db.set(
-    key(CODE, null, false),
+    key(CODE, false)(),
     code
   );
 };

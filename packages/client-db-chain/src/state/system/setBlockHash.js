@@ -13,7 +13,7 @@ const { BLOCK_HASH_AT } = require('./prefix');
 
 module.exports = function setBlockHash (db: WrapDbInterface, block: BN | number, hash: Uint8Array): void {
   db.set(
-    key(BLOCK_HASH_AT, bnToU8a(block, 64, true)),
+    key(BLOCK_HASH_AT)(bnToU8a(block, 64, true)),
     hash
   );
 };

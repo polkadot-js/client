@@ -13,7 +13,7 @@ const { AUTHORITY } = require('./prefix');
 
 module.exports = function setAuthority (db: WrapDbInterface, id: BN | number, publicKey: Uint8Array, isHashed: boolean = false): void {
   db.set(
-    key(AUTHORITY, bnToU8a(id, 32, true), isHashed),
+    key(AUTHORITY, isHashed)(bnToU8a(id, 32, true)),
     publicKey
   );
 };

@@ -11,5 +11,5 @@ const key = require('@polkadot/client-db/key');
 const { AUTHORITY_LENGTH } = require('./prefix');
 
 module.exports = function setAuthorityCount (db: WrapDbInterface, count: BN | number): void {
-  db.setBn(key(AUTHORITY_LENGTH, null, false), count, 32);
+  db.setBn(key(AUTHORITY_LENGTH, false)(), count, 32);
 };

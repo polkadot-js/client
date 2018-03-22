@@ -10,5 +10,5 @@ const key = require('@polkadot/client-db/key');
 const { CODE } = require('./prefix');
 
 module.exports = function getCode (db: WrapDbInterface): Uint8Array {
-  return db.get(key(CODE, null, false));
+  return db.get(key(CODE, false)());
 };

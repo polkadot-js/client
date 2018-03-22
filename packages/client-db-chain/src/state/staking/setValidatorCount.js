@@ -11,5 +11,5 @@ const key = require('@polkadot/client-db/key');
 const { VALIDATOR_COUNT } = require('./prefix');
 
 module.exports = function setValidatorCount (db: WrapDbInterface, count: BN | number): void {
-  db.setBn(key(VALIDATOR_COUNT), count, 64);
+  db.setBn(key(VALIDATOR_COUNT)(), count, 64);
 };

@@ -13,7 +13,7 @@ const { VALUE } = require('./prefix');
 
 module.exports = function setValue (db: WrapDbInterface, id: BN | number, publicKey: Uint8Array): void {
   db.set(
-    key(VALUE, bnToU8a(id, 32, true)),
+    key(VALUE)(bnToU8a(id, 32, true)),
     publicKey
   );
 };

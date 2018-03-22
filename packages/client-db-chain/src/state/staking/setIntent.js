@@ -13,7 +13,7 @@ const { INTENT_WILL } = require('./prefix');
 
 module.exports = function setIntent (db: WrapDbInterface, id: BN | number, publicKey: Uint8Array): void {
   db.set(
-    key(INTENT_WILL, bnToU8a(id, 32, true)),
+    key(INTENT_WILL)(bnToU8a(id, 32, true)),
     publicKey
   );
 };

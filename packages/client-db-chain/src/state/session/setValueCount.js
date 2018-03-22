@@ -11,5 +11,5 @@ const key = require('@polkadot/client-db/key');
 const { VALUE_LENGTH } = require('./prefix');
 
 module.exports = function setValueCount (db: WrapDbInterface, count: BN | number): void {
-  db.setBn(key(VALUE_LENGTH), count, 32);
+  db.setBn(key(VALUE_LENGTH)(), count, 32);
 };

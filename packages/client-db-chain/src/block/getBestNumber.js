@@ -11,5 +11,5 @@ const key = require('@polkadot/client-db/key');
 const { BEST_NUMBER } = require('./prefix');
 
 module.exports = function getBestNumber (db: WrapDbInterface): BN {
-  return db.getBn(key(BEST_NUMBER), 64);
+  return db.getBn(key(BEST_NUMBER)(), 64);
 };

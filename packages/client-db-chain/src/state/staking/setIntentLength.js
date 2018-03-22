@@ -11,5 +11,5 @@ const key = require('@polkadot/client-db/key');
 const { INTENT_WILL_LENGTH } = require('./prefix');
 
 module.exports = function setIntentLength (db: WrapDbInterface, length: BN | number): void {
-  db.setBn(key(INTENT_WILL_LENGTH), length, 32);
+  db.setBn(key(INTENT_WILL_LENGTH)(), length, 32);
 };

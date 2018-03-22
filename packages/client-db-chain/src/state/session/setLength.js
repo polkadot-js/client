@@ -11,5 +11,5 @@ const key = require('@polkadot/client-db/key');
 const { SESSION_LENGTH } = require('./prefix');
 
 module.exports = function setLength (db: WrapDbInterface, length: BN | number): void {
-  db.setBn(key(SESSION_LENGTH), length, 64);
+  db.setBn(key(SESSION_LENGTH)(), length, 64);
 };

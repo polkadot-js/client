@@ -11,5 +11,5 @@ const key = require('@polkadot/client-db/key');
 const { NONCE_OF } = require('./prefix');
 
 module.exports = function getNonce (db: WrapDbInterface, publicKey: Uint8Array): BN {
-  return db.getBn(key(NONCE_OF, publicKey), 64);
+  return db.getBn(key(NONCE_OF)(publicKey), 64);
 };
