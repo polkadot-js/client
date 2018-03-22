@@ -3,8 +3,11 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
+const key = require('@polkadot/client-db/key');
+
 module.exports = {
-  APPROVAL_OF: 'gov:app:',
-  APPROVALS_RATIO: 'gov:apr',
-  CURRENT_PROPOSAL: 'gov:pro'
+  BLOCK_HASH_AT: key('sys:old:'),
+  CODE: key(':code', false),
+  NONCE_OF: key('sys:non:'),
+  TEMP_TRANSACTION_NUMBER: key('temp:txcount:')
 };

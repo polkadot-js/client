@@ -6,14 +6,13 @@
 import type { WrapDbInterface } from '@polkadot/client-db/types';
 
 const BN = require('bn.js');
-const key = require('@polkadot/client-db/key');
 const bnToU8a = require('@polkadot/util/bn/toU8a');
 
-const { AUTHORITY } = require('./prefix');
+const { AUTHORITY_H, AUTHORITY_U } = require('./keys');
 
-module.exports = function setAuthority (db: WrapDbInterface, id: BN | number, publicKey: Uint8Array, isHashed: boolean = false): void {
-  db.set(
-    key(AUTHORITY, isHashed)(bnToU8a(id, 32, true)),
-    publicKey
-  );
+module.exports = function setAuthority (db: WrapDbInterface, id: BN | number, publicKey: Uint8Array): void {
+  const key = bnToU8a(id, 32, true);
+
+  db.set(AUTHORITY_H(key), publicKey);
+  db.set(AUTHORITY_U(key), publicKey);
 };

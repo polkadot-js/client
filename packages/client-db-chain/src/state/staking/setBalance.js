@@ -6,10 +6,9 @@
 import type { WrapDbInterface } from '@polkadot/client-db/types';
 
 const BN = require('bn.js');
-const key = require('@polkadot/client-db/key');
 
-const { BALANCE_OF } = require('./prefix');
+const { BALANCE_OF } = require('./keys');
 
 module.exports = function setBalance (db: WrapDbInterface, publicKey: Uint8Array, value: BN | number): void {
-  db.setBn(key(BALANCE_OF)(publicKey), value, 64);
+  db.setBn64(BALANCE_OF(publicKey), value);
 };

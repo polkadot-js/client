@@ -3,9 +3,10 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
+const key = require('@polkadot/client-db/key');
+
 module.exports = {
-  BLOCK_HASH_AT: 'sys:old:',
-  CODE: ':code',
-  NONCE_OF: 'sys:non:',
-  TEMP_TRANSACTION_NUMBER: 'temp:txcount:'
+  AUTHORITY_H: key(':auth:', true),
+  AUTHORITY_U: key(':auth:', false),
+  AUTHORITY_LENGTH: key(':auth:len', false)
 };

@@ -8,11 +8,11 @@ import type { Trie$Pairs } from '@polkadot/util-triehash/types';
 
 export type DbPathPrefix = 'database';
 
-export type DbConfig$ = 'disk' | 'memory';
+export type DbConfig$Type = 'disk' | 'memory';
 
 export type DbConfig = {
   path: string,
-  type: DbConfig$
+  type: DbConfig$Type
 };
 
 export type BaseDbInterface = {
@@ -26,6 +26,8 @@ export type BaseDbInterface = {
 }
 
 export type WrapDbInterface = BaseDbInterface & {
-  getBn (key: Uint8Array, bitLength: number): BN,
-  setBn (key: Uint8Array, value: BN | number, bitLength: number): void
+  getBn32 (key: Uint8Array): BN,
+  getBn64 (key: Uint8Array): BN,
+  setBn32 (key: Uint8Array, value: BN | number): void,
+  setBn64 (key: Uint8Array, value: BN | number): void
 };

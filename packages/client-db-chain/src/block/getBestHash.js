@@ -5,10 +5,8 @@
 
 import type { WrapDbInterface } from '@polkadot/client-db/types';
 
-const key = require('@polkadot/client-db/key');
-
-const { BEST_HASH } = require('./prefix');
+const { BEST_HASH } = require('./keys');
 
 module.exports = function getBestHash (db: WrapDbInterface): Uint8Array {
-  return db.get(key(BEST_HASH)());
+  return db.get(BEST_HASH());
 };

@@ -6,10 +6,9 @@
 import type { WrapDbInterface } from '@polkadot/client-db/types';
 
 const BN = require('bn.js');
-const key = require('@polkadot/client-db/key');
 
-const { SESSIONS_PER_ERA } = require('./prefix');
+const { SESSIONS_PER_ERA } = require('./keys');
 
 module.exports = function setSessionsPerEra (db: WrapDbInterface, count: BN | number): void {
-  db.setBn(key(SESSIONS_PER_ERA)(), count, 64);
+  db.setBn64(SESSIONS_PER_ERA(), count);
 };

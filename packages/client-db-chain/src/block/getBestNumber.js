@@ -6,10 +6,8 @@
 import type BN from 'bn.js';
 import type { WrapDbInterface } from '@polkadot/client-db/types';
 
-const key = require('@polkadot/client-db/key');
-
-const { BEST_NUMBER } = require('./prefix');
+const { BEST_NUMBER } = require('./keys');
 
 module.exports = function getBestNumber (db: WrapDbInterface): BN {
-  return db.getBn(key(BEST_NUMBER)(), 64);
+  return db.getBn64(BEST_NUMBER());
 };

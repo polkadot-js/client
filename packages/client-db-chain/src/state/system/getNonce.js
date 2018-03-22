@@ -6,10 +6,8 @@
 import type BN from 'bn.js';
 import type { WrapDbInterface } from '@polkadot/client-db/types';
 
-const key = require('@polkadot/client-db/key');
-
-const { NONCE_OF } = require('./prefix');
+const { NONCE_OF } = require('./keys');
 
 module.exports = function getNonce (db: WrapDbInterface, publicKey: Uint8Array): BN {
-  return db.getBn(key(NONCE_OF)(publicKey), 64);
+  return db.getBn64(NONCE_OF(publicKey));
 };

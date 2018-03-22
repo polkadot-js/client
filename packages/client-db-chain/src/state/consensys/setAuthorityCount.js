@@ -6,10 +6,9 @@
 import type { WrapDbInterface } from '@polkadot/client-db/types';
 
 const BN = require('bn.js');
-const key = require('@polkadot/client-db/key');
 
-const { AUTHORITY_LENGTH } = require('./prefix');
+const { AUTHORITY_LENGTH } = require('./keys');
 
 module.exports = function setAuthorityCount (db: WrapDbInterface, count: BN | number): void {
-  db.setBn(key(AUTHORITY_LENGTH, false)(), count, 32);
+  db.setBn32(AUTHORITY_LENGTH(), count);
 };

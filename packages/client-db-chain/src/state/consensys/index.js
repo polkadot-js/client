@@ -12,8 +12,8 @@ const setAuthorityCount = require('./setAuthorityCount');
 
 module.exports = function consensys (db: WrapDbInterface): ChainDb$State$Consensys {
   return {
-    setAuthority: (id: BN | number, publicKey: Uint8Array, isHashed?: boolean = false): void =>
-      setAuthority(db, id, publicKey, isHashed),
+    setAuthority: (id: BN | number, publicKey: Uint8Array): void =>
+      setAuthority(db, id, publicKey),
     setAuthorityCount: (count: BN | number): void =>
       setAuthorityCount(db, count)
   };

@@ -9,7 +9,6 @@ module.exports = function genesisState ({ chain: { genesis: { authorities, balan
   stateDb.consensys.setAuthorityCount(authorities.length);
   authorities.forEach((authority, index) => {
     stateDb.consensys.setAuthority(index, authority);
-    stateDb.consensys.setAuthority(index, authority, true);
   });
 
   stateDb.staking.setValidatorCount(validators.length);

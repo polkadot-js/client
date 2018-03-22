@@ -5,10 +5,8 @@
 
 import type { WrapDbInterface } from '@polkadot/client-db/types';
 
-const key = require('@polkadot/client-db/key');
-
-const { CODE } = require('./prefix');
+const { CODE } = require('./keys');
 
 module.exports = function getCode (db: WrapDbInterface): Uint8Array {
-  return db.get(key(CODE, false)());
+  return db.get(CODE());
 };

@@ -9,7 +9,7 @@ import type { ChainInterface$Blocks } from '@polkadot/client-chains/types';
 export type ChainDb$Block = ChainInterface$Blocks;
 
 export type ChainDb$State$Consensys = {
-  setAuthority (id: BN | number, publicKey: Uint8Array, isHashed?: boolean): void,
+  setAuthority (id: BN | number, publicKey: Uint8Array): void,
   setAuthorityCount (count: BN | number): void
 }
 

@@ -6,10 +6,9 @@
 import type { WrapDbInterface } from '@polkadot/client-db/types';
 
 const BN = require('bn.js');
-const key = require('@polkadot/client-db/key');
 
-const { SESSION_LENGTH } = require('./prefix');
+const { SESSION_LENGTH } = require('./keys');
 
 module.exports = function setLength (db: WrapDbInterface, length: BN | number): void {
-  db.setBn(key(SESSION_LENGTH)(), length, 64);
+  db.setBn64(SESSION_LENGTH(), length);
 };

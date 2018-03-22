@@ -5,13 +5,11 @@
 
 import type { WrapDbInterface } from '@polkadot/client-db/types';
 
-const key = require('@polkadot/client-db/key');
-
-const { CODE } = require('./prefix');
+const { CODE } = require('./keys');
 
 module.exports = function setCode (db: WrapDbInterface, code: Uint8Array): void {
   db.set(
-    key(CODE, false)(),
+    CODE(),
     code
   );
 };

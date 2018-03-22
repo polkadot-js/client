@@ -3,8 +3,10 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
+const key = require('@polkadot/client-db/key');
+
 module.exports = {
-  BEST_HASH: 'bst:hsh',
-  BEST_NUMBER: 'bst:num',
-  BLOCK_BY_HASH: 'blk:hsh:'
+  BEST_HASH: key('bst:hsh'),
+  BEST_NUMBER: key('bst:num'),
+  BLOCK_BY_HASH: key('blk:hsh:')
 };

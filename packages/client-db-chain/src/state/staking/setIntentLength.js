@@ -6,10 +6,9 @@
 import type { WrapDbInterface } from '@polkadot/client-db/types';
 
 const BN = require('bn.js');
-const key = require('@polkadot/client-db/key');
 
-const { INTENT_WILL_LENGTH } = require('./prefix');
+const { INTENT_WILL_LENGTH } = require('./keys');
 
 module.exports = function setIntentLength (db: WrapDbInterface, length: BN | number): void {
-  db.setBn(key(INTENT_WILL_LENGTH)(), length, 32);
+  db.setBn32(INTENT_WILL_LENGTH(), length);
 };

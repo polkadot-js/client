@@ -6,14 +6,13 @@
 import type { WrapDbInterface } from '@polkadot/client-db/types';
 
 const BN = require('bn.js');
-const key = require('@polkadot/client-db/key');
 const bnToU8a = require('@polkadot/util/bn/toU8a');
 
-const { VALUE } = require('./prefix');
+const { VALUE } = require('./keys');
 
 module.exports = function setValue (db: WrapDbInterface, id: BN | number, publicKey: Uint8Array): void {
   db.set(
-    key(VALUE)(bnToU8a(id, 32, true)),
+    VALUE(bnToU8a(id, 32, true)),
     publicKey
   );
 };

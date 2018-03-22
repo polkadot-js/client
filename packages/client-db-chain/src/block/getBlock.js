@@ -5,10 +5,8 @@
 
 import type { WrapDbInterface } from '@polkadot/client-db/types';
 
-const key = require('@polkadot/client-db/key');
-
-const { BLOCK_BY_HASH } = require('./prefix');
+const { BLOCK_BY_HASH } = require('./keys');
 
 module.exports = function getBlock (db: WrapDbInterface, hash: Uint8Array): Uint8Array {
-  return db.get(key(BLOCK_BY_HASH)(hash));
+  return db.get(BLOCK_BY_HASH(hash));
 };

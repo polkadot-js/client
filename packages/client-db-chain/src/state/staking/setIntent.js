@@ -6,14 +6,13 @@
 import type { WrapDbInterface } from '@polkadot/client-db/types';
 
 const BN = require('bn.js');
-const key = require('@polkadot/client-db/key');
 const bnToU8a = require('@polkadot/util/bn/toU8a');
 
-const { INTENT_WILL } = require('./prefix');
+const { INTENT_WILL } = require('./keys');
 
 module.exports = function setIntent (db: WrapDbInterface, id: BN | number, publicKey: Uint8Array): void {
   db.set(
-    key(INTENT_WILL)(bnToU8a(id, 32, true)),
+    INTENT_WILL(bnToU8a(id, 32, true)),
     publicKey
   );
 };

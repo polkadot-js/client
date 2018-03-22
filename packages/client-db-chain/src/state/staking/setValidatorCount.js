@@ -6,10 +6,9 @@
 import type { WrapDbInterface } from '@polkadot/client-db/types';
 
 const BN = require('bn.js');
-const key = require('@polkadot/client-db/key');
 
-const { VALIDATOR_COUNT } = require('./prefix');
+const { VALIDATOR_COUNT } = require('./keys');
 
 module.exports = function setValidatorCount (db: WrapDbInterface, count: BN | number): void {
-  db.setBn(key(VALIDATOR_COUNT)(), count, 64);
+  db.setBn64(VALIDATOR_COUNT(), count);
 };
