@@ -11,12 +11,15 @@ const bnToU8a = require('@polkadot/util/bn/toU8a');
 
 const { VALUE } = require('./keys');
 
+function key (id: BN | number): Uint8Array {
+  return VALUE(bnToU8a(id, 32, true));
+}
+
 module.exports = function value (db: WrapDbInterface): ChainDb$State$Session$Value {
   return {
+    get: (id: BN | number): Uint8Array =>
+      db.get(key(id)),
     set: (id: BN | number, publicKey: Uint8Array): void =>
-      db.set(
-        VALUE(bnToU8a(id, 32, true)),
-        publicKey
-      )
+      db.set(key(id), publicKey)
   };
 };

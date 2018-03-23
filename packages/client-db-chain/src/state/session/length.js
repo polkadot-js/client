@@ -11,6 +11,8 @@ const { SESSION_LENGTH } = require('./keys');
 
 module.exports = function length (db: WrapDbInterface): ChainDb$State$Session$Length {
   return {
+    get: (): BN =>
+      db.getBn64(SESSION_LENGTH()),
     set: (length: BN | number): void =>
       db.setBn64(SESSION_LENGTH(), length)
   };

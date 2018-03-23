@@ -17,6 +17,8 @@ function key (id: BN | number): Uint8Array {
 
 module.exports = function intent (db: WrapDbInterface): ChainDb$State$Staking$Intent {
   return {
+    get: (id: BN | number): Uint8Array =>
+      db.get(key(id)),
     set: (id: BN | number, publicKey: Uint8Array): void =>
       db.set(key(id), publicKey)
   };

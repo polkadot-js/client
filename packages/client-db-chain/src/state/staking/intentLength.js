@@ -11,6 +11,8 @@ const { INTENT_WILL_LENGTH } = require('./keys');
 
 module.exports = function setIntentLength (db: WrapDbInterface): ChainDb$State$Staking$IntentLength {
   return {
+    get: (): BN =>
+      db.getBn32(INTENT_WILL_LENGTH()),
     set: (length: BN | number): void =>
       db.setBn32(INTENT_WILL_LENGTH(), length)
   };

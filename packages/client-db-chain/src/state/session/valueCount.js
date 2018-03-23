@@ -11,6 +11,8 @@ const { VALUE_LENGTH } = require('./keys');
 
 module.exports = function valueCount (db: WrapDbInterface): ChainDb$State$Session$ValueCount {
   return {
+    get: (): BN =>
+      db.getBn32(VALUE_LENGTH()),
     set: (count: BN | number): void =>
       db.setBn32(VALUE_LENGTH(), count)
   };

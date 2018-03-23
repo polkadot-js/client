@@ -12,6 +12,8 @@ const { NONCE_OF } = require('./keys');
 module.exports = function nonce (db: WrapDbInterface): ChainDb$State$System$Nonce {
   return {
     get: (publicKey: Uint8Array): BN =>
-      db.getBn64(NONCE_OF(publicKey))
+      db.getBn64(NONCE_OF(publicKey)),
+    set: (value: number | BN, publicKey: Uint8Array): void =>
+      db.detBn64(NONCE_OF(publicKey), value)
   };
 };

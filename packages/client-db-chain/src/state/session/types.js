@@ -6,15 +6,18 @@
 import type BN from 'bn.js';
 
 export type ChainDb$State$Session$Length = {
-  set (length: BN | number): void,
+  get: () => BN,
+  set: (length: BN | number) => void
 };
 
 export type ChainDb$State$Session$Value = {
-  set (id: BN | number, publicKey: Uint8Array): void
+  get: (id: BN | number) => Uint8Array,
+  set: (id: BN | number, publicKey: Uint8Array) => void
 };
 
 export type ChainDb$State$Session$ValueCount = {
-  set (count: BN | number): void
+  get: () => BN,
+  set: (count: BN | number) => void
 }
 
 export type ChainDb$State$Session = {

@@ -11,6 +11,8 @@ const { VALIDATOR_COUNT } = require('./keys');
 
 module.exports = function validatorCount (db: WrapDbInterface): ChainDb$State$Staking$ValidatorCount {
   return {
+    get: (): BN =>
+      db.getBn64(VALIDATOR_COUNT()),
     set: (count: BN | number): void =>
       db.setBn64(VALIDATOR_COUNT(), count)
   };

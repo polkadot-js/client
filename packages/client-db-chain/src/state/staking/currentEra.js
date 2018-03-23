@@ -11,6 +11,8 @@ const { CURRENT_ERA } = require('./keys');
 
 module.exports = function currentEra (db: WrapDbInterface): ChainDb$State$Staking$CurrentEra {
   return {
+    get: (): BN =>
+      db.getBn32(CURRENT_ERA()),
     set: (era: BN | number): void =>
       db.setBn64(CURRENT_ERA(), era)
   };

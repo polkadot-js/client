@@ -11,6 +11,8 @@ const { SESSIONS_PER_ERA } = require('./keys');
 
 module.exports = function sessionsPerEra (db: WrapDbInterface): ChainDb$State$Staking$SessionsPerEra {
   return {
+    get: (): BN =>
+      db.getBn64(SESSIONS_PER_ERA()),
     set: (count: BN | number): void =>
       db.setBn64(SESSIONS_PER_ERA(), count)
   };

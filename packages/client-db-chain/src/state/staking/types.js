@@ -11,22 +11,27 @@ export type ChainDb$State$Staking$Balance = {
 }
 
 export type ChainDb$State$Staking$CurrentEra = {
-  set (era: BN | number): void,
+  get: () => BN,
+  set: (era: BN | number) => void
 }
 
 export type ChainDb$State$Staking$Intent = {
-  set (id: BN | number, publicKey: Uint8Array): void,
+  get: (id: BN | number) => Uint8Array,
+  set: (id: BN | number, publicKey: Uint8Array) => void,
 }
 
 export type ChainDb$State$Staking$IntentLength = {
-  set (length: BN | number): void,
+  get: () => BN,
+  set: (length: BN | number) => void
 }
 
 export type ChainDb$State$Staking$SessionsPerEra = {
-  set (count: BN | number): void
+  get: () => BN,
+  set: (count: BN | number) => void
 }
 
 export type ChainDb$State$Staking$ValidatorCount = {
+  get: () => BN,
   set: (count: BN | number) => void
 }
 

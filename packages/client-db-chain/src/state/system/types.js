@@ -16,7 +16,8 @@ export type ChainDb$State$System$Code = {
 };
 
 export type ChainDb$State$System$Nonce = {
-  get: (publicKey: Uint8Array) => BN
+  get: (publicKey: Uint8Array) => BN,
+  set: (nonce: number | BN, publicKey: Uint8Array) => void
 };
 
 export type ChainDb$State$System = {
