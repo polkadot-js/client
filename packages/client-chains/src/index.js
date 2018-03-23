@@ -3,12 +3,30 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-const chains = require('./chains');
-const loadChain = require('./load');
-const validateChain = require('./validate');
+import type { Config } from '@polkadot/client/types';
+import type { BaseDbInterface } from '@polkadot/client-db/types';
+import type { ChainInterface } from './types';
 
-module.exports = {
-  chains,
-  loadChain,
-  validateChain
+const loadChain = require('./load');
+const createState = require('./state');
+
+module.exports = function chains (config: Config, baseStateDb: BaseDbInterface, baseBlockDb: BaseDbInterface): ChainInterface {
+  const chain = loadChain(config.chain);
+  const self = createState(chain, config, baseStateDb, baseBlockDb);
+
+  chain.genesis(self);
+
+  return {
+    blocks: {
+      getBestHash: self.blockDb.bestHash.get,
+      getBestNumber: self.blockDb.bestNumber.get,
+      getBlock: self.blockDb.block.get
+    },
+    config: chain.config,
+    executor: chain.executor(self),
+    state: {
+      getBlockHash: self.stateDb.system.blockHash.get,
+      getNonce: self.stateDb.system.nonce.get
+    }
+  };
 };

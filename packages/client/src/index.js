@@ -5,15 +5,15 @@
 
 require('./license.js');
 
+const createChain = require('@polkadot/client-chains');
 const memoryDb = require('@polkadot/client-db/memory');
+const createP2p = require('@polkadot/client-p2p');
 const l = require('@polkadot/util/logger')('client');
 
 const clientId = require('./clientId');
 const config = require('./cli')();
-const createChain = require('./create/chain');
-const createRpc = require('./create/rpc');
-const createP2p = require('./create/p2p');
 const initDev = require('./dev');
+const createRpc = require('./rpc');
 
 (async function main (): Promise<void> {
   const verStatus = await clientId.getNpmStatus();

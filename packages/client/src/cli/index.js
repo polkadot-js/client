@@ -6,16 +6,7 @@
 import type { Config } from '../types';
 
 const getArgv = require('./argv');
-
-function keyToCamel (key: string, startIndex: number = 0): string {
-  return key.split('-').reduce((name, part, index) => {
-    if (index <= startIndex) {
-      return part;
-    }
-
-    return `${name}${part.substr(0, 1).toUpperCase()}${part.substr(1).toLowerCase()}`;
-  }, '');
-}
+const keyToCamel = require('./keyToCamel');
 
 module.exports = function cli (params?: string): Config {
   const argv = getArgv(params);

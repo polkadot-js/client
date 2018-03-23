@@ -79,17 +79,17 @@
     lodash "^4.2.0"
     to-fast-properties "^2.0.0"
 
-"@polkadot/api-jsonrpc@^0.8.4":
-  version "0.8.4"
-  resolved "https://registry.yarnpkg.com/@polkadot/api-jsonrpc/-/api-jsonrpc-0.8.4.tgz#e4f34523a42e1772abf6c25ac604fb9b387ad10e"
+"@polkadot/api-jsonrpc@^0.8.5":
+  version "0.8.5"
+  resolved "https://registry.yarnpkg.com/@polkadot/api-jsonrpc/-/api-jsonrpc-0.8.5.tgz#f27afc6304dcf94b0e95f62b33b2091ba6b690e5"
   dependencies:
     babel-runtime "^6.26.0"
 
-"@polkadot/api-provider@^0.8.4":
-  version "0.8.4"
-  resolved "https://registry.yarnpkg.com/@polkadot/api-provider/-/api-provider-0.8.4.tgz#831b02d2dbd17bf671c894a54a848bef7e521cbe"
+"@polkadot/api-provider@^0.8.5":
+  version "0.8.5"
+  resolved "https://registry.yarnpkg.com/@polkadot/api-provider/-/api-provider-0.8.5.tgz#2b527f216dfebbf513400362aec31d1b6f6c5d82"
   dependencies:
-    "@polkadot/util" "^0.17.2"
+    "@polkadot/util" "^0.17.3"
     babel-runtime "^6.26.0"
     isomorphic-fetch "^2.2.1"
     websocket "^1.0.25"
@@ -102,9 +102,9 @@
     "@polkadot/util" "^0.16.5"
     babel-runtime "^6.26.0"
 
-"@polkadot/dev@^0.17.1":
-  version "0.17.1"
-  resolved "https://registry.yarnpkg.com/@polkadot/dev/-/dev-0.17.1.tgz#f3b2273b61e37bc0a5b01b3999f2c5ba8f63fdc5"
+"@polkadot/dev@^0.17.2":
+  version "0.17.2"
+  resolved "https://registry.yarnpkg.com/@polkadot/dev/-/dev-0.17.2.tgz#1009c81f9db1548774361aa23631b4bdf8b7ede9"
   dependencies:
     babel-cli "^6.26.0"
     babel-core "^6.26.0"
@@ -206,9 +206,9 @@
     tweetnacl "^1.0.0"
     xxhashjs "^0.2.2"
 
-"@polkadot/util-crypto@^0.17.4":
-  version "0.17.4"
-  resolved "https://registry.yarnpkg.com/@polkadot/util-crypto/-/util-crypto-0.17.4.tgz#d405e44a636275cbc93cdb1e7d11efb8a78eca0d"
+"@polkadot/util-crypto@^0.18.2":
+  version "0.18.2"
+  resolved "https://registry.yarnpkg.com/@polkadot/util-crypto/-/util-crypto-0.18.2.tgz#aaee74d9c485fa0fd377befdf37878d4cd983983"
   dependencies:
     babel-runtime "^6.26.0"
     blakejs "^1.1.0"
@@ -224,12 +224,12 @@
     "@polkadot/util-crypto" "^0.17.3"
     babel-runtime "^6.26.0"
 
-"@polkadot/util-keyring@^0.17.4":
-  version "0.17.4"
-  resolved "https://registry.yarnpkg.com/@polkadot/util-keyring/-/util-keyring-0.17.4.tgz#915775dd0b59ed605dbf494d2bb20002d8ad6da6"
+"@polkadot/util-keyring@^0.18.2":
+  version "0.18.2"
+  resolved "https://registry.yarnpkg.com/@polkadot/util-keyring/-/util-keyring-0.18.2.tgz#8846c25af261eeacbeb36d15de8908a9bfa6cef1"
   dependencies:
-    "@polkadot/util" "^0.17.4"
-    "@polkadot/util-crypto" "^0.17.4"
+    "@polkadot/util" "^0.18.2"
+    "@polkadot/util-crypto" "^0.18.2"
     babel-runtime "^6.26.0"
 
 "@polkadot/util-rlp@^0.17.3":
@@ -239,11 +239,11 @@
     "@polkadot/util" "^0.17.3"
     babel-runtime "^6.26.0"
 
-"@polkadot/util-rlp@^0.17.4":
-  version "0.17.4"
-  resolved "https://registry.yarnpkg.com/@polkadot/util-rlp/-/util-rlp-0.17.4.tgz#719939b42b3a3f947b5135ce7bf63a47cf9df957"
+"@polkadot/util-rlp@^0.18.2":
+  version "0.18.2"
+  resolved "https://registry.yarnpkg.com/@polkadot/util-rlp/-/util-rlp-0.18.2.tgz#38a9e6e56955f3e3300bfa3bfff0f1662a3791f7"
   dependencies:
-    "@polkadot/util" "^0.17.4"
+    "@polkadot/util" "^0.18.2"
     babel-runtime "^6.26.0"
 
 "@polkadot/util-triehash@^0.17.3":
@@ -255,27 +255,18 @@
     "@polkadot/util-rlp" "^0.17.3"
     babel-runtime "^6.26.0"
 
-"@polkadot/util-triehash@^0.17.4":
-  version "0.17.4"
-  resolved "https://registry.yarnpkg.com/@polkadot/util-triehash/-/util-triehash-0.17.4.tgz#51c68459e54678f3aba5bf1b5abd98e3ec016d40"
+"@polkadot/util-triehash@^0.18.2":
+  version "0.18.2"
+  resolved "https://registry.yarnpkg.com/@polkadot/util-triehash/-/util-triehash-0.18.2.tgz#8eceb299144b86d3be95cab148bcd7e86086f05a"
   dependencies:
-    "@polkadot/util" "^0.17.4"
-    "@polkadot/util-crypto" "^0.17.4"
-    "@polkadot/util-rlp" "^0.17.4"
+    "@polkadot/util" "^0.18.2"
+    "@polkadot/util-crypto" "^0.18.2"
+    "@polkadot/util-rlp" "^0.18.2"
     babel-runtime "^6.26.0"
 
 "@polkadot/util@^0.16.5":
   version "0.16.5"
   resolved "https://registry.yarnpkg.com/@polkadot/util/-/util-0.16.5.tgz#72a669714631dc33b9c7085dc92a289a579a4a6b"
-  dependencies:
-    babel-runtime "^6.26.0"
-    bn.js "^4.11.8"
-    deasync "^0.1.12"
-    ip-regex "^2.1.0"
-
-"@polkadot/util@^0.17.2":
-  version "0.17.2"
-  resolved "https://registry.yarnpkg.com/@polkadot/util/-/util-0.17.2.tgz#f37a989c15f30d706d036da02c5d1699b8abcecb"
   dependencies:
     babel-runtime "^6.26.0"
     bn.js "^4.11.8"
@@ -291,9 +282,9 @@
     deasync "^0.1.12"
     ip-regex "^2.1.0"
 
-"@polkadot/util@^0.17.4":
-  version "0.17.4"
-  resolved "https://registry.yarnpkg.com/@polkadot/util/-/util-0.17.4.tgz#eb545a7c21e43dee879dbce07f8ae86d1bf1bee9"
+"@polkadot/util@^0.18.2":
+  version "0.18.2"
+  resolved "https://registry.yarnpkg.com/@polkadot/util/-/util-0.18.2.tgz#a00fc2c27e63f9ed1b297eb9109db97234677194"
   dependencies:
     babel-runtime "^6.26.0"
     bn.js "^4.11.8"
@@ -6696,6 +6687,10 @@ secp256k1@^3.0.1, secp256k1@^3.3.0:
 semaphore@>=1.0.1:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/semaphore/-/semaphore-1.1.0.tgz#aaad8b86b20fe8e9b32b16dc2ee682a8cd26a8aa"
+
+semver-compare@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/semver-compare/-/semver-compare-1.0.0.tgz#0dee216a1c941ab37e9efb1788f6afc5ff5537fc"
 
 "semver@2 || 3 || 4 || 5", semver@^5.0.1, semver@^5.1.0, semver@^5.3.0, semver@^5.4.1, semver@~5.4.1:
   version "5.4.1"

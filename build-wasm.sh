@@ -11,7 +11,7 @@ DIRRT="packages/client-runtime/src/wasm"
 DIRWB="node_modules/@polkadot/wasm-bin/wasm32-unknown-unknown"
 
 WSRC=( "$DIRPD/proxy_polkadot.wat" "$DIRRT/proxy_runtime.wat" "$DIRCT/addTwo.wat" "$DIRCT/import.wat" "$DIRCT/start.wat" )
-PSRC=( "$DIRWB/polkadot_runtime.wasm" "$DIRPT/genesis_polkadot.wasm" )
+PSRC=( "$DIRPT/demo_genesis.wasm" "$DIRWB/polkadot_runtime.wasm" "$DIRPT/polkadot_genesis.wasm" )
 
 $DIRBIN/polkadot-wasm-build-wabt.sh
 

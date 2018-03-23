@@ -1,6 +1,6 @@
 {
   "name": "@polkadot/client",
-  "version": "0.8.13",
+  "version": "0.9.0",
   "description": "A JavaScript client node for the polkadot network",
   "main": "polkadot.js",
   "bin": {
@@ -33,16 +33,17 @@
     "test": "echo \"Tests only available from root wrapper\""
   },
   "dependencies": {
-    "@polkadot/api-jsonrpc": "^0.8.4",
-    "@polkadot/client-chains": "^0.8.13",
-    "@polkadot/client-db": "^0.8.13",
-    "@polkadot/client-p2p": "^0.8.13",
-    "@polkadot/client-rpc": "^0.8.13",
+    "@polkadot/api-jsonrpc": "^0.8.5",
+    "@polkadot/client-chains": "^0.9.0",
+    "@polkadot/client-db": "^0.9.0",
+    "@polkadot/client-p2p": "^0.9.0",
+    "@polkadot/client-rpc": "^0.9.0",
     "@polkadot/client-state": "^0.8.6",
-    "@polkadot/client-wasm": "^0.8.13",
+    "@polkadot/client-wasm": "^0.9.0",
     "@polkadot/primitives": "^0.9.5",
-    "@polkadot/util": "^0.17.4",
+    "@polkadot/util": "^0.18.2",
     "package-json": "^4.0.1",
+    "semver-compare": "^1.0.0",
     "yargs": "^11.0.0"
   },
   "devDependencies": {
