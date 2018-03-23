@@ -4,7 +4,7 @@
 // @flow
 
 import type { BaseDbInterface } from '@polkadot/client-db/types';
-import type { ChainDb$State } from '../types';
+import type { ChainDb$State } from './types';
 
 const wrapDb = require('@polkadot/client-db/wrap');
 const trieRoot = require('@polkadot/util-triehash/root');

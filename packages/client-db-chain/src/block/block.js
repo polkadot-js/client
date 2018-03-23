@@ -4,15 +4,11 @@
 // @flow
 
 import type { WrapDbInterface } from '@polkadot/client-db/types';
-
-type Block = {
-  get: (hash: Uint8Array) => Uint8Array,
-  set: (hash: Uint8Array, block: Uint8Array) => void
-};
+import type { ChainDb$Block$Block } from './types';
 
 const { BLOCK_BY_HASH } = require('./keys');
 
-module.exports = function block (db: WrapDbInterface): Block {
+module.exports = function block (db: WrapDbInterface): ChainDb$Block$Block {
   return {
     get: (hash: Uint8Array): Uint8Array =>
       db.get(BLOCK_BY_HASH(hash)),

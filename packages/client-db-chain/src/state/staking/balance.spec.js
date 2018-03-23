@@ -31,17 +31,17 @@ describe('balance', () => {
 
     it('returns balances', () => {
       expect(
-        staking.getBalance(keyring.one.publicKey()).toNumber()
+        staking.balance.get(keyring.one.publicKey()).toNumber()
       ).toEqual(42);
 
       expect(
-        staking.getBalance(keyring.two.publicKey()).toNumber()
+        staking.balance.get(keyring.two.publicKey()).toNumber()
       ).toEqual(69);
     });
 
     it('returns zero balances', () => {
       expect(
-        staking.getBalance(keyring.alice.publicKey()).toNumber()
+        staking.balance.get(keyring.alice.publicKey()).toNumber()
       ).toEqual(0);
     });
   });
@@ -59,10 +59,10 @@ describe('balance', () => {
     });
 
     it('sets balances', () => {
-      staking.setBalance(keyring.one.publicKey, 123);
+      staking.balance.set(keyring.one.publicKey, 123);
 
       expect(
-        staking.getBalance(keyring.one.publicKey).toNumber()
+        staking.balance.get(keyring.one.publicKey).toNumber()
       ).toEqual(123);
     });
   });

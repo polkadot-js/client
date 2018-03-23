@@ -5,42 +5,28 @@
 
 import type { Config } from '@polkadot/client/types';
 import type { BaseDbInterface } from '@polkadot/client-db/types';
-import type { ChainInterface, ChainState } from './types';
-
-const createBlockDb = require('@polkadot/client-db-chain/block');
-const createStateDb = require('@polkadot/client-db-chain/state');
-const createRuntime = require('@polkadot/client-runtime');
-const logger = require('@polkadot/util/logger');
+import type { ChainInterface } from './types';
 
 const loadChain = require('./load');
+const createState = require('./state');
 
 module.exports = function chains (config: Config, baseStateDb: BaseDbInterface, baseBlockDb: BaseDbInterface): ChainInterface {
-  const l = logger(`chain-${config.chain}`);
   const chain = loadChain(config.chain);
-  const runtime = createRuntime(chain.config, baseStateDb);
-  const blockDb = createBlockDb(baseBlockDb);
-  const stateDb = createStateDb(runtime.environment.db);
-
-  const self: ChainState = {
-    blockDb,
-    config,
-    chain: chain.config,
-    l,
-    runtime,
-    stateDb
-  };
+  const self = createState(chain, config, baseStateDb, baseBlockDb);
 
   chain.genesis(self);
 
-  const { getBlockHash, getNonce } = stateDb.system;
-
   return {
-    blocks: blockDb,
+    blocks: {
+      getBestHash: self.blockDb.bestHash.get,
+      getBestNumber: self.blockDb.bestNumber.get,
+      getBlock: self.blockDb.block.get
+    },
     config: chain.config,
     executor: chain.executor(self),
     state: {
-      getBlockHash,
-      getNonce
+      getBlockHash: self.stateDb.system.blockHash.get,
+      getNonce: self.stateDb.system.nonce.get
     }
   };
 };

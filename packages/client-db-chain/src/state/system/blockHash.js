@@ -5,11 +5,7 @@
 
 import type BN from 'bn.js';
 import type { WrapDbInterface } from '@polkadot/client-db/types';
-
-type BlockHash = {
-  get: (block: BN | number) => Uint8Array,
-  set: (block: BN | number, hash: Uint8Array) => void
-};
+import type { ChainDb$State$System$BlockHash } from './types';
 
 const bnToU8a = require('@polkadot/util/bn/toU8a');
 
@@ -19,7 +15,7 @@ function key (block: BN | number): Uint8Array {
   return BLOCK_HASH_AT(bnToU8a(block, 64, true));
 }
 
-module.exports = function blockHash (db: WrapDbInterface): BlockHash {
+module.exports = function blockHash (db: WrapDbInterface): ChainDb$State$System$BlockHash {
   return {
     get: (block: BN | number): Uint8Array =>
       db.get(key(block)),

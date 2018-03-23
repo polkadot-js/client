@@ -14,22 +14,21 @@ describe('blockHash', () => {
 
   describe('get', () => {
     beforeEach(() => {
-      system = index({
-        get: (key) => {
-          switch (u8aToHex(key)) {
-            case '0x3117ecd3eaa7a8c27cb8d04eb597a1ef':
-              return TEST_HASH;
+      const store = {
+        '0x3117ecd3eaa7a8c27cb8d04eb597a1ef': TEST_HASH
+      };
 
-            default:
-              return new Uint8Array([]);
-          }
+      system = index({
+        get: (key) => store[u8aToHex(key)] || new Uint8Array([]),
+        set: (key, value) => {
+          store[u8aToHex(key)] = value;
         }
       }).system;
     });
 
     it('returns hash as set', () => {
       expect(
-        system.getBlockHash(1)
+        system.blockHash.get(1)
       ).toEqual(TEST_HASH);
     });
   });
@@ -47,10 +46,10 @@ describe('blockHash', () => {
     });
 
     it('sets balances', () => {
-      system.setBlockHash(5, new Uint8Array([123]));
+      system.blockHash.set(5, new Uint8Array([123]));
 
       expect(
-        system.getBlockHash(5)
+        system.blockHash.get(5)
       ).toEqual(new Uint8Array([123]));
     });
   });

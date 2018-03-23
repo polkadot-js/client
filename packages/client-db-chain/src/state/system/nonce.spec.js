@@ -8,7 +8,7 @@ const keyring = require('@polkadot/util-keyring/testing')();
 
 const index = require('../index');
 
-describe('getNonce', () => {
+describe('nonce', () => {
   let system;
 
   beforeEach(() => {
@@ -27,13 +27,13 @@ describe('getNonce', () => {
 
   it('returns nonce', () => {
     expect(
-      system.getNonce(keyring.one.publicKey()).toNumber()
+      system.nonce.get(keyring.one.publicKey()).toNumber()
     ).toEqual(1);
   });
 
   it('returns zero nonces', () => {
     expect(
-      system.getNonce(keyring.alice.publicKey()).toNumber()
+      system.nonce.get(keyring.alice.publicKey()).toNumber()
     ).toEqual(0);
   });
 });

@@ -5,15 +5,11 @@
 
 import type BN from 'bn.js';
 import type { WrapDbInterface } from '@polkadot/client-db/types';
-
-type BestNumber = {
-  get: () => BN,
-  set: (number: BN | number) => void
-};
+import type { ChainDb$Block$BestNumber } from './types';
 
 const { BEST_NUMBER } = require('./keys');
 
-module.exports = function bestNumber (db: WrapDbInterface): BestNumber {
+module.exports = function bestNumber (db: WrapDbInterface): ChainDb$Block$BestNumber {
   return {
     get: (): BN =>
       db.getBn64(BEST_NUMBER()),

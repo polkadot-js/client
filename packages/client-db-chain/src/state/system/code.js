@@ -4,15 +4,11 @@
 // @flow
 
 import type { WrapDbInterface } from '@polkadot/client-db/types';
-
-type Code = {
-  get: () => Uint8Array,
-  set: (code: Uint8Array) => void
-};
+import type { ChainDb$State$System$Code } from './types';
 
 const { CODE } = require('./keys');
 
-module.exports = function code (db: WrapDbInterface): Code {
+module.exports = function code (db: WrapDbInterface): ChainDb$State$System$Code {
   return {
     get: (): Uint8Array =>
       db.get(CODE()),

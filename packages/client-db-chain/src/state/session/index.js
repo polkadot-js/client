@@ -3,21 +3,17 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type BN from 'bn.js';
 import type { WrapDbInterface } from '@polkadot/client-db/types';
-import type { ChainDb$State$Session } from '../../types';
+import type { ChainDb$State$Session } from './types';
 
-const setLength = require('./setLength');
-const setValue = require('./setValue');
-const setValueCount = require('./setValueCount');
+const length = require('./length');
+const value = require('./value');
+const valueCount = require('./valueCount');
 
 module.exports = function session (db: WrapDbInterface): ChainDb$State$Session {
   return {
-    setLength: (length: BN | number): void =>
-      setLength(db, length),
-    setValue: (id: BN | number, publicKey: Uint8Array): void =>
-      setValue(db, id, publicKey),
-    setValueCount: (count: BN | number): void =>
-      setValueCount(db, count)
+    length: length(db),
+    value: value(db),
+    valueCount: valueCount(db)
   };
 };

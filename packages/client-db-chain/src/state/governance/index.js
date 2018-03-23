@@ -3,15 +3,13 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type BN from 'bn.js';
 import type { WrapDbInterface } from '@polkadot/client-db/types';
-import type { ChainDb$State$Governance } from '../../types';
+import type { ChainDb$State$Governance } from './types';
 
-const setApprovalsRatio = require('./setApprovalsRatio');
+const approvalsRatio = require('./approvalsRatio');
 
 module.exports = function governance (db: WrapDbInterface): ChainDb$State$Governance {
   return {
-    setApprovalsRatio: (ratio: BN | number): void =>
-      setApprovalsRatio(db, ratio)
+    approvalsRatio: approvalsRatio(db)
   };
 };

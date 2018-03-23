@@ -5,15 +5,11 @@
 
 import type BN from 'bn.js';
 import type { WrapDbInterface } from '@polkadot/client-db/types';
-
-type Balance = {
-  get: (Uint8Array) => BN,
-  set: (Uint8Array, value: BN | number) => void
-};
+import type { ChainDb$State$Staking$Balance } from './types';
 
 const { BALANCE_OF } = require('./keys');
 
-module.exports = function balance (db: WrapDbInterface): Balance {
+module.exports = function balance (db: WrapDbInterface): ChainDb$State$Staking$Balance {
   return {
     get: (publicKey: Uint8Array): BN =>
       db.getBn64(BALANCE_OF(publicKey)),

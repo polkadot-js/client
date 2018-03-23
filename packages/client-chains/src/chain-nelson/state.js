@@ -10,11 +10,11 @@ const substrateState = require('../substrate/state');
 module.exports = function state (self: ChainState): void {
   const { chain: { genesis: { params: { approvalRatio, sessionLength, sessionsPerEra } } }, stateDb } = self;
 
-  stateDb.governance.setApprovalsRatio(approvalRatio);
-  stateDb.session.setLength(sessionLength);
-  stateDb.staking.setCurrentEra(0);
-  stateDb.staking.setIntentLength(0);
-  stateDb.staking.setSessionsPerEra(sessionsPerEra);
+  stateDb.governance.approvalsRatio.set(approvalRatio);
+  stateDb.session.length.set(sessionLength);
+  stateDb.staking.currentEra.set(0);
+  stateDb.staking.intentLength.set(0);
+  stateDb.staking.sessionsPerEra.set(sessionsPerEra);
 
   substrateState(self);
 };

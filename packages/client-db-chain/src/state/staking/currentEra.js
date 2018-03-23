@@ -3,12 +3,15 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
+import type BN from 'bn.js';
 import type { WrapDbInterface } from '@polkadot/client-db/types';
-
-const BN = require('bn.js');
+import type { ChainDb$State$Staking$CurrentEra } from './types';
 
 const { CURRENT_ERA } = require('./keys');
 
-module.exports = function setCurrentEra (db: WrapDbInterface, era: BN | number): void {
-  db.setBn64(CURRENT_ERA(), era);
+module.exports = function currentEra (db: WrapDbInterface): ChainDb$State$Staking$CurrentEra {
+  return {
+    set: (era: BN | number): void =>
+      db.setBn64(CURRENT_ERA(), era)
+  };
 };

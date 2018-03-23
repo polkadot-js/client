@@ -4,15 +4,11 @@
 // @flow
 
 import type { WrapDbInterface } from '@polkadot/client-db/types';
-
-type BestHash = {
-  get: () => Uint8Array,
-  set: (hash: Uint8Array) => void
-};
+import type { ChainDb$Block$BestHash } from './types';
 
 const { BEST_HASH } = require('./keys');
 
-module.exports = function bestHash (db: WrapDbInterface): BestHash {
+module.exports = function bestHash (db: WrapDbInterface): ChainDb$Block$BestHash {
   return {
     get: (): Uint8Array =>
       db.get(BEST_HASH()),

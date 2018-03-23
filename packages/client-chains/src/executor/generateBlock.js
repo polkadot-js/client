@@ -28,7 +28,7 @@ module.exports = function generateBlock (self: ChainState, _number: number | BN,
   const empty = encodeHeader(
     createHeader({
       number,
-      parentHash: self.stateDb.system.getBlockHash(number.subn(1)),
+      parentHash: self.stateDb.system.blockHash.get(number.subn(1)),
       transactionRoot
     })
   );

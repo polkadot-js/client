@@ -3,18 +3,15 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type BN from 'bn.js';
 import type { WrapDbInterface } from '@polkadot/client-db/types';
-import type { ChainDb$State$Consensys } from '../../types';
+import type { ChainDb$State$Consensys } from './types';
 
-const setAuthority = require('./setAuthority');
-const setAuthorityCount = require('./setAuthorityCount');
+const authority = require('./authority');
+const authorityCount = require('./authorityCount');
 
 module.exports = function consensys (db: WrapDbInterface): ChainDb$State$Consensys {
   return {
-    setAuthority: (id: BN | number, publicKey: Uint8Array): void =>
-      setAuthority(db, id, publicKey),
-    setAuthorityCount: (count: BN | number): void =>
-      setAuthorityCount(db, count)
+    authority: authority(db),
+    authorityCount: authorityCount(db)
   };
 };
