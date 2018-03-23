@@ -10,7 +10,9 @@ type Wrap = (key: Uint8Array) => BN;
 
 const u8aToBn = require('@polkadot/util/u8a/toBn');
 
-module.exports = function getBn (db: BaseDbInterface, bitLength: number = -1): Wrap {
-  return (key: Uint8Array): BN =>
-    u8aToBn(db.get(key), true);
+module.exports = function getBn (db: BaseDbInterface): (bitLength?: number) => Wrap {
+  return (bitLength: number = -1): Wrap => {
+    return (key: Uint8Array): BN =>
+      u8aToBn(db.get(key), true);
+  };
 };

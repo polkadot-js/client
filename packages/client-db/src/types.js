@@ -18,18 +18,18 @@ export type DbConfig = {
 };
 
 export type BaseDbInterface = {
-  clear (): void,
-  commit (values?: Trie$Pairs): void,
-  del (key: Uint8Array): void,
-  isEmpty (): boolean,
-  get (key: Uint8Array): Uint8Array,
-  pairs (): Trie$Pairs,
-  set (key: Uint8Array, value: Uint8Array): void
+  clear: () => void,
+  commit: (values?: Trie$Pairs) => void,
+  del: (key: Uint8Array) => void,
+  isEmpty: () => boolean,
+  get: (key: Uint8Array) => Uint8Array,
+  pairs: () => Trie$Pairs,
+  set: (key: Uint8Array, value: Uint8Array) => void
 }
 
 export type WrapDbInterface = BaseDbInterface & {
-  getBn32 (key: Uint8Array): BN,
-  getBn64 (key: Uint8Array): BN,
-  setBn32 (key: Uint8Array, value: BN | number): void,
-  setBn64 (key: Uint8Array, value: BN | number): void
+  getBn: (bitLength?: number) =>
+    (key: Uint8Array) => BN,
+  setBn: (bitLength?: number) =>
+    (key: Uint8Array, value: BN | number) => void
 };

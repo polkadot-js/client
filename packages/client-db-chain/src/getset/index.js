@@ -3,20 +3,18 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-const k32vU = require('./k32vU');
-const k64vU = require('./k64vU');
-const kNv32 = require('./kNv32');
-const kNv64 = require('./kNv64');
+const kBvU = require('./kBvU');
+const kNvB = require('./kNvB');
 const kNvU = require('./kNvU');
-const kUv64 = require('./kUv64');
+const kUvB = require('./kUvB');
 const kUvU = require('./kUvU');
 
 module.exports = {
-  k32vU,
-  k64vU,
-  kNv32,
-  kNv64,
+  k32vU: kBvU(32),
+  k64vU: kBvU(64),
+  kNv32: kNvB(32),
+  kNv64: kNvB(64),
   kNvU,
-  kUv64,
+  kUv64: kUvB(64),
   kUvU
 };
