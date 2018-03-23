@@ -6,10 +6,12 @@
 import type { WrapDbInterface } from '@polkadot/client-db/types';
 import type { ChainDb$State$Governance } from './types';
 
-const approvalsRatio = require('./approvalsRatio');
+const { kNv32 } = require('../../getset');
+
+const keys = require('./keys');
 
 module.exports = function governance (db: WrapDbInterface): ChainDb$State$Governance {
   return {
-    approvalsRatio: approvalsRatio(db)
+    approvalsRatio: kNv32(db, keys.APPROVALS_RATIO)
   };
 };

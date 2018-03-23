@@ -6,6 +6,8 @@
 import type BN from 'bn.js';
 import type { Trie$Pairs } from '@polkadot/util-triehash/types';
 
+export type DbKeygen = (key?: Uint8Array) => Uint8Array;
+
 export type DbPathPrefix = 'database';
 
 export type DbConfig$Type = 'disk' | 'memory';

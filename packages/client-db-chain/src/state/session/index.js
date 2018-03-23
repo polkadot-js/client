@@ -6,14 +6,14 @@
 import type { WrapDbInterface } from '@polkadot/client-db/types';
 import type { ChainDb$State$Session } from './types';
 
-const length = require('./length');
-const value = require('./value');
-const valueCount = require('./valueCount');
+const { kNv32, kNv64, k32vU } = require('../../getset');
+
+const keys = require('./keys');
 
 module.exports = function session (db: WrapDbInterface): ChainDb$State$Session {
   return {
-    length: length(db),
-    value: value(db),
-    valueCount: valueCount(db)
+    length: kNv64(db, keys.SESSION_LENGTH),
+    value: k32vU(db, keys.VALUE),
+    valueCount: kNv32(db, keys.VALUE_COUNT)
   };
 };

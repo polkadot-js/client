@@ -3,16 +3,16 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { IdWithU8a, NoneWithBn } from '../typesShared';
+import type { KeyBnValU8a, KeyNoneValBn } from '../../types';
 
-export type ChainDb$State$Session$Length = NoneWithBn;
+export type ChainDb$State$Session$Length = KeyNoneValBn;
 
-export type ChainDb$State$Session$Value = IdWithU8a;
+export type ChainDb$State$Session$Val = KeyBnValU8a;
 
-export type ChainDb$State$Session$ValueCount = NoneWithBn;
+export type ChainDb$State$Session$ValCount = KeyNoneValBn;
 
 export type ChainDb$State$Session = {
   length: ChainDb$State$Session$Length,
-  value: ChainDb$State$Session$Value,
-  valueCount: ChainDb$State$Session$ValueCount
+  value: ChainDb$State$Session$Val,
+  valueCount: ChainDb$State$Session$ValCount
 };

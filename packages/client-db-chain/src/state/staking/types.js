@@ -3,23 +3,19 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type BN from 'bn.js';
-import type { IdWithU8a, NoneWithBn } from '../typesShared';
+import type { KeyBnValU8a, KeyNoneValBn, KeyU8aValBn } from '../../types';
 
-export type ChainDb$State$Staking$Balance = {
-  get (publicKey: Uint8Array): BN,
-  set (publicKey: Uint8Array, value: BN | number): void
-}
+export type ChainDb$State$Staking$Balance = KeyU8aValBn;
 
-export type ChainDb$State$Staking$CurrentEra = NoneWithBn;
+export type ChainDb$State$Staking$CurrentEra = KeyNoneValBn;
 
-export type ChainDb$State$Staking$Intent = IdWithU8a;
+export type ChainDb$State$Staking$Intent = KeyBnValU8a;
 
-export type ChainDb$State$Staking$IntentLength = NoneWithBn;
+export type ChainDb$State$Staking$IntentLength = KeyNoneValBn;
 
-export type ChainDb$State$Staking$SessionsPerEra = NoneWithBn;
+export type ChainDb$State$Staking$SessionsPerEra = KeyNoneValBn;
 
-export type ChainDb$State$Staking$ValidatorCount = NoneWithBn;
+export type ChainDb$State$Staking$ValidatorCount = KeyNoneValBn;
 
 export type ChainDb$State$Staking = {
   balance: ChainDb$State$Staking$Balance,

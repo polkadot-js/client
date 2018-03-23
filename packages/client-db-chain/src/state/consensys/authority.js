@@ -9,7 +9,7 @@ import type { ChainDb$State$Consensys$Authority } from './types';
 
 const bnToU8a = require('@polkadot/util/bn/toU8a');
 
-const { AUTHORITY_H, AUTHORITY_U } = require('./keys');
+const keys = require('./keys');
 
 function key (id: BN | number): Uint8Array {
   return bnToU8a(id, 32, true);
@@ -18,10 +18,10 @@ function key (id: BN | number): Uint8Array {
 module.exports = function authority (db: WrapDbInterface): ChainDb$State$Consensys$Authority {
   return {
     get: (id: BN | number): Uint8Array =>
-      db.get(AUTHORITY_H(key(id))),
+      db.get(keys.AUTHORITY_H(key(id))),
     set: (id: BN | number, publicKey: Uint8Array): void => {
-      db.set(AUTHORITY_H(key(id)), publicKey);
-      db.set(AUTHORITY_U(key(id)), publicKey);
+      db.set(keys.AUTHORITY_H(key(id)), publicKey);
+      db.set(keys.AUTHORITY_U(key(id)), publicKey);
     }
   };
 };

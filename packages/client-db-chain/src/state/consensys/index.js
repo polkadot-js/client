@@ -6,12 +6,14 @@
 import type { WrapDbInterface } from '@polkadot/client-db/types';
 import type { ChainDb$State$Consensys } from './types';
 
+const { kNv32 } = require('../../getset');
 const authority = require('./authority');
-const authorityCount = require('./authorityCount');
+
+const keys = require('./keys');
 
 module.exports = function consensys (db: WrapDbInterface): ChainDb$State$Consensys {
   return {
     authority: authority(db),
-    authorityCount: authorityCount(db)
+    authorityCount: kNv32(db, keys.AUTHORITY_LENGTH)
   };
 };

@@ -12,5 +12,5 @@ module.exports = {
   NEXT_SESSION_LENGTH: key('ses:nln'),
   SESSION_LENGTH: key('ses:len'),
   VALUE: key('ses:val:'),
-  VALUE_LENGTH: key('ses:val:len')
+  VALUE_COUNT: key('ses:val:len')
 };

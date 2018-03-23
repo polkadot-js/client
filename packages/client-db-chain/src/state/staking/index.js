@@ -6,20 +6,17 @@
 import type { WrapDbInterface } from '@polkadot/client-db/types';
 import type { ChainDb$State$Staking } from './types';
 
-const balance = require('./balance');
-const currentEra = require('./currentEra');
-const intent = require('./intent');
-const intentLength = require('./intentLength');
-const sessionsPerEra = require('./sessionsPerEra');
-const validatorCount = require('./validatorCount');
+const { k32vU, kNv32, kNv64, kUv64 } = require('../../getset');
+
+const keys = require('./keys');
 
 module.exports = function staking (db: WrapDbInterface): ChainDb$State$Staking {
   return {
-    balance: balance(db),
-    currentEra: currentEra(db),
-    intent: intent(db),
-    intentLength: intentLength(db),
-    sessionsPerEra: sessionsPerEra(db),
-    validatorCount: validatorCount(db)
+    balance: kUv64(db, keys.BALANCE_OF),
+    currentEra: kNv64(db, keys.CURRENT_ERA),
+    intent: k32vU(db, keys.INTENT_WILL),
+    intentLength: kNv32(db, keys.INTENT_WILL_LENGTH),
+    sessionsPerEra: kNv64(db, keys.SESSIONS_PER_ERA),
+    validatorCount: kNv64(db, keys.VALIDATOR_COUNT)
   };
 };

@@ -3,22 +3,13 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type BN from 'bn.js';
+import type { KeyNoneValBn, KeyNoneValU8a, KeyU8aValU8a } from '../types';
 
-export type ChainDb$Block$BestHash = {
-  get: () => Uint8Array,
-  set: (hash: Uint8Array) => void
-};
+export type ChainDb$Block$BestHash = KeyNoneValU8a;
 
-export type ChainDb$Block$BestNumber = {
-  get: () => BN,
-  set: (number: BN | number) => void
-};
+export type ChainDb$Block$BestNumber = KeyNoneValBn;
 
-export type ChainDb$Block$Block = {
-  get: (hash: Uint8Array) => Uint8Array,
-  set: (hash: Uint8Array, block: Uint8Array) => void
-};
+export type ChainDb$Block$Block = KeyU8aValU8a;
 
 export type ChainDb$Block = {
   bestHash: ChainDb$Block$BestHash,

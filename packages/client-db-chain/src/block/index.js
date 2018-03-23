@@ -8,10 +8,10 @@ import type { ChainDb$Block } from './types';
 
 const wrapDb = require('@polkadot/client-db/wrap');
 
+const { kNv64, kNvU, kUvU } = require('../getset');
 const debug = require('../debug');
-const bestHash = require('./bestHash');
-const bestNumber = require('./bestNumber');
-const block = require('./block');
+
+const keys = require('./keys');
 
 module.exports = function blockDb (baseDb: BaseDbInterface): ChainDb$Block {
   const db = wrapDb(baseDb);
@@ -19,8 +19,8 @@ module.exports = function blockDb (baseDb: BaseDbInterface): ChainDb$Block {
   return {
     debug: (): { [string]: string } =>
       debug(db),
-    bestHash: bestHash(db),
-    bestNumber: bestNumber(db),
-    block: block(db)
+    bestHash: kNvU(db, keys.BEST_HASH),
+    bestNumber: kNv64(db, keys.BEST_NUMBER),
+    block: kUvU(db, keys.BLOCK_BY_HASH)
   };
 };
