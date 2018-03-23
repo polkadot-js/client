@@ -4,36 +4,22 @@
 // @flow
 
 import type BN from 'bn.js';
+import type { IdWithU8a, NoneWithBn } from '../typesShared';
 
 export type ChainDb$State$Staking$Balance = {
   get (publicKey: Uint8Array): BN,
   set (publicKey: Uint8Array, value: BN | number): void
 }
 
-export type ChainDb$State$Staking$CurrentEra = {
-  get: () => BN,
-  set: (era: BN | number) => void
-}
+export type ChainDb$State$Staking$CurrentEra = NoneWithBn;
 
-export type ChainDb$State$Staking$Intent = {
-  get: (id: BN | number) => Uint8Array,
-  set: (id: BN | number, publicKey: Uint8Array) => void,
-}
+export type ChainDb$State$Staking$Intent = IdWithU8a;
 
-export type ChainDb$State$Staking$IntentLength = {
-  get: () => BN,
-  set: (length: BN | number) => void
-}
+export type ChainDb$State$Staking$IntentLength = NoneWithBn;
 
-export type ChainDb$State$Staking$SessionsPerEra = {
-  get: () => BN,
-  set: (count: BN | number) => void
-}
+export type ChainDb$State$Staking$SessionsPerEra = NoneWithBn;
 
-export type ChainDb$State$Staking$ValidatorCount = {
-  get: () => BN,
-  set: (count: BN | number) => void
-}
+export type ChainDb$State$Staking$ValidatorCount = NoneWithBn;
 
 export type ChainDb$State$Staking = {
   balance: ChainDb$State$Staking$Balance,

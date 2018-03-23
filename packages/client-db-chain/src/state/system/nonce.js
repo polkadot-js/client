@@ -13,7 +13,7 @@ module.exports = function nonce (db: WrapDbInterface): ChainDb$State$System$Nonc
   return {
     get: (publicKey: Uint8Array): BN =>
       db.getBn64(NONCE_OF(publicKey)),
-    set: (value: number | BN, publicKey: Uint8Array): void =>
-      db.detBn64(NONCE_OF(publicKey), value)
+    set: (publicKey: Uint8Array, value: number | BN): void =>
+      db.setBn64(NONCE_OF(publicKey), value)
   };
 };

@@ -12,28 +12,39 @@ describe('nonce', () => {
   let system;
 
   beforeEach(() => {
-    system = index({
-      get: (key) => {
-        switch (u8aToHex(key)) {
-          case '0xc7f790aa4fc95a8813b0d5734a8c195b':
-            return hexToU8a('0x0100000000000000');
+    const store = {
+      '0xc7f790aa4fc95a8813b0d5734a8c195b': hexToU8a('0x0100000000000000')
+    };
 
-          default:
-            return new Uint8Array([]);
-        }
+    system = index({
+      get: (key) => store[u8aToHex(key)] || new Uint8Array([]),
+      set: (key, value) => {
+        store[u8aToHex(key)] = value;
       }
     }).system;
   });
 
-  it('returns nonce', () => {
-    expect(
-      system.nonce.get(keyring.one.publicKey()).toNumber()
-    ).toEqual(1);
+  describe('get', () => {
+    it('returns nonce', () => {
+      expect(
+        system.nonce.get(keyring.one.publicKey()).toNumber()
+      ).toEqual(1);
+    });
+
+    it('returns zero nonces', () => {
+      expect(
+        system.nonce.get(keyring.alice.publicKey()).toNumber()
+      ).toEqual(0);
+    });
   });
 
-  it('returns zero nonces', () => {
-    expect(
-      system.nonce.get(keyring.alice.publicKey()).toNumber()
-    ).toEqual(0);
+  describe('set', () => {
+    it('sets a nonce', () => {
+      system.nonce.set(keyring.alice.publicKey(), 666);
+
+      expect(
+        system.nonce.get(keyring.alice.publicKey()).toNumber()
+      ).toEqual(666);
+    });
   });
 });

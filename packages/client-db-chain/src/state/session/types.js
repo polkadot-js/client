@@ -3,22 +3,13 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type BN from 'bn.js';
+import type { IdWithU8a, NoneWithBn } from '../typesShared';
 
-export type ChainDb$State$Session$Length = {
-  get: () => BN,
-  set: (length: BN | number) => void
-};
+export type ChainDb$State$Session$Length = NoneWithBn;
 
-export type ChainDb$State$Session$Value = {
-  get: (id: BN | number) => Uint8Array,
-  set: (id: BN | number, publicKey: Uint8Array) => void
-};
+export type ChainDb$State$Session$Value = IdWithU8a;
 
-export type ChainDb$State$Session$ValueCount = {
-  get: () => BN,
-  set: (count: BN | number) => void
-}
+export type ChainDb$State$Session$ValueCount = NoneWithBn;
 
 export type ChainDb$State$Session = {
   length: ChainDb$State$Session$Length,

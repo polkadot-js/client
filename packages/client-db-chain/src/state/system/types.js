@@ -4,11 +4,9 @@
 // @flow
 
 import type BN from 'bn.js';
+import type { IdWithU8a } from '../typesShared';
 
-export type ChainDb$State$System$BlockHash = {
-  get: (block: BN | number) => Uint8Array,
-  set: (block: BN | number, hash: Uint8Array) => void
-};
+export type ChainDb$State$System$BlockHash = IdWithU8a;
 
 export type ChainDb$State$System$Code = {
   get: () => Uint8Array,
@@ -17,7 +15,7 @@ export type ChainDb$State$System$Code = {
 
 export type ChainDb$State$System$Nonce = {
   get: (publicKey: Uint8Array) => BN,
-  set: (nonce: number | BN, publicKey: Uint8Array) => void
+  set: (publicKey: Uint8Array, nonce: number | BN) => void
 };
 
 export type ChainDb$State$System = {

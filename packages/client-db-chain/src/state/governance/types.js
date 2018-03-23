@@ -3,12 +3,9 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type BN from 'bn.js';
+import type { NoneWithBn } from '../typesShared';
 
-export type ChainDb$State$Governance$ApprovalsRatio = {
-  get: () => BN,
-  set: (ratio: BN | number) => void
-};
+export type ChainDb$State$Governance$ApprovalsRatio = NoneWithBn;
 
 export type ChainDb$State$Governance = {
   approvalsRatio: ChainDb$State$Governance$ApprovalsRatio
