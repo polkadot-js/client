@@ -9,14 +9,11 @@ import type { KeyNoneValBn } from '../types';
 
 module.exports = function kNvB (bitLength: number): (db: WrapDbInterface, keyGen: DbKeygen) => KeyNoneValBn {
   return (db: WrapDbInterface, keyGen: DbKeygen): KeyNoneValBn => {
-    const getBn = db.getBn(bitLength);
-    const setBn = db.setBn(bitLength);
-
     return {
       get: (): BN =>
-        getBn(keyGen()),
+        db.getBn(keyGen(), bitLength),
       set: (value: number | BN): void =>
-        setBn(keyGen(), value)
+        db.setBn(keyGen(), value, bitLength)
     };
   };
 };

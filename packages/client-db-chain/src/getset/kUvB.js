@@ -9,14 +9,11 @@ import type { KeyU8aValBn } from '../types';
 
 module.exports = function kUv64 (bitLength: number): (db: WrapDbInterface, keyGen: DbKeygen) => KeyU8aValBn {
   return (db: WrapDbInterface, keyGen: DbKeygen): KeyU8aValBn => {
-    const getBn = db.getBn(bitLength);
-    const setBn = db.setBn(bitLength);
-
     return {
       get: (id: Uint8Array): BN =>
-        getBn(keyGen(id)),
+        db.getBn(keyGen(id), bitLength),
       set: (id: Uint8Array, value: BN | number): void =>
-        setBn(keyGen(id), value)
+        db.setBn(keyGen(id), value, bitLength)
     };
   };
 };

@@ -3,6 +3,7 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
+import type BN from 'bn.js';
 import type { BaseDbInterface, WrapDbInterface } from '../types';
 
 const getBn = require('./getBn');
@@ -19,7 +20,9 @@ module.exports = function wrap (db: BaseDbInterface): WrapDbInterface {
     get,
     pairs,
     set,
-    getBn: getBn(db),
-    setBn: setBn(db)
+    getBn: (key: Uint8Array, bitLength?: number): BN =>
+      getBn(db, key, bitLength),
+    setBn: (key: Uint8Array, value: BN | number, bitLength?: number): void =>
+      setBn(db, key, value, bitLength)
   };
 };
