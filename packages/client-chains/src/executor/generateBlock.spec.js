@@ -11,7 +11,7 @@ const memoryDb = require('@polkadot/client-db/memory');
 const createBlockDb = require('@polkadot/client-db-chain/block');
 const createStateDb = require('@polkadot/client-db-chain/state');
 const createRuntime = require('@polkadot/client-runtime');
-const keyring = require('@polkadot/util-keyring/testing')();
+const keyring = require('@polkadot/util-keyring/testingPairs')();
 const l = require('@polkadot/util/logger')('test');
 
 const createExecutor = require('./index');

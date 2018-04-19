@@ -7,7 +7,7 @@ const memDb = require('@polkadot/client-db/memory');
 const createDb = require('@polkadot/client-db-chain/state');
 // const code = require('@polkadot/client-chains/wasm/genesis_polkadot_wasm');
 const hexToU8a = require('@polkadot/util/hex/toU8a');
-const keyring = require('@polkadot/util-keyring/testing')();
+const keyring = require('@polkadot/util-keyring/testingPairs')();
 
 const genesis = require('./index');
 

@@ -7,7 +7,7 @@ import type BN from 'bn.js';
 import type { DbKeygen, WrapDbInterface } from '@polkadot/client-db/types';
 import type { KeyU8aValBn } from '../types';
 
-module.exports = function kUv64 (bitLength: number): (db: WrapDbInterface, keyGen: DbKeygen) => KeyU8aValBn {
+module.exports = function kUvB (bitLength: number): (db: WrapDbInterface, keyGen: DbKeygen) => KeyU8aValBn {
   return (db: WrapDbInterface, keyGen: DbKeygen): KeyU8aValBn => {
     return {
       get: (id: Uint8Array): BN =>
