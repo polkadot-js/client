@@ -27,23 +27,23 @@ describe('nonce', () => {
   describe('get', () => {
     it('returns nonce', () => {
       expect(
-        system.nonce.get(keyring.one.publicKey()).toNumber()
+        system.nonceOf.get(keyring.one.publicKey()).toNumber()
       ).toEqual(1);
     });
 
     it('returns zero nonces', () => {
       expect(
-        system.nonce.get(keyring.alice.publicKey()).toNumber()
+        system.nonceOf.get(keyring.alice.publicKey()).toNumber()
       ).toEqual(0);
     });
   });
 
   describe('set', () => {
     it('sets a nonce', () => {
-      system.nonce.set(keyring.alice.publicKey(), 666);
+      system.nonceOf.set(666, keyring.alice.publicKey());
 
       expect(
-        system.nonce.get(keyring.alice.publicKey()).toNumber()
+        system.nonceOf.get(keyring.alice.publicKey()).toNumber()
       ).toEqual(666);
     });
   });

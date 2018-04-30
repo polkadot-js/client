@@ -41,7 +41,7 @@ describe('executeTransaction', () => {
   });
 
   beforeEach(() => {
-    stateDb.staking.balance.set(keyring.one.publicKey(), 69 + 42);
+    stateDb.staking.balance.set(69 + 42, keyring.one.publicKey());
   });
 
   it('executes a basic transaction', () => {

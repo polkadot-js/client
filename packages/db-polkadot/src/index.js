@@ -13,9 +13,11 @@ const definition = require('./definition');
 module.exports = function db (baseDb: BaseDbInterface): Db {
   const state = createDb(baseDb, definition);
 
-  state.consensus.authority.set = (value: Uint8Array | BN | number, params?: Array<State$Key$ParamType>) => {
-    state.consensus.authority.set(value, params);
-    state.consensus['authority(unhashed)'].set(value, params);
+  state.consensus.authority.set = (value: Uint8Array | BN | number, ...params?: Array<State$Key$ParamType>) => {
+    const pass = [value].concat(params || []);
+
+    state.consensus.authority.set.apply(null, pass);
+    state.consensus['authority(unhashed)'].set.apply(null, pass);
   };
 
   return state;

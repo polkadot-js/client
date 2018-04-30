@@ -23,17 +23,17 @@ module.exports = function expandMethod ({ isUnhashed = false, key, params, type 
     const bitLength = type === 'u32' ? 32 : 64;
 
     return {
-      get: (inputs?: Array<State$Key$ParamType>): BN =>
+      get: (...inputs?: Array<State$Key$ParamType>): BN =>
         db.getBn(createKey(inputs), bitLength),
-      set: (value: Uint8Array | BN | number, inputs?: Array<State$Key$ParamType>): void =>
+      set: (value: Uint8Array | BN | number, ...inputs?: Array<State$Key$ParamType>): void =>
         db.setBn(createKey(inputs), value, bitLength)
     };
   }
 
   return {
-    get: (inputs?: Array<State$Key$ParamType>): Uint8Array =>
+    get: (...inputs?: Array<State$Key$ParamType>): Uint8Array =>
       db.get(createKey(inputs)),
-    set: (value: Uint8Array | BN | number, inputs?: Array<State$Key$ParamType>): void =>
+    set: (value: Uint8Array | BN | number, ...inputs?: Array<State$Key$ParamType>): void =>
       db.set(createKey(inputs), isU8a(value)
         ? value
         // $FlowFixMe type has been determined

@@ -3,10 +3,17 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-const key = require('@polkadot/client-db/key');
+import type { State$Definition$Section } from '@polkadot/db/types';
 
-module.exports = {
-  BEST_HASH: key('bst:hsh'),
-  BEST_NUMBER: key('bst:num'),
-  BLOCK_BY_HASH: key('blk:hsh:')
-};
+module.exports = ({
+  bestHash: {
+    key: 'bst:hsh'
+  },
+  bestNumber: {
+    key: 'bst:num',
+    type: 'u64'
+  },
+  blockByHash: {
+    key: 'blk:hsh:'
+  }
+}: State$Definition$Section);

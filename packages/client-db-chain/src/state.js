@@ -3,11 +3,6 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-export type DbPathPrefix = 'database';
+const createDb = require('@polkadot/db-polkadot');
 
-export type DbConfig$Type = 'disk' | 'memory';
-
-export type DbConfig = {
-  path: string,
-  type: DbConfig$Type
-};
+module.exports = createDb;

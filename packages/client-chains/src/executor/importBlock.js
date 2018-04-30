@@ -28,7 +28,7 @@ module.exports = function importBlock (self: ChainState, block: Uint8Array): ?Ch
 
   self.blockDb.bestHash.set(hash);
   self.blockDb.bestNumber.set(number);
-  self.blockDb.block.set(hash, block);
+  self.blockDb.block.set(block, hash);
 
   self.l.debug(() => `Imported block #${number.toString()} (${Date.now() - start}ms)`);
 

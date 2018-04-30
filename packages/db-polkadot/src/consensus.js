@@ -15,7 +15,7 @@ module.exports = ({
     key: ':auth:',
     params: ['u32']
   },
-  authorityLength: {
+  authorityCount: {
     isUnhashed: true,
     key: ':auth:len',
     type: 'u32'

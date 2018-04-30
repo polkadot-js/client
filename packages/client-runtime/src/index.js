@@ -4,7 +4,7 @@
 // @flow
 
 import type { ChainConfig } from '@polkadot/client-chains/types';
-import type { BaseDbInterface } from '@polkadot/client-db/types';
+import type { BaseDbInterface } from '@polkadot/db/types';
 import type { RuntimeInterface, RuntimeInterface$Exports } from './types';
 
 const createChain = require('./chain');

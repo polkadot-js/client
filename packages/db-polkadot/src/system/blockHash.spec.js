@@ -28,7 +28,7 @@ describe('blockHash', () => {
 
     it('returns hash as set', () => {
       expect(
-        system.blockHash.get(1)
+        system.blockHashAt.get(1)
       ).toEqual(TEST_HASH);
     });
   });
@@ -46,10 +46,10 @@ describe('blockHash', () => {
     });
 
     it('sets balances', () => {
-      system.blockHash.set(5, new Uint8Array([123]));
+      system.blockHashAt.set(new Uint8Array([123]), 5);
 
       expect(
-        system.blockHash.get(5)
+        system.blockHashAt.get(5)
       ).toEqual(new Uint8Array([123]));
     });
   });

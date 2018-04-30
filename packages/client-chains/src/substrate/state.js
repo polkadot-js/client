@@ -8,17 +8,17 @@ import type { ChainState } from '../types';
 module.exports = function genesisState ({ chain: { genesis: { authorities, balances, code, validators } }, stateDb }: ChainState): void {
   stateDb.consensus.authorityCount.set(authorities.length);
   authorities.forEach((authority, index) => {
-    stateDb.consensus.authority.set(index, authority);
+    stateDb.consensus.authority.set(authority, index);
   });
 
   stateDb.staking.validatorCount.set(validators.length);
   stateDb.session.valueCount.set(validators.length);
   validators.forEach((validator, index) => {
-    stateDb.session.value.set(index, validator);
+    stateDb.session.value.set(validator, index);
   });
 
   balances.forEach(({ accountId, balance }) => {
-    stateDb.staking.balance.set(accountId, balance);
+    stateDb.staking.balance.set(balance, accountId);
   });
   stateDb.system.code.set(code);
 

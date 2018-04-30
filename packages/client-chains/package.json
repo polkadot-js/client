@@ -32,6 +32,7 @@
     "@polkadot/client-db-chain": "^0.9.1",
     "@polkadot/client-runtime": "^0.9.1",
     "@polkadot/client-wasm": "^0.9.1",
+    "@polkadot/db-polkadot": "^0.9.1",
     "@polkadot/util": "^0.19.4",
     "@polkadot/util-crypto": "^0.19.4",
     "babel-runtime": "^6.26.0"
@@ -39,6 +40,7 @@
   "devDependencies": {
     "@polkadot/client": "^0.9.1",
     "@polkadot/client-db": "^0.9.1",
+    "@polkadot/db": "^0.9.1",
     "@polkadot/primitives-builder": "^0.10.4",
     "@polkadot/primitives-codec": "^0.10.4",
     "@polkadot/util-keyring": "^0.19.4",

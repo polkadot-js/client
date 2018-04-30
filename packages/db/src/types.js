@@ -30,8 +30,8 @@ export type State$Definition = {
 export type State$Key$ParamType = number | BN | Uint8Array | string;
 
 export type State$Method = {
-  get: (params?: Array<State$Key$ParamType>) => BN | Uint8Array,
-  set: (value: Uint8Array | BN | number, params?: Array<State$Key$ParamType>) => void
+  get: (...params?: Array<State$Key$ParamType>) => BN | Uint8Array,
+  set: (value: Uint8Array | BN | number, ...params?: Array<State$Key$ParamType>) => void
 }
 
 export type State$Section = {
