@@ -27,7 +27,7 @@ module.exports = function wrap (db: BaseDbInterface): WrapDbInterface {
       debug(db),
     getBn: (key: Uint8Array, bitLength?: number): BN =>
       getBn(db, key, bitLength),
-    setBn: (key: Uint8Array, value: Uint8Array | BN | number, bitLength?: number): void =>
+    setBn: (key: Uint8Array, value: BN | number, bitLength?: number): void =>
       setBn(db, key, value, bitLength),
     trieRoot: (): Uint8Array =>
       trieRoot(db.pairs())
