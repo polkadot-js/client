@@ -12,7 +12,7 @@ const chain = require('@polkadot/client-chains/chain-nelson/config');
 const memoryDb = require('@polkadot/client-db/memory');
 const createDb = require('@polkadot/client-db-chain/state');
 const createRuntime = require('@polkadot/client-runtime');
-const keyring = require('@polkadot/util-keyring/testing')();
+const keyring = require('@polkadot/util-keyring/testingPairs')();
 const l = require('@polkadot/util/logger')('test');
 
 const createExecutor = require('./index');
@@ -50,7 +50,7 @@ describe('executeTransaction', () => {
         encodeHeader(
           createHeader({
             number: 1,
-            transactionRoot: new Uint8Array([])
+            extrinsicsRoot: new Uint8Array([])
           })
         )
       ),

@@ -7,7 +7,7 @@ const memDb = require('@polkadot/client-db/memory');
 const createDb = require('@polkadot/client-db-chain/state');
 // const code = require('@polkadot/client-chains/wasm/genesis_polkadot_wasm');
 const hexToU8a = require('@polkadot/util/hex/toU8a');
-const keyring = require('@polkadot/util-keyring/testing')();
+const keyring = require('@polkadot/util-keyring/testingPairs')();
 
 const genesis = require('./index');
 
@@ -45,9 +45,9 @@ describe.skip('genesis', () => {
     );
   });
 
-  it('creates a correct genesis block (transactionRoot)', () => {
+  it('creates a correct genesis block (extrinsicsRoot)', () => {
     expect(
-      block.header.transactionRoot
+      block.header.extrinsicsRoot
     ).toEqual(
       hexToU8a('0x56e81f171bcc55a6ff8345e692c0f86e5b48e01b996cadc001622fb5e363b421')
     );

@@ -4,7 +4,7 @@
 
 const hexToU8a = require('@polkadot/util/hex/toU8a');
 const u8aToHex = require('@polkadot/util/u8a/toHex');
-const keyring = require('@polkadot/util-keyring/testing')();
+const keyring = require('@polkadot/util-keyring/testingPairs')();
 
 const index = require('../index');
 
@@ -59,10 +59,10 @@ describe('balance', () => {
     });
 
     it('sets balances', () => {
-      staking.balance.set(keyring.one.publicKey, 123);
+      staking.balance.set(keyring.one.publicKey(), 123);
 
       expect(
-        staking.balance.get(keyring.one.publicKey).toNumber()
+        staking.balance.get(keyring.one.publicKey()).toNumber()
       ).toEqual(123);
     });
   });
