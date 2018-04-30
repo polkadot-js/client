@@ -3,22 +3,12 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type BN from 'bn.js';
-import type { BaseDbInterface, Db, State$Key$ParamType } from '@polkadot/db/types';
+import type { BaseDbInterface, Db } from '@polkadot/db/types';
 
 const createDb = require('@polkadot/db');
 
 const definition = require('./definition');
 
 module.exports = function db (baseDb: BaseDbInterface): Db {
-  const state = createDb(baseDb, definition);
-
-  state.consensus.authority.set = (value: Uint8Array | BN | number, ...params?: Array<State$Key$ParamType>) => {
-    const pass = [value].concat(params || []);
-
-    state.consensus.authority.set.apply(null, pass);
-    state.consensus['authority(unhashed)'].set.apply(null, pass);
-  };
-
-  return state;
+  return createDb(baseDb, definition);
 };

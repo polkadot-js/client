@@ -14,9 +14,9 @@ const formatParams = require('./params');
 
 module.exports = function expandMethod ({ isUnhashed = false, key, params, type }: State$Definition$Key, db: WrapDbInterface): State$Method {
   const keyCreator = bindKey(key, isUnhashed);
-  const createKey = (inputs?: Array<State$Key$ParamType>): Uint8Array =>
-    keyCreator(
-      formatParams(inputs, params)
+  const createKey = (values?: Array<State$Key$ParamType>): Uint8Array =>
+    keyCreator.apply(null,
+      formatParams(values, params)
     );
 
   if (['u32', 'u64'].includes(type)) {

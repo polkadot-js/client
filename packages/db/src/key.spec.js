@@ -30,10 +30,10 @@ describe('key', () => {
 
   it('concats the values (Array<Uint8Array>)', () => {
     expect(
-      key(u8aFromString('sys:old:'))([
+      key(u8aFromString('sys:old:'))(
         hexToU8a('0x01000000'),
         hexToU8a('0x00000000')
-      ])
+      )
     ).toEqual(
       hexToU8a('0x3117ecd3eaa7a8c27cb8d04eb597a1ef')
     );

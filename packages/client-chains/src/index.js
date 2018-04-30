@@ -25,8 +25,8 @@ module.exports = function chains (config: Config, baseStateDb: BaseDbInterface, 
     config: chain.config,
     executor: chain.executor(self),
     state: {
-      getBlockHash: self.stateDb.system.blockHash.get,
-      getNonce: self.stateDb.system.nonce.get
+      getBlockHash: self.stateDb.system.blockHashAt.get,
+      getNonce: self.stateDb.system.nonceOf.get
     }
   };
 };

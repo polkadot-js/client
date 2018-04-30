@@ -19,7 +19,7 @@ module.exports = function key (_prefix: Uint8Array | string, isUnhashed: boolean
     // flowlint-next-line unclear-type:off
     : u8aFromString(((_prefix: any): string));
 
-  return (params?: Array<Uint8Array> = []): Uint8Array => {
+  return (...params?: Array<Uint8Array>): Uint8Array => {
     const key = params.length
       ? u8aConcat.apply(null, params)
       : EMPTY_KEY;

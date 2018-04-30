@@ -20,7 +20,7 @@ describe('blockHash', () => {
 
       system = index({
         get: (key) => store[u8aToHex(key)] || new Uint8Array([]),
-        set: (key, value) => {
+        set: (value, key) => {
           store[u8aToHex(key)] = value;
         }
       }).system;

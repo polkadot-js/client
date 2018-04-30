@@ -13,9 +13,12 @@ module.exports = function formatParams (values?: Array<State$Key$ParamType> = []
   return values.map((value: State$Key$ParamType, index: number): Uint8Array => {
     switch (types[index]) {
       case 'u32':
+        // flowlint-next-line unclear-type:off
+        return bnToU8a(((value: any): BN), 32, true);
+
       case 'u64':
         // flowlint-next-line unclear-type:off
-        return bnToU8a(((value: any): BN));
+        return bnToU8a(((value: any): BN), 64, true);
 
       default:
         // flowlint-next-line unclear-type:off

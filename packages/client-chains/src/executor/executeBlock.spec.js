@@ -39,7 +39,7 @@ describe('executeBlock', () => {
     stateDb.session.value.set(keyring.one.publicKey(), 0);
     stateDb.session.value.set(keyring.two.publicKey(), 1);
     stateDb.session.value.set(threePublicKey, 2);
-    stateDb.staking.balance.set(69 + 42, keyring.one.publicKey());
+    stateDb.staking.balanceOf.set(69 + 42, keyring.one.publicKey());
     stateDb.staking.currentEra.set(0);
     stateDb.staking.intentLength.set(3);
     stateDb.staking.intent.set(keyring.one.publicKey(), 0);
@@ -47,7 +47,7 @@ describe('executeBlock', () => {
     stateDb.staking.intent.set(threePublicKey, 2);
     stateDb.staking.sessionsPerEra.set(2);
     stateDb.staking.validatorCount.set(3);
-    stateDb.system.blockHash.set(hexToU8a('0x4545454545454545454545454545454545454545454545454545454545454545'), 0);
+    stateDb.system.blockHashAt.set(hexToU8a('0x4545454545454545454545454545454545454545454545454545454545454545'), 0);
   });
 
   it('executes a basic block', () => {
@@ -56,7 +56,7 @@ describe('executeBlock', () => {
       encodeBlock(
         createBlock({
           header: {
-            parentHash: stateDb.system.blockHash.get(0),
+            parentHash: stateDb.system.blockHashAt.get(0),
             number: 1,
             stateRoot: hexToU8a('0x3df569d47a0d7f4a448486f04fba4eea3e9dfca001319c609f88b3a67b0dd1ea')
           },
@@ -71,17 +71,17 @@ describe('executeBlock', () => {
     );
 
     expect(
-      stateDb.staking.balance.get(keyring.one.publicKey()).toNumber()
+      stateDb.staking.balanceOf.get(keyring.one.publicKey()).toNumber()
     ).toEqual(42);
     expect(
-      stateDb.staking.balance.get(keyring.two.publicKey()).toNumber()
+      stateDb.staking.balanceOf.get(keyring.two.publicKey()).toNumber()
     ).toEqual(69);
 
     executor.executeBlock(
       encodeBlock(
         createBlock({
           header: {
-            parentHash: stateDb.system.blockHash.get(1),
+            parentHash: stateDb.system.blockHashAt.get(1),
             number: 2,
             stateRoot: hexToU8a('0x6b1df261bab7dc96a7428bff9fa740f26cc08cd1214834e52e3bdd4fed5557a5')
           },
@@ -99,10 +99,10 @@ describe('executeBlock', () => {
     );
 
     expect(
-      stateDb.staking.balance.get(keyring.one.publicKey()).toNumber()
+      stateDb.staking.balanceOf.get(keyring.one.publicKey()).toNumber()
     ).toEqual(32);
     expect(
-      stateDb.staking.balance.get(keyring.two.publicKey()).toNumber()
+      stateDb.staking.balanceOf.get(keyring.two.publicKey()).toNumber()
     ).toEqual(79);
   });
 });
