@@ -5,4 +5,4 @@
 
 import type { State$Key$ParamValues } from '../types';
 
-export type Creator = (keyParams?: State$Key$ParamValues) => Uint8Array;
+export type Keygen = (...keyParams?: State$Key$ParamValues) => Uint8Array;

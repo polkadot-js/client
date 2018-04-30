@@ -65,4 +65,4 @@ export type WrapDbInterface = BaseDbInterface & {
   trieRoot: () => Uint8Array
 };
 
-export type Db = WrapDbInterface; // & State;
+export type Db = WrapDbInterface & State;

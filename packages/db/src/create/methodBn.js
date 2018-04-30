@@ -5,7 +5,7 @@
 
 import type BN from 'bn.js';
 import type { State$Method, State$Key$ParamValues, State$Definition$Key, WrapDbInterface } from '../types';
-import { Creator } from './types';
+import type { Creator } from './types';
 
 module.exports = function expandMethodBn (key: State$Definition$Key, createKey: Creator, db: WrapDbInterface): State$Method {
   const bitLength = ['u32'].includes(key.type) ? 32 : 64;

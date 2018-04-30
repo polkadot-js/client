@@ -4,7 +4,7 @@
 // @flow
 
 import type { State$Method, State$Key$ParamValues, State$Definition$Key, WrapDbInterface } from '../types';
-import { Creator } from './types';
+import type { Creator } from './types';
 
 module.exports = function expandMethodU8a (key: State$Definition$Key, createKey: Creator, db: WrapDbInterface): State$Method {
   return ({

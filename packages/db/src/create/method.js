@@ -11,8 +11,8 @@ const methodU8a = require('./methodU8a');
 
 module.exports = function expandMethod (key: State$Definition$Key, db: WrapDbInterface): State$Method {
   const keyCreator = bindKey(key);
-  const createKey = (keyParams?: State$Key$ParamValues): Uint8Array =>
-    keyCreator.apply(null, keyParams || []);
+  const createKey = (keyParams?: State$Key$ParamValues = []): Uint8Array =>
+    keyCreator.apply(null, keyParams);
 
   return ['BlockNumber', 'u32', 'u64'].includes(key.type)
     ? methodBn(key, createKey, db)

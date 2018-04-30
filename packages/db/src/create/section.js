@@ -7,12 +7,14 @@ import type { State$Section, State$Definition$Section, WrapDbInterface } from '.
 
 const expandMethod = require('./method');
 
-module.exports = function expandSection (section: State$Definition$Section, db: WrapDbInterface): State$Section {
-  const methodNames = Object.keys(section);
+module.exports = function expandSection (source: State$Definition$Section, db: WrapDbInterface): State$Section {
+  const section: State$Section = {};
 
-  return methodNames.reduce((result: State$Section, name: string): State$Section => {
-    result[name] = expandMethod(section[name], db);
+  return Object
+    .keys(source)
+    .reduce((result: State$Section, name: string): State$Section => {
+      result[name] = expandMethod(source[name], db);
 
-    return result;
-  }, ({}: State$Section));
+      return result;
+    }, section);
 };

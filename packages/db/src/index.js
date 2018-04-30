@@ -3,22 +3,24 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { BaseDbInterface, Db, State$Definition, State, State$SectionNames } from './types';
+import type { BaseDbInterface, Db, State, State$Definition, State$SectionNames } from './types';
 
 const createSection = require('./create/section');
 const wrapDb = require('./wrap');
 
 module.exports = function db (baseDb: BaseDbInterface, definition: State$Definition): Db {
   const wrapped = wrapDb(baseDb);
-  const sectionNames = Object.keys(definition);
-  const state = sectionNames.reduce((result: State, name: State$SectionNames): Db => {
-    result[name] = createSection(definition[name], wrapped);
+  const state = Object
+    .keys(definition)
+    .reduce((result: State, name: State$SectionNames): State => {
+      result[name] = createSection(definition[name], wrapped);
 
-    return result;
-  }, ({}: State));
+      return result;
+    }, {});
 
-  return ({
+  // flowlint-next-line inexact-spread:off
+  return {
     ...state,
     ...wrapped
-  }: $Shape<Db>);
+  };
 };
