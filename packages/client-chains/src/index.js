@@ -19,14 +19,14 @@ module.exports = function chains (config: Config, baseStateDb: BaseDbInterface, 
   return {
     blocks: {
       getBestHash: self.blockDb.bestHash.get,
-      getBestNumber: self.blockDb.bestNumber.get,
+      getBestNumber: self.blockDb.bestNumber.getn,
       getBlock: self.blockDb.block.get
     },
     config: chain.config,
     executor: chain.executor(self),
     state: {
       getBlockHash: self.stateDb.system.blockHashAt.get,
-      getNonce: self.stateDb.system.nonceOf.get
+      getNonce: self.stateDb.system.nonceOf.getn
     }
   };
 };

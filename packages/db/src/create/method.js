@@ -6,9 +6,6 @@
 import type BN from 'bn.js';
 import type { State$Method, State$Key$ParamType, State$Definition$Key, WrapDbInterface } from '../types';
 
-const bnToU8a = require('@polkadot/util/bn/toU8a');
-const isU8a = require('@polkadot/util/is/u8a');
-
 const bindKey = require('../key');
 const formatParams = require('./params');
 
@@ -22,22 +19,18 @@ module.exports = function expandMethod ({ isUnhashed = false, key, params, type 
   if (['u32', 'u64'].includes(type)) {
     const bitLength = type === 'u32' ? 32 : 64;
 
-    return {
-      get: (...inputs?: Array<State$Key$ParamType>): BN =>
+    return ({
+      getn: (...inputs?: Array<State$Key$ParamType>): BN =>
         db.getBn(createKey(inputs), bitLength),
-      set: (value: Uint8Array | BN | number, ...inputs?: Array<State$Key$ParamType>): void =>
+      setn: (value: BN | number, ...inputs?: Array<State$Key$ParamType>): void =>
         db.setBn(createKey(inputs), value, bitLength)
-    };
+    }: $Shape<State$Method>);
   }
 
-  return {
+  return ({
     get: (...inputs?: Array<State$Key$ParamType>): Uint8Array =>
       db.get(createKey(inputs)),
-    set: (value: Uint8Array | BN | number, ...inputs?: Array<State$Key$ParamType>): void =>
-      db.set(createKey(inputs), isU8a(value)
-        ? value
-        // $FlowFixMe type has been determined
-        : bnToU8a(value)
-      )
-  };
+    set: (value: Uint8Array, ...inputs?: Array<State$Key$ParamType>): void =>
+      db.set(createKey(inputs), value)
+  }: $Shape<State$Method>);
 };

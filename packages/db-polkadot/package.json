@@ -1,6 +1,6 @@
 {
   "name": "@polkadot/db-polkadot",
-  "version": "0.9.1",
+  "version": "0.9.2",
   "description": "Database wrapper for state on Polkadot",
   "main": "index.js",
   "engines": {
@@ -29,7 +29,7 @@
     "test": "echo \"Tests only available from root wrapper\""
   },
   "dependencies": {
-    "@polkadot/db": "^0.9.1",
+    "@polkadot/db": "^0.9.2",
     "@polkadot/util": "^0.19.4",
     "babel-runtime": "^6.26.0"
   }

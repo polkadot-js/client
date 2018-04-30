@@ -15,4 +15,5 @@ include_warnings=true
 module.name_mapper='^@polkadot/client-\(chains\|db-chain\|db\|keyring\|p2p\|rpc\|runtime\|wasm\)\(.*\)$' -> '<PROJECT_ROOT>/packages/client-\1/src\2'
 module.name_mapper='^@polkadot/client\(.*\)$' -> '<PROJECT_ROOT>/packages/client/src\1'
 module.name_mapper='^@polkadot/client-\(polkadot\|substrate\)\(.*\)$' -> '<PROJECT_ROOT>/packages/db-\1/src\2'
+module.name_mapper='^@polkadot/db-\(polkadot\|substrate\)\(.*\)$' -> '<PROJECT_ROOT>/packages/db-\1/src\2'
 module.name_mapper='^@polkadot/db\(.*\)$' -> '<PROJECT_ROOT>/packages/db/src\1'

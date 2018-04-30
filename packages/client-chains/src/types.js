@@ -7,8 +7,8 @@
 import type BN from 'bn.js';
 import type { Config } from '@polkadot/client/types';
 import type { ChainDb$Block } from '@polkadot/client-db-chain/block/types';
-import type { ChainDb$State } from '@polkadot/client-db-chain/state/types';
 import type { RuntimeInterface } from '@polkadot/client-runtime/types';
+import type { Db } from '@polkadot/db/types';
 import type { Logger } from '@polkadot/util/types';
 
 export type ChainName = 'demo' | 'nelson';
@@ -113,7 +113,7 @@ export type ChainState = {
   chain: ChainConfig,
   l: Logger,
   runtime: RuntimeInterface,
-  stateDb: ChainDb$State
+  stateDb: Db
 };
 
 export type ChainDefinition$Execute = {

@@ -7,14 +7,7 @@ import type BN from 'bn.js';
 import type { BaseDbInterface } from '../types';
 
 const bnToU8a = require('@polkadot/util/bn/toU8a');
-const isU8a = require('@polkadot/util/is/u8a');
 
-module.exports = function setBn (db: BaseDbInterface, key: Uint8Array, value: Uint8Array | BN | number, bitLength: number = -1): void {
-  return db.set(
-    key,
-    isU8a(value)
-      ? value
-      // $FlowFixMe as above
-      : bnToU8a(value, bitLength, true)
-  );
+module.exports = function setBn (db: BaseDbInterface, key: Uint8Array, value: BN | number, bitLength: number = -1): void {
+  return db.set(key, bnToU8a(value, bitLength, true));
 };
