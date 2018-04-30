@@ -10,7 +10,7 @@ const wrapDb = require('@polkadot/client-db/wrap');
 const trieRoot = require('@polkadot/util-triehash/root');
 
 const debug = require('../debug');
-const consensys = require('./consensys');
+const consensus = require('./consensus');
 const governance = require('./governance');
 const session = require('./session');
 const staking = require('./staking');
@@ -26,7 +26,7 @@ module.exports = function state (baseDb: BaseDbInterface): ChainDb$State {
       db.commit(),
     debug: (): { [string]: string } =>
       debug(db),
-    consensys: consensys(db),
+    consensus: consensus(db),
     governance: governance(db),
     session: session(db),
     staking: staking(db),

@@ -3,7 +3,7 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { ChainDb$State$Consensys } from './consensys/types';
+import type { ChainDb$State$Consensus } from './consensus/types';
 import type { ChainDb$State$Governance } from './governance/types';
 import type { ChainDb$State$Session } from './session/types';
 import type { ChainDb$State$Staking } from './staking/types';
@@ -12,7 +12,7 @@ import type { ChainDb$State$System } from './system/types';
 export type ChainDb$State = {
   clear: () => void,
   commit: () => void,
-  consensys: ChainDb$State$Consensys,
+  consensus: ChainDb$State$Consensus,
   governance: ChainDb$State$Governance,
   session: ChainDb$State$Session,
   staking: ChainDb$State$Staking,

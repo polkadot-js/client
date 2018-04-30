@@ -5,13 +5,13 @@
 
 import type BN from 'bn.js';
 import type { WrapDbInterface } from '@polkadot/client-db/types';
-import type { ChainDb$State$Consensys } from './types';
+import type { ChainDb$State$Consensus } from './types';
 
 const { k32vU, kNv32 } = require('../../getset');
 
 const keys = require('./keys');
 
-module.exports = function consensys (db: WrapDbInterface): ChainDb$State$Consensys {
+module.exports = function consensus (db: WrapDbInterface): ChainDb$State$Consensus {
   const authorityH = k32vU(db, keys.AUTHORITY_H);
   const authorityU = k32vU(db, keys.AUTHORITY_U);
 
