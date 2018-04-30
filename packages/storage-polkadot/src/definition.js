@@ -3,7 +3,7 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { StorageDef } from '@polkadot/db/types';
+import type { StorageDef } from '@polkadot/storage/types';
 
 const consensus = require('./consensus');
 const governance = require('./governance');

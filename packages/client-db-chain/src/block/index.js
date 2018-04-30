@@ -3,11 +3,11 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { BaseDb } from '@polkadot/db/types';
+import type { BaseDb } from '@polkadot/storage/types';
 import type { ChainDb$Block } from './types';
 
-const wrapDb = require('@polkadot/db/wrap');
-const expandKey = require('@polkadot/db/create/key');
+const wrapDb = require('@polkadot/storage/wrap');
+const expandKey = require('@polkadot/storage/create/key');
 
 const keys = require('./keys');
 

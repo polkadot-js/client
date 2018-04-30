@@ -4,7 +4,7 @@
 // @flow
 
 import type { ChainConfig } from '@polkadot/client-chains/types';
-import type { BaseDb } from '@polkadot/db/types';
+import type { BaseDb } from '@polkadot/storage/types';
 import type { Logger } from '@polkadot/util/types';
 import type { SizeUsed } from './environment/heap/types';
 

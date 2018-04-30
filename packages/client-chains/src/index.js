@@ -4,7 +4,7 @@
 // @flow
 
 import type { Config } from '@polkadot/client/types';
-import type { BaseDb } from '@polkadot/db/types';
+import type { BaseDb } from '@polkadot/storage/types';
 import type { ChainInterface } from './types';
 
 const loadChain = require('./load');

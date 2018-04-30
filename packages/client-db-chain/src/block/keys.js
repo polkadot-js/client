@@ -3,7 +3,7 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { StorageDef$Section } from '@polkadot/db/types';
+import type { StorageDef$Section } from '@polkadot/storage/types';
 
 module.exports = ({
   bestHash: {

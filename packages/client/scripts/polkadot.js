@@ -12,8 +12,8 @@ try {
       ['module-resolver', {
         alias: {
           '^@polkadot/client-(chains|db-chain|db|p2p|rpc|runtime|state|wasm)(.*)': './packages/client-\\1/src\\2',
-          '^@polkadot/db-(polkadot|substrate)(.*)': './packages/client-\\1/src\\2',
-          '^@polkadot/db(.*)': './packages/db\\1/src\\2'
+          '^@polkadot/storage-(polkadot|substrate)(.*)': './packages/storage-\\1/src\\2',
+          '^@polkadot/storage(.*)': './packages/storage\\1/src\\2'
         }
       }]
     ]
