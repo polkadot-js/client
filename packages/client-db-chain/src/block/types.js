@@ -3,10 +3,11 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { State$Method } from '@polkadot/db/types';
+import type { StorageMethod, WrapDb } from '@polkadot/db/types';
 
 export type ChainDb$Block = {
-  bestHash: State$Method,
-  bestNumber: State$Method,
-  block: State$Method
+  db: WrapDb,
+  bestHash: StorageMethod,
+  bestNumber: StorageMethod,
+  block: StorageMethod
 };

@@ -52,7 +52,7 @@ describe('generateBlock', () => {
     stateDb.staking.validatorCount.setn(3);
     stateDb.system.blockHashAt.set(hexToU8a('0x4545454545454545454545454545454545454545454545454545454545454545'), 0);
 
-    stateDb.commit();
+    stateDb.db.commit();
   });
 
   it('generates a basic block', () => {

@@ -3,7 +3,7 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { State$Definition$Section } from '@polkadot/db/types';
+import type { StorageDef$Section } from '@polkadot/db/types';
 
 module.exports = ({
   approvalsOf: {
@@ -16,4 +16,4 @@ module.exports = ({
   currentProposal: {
     key: 'gov:pro'
   }
-}: State$Definition$Section);
+}: StorageDef$Section);

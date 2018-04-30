@@ -3,18 +3,16 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { State$Section, State$Definition$Section, WrapDbInterface } from '../types';
+import type { StateDb$Section, StorageDef$Section, WrapDb } from '../types';
 
-const expandMethod = require('./method');
+const expandKey = require('./key');
 
-module.exports = function expandSection (source: State$Definition$Section, db: WrapDbInterface): State$Section {
-  const section: State$Section = {};
-
+module.exports = function expandSection (source: StorageDef$Section, db: WrapDb): StateDb$Section {
   return Object
     .keys(source)
-    .reduce((result: State$Section, name: string): State$Section => {
-      result[name] = expandMethod(source[name], db);
+    .reduce((result: StateDb$Section, name: string): StateDb$Section => {
+      result[name] = expandKey(source[name], db);
 
       return result;
-    }, section);
+    }, {});
 };

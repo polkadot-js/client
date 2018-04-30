@@ -3,6 +3,6 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { State$Key$ParamValues } from '../types';
+import type { StorageDef$Key$Values } from '../types';
 
-export type Creator = (keyParams?: State$Key$ParamValues) => Uint8Array;
+export type Creator = (keyParams?: StorageDef$Key$Values) => Uint8Array;

@@ -21,7 +21,7 @@ module.exports = function importBlock (self: ChainState, block: Uint8Array): ?Ch
     return null;
   }
 
-  self.stateDb.commit();
+  self.stateDb.db.commit();
 
   const { body, header, number } = decodeRaw(block);
   const hash = blake2Asu8a256(header);

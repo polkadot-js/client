@@ -3,7 +3,7 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { State$Definition$Key, State$Key$ParamValues } from '../types';
+import type { StorageDef$Key, StorageDef$Key$Values } from '../types';
 import type { Keygen } from './types';
 
 const isU8a = require('@polkadot/util/is/u8a');
@@ -13,14 +13,14 @@ const xxhash = require('@polkadot/util-crypto/xxhash/asU8a128');
 
 const formatParams = require('./params');
 
-module.exports = function createKey ({ isUnhashed = false, key, params = {} }: State$Definition$Key): Keygen {
+module.exports = function createKey ({ isUnhashed = false, key, params = {} }: StorageDef$Key): Keygen {
   const prefix = isU8a(key)
     // flowlint-next-line unclear-type:off
     ? ((key: any): Uint8Array)
     // flowlint-next-line unclear-type:off
     : u8aFromString(((key: any): string));
 
-  return (...keyParams: State$Key$ParamValues): Uint8Array => {
+  return (...keyParams: StorageDef$Key$Values): Uint8Array => {
     const postfix = keyParams.length !== 0
       ? u8aConcat.apply(null, formatParams(params, keyParams))
       : new Uint8Array([]);

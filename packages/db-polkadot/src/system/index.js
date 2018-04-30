@@ -3,7 +3,7 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { State$Definition$Section } from '@polkadot/db/types';
+import type { StorageDef$Section } from '@polkadot/db/types';
 
 module.exports = ({
   blockHashAt: {
@@ -26,4 +26,4 @@ module.exports = ({
   tempTransactionNumber: {
     key: 'temp:txcount:'
   }
-}: State$Definition$Section);
+}: StorageDef$Section);

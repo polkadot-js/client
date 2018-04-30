@@ -4,16 +4,16 @@
 // @flow
 
 import type BN from 'bn.js';
-import type { State$Method, State$Key$ParamValues, State$Definition$Key, WrapDbInterface } from '../types';
+import type { StorageMethod, StorageDef$Key$Values, StorageDef$Key, WrapDb } from '../types';
 import type { Creator } from './types';
 
-module.exports = function expandMethodBn (key: State$Definition$Key, createKey: Creator, db: WrapDbInterface): State$Method {
+module.exports = function expandMethodBn (key: StorageDef$Key, createKey: Creator, db: WrapDb): StorageMethod {
   const bitLength = ['u32'].includes(key.type) ? 32 : 64;
 
   return ({
-    getn: (...keyParams?: State$Key$ParamValues): BN =>
+    getn: (...keyParams?: StorageDef$Key$Values): BN =>
       db.getn(createKey(keyParams), bitLength),
-    setn: (value: BN | number, ...keyParams?: State$Key$ParamValues): void =>
+    setn: (value: BN | number, ...keyParams?: StorageDef$Key$Values): void =>
       db.setn(createKey(keyParams), value, bitLength)
-  }: $Shape<State$Method>);
+  }: $Shape<StorageMethod>);
 };

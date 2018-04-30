@@ -4,15 +4,15 @@
 // @flow
 
 import type BN from 'bn.js';
-import type { State$Key$ParamValue, State$Key$ParamValues, State$Definition$Key$Params } from '../types';
+import type { StorageDef$Key$Value, StorageDef$Key$Values, StorageDef$Key$Params } from '../types';
 
 const bnToU8a = require('@polkadot/util/bn/toU8a');
 const u8aToU8a = require('@polkadot/util/u8a/toU8a');
 
-module.exports = function formatParams (params: State$Definition$Key$Params, values?: State$Key$ParamValues = []): Array<Uint8Array> {
+module.exports = function formatParams (params: StorageDef$Key$Params, values?: StorageDef$Key$Values = []): Array<Uint8Array> {
   const paramTypes = Object.values(params);
 
-  return values.map((value: State$Key$ParamValue, index: number): Uint8Array => {
+  return values.map((value: StorageDef$Key$Value, index: number): Uint8Array => {
     switch (paramTypes[index]) {
       case 'BlockNumber':
       case 'u64':

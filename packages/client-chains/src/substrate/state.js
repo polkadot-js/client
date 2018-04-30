@@ -23,5 +23,5 @@ module.exports = function genesisState ({ chain: { genesis: { authorities, balan
   });
   stateDb.system.code.set(code);
 
-  stateDb.commit();
+  stateDb.db.commit();
 };

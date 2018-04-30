@@ -3,14 +3,14 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { State$Method, State$Key$ParamValues, State$Definition$Key, WrapDbInterface } from '../types';
+import type { StorageMethod, StorageDef$Key$Values, StorageDef$Key, WrapDb } from '../types';
 import type { Creator } from './types';
 
-module.exports = function expandMethodU8a (key: State$Definition$Key, createKey: Creator, db: WrapDbInterface): State$Method {
+module.exports = function expandMethodU8a (key: StorageDef$Key, createKey: Creator, db: WrapDb): StorageMethod {
   return ({
-    get: (...keyParams?: State$Key$ParamValues): Uint8Array =>
+    get: (...keyParams?: StorageDef$Key$Values): Uint8Array =>
       db.get(createKey(keyParams)),
-    set: (value: Uint8Array, ...keyParams?: State$Key$ParamValues): void =>
+    set: (value: Uint8Array, ...keyParams?: StorageDef$Key$Values): void =>
       db.set(createKey(keyParams), value)
-  }: $Shape<State$Method>);
+  }: $Shape<StorageMethod>);
 };

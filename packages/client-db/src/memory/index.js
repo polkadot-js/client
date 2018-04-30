@@ -3,7 +3,7 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { BaseDbInterface } from '@polkadot/db/types';
+import type { BaseDb } from '@polkadot/db/types';
 import type { Trie$Pairs } from '@polkadot/util-triehash/types';
 import type { Memory$Storage } from './types';
 
@@ -13,7 +13,7 @@ const get = require('./get');
 const pairs = require('./pairs');
 const set = require('./set');
 
-module.exports = function memory (): BaseDbInterface {
+module.exports = function memory (): BaseDb {
   let storage: Memory$Storage = {};
 
   return {

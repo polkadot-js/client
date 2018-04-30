@@ -3,7 +3,7 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { State$Definition$Section } from '@polkadot/db/types';
+import type { StorageDef$Section } from '@polkadot/db/types';
 
 module.exports = ({
   bestHash: {
@@ -11,9 +11,9 @@ module.exports = ({
   },
   bestNumber: {
     key: 'bst:num',
-    type: 'u64'
+    type: 'BlockNumber'
   },
   blockByHash: {
     key: 'blk:hsh:'
   }
-}: State$Definition$Section);
+}: StorageDef$Section);

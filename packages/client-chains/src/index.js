@@ -4,13 +4,13 @@
 // @flow
 
 import type { Config } from '@polkadot/client/types';
-import type { BaseDbInterface } from '@polkadot/db/types';
+import type { BaseDb } from '@polkadot/db/types';
 import type { ChainInterface } from './types';
 
 const loadChain = require('./load');
 const createState = require('./state');
 
-module.exports = function chains (config: Config, baseStateDb: BaseDbInterface, baseBlockDb: BaseDbInterface): ChainInterface {
+module.exports = function chains (config: Config, baseStateDb: BaseDb, baseBlockDb: BaseDb): ChainInterface {
   const chain = loadChain(config.chain);
   const self = createState(chain, config, baseStateDb, baseBlockDb);
 

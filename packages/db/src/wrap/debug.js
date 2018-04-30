@@ -3,9 +3,9 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { BaseDbInterface } from '../types';
+import type { BaseDb } from '../types';
 
-module.exports = function debug (baseDb: BaseDbInterface): { [string]: string } {
+module.exports = function debug (baseDb: BaseDb): { [string]: string } {
   return baseDb.pairs().reduce((result, { k, v }) => {
     result[k.toString()] = `[${v.toString()}]`;
 

@@ -3,20 +3,21 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { BaseDbInterface } from '@polkadot/db/types';
+import type { BaseDb } from '@polkadot/db/types';
 import type { ChainDb$Block } from './types';
 
 const wrapDb = require('@polkadot/db/wrap');
-const expandMethod = require('@polkadot/db/create/method');
+const expandKey = require('@polkadot/db/create/key');
 
 const keys = require('./keys');
 
-module.exports = function blockDb (baseDb: BaseDbInterface): ChainDb$Block {
+module.exports = function blockDb (baseDb: BaseDb): ChainDb$Block {
   const db = wrapDb(baseDb);
 
   return {
-    bestHash: expandMethod(keys.bestHash, db),
-    bestNumber: expandMethod(keys.bestNumber, db),
-    block: expandMethod(keys.blockByHash, db)
+    db,
+    bestHash: expandKey(keys.bestHash, db),
+    bestNumber: expandKey(keys.bestNumber, db),
+    block: expandKey(keys.blockByHash, db)
   };
 };

@@ -6,49 +6,7 @@
 import type BN from 'bn.js';
 import type { Trie$Pairs } from '@polkadot/util-triehash/types';
 
-export type State$SectionNames = 'consensus' | 'governance' | 'session' | 'staking' | 'system';
-
-export type State$Key$Type = 'AccountId' | 'BlockNumber' | 'Bytes' | 'Hash' | 'u32' | 'u64';
-
-export type State$Definition$Key$Params = {
-  [string]: State$Key$Type
-};
-
-export type State$Definition$Key = {
-  isUnhashed?: boolean,
-  key: Uint8Array | string,
-  params?: State$Definition$Key$Params,
-  type?: State$Key$Type
-};
-
-export type State$Definition$Section = {
-  [string]: State$Definition$Key
-}
-
-export type State$Definition = {
-  [State$SectionNames]: State$Definition$Section
-}
-
-export type State$Key$ParamValue = number | BN | Uint8Array | string;
-
-export type State$Key$ParamValues = Array<State$Key$ParamValue>;
-
-export type State$Method = {
-  get: (...params?: State$Key$ParamValues) => Uint8Array,
-  getn: (...params?: State$Key$ParamValues) => BN,
-  set: (value: Uint8Array, ...params?: State$Key$ParamValues) => void,
-  setn: (value: BN | number, ...params?: State$Key$ParamValues) => void
-}
-
-export type State$Section = {
-  [string]: State$Method
-}
-
-export type State = {
-  [State$SectionNames]: State$Section
-}
-
-export type BaseDbInterface = {
+export type BaseDb = {
   clear: () => void,
   commit: (values?: Trie$Pairs) => void,
   del: (key: Uint8Array) => void,
@@ -58,11 +16,52 @@ export type BaseDbInterface = {
   set: (key: Uint8Array, value: Uint8Array) => void
 }
 
-export type WrapDbInterface = BaseDbInterface & {
+export type WrapDb = BaseDb & {
   debug: () => { [string]: string },
   getn: (key: Uint8Array, bitLength?: number) => BN,
   setn: (key: Uint8Array, value: BN | number, bitLength?: number) => void,
   trieRoot: () => Uint8Array
 };
 
-export type Db = WrapDbInterface & State;
+export type StateDb$SectionNames = 'consensus' | 'governance' | 'session' | 'staking' | 'system';
+
+export type StorageDef$Key$Type = 'AccountId' | 'BlockNumber' | 'Bytes' | 'Hash' | 'u32' | 'u64';
+
+export type StorageDef$Key$Params = {
+  [string]: StorageDef$Key$Type
+};
+
+export type StorageDef$Key = {
+  isUnhashed?: boolean,
+  key: Uint8Array | string,
+  params?: StorageDef$Key$Params,
+  type?: StorageDef$Key$Type
+};
+
+export type StorageDef$Section = {
+  [string]: StorageDef$Key
+}
+
+export type StorageDef = {
+  [StateDb$SectionNames]: StorageDef$Section
+}
+
+export type StorageDef$Key$Value = number | BN | Uint8Array | string;
+
+export type StorageDef$Key$Values = Array<StorageDef$Key$Value>;
+
+export type StorageMethod = {
+  get: (...params?: StorageDef$Key$Values) => Uint8Array,
+  getn: (...params?: StorageDef$Key$Values) => BN,
+  set: (value: Uint8Array, ...params?: StorageDef$Key$Values) => void,
+  setn: (value: BN | number, ...params?: StorageDef$Key$Values) => void
+}
+
+export type StateDb$Section = {
+  [string]: StorageMethod
+}
+
+export type StateDb = {
+  db: WrapDb,
+  [StateDb$SectionNames]: StateDb$Section
+}

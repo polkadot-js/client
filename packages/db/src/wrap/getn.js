@@ -4,10 +4,10 @@
 // @flow
 
 import type BN from 'bn.js';
-import type { BaseDbInterface } from '../types';
+import type { BaseDb } from '../types';
 
 const u8aToBn = require('@polkadot/util/u8a/toBn');
 
-module.exports = function getn (db: BaseDbInterface, key: Uint8Array, bitLength: number = -1): BN {
+module.exports = function getn (db: BaseDb, key: Uint8Array, bitLength: number = -1): BN {
   return u8aToBn(db.get(key), true);
 };

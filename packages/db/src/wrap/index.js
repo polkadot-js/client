@@ -4,7 +4,7 @@
 // @flow
 
 import type BN from 'bn.js';
-import type { BaseDbInterface, WrapDbInterface } from '../types';
+import type { BaseDb, WrapDb } from '../types';
 
 const trieRoot = require('@polkadot/util-triehash/root');
 
@@ -12,7 +12,7 @@ const debug = require('./debug');
 const getn = require('./getn');
 const setn = require('./setn');
 
-module.exports = function wrap (db: BaseDbInterface): WrapDbInterface {
+module.exports = function wrap (db: BaseDb): WrapDb {
   const { clear, commit, del, isEmpty, get, pairs, set } = db;
 
   return {

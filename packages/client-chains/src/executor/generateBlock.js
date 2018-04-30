@@ -37,7 +37,7 @@ module.exports = function generateBlock (self: ChainState, _number: number | BN,
   }, empty));
   const block = encodeBlockRaw(header, timestamp, utxs);
 
-  self.stateDb.clear();
+  self.stateDb.db.clear();
 
   self.l.log(() => `Block #${number.toString()} generated (${Date.now() - start}ms)`);
 

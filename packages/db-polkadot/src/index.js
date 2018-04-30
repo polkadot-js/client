@@ -3,12 +3,12 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { BaseDbInterface, Db } from '@polkadot/db/types';
+import type { BaseDb, StateDb } from '@polkadot/db/types';
 
 const createDb = require('@polkadot/db');
 
 const definition = require('./definition');
 
-module.exports = function db (baseDb: BaseDbInterface): Db {
+module.exports = function db (baseDb: BaseDb): StateDb {
   return createDb(baseDb, definition);
 };

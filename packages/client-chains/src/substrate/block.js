@@ -13,7 +13,7 @@ const trieRoot = require('@polkadot/util-triehash/root');
 module.exports = function genesisBlock ({ stateDb, chain }: ChainState): void {
   const block = createBlock({
     header: {
-      stateRoot: stateDb.trieRoot(),
+      stateRoot: stateDb.db.trieRoot(),
       extrinsicsRoot: trieRoot([])
     }
   });
