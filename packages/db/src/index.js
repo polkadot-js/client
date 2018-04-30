@@ -10,13 +10,12 @@ const wrapDb = require('./wrap');
 
 module.exports = function db (baseDb: BaseDbInterface, definition: State$Definition): Db {
   const wrapped = wrapDb(baseDb);
-  const state = Object
-    .keys(definition)
-    .reduce((result: State, name: State$SectionNames): Db => {
-      result[name] = createSection(definition[name], wrapped);
+  const sectionNames = Object.keys(definition);
+  const state = sectionNames.reduce((result: State, name: State$SectionNames): Db => {
+    result[name] = createSection(definition[name], wrapped);
 
-      return result;
-    }, ({}: State));
+    return result;
+  }, ({}: State));
 
   return ({
     ...state,

@@ -8,12 +8,16 @@ import type { State$Definition$Section } from '@polkadot/db/types';
 module.exports = ({
   balanceOf: {
     key: 'sta:bal:',
-    params: ['AccountId'],
+    params: {
+      who: 'AccountId'
+    },
     type: 'u64'
   },
   bondageOf: {
     key: 'sta:bon:',
-    params: ['AccountId'],
+    params: {
+      who: 'AccountId'
+    },
     type: 'u64'
   },
   bondingDuration: {
@@ -25,7 +29,9 @@ module.exports = ({
   },
   intent: {
     key: 'sta:wil:',
-    params: ['u32']
+    params: {
+      index: 'u32'
+    }
   },
   intentLength: {
     key: 'sta:wil:len',

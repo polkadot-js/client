@@ -8,11 +8,11 @@ import type { State$Section, State$Definition$Section, WrapDbInterface } from '.
 const expandMethod = require('./method');
 
 module.exports = function expandSection (section: State$Definition$Section, db: WrapDbInterface): State$Section {
-  return Object
-    .keys(section)
-    .reduce((result: State$Section, name: string): State$Section => {
-      result[name] = expandMethod(section[name], db);
+  const methodNames = Object.keys(section);
 
-      return result;
-    }, ({}: State$Section));
+  return methodNames.reduce((result: State$Section, name: string): State$Section => {
+    result[name] = expandMethod(section[name], db);
+
+    return result;
+  }, ({}: State$Section));
 };

@@ -5,12 +5,12 @@
 const hexToU8a = require('@polkadot/util/hex/toU8a');
 const u8aFromString = require('@polkadot/util/u8a/fromString');
 
-const key = require('./key');
+const key = require('./index');
 
 describe('key', () => {
   it('concats the values', () => {
     expect(
-      key('sys:old:')(
+      key({ key: 'sys:old:' })(
         hexToU8a('0x0100000000000000')
       )
     ).toEqual(
@@ -20,7 +20,7 @@ describe('key', () => {
 
   it('concats the values (Uint8Array)', () => {
     expect(
-      key(u8aFromString('sys:old:'))(
+      key({ key: u8aFromString('sys:old:') })(
         hexToU8a('0x0100000000000000')
       )
     ).toEqual(
@@ -30,7 +30,7 @@ describe('key', () => {
 
   it('concats the values (Array<Uint8Array>)', () => {
     expect(
-      key(u8aFromString('sys:old:'))(
+      key({ key: u8aFromString('sys:old:') })(
         hexToU8a('0x01000000'),
         hexToU8a('0x00000000')
       )
@@ -41,7 +41,7 @@ describe('key', () => {
 
   it('concats with empty key', () => {
     expect(
-      key('ses:llc')()
+      key({ key: 'ses:llc' })()
     ).toEqual(
       hexToU8a('0xe14daa763fce793346d4b7e131240849')
     );
@@ -49,7 +49,7 @@ describe('key', () => {
 
   it('does not hash when not required', () => {
     expect(
-      key(':code', true)()
+      key({ key: ':code', isUnhashed: true })()
     ).toEqual(
       u8aFromString(':code')
     );

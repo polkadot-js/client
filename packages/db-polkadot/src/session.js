@@ -25,7 +25,9 @@ module.exports = ({
   },
   value: {
     key: 'ses:val:',
-    params: ['u32']
+    params: {
+      index: 'u32'
+    }
   },
   valueCount: {
     key: 'ses:val:len',

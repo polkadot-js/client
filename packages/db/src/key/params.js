@@ -4,21 +4,24 @@
 // @flow
 
 import type BN from 'bn.js';
-import type { State$Key$ParamType, State$Key$Type } from '../types';
+import type { State$Key$ParamValue, State$Key$ParamValues, State$Definition$Key$Params } from '../types';
 
 const bnToU8a = require('@polkadot/util/bn/toU8a');
 const u8aToU8a = require('@polkadot/util/u8a/toU8a');
 
-module.exports = function formatParams (values?: Array<State$Key$ParamType> = [], types?: Array<State$Key$Type> = []): Array<Uint8Array> {
-  return values.map((value: State$Key$ParamType, index: number): Uint8Array => {
-    switch (types[index]) {
-      case 'u32':
-        // flowlint-next-line unclear-type:off
-        return bnToU8a(((value: any): BN), 32, true);
+module.exports = function formatParams (params: State$Definition$Key$Params, values?: State$Key$ParamValues = []): Array<Uint8Array> {
+  const paramTypes = Object.values(params);
 
+  return values.map((value: State$Key$ParamValue, index: number): Uint8Array => {
+    switch (paramTypes[index]) {
+      case 'BlockNumber':
       case 'u64':
         // flowlint-next-line unclear-type:off
         return bnToU8a(((value: any): BN), 64, true);
+
+      case 'u32':
+        // flowlint-next-line unclear-type:off
+        return bnToU8a(((value: any): BN), 32, true);
 
       default:
         // flowlint-next-line unclear-type:off

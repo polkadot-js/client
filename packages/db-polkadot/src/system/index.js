@@ -8,7 +8,9 @@ import type { State$Definition$Section } from '@polkadot/db/types';
 module.exports = ({
   blockHashAt: {
     key: 'sys:old:',
-    params: ['u64']
+    params: {
+      blockNumber: 'BlockNumber'
+    }
   },
   code: {
     isUnhashed: true,
@@ -16,7 +18,9 @@ module.exports = ({
   },
   nonceOf: {
     key: 'sys:non:',
-    params: ['AccountId'],
+    params: {
+      who: 'AccountId'
+    },
     type: 'u64'
   },
   tempTransactionNumber: {

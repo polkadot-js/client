@@ -8,12 +8,16 @@ import type { State$Definition$Section } from '@polkadot/db/types';
 module.exports = ({
   authority: {
     key: ':auth:',
-    params: ['u32']
+    params: {
+      index: 'u32'
+    }
   },
   'authority(unhashed)': {
     isUnhashed: true,
     key: ':auth:',
-    params: ['u32']
+    params: {
+      index: 'u32'
+    }
   },
   authorityCount: {
     isUnhashed: true,

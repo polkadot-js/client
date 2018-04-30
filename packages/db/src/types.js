@@ -6,16 +6,18 @@
 import type BN from 'bn.js';
 import type { Trie$Pairs } from '@polkadot/util-triehash/types';
 
-export type DbKeygen = (...params?: Array<Uint8Array>) => Uint8Array;
-
 export type State$SectionNames = 'consensus' | 'governance' | 'session' | 'staking' | 'system';
 
-export type State$Key$Type = 'AccountId' | 'Bytes' | 'Hash' | 'u32' | 'u64';
+export type State$Key$Type = 'AccountId' | 'BlockNumber' | 'Bytes' | 'Hash' | 'u32' | 'u64';
+
+export type State$Definition$Key$Params = {
+  [string]: State$Key$Type
+};
 
 export type State$Definition$Key = {
   isUnhashed?: boolean,
   key: Uint8Array | string,
-  params?: Array<State$Key$Type>,
+  params?: State$Definition$Key$Params,
   type?: State$Key$Type
 };
 
@@ -27,13 +29,15 @@ export type State$Definition = {
   [State$SectionNames]: State$Definition$Section
 }
 
-export type State$Key$ParamType = number | BN | Uint8Array | string;
+export type State$Key$ParamValue = number | BN | Uint8Array | string;
+
+export type State$Key$ParamValues = Array<State$Key$ParamValue>;
 
 export type State$Method = {
-  get: (...params?: Array<State$Key$ParamType>) => Uint8Array,
-  getn: (...params?: Array<State$Key$ParamType>) => BN,
-  set: (value: Uint8Array, ...params?: Array<State$Key$ParamType>) => void,
-  setn: (value: BN | number, ...params?: Array<State$Key$ParamType>) => void
+  get: (...params?: State$Key$ParamValues) => Uint8Array,
+  getn: (...params?: State$Key$ParamValues) => BN,
+  set: (value: Uint8Array, ...params?: State$Key$ParamValues) => void,
+  setn: (value: BN | number, ...params?: State$Key$ParamValues) => void
 }
 
 export type State$Section = {
@@ -61,4 +65,4 @@ export type WrapDbInterface = BaseDbInterface & {
   trieRoot: () => Uint8Array
 };
 
-export type Db = WrapDbInterface & State;
+export type Db = WrapDbInterface; // & State;
