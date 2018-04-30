@@ -56,8 +56,8 @@ export type BaseDbInterface = {
 
 export type WrapDbInterface = BaseDbInterface & {
   debug: () => { [string]: string },
-  getBn: (key: Uint8Array, bitLength?: number) => BN,
-  setBn: (key: Uint8Array, value: BN | number, bitLength?: number) => void,
+  getn: (key: Uint8Array, bitLength?: number) => BN,
+  setn: (key: Uint8Array, value: BN | number, bitLength?: number) => void,
   trieRoot: () => Uint8Array
 };
 

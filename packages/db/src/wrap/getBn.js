@@ -8,6 +8,6 @@ import type { BaseDbInterface } from '../types';
 
 const u8aToBn = require('@polkadot/util/u8a/toBn');
 
-module.exports = function getBn (db: BaseDbInterface, key: Uint8Array, bitLength: number = -1): BN {
+module.exports = function getn (db: BaseDbInterface, key: Uint8Array, bitLength: number = -1): BN {
   return u8aToBn(db.get(key), true);
 };

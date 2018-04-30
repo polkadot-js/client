@@ -21,9 +21,9 @@ module.exports = function expandMethod ({ isUnhashed = false, key, params, type 
 
     return ({
       getn: (...inputs?: Array<State$Key$ParamType>): BN =>
-        db.getBn(createKey(inputs), bitLength),
+        db.getn(createKey(inputs), bitLength),
       setn: (value: BN | number, ...inputs?: Array<State$Key$ParamType>): void =>
-        db.setBn(createKey(inputs), value, bitLength)
+        db.setn(createKey(inputs), value, bitLength)
     }: $Shape<State$Method>);
   }
 

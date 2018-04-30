@@ -9,8 +9,8 @@ import type { BaseDbInterface, WrapDbInterface } from '../types';
 const trieRoot = require('@polkadot/util-triehash/root');
 
 const debug = require('./debug');
-const getBn = require('./getBn');
-const setBn = require('./setBn');
+const getn = require('./getn');
+const setn = require('./setn');
 
 module.exports = function wrap (db: BaseDbInterface): WrapDbInterface {
   const { clear, commit, del, isEmpty, get, pairs, set } = db;
@@ -25,10 +25,10 @@ module.exports = function wrap (db: BaseDbInterface): WrapDbInterface {
     set,
     debug: (): { [string]: string } =>
       debug(db),
-    getBn: (key: Uint8Array, bitLength?: number): BN =>
-      getBn(db, key, bitLength),
-    setBn: (key: Uint8Array, value: BN | number, bitLength?: number): void =>
-      setBn(db, key, value, bitLength),
+    getn: (key: Uint8Array, bitLength?: number): BN =>
+      getn(db, key, bitLength),
+    setn: (key: Uint8Array, value: BN | number, bitLength?: number): void =>
+      setn(db, key, value, bitLength),
     trieRoot: (): Uint8Array =>
       trieRoot(db.pairs())
   };
