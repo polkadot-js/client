@@ -10,6 +10,7 @@ const expandKey = require('./key');
 module.exports = function expandSection (source: StorageDef$Section, db: WrapDb): StateDb$Section {
   return Object
     .keys(source)
+    // $FlowFixMe Ok, I give up... SateDb$Section [1] is incompatible with string [2] in the first argument.
     .reduce((result: StateDb$Section, name: string): StateDb$Section => {
       result[name] = expandKey(source[name], db);
 

@@ -18,7 +18,7 @@ describe('debug', () => {
 
   it('returns the keys and values', () => {
     expect(
-      state.debug()
+      state.db.debug()
     ).toEqual({
       '1,2': '[3,4]',
       '5,6': '[7,8]'
