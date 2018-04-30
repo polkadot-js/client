@@ -14,7 +14,7 @@ module.exports = function genesisBlock ({ stateDb, chain }: ChainState): void {
   const block = createBlock({
     header: {
       stateRoot: stateDb.trieRoot(),
-      transactionRoot: trieRoot([])
+      extrinsicsRoot: trieRoot([])
     }
   });
   const header = encodeHeader(block.header);

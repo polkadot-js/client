@@ -50,7 +50,7 @@ describe('executeTransaction', () => {
         encodeHeader(
           createHeader({
             number: 1,
-            transactionRoot: new Uint8Array([])
+            extrinsicsRoot: new Uint8Array([])
           })
         )
       ),

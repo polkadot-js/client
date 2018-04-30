@@ -24,12 +24,12 @@ module.exports = function generateBlock (self: ChainState, _number: number | BN,
   self.l.debug(() => `Generating block #${number.toString()}`);
 
   const txs = [ encodeUtx(timestampSet(timestamp)) ].concat(utxs);
-  const transactionRoot = rootRaw(txs);
+  const extrinsicsRoot = rootRaw(txs);
   const empty = encodeHeader(
     createHeader({
       number,
       parentHash: self.stateDb.system.blockHash.get(number.subn(1)),
-      transactionRoot
+      extrinsicsRoot
     })
   );
   const header = finaliseBlock(self, txs.reduce((hdr, utx) => {

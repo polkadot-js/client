@@ -59,10 +59,10 @@ describe('balance', () => {
     });
 
     it('sets balances', () => {
-      staking.balance.set(keyring.one.publicKey, 123);
+      staking.balance.set(keyring.one.publicKey(), 123);
 
       expect(
-        staking.balance.get(keyring.one.publicKey).toNumber()
+        staking.balance.get(keyring.one.publicKey()).toNumber()
       ).toEqual(123);
     });
   });
