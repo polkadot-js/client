@@ -7,7 +7,7 @@ import type { StorageDef$Section } from '@polkadot/storage/types';
 
 module.exports = ({
   didUpdate: {
-    description: 'Did teh timestamp update',
+    description: 'Did the timestamp update',
     key: 'tim:did',
     type: 'bool'
   },

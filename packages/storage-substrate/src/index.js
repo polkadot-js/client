@@ -7,8 +7,8 @@ import type { BaseDb, StateDb } from '@polkadot/storage/types';
 
 const createDb = require('@polkadot/storage');
 
-const definition = require('./definition');
+const keys = require('./keys');
 
 module.exports = function db (baseDb: BaseDb): StateDb {
-  return createDb(baseDb, definition);
+  return createDb(baseDb, keys);
 };
