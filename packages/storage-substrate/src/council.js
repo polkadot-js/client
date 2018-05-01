@@ -5,5 +5,7 @@
 
 import type { StorageDef$Section } from '@polkadot/storage/types';
 
+// TODO: Expand
+
 module.exports = ({
 }: StorageDef$Section);

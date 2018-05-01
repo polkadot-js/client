@@ -1,5 +1,5 @@
 {
-  "name": "@polkadot/storage-polkadot",
+  "name": "@polkadot/storage-substrate",
   "version": "0.10.0",
   "description": "Database wrapper for state on Polkadot",
   "main": "index.js",
