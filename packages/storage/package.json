@@ -1,6 +1,6 @@
 {
   "name": "@polkadot/storage",
-  "version": "0.9.2",
+  "version": "0.10.0",
   "description": "Generic database wrapper around state storage",
   "main": "index.js",
   "engines": {

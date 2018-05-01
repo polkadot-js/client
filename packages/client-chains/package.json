@@ -1,6 +1,6 @@
 {
   "name": "@polkadot/client-chains",
-  "version": "0.9.2",
+  "version": "0.10.0",
   "description": "Node configuration definitions for specific chains",
   "main": "index.js",
   "keywords": [
@@ -29,20 +29,20 @@
     "test": "echo \"Tests only available from root wrapper\""
   },
   "dependencies": {
-    "@polkadot/client-db-chain": "^0.9.2",
-    "@polkadot/client-runtime": "^0.9.2",
-    "@polkadot/client-wasm": "^0.9.2",
-    "@polkadot/storage-polkadot": "^0.9.2",
+    "@polkadot/client-db-chain": "^0.10.0",
+    "@polkadot/client-runtime": "^0.10.0",
+    "@polkadot/client-wasm": "^0.10.0",
+    "@polkadot/storage-polkadot": "^0.10.0",
     "@polkadot/util": "^0.19.4",
     "@polkadot/util-crypto": "^0.19.4",
     "babel-runtime": "^6.26.0"
   },
   "devDependencies": {
-    "@polkadot/client": "^0.9.2",
-    "@polkadot/client-db": "^0.9.2",
-    "@polkadot/storage": "^0.9.2",
+    "@polkadot/client": "^0.10.0",
+    "@polkadot/client-db": "^0.10.0",
     "@polkadot/primitives-builder": "^0.10.4",
     "@polkadot/primitives-codec": "^0.10.4",
+    "@polkadot/storage": "^0.10.0",
     "@polkadot/util-keyring": "^0.19.4",
     "@polkadot/wasm-bin": "paritytech/polkadot-wasm-bin#bfc718615463a2763b25f7b231792201a4593113"
   }
