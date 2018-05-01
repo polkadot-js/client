@@ -7,11 +7,12 @@ import type { StorageDef$Section } from '@polkadot/storage/types';
 
 module.exports = ({
   blockHashAt: {
+    description: 'The blockHash for a specific number',
     key: 'sys:old:',
     params: {
       blockNumber: 'BlockNumber'
     },
-    type: 'Bytes'
+    type: 'Hash'
   },
   blockNumber: {
     description: 'The current block number being processed',
@@ -58,8 +59,5 @@ module.exports = ({
     description: 'The random seed',
     key: 'sys:rnd',
     type: 'Hash'
-  },
-  tempTransactionNumber: {
-    key: 'temp:txcount:'
   }
 }: StorageDef$Section);

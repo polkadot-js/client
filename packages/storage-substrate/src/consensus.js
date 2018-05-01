@@ -12,17 +12,16 @@ module.exports = ({
     params: {
       index: 'u32'
     },
-    type: 'AccountID'
+    type: 'AccountId'
   },
   'authority(unhashed)': {
     description: 'Authority by index (unhashed key entry)',
-    isHidden: true,
     isUnhashed: true,
     key: ':auth:',
     params: {
       index: 'u32'
     },
-    type: 'AccountID'
+    type: 'AccountId'
   },
   authorityCount: {
     description: 'The number of authorities',

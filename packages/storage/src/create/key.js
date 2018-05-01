@@ -14,7 +14,7 @@ module.exports = function expandKey (key: StorageDef$Key, db: WrapDb): StorageMe
   const createKey = (keyParams?: StorageDef$Key$Values = []): Uint8Array =>
     keyCreator.apply(null, keyParams);
 
-  return ['BlockNumber', 'u32', 'u64'].includes(key.type)
+  return ['Balance', 'BlockNumber', 'u32', 'u64'].includes(key.type)
     ? methodBn(key, createKey, db)
     : methodU8a(key, createKey, db);
 };

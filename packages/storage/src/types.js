@@ -25,15 +25,13 @@ export type WrapDb = BaseDb & {
 
 export type StateDb$SectionNames = 'consensus' | 'council' | 'councilVoting' | 'democracy' | 'governance' | 'session' | 'staking' | 'system' | 'timestamp';
 
-export type StorageDef$Key$Type = 'AccountId' | 'BlockNumber' | 'bool' | 'Bytes' | 'Digest' | 'Hash' | 'u32' | 'u64';
+export type StorageDef$Key$Type = 'AccountId' | 'Balance' | 'BlockNumber' | 'bool' | 'Bytes' | 'Digest' | 'Hash' | 'Proposal' | 'u32' | 'u64';
 
 export type StorageDef$Key$Params = {
   [string]: StorageDef$Key$Type
 };
 
 export type StorageDef$Key = {
-  isDeprecated?: boolean,
-  isHidden?: boolean,
   isUnhashed?: boolean,
   description: string,
   key: Uint8Array | string,

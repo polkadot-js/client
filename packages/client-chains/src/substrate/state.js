@@ -21,7 +21,7 @@ module.exports = function genesisState ({ chain: { genesis: { authorities, balan
   balances.forEach(({ accountId, balance }) => {
     stateDb.staking.balanceOf.setn(balance, accountId);
   });
-  stateDb.system.code.set(code);
+  stateDb.consensus.code.set(code);
 
   stateDb.db.commit();
 };

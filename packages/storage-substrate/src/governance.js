@@ -8,7 +8,6 @@ import type { StorageDef$Section } from '@polkadot/storage/types';
 module.exports = ({
   approvalsOf: {
     description: 'Approvals for a specific account',
-    isDeprecated: true,
     key: 'gov:app:',
     params: {
       who: 'AccountId'
@@ -17,13 +16,11 @@ module.exports = ({
   },
   approvalsRatio: {
     description: 'The apprivals ratio',
-    isDeprecated: true,
     key: 'gov:apr',
     type: 'u32'
   },
   currentProposal: {
     description: 'The current proposal',
-    isDeprecated: true,
     key: 'gov:pro',
     type: 'Bytes'
   }

@@ -7,13 +7,21 @@ import type { StorageDef$Section } from '@polkadot/storage/types';
 
 module.exports = ({
   bestHash: {
-    key: 'bst:hsh'
+    description: 'Best hash',
+    key: 'bst:hsh',
+    type: 'Hash'
   },
   bestNumber: {
+    description: 'Best block',
     key: 'bst:num',
     type: 'BlockNumber'
   },
   blockByHash: {
-    key: 'blk:hsh:'
+    description: 'Retrieve block by hash',
+    params: {
+      hash: 'Hash'
+    },
+    key: 'blk:hsh:',
+    type: 'Bytes'
   }
 }: StorageDef$Section);
