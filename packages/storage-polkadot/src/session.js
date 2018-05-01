@@ -7,29 +7,43 @@ import type { StorageDef$Section } from '@polkadot/storage/types';
 
 module.exports = ({
   currentIndex: {
-    key: 'ses:ind'
+    description: 'Current index of the session',
+    key: 'ses:ind',
+    type: 'BlockNumber'
   },
   lastSessionChange: {
-    key: 'ses:llc'
+    description: 'Block at which the session length last changed',
+    key: 'ses:llc',
+    type: 'BlockNumber'
   },
   nextKeyFor: {
-    key: 'ses:nxt:'
+    description: 'The next key for a given validator',
+    key: 'ses:nxt:',
+    params: {
+      who: 'AccountId'
+    },
+    type: 'Bytes'
   },
   nextLength: {
+    description: 'The next session length',
     key: 'ses:nln',
-    type: 'u64'
+    type: 'BlockNumber'
   },
   length: {
+    description: 'Current length of the session',
     key: 'ses:len',
-    type: 'u64'
+    type: 'BlockNumber'
   },
-  value: {
+  validator: {
+    description: 'The validator at a specific index',
     key: 'ses:val:',
     params: {
       index: 'u32'
-    }
+    },
+    type: 'AccountId'
   },
-  valueCount: {
+  validatorCount: {
+    description: 'The number of validators',
     key: 'ses:val:len',
     type: 'u32'
   }

@@ -38,10 +38,10 @@ describe('generateBlock', () => {
 
     stateDb.governance.approvalsRatio.setn(667);
     stateDb.session.length.setn(2);
-    stateDb.session.valueCount.setn(3);
-    stateDb.session.value.set(keyring.one.publicKey(), 0);
-    stateDb.session.value.set(keyring.two.publicKey(), 1);
-    stateDb.session.value.set(threePublicKey, 2);
+    stateDb.session.validatorCount.setn(3);
+    stateDb.session.validator.set(keyring.one.publicKey(), 0);
+    stateDb.session.validator.set(keyring.two.publicKey(), 1);
+    stateDb.session.validator.set(threePublicKey, 2);
     stateDb.staking.balanceOf.setn(69 + 42, keyring.one.publicKey());
     stateDb.staking.currentEra.setn(0);
     stateDb.staking.intentLength.setn(3);

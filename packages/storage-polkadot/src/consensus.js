@@ -7,21 +7,33 @@ import type { StorageDef$Section } from '@polkadot/storage/types';
 
 module.exports = ({
   authority: {
+    description: 'Authority by index',
     key: ':auth:',
     params: {
       index: 'u32'
-    }
+    },
+    type: 'AccountID'
   },
   'authority(unhashed)': {
+    description: 'Authority by index (unhashed key entry)',
+    isHidden: true,
     isUnhashed: true,
     key: ':auth:',
     params: {
       index: 'u32'
-    }
+    },
+    type: 'AccountID'
   },
   authorityCount: {
+    description: 'The number of authorities',
     isUnhashed: true,
     key: ':auth:len',
     type: 'u32'
+  },
+  code: {
+    description: 'The current runtime code',
+    isUnhashed: true,
+    key: ':code',
+    type: 'Hash'
   }
 }: StorageDef$Section);

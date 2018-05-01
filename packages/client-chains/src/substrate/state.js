@@ -13,9 +13,9 @@ module.exports = function genesisState ({ chain: { genesis: { authorities, balan
   });
 
   stateDb.staking.validatorCount.setn(validators.length);
-  stateDb.session.valueCount.setn(validators.length);
+  stateDb.session.validatorCount.setn(validators.length);
   validators.forEach((validator, index) => {
-    stateDb.session.value.set(validator, index);
+    stateDb.session.validator.set(validator, index);
   });
 
   balances.forEach(({ accountId, balance }) => {
