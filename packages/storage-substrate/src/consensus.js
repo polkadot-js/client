@@ -16,6 +16,7 @@ module.exports = ({
   },
   'authority(unhashed)': {
     description: 'Authority by index (unhashed key entry)',
+    isHidden: true,
     isUnhashed: true,
     key: ':auth:',
     params: {

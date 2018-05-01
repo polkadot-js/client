@@ -32,6 +32,8 @@ export type StorageDef$Key$Params = {
 };
 
 export type StorageDef$Key = {
+  isDeprecated?: boolean,
+  isHidden?: boolean,
   isUnhashed?: boolean,
   description: string,
   key: Uint8Array | string,
