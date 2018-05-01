@@ -1,6 +1,6 @@
 {
   "name": "@polkadot/storage-substrate",
-  "version": "0.10.0",
+  "version": "0.10.1",
   "description": "Database wrapper for state on Polkadot",
   "main": "index.js",
   "engines": {
@@ -29,7 +29,7 @@
     "test": "echo \"Tests only available from root wrapper\""
   },
   "dependencies": {
-    "@polkadot/storage": "^0.10.0",
+    "@polkadot/storage": "^0.10.1",
     "@polkadot/util": "^0.19.4",
     "babel-runtime": "^6.26.0"
   }
