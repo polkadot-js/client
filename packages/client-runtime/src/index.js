@@ -4,7 +4,7 @@
 // @flow
 
 import type { ChainConfig } from '@polkadot/client-chains/types';
-import type { BaseDbInterface } from '@polkadot/client-db/types';
+import type { BaseDb } from '@polkadot/storage/types';
 import type { RuntimeInterface, RuntimeInterface$Exports } from './types';
 
 const createChain = require('./chain');
@@ -14,7 +14,7 @@ const createIo = require('./io');
 const createMemory = require('./memory');
 const createStorage = require('./storage');
 
-module.exports = function runtime (chain: ChainConfig, stateDb: BaseDbInterface): RuntimeInterface {
+module.exports = function runtime (chain: ChainConfig, stateDb: BaseDb): RuntimeInterface {
   const environment = createEnv(chain, stateDb);
 
   return {

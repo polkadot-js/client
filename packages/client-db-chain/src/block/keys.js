@@ -3,10 +3,25 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-const key = require('@polkadot/client-db/key');
+import type { StorageDef$Section } from '@polkadot/storage/types';
 
-module.exports = {
-  BEST_HASH: key('bst:hsh'),
-  BEST_NUMBER: key('bst:num'),
-  BLOCK_BY_HASH: key('blk:hsh:')
-};
+module.exports = ({
+  bestHash: {
+    description: 'Best hash',
+    key: 'bst:hsh',
+    type: 'Hash'
+  },
+  bestNumber: {
+    description: 'Best block',
+    key: 'bst:num',
+    type: 'BlockNumber'
+  },
+  blockByHash: {
+    description: 'Retrieve block by hash',
+    params: {
+      hash: 'Hash'
+    },
+    key: 'blk:hsh:',
+    type: 'Bytes'
+  }
+}: StorageDef$Section);

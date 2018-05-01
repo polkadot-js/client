@@ -28,7 +28,7 @@ module.exports = function generateBlock (self: ChainState, _number: number | BN,
   const empty = encodeHeader(
     createHeader({
       number,
-      parentHash: self.stateDb.system.blockHash.get(number.subn(1)),
+      parentHash: self.stateDb.system.blockHashAt.get(number.subn(1)),
       extrinsicsRoot
     })
   );
@@ -37,7 +37,7 @@ module.exports = function generateBlock (self: ChainState, _number: number | BN,
   }, empty));
   const block = encodeBlockRaw(header, timestamp, utxs);
 
-  self.stateDb.clear();
+  self.stateDb.db.clear();
 
   self.l.log(() => `Block #${number.toString()} generated (${Date.now() - start}ms)`);
 

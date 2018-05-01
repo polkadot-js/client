@@ -41,7 +41,7 @@ describe('executeTransaction', () => {
   });
 
   beforeEach(() => {
-    stateDb.staking.balance.set(keyring.one.publicKey(), 69 + 42);
+    stateDb.staking.balanceOf.setn(69 + 42, keyring.one.publicKey());
   });
 
   it('executes a basic transaction', () => {
@@ -62,10 +62,10 @@ describe('executeTransaction', () => {
     );
 
     expect(
-      stateDb.staking.balance.get(keyring.one.publicKey()).toNumber()
+      stateDb.staking.balanceOf.getn(keyring.one.publicKey()).toNumber()
     ).toEqual(42);
     expect(
-      stateDb.staking.balance.get(keyring.two.publicKey()).toNumber()
+      stateDb.staking.balanceOf.getn(keyring.two.publicKey()).toNumber()
     ).toEqual(69);
   });
 });

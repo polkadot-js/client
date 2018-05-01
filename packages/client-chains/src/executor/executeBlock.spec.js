@@ -33,21 +33,21 @@ describe('executeBlock', () => {
   beforeEach(() => {
     const threePublicKey = hexToU8a('0x0303030303030303030303030303030303030303030303030303030303030303');
 
-    stateDb.governance.approvalsRatio.set(667);
-    stateDb.session.length.set(2);
-    stateDb.session.valueCount.set(3);
-    stateDb.session.value.set(0, keyring.one.publicKey());
-    stateDb.session.value.set(1, keyring.two.publicKey());
-    stateDb.session.value.set(2, threePublicKey);
-    stateDb.staking.balance.set(keyring.one.publicKey(), 69 + 42);
-    stateDb.staking.currentEra.set(0);
-    stateDb.staking.intentLength.set(3);
-    stateDb.staking.intent.set(0, keyring.one.publicKey());
-    stateDb.staking.intent.set(1, keyring.two.publicKey());
-    stateDb.staking.intent.set(2, threePublicKey);
-    stateDb.staking.sessionsPerEra.set(2);
-    stateDb.staking.validatorCount.set(3);
-    stateDb.system.blockHash.set(0, hexToU8a('0x4545454545454545454545454545454545454545454545454545454545454545'));
+    stateDb.governance.approvalsRatio.setn(667);
+    stateDb.session.length.setn(2);
+    stateDb.session.validatorCount.setn(3);
+    stateDb.session.validator.set(keyring.one.publicKey(), 0);
+    stateDb.session.validator.set(keyring.two.publicKey(), 1);
+    stateDb.session.validator.set(threePublicKey, 2);
+    stateDb.staking.balanceOf.setn(69 + 42, keyring.one.publicKey());
+    stateDb.staking.currentEra.setn(0);
+    stateDb.staking.intentLength.setn(3);
+    stateDb.staking.intent.set(keyring.one.publicKey(), 0);
+    stateDb.staking.intent.set(keyring.two.publicKey(), 1);
+    stateDb.staking.intent.set(threePublicKey, 2);
+    stateDb.staking.sessionsPerEra.setn(2);
+    stateDb.staking.validatorCount.setn(3);
+    stateDb.system.blockHashAt.set(hexToU8a('0x4545454545454545454545454545454545454545454545454545454545454545'), 0);
   });
 
   it('executes a basic block', () => {
@@ -56,7 +56,7 @@ describe('executeBlock', () => {
       encodeBlock(
         createBlock({
           header: {
-            parentHash: stateDb.system.blockHash.get(0),
+            parentHash: stateDb.system.blockHashAt.get(0),
             number: 1,
             stateRoot: hexToU8a('0x3df569d47a0d7f4a448486f04fba4eea3e9dfca001319c609f88b3a67b0dd1ea')
           },
@@ -71,17 +71,17 @@ describe('executeBlock', () => {
     );
 
     expect(
-      stateDb.staking.balance.get(keyring.one.publicKey()).toNumber()
+      stateDb.staking.balanceOf.getn(keyring.one.publicKey()).toNumber()
     ).toEqual(42);
     expect(
-      stateDb.staking.balance.get(keyring.two.publicKey()).toNumber()
+      stateDb.staking.balanceOf.getn(keyring.two.publicKey()).toNumber()
     ).toEqual(69);
 
     executor.executeBlock(
       encodeBlock(
         createBlock({
           header: {
-            parentHash: stateDb.system.blockHash.get(1),
+            parentHash: stateDb.system.blockHashAt.get(1),
             number: 2,
             stateRoot: hexToU8a('0x6b1df261bab7dc96a7428bff9fa740f26cc08cd1214834e52e3bdd4fed5557a5')
           },
@@ -99,10 +99,10 @@ describe('executeBlock', () => {
     );
 
     expect(
-      stateDb.staking.balance.get(keyring.one.publicKey()).toNumber()
+      stateDb.staking.balanceOf.getn(keyring.one.publicKey()).toNumber()
     ).toEqual(32);
     expect(
-      stateDb.staking.balance.get(keyring.two.publicKey()).toNumber()
+      stateDb.staking.balanceOf.getn(keyring.two.publicKey()).toNumber()
     ).toEqual(79);
   });
 });

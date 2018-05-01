@@ -3,10 +3,10 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { BaseDbInterface } from '@polkadot/client-db/types';
+import type { BaseDb } from '@polkadot/storage/types';
 import type { Memory$Storage } from '@polkadot/client-db/memory/types';
 
 export type DbState = {
-  backend: BaseDbInterface,
+  backend: BaseDb,
   pending: Memory$Storage
 };

@@ -21,14 +21,14 @@ module.exports = function importBlock (self: ChainState, block: Uint8Array): ?Ch
     return null;
   }
 
-  self.stateDb.commit();
+  self.stateDb.db.commit();
 
   const { body, header, number } = decodeRaw(block);
   const hash = blake2Asu8a256(header);
 
   self.blockDb.bestHash.set(hash);
-  self.blockDb.bestNumber.set(number);
-  self.blockDb.block.set(hash, block);
+  self.blockDb.bestNumber.setn(number);
+  self.blockDb.block.set(block, hash);
 
   self.l.debug(() => `Imported block #${number.toString()} (${Date.now() - start}ms)`);
 

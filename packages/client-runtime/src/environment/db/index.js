@@ -3,7 +3,7 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { BaseDbInterface } from '@polkadot/client-db/types';
+import type { BaseDb } from '@polkadot/storage/types';
 import type { Trie$Pairs } from '@polkadot/util-triehash/types';
 import type { DbState } from './types';
 
@@ -14,7 +14,7 @@ const get = require('./get');
 const pairs = require('./pairs');
 const set = require('./set');
 
-module.exports = function envDb (backend: BaseDbInterface): BaseDbInterface {
+module.exports = function envDb (backend: BaseDb): BaseDb {
   const self: DbState = {
     backend,
     pending: {}

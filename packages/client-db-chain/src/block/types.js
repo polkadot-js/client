@@ -3,16 +3,11 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { KeyNoneValBn, KeyNoneValU8a, KeyU8aValU8a } from '../types';
-
-export type ChainDb$Block$BestHash = KeyNoneValU8a;
-
-export type ChainDb$Block$BestNumber = KeyNoneValBn;
-
-export type ChainDb$Block$Block = KeyU8aValU8a;
+import type { StorageMethod, WrapDb } from '@polkadot/storage/types';
 
 export type ChainDb$Block = {
-  bestHash: ChainDb$Block$BestHash,
-  bestNumber: ChainDb$Block$BestNumber,
-  block: ChainDb$Block$Block
+  db: WrapDb,
+  bestHash: StorageMethod,
+  bestNumber: StorageMethod,
+  block: StorageMethod
 };
