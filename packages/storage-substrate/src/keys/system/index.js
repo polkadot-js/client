@@ -9,7 +9,7 @@ module.exports = ({
   keys: {
     blockHashAt: {
       description: 'The blockHash for a specific number',
-      key: 'sys:old:',
+      key: 'sys:old',
       params: {
         blockNumber: 'BlockNumber'
       },
