@@ -15,12 +15,18 @@ describe('blockHash', () => {
   describe('get', () => {
     beforeEach(() => {
       const store = {
-        '0x3117ecd3eaa7a8c27cb8d04eb597a1ef': TEST_HASH
+        '0xfe7a071d703c0bb0ba5ccba2cef1b8aa': TEST_HASH
       };
 
       system = index({
-        get: (key) => store[u8aToHex(key)] || new Uint8Array([]),
+        get: (key) => {
+          console.log('retrieving', u8aToHex(key));
+
+          return store[u8aToHex(key)] || new Uint8Array([]);
+        },
         set: (value, key) => {
+          console.log('setting', u8aToHex(key), value);
+
           store[u8aToHex(key)] = value;
         }
       }).system;
@@ -45,7 +51,7 @@ describe('blockHash', () => {
       }).system;
     });
 
-    it('sets balances', () => {
+    it('sets hashes', () => {
       system.blockHashAt.set(new Uint8Array([123]), 5);
 
       expect(

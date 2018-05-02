@@ -9,7 +9,7 @@ module.exports = ({
   keys: {
     blockHashAt: {
       description: 'The blockHash for a specific number',
-      key: 'sys:old:',
+      key: 'sys:old',
       params: {
         blockNumber: 'BlockNumber'
       },
@@ -45,7 +45,7 @@ module.exports = ({
     },
     nonceOf: {
       description: 'The index of the given account',
-      key: 'sys:non:',
+      key: 'sys:non',
       params: {
         who: 'AccountId'
       },
