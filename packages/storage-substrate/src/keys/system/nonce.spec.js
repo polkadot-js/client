@@ -13,12 +13,18 @@ describe('nonce', () => {
 
   beforeEach(() => {
     const store = {
-      '0xc7f790aa4fc95a8813b0d5734a8c195b': hexToU8a('0x0100000000000000')
+      '0x3ee0a63dc85a046557a2b3092a723d76': hexToU8a('0x0100000000000000')
     };
 
     system = index({
-      get: (key) => store[u8aToHex(key)] || new Uint8Array([]),
+      get: (key) => {
+        console.log('retrieving', u8aToHex(key));
+
+        return store[u8aToHex(key)] || new Uint8Array([]);
+      },
       set: (key, value) => {
+        console.log('setting', u8aToHex(key), value);
+
         store[u8aToHex(key)] = value;
       }
     }).system;
