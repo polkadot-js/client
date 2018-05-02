@@ -1,6 +1,6 @@
 {
   "name": "@polkadot/client-db",
-  "version": "0.10.3",
+  "version": "0.10.4",
   "description": "Database interface layer for network client",
   "main": "index.js",
   "engines": {
@@ -40,7 +40,7 @@
     "mkdirp": "^0.5.1"
   },
   "devDependencies": {
-    "@polkadot/client": "^0.10.3",
+    "@polkadot/client": "^0.10.4",
     "rimraf": "^2.6.2"
   }
 }
