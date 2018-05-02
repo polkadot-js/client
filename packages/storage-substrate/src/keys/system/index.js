@@ -45,7 +45,7 @@ module.exports = ({
     },
     nonceOf: {
       description: 'The index of the given account',
-      key: 'sys:non:',
+      key: 'sys:non',
       params: {
         who: 'AccountId'
       },
