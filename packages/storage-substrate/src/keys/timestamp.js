@@ -6,14 +6,16 @@
 import type { StorageDef$Section } from '@polkadot/storage/types';
 
 module.exports = ({
-  current: {
-    description: 'The current timestamp',
-    key: 'tim:val',
-    type: 'u64'
-  },
-  didUpdate: {
-    description: 'Did the timestamp update',
-    key: 'tim:did',
-    type: 'bool'
+  keys: {
+    current: {
+      description: 'The current timestamp',
+      key: 'tim:val',
+      type: 'u64'
+    },
+    didUpdate: {
+      description: 'Did the timestamp update',
+      key: 'tim:did',
+      type: 'bool'
+    }
   }
 }: StorageDef$Section);

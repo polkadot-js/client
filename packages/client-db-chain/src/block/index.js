@@ -9,7 +9,7 @@ import type { ChainDb$Block } from './types';
 const wrapDb = require('@polkadot/storage/wrap');
 const expandKey = require('@polkadot/storage/create/key');
 
-const keys = require('./keys');
+const keys = require('./keys').keys;
 
 module.exports = function blockDb (baseDb: BaseDb): ChainDb$Block {
   const db = wrapDb(baseDb);

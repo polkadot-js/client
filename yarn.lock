@@ -79,16 +79,17 @@
     lodash "^4.2.0"
     to-fast-properties "^2.0.0"
 
-"@polkadot/api-jsonrpc@^0.9.6":
-  version "0.9.6"
-  resolved "https://registry.yarnpkg.com/@polkadot/api-jsonrpc/-/api-jsonrpc-0.9.6.tgz#2f0495042446927d8bf59fd9a2571eaba7379d70"
+"@polkadot/api-jsonrpc@^0.9.7":
+  version "0.9.7"
+  resolved "https://registry.yarnpkg.com/@polkadot/api-jsonrpc/-/api-jsonrpc-0.9.7.tgz#baef3ff5e2a358bf655673a92250278c5d31a9fc"
   dependencies:
     babel-runtime "^6.26.0"
 
-"@polkadot/api-provider@^0.9.6":
-  version "0.9.6"
-  resolved "https://registry.yarnpkg.com/@polkadot/api-provider/-/api-provider-0.9.6.tgz#06685b40176a340e7dc630a0c0ab895103868b61"
+"@polkadot/api-provider@^0.9.7":
+  version "0.9.7"
+  resolved "https://registry.yarnpkg.com/@polkadot/api-provider/-/api-provider-0.9.7.tgz#5f432fd4b2942187364c7c790d69caff63d35719"
   dependencies:
+    "@polkadot/storage-substrate" "^0.10.2"
     "@polkadot/util" "^0.19.4"
     "@polkadot/util-crypto" "^0.19.4"
     "@polkadot/util-keyring" "^0.19.4"
