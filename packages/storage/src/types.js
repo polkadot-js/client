@@ -42,7 +42,10 @@ export type StorageDef$Key = {
 };
 
 export type StorageDef$Section = {
-  [string]: StorageDef$Key
+  isDeprecated?: boolean,
+  keys: {
+    [string]: StorageDef$Key
+  }
 }
 
 export type StorageDef = {
