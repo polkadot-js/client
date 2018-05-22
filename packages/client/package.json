@@ -33,15 +33,15 @@
     "test": "echo \"Tests only available from root wrapper\""
   },
   "dependencies": {
-    "@polkadot/api-jsonrpc": "^0.9.11",
+    "@polkadot/api-jsonrpc": "^0.11.3",
     "@polkadot/client-chains": "^0.10.4",
     "@polkadot/client-db": "^0.10.4",
     "@polkadot/client-p2p": "^0.10.4",
     "@polkadot/client-rpc": "^0.10.4",
     "@polkadot/client-state": "^0.8.6",
     "@polkadot/client-wasm": "^0.10.4",
-    "@polkadot/primitives": "^0.12.2",
-    "@polkadot/util": "^0.19.4",
+    "@polkadot/primitives": "^0.15.6",
+    "@polkadot/util": "^0.21.1",
     "package-json": "^4.0.1",
     "semver-compare": "^1.0.0",
     "yargs": "^11.0.0"

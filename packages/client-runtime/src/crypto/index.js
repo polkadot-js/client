@@ -5,7 +5,7 @@
 
 import type { RuntimeEnv, RuntimeInterface$Crypto, Pointer } from '../types';
 
-const blake2AsU8a256 = require('@polkadot/util-crypto/blake2/asU8a256');
+const blake2AsU8a = require('@polkadot/util-crypto/blake2/asU8a');
 const naclVerify = require('@polkadot/util-crypto/nacl/verify');
 const xxhashAsU8a = require('@polkadot/util-crypto/xxhash/asU8a');
 
@@ -40,7 +40,7 @@ module.exports = function crypto ({ l, heap }: RuntimeEnv): RuntimeInterface$Cry
   return {
     blake2_256: (dataPtr: Pointer, dataLen: number, outPtr: Pointer): void => {
       const data = heap.get(dataPtr, dataLen);
-      const hash = blake2AsU8a256(data);
+      const hash = blake2AsU8a(data, 256);
 
       l.debug(() => ['blake2_256', [dataPtr, dataLen, outPtr], '<-', data.toString(), '->', hash.toString()]);
 

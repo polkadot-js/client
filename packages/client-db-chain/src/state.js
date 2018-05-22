@@ -3,6 +3,6 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-const createState = require('@polkadot/storage-substrate');
+const createState = require('@polkadot/storage-substrate/db');
 
 module.exports = createState;

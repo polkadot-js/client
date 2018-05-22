@@ -10,7 +10,7 @@ const bnToBn = require('@polkadot/util/bn/toBn');
 const isHex = require('@polkadot/util/is/hex');
 const hexToBn = require('@polkadot/util/hex/toBn');
 const hexToU8a = require('@polkadot/util/hex/toU8a');
-const blake2AsU8a256 = require('@polkadot/util-crypto/blake2/asU8a256');
+const blake2AsU8a = require('@polkadot/util-crypto/blake2/asU8a');
 
 function valueToBn (value: ChainConfigLoose$Number): BN {
   // $FlowFixMe we are determining type
@@ -24,7 +24,7 @@ function valueToBn (value: ChainConfigLoose$Number): BN {
 }
 
 module.exports = function config ({ blockTime, description, genesis: { authorities, balances, code, params, validators }, name, networkId, nodes, type }: ChainConfigLoose): $Shape<ChainConfig> {
-  const codeHash = blake2AsU8a256(code);
+  const codeHash = blake2AsU8a(code, 256);
   const genesis: $Shape<ChainConfig$Genesis> = {
     authorities: authorities.map(hexToU8a),
     balances: Object.keys(balances).map((accountId) => ({
