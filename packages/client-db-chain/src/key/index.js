@@ -4,7 +4,6 @@
 // @flow
 
 import type { Section$Item } from '@polkadot/params/types';
-import type { Storage$Sections } from '@polkadot/storage/types';
 import type { Storage$Key$Values } from '../types';
 import type { Keygen } from './types';
 
@@ -14,7 +13,7 @@ const xxhash = require('@polkadot/util-crypto/xxhash/asU8a');
 
 const formatParams = require('./params');
 
-module.exports = function createKey ({ isUnhashed = false, key, params = [] }: Section$Item<Storage$Sections>): Keygen {
+module.exports = function createKey <T> ({ isUnhashed, key, params }: Section$Item<T>): Keygen {
   const prefix = u8aFromString(key);
 
   return (...keyParams: Storage$Key$Values): Uint8Array => {
