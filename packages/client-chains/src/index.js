@@ -4,7 +4,7 @@
 // @flow
 
 import type { Config } from '@polkadot/client/types';
-import type { BaseDb } from '@polkadot/storage/types';
+import type { BaseDb } from '@polkadot/client-db-chain/types';
 import type { ChainInterface } from './types';
 
 const loadChain = require('./load');
@@ -19,14 +19,14 @@ module.exports = function chains (config: Config, baseStateDb: BaseDb, baseBlock
   return {
     blocks: {
       getBestHash: self.blockDb.bestHash.get,
-      getBestNumber: self.blockDb.bestNumber.getn,
+      getBestNumber: self.blockDb.bestNumber.get,
       getBlock: self.blockDb.block.get
     },
     config: chain.config,
     executor: chain.executor(self),
     state: {
       getBlockHash: self.stateDb.system.blockHashAt.get,
-      getNonce: self.stateDb.system.nonceOf.getn
+      getNonce: self.stateDb.system.accountIndexOf.get
     }
   };
 };

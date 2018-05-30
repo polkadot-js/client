@@ -34,8 +34,8 @@
     "@polkadot/client": "^0.10.4"
   },
   "dependencies": {
-    "@polkadot/util": "^0.22.2",
     "@babel/runtime": "^7.0.0-beta.47",
+    "@polkadot/util": "^0.22.2",
     "co-body": "^5.1.1",
     "eventemitter3": "^2.0.3",
     "koa": "^2.4.1",

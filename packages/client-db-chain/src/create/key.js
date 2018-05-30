@@ -4,19 +4,15 @@
 // @flow
 
 import type { Section$Item } from '@polkadot/params/types';
-import type { StorageMethod, Storage$Key$Values, Storage$Sections, WrapDb } from '../types';
+import type { Storage$Key$Values } from '../types';
 
 const bindKey = require('../key');
-const decode = require('./decode');
-const decodeU8a = require('./decode/u8a');
 
-module.exports = function expandKey <T> (key: Section$Item<Storage$Sections>, db: WrapDb): StorageMethod<T> {
+type Creator = (keyParams?: Storage$Key$Values) => Uint8Array;
+
+module.exports = function creator <T> (key: Section$Item<T>): Creator {
   const keyCreator = bindKey(key);
-  const createKey = (keyParams?: Storage$Key$Values = []): Uint8Array =>
-    keyCreator.apply(null, keyParams);
 
-  // Arrays and tuples are always u8a
-  return Array.isArray(key.type)
-    ? decodeU8a(createKey, db)
-    : decode(key.type, createKey, db);
+  return (keyParams?: Storage$Key$Values = []): Uint8Array =>
+    keyCreator.apply(null, keyParams);
 };

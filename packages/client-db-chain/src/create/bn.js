@@ -4,14 +4,18 @@
 // @flow
 
 import type BN from 'bn.js';
-import type { StorageMethod, Storage$Key$Values, WrapDb } from '../../types';
-import type { Creator } from '../types';
+import type { Section$Item } from '@polkadot/params/types';
+import type { StorageMethod$Bn, Storage$Key$Values, WrapDb } from '../types';
 
-module.exports = function decodeBn (createKey: Creator, db: WrapDb, bitLength: number): StorageMethod<BN> {
-  return ({
+const creator = require('./key');
+
+module.exports = function decodeBn <T> (key: Section$Item<T>, db: WrapDb, bitLength: 32 | 64 | 128): StorageMethod$Bn {
+  const createKey = creator(key);
+
+  return {
     get: (...keyParams?: Storage$Key$Values): BN =>
       db.getn(createKey(keyParams), bitLength),
     set: (value: BN | number, ...keyParams?: Storage$Key$Values): void =>
       db.setn(createKey(keyParams), value, bitLength)
-  }: $Shape<StorageMethod<BN>>);
+  };
 };

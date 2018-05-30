@@ -4,7 +4,8 @@
 // @flow
 
 import type { Section$Item } from '@polkadot/params/types';
-import type { Storage$Sections, Storage$Key$Values } from '../types';
+import type { Storage$Sections } from '@polkadot/storage/types';
+import type { Storage$Key$Values } from '../types';
 import type { Keygen } from './types';
 
 const u8aConcat = require('@polkadot/util/u8a/concat');

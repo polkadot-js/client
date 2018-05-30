@@ -3,7 +3,7 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { BaseDb } from '@polkadot/storage/types';
+import type { BaseDb } from '@polkadot/client-db-chain/types';
 
 module.exports = function get (db: BaseDb, key: Uint8Array, maxLength: number = -1): Uint8Array {
   const data = db.get(key);

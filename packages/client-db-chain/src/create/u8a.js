@@ -3,14 +3,18 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { StorageMethod, Storage$Key$Values, WrapDb } from '../../types';
-import type { Creator } from '../types';
+import type { Section$Item } from '@polkadot/params/types';
+import type { StorageMethod$U8a, Storage$Key$Values, WrapDb } from '../types';
 
-module.exports = function decodeU8a (createKey: Creator, db: WrapDb): StorageMethod<Uint8Array> {
-  return ({
+const creator = require('./key');
+
+module.exports = function decodeU8a <T> (key: Section$Item<T>, db: WrapDb): StorageMethod$U8a {
+  const createKey = creator(key);
+
+  return {
     get: (...keyParams?: Storage$Key$Values): Uint8Array =>
       db.get(createKey(keyParams)),
     set: (value: Uint8Array, ...keyParams?: Storage$Key$Values): void =>
       db.set(createKey(keyParams), value)
-  }: $Shape<StorageMethod<Uint8Array>>);
+  };
 };

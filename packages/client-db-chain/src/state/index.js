@@ -3,11 +3,14 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { BaseDb, StateDb } from '../types';
+import type { BaseDb } from '../types';
+import type { StateDb } from './types';
 
-const keys = require('@polkadot/storage');
+const { consensus, governance, session, staking, system } = require('@polkadot/storage');
 
-const createKeys = require('../create/keys');
+const createAcc = require('../create/account');
+const createBn = require('../create/bn');
+const createU8a = require('../create/u8a');
 const createDb = require('../db');
 
 module.exports = function createState (baseDb: BaseDb): StateDb {
@@ -15,14 +18,31 @@ module.exports = function createState (baseDb: BaseDb): StateDb {
 
   return {
     db,
-    consensus: createKeys(keys.consensus.public, db),
-    council: createKeys(keys.council.public, db),
-    councilVoting: createKeys(keys.councilVoting.public, db),
-    democracy: createKeys(keys.democracy.public, db),
-    governance: createKeys(keys.governance.public, db),
-    session: createKeys(keys.session.public, db),
-    staking: createKeys(keys.staking.public, db),
-    system: createKeys(keys.system.public, db),
-    timestamp: createKeys(keys.timestamp.public, db)
+    consensus: {
+      authority: createAcc(consensus.public.authority, db),
+      authorityCount: createBn(consensus.public.authorityCount, db, 32),
+      code: createU8a(consensus.public.code, db)
+    },
+    council: {},
+    councilVoting: {},
+    democracy: {},
+    governance: {
+      approvalsRatio: createBn(governance.public.approvalsRatio, db, 64)
+    },
+    session: {
+      length: createBn(consensus.public.length, db, 64),
+      validator: createAcc(session.public.validator, db)
+    },
+    staking: {
+      currentEra: createBn(staking.public.currentEra, db, 64),
+      freeBalanceOf: createBn(staking.public.freeBalanceOf, db, 128),
+      sessionsPerEra: createBn(staking.public.sessionsPerEra, db, 64),
+      validatorCount: createBn(staking.public.validatorCount, db, 32)
+    },
+    system: {
+      accountIndexOf: createBn(system.public.accountIndexOf, db, 32),
+      blockHashAt: createU8a(system.public.blockHashAt, db)
+    },
+    timestamp: {}
   };
 };

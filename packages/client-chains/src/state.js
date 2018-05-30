@@ -4,7 +4,7 @@
 // @flow
 
 import type { Config } from '@polkadot/client/types';
-import type { BaseDb } from '@polkadot/storage/types';
+import type { BaseDb } from '@polkadot/client-db-chain/types';
 import type { ChainDefinition, ChainState } from './types';
 
 const createBlockDb = require('@polkadot/client-db-chain/block');

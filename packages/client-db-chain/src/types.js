@@ -29,35 +29,19 @@ export type Storage$Key$Value = number | BN | Uint8Array | string;
 
 export type Storage$Key$Values = Array<Storage$Key$Value>;
 
-export type StorageMethod<T> = {
-  get: (...params?: Storage$Key$Values) => T,
-  set: (value: T, ...params?: Storage$Key$Values) => void
+export type StorageMethod<P, R> = {
+  get: (...params?: Storage$Key$Values) => R,
+  set: (value: P, ...params?: Storage$Key$Values) => void
 }
 
-export type StorageMethods = StorageMethod<BN> | StorageMethod<Uint8Array>;
+export type StorageMethod$Account = StorageMethod<Uint8Array | string, Uint8Array>;
 
-export type StateDb$Section = {
-  [string]: StorageMethods
-}
+export type StorageMethod$Bn = StorageMethod<BN | number, BN>;
+
+export type StorageMethod$U8a = StorageMethod<Uint8Array, Uint8Array>;
+
+export type StorageMethods = StorageMethod$Account | StorageMethod$Bn | StorageMethod$U8a;
 
 export type WrappedDb<O> = O & {
   db: WrapDb
 }
-
-export type StateDb = WrappedDb<{
-  consensus: StateDb$Section,
-  council: StateDb$Section,
-  councilVoting: StateDb$Section,
-  democracy: StateDb$Section,
-  governance: StateDb$Section,
-  session: StateDb$Section,
-  staking: StateDb$Section,
-  system: StateDb$Section,
-  timestamp: StateDb$Section
-}>;
-
-export type ChainDb$Block = WrappedDb<{
-  bestHash: StorageMethod<Uint8Array>,
-  bestNumber: StorageMethod<BN>,
-  block: StorageMethod<Uint8Array>
-}>;

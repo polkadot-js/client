@@ -13,7 +13,6 @@ const hexToU8a = require('@polkadot/util/hex/toU8a');
 const blake2AsU8a = require('@polkadot/util-crypto/blake2/asU8a');
 
 function valueToBn (value: ChainConfigLoose$Number): BN {
-  // $FlowFixMe we are determining type
   if (isHex(value)) {
     // $FlowFixMe type has been determined
     return hexToBn(value);
