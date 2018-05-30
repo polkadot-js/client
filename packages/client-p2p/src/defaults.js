@@ -10,9 +10,9 @@ const CLIENT_ID = 'client/0.0.0';
 const MAX_PEERS = 25;
 const MAX_SYNC_BLOCKS = 64;
 const PORT = 39933;
-const ROLE: Role = 'none';
+const ROLE: Role = 'full';
 const PROTOCOL_VERSION = 0;
-const PROTOCOL = `/dot/0.0.${PROTOCOL_VERSION}`;
+const PROTOCOL = `/parity/pol/${PROTOCOL_VERSION}`;
 
 module.exports = {
   ADDRESS,
