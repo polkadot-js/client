@@ -10,8 +10,6 @@ import type { WrapDb, StorageMethod$Account, StorageMethod$Bn, StorageMethod$U8a
 
 import storage from '@polkadot/storage';
 
-import expandKey from '../create/key';
-
 export type StateDb$Consensus = {
   authority: StorageMethod$Account,
   authorityCount: StorageMethod$Bn,

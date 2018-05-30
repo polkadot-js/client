@@ -6,7 +6,7 @@
 import type { Section$Item } from '@polkadot/params/types';
 import type { StorageMethod$U8a, Storage$Key$Values, WrapDb } from '../types';
 
-const creator = require('./key');
+const creator = require('../key');
 
 module.exports = function decodeU8a <T> (key: Section$Item<T>, db: WrapDb): StorageMethod$U8a {
   const createKey = creator(key);

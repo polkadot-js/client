@@ -5,25 +5,14 @@
 
 import type { Section$Item } from '@polkadot/params/types';
 import type { Storage$Key$Values } from '../types';
-import type { Keygen } from './types';
 
-const u8aConcat = require('@polkadot/util/u8a/concat');
-const u8aFromString = require('@polkadot/util/u8a/fromString');
-const xxhash = require('@polkadot/util-crypto/xxhash/asU8a');
+const bindKey = require('./bind');
 
-const formatParams = require('./params');
+type Creator = (keyParams?: Storage$Key$Values) => Uint8Array;
 
-module.exports = function createKey <T> ({ isUnhashed, key, params }: Section$Item<T>): Keygen {
-  const prefix = u8aFromString(key);
+module.exports = function createKey <T> (key: Section$Item<T>): Creator {
+  const keyCreator = bindKey(key);
 
-  return (...keyParams: Storage$Key$Values): Uint8Array => {
-    const postfix = keyParams.length !== 0
-      ? u8aConcat.apply(null, formatParams(params, keyParams))
-      : new Uint8Array([]);
-    const prefixedKey = u8aConcat(prefix, postfix);
-
-    return isUnhashed
-      ? prefixedKey
-      : xxhash(prefixedKey, 128);
-  };
+  return (keyParams?: Storage$Key$Values = []): Uint8Array =>
+    keyCreator.apply(null, keyParams);
 };

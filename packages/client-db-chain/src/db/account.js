@@ -8,7 +8,7 @@ import type { StorageMethod$Account, Storage$Key$Values, WrapDb } from '../types
 
 const addressDecode = require('@polkadot/util-keyring/address/decode');
 
-const creator = require('./key');
+const creator = require('../key');
 
 module.exports = function decodeAccountId <T> (key: Section$Item<T>, db: WrapDb): StorageMethod$Account {
   const createKey = creator(key);

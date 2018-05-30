@@ -8,9 +8,9 @@ import type { StateDb } from './types';
 
 const { consensus, governance, session, staking, system } = require('@polkadot/storage');
 
-const createAcc = require('../create/account');
-const createBn = require('../create/bn');
-const createU8a = require('../create/u8a');
+const createAcc = require('../db/account');
+const createBn = require('../db/bn');
+const createU8a = require('../db/u8a');
 const createDb = require('../db');
 
 module.exports = function createState (baseDb: BaseDb): StateDb {

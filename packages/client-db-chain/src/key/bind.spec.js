@@ -6,7 +6,7 @@ const hexToU8a = require('@polkadot/util/hex/toU8a');
 const u8aFromString = require('@polkadot/util/u8a/fromString');
 const param = require('@polkadot/params/param');
 
-const key = require('./index');
+const key = require('./bind');
 
 describe('key', () => {
   it('concats the values', () => {

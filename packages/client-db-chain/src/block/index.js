@@ -6,8 +6,8 @@
 import type { BaseDb } from '../types';
 import type { BlockDb } from './types';
 
-const createBn = require('../create/bn');
-const createU8a = require('../create/u8a');
+const createBn = require('../db/bn');
+const createU8a = require('../db/u8a');
 const createDb = require('../db');
 const keys = require('./keys');
 

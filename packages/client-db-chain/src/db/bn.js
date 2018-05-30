@@ -7,7 +7,7 @@ import type BN from 'bn.js';
 import type { Section$Item } from '@polkadot/params/types';
 import type { StorageMethod$Bn, Storage$Key$Values, WrapDb } from '../types';
 
-const creator = require('./key');
+const creator = require('../key');
 
 module.exports = function decodeBn <T> (key: Section$Item<T>, db: WrapDb, bitLength: 32 | 64 | 128): StorageMethod$Bn {
   const createKey = creator(key);
