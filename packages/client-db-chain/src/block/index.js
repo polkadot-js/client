@@ -4,20 +4,20 @@
 // @flow
 
 import type { BaseDb } from '@polkadot/storage/types';
-import type { ChainDb$Block } from './types';
+import type { ChainDb$Block } from '../types';
 
-const wrapDb = require('@polkadot/storage/wrap');
 const expandKey = require('@polkadot/storage/create/key');
 
-const keys = require('./keys').keys;
+const createDb = require('../db');
+const keys = require('./keys');
 
 module.exports = function blockDb (baseDb: BaseDb): ChainDb$Block {
-  const db = wrapDb(baseDb);
+  const db = createDb(baseDb);
 
   return {
     db,
-    bestHash: expandKey(keys.bestHash, db),
-    bestNumber: expandKey(keys.bestNumber, db),
-    block: expandKey(keys.blockByHash, db)
+    bestHash: expandKey(keys.public.bestHash, db),
+    bestNumber: expandKey(keys.public.bestNumber, db),
+    block: expandKey(keys.public.blockByHash, db)
   };
 };

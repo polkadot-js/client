@@ -30,10 +30,11 @@
   },
   "dependencies": {
     "@polkadot/client-db": "^0.10.4",
-    "@polkadot/storage": "^0.16.15",
+    "@polkadot/storage": "^0.17.4",
     "@polkadot/util": "^0.22.2",
     "@polkadot/util-crypto": "^0.22.2",
-    "babel-runtime": "^6.26.0"
+    "@polkadot/util-triehash": "^0.22.2",
+    "@babel/runtime": "^7.0.0-beta.47"
   },
   "devDependencies": {
     "@polkadot/storage": "^0.17.4"

@@ -3,6 +3,6 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-const createState = require('@polkadot/storage/db');
+import type { Storage$Key$Values } from '../types';
 
-module.exports = createState;
+export type Creator = (keyParams?: Storage$Key$Values) => Uint8Array;
