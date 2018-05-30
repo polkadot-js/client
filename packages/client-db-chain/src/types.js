@@ -4,8 +4,6 @@
 // @flow
 
 import type BN from 'bn.js';
-// import type { Section, Sections, Section$Item } from '@polkadot/params/types';
-// import type { Storage$Sections } from '@polkadot/storage/types';
 import type { Trie$Pairs } from '@polkadot/util-triehash/types';
 
 export type BaseDb = {
