@@ -13,7 +13,7 @@ const u8aConcat = require('@polkadot/util/u8a/concat');
 module.exports = function genesisState ({ chain: { genesis: { consensus, council, councilVoting, democracy, session, staking } }, stateDb }: ChainState): void {
   stateDb.consensus.authorityCount.set(consensus.authorities.length);
   consensus.authorities.forEach((accountId, index) => {
-    stateDb.consensus.authority.set(accountId, index);
+    stateDb.consensus.authorityAt.set(accountId, index);
   });
   stateDb.consensus.code.set(consensus.code);
 
@@ -32,7 +32,7 @@ module.exports = function genesisState ({ chain: { genesis: { consensus, council
   stateDb.council.presentationDuration.set(council.presentationDuration);
   stateDb.council.presentSlashPerVoter.set(council.presentSlashPerVoter);
   stateDb.council.termDuration.set(council.termDuration);
-  stateDb.council.voterBond.set(council.voterBond);
+  stateDb.council.votingBond.set(council.votingBond);
   stateDb.council.votingPeriod.set(council.votingPeriod);
 
   stateDb.councilVoting.cooloffPeriod.set(councilVoting.cooloffPeriod);

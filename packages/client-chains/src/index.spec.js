@@ -13,7 +13,7 @@ describe('client-chains', () => {
 
   beforeEach(() => {
     config = {
-      chain: 'nelson'
+      chain: 'dev'
     };
     blockDb = memoryDb();
     stateDb = memoryDb();

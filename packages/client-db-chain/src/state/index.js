@@ -19,13 +19,13 @@ const createDb = require('../db');
 const BALANCE_SIZE = 128;
 const BLOCKNUM_SIZE = 64;
 
-const consensus = (db: WrapDb, { public: { authority, authorityCount, code } }: Storage$Section) => ({
-  authority: createAcc(db, authority),
+const consensus = (db: WrapDb, { public: { authorityAt, authorityCount, code } }: Storage$Section) => ({
+  authorityAt: createAcc(db, authorityAt),
   authorityCount: createBn(db, authorityCount, 32),
   code: createU8a(db, code)
 });
 
-const council = (db: WrapDb, { public: { activeCouncil, candidacyBond, carryCount, desiredSeats, inactiveGracePeriod, presentationDuration, presentSlashPerVoter, termDuration, voterBond, votingPeriod } }: Storage$Section) => ({
+const council = (db: WrapDb, { public: { activeCouncil, candidacyBond, carryCount, desiredSeats, inactiveGracePeriod, presentationDuration, presentSlashPerVoter, termDuration, votingBond, votingPeriod } }: Storage$Section) => ({
   activeCouncil: createArrU8a(db, activeCouncil),
   candidacyBond: createBn(db, candidacyBond, BALANCE_SIZE),
   carryCount: createBn(db, carryCount, 32),
@@ -34,7 +34,7 @@ const council = (db: WrapDb, { public: { activeCouncil, candidacyBond, carryCoun
   presentationDuration: createBn(db, presentationDuration, BLOCKNUM_SIZE),
   presentSlashPerVoter: createBn(db, presentSlashPerVoter, BALANCE_SIZE),
   termDuration: createBn(db, termDuration, BLOCKNUM_SIZE),
-  voterBond: createBn(db, voterBond, BALANCE_SIZE),
+  votingBond: createBn(db, votingBond, BALANCE_SIZE),
   votingPeriod: createBn(db, votingPeriod, BLOCKNUM_SIZE)
 });
 

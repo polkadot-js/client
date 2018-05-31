@@ -11,7 +11,7 @@ import type { WrapDb, StorageMethod$Account, StorageMethod$Bn, StorageMethod$U8a
 import storage from '@polkadot/storage';
 
 export type StateDb$Consensus = {
-  authority: StorageMethod$Account,
+  authorityAt: StorageMethod$Account,
   authorityCount: StorageMethod$Bn,
   code: StorageMethod$U8a
 };
@@ -25,7 +25,7 @@ export type StateDb$Council = {
   presentationDuration: StorageMethod$Bn,
   presentSlashPerVoter: StorageMethod$Bn,
   termDuration: StorageMethod$Bn,
-  voterBond: StorageMethod$Bn,
+  votingBond: StorageMethod$Bn,
   votingPeriod: StorageMethod$Bn
 };
 

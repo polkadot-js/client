@@ -6,7 +6,7 @@ const hexToU8a = require('@polkadot/util/hex/toU8a');
 const u8aToHex = require('@polkadot/util/u8a/toHex');
 const keyring = require('@polkadot/util-keyring/testingPairs')();
 
-const db = require('./state');
+const db = require('./index');
 
 describe('balance', () => {
   let staking;
