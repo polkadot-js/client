@@ -50,11 +50,12 @@ export type ChainConfig$Genesis = {
     presentationDuration: BN | number,
     presentSlashPerVoter: BN | number,
     termDuration: BN | number,
-    voterBond: BN | number, // Rust approval_voting_period
+    votingBond: BN | number,
+    // NOTE Rust approval_voting_period
     votingPeriod: BN | number
   },
-  // Rust has these in council
   councilVoting: {
+    // NOTE Rust has these in council as well
     cooloffPeriod: BN | number,
     votingPeriod: BN | number
   },

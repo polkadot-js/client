@@ -4,7 +4,8 @@
 // @flow
 
 import type { Section$Item } from '@polkadot/params/types';
-import type { StorageMethod$ArrayU8a, Storage$Key$Values, BaseDb } from '../types';
+import type { Storage$Key$Values } from '@polkadot/storage/types';
+import type { StorageMethod$ArrayU8a, BaseDb } from '../types';
 
 const bnToU8a = require('@polkadot/util/bn/toU8a');
 const u8aConcat = require('@polkadot/util/u8a/concat');

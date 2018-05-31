@@ -5,6 +5,7 @@
 
 import type BN from 'bn.js';
 import type { Trie$Pairs } from '@polkadot/util-triehash/types';
+import type { Storage$Key$Values } from '@polkadot/storage/types';
 
 export type BaseDb = {
   clear: () => void,
@@ -20,10 +21,6 @@ export type WrapDb = BaseDb & {
   debug: () => { [string]: string },
   trieRoot: () => Uint8Array
 };
-
-export type Storage$Key$Value = number | BN | Uint8Array | string;
-
-export type Storage$Key$Values = Array<Storage$Key$Value>;
 
 export type StorageMethod<P, R> = {
   get: (...params?: Storage$Key$Values) => R,

@@ -4,9 +4,9 @@
 // @flow
 
 import type { Section$Item } from '@polkadot/params/types';
-import type { Storage$Key$Values } from '../types';
+import type { Storage$Key$Values } from '@polkadot/storage/types';
 
-const bindKey = require('./bind');
+const bindKey = require('@polkadot/storage/key');
 
 type Creator = (keyParams?: Storage$Key$Values) => Uint8Array;
 

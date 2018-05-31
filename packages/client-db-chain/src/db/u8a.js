@@ -4,7 +4,8 @@
 // @flow
 
 import type { Section$Item } from '@polkadot/params/types';
-import type { StorageMethod$U8a, Storage$Key$Values, WrapDb } from '../types';
+import type { Storage$Key$Values } from '@polkadot/storage/types';
+import type { StorageMethod$U8a, WrapDb } from '../types';
 
 const creator = require('../key');
 

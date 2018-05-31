@@ -44,7 +44,7 @@ module.exports = ({
       presentationDuration: 10,
       presentSlashPerVoter: 1,
       termDuration: 1000000,
-      voterBond: 2,
+      votingBond: 2,
       votingPeriod: 20
     },
     councilVoting: {
