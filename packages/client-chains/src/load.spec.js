@@ -7,7 +7,7 @@ const loadChain = require('./load');
 describe('loadChain', () => {
   it('loads a chain from chains/*', () => {
     expect(
-      loadChain('nelson')
+      loadChain('dev')
     ).toBeDefined();
   });
 
