@@ -14,7 +14,7 @@ describe('createConfig', () => {
   let peerInfo;
 
   beforeEach(async () => {
-    peerInfo = await promisify(null, PeerInfo.create, { bits: 0 });
+    peerInfo = await promisify(null, PeerInfo.create);
   });
 
   it('uses Railing when bootnodes available', () => {
