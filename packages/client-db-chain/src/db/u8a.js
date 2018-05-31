@@ -8,7 +8,7 @@ import type { StorageMethod$U8a, Storage$Key$Values, WrapDb } from '../types';
 
 const creator = require('../key');
 
-module.exports = function decodeU8a <T> (key: Section$Item<T>, db: WrapDb): StorageMethod$U8a {
+module.exports = function decodeU8a <T> (db: WrapDb, key: Section$Item<T>): StorageMethod$U8a {
   const createKey = creator(key);
 
   return {

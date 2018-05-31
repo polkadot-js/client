@@ -18,8 +18,6 @@ export type BaseDb = {
 
 export type WrapDb = BaseDb & {
   debug: () => { [string]: string },
-  getn: (key: Uint8Array, bitLength?: number) => BN,
-  setn: (key: Uint8Array, value: BN | number, bitLength?: number) => void,
   trieRoot: () => Uint8Array
 };
 
@@ -32,13 +30,17 @@ export type StorageMethod<P, R> = {
   set: (value: P, ...params?: Storage$Key$Values) => void
 }
 
-export type StorageMethod$Account = StorageMethod<Uint8Array | string, Uint8Array>;
+export type StorageMethod$Account = StorageMethod<Uint8Array, Uint8Array>;
 
 export type StorageMethod$Bn = StorageMethod<BN | number, BN>;
 
 export type StorageMethod$U8a = StorageMethod<Uint8Array, Uint8Array>;
 
-export type StorageMethods = StorageMethod$Account | StorageMethod$Bn | StorageMethod$U8a;
+export type StorageMethod$ArrayAccount = StorageMethod<Array<Uint8Array>, Array<Uint8Array>>;
+
+export type StorageMethod$ArrayU8a = StorageMethod<Array<Uint8Array>, Array<Uint8Array>>;
+
+export type StorageMethods = StorageMethod$Account | StorageMethod$Bn | StorageMethod$U8a | StorageMethod$ArrayU8a | StorageMethod$ArrayAccount;
 
 export type WrappedDb<O> = O & {
   db: WrapDb

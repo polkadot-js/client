@@ -3,6 +3,6 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-const block = require('../substrate/block');
+const arrayU8a = require('./arrayU8a');
 
-module.exports = block;
+module.exports = arrayU8a;

@@ -8,9 +8,9 @@ import type { RuntimeEnv, RuntimeInterface$Chain } from '../types';
 module.exports = function ({ l, chain }: RuntimeEnv): RuntimeInterface$Chain {
   return {
     chain_id: () => {
-      l.debug(() => ['chain_id', '->', chain.networkId.toNumber()]);
+      l.debug(() => ['chain_id', '->', chain.networkId]);
 
-      return chain.networkId.toNumber();
+      return chain.networkId;
     }
   };
 };

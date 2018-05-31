@@ -6,8 +6,8 @@
 import type { ChainDefinition } from '../types';
 
 const config = require('./config');
-const executor = require('./executor');
-const genesis = require('./genesis');
+const executor = require('../executor');
+const genesis = require('../substrate/genesis');
 
 module.exports = ({
   config,

@@ -9,7 +9,7 @@ const createDb = require('@polkadot/client-db-chain/state');
 const hexToU8a = require('@polkadot/util/hex/toU8a');
 const keyring = require('@polkadot/util-keyring/testingPairs')();
 
-const genesis = require('./index');
+const { genesis } = require('./index');
 
 describe.skip('genesis', () => {
   let block;

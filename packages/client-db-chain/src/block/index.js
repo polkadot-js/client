@@ -16,8 +16,8 @@ module.exports = function blockDb (baseDb: BaseDb): BlockDb {
 
   return {
     db,
-    bestHash: createU8a(keys.public.bestHash, db),
-    bestNumber: createBn(keys.public.bestNumber, db, 64),
-    block: createU8a(keys.public.blockByHash, db)
+    bestHash: createU8a(db, keys.public.bestHash),
+    bestNumber: createBn(db, keys.public.bestNumber, 64),
+    block: createU8a(db, keys.public.blockByHash)
   };
 };

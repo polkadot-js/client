@@ -5,17 +5,24 @@
 
 import type BN from 'bn.js';
 import type { Section$Item } from '@polkadot/params/types';
-import type { StorageMethod$Bn, Storage$Key$Values, WrapDb } from '../types';
+import type { StorageMethod$Bn, Storage$Key$Values, BaseDb } from '../types';
+
+const bnToU8a = require('@polkadot/util/bn/toU8a');
+const u8aToBn = require('@polkadot/util/u8a/toBn');
 
 const creator = require('../key');
 
-module.exports = function decodeBn <T> (key: Section$Item<T>, db: WrapDb, bitLength: 32 | 64 | 128): StorageMethod$Bn {
+module.exports = function decodeBn <T> (db: BaseDb, key: Section$Item<T>, bitLength: 32 | 64 | 128): StorageMethod$Bn {
   const createKey = creator(key);
 
   return {
     get: (...keyParams?: Storage$Key$Values): BN =>
-      db.getn(createKey(keyParams), bitLength),
+      u8aToBn(
+        db.get(createKey(keyParams)), true
+      ),
     set: (value: BN | number, ...keyParams?: Storage$Key$Values): void =>
-      db.setn(createKey(keyParams), value, bitLength)
+      db.set(
+        createKey(keyParams), bnToU8a(value, bitLength, true)
+      )
   };
 };

@@ -35,7 +35,8 @@
     "@polkadot/client-wasm": "^0.10.4",
     "@polkadot/storage": "^0.17.5",
     "@polkadot/util": "^0.22.2",
-    "@polkadot/util-crypto": "^0.22.2"
+    "@polkadot/util-crypto": "^0.22.2",
+    "@polkadot/util-keyring": "^0.22.2"
   },
   "devDependencies": {
     "@polkadot/client": "^0.10.4",
