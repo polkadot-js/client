@@ -6,7 +6,7 @@ const stakingTransfer = require('@polkadot/primitives-builder/transaction/stakin
 const uncheckedSign = require('@polkadot/primitives-builder/unchecked/uncheckedSign');
 const encodeUtx = require('@polkadot/primitives-codec/unchecked/encode');
 const hexToU8a = require('@polkadot/util/hex/toU8a');
-const chain = require('@polkadot/client-chains/chain-nelson/config');
+const chain = require('@polkadot/client-chains/chain-dev/config');
 const memoryDb = require('@polkadot/client-db/memory');
 const createBlockDb = require('@polkadot/client-db-chain/block');
 const createStateDb = require('@polkadot/client-db-chain/state');
@@ -37,20 +37,20 @@ describe.skip('generateBlock', () => {
 
     const threePublicKey = hexToU8a('0x0303030303030303030303030303030303030303030303030303030303030303');
 
-    stateDb.governance.approvalsRatio.setn(667);
-    stateDb.session.length.setn(2);
-    stateDb.session.validatorCount.setn(3);
+    stateDb.governance.approvalsRatio.set(667);
+    stateDb.session.length.set(2);
+    stateDb.session.validatorCount.set(3);
     stateDb.session.validator.set(keyring.one.publicKey(), 0);
     stateDb.session.validator.set(keyring.two.publicKey(), 1);
     stateDb.session.validator.set(threePublicKey, 2);
-    stateDb.staking.balanceOf.setn(69 + 42, keyring.one.publicKey());
-    stateDb.staking.currentEra.setn(0);
-    stateDb.staking.intentLength.setn(3);
+    stateDb.staking.freeBalanceOf.set(69 + 42, keyring.one.publicKey());
+    stateDb.staking.currentEra.set(0);
+    stateDb.staking.intentLength.set(3);
     stateDb.staking.intent.set(keyring.one.publicKey(), 0);
     stateDb.staking.intent.set(keyring.two.publicKey(), 1);
     stateDb.staking.intent.set(threePublicKey, 2);
-    stateDb.staking.sessionsPerEra.setn(2);
-    stateDb.staking.validatorCount.setn(3);
+    stateDb.staking.sessionsPerEra.set(2);
+    stateDb.staking.validatorCount.set(3);
     stateDb.system.blockHashAt.set(hexToU8a('0x4545454545454545454545454545454545454545454545454545454545454545'), 0);
 
     stateDb.db.commit();

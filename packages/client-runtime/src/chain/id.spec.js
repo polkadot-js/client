@@ -3,8 +3,6 @@
 // of the ISC license. See the LICENSE file for details.
 /* eslint camelcase: 0 */
 
-const BN = require('bn.js');
-
 const index = require('./index');
 
 describe('chain_id', () => {
@@ -16,7 +14,7 @@ describe('chain_id', () => {
         debug: (cb) => cb()
       },
       chain: {
-        networkId: new BN(1337)
+        networkId: 1337
       }
     }).chain_id;
   });

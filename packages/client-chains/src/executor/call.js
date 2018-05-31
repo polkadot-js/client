@@ -18,7 +18,7 @@ const u8aToHex = require('@polkadot/util/u8a/toHex');
 const proxy = require('../wasm/proxy_substrate_wasm');
 
 module.exports = function call ({ chain: { code, genesis }, config, runtime }: ChainState, name: string): Call {
-  const instance = createWasm(config, runtime, code || genesis.code, proxy);
+  const instance = createWasm(config, runtime, code || genesis.consensus.code, proxy);
   const { l, heap } = runtime.environment;
 
   return (...data: Array<Uint8Array>): CallResult => {

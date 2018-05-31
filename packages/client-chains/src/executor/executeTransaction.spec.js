@@ -8,7 +8,7 @@ const uncheckedSign = require('@polkadot/primitives-builder/unchecked/uncheckedS
 const timestampSet = require('@polkadot/primitives-builder/unchecked/timestampSet');
 const encodeHeader = require('@polkadot/primitives-codec/header/encode');
 const encodeUtx = require('@polkadot/primitives-codec/unchecked/encode');
-const chain = require('@polkadot/client-chains/chain-nelson/config');
+const chain = require('@polkadot/client-chains/chain-dev/config');
 const memoryDb = require('@polkadot/client-db/memory');
 const createDb = require('@polkadot/client-db-chain/state');
 const createRuntime = require('@polkadot/client-runtime');
@@ -41,7 +41,7 @@ describe('executeTransaction', () => {
   });
 
   beforeEach(() => {
-    stateDb.staking.balanceOf.setn(69 + 42, keyring.one.publicKey());
+    stateDb.staking.freeBalanceOf.set(69 + 42, keyring.one.publicKey());
   });
 
   it('executes a basic transaction', () => {
@@ -62,10 +62,10 @@ describe('executeTransaction', () => {
     );
 
     expect(
-      stateDb.staking.balanceOf.getn(keyring.one.publicKey()).toNumber()
+      stateDb.staking.freeBalanceOf.get(keyring.one.publicKey()).toNumber()
     ).toEqual(42);
     expect(
-      stateDb.staking.balanceOf.getn(keyring.two.publicKey()).toNumber()
+      stateDb.staking.freeBalanceOf.get(keyring.two.publicKey()).toNumber()
     ).toEqual(69);
   });
 });

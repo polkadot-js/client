@@ -32,14 +32,14 @@ describe('status', () => {
       status({
         roles: ['full', 'validator'],
         bestNumber: new BN(1),
-        bestHash: '0x2',
-        genesisHash: '0x3'
+        bestHash: '0x02',
+        genesisHash: '0x03'
       }).raw
     ).toMatchObject({
       roles: ['full', 'validator'],
       bestNumber: new BN(1),
-      bestHash: '0x2',
-      genesisHash: '0x3'
+      bestHash: '0x02',
+      genesisHash: '0x03'
     });
   });
 
@@ -50,8 +50,8 @@ describe('status', () => {
       status({
         roles: ['full', 'validator'],
         // bestNumber: new BN(1),
-        bestHash: hexToU8a('0x2', 256),
-        genesisHash: hexToU8a('0x3', 256)
+        bestHash: hexToU8a('0x02', 256),
+        genesisHash: hexToU8a('0x03', 256)
         // validatorSignature: hexToU8a('0x4', 512),
         // validatorId: hexToU8a('0x5', 160),
         // parachainId: new BN(6)
@@ -63,8 +63,8 @@ describe('status', () => {
     ).toMatchObject({
       roles: ['full', 'validator'],
       // bestNumber: new BN(1),
-      bestHash: hexToU8a('0x2', 256),
-      genesisHash: hexToU8a('0x3', 256)
+      bestHash: hexToU8a('0x02', 256),
+      genesisHash: hexToU8a('0x03', 256)
       // validatorSignature: hexToU8a('0x4', 512),
       // validatorId: hexToU8a('0x5', 160)
       // parachainId: new BN(6)

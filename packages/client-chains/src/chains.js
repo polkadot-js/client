@@ -5,10 +5,8 @@
 
 import type { ChainDefinition, ChainName } from './types';
 
-const demo = require('./chain-demo');
-const nelson = require('./chain-nelson');
+const dev = require('./chain-dev');
 
 module.exports = ({
-  demo,
-  nelson
+  dev
 }: { [ChainName]: ChainDefinition });

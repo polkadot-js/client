@@ -6,12 +6,13 @@
 
 import type BN from 'bn.js';
 import type { Config } from '@polkadot/client/types';
-import type { ChainDb$Block } from '@polkadot/client-db-chain/block/types';
+import type { BlockDb } from '@polkadot/client-db-chain/block/types';
+import type { StateDb } from '@polkadot/client-db-chain/state/types';
 import type { RuntimeInterface } from '@polkadot/client-runtime/types';
-import type { StateDb } from '@polkadot/storage/types';
+import type { Header } from '@polkadot/primitives/header';
 import type { Logger } from '@polkadot/util/types';
 
-export type ChainName = 'demo' | 'nelson';
+export type ChainName = 'dev';
 export type ChainType = 'polkadot' | 'substrate';
 
 export type ChainConfig$Node = string;
@@ -22,55 +23,68 @@ export type ChainConfig$Balances = Array<{
   balance: BN
 }>;
 
-export type ChainConfig$Genesis$Block = {
-  header: Uint8Array,
+export type ChainGenesis = {
+  header: Header,
   hash: Uint8Array
 };
 
-export type ChainConfigLoose$Number = BN | number | string;
-
-export type ChainConfigLoose$Params = {
-  [string]: ChainConfigLoose$Number
-};
-
-export type ChainConfigLoose = {
-  name: string,
-  description: string,
-  blockTime: ChainConfigLoose$Number,
-  networkId: ChainConfigLoose$Number,
-  type: ChainType,
-  genesis: {
-    authorities: Array<string>,
-    balances: {
-      [string]: ChainConfigLoose$Number
-    },
-    code: Uint8Array,
-    params: ChainConfigLoose$Params,
-    validators: Array<string>
-  },
-  nodes: ChainConfig$Nodes
-};
-
 export type ChainConfig$Genesis = {
-  authorities: Array<Uint8Array>,
-  balances: ChainConfig$Balances,
-  block: ChainConfig$Genesis$Block,
-  code: Uint8Array,
-  codeHash: Uint8Array,
-  params: {
-    [string]: BN
+  consensus: {
+    authorities: Array<Uint8Array>,
+    code: Uint8Array
   },
-  validators: Array<Uint8Array>
+  democracy: {
+    launchPeriod: BN | number,
+    minimumDeposit: BN | number,
+    votingPeriod: BN | number
+  },
+  council: {
+    activeCouncil: Array<{
+      accountId: Uint8Array,
+      duration: BN | number
+    }>,
+    candidacyBond: BN | number,
+    carryCount: BN | number,
+    desiredSeats: BN | number,
+    inactiveGracePeriod: BN | number,
+    presentationDuration: BN | number,
+    presentSlashPerVoter: BN | number,
+    termDuration: BN | number,
+    votingBond: BN | number,
+    // NOTE Rust approval_voting_period
+    votingPeriod: BN | number
+  },
+  councilVoting: {
+    // NOTE Rust has these in council as well
+    cooloffPeriod: BN | number,
+    votingPeriod: BN | number
+  },
+  session: {
+    length: BN | number,
+    validators: Array<Uint8Array>
+  },
+  staking: {
+    balances: Array<{
+      accountId: Uint8Array,
+      balance: BN | number
+    }>,
+    bondingDuration: BN | number,
+    currentEra: BN | number,
+    intentions: Array<Uint8Array>,
+    sessionsPerEra: BN | number,
+    transactionFee: BN | number,
+    validatorCount: BN | number
+  }
 };
 
 export type ChainConfig = {
-  blockTime: BN,
+  blockTime: number,
   code: Uint8Array,
   codeHash: Uint8Array,
   description: string,
   genesis: ChainConfig$Genesis,
   name: string,
-  networkId: BN,
+  networkId: number,
   nodes: ChainConfig$Nodes,
   type: ChainType
 };
@@ -104,11 +118,12 @@ export type ChainInterface = {
   blocks: ChainInterface$Blocks,
   config: ChainConfig,
   executor: ChainInterface$Executor,
+  genesis: ChainGenesis,
   state: ChainInterface$StateDb
 };
 
 export type ChainState = {
-  blockDb: ChainDb$Block,
+  blockDb: BlockDb,
   config: Config,
   chain: ChainConfig,
   l: Logger,
@@ -116,15 +131,8 @@ export type ChainState = {
   stateDb: StateDb
 };
 
-export type ChainDefinition$Execute = {
-  executor: (self: ChainState) => ChainInterface$Executor,
-  genesis: (self: ChainState) => void
-};
-
-export type ChainDefinitionLoose = ChainDefinition$Execute & {
-  config: ChainConfigLoose
-};
-
-export type ChainDefinition = ChainDefinition$Execute & {
-  config: ChainConfig
+export type ChainDefinition = {
+  config: ChainConfig,
+  initExecutor: (self: ChainState) => ChainInterface$Executor,
+  initGenesis: (self: ChainState) => ChainGenesis
 };

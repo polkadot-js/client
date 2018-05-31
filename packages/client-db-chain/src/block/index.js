@@ -3,21 +3,21 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { BaseDb } from '@polkadot/storage/types';
-import type { ChainDb$Block } from './types';
+import type { BaseDb } from '../types';
+import type { BlockDb } from './types';
 
-const wrapDb = require('@polkadot/storage/wrap');
-const expandKey = require('@polkadot/storage/create/key');
+const createBn = require('../db/bn');
+const createU8a = require('../db/u8a');
+const createDb = require('../db');
+const keys = require('./keys');
 
-const keys = require('./keys').keys;
-
-module.exports = function blockDb (baseDb: BaseDb): ChainDb$Block {
-  const db = wrapDb(baseDb);
+module.exports = function blockDb (baseDb: BaseDb): BlockDb {
+  const db = createDb(baseDb);
 
   return {
     db,
-    bestHash: expandKey(keys.bestHash, db),
-    bestNumber: expandKey(keys.bestNumber, db),
-    block: expandKey(keys.blockByHash, db)
+    bestHash: createU8a(db, keys.public.bestHash),
+    bestNumber: createBn(db, keys.public.bestNumber, 64),
+    block: createU8a(db, keys.public.blockByHash)
   };
 };

@@ -7,7 +7,7 @@ import type { ChainConfig$Nodes } from '@polkadot/client-chains/types';
 
 const KadDHT = require('libp2p-kad-dht');
 const Multicast = require('libp2p-mdns');
-const Multiplex = require('libp2p-multiplex');
+const Multiplex = require('libp2p-mplex');
 const Railing = require('libp2p-railing');
 const TCP = require('libp2p-tcp');
 const PeerInfo = require('peer-info');

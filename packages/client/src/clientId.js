@@ -13,7 +13,7 @@ const semcmp = require('semver-compare');
 
 const DEVELOPMENT = 'development';
 
-const name = '@polkadot';
+const name = 'polkadot-js';
 let pkgJson: PackageJson;
 let stability = 'release';
 

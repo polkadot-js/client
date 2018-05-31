@@ -14,7 +14,7 @@ describe('onPeerDiscovery', () => {
     self = {
       peers: new EventEmitter(),
       node: {
-        dial: jest.fn((peerInfo, protocol, cb) => cb(null, 'connection'))
+        dialProtocol: jest.fn((peerInfo, protocol, cb) => cb(null, 'connection'))
       }
     };
     peer = {
@@ -26,7 +26,7 @@ describe('onPeerDiscovery', () => {
 
   it('dials the node', (done) => {
     peer.addConnection = () => {
-      expect(self.node.dial).toHaveBeenCalled();
+      expect(self.node.dialProtocol).toHaveBeenCalled();
 
       done();
     };

@@ -7,12 +7,13 @@
   "scripts": {
     "build": "polkadot-dev-build-babel",
     "check": "eslint packages && flow check",
+    "clean": "polkadot-dev-clean-build",
     "start": "node packages/client/scripts/polkadot.js",
     "start2": "node packages/client/scripts/polkadot.js --db-path=./tmp --p2p-peers=/ip4/127.0.0.1/tcp/39933 --p2p-port=39934 --rpc-port=9934",
     "test": "jest --coverage"
   },
   "devDependencies": {
-    "@polkadot/dev": "^0.17.13",
-    "lerna": "^2.5.1"
+    "@polkadot/dev": "^0.19.12",
+    "lerna": "^2.11.0"
   }
 }

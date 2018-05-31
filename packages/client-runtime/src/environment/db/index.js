@@ -3,7 +3,7 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { BaseDb } from '@polkadot/storage/types';
+import type { BaseDb } from '@polkadot/client-db-chain/types';
 import type { Trie$Pairs } from '@polkadot/util-triehash/types';
 import type { DbState } from './types';
 
