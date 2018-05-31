@@ -30,7 +30,7 @@
     "test": "echo \"Tests only available from root wrapper\""
   },
   "devDependencies": {
-    "@polkadot/api-provider": "^0.13.3",
+    "@polkadot/api-provider": "^0.13.4",
     "@polkadot/client": "^0.10.4"
   },
   "dependencies": {
