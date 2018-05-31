@@ -15,7 +15,7 @@ describe('genesis', () => {
     const stateDb = memDb();
     const blockDb = memDb();
 
-    genesis = init(config, stateDb, blockDb).genesis;
+    genesis = init({ chain: 'test' }, config, stateDb, blockDb).genesis;
   });
 
   it('creates a correct genesis block (stateRoot)', () => {

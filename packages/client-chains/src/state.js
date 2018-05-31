@@ -12,7 +12,7 @@ const createStateDb = require('@polkadot/client-db-chain/state');
 const createRuntime = require('@polkadot/client-runtime');
 const logger = require('@polkadot/util/logger');
 
-module.exports = function state (chain: ChainDefinition, config: Config, baseStateDb: BaseDb, baseBlockDb: BaseDb): ChainState {
+module.exports = function state (config: Config, chain: ChainDefinition, baseStateDb: BaseDb, baseBlockDb: BaseDb): ChainState {
   const l = logger(`chain-${config.chain}`);
   const runtime = createRuntime(chain.config, baseStateDb);
   const blockDb = createBlockDb(baseBlockDb);

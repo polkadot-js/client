@@ -3,15 +3,16 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
+import type { Config } from '@polkadot/client/types';
 import type { BaseDb } from '@polkadot/client-db-chain/types';
 import type { ChainDefinition, ChainInterface } from './types';
 
 const createState = require('./state');
 
-module.exports = function init (chain: ChainDefinition, baseStateDb: BaseDb, baseBlockDb: BaseDb): ChainInterface {
-  const self = createState(chain, chain.config, baseStateDb, baseBlockDb);
-  const executor = chain.executor(self);
-  const genesis = chain.genesis(self);
+module.exports = function init (config: Config, chain: ChainDefinition, baseStateDb: BaseDb, baseBlockDb: BaseDb): ChainInterface {
+  const self = createState(config, chain, baseStateDb, baseBlockDb);
+  const executor = chain.initExecutor(self);
+  const genesis = chain.initGenesis(self);
 
   return {
     blocks: {

@@ -12,6 +12,7 @@ const initChain = require('./init');
 
 module.exports = function chains (config: Config, baseStateDb: BaseDb, baseBlockDb: BaseDb): ChainInterface {
   return initChain(
+    config,
     loadChain(config.chain),
     baseStateDb,
     baseBlockDb

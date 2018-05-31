@@ -9,6 +9,7 @@ import type { Config } from '@polkadot/client/types';
 import type { BlockDb } from '@polkadot/client-db-chain/block/types';
 import type { StateDb } from '@polkadot/client-db-chain/state/types';
 import type { RuntimeInterface } from '@polkadot/client-runtime/types';
+import type { Header } from '@polkadot/primitives/header';
 import type { Logger } from '@polkadot/util/types';
 
 export type ChainName = 'dev';
@@ -23,7 +24,7 @@ export type ChainConfig$Balances = Array<{
 }>;
 
 export type ChainGenesis = {
-  header: Uint8Array,
+  header: Header,
   hash: Uint8Array
 };
 
@@ -130,11 +131,8 @@ export type ChainState = {
   stateDb: StateDb
 };
 
-export type ChainDefinition$Execute = {
-  executor: (self: ChainState) => ChainInterface$Executor,
-  genesis: (self: ChainState) => void
-};
-
-export type ChainDefinition = ChainDefinition$Execute & {
-  config: ChainConfig
+export type ChainDefinition = {
+  config: ChainConfig,
+  initExecutor: (self: ChainState) => ChainInterface$Executor,
+  initGenesis: (self: ChainState) => ChainGenesis
 };
