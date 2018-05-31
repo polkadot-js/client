@@ -22,13 +22,12 @@ export type ChainConfig$Balances = Array<{
   balance: BN
 }>;
 
-export type ChainConfig$Genesis$Block = {
+export type ChainGenesis = {
   header: Uint8Array,
   hash: Uint8Array
 };
 
 export type ChainConfig$Genesis = {
-  block: ChainConfig$Genesis$Block,
   consensus: {
     authorities: Array<Uint8Array>,
     code: Uint8Array
@@ -118,6 +117,7 @@ export type ChainInterface = {
   blocks: ChainInterface$Blocks,
   config: ChainConfig,
   executor: ChainInterface$Executor,
+  genesis: ChainGenesis,
   state: ChainInterface$StateDb
 };
 

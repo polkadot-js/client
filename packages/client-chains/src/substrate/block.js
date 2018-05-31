@@ -3,14 +3,14 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { ChainState } from '../types';
+import type { ChainState, ChainGenesis } from '../types';
 
 const createBlock = require('@polkadot/primitives-builder/block');
 const encodeHeader = require('@polkadot/primitives-codec/header/encode');
 const blake2Asu8a = require('@polkadot/util-crypto/blake2/asU8a');
 const trieRoot = require('@polkadot/util-triehash/root');
 
-module.exports = function genesisBlock ({ stateDb, chain }: ChainState): void {
+module.exports = function genesisBlock ({ stateDb, chain }: ChainState): ChainGenesis {
   const block = createBlock({
     header: {
       stateRoot: stateDb.db.trieRoot(),
@@ -20,8 +20,8 @@ module.exports = function genesisBlock ({ stateDb, chain }: ChainState): void {
   const header = encodeHeader(block.header);
   const hash = blake2Asu8a(header, 256);
 
-  chain.genesis.block = {
-    header,
+  return {
+    header: block.header,
     hash
   };
 };

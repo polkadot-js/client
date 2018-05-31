@@ -3,7 +3,7 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { ChainConfig, ChainConfig$Genesis$Block } from '../types';
+import type { ChainConfig } from '../types';
 
 const BN = require('bn.js');
 
@@ -25,9 +25,6 @@ module.exports = ({
   codeHash,
   networkId: 12345,
   genesis: {
-    block: ({
-      // NOTE: will be filled in by the genesis execution
-    }: $Shape<ChainConfig$Genesis$Block>),
     consensus: {
       authorities,
       code

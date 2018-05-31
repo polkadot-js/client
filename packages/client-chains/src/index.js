@@ -8,25 +8,12 @@ import type { BaseDb } from '@polkadot/client-db-chain/types';
 import type { ChainInterface } from './types';
 
 const loadChain = require('./load');
-const createState = require('./state');
+const initChain = require('./init');
 
 module.exports = function chains (config: Config, baseStateDb: BaseDb, baseBlockDb: BaseDb): ChainInterface {
-  const chain = loadChain(config.chain);
-  const self = createState(chain, config, baseStateDb, baseBlockDb);
-
-  chain.genesis(self);
-
-  return {
-    blocks: {
-      getBestHash: self.blockDb.bestHash.get,
-      getBestNumber: self.blockDb.bestNumber.get,
-      getBlock: self.blockDb.block.get
-    },
-    config: chain.config,
-    executor: chain.executor(self),
-    state: {
-      getBlockHash: self.stateDb.system.blockHashAt.get,
-      getNonce: self.stateDb.system.accountIndexOf.get
-    }
-  };
+  return initChain(
+    loadChain(config.chain),
+    baseStateDb,
+    baseBlockDb
+  );
 };
