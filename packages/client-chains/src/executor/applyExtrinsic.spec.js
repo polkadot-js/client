@@ -31,7 +31,7 @@ describe('applyExtrinsic', () => {
       wasm: {}
     };
 
-    chain.executor = init(config, memoryDb(), memoryDb());
+    chain = init(config, memoryDb(), memoryDb());
   });
 
   beforeEach(() => {
