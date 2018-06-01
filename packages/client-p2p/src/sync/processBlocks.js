@@ -9,7 +9,7 @@ const u8aConcat = require('@polkadot/util/u8a/concat');
 
 module.exports = function processBlocks ({ l, chain, sync }: P2pState): void {
   const start = Date.now();
-  const startNumber = chain.blocks.getBestNumber().addn(1);
+  const startNumber = chain.blocks.bestNumber.get().addn(1);
   let nextNumber = startNumber;
   let count = 0;
 

@@ -3,7 +3,7 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { ChainGenesisState } from './types';
+import type { ChainGenesisState, ChainName } from './types';
 
 const assert = require('@polkadot/util/assert');
 

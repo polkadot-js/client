@@ -9,18 +9,15 @@ const timestampSet = require('@polkadot/primitives-builder/unchecked/timestampSe
 const encodeHeader = require('@polkadot/primitives-codec/header/encode');
 const encodeUtx = require('@polkadot/primitives-codec/unchecked/encode');
 const memoryDb = require('@polkadot/client-db/memory');
-const createStateDb = require('@polkadot/client-db-chain/state');
-const createRuntime = require('@polkadot/client-runtime');
 const keyring = require('@polkadot/util-keyring/testingPairs')();
 
 const init = require('../index');
 
 describe('applyExtrinsic', () => {
-  let executor;
-  let stateDb;
+  let chain;
 
   function getNextHeader (header) {
-    return executor.applyExtrinsic(
+    return chain.executor.applyExtrinsic(
       header,
       encodeUtx(
         timestampSet(100000)
@@ -33,19 +30,17 @@ describe('applyExtrinsic', () => {
       chain: 'dev',
       wasm: {}
     };
-    const runtime = createRuntime(memoryDb());
 
-    stateDb = createStateDb(runtime.environment.db);
-    executor = init(config, stateDb, memoryDb()).executor;
+    chain.executor = init(config, memoryDb(), memoryDb());
   });
 
   beforeEach(() => {
-    stateDb.staking.freeBalanceOf.set(69 + 42, keyring.one.publicKey());
-    stateDb.staking.freeBalanceOf.set(0, keyring.two.publicKey());
+    chain.state.staking.freeBalanceOf.set(69 + 42, keyring.one.publicKey());
+    chain.state.staking.freeBalanceOf.set(0, keyring.two.publicKey());
   });
 
   it('executes a basic transaction', () => {
-    executor.applyExtrinsic(
+    chain.executor.applyExtrinsic(
       getNextHeader(
         encodeHeader(
           createHeader({
@@ -62,10 +57,10 @@ describe('applyExtrinsic', () => {
     );
 
     expect(
-      stateDb.staking.freeBalanceOf.get(keyring.one.publicKey()).toNumber()
+      chain.state.staking.freeBalanceOf.get(keyring.one.publicKey()).toNumber()
     ).toEqual(42);
     expect(
-      stateDb.staking.freeBalanceOf.get(keyring.two.publicKey()).toNumber()
+      chain.state.staking.freeBalanceOf.get(keyring.two.publicKey()).toNumber()
     ).toEqual(69);
   });
 });

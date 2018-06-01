@@ -4,14 +4,12 @@
 // @flow
 
 import type { Storage$Section } from '@polkadot/storage/types';
-import type { BaseDb, WrapDb } from '../types';
-import type { StateDb } from './types';
+import type { BaseDb, StateDb, WrapDb } from '../types';
 
 const storage = require('@polkadot/storage');
 
 const createAcc = require('../db/account');
 const createArrAcc = require('../db/arrayAccount');
-const createArrayBn = require('../db/arrayBn');
 const createArrU8a = require('../db/arrayU8a');
 const createBn = require('../db/bn');
 const createU8a = require('../db/u8a');
@@ -54,9 +52,7 @@ const governance = (db: WrapDb, { public: { approvalsRatio } }: Storage$Section)
   approvalsRatio: createBn(db, approvalsRatio, BLOCKNUM_SIZE)
 });
 
-const parachains = (db: WrapDb, { public: { activeParachains } }: Storage$Section) => ({
-  activeParachains: createArrayBn(db, activeParachains, 32)
-});
+const parachains = (db: WrapDb, { public: { activeParachains } }: Storage$Section) => ({});
 
 const session = (db: WrapDb, { public: { length, validators } }: Storage$Section) => ({
   length: createBn(db, length, BLOCKNUM_SIZE),

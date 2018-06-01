@@ -9,7 +9,7 @@ import type { P2pState, PeerInterface } from '../types';
 const blockRequest = require('../message/blockRequest');
 
 module.exports = function requestBlocks (self: P2pState, peer: PeerInterface): void {
-  const from = self.chain.blocks.getBestNumber().addn(1);
+  const from = self.chain.blocks.bestNumber.get().addn(1);
 
   // TODO: This assumes no stale block downloading
   if (self.sync.blockRequests[peer.id] || from.gt(peer.getBestNumber())) {

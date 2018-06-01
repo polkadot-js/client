@@ -35,12 +35,87 @@ export type StorageMethod$U8a = StorageMethod<Uint8Array, Uint8Array>;
 
 export type StorageMethod$ArrayAccount = StorageMethod<Array<Uint8Array>, Array<Uint8Array>>;
 
-export type StorageMethod$ArrayBn = StorageMethod<Array<BN | number>, Array<BN>>;
-
 export type StorageMethod$ArrayU8a = StorageMethod<Array<Uint8Array>, Array<Uint8Array>>;
 
-export type StorageMethods = StorageMethod$Account | StorageMethod$Bn | StorageMethod$U8a | StorageMethod$ArrayBn | StorageMethod$ArrayU8a | StorageMethod$ArrayAccount;
+export type StorageMethods = StorageMethod$Account | StorageMethod$Bn | StorageMethod$U8a | StorageMethod$ArrayU8a | StorageMethod$ArrayAccount;
 
 export type WrappedDb<O> = O & {
   db: WrapDb
 }
+
+export type BlockDb = WrappedDb<{
+  bestHash: StorageMethod$U8a,
+  bestNumber: StorageMethod$Bn,
+  block: StorageMethod$U8a
+}>;
+
+export type StateDb$Consensus = {
+  authorityAt: StorageMethod$Account,
+  authorityCount: StorageMethod$Bn,
+  code: StorageMethod$U8a
+};
+
+export type StateDb$Council = {
+  activeCouncil: StorageMethod$ArrayU8a,
+  candidacyBond: StorageMethod$Bn,
+  carryCount: StorageMethod$Bn,
+  desiredSeats: StorageMethod$Bn,
+  inactiveGracePeriod: StorageMethod$Bn,
+  presentationDuration: StorageMethod$Bn,
+  presentSlashPerVoter: StorageMethod$Bn,
+  termDuration: StorageMethod$Bn,
+  votingBond: StorageMethod$Bn,
+  votingPeriod: StorageMethod$Bn
+};
+
+export type StateDb$CouncilVoting = {
+  cooloffPeriod: StorageMethod$Bn,
+  votingPeriod: StorageMethod$Bn
+};
+
+export type StateDb$Democracy = {
+  launchPeriod: StorageMethod$Bn,
+  minimumDeposit: StorageMethod$Bn,
+  votingPeriod: StorageMethod$Bn
+};
+
+export type StateDb$Governance = {
+  approvalsRatio: StorageMethod$Bn
+};
+
+export type StateDb$Parachains = {};
+
+export type StateDb$Session = {
+  length: StorageMethod$Bn,
+  validators: StorageMethod$ArrayAccount
+};
+
+export type StateDb$Staking = {
+  bondingDuration: StorageMethod$Bn,
+  currentEra: StorageMethod$Bn,
+  freeBalanceOf: StorageMethod$Bn,
+  intentions: StorageMethod$ArrayAccount,
+  sessionsPerEra: StorageMethod$Bn,
+  transactionFee: StorageMethod$Bn,
+  validatorCount: StorageMethod$Bn
+};
+
+export type StateDb$System = {
+  accountIndexOf: StorageMethod$Bn,
+  blockHashAt: StorageMethod$U8a
+};
+
+export type StateDb$Timestamp = {};
+
+export type StateDb = WrappedDb<{
+  consensus: StateDb$Consensus,
+  council: StateDb$Council,
+  councilVoting: StateDb$CouncilVoting,
+  democracy: StateDb$Democracy,
+  governance: StateDb$Governance,
+  parachains: StateDb$Parachains,
+  session: StateDb$Session,
+  staking: StateDb$Staking,
+  system: StateDb$System,
+  timestamp: StateDb$Timestamp
+}>;

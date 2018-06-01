@@ -21,7 +21,7 @@ module.exports = function queueBlocks (self: P2pState, peer: PeerInterface, { bl
   }
 
   const count = blocks.reduce((count, block) => {
-    const hasImported = self.chain.blocks.getBlock(block.hash).length !== 0;
+    const hasImported = self.chain.blocks.block.get(block.hash).length !== 0;
     // flowlint-next-line unclear-type:off
     const { number } = decodeHeader(((block.header: any): Uint8Array));
     const hasQueued = !!self.sync.blockQueue[number];

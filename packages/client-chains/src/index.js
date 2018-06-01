@@ -15,20 +15,13 @@ const createState = require('./state');
 module.exports = function chains (config: Config, baseStateDb: BaseDb, baseBlockDb: BaseDb): ChainInterface {
   const initial = loadChain(config.chain);
   const self = createState(config, baseStateDb, baseBlockDb);
-  const executor = createExecutor(self);
   const genesis = createGenesis(self, initial);
+  const executor = createExecutor(self, genesis);
 
   return {
-    blocks: {
-      getBestHash: self.blockDb.bestHash.get,
-      getBestNumber: self.blockDb.bestNumber.get,
-      getBlock: self.blockDb.block.get
-    },
+    blocks: self.blockDb,
     executor,
     genesis,
-    state: {
-      getBlockHash: self.stateDb.system.blockHashAt.get,
-      getNonce: self.stateDb.system.accountIndexOf.get
-    }
+    state: self.stateDb
   };
 };

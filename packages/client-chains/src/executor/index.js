@@ -4,7 +4,7 @@
 // @flow
 
 import type BN from 'bn.js';
-import type { ChainState, ChainInterface$Executor, ChainInterface$Executor$BlockImportResult } from '../types';
+import type { ChainGenesis, ChainState, ChainInterface$Executor, ChainInterface$Executor$BlockImportResult } from '../types';
 
 const applyExtrinsic = require('./applyExtrinsic');
 const executeBlock = require('./executeBlock');
@@ -12,17 +12,17 @@ const finaliseBlock = require('./finaliseBlock');
 const generateBlock = require('./generateBlock');
 const importBlock = require('./importBlock');
 
-module.exports = function executor (self: ChainState): ChainInterface$Executor {
+module.exports = function executor (self: ChainState, { code }: ChainGenesis): ChainInterface$Executor {
   return {
     executeBlock: (block: Uint8Array): boolean =>
-      executeBlock(self, block),
+      executeBlock(self, code, block),
     applyExtrinsic: (header: Uint8Array, utx: Uint8Array): Uint8Array =>
-      applyExtrinsic(self, header, utx),
+      applyExtrinsic(self, code, header, utx),
     finaliseBlock: (header: Uint8Array): Uint8Array =>
-      finaliseBlock(self, header),
+      finaliseBlock(self, code, header),
     generateBlock: (number: BN | number, utxs: Array<Uint8Array>, timestamp?: number = Date.now()): Uint8Array =>
-      generateBlock(self, number, utxs, timestamp),
+      generateBlock(self, code, number, utxs, timestamp),
     importBlock: (block: Uint8Array): ?ChainInterface$Executor$BlockImportResult =>
-      importBlock(self, block)
+      importBlock(self, code, block)
   };
 };

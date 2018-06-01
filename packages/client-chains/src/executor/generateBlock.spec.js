@@ -7,8 +7,6 @@ const uncheckedSign = require('@polkadot/primitives-builder/unchecked/uncheckedS
 const encodeUtx = require('@polkadot/primitives-codec/unchecked/encode');
 const hexToU8a = require('@polkadot/util/hex/toU8a');
 const memoryDb = require('@polkadot/client-db/memory');
-const createStateDb = require('@polkadot/client-db-chain/state');
-const createRuntime = require('@polkadot/client-runtime');
 const keyring = require('@polkadot/util-keyring/testingPairs')();
 
 const init = require('../index');
@@ -26,10 +24,8 @@ describe.skip('generateBlock', () => {
       chain: 'dev',
       wasm: {}
     };
-    const runtime = createRuntime(memoryDb());
 
-    stateDb = createStateDb(runtime.environment.db);
-    executor = init(config, stateDb, memoryDb()).executor;
+    executor = init(config, memoryDb(), memoryDb()).executor;
 
     const threePublicKey = hexToU8a('0x0303030303030303030303030303030303030303030303030303030303030303');
 

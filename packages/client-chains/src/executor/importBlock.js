@@ -10,11 +10,11 @@ const blake2Asu8a = require('@polkadot/util-crypto/blake2/asU8a');
 
 const executeBlock = require('./executeBlock');
 
-module.exports = function importBlock (self: ChainState, block: Uint8Array): ?ChainInterface$Executor$BlockImportResult {
+module.exports = function importBlock (self: ChainState, code: Uint8Array, block: Uint8Array): ?ChainInterface$Executor$BlockImportResult {
   self.l.debug(() => 'Importing block');
 
   const start = Date.now();
-  const result = executeBlock(self, block);
+  const result = executeBlock(self, code, block);
 
   if (!result) {
     self.l.error(`Block import failed (${Date.now() - start}ms elapsed)`);

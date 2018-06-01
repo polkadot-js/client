@@ -6,8 +6,7 @@
 
 import type BN from 'bn.js';
 import type { Config } from '@polkadot/client/types';
-import type { BlockDb } from '@polkadot/client-db-chain/block/types';
-import type { StateDb } from '@polkadot/client-db-chain/state/types';
+import type { BlockDb, StateDb } from '@polkadot/client-db-chain/types';
 import type { RuntimeInterface } from '@polkadot/client-runtime/types';
 import type { Header } from '@polkadot/primitives/header';
 import type { Logger } from '@polkadot/util/types';
@@ -26,12 +25,6 @@ export type ChainGenesis = {
   headerHash: Uint8Array
 };
 
-export type ChainInterface$Blocks = {
-  getBestHash: () => Uint8Array,
-  getBestNumber: () => BN,
-  getBlock: (hash: Uint8Array) => Uint8Array
-};
-
 export type ChainInterface$Executor$BlockImportResult = {
   body: Uint8Array,
   hash: Uint8Array,
@@ -46,16 +39,11 @@ export type ChainInterface$Executor = {
   importBlock (block: Uint8Array): ?ChainInterface$Executor$BlockImportResult
 };
 
-export type ChainInterface$StateDb = {
-  getBlockHash: (number: BN | number) => Uint8Array,
-  getNonce: (publicKey: Uint8Array) => BN
-};
-
 export type ChainInterface = {
-  blocks: ChainInterface$Blocks,
+  blocks: BlockDb,
   executor: ChainInterface$Executor,
   genesis: ChainGenesis,
-  state: ChainInterface$StateDb
+  state: StateDb
 };
 
 export type ChainState = {

@@ -7,11 +7,11 @@ import type { ChainState } from '../types';
 
 const call = require('./call');
 
-module.exports = function executeBlock (self: ChainState, block: Uint8Array): boolean {
+module.exports = function executeBlock (self: ChainState, code: Uint8Array, block: Uint8Array): boolean {
   self.l.debug(() => 'Executing block');
 
   const start = Date.now();
-  const result = call(self, 'execute_block')(block);
+  const result = call(self, code, 'execute_block')(block);
 
   self.l.debug(() => `Block execution completed (${Date.now() - start}ms)`);
 

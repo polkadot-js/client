@@ -11,8 +11,8 @@ const u8aToHex = require('@polkadot/util/u8a/toHex');
 
 const call = require('./call');
 
-module.exports = function callAsU8a (self: ChainState, name: string): CallU8a {
-  const fn = call(self, name);
+module.exports = function callAsU8a (self: ChainState, code: Uint8Array, name: string): CallU8a {
+  const fn = call(self, code, name);
   const { l, heap } = self.runtime.environment;
 
   return (...data: Array<Uint8Array>): Uint8Array => {

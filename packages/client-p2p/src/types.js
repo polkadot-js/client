@@ -8,8 +8,10 @@ import type LibP2P, { LibP2P$Connection } from 'libp2p';
 import type EventEmitter from 'eventemitter3';
 import type { Logger } from '@polkadot/util/types';
 import type { Config } from '@polkadot/client/types';
-import type { ChainInterface, ChainConfig$Nodes } from '@polkadot/client-chains/types';
+import type { ChainInterface } from '@polkadot/client-chains/types';
 import type { SyncState } from './sync/types';
+
+export type P2pNodes = Array<string>;
 
 export type RawMessage = {
   // flowlint-next-line unclear-type: off
@@ -35,7 +37,7 @@ export type P2pConfig = {
   address: string,
   clientId: string,
   maxPeers: number,
-  peers?: ChainConfig$Nodes,
+  peers?: P2pNodes,
   port: number
 };
 

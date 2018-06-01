@@ -17,7 +17,7 @@ const bnToBn = require('@polkadot/util/bn/toBn');
 const applyExtrinsic = require('./applyExtrinsic');
 const finaliseBlock = require('./finaliseBlock');
 
-module.exports = function generateBlock (self: ChainState, _number: number | BN, utxs: Array<Uint8Array>, timestamp: number): Uint8Array {
+module.exports = function generateBlock (self: ChainState, code: Uint8Array, _number: number | BN, utxs: Array<Uint8Array>, timestamp: number): Uint8Array {
   const start = Date.now();
   const number = bnToBn(_number);
 
@@ -32,8 +32,8 @@ module.exports = function generateBlock (self: ChainState, _number: number | BN,
       extrinsicsRoot
     })
   );
-  const header = finaliseBlock(self, txs.reduce((hdr, utx) => {
-    return applyExtrinsic(self, hdr, utx);
+  const header = finaliseBlock(self, code, txs.reduce((hdr, utx) => {
+    return applyExtrinsic(self, code, hdr, utx);
   }, empty));
   const block = encodeBlockRaw(header, timestamp, utxs);
 

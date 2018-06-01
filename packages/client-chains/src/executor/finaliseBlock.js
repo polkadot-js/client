@@ -7,11 +7,11 @@ import type { ChainState } from '../types';
 
 const call = require('./callAsU8a');
 
-module.exports = function finaliseBlock (self: ChainState, header: Uint8Array): Uint8Array {
+module.exports = function finaliseBlock (self: ChainState, code: Uint8Array, header: Uint8Array): Uint8Array {
   self.l.debug(() => 'Finalising block');
 
   const start = Date.now();
-  const result = call(self, 'finalise_block')(header);
+  const result = call(self, code, 'finalise_block')(header);
 
   self.l.debug(() => `Block finalised (${Date.now() - start}ms)`);
 
