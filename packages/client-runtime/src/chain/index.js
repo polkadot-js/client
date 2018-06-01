@@ -5,12 +5,13 @@
 
 import type { RuntimeEnv, RuntimeInterface$Chain } from '../types';
 
-module.exports = function ({ l, chain }: RuntimeEnv): RuntimeInterface$Chain {
+module.exports = function ({ l }: RuntimeEnv): RuntimeInterface$Chain {
   return {
     chain_id: () => {
-      l.debug(() => ['chain_id', '->', chain.networkId]);
+      l.debug(() => ['chain_id', '->', 0]);
 
-      return chain.networkId;
+      // FIXME This is not correct, to be retrieved
+      return 0;
     }
   };
 };

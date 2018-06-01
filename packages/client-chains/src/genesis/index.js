@@ -3,13 +3,13 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { ChainState, ChainGenesis } from '../types';
+import type { ChainState, ChainGenesis, ChainGenesisState } from '../types';
 
 const initBlock = require('./block');
 const initState = require('./state');
 
-module.exports = function genesis (self: ChainState): ChainGenesis {
-  initState(self);
+module.exports = function genesis (self: ChainState, state: ChainGenesisState): ChainGenesis {
+  initState(self, state);
 
   return initBlock(self);
 };

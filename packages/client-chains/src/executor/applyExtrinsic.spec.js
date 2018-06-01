@@ -8,14 +8,12 @@ const uncheckedSign = require('@polkadot/primitives-builder/unchecked/uncheckedS
 const timestampSet = require('@polkadot/primitives-builder/unchecked/timestampSet');
 const encodeHeader = require('@polkadot/primitives-codec/header/encode');
 const encodeUtx = require('@polkadot/primitives-codec/unchecked/encode');
-const chain = require('@polkadot/client-chains/chain-dev/config');
 const memoryDb = require('@polkadot/client-db/memory');
-const createDb = require('@polkadot/client-db-chain/state');
+const createStateDb = require('@polkadot/client-db-chain/state');
 const createRuntime = require('@polkadot/client-runtime');
 const keyring = require('@polkadot/util-keyring/testingPairs')();
-const l = require('@polkadot/util/logger')('test');
 
-const createExecutor = require('./index');
+const init = require('../index');
 
 describe('applyExtrinsic', () => {
   let executor;
@@ -32,16 +30,18 @@ describe('applyExtrinsic', () => {
 
   beforeEach(() => {
     const config = {
+      chain: 'dev',
       wasm: {}
     };
-    const runtime = createRuntime(chain, memoryDb());
+    const runtime = createRuntime(memoryDb());
 
-    stateDb = createDb(runtime.environment.db);
-    executor = createExecutor({ config, runtime, chain, stateDb, l });
+    stateDb = createStateDb(runtime.environment.db);
+    executor = init(config, stateDb, memoryDb()).executor;
   });
 
   beforeEach(() => {
     stateDb.staking.freeBalanceOf.set(69 + 42, keyring.one.publicKey());
+    stateDb.staking.freeBalanceOf.set(0, keyring.two.publicKey());
   });
 
   it('executes a basic transaction', () => {

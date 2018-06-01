@@ -35,9 +35,11 @@ export type StorageMethod$U8a = StorageMethod<Uint8Array, Uint8Array>;
 
 export type StorageMethod$ArrayAccount = StorageMethod<Array<Uint8Array>, Array<Uint8Array>>;
 
+export type StorageMethod$ArrayBn = StorageMethod<Array<BN | number>, Array<BN>>;
+
 export type StorageMethod$ArrayU8a = StorageMethod<Array<Uint8Array>, Array<Uint8Array>>;
 
-export type StorageMethods = StorageMethod$Account | StorageMethod$Bn | StorageMethod$U8a | StorageMethod$ArrayU8a | StorageMethod$ArrayAccount;
+export type StorageMethods = StorageMethod$Account | StorageMethod$Bn | StorageMethod$U8a | StorageMethod$ArrayBn | StorageMethod$ArrayU8a | StorageMethod$ArrayAccount;
 
 export type WrappedDb<O> = O & {
   db: WrapDb

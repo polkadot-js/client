@@ -6,15 +6,12 @@ const stakingTransfer = require('@polkadot/primitives-builder/transaction/stakin
 const uncheckedSign = require('@polkadot/primitives-builder/unchecked/uncheckedSign');
 const encodeUtx = require('@polkadot/primitives-codec/unchecked/encode');
 const hexToU8a = require('@polkadot/util/hex/toU8a');
-const chain = require('@polkadot/client-chains/chain-dev/config');
 const memoryDb = require('@polkadot/client-db/memory');
-const createBlockDb = require('@polkadot/client-db-chain/block');
 const createStateDb = require('@polkadot/client-db-chain/state');
 const createRuntime = require('@polkadot/client-runtime');
 const keyring = require('@polkadot/util-keyring/testingPairs')();
-const l = require('@polkadot/util/logger')('test');
 
-const createExecutor = require('./index');
+const init = require('../index');
 
 const TIMESTAMP = '71000000ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff00000000000000000020a107000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000';
 const TRANSFER = '910000002f8c6129d816cf51c374bc7f08c3e63ed156cf78aefb4a6550d97b87997977ee000000000000000022d75a980182b10ab7d54bfed3c964073a0ee172f3daa62325af021a68f707511a45000000000000005f9832c5a4a39e2dd4a3a0c5b400e9836beb362cb8f7d845a8291a2ae6fe366612e080e4acd0b5a75c3d0b6ee69614a68fb63698c1e76bf1f2dcd8fa617ddf05';
@@ -22,18 +19,17 @@ const TRANSFER = '910000002f8c6129d816cf51c374bc7f08c3e63ed156cf78aefb4a6550d97b
 // FIXME we are out of date with the runtime/storage
 describe.skip('generateBlock', () => {
   let executor;
-  let blockDb;
   let stateDb;
 
   beforeEach(() => {
     const config = {
+      chain: 'dev',
       wasm: {}
     };
-    const runtime = createRuntime(chain, memoryDb());
+    const runtime = createRuntime(memoryDb());
 
-    blockDb = createBlockDb(memoryDb());
     stateDb = createStateDb(runtime.environment.db);
-    executor = createExecutor({ config, runtime, chain, blockDb, stateDb, l });
+    executor = init(config, stateDb, memoryDb()).executor;
 
     const threePublicKey = hexToU8a('0x0303030303030303030303030303030303030303030303030303030303030303');
 

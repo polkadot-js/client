@@ -7,48 +7,68 @@ const uncheckedSign = require('@polkadot/primitives-builder/unchecked/uncheckedS
 const createBlock = require('@polkadot/primitives-builder/block');
 const encodeBlock = require('@polkadot/primitives-codec/block/encode');
 const hexToU8a = require('@polkadot/util/hex/toU8a');
-const chain = require('@polkadot/client-chains/chain-dev/config');
 const memoryDb = require('@polkadot/client-db/memory');
 const createStateDb = require('@polkadot/client-db-chain/state');
 const createRuntime = require('@polkadot/client-runtime');
 const keyring = require('@polkadot/util-keyring/testingPairs')();
-const l = require('@polkadot/util/logger')('test');
 
-const createExecutor = require('./index');
+const init = require('../index');
 
-// FIXME we are out of date with the runtime/storage
-describe.skip('executeBlock', () => {
+describe('executeBlock', () => {
   let executor;
   let stateDb;
 
   beforeEach(() => {
     const config = {
+      chain: 'dev',
       wasm: {}
     };
-    const runtime = createRuntime(chain, memoryDb());
+    const runtime = createRuntime(memoryDb());
 
     stateDb = createStateDb(runtime.environment.db);
-    executor = createExecutor({ config, runtime, chain, stateDb, l });
+    executor = init(config, stateDb, memoryDb()).executor;
   });
 
   beforeEach(() => {
-    const threePublicKey = hexToU8a('0x0303030303030303030303030303030303030303030303030303030303030303');
+    // const threePublicKey = hexToU8a('0x0303030303030303030303030303030303030303030303030303030303030303');
 
     stateDb.governance.approvalsRatio.set(667);
     stateDb.session.length.set(2);
-    stateDb.session.validatorCount.set(3);
-    stateDb.session.validator.set(keyring.one.publicKey(), 0);
-    stateDb.session.validator.set(keyring.two.publicKey(), 1);
-    stateDb.session.validator.set(threePublicKey, 2);
+    // stateDb.session.validatorCount.set(3);
+    // stateDb.session.validator.set(keyring.one.publicKey(), 0);
+    // stateDb.session.validator.set(keyring.two.publicKey(), 1);
+    // stateDb.session.validator.set(threePublicKey, 2);
     stateDb.staking.freeBalanceOf.set(69 + 42, keyring.one.publicKey());
     stateDb.staking.currentEra.set(0);
-    stateDb.staking.intentLength.set(3);
-    stateDb.staking.intent.set(keyring.one.publicKey(), 0);
-    stateDb.staking.intent.set(keyring.two.publicKey(), 1);
-    stateDb.staking.intent.set(threePublicKey, 2);
+    // stateDb.staking.intentLength.set(3);
+    // stateDb.staking.intent.set(keyring.one.publicKey(), 0);
+    // stateDb.staking.intent.set(keyring.two.publicKey(), 1);
+    // stateDb.staking.intent.set(threePublicKey, 2);
     stateDb.staking.sessionsPerEra.set(2);
     stateDb.staking.validatorCount.set(3);
     stateDb.system.blockHashAt.set(hexToU8a('0x4545454545454545454545454545454545454545454545454545454545454545'), 0);
+
+    console.error('trieRoot', stateDb.db.trieRoot());
+  });
+
+  it('executes with no external extrinsics', () => {
+    expect(
+      executor.executeBlock(
+        encodeBlock(
+          createBlock({
+            header: {
+              parentHash: stateDb.system.blockHashAt.get(0),
+              number: 1,
+              stateRoot: new Uint8Array([
+                202, 62, 55, 51, 175, 184, 11, 195, 85, 147, 88, 241, 90, 22, 236, 240, 90, 188, 77, 134, 134, 70, 57, 104, 69, 94, 216, 123, 99, 229, 230, 24
+              ])
+            },
+            timestamp: 100000,
+            transactions: []
+          })
+        )
+      )
+    ).toBe(true);
   });
 
   it('executes a basic block', () => {

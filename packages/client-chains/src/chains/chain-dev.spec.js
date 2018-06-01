@@ -3,10 +3,8 @@
 // of the ISC license. See the LICENSE file for details.
 
 const memDb = require('@polkadot/client-db/memory');
-const hexToU8a = require('@polkadot/util/hex/toU8a');
 
-const init = require('../init');
-const config = require('./index');
+const init = require('../index');
 
 describe('genesis', () => {
   let genesis;
@@ -15,14 +13,16 @@ describe('genesis', () => {
     const stateDb = memDb();
     const blockDb = memDb();
 
-    genesis = init({ chain: 'test' }, config, stateDb, blockDb).genesis;
+    genesis = init({ chain: 'dev' }, stateDb, blockDb).genesis;
   });
 
   it('creates a correct genesis block (stateRoot)', () => {
     expect(
       genesis.header.stateRoot
     ).toEqual(
-      new Uint8Array([133, 218, 140, 182, 43, 145, 77, 72, 119, 152, 247, 190, 16, 37, 199, 164, 59, 142, 238, 150, 62, 132, 122, 69, 112, 213, 167, 118, 182, 71, 247, 210])
+      new Uint8Array([
+        183, 79, 108, 134, 124, 245, 189, 86, 29, 84, 33, 80, 31, 234, 186, 201, 226, 21, 241, 214, 43, 76, 90, 92, 146, 31, 182, 6, 147, 161, 56, 103
+      ])
     );
   });
 
@@ -30,15 +30,19 @@ describe('genesis', () => {
     expect(
       genesis.header.extrinsicsRoot
     ).toEqual(
-      hexToU8a('0x56e81f171bcc55a6ff8345e692c0f86e5b48e01b996cadc001622fb5e363b421')
+      new Uint8Array([
+        86, 232, 31, 23, 27, 204, 85, 166, 255, 131, 69, 230, 146, 192, 248, 110, 91, 72, 224, 27, 153, 108, 173, 192, 1, 98, 47, 181, 227, 99, 180, 33
+      ])
     );
   });
 
   it('creates a correct block hash', () => {
     expect(
-      genesis.hash
+      genesis.headerHash
     ).toEqual(
-      new Uint8Array([84, 57, 249, 216, 185, 26, 248, 116, 15, 160, 105, 99, 44, 179, 200, 161, 64, 248, 104, 240, 111, 84, 182, 134, 130, 50, 37, 138, 242, 42, 27, 135])
+      new Uint8Array([
+        168, 135, 224, 93, 140, 222, 226, 83, 13, 116, 138, 197, 164, 6, 48, 190, 101, 18, 221, 166, 40, 179, 158, 112, 133, 154, 215, 198, 177, 76, 212, 228
+      ])
     );
   });
 });

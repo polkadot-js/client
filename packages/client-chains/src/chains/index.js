@@ -3,10 +3,10 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { ChainDefinition, ChainName } from './types';
+import type { ChainGenesisState } from '../types';
 
-const dev = require('./chain-dev');
+const dev = (require('./chain-dev.json'): ChainGenesisState);
 
 module.exports = ({
   dev
-}: { [ChainName]: ChainDefinition });
+}: { [ChainName]: ChainGenesisState });

@@ -11,6 +11,7 @@ const storage = require('@polkadot/storage');
 
 const createAcc = require('../db/account');
 const createArrAcc = require('../db/arrayAccount');
+const createArrayBn = require('../db/arrayBn');
 const createArrU8a = require('../db/arrayU8a');
 const createBn = require('../db/bn');
 const createU8a = require('../db/u8a');
@@ -53,6 +54,10 @@ const governance = (db: WrapDb, { public: { approvalsRatio } }: Storage$Section)
   approvalsRatio: createBn(db, approvalsRatio, BLOCKNUM_SIZE)
 });
 
+const parachains = (db: WrapDb, { public: { activeParachains } }: Storage$Section) => ({
+  activeParachains: createArrayBn(db, activeParachains, 32)
+});
+
 const session = (db: WrapDb, { public: { length, validators } }: Storage$Section) => ({
   length: createBn(db, length, BLOCKNUM_SIZE),
   validators: createArrAcc(db, validators)
@@ -85,6 +90,7 @@ module.exports = function createState (baseDb: BaseDb): StateDb {
     councilVoting: councilVoting(db, storage.councilVoting),
     democracy: democracy(db, storage.democracy),
     governance: governance(db, storage.governance),
+    parachains: parachains(db, storage.parachains),
     session: session(db, storage.session),
     staking: staking(db, storage.staking),
     system: system(db, storage.system),

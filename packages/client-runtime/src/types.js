@@ -3,7 +3,6 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { ChainConfig } from '@polkadot/client-chains/types';
 import type { BaseDb } from '@polkadot/client-db-chain/types';
 import type { Logger } from '@polkadot/util/types';
 import type { SizeUsed } from './environment/heap/types';
@@ -25,7 +24,6 @@ export type RuntimeEnv$Heap = {
 };
 
 export type RuntimeEnv = {
-  chain: ChainConfig,
   heap: RuntimeEnv$Heap,
   l: Logger,
   db: BaseDb
