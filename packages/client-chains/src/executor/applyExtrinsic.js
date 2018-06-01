@@ -9,15 +9,15 @@ const u8aConcat = require('@polkadot/util/u8a/concat');
 
 const call = require('./callAsU8a');
 
-module.exports = function executeTransaction (self: ChainState, header: Uint8Array, utx: Uint8Array): Uint8Array {
-  self.l.debug(() => 'Executing transaction');
+module.exports = function applyExtrinsic (self: ChainState, header: Uint8Array, utx: Uint8Array): Uint8Array {
+  self.l.debug(() => 'Apply extrinsic');
 
   const start = Date.now();
-  const result = call(self, 'execute_transaction')(
+  const result = call(self, 'apply_extrinsic')(
     u8aConcat(header, utx)
   );
 
-  self.l.debug(() => `Transaction execution completed (${Date.now() - start}ms)`);
+  self.l.debug(() => `Apply extrinsic completed (${Date.now() - start}ms)`);
 
   return result;
 };

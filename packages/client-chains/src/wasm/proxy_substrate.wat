@@ -9,8 +9,8 @@
       (param i32 i32) (result i64)
     )
   )
-  (import "proxy" "execute_transaction"
-    (func $execute_transaction
+  (import "proxy" "apply_extrinsic"
+    (func $apply_extrinsic
       (param i32 i32) (result i64)
     )
   )
@@ -58,12 +58,12 @@
     )
   )
 
-  ;; proxied execute_transaction exported
-  (func (export "execute_transaction")
+  ;; proxied apply_extrinsic exported
+  (func (export "apply_extrinsic")
     (param i32 i32) (result i32)
 
     (call $result_wrap
-      (call $execute_transaction
+      (call $apply_extrinsic
         (get_local 0)
         (get_local 1)
       )

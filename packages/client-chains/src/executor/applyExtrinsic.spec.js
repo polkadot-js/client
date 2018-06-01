@@ -17,12 +17,12 @@ const l = require('@polkadot/util/logger')('test');
 
 const createExecutor = require('./index');
 
-describe('executeTransaction', () => {
+describe('applyExtrinsic', () => {
   let executor;
   let stateDb;
 
   function getNextHeader (header) {
-    return executor.executeTransaction(
+    return executor.applyExtrinsic(
       header,
       encodeUtx(
         timestampSet(100000)
@@ -45,7 +45,7 @@ describe('executeTransaction', () => {
   });
 
   it('executes a basic transaction', () => {
-    executor.executeTransaction(
+    executor.applyExtrinsic(
       getNextHeader(
         encodeHeader(
           createHeader({

@@ -6,13 +6,6 @@
   "engines": {
     "node": ">=8.0"
   },
-  "bin": {
-    "polkadot-wasm-wat2wasm": "./scripts/polkadot-wasm-wat2wasm.sh",
-    "polkadot-wasm-wasm2wat": "./scripts/polkadot-wasm-wasm2wat.sh",
-    "polkadot-wasm-wasm2js": "./scripts/polkadot-wasm-wasm2js.js",
-    "polkadot-wasm-build-wabt": "./scripts/polkadot-wasm-build-wabt.sh",
-    "polkadot-wasm-build-binaryen": "./scripts/polkadot-wasm-build-binaryen.sh"
-  },
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org"

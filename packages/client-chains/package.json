@@ -45,6 +45,6 @@
     "@polkadot/primitives-codec": "^0.17.7",
     "@polkadot/storage": "^0.17.7",
     "@polkadot/util-keyring": "^0.22.2",
-    "@polkadot/wasm-bin": "paritytech/polkadot-wasm-bin#bfc718615463a2763b25f7b231792201a4593113"
+    "@polkadot/wasm-bin": "paritytech/polkadot-wasm-bin#b0f8ff49555ff927c937a182b652a2012b858f28"
   }
 }

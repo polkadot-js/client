@@ -14,7 +14,7 @@ const encodeHeader = require('@polkadot/primitives-codec/header/encode');
 const encodeUtx = require('@polkadot/primitives-codec/unchecked/encode');
 const bnToBn = require('@polkadot/util/bn/toBn');
 
-const executeTx = require('./executeTransaction');
+const applyExtrinsic = require('./applyExtrinsic');
 const finaliseBlock = require('./finaliseBlock');
 
 module.exports = function generateBlock (self: ChainState, _number: number | BN, utxs: Array<Uint8Array>, timestamp: number): Uint8Array {
@@ -33,7 +33,7 @@ module.exports = function generateBlock (self: ChainState, _number: number | BN,
     })
   );
   const header = finaliseBlock(self, txs.reduce((hdr, utx) => {
-    return executeTx(self, hdr, utx);
+    return applyExtrinsic(self, hdr, utx);
   }, empty));
   const block = encodeBlockRaw(header, timestamp, utxs);
 
