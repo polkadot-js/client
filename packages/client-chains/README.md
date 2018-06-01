@@ -23,13 +23,13 @@ The next is an intermediate compilation step that takes the raw code and makes i
 First update the dependencies, e.g. binaryen and wabt (when not already available in the project root `tmp`) -
 
 ```sh
-$ scripts/polkadot-wasm-build-binaryen.sh && scripts/polkadot-wasm-build-wabt.sh
+scripts/polkadot-wasm-build-binaryen.sh scripts/polkadot-wasm-build-wabt.sh
 ```
 
 Now run the actual Wasm to Wasm-compatible-with-JS conversion step (effectively this takes the i64 returns and makes it available as calls with hi/lo to the JS environment) -
 
 ```sh
-$ scripts/polkadot-wasm-js-compat.sh
+scripts/polkadot-wasm-js-compat.sh
 ```
 
 Now we have JS-legal Wasm files and these have been converted to hex strings for easy Uint8Array loading available inside the [wasm](wasm) subdir.
@@ -37,5 +37,6 @@ Now we have JS-legal Wasm files and these have been converted to hex strings for
 In some cases it may be applicable to convert the proxy (making the external interfaces JS-legal) as well.
 
 ```sh
-$ scripts/polkadot-wasm-wat2wasm.sh packages/client-chains/src/wasm/proxy_substrate.wat && scripts/polkadot-wasm-wasm2js.js --input packages/client-chains/src/wasm/proxy_substrate.wasm --output packages/client-chains/src/wasm/proxy_substrate_wasm.js
+scripts/polkadot-wasm-wat2wasm.sh packages/client-chains/src/wasm/proxy_substrate.wat
+scripts/polkadot-wasm-wasm2js.js --input packages/client-chains/src/wasm/proxy_substrate.wasm --output packages/client-chains/src/wasm/proxy_substrate_wasm.js
 ```

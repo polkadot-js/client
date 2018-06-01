@@ -21,5 +21,6 @@ A comprehensive libc runtime has been implemented as part of the [musl](https://
 When the runtime interface changes, the Wasm proxy needs to be updated. Assuming that all the tolling is available (setup for those in [client-chains](../client-chains)), the conversion can be done with -
 
 ```sh
-$ scripts/polkadot-wasm-wat2wasm.sh packages/client-runtime/src/wasm/proxy_runtime.wat && scripts/polkadot-wasm-wasm2js.js --input packages/client-runtime/src/wasm/proxy_runtime.wasm --output packages/client-runtime/src/wasm/proxy_runtime_wasm.js
+scripts/polkadot-wasm-wat2wasm.sh packages/client-runtime/src/wasm/proxy_runtime.wat
+scripts/polkadot-wasm-wasm2js.js --input packages/client-runtime/src/wasm/proxy_runtime.wasm --output packages/client-runtime/src/wasm/proxy_runtime_wasm.js
 ```
