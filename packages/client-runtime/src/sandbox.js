@@ -8,7 +8,7 @@ import type { RuntimeInterface$Sandbox, RuntimeEnv, Pointer } from './types';
 // TODO Implement according to https://github.com/paritytech/polkadot/tree/master/substrate/runtime-sandbox
 
 module.exports = function sandbox ({ l }: RuntimeEnv): RuntimeInterface$Sandbox {
-  l.warn('sandbox-runtime not implemented, only stubbed');
+  l.warn('sandbox not implemented, only stubbed');
 
   return {
     sandbox_instantiate: (a: number, b: number, c: number, d: number, e: number, f: number): number =>
