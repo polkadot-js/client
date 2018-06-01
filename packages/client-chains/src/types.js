@@ -102,8 +102,8 @@ export type ChainInterface$Executor$BlockImportResult = {
 };
 
 export type ChainInterface$Executor = {
+  applyExtrinsic (header: Uint8Array, utx: Uint8Array): Uint8Array,
   executeBlock (block: Uint8Array): boolean,
-  executeTransaction (header: Uint8Array, utx: Uint8Array): Uint8Array,
   finaliseBlock (header: Uint8Array): Uint8Array,
   generateBlock (number: BN | number, transactions: Array<Uint8Array>): Uint8Array,
   importBlock (block: Uint8Array): ?ChainInterface$Executor$BlockImportResult

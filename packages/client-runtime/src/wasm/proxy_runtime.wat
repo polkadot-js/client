@@ -83,6 +83,41 @@
       (param i32 i32)
     )
   )
+  (import "runtime" "sandbox_instantiate"
+    (func $sandbox_instantiate
+      (param i32 i32 i32 i32 i32 i32) (result i32)
+    )
+  )
+  (import "runtime" "sandbox_instance_teardown"
+    (func $sandbox_instance_teardown
+      (param i32)
+    )
+  )
+  (import "runtime" "sandbox_invoke"
+    (func $sandbox_invoke
+      (param i32 i32 i32 i32) (result i32)
+    )
+  )
+  (import "runtime" "sandbox_memory_get"
+    (func $sandbox_memory_get
+      (param i32 i32 i32 i32) (result i32)
+    )
+  )
+  (import "runtime" "sandbox_memory_new"
+    (func $sandbox_memory_new
+      (param i32 i32) (result i32)
+    )
+  )
+  (import "runtime" "sandbox_memory_set"
+    (func $sandbox_memory_set
+      (param i32 i32 i32 i32) (result i32)
+    )
+  )
+  (import "runtime" "sandbox_memory_teardown"
+    (func $sandbox_memory_teardown
+      (param i32)
+    )
+  )
   (import "runtime" "set_storage"
     (func $set_storage
       (param i32 i32 i32 i32)
@@ -139,6 +174,13 @@
   (export "ext_memset" (func $memset))
   (export "ext_print_hex" (func $print_hex))
   (export "ext_print_utf8" (func $print_utf8))
+  (export "ext_sandbox_invoke" (func $sandbox_invoke))
+  (export "ext_sandbox_instance_teardown" (func $sandbox_instance_teardown))
+  (export "ext_sandbox_instantiate" (func $sandbox_instantiate))
+  (export "ext_sandbox_memory_get" (func $sandbox_memory_get))
+  (export "ext_sandbox_memory_new" (func $sandbox_memory_new))
+  (export "ext_sandbox_memory_set" (func $sandbox_memory_set))
+  (export "ext_sandbox_memory_teardown" (func $sandbox_memory_teardown))
   (export "ext_set_storage" (func $set_storage))
   (export "ext_storage_root" (func $storage_root))
   (export "ext_twox_128" (func $twox_128))

@@ -56,6 +56,16 @@ export type RuntimeInterface$Memory = {
   memset: (dst: Pointer, val: number, num: number) => Pointer
 };
 
+export type RuntimeInterface$Sandbox = {
+  sandbox_instantiate: (a: number, b: number, c: number, d: number, e: number, f: number) => number,
+  sandbox_instance_teardown: (instanceIdx: number) => void,
+  sandbox_invoke: (instanceIdx: number, b: number, c: number, d: number) => number,
+  sandbox_memory_get: (memoryIdx: number, offset: number, ptr: Pointer, len: number) => number,
+  sandbox_memory_new: (initial: number, maximum: number) => number,
+  sandbox_memory_set: (memoryIdx: number, offset: number, ptr: Pointer, len: number) => number,
+  sandbox_memory_teardown: (memoryIdx: number) => void
+};
+
 export type RuntimeInterface$Storage$Data = {
   clear_storage: (keyPtr: Pointer, keyLength: number) => void,
   get_allocated_storage: (keyPtr: Pointer, keyLength: number, writtenPtr: Pointer) => Pointer,
@@ -70,7 +80,7 @@ export type RuntimeInterface$Storage$Trie = {
 
 export type RuntimeInterface$Storage = RuntimeInterface$Storage$Data & RuntimeInterface$Storage$Trie;
 
-export type RuntimeInterface$Exports = RuntimeInterface$Chain & RuntimeInterface$Crypto & RuntimeInterface$Io & RuntimeInterface$Memory & RuntimeInterface$Storage;
+export type RuntimeInterface$Exports = RuntimeInterface$Chain & RuntimeInterface$Crypto & RuntimeInterface$Io & RuntimeInterface$Memory & RuntimeInterface$Sandbox & RuntimeInterface$Storage;
 
 export type RuntimeInterface = {
   environment: RuntimeEnv,

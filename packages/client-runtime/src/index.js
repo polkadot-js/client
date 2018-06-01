@@ -12,6 +12,7 @@ const createCrypto = require('./crypto');
 const createEnv = require('./environment');
 const createIo = require('./io');
 const createMemory = require('./memory');
+const createSandbox = require('./sandbox');
 const createStorage = require('./storage');
 
 module.exports = function runtime (chain: ChainConfig, stateDb: BaseDb): RuntimeInterface {
@@ -22,7 +23,7 @@ module.exports = function runtime (chain: ChainConfig, stateDb: BaseDb): Runtime
     exports: (Object.assign(
       // flowlint-next-line unclear-type:off
       ({}: any),
-      createChain(environment), createCrypto(environment), createIo(environment), createMemory(environment), createStorage(environment)
+      createChain(environment), createCrypto(environment), createIo(environment), createMemory(environment), createSandbox(environment), createStorage(environment)
     ): $Shape<RuntimeInterface$Exports>)
   };
 };
