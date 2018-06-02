@@ -7,24 +7,21 @@ import type BN from 'bn.js';
 import type { ChainState } from '../types';
 
 const createHeader = require('@polkadot/primitives-builder/header');
-const rootRaw = require('@polkadot/primitives-builder/transaction/rootRaw');
-const timestampSet = require('@polkadot/primitives-builder/unchecked/timestampSet');
+const rootRaw = require('@polkadot/primitives-builder/extrinsic/rootRaw');
 const encodeBlockRaw = require('@polkadot/primitives-codec/block/encodeRaw');
 const encodeHeader = require('@polkadot/primitives-codec/header/encode');
-const encodeUtx = require('@polkadot/primitives-codec/unchecked/encode');
 const bnToBn = require('@polkadot/util/bn/toBn');
 
 const applyExtrinsic = require('./applyExtrinsic');
 const finaliseBlock = require('./finaliseBlock');
 
-module.exports = function generateBlock (self: ChainState, code: Uint8Array, _number: number | BN, utxs: Array<Uint8Array>, timestamp: number): Uint8Array {
+module.exports = function generateBlock (self: ChainState, code: Uint8Array, _number: number | BN, extrinsics: Array<Uint8Array>): Uint8Array {
   const start = Date.now();
   const number = bnToBn(_number);
 
   self.l.debug(() => `Generating block #${number.toString()}`);
 
-  const txs = [ encodeUtx(timestampSet(timestamp)) ].concat(utxs);
-  const extrinsicsRoot = rootRaw(txs);
+  const extrinsicsRoot = rootRaw(extrinsics);
   const empty = encodeHeader(
     createHeader({
       number,
@@ -32,10 +29,10 @@ module.exports = function generateBlock (self: ChainState, code: Uint8Array, _nu
       extrinsicsRoot
     })
   );
-  const header = finaliseBlock(self, code, txs.reduce((hdr, utx) => {
+  const header = finaliseBlock(self, code, extrinsics.reduce((hdr, utx) => {
     return applyExtrinsic(self, code, hdr, utx);
   }, empty));
-  const block = encodeBlockRaw(header, timestamp, utxs);
+  const block = encodeBlockRaw(header, extrinsics);
 
   self.stateDb.db.clear();
 

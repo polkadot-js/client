@@ -3,11 +3,9 @@
 // of the ISC license. See the LICENSE file for details.
 
 const createHeader = require('@polkadot/primitives-builder/header');
-const stakingTransfer = require('@polkadot/primitives-builder/transaction/stakingTransfer');
-const uncheckedSign = require('@polkadot/primitives-builder/unchecked/uncheckedSign');
-const timestampSet = require('@polkadot/primitives-builder/unchecked/timestampSet');
+const extrinsics = require('@polkadot/extrinsics');
+const encodeSigned = require('@polkadot/extrinsics-codec/encode/sign');
 const encodeHeader = require('@polkadot/primitives-codec/header/encode');
-const encodeUtx = require('@polkadot/primitives-codec/unchecked/encode');
 const memoryDb = require('@polkadot/client-db/memory');
 const keyring = require('@polkadot/util-keyring/testingPairs')();
 
@@ -15,15 +13,6 @@ const init = require('../index');
 
 describe('applyExtrinsic', () => {
   let chain;
-
-  function getNextHeader (header) {
-    return chain.executor.applyExtrinsic(
-      header,
-      encodeUtx(
-        timestampSet(100000)
-      )
-    );
-  }
 
   beforeEach(() => {
     const config = {
@@ -41,18 +30,15 @@ describe('applyExtrinsic', () => {
 
   it('executes a basic transaction', () => {
     chain.executor.applyExtrinsic(
-      getNextHeader(
-        encodeHeader(
-          createHeader({
-            number: 1,
-            extrinsicsRoot: new Uint8Array([])
-          })
-        )
+      encodeHeader(
+        createHeader({
+          number: 1,
+          extrinsicsRoot: new Uint8Array([])
+        })
       ),
-      encodeUtx(
-        uncheckedSign(keyring.one, stakingTransfer(
-          keyring.one.publicKey(), keyring.two.publicKey(), 69, 0
-        ))
+      encodeSigned(keyring.one, 0)(
+        extrinsics.staking.public.transfer,
+        [keyring.two.publicKey(), 69]
       )
     );
 

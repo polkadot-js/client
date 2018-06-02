@@ -32,7 +32,7 @@
   "dependencies": {
     "@babel/runtime": "^7.0.0-beta.47",
     "@polkadot/client-state": "^0.8.6",
-    "@polkadot/util": "^0.22.2",
+    "@polkadot/util": "^0.22.3",
     "leveldown": "^2.1.1",
     "levelup": "^2.0.1",
     "memdown": "^1.4.1",
