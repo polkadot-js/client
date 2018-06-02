@@ -11,18 +11,21 @@ const executeBlock = require('./executeBlock');
 const finaliseBlock = require('./finaliseBlock');
 const generateBlock = require('./generateBlock');
 const importBlock = require('./importBlock');
+const initialiseBlock = require('./initialiseBlock');
 
 module.exports = function executor (self: ChainState, { code }: ChainGenesis): ChainInterface$Executor {
   return {
-    executeBlock: (block: Uint8Array): boolean =>
-      executeBlock(self, code, block),
     applyExtrinsic: (header: Uint8Array, utx: Uint8Array): Uint8Array =>
       applyExtrinsic(self, code, header, utx),
+    executeBlock: (block: Uint8Array): boolean =>
+      executeBlock(self, code, block),
     finaliseBlock: (header: Uint8Array): Uint8Array =>
       finaliseBlock(self, code, header),
     generateBlock: (number: BN | number, utxs: Array<Uint8Array>, timestamp?: number = Date.now()): Uint8Array =>
       generateBlock(self, code, number, utxs, timestamp),
     importBlock: (block: Uint8Array): ?ChainInterface$Executor$BlockImportResult =>
-      importBlock(self, code, block)
+      importBlock(self, code, block),
+    initialiseBlock: (header: Uint8Array): Uint8Array =>
+      initialiseBlock(self, code, header)
   };
 };

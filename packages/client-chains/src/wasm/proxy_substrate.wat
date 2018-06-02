@@ -4,18 +4,23 @@
 
 (module
   ;; imports, compliant as per spec
-  (import "proxy" "execute_block"
-    (func $execute_block
-      (param i32 i32) (result i64)
-    )
-  )
   (import "proxy" "apply_extrinsic"
     (func $apply_extrinsic
       (param i32 i32) (result i64)
     )
   )
+  (import "proxy" "execute_block"
+    (func $execute_block
+      (param i32 i32) (result i64)
+    )
+  )
   (import "proxy" "finalise_block"
     (func $finalise_block
+      (param i32 i32) (result i64)
+    )
+  )
+  (import "proxy" "initialise_block"
+    (func $initialise_block
       (param i32 i32) (result i64)
     )
   )
@@ -46,18 +51,6 @@
     (get_global $result_lo)
   )
 
-  ;; proxied execute_block exported
-  (func (export "execute_block")
-    (param i32 i32) (result i32)
-
-    (call $result_wrap
-      (call $execute_block
-        (get_local 0)
-        (get_local 1)
-      )
-    )
-  )
-
   ;; proxied apply_extrinsic exported
   (func (export "apply_extrinsic")
     (param i32 i32) (result i32)
@@ -70,12 +63,36 @@
     )
   )
 
+  ;; proxied execute_block exported
+  (func (export "execute_block")
+    (param i32 i32) (result i32)
+
+    (call $result_wrap
+      (call $execute_block
+        (get_local 0)
+        (get_local 1)
+      )
+    )
+  )
+
   ;; proxied finalise_block exported
   (func (export "finalise_block")
     (param i32 i32) (result i32)
 
     (call $result_wrap
       (call $finalise_block
+        (get_local 0)
+        (get_local 1)
+      )
+    )
+  )
+
+  ;; proxied execute_block exported
+  (func (export "initialise_block")
+    (param i32 i32) (result i32)
+
+    (call $result_wrap
+      (call $initialise_block
         (get_local 0)
         (get_local 1)
       )
