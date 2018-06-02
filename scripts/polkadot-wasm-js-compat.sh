@@ -6,33 +6,45 @@
 set -e
 
 BASEDIR=$(dirname "$0")
-NODEDIR=$BASEDIR/../node_modules/@polkadot/wasm-bin/wasm32-unknown-unknown
-JSDIR=$BASEDIR/../packages/client-chains/src/wasm
-DST=tmp/wasm-bin-tmp
-SOURCES=( "polkadot_runtime.wasm" )
+PKG=$BASEDIR/../node_modules/@polkadot/wasm-bin/wasm32-unknown-unknown
+DST=$BASEDIR/../packages/client-wasm/src/wasm
+SRCWASM=( "polkadot_runtime.wasm" "polkadot_runtime.compact.wasm" )
+SRCPROX=( "proxy_runtime.wat" "proxy_substrate.wat" )
 
-rm -rf $DST
-mkdir -p $DST
+function wat2js () {
+  DIR=$1
+  SRC=$2
 
-for SRC in "${SOURCES[@]}"; do
-  echo "*** Converting $SRC to JS-compatible output"
+  echo "*** $SRC :: Compiling Wat to Wasm output"
 
-  WASMFILE=$DST/$SRC
-  WATFILE=${WASMFILE/.wasm/.wat}
+  WASMSRC=${SRC/.wat/.wasm}
 
-  # copy, proxy handles legal
-  cp -f $NODEDIR/$SRC $WASMFILE
+  $BASEDIR/polkadot-wasm-wat2wasm.sh $DST/$SRC
 
-  # create legal interface : --legalize-js-interface -g
-  tmp/binaryen/bin/wasm-opt  --emit-text $NODEDIR/$SRC -o $WATFILE
-  # tmp/wabt/bin/wat2wasm $WATFILE -o $WASMFILE
+  echo "*** $SRC :: Done"
 
-  echo "*** Creating JS Uint8Array output"
+  wasm2js $DST $WASMSRC
+}
 
-  JSSRC=${SRC/.wasm/_wasm.js}
-  JSFILE=$JSDIR/$JSSRC
+function wasm2js () {
+  DIR=$1
+  SRC=$2
 
-  $BASEDIR/polkadot-wasm-wasm2js.js --input $WASMFILE --output $JSFILE
+  echo "*** $SRC :: Creating JS Uint8Array output"
+
+  JSSRC=${SRC/.wasm/.wasm.js}
+
+  $BASEDIR/polkadot-wasm-wasm2js.js --input $DIR/$SRC --output $DST/$JSSRC
+
+  echo "*** $SRC :: Done"
+}
+
+for SRC in "${SRCPROX[@]}"; do
+  wat2js $DST $SRC
+done
+
+for SRC in "${SRCWASM[@]}"; do
+  wasm2js $PKG $SRC
 done
 
 exit 0

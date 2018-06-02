@@ -985,6 +985,10 @@
     deasync "^0.1.12"
     ip-regex "^2.1.0"
 
+"@polkadot/wasm-bin@paritytech/polkadot-wasm-bin#5ab4fc6083501b26e5fd979b93c35e2f9010b324":
+  version "20180601.165414.0"
+  resolved "https://codeload.github.com/paritytech/polkadot-wasm-bin/tar.gz/5ab4fc6083501b26e5fd979b93c35e2f9010b324"
+
 "@types/node@*":
   version "8.5.2"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-8.5.2.tgz#83b8103fa9a2c2e83d78f701a9aa7c9539739aa5"

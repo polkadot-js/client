@@ -16,7 +16,7 @@ BIN_PATH=tmp/wabt/bin
 DST=${SRC/.wat/.wasm}
 BASEDIR=$(dirname "$0")
 
-echo "*** Compiling $SRC -o $DST"
+echo "*** Compiling Wat2Wasm $SRC"
 $BIN_PATH/wat2wasm $SRC -o $DST
 
 echo "*** Completed"

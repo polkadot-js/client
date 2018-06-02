@@ -34,6 +34,7 @@
     "@polkadot/client-runtime": "^0.11.1",
     "@polkadot/primitives-codec": "^0.17.11",
     "@polkadot/util": "^0.22.3",
+    "@polkadot/wasm-bin": "paritytech/polkadot-wasm-bin#5ab4fc6083501b26e5fd979b93c35e2f9010b324",
     "yargs": "^11.0.0"
   }
 }

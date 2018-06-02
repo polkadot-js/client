@@ -22,16 +22,8 @@ First update the dependencies, e.g. binaryen and wabt (when not already availabl
 scripts/polkadot-wasm-build-binaryen.sh scripts/polkadot-wasm-build-wabt.sh
 ```
 
-Compiling the Wat to Wasm -
+Compiling the WAT to WASM to JS, including converting the polkadot runtimes to a JS-compatible version -
 
 ```sh
-scripts/polkadot-wasm-wat2wasm.sh packages/client-wasm/src/wasm/proxy_runtime.wat &&\
-scripts/polkadot-wasm-wat2wasm.sh packages/client-wasm/src/wasm/proxy_substrate.wat
-```
-
-Now we can convert these to allow the proxy (making the external interfaces JS-legal) as well.
-
-```sh
-scripts/polkadot-wasm-wasm2js.js --input packages/client-wasm/src/wasm/proxy_runtime.wasm --output packages/client-wasm/src/wasm/proxy_runtime_wasm.js &&\
-scripts/polkadot-wasm-wasm2js.js --input packages/client-wasm/src/wasm/proxy_substrate.wasm --output packages/client-wasm/src/wasm/proxy_substrate_wasm.js
+scripts/polkadot-wasm-js-compat.sh
 ```
