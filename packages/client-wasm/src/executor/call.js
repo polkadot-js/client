@@ -49,14 +49,14 @@ module.exports = function call ({ config, l, runtime, stateDb: { db } }: Executo
 
       l.debug(() => ['returned', [lo, hi]]);
 
-      return { lo, hi };
+      return { hi, lo };
     } catch (error) {
       l.error('execution error', error);
     }
 
     return {
-      lo: 0,
-      hi: 0
+      hi: 0,
+      lo: 0
     };
   };
 };

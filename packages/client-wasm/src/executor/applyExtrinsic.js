@@ -5,17 +5,13 @@
 
 import type { ExecutorState } from '../types';
 
-const u8aConcat = require('@polkadot/util/u8a/concat');
-
 const call = require('./callAsU8a');
 
-module.exports = function applyExtrinsic (self: ExecutorState, header: Uint8Array, utx: Uint8Array): Uint8Array {
+module.exports = function applyExtrinsic (self: ExecutorState, extrinsic: Uint8Array): Uint8Array {
   self.l.debug(() => 'Apply extrinsic');
 
   const start = Date.now();
-  const result = call(self, 'apply_extrinsic')(
-    u8aConcat(header, utx)
-  );
+  const result = call(self, 'apply_extrinsic')(extrinsic);
 
   self.l.debug(() => `Apply extrinsic completed (${Date.now() - start}ms)`);
 

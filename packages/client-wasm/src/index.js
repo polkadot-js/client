@@ -28,8 +28,8 @@ module.exports = function executor (config: Config, blockDb: BlockDb, stateDb: S
   };
 
   return {
-    applyExtrinsic: (header: Uint8Array, utx: Uint8Array): Uint8Array =>
-      applyExtrinsic(self, header, utx),
+    applyExtrinsic: (extrinsic: Uint8Array): Uint8Array =>
+      applyExtrinsic(self, extrinsic),
     executeBlock: (block: Uint8Array): boolean =>
       executeBlock(self, block),
     finaliseBlock: (header: Uint8Array): Uint8Array =>

@@ -34,7 +34,7 @@ export type Executor$BlockImportResult = {
 };
 
 export type ExecutorInterface = {
-  applyExtrinsic (header: Uint8Array, utx: Uint8Array): Uint8Array,
+  applyExtrinsic (extrinsic: Uint8Array): Uint8Array,
   executeBlock (block: Uint8Array): boolean,
   finaliseBlock (header: Uint8Array): Uint8Array,
   generateBlock (number: BN | number, extrinsics: Array<Uint8Array>): Uint8Array,
