@@ -5,7 +5,7 @@
 
 import type { RuntimeInterface } from '@polkadot/client-runtime/types';
 
-const runtimeProxy = require('@polkadot/client-runtime/wasm/proxy_runtime_wasm');
+const runtimeProxy = require('../wasm/proxy_runtime_wasm');
 
 const createExports = require('./exports');
 

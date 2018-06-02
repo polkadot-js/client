@@ -3,7 +3,7 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { ChainState } from '../types';
+import type { ExecutorState } from '../types';
 
 export type CallU8a = (...data: Array<Uint8Array>) => Uint8Array;
 
@@ -11,8 +11,8 @@ const u8aToHex = require('@polkadot/util/u8a/toHex');
 
 const call = require('./call');
 
-module.exports = function callAsU8a (self: ChainState, code: Uint8Array, name: string): CallU8a {
-  const fn = call(self, code, name);
+module.exports = function callAsU8a (self: ExecutorState, name: string): CallU8a {
+  const fn = call(self, name);
   const { l, heap } = self.runtime.environment;
 
   return (...data: Array<Uint8Array>): Uint8Array => {

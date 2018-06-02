@@ -3,15 +3,15 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { ChainState } from '../types';
+import type { ExecutorState } from '../types';
 
 const call = require('./callAsU8a');
 
-module.exports = function initialiseBlock (self: ChainState, code: Uint8Array, header: Uint8Array): Uint8Array {
+module.exports = function initialiseBlock (self: ExecutorState, header: Uint8Array): Uint8Array {
   self.l.debug(() => 'Initialising block');
 
   const start = Date.now();
-  const result = call(self, code, 'initialise_block')(header);
+  const result = call(self, 'initialise_block')(header);
 
   self.l.debug(() => `Block initialised (${Date.now() - start}ms)`);
 

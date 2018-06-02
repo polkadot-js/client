@@ -10,7 +10,7 @@ const hexToU8a = require('@polkadot/util/hex/toU8a');
 const memoryDb = require('@polkadot/client-db/memory');
 const keyring = require('@polkadot/util-keyring/testingPairs')();
 
-const init = require('../index');
+const init = require('@polkadot/client-chains');
 
 describe('executeBlock', () => {
   let chain;

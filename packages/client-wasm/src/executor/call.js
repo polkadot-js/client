@@ -3,7 +3,7 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { ChainState } from '../types';
+import type { ExecutorState } from '../types';
 
 type CallResult = {
   lo: number,
@@ -12,14 +12,19 @@ type CallResult = {
 
 type Call = (...data: Array<Uint8Array>) => CallResult;
 
-const createWasm = require('@polkadot/client-wasm');
+const hexToU8a = require('@polkadot/util/hex/toU8a');
 const u8aToHex = require('@polkadot/util/u8a/toHex');
 
+const createWasm = require('../wasm');
 const proxy = require('../wasm/proxy_substrate_wasm');
 
-module.exports = function call ({ config, runtime }: ChainState, code: Uint8Array, name: string): Call {
+// FIXME We probably want to hash, but _should_ be pretty "safe"
+const CODE_KEY = hexToU8a('0x3a636f6465');
+
+module.exports = function call ({ config, l, runtime, stateDb: { db } }: ExecutorState, name: string): Call {
+  const code = db.get(CODE_KEY);
   const instance = createWasm(config, runtime, code, proxy);
-  const { l, heap } = runtime.environment;
+  const { heap } = runtime.environment;
 
   return (...data: Array<Uint8Array>): CallResult => {
     l.debug(() => ['preparing', name]);

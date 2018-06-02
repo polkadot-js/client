@@ -9,7 +9,7 @@ const encodeHeader = require('@polkadot/primitives-codec/header/encode');
 const memoryDb = require('@polkadot/client-db/memory');
 const keyring = require('@polkadot/util-keyring/testingPairs')();
 
-const init = require('../index');
+const init = require('@polkadot/client-chains');
 
 describe('applyExtrinsic', () => {
   let chain;

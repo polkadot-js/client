@@ -6,7 +6,7 @@ const createHeader = require('@polkadot/primitives-builder/header');
 const encodeHeader = require('@polkadot/primitives-codec/header/encode');
 const memoryDb = require('@polkadot/client-db/memory');
 
-const init = require('../index');
+const init = require('@polkadot/client-chains');
 
 describe('initialiseBlock', () => {
   let chain;

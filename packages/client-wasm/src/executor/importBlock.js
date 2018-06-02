@@ -3,18 +3,18 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { ChainState, ChainInterface$Executor$BlockImportResult } from '../types';
+import type { ExecutorState, Executor$BlockImportResult } from '../types';
 
 const decodeRaw = require('@polkadot/primitives-codec/block/decodeRaw');
 const blake2Asu8a = require('@polkadot/util-crypto/blake2/asU8a');
 
 const executeBlock = require('./executeBlock');
 
-module.exports = function importBlock (self: ChainState, code: Uint8Array, block: Uint8Array): ?ChainInterface$Executor$BlockImportResult {
+module.exports = function importBlock (self: ExecutorState, block: Uint8Array): ?Executor$BlockImportResult {
   self.l.debug(() => 'Importing block');
 
   const start = Date.now();
-  const result = executeBlock(self, code, block);
+  const result = executeBlock(self, block);
 
   if (!result) {
     self.l.error(`Block import failed (${Date.now() - start}ms elapsed)`);
@@ -23,7 +23,7 @@ module.exports = function importBlock (self: ChainState, code: Uint8Array, block
 
   self.stateDb.db.commit();
 
-  const { body, header, number } = decodeRaw(block);
+  const { body, extrinsics, header, number } = decodeRaw(block);
   const hash = blake2Asu8a(header, 256);
 
   self.blockDb.bestHash.set(hash);
@@ -34,6 +34,7 @@ module.exports = function importBlock (self: ChainState, code: Uint8Array, block
 
   return {
     body,
+    extrinsics,
     hash,
     header
   };

@@ -17,11 +17,11 @@ module.exports = function getBlockData (self: P2pState, fields: BlockRequestMess
   };
 
   if (fields.includes('body')) {
-    data.header = header;
+    data.body = body;
   }
 
   if (fields.includes('header')) {
-    data.body = body;
+    data.header = header;
   }
 
   return data;

@@ -2,12 +2,11 @@
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
 // @flow
-/* eslint no-use-before-define:0 */
 
-import type BN from 'bn.js';
 import type { Config } from '@polkadot/client/types';
 import type { BlockDb, StateDb } from '@polkadot/client-db-chain/types';
 import type { RuntimeInterface } from '@polkadot/client-runtime/types';
+import type { ExecutorInterface } from '@polkadot/client-wasm/types';
 import type { Header } from '@polkadot/primitives/header';
 import type { Logger } from '@polkadot/util/types';
 
@@ -25,23 +24,9 @@ export type ChainGenesis = {
   headerHash: Uint8Array
 };
 
-export type ChainInterface$Executor$BlockImportResult = {
-  body: Uint8Array,
-  hash: Uint8Array,
-  header: Uint8Array
-};
-
-export type ChainInterface$Executor = {
-  applyExtrinsic (header: Uint8Array, utx: Uint8Array): Uint8Array,
-  executeBlock (block: Uint8Array): boolean,
-  finaliseBlock (header: Uint8Array): Uint8Array,
-  generateBlock (number: BN | number, transactions: Array<Uint8Array>): Uint8Array,
-  importBlock (block: Uint8Array): ?ChainInterface$Executor$BlockImportResult
-};
-
 export type ChainInterface = {
   blocks: BlockDb,
-  executor: ChainInterface$Executor,
+  executor: ExecutorInterface,
   genesis: ChainGenesis,
   state: StateDb
 };

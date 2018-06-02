@@ -4,7 +4,7 @@
 // @flow
 
 import type BN from 'bn.js';
-import type { ChainState } from '../types';
+import type { ExecutorState } from '../types';
 
 const createHeader = require('@polkadot/primitives-builder/header');
 const rootRaw = require('@polkadot/primitives-builder/extrinsic/rootRaw');
@@ -15,7 +15,7 @@ const bnToBn = require('@polkadot/util/bn/toBn');
 const applyExtrinsic = require('./applyExtrinsic');
 const finaliseBlock = require('./finaliseBlock');
 
-module.exports = function generateBlock (self: ChainState, code: Uint8Array, _number: number | BN, extrinsics: Array<Uint8Array>): Uint8Array {
+module.exports = function generateBlock (self: ExecutorState, _number: number | BN, extrinsics: Array<Uint8Array>): Uint8Array {
   const start = Date.now();
   const number = bnToBn(_number);
 
@@ -29,8 +29,8 @@ module.exports = function generateBlock (self: ChainState, code: Uint8Array, _nu
       extrinsicsRoot
     })
   );
-  const header = finaliseBlock(self, code, extrinsics.reduce((hdr, utx) => {
-    return applyExtrinsic(self, code, hdr, utx);
+  const header = finaliseBlock(self, extrinsics.reduce((hdr, utx) => {
+    return applyExtrinsic(self, hdr, utx);
   }, empty));
   const block = encodeBlockRaw(header, extrinsics);
 
