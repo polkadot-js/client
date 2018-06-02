@@ -2,8 +2,8 @@
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
 
-const stakingTransfer = require('@polkadot/primitives-builder/transaction/stakingTransfer');
-const uncheckedSign = require('@polkadot/primitives-builder/unchecked/uncheckedSign');
+const extrinsics = require('@polkadot/extrinsics');
+const encodeSigned = require('@polkadot/extrinsics-codec/encode/sign');
 const createBlock = require('@polkadot/primitives-builder/block');
 const encodeBlock = require('@polkadot/primitives-codec/block/encode');
 const hexToU8a = require('@polkadot/util/hex/toU8a');
@@ -14,7 +14,6 @@ const init = require('@polkadot/client-chains');
 
 describe('executeBlock', () => {
   let chain;
-  let stateDb;
 
   beforeEach(() => {
     const config = {
@@ -42,8 +41,7 @@ describe('executeBlock', () => {
                 202, 62, 55, 51, 175, 184, 11, 195, 85, 147, 88, 241, 90, 22, 236, 240, 90, 188, 77, 134, 134, 70, 57, 104, 69, 94, 216, 123, 99, 229, 230, 24
               ])
             },
-            timestamp: 100000,
-            transactions: []
+            extrinsics: []
           })
         )
       )
@@ -60,39 +58,40 @@ describe('executeBlock', () => {
             number: 1,
             stateRoot: hexToU8a('0x3df569d47a0d7f4a448486f04fba4eea3e9dfca001319c609f88b3a67b0dd1ea')
           },
-          timestamp: 100000,
-          transactions: [
-            uncheckedSign(keyring.one, stakingTransfer(
-              keyring.one.publicKey(), keyring.two.publicKey(), 69, 0
-            ))
+          extrinsics: [
+            encodeSigned(keyring.one, 0)(
+              extrinsics.staking.public.transfer,
+              [keyring.two.publicKey(), 69]
+            )
           ]
         })
       )
     );
 
     expect(
-      stateDb.staking.freeBalanceOf.get(keyring.one.publicKey()).toNumber()
+      chain.state.staking.freeBalanceOf.get(keyring.one.publicKey()).toNumber()
     ).toEqual(42);
     expect(
-      stateDb.staking.freeBalanceOf.get(keyring.two.publicKey()).toNumber()
+      chain.state.staking.freeBalanceOf.get(keyring.two.publicKey()).toNumber()
     ).toEqual(69);
 
     chain.executor.executeBlock(
       encodeBlock(
         createBlock({
           header: {
-            parentHash: stateDb.system.blockHashAt.get(1),
+            parentHash: chain.state.system.blockHashAt.get(1),
             number: 2,
             stateRoot: hexToU8a('0x6b1df261bab7dc96a7428bff9fa740f26cc08cd1214834e52e3bdd4fed5557a5')
           },
-          timestamp: 200000,
           transactions: [
-            uncheckedSign(keyring.two, stakingTransfer(
-              keyring.two.publicKey(), keyring.one.publicKey(), 5, 0
-            )),
-            uncheckedSign(keyring.one, stakingTransfer(
-              keyring.one.publicKey(), keyring.two.publicKey(), 15, 1
-            ))
+            encodeSigned(keyring.two, 0)(
+              extrinsics.staking.public.transfer,
+              [keyring.one.publicKey(), 5]
+            ),
+            encodeSigned(keyring.one, 0)(
+              extrinsics.staking.public.transfer,
+              [keyring.two.publicKey(), 15]
+            )
           ]
         })
       )

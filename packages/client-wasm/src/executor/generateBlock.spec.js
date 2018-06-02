@@ -2,9 +2,8 @@
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
 
-const stakingTransfer = require('@polkadot/primitives-builder/transaction/stakingTransfer');
-const uncheckedSign = require('@polkadot/primitives-builder/unchecked/uncheckedSign');
-const encodeUtx = require('@polkadot/primitives-codec/unchecked/encode');
+const extrinsics = require('@polkadot/extrinsics');
+const encodeSigned = require('@polkadot/extrinsics-codec/encode/sign');
 const hexToU8a = require('@polkadot/util/hex/toU8a');
 const memoryDb = require('@polkadot/client-db/memory');
 const keyring = require('@polkadot/util-keyring/testingPairs')();
@@ -14,10 +13,8 @@ const init = require('@polkadot/client-chains');
 const TIMESTAMP = '71000000ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff00000000000000000020a107000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000';
 const TRANSFER = '910000002f8c6129d816cf51c374bc7f08c3e63ed156cf78aefb4a6550d97b87997977ee000000000000000022d75a980182b10ab7d54bfed3c964073a0ee172f3daa62325af021a68f707511a45000000000000005f9832c5a4a39e2dd4a3a0c5b400e9836beb362cb8f7d845a8291a2ae6fe366612e080e4acd0b5a75c3d0b6ee69614a68fb63698c1e76bf1f2dcd8fa617ddf05';
 
-// FIXME we are out of date with the runtime/storage
-describe.skip('generateBlock', () => {
+describe('generateBlock', () => {
   let executor;
-  let stateDb;
 
   beforeEach(() => {
     const config = {
@@ -26,35 +23,24 @@ describe.skip('generateBlock', () => {
     };
 
     executor = init(config, memoryDb(), memoryDb()).executor;
+  });
 
-    const threePublicKey = hexToU8a('0x0303030303030303030303030303030303030303030303030303030303030303');
-
-    stateDb.governance.approvalsRatio.set(667);
-    stateDb.session.length.set(2);
-    stateDb.session.validatorCount.set(3);
-    stateDb.session.validator.set(keyring.one.publicKey(), 0);
-    stateDb.session.validator.set(keyring.two.publicKey(), 1);
-    stateDb.session.validator.set(threePublicKey, 2);
-    stateDb.staking.freeBalanceOf.set(69 + 42, keyring.one.publicKey());
-    stateDb.staking.currentEra.set(0);
-    stateDb.staking.intentLength.set(3);
-    stateDb.staking.intent.set(keyring.one.publicKey(), 0);
-    stateDb.staking.intent.set(keyring.two.publicKey(), 1);
-    stateDb.staking.intent.set(threePublicKey, 2);
-    stateDb.staking.sessionsPerEra.set(2);
-    stateDb.staking.validatorCount.set(3);
-    stateDb.system.blockHashAt.set(hexToU8a('0x4545454545454545454545454545454545454545454545454545454545454545'), 0);
-
-    stateDb.db.commit();
+  it('generates a basic block (empty)', () => {
+    expect(
+      executor.generateBlock(1, [])
+    ).toEqual(
+      new Uint8array([])
+    );
   });
 
   it('generates a basic block', () => {
     expect(
       executor.generateBlock(1, [
-        uncheckedSign(keyring.one, stakingTransfer(
-          keyring.one.publicKey(), keyring.two.publicKey(), 69, 0
-        ))
-      ].map(encodeUtx), 500000)
+        encodeSigned(keyring.one, 0)(
+          extrinsics.staking.public.transfer,
+          [keyring.two.publicKey(), 69]
+        )
+      ].map(encodeUtx))
     ).toEqual(
       hexToU8a(
         '0x' +
@@ -73,9 +59,10 @@ describe.skip('generateBlock', () => {
 
   it('generated blocks are importable', () => {
     const block = executor.generateBlock(1, [
-      uncheckedSign(keyring.one, stakingTransfer(
-        keyring.one.publicKey(), keyring.two.publicKey(), 69, 0
-      ))
+      encodeSigned(keyring.one, 0)(
+        extrinsics.staking.public.transfer,
+        [keyring.two.publicKey(), 69]
+      )
     ].map(encodeUtx));
 
     expect(
@@ -86,16 +73,18 @@ describe.skip('generateBlock', () => {
   it('blocks are importable on top of previous', () => {
     executor.importBlock(
       executor.generateBlock(1, [
-        uncheckedSign(keyring.one, stakingTransfer(
-          keyring.one.publicKey(), keyring.two.publicKey(), 69, 0
-        ))
+        encodeSigned(keyring.one, 0)(
+          extrinsics.staking.public.transfer,
+          [keyring.two.publicKey(), 69]
+        )
       ].map(encodeUtx))
     );
 
     const block = executor.generateBlock(2, [
-      uncheckedSign(keyring.two, stakingTransfer(
-        keyring.two.publicKey(), keyring.one.publicKey(), 5, 0
-      ))
+      encodeSigned(keyring.t2o, 0)(
+        extrinsics.staking.public.transfer,
+        [keyring.one.publicKey(), 5]
+      )
     ].map(encodeUtx));
 
     expect(

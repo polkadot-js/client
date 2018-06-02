@@ -21,12 +21,11 @@ module.exports = function generateBlock (self: ExecutorState, _number: number | 
 
   self.l.debug(() => `Generating block #${number.toString()}`);
 
-  const extrinsicsRoot = rootRaw(extrinsics);
   const empty = encodeHeader(
     createHeader({
       number,
       parentHash: self.stateDb.system.blockHashAt.get(number.subn(1)),
-      extrinsicsRoot
+      extrinsicsRoot: rootRaw(extrinsics)
     })
   );
   const header = finaliseBlock(self, extrinsics.reduce((hdr, utx) => {
