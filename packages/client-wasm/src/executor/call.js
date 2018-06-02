@@ -12,18 +12,20 @@ type CallResult = {
 
 type Call = (...data: Array<Uint8Array>) => CallResult;
 
-// const hexToU8a = require('@polkadot/util/hex/toU8a');
+const hexToU8a = require('@polkadot/util/hex/toU8a');
 const u8aToHex = require('@polkadot/util/u8a/toHex');
 
 const createWasm = require('../wasm');
 const proxy = require('../wasm/proxy_substrate.wasm.js');
-const code = require('../wasm/polkadot_runtime.compact.wasm.js');
+
+// NOTE testing only, comparing results
+// const code = require('../wasm/polkadot_runtime.compact.wasm.js');
 
 // FIXME We probably want to hash, but _should_ be pretty "safe"
-// const CODE_KEY = hexToU8a('0x3a636f6465');
+const CODE_KEY = hexToU8a('0x3a636f6465');
 
 module.exports = function call ({ config, l, runtime, stateDb: { db } }: ExecutorState, name: string): Call {
-  // const code = db.get(CODE_KEY);
+  const code = db.get(CODE_KEY);
   const instance = createWasm(config, runtime, code, proxy);
   const { heap } = runtime.environment;
 
