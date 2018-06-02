@@ -12,19 +12,26 @@
 
 A wrapper around WebAssembly applications, creating an instance from the input and providing a consistent class with the methods exposed on top of it. It is non-specific to the Polkadot usage, rather is is a extended utility provider around the base WebAssembly interfaces, reducing boilerplate.
 
-## Usage
+## Updating the WASM proxies
 
-Installation -
+Development notes for updating the WASM proxies runtimes.
 
+First update the dependencies, e.g. binaryen and wabt (when not already available in the project root `tmp`) -
+
+```sh
+scripts/polkadot-wasm-build-binaryen.sh scripts/polkadot-wasm-build-wabt.sh
 ```
-npm install --save @polkadot/client-wasm
+
+Compiling the Wat to Wasm -
+
+```sh
+scripts/polkadot-wasm-wat2wasm.sh packages/client-wasm/src/wasm/proxy_runtime.wat &&\
+scripts/polkadot-wasm-wat2wasm.sh packages/client-wasm/src/wasm/proxy_substrate.wat
 ```
 
-Calling -
+Now we can convert these to allow the proxy (making the external interfaces JS-legal) as well.
 
-```js
-const Wasm = require('@polkadot/client-wasm');
-const wasm = Wasm.fromCode(new Uint8Array([...]));
-
-console.log('result', wasm.addTwo(1, 2)); // => 3
+```sh
+scripts/polkadot-wasm-wasm2js.js --input packages/client-wasm/src/wasm/proxy_runtime.wasm --output packages/client-wasm/src/wasm/proxy_runtime_wasm.js &&\
+scripts/polkadot-wasm-wasm2js.js --input packages/client-wasm/src/wasm/proxy_substrate.wasm --output packages/client-wasm/src/wasm/proxy_substrate_wasm.js
 ```

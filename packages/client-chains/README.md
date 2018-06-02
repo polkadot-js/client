@@ -11,20 +11,3 @@
 # @polkadot/client-chains
 
 Node configuration definitions for specific chains.
-
-## Updating the WASM proxies
-
-Development notes for updating the WASM proxies runtimes.
-
-First update the dependencies, e.g. binaryen and wabt (when not already available in the project root `tmp`) -
-
-```sh
-scripts/polkadot-wasm-build-binaryen.sh scripts/polkadot-wasm-build-wabt.sh
-```
-
-Now we can convert the proxy (making the external interfaces JS-legal) as well.
-
-```sh
-scripts/polkadot-wasm-wat2wasm.sh packages/client-chains/src/wasm/proxy_substrate.wat
-scripts/polkadot-wasm-wasm2js.js --input packages/client-chains/src/wasm/proxy_substrate.wasm --output packages/client-chains/src/wasm/proxy_substrate_wasm.js
-```

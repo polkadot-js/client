@@ -15,12 +15,3 @@ For WASM binaries to operate in the general environment, a limited libc-like env
 ## Other runtimes
 
 A comprehensive libc runtime has been implemented as part of the [musl](https://github.com/jfbastien/musl) project. Ideas for the memory allocation has been expanded from this project, specifically by understanding [arch/wasm32/wasm.js](https://github.com/jfbastien/musl/blob/190dffd1415cc8be52d4659aced51625d63bdbc1/arch/wasm32/wasm.js).
-
-## Updating proxies
-
-When the runtime interface changes, the Wasm proxy needs to be updated. Assuming that all the tolling is available (setup for those in [client-chains](../client-chains)), the conversion can be done with -
-
-```sh
-scripts/polkadot-wasm-wat2wasm.sh packages/client-runtime/src/wasm/proxy_runtime.wat
-scripts/polkadot-wasm-wasm2js.js --input packages/client-runtime/src/wasm/proxy_runtime.wasm --output packages/client-runtime/src/wasm/proxy_runtime_wasm.js
-```
