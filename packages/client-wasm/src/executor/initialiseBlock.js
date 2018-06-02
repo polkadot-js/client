@@ -5,7 +5,7 @@
 
 import type { ExecutorState } from '../types';
 
-const call = require('./callAsU8a');
+const call = require('./call');
 
 module.exports = function initialiseBlock (self: ExecutorState, header: Uint8Array): Uint8Array {
   self.l.debug(() => 'Initialising block');

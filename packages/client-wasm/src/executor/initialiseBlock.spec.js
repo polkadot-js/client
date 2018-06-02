@@ -26,10 +26,13 @@ describe('initialiseBlock', () => {
         encodeHeader(
           createHeader({
             number: 1,
-            extrinsicsRoot: new Uint8Array([])
+            extrinsicsRoot: new Uint8Array(32)
           })
         )
       )
-    ).toBe(555);
+    ).toEqual({
+      hi: 0,
+      lo: 1
+    });
   });
 });

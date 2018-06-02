@@ -33,7 +33,7 @@ describe('applyExtrinsic', () => {
       encodeHeader(
         createHeader({
           number: 1,
-          extrinsicsRoot: new Uint8Array([])
+          extrinsicsRoot: new Uint8Array(32)
         })
       ),
       encodeSigned(keyring.one, 0)(
