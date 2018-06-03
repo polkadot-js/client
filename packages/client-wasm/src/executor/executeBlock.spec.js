@@ -14,6 +14,7 @@ const init = require('@polkadot/client-chains');
 
 describe('executeBlock', () => {
   let chain;
+  let transactions;
 
   beforeEach(() => {
     const config = {
@@ -22,11 +23,20 @@ describe('executeBlock', () => {
     };
 
     chain = init(config, memoryDb(), memoryDb());
-  });
 
-  beforeEach(() => {
     chain.state.staking.freeBalanceOf.set(69 + 42, keyring.one.publicKey());
-    chain.state.staking.freeBalanceOf.set(0, keyring.two.publicKey());
+    chain.state.staking.freeBalanceOf.set(10, keyring.two.publicKey());
+
+    transactions = [
+      // encodeSigned(keyring.nobody, 0)(
+      //   extrinsics.timestamp.public.set,
+      //   [12345]
+      // ),
+      // encodeSigned(keyring.nobody, 0)(
+      //   extrinsics.parachains.public.setHeads,
+      //   [[]]
+      // )
+    ];
   });
 
   it('executes with no external extrinsics', () => {
@@ -35,13 +45,11 @@ describe('executeBlock', () => {
         encodeBlock(
           createBlock({
             header: {
-              parentHash: chain.state.system.blockHashAt.get(0),
               number: 1,
-              stateRoot: new Uint8Array([
-                202, 62, 55, 51, 175, 184, 11, 195, 85, 147, 88, 241, 90, 22, 236, 240, 90, 188, 77, 134, 134, 70, 57, 104, 69, 94, 216, 123, 99, 229, 230, 24
-              ])
+              parentHash: chain.genesis.headerHash,
+              stateRoot: new Uint8Array(32)
             },
-            extrinsics: []
+            extrinsics: transactions
           })
         )
       )
@@ -58,32 +66,34 @@ describe('executeBlock', () => {
             number: 1,
             stateRoot: hexToU8a('0x3df569d47a0d7f4a448486f04fba4eea3e9dfca001319c609f88b3a67b0dd1ea')
           },
-          extrinsics: [
+          extrinsics: transactions.concat([
             encodeSigned(keyring.one, 0)(
               extrinsics.staking.public.transfer,
               [keyring.two.publicKey(), 69]
             )
-          ]
+          ])
         })
       )
     );
 
     expect(
       chain.state.staking.freeBalanceOf.get(keyring.one.publicKey()).toNumber()
-    ).toEqual(42);
+    ).toEqual(42 - 1); // transaction fee
     expect(
       chain.state.staking.freeBalanceOf.get(keyring.two.publicKey()).toNumber()
-    ).toEqual(69);
+    ).toEqual(10 + 69);
+  });
 
+  it('executes a block with multiple externals', () => {
     chain.executor.executeBlock(
       encodeBlock(
         createBlock({
           header: {
-            parentHash: chain.state.system.blockHashAt.get(1),
-            number: 2,
+            parentHash: chain.state.system.blockHashAt.get(0),
+            number: 1,
             stateRoot: hexToU8a('0x6b1df261bab7dc96a7428bff9fa740f26cc08cd1214834e52e3bdd4fed5557a5')
           },
-          transactions: [
+          extrinsics: transactions.concat([
             encodeSigned(keyring.two, 0)(
               extrinsics.staking.public.transfer,
               [keyring.one.publicKey(), 5]
@@ -92,16 +102,16 @@ describe('executeBlock', () => {
               extrinsics.staking.public.transfer,
               [keyring.two.publicKey(), 15]
             )
-          ]
+          ])
         })
       )
     );
 
     expect(
       chain.state.staking.freeBalanceOf.get(keyring.one.publicKey()).toNumber()
-    ).toEqual(32);
+    ).toEqual(69 - 15 - 1 + 5);
     expect(
       chain.state.staking.freeBalanceOf.get(keyring.two.publicKey()).toNumber()
-    ).toEqual(79);
+    ).toEqual(10 - 5 - 1 + 15);
   });
 });

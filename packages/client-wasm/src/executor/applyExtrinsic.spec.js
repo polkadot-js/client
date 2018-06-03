@@ -3,8 +3,10 @@
 // of the ISC license. See the LICENSE file for details.
 
 const extrinsics = require('@polkadot/extrinsics');
-const encodeSigned = require('@polkadot/extrinsics-codec/encode/sign');
 const memoryDb = require('@polkadot/client-db/memory');
+const encodeSigned = require('@polkadot/extrinsics-codec/encode/sign');
+const createHeader = require('@polkadot/primitives-builder/header');
+const encodeHeader = require('@polkadot/primitives-codec/header/encode');
 const keyring = require('@polkadot/util-keyring/testingPairs')();
 
 const init = require('@polkadot/client-chains');
@@ -19,11 +21,33 @@ describe('applyExtrinsic', () => {
     };
 
     chain = init(config, memoryDb(), memoryDb());
-  });
 
-  beforeEach(() => {
     chain.state.staking.freeBalanceOf.set(69 + 42, keyring.one.publicKey());
     chain.state.staking.freeBalanceOf.set(0, keyring.two.publicKey());
+
+    chain.executor.initialiseBlock(
+      encodeHeader(
+        createHeader({
+          number: 1,
+          parentHash: chain.genesis.headerHash,
+          extrinsicsRoot: new Uint8Array(32)
+        })
+      )
+    );
+
+    chain.executor.applyExtrinsic(
+      encodeSigned(keyring.nobody, 0)(
+        extrinsics.timestamp.public.set,
+        [12345]
+      )
+    );
+
+    // chain.executor.applyExtrinsic(
+    //   encodeSigned(keyring.nobody, 0)(
+    //     extrinsics.parachains.public.setHeads,
+    //     [[]]
+    //   )
+    // );
   });
 
   it('executes a basic transaction', () => {
@@ -44,7 +68,7 @@ describe('applyExtrinsic', () => {
 
     expect(
       chain.state.staking.freeBalanceOf.get(keyring.one.publicKey()).toNumber()
-    ).toEqual(42);
+    ).toEqual(42 - 1); // transaction fee of 1
     expect(
       chain.state.staking.freeBalanceOf.get(keyring.two.publicKey()).toNumber()
     ).toEqual(69);
