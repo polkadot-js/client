@@ -5,14 +5,14 @@
 
 import type { DbState } from './types';
 
-module.exports = function get ({ backend, pending }: DbState, k: Uint8Array): Uint8Array {
+module.exports = function get ({ backend, pending }: DbState, k: Uint8Array): Uint8Array | null {
   const value = pending[k];
 
   if (value) {
     return value.v
       ? value.v.slice()
-      : new Uint8Array([]);
+      : null;
   }
 
-  return backend.get(k);
+  return backend.get(k) || null;
 };

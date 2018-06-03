@@ -5,13 +5,17 @@
 
 import type { ExecutorState } from '../types';
 
+const encodeRaw = require('@polkadot/primitives-codec/extrinsic/encodeRaw');
+
 const call = require('./callAsU8a');
 
 module.exports = function applyExtrinsic (self: ExecutorState, extrinsic: Uint8Array): Uint8Array {
   self.l.debug(() => 'Apply extrinsic');
 
   const start = Date.now();
-  const result = call(self, 'apply_extrinsic')(extrinsic);
+  const result = call(self, 'apply_extrinsic')(
+    encodeRaw(extrinsic)
+  );
 
   self.l.debug(() => `Apply extrinsic completed (${Date.now() - start}ms)`);
 

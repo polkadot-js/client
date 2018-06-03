@@ -5,19 +5,21 @@
 
 import type { Section$Item } from '@polkadot/params/types';
 import type { Storage$Key$Values } from '@polkadot/storage/types';
-import type { StorageMethod$U8a, WrapDb } from '../types';
+import type { StorageMethod$Bool, BaseDb } from '../types';
 
 const creator = require('../key');
 
-module.exports = function decodeU8a <T> (db: WrapDb, key: Section$Item<T>): StorageMethod$U8a {
+module.exports = function decodeBool <T> (db: BaseDb, key: Section$Item<T>): StorageMethod$Bool {
   const createKey = creator(key);
 
   return {
     del: (...keyParams?: Storage$Key$Values): void =>
       db.del(createKey(keyParams)),
-    get: (...keyParams?: Storage$Key$Values): Uint8Array =>
-      db.get(createKey(keyParams)),
-    set: (value: Uint8Array, ...keyParams?: Storage$Key$Values): void =>
-      db.set(createKey(keyParams), value)
+    get: (...keyParams?: Storage$Key$Values): boolean =>
+      db.get(createKey(keyParams))[0] === 1,
+    set: (value: boolean, ...keyParams?: Storage$Key$Values): void =>
+      db.set(
+        createKey(keyParams), new Uint8Array([value ? 1 : 0])
+      )
   };
 };

@@ -12,6 +12,7 @@ const createAcc = require('../db/account');
 const createArrAcc = require('../db/arrayAccount');
 const createArrU8a = require('../db/arrayU8a');
 const createBn = require('../db/bn');
+const createBool = require('../db/bool');
 const createU8a = require('../db/u8a');
 const createDb = require('../db');
 
@@ -52,7 +53,9 @@ const governance = (db: WrapDb, { public: { approvalsRatio } }: Storage$Section)
   approvalsRatio: createBn(db, approvalsRatio, BLOCKNUM_SIZE)
 });
 
-const parachains = (db: WrapDb, { public: { activeParachains } }: Storage$Section) => ({});
+const parachains = (db: WrapDb, { public: { didUpdate } }: Storage$Section) => ({
+  didUpdate: createBool(db, didUpdate)
+});
 
 const session = (db: WrapDb, { public: { length, validators } }: Storage$Section) => ({
   length: createBn(db, length, BLOCKNUM_SIZE),
@@ -74,7 +77,9 @@ const system = (db: WrapDb, { public: { accountIndexOf, blockHashAt } }: Storage
   blockHashAt: createU8a(db, blockHashAt)
 });
 
-const timestamp = (db: WrapDb, x: Storage$Section) => ({});
+const timestamp = (db: WrapDb, { public: { didUpdate } }: Storage$Section) => ({
+  didUpdate: createBool(db, didUpdate)
+});
 
 module.exports = function createState (baseDb: BaseDb): StateDb {
   const db = createDb(baseDb);

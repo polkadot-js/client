@@ -17,6 +17,8 @@ module.exports = function decodeBn <T> (db: BaseDb, key: Section$Item<T>, bitLen
   const createKey = creator(key);
 
   return {
+    del: (...keyParams?: Storage$Key$Values): void =>
+      db.del(createKey(keyParams)),
     get: (...keyParams?: Storage$Key$Values): BN =>
       u8aToBn(
         db.get(createKey(keyParams)), true

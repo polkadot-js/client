@@ -34,8 +34,8 @@ module.exports = function executor (config: Config, blockDb: BlockDb, stateDb: S
       executeBlock(self, block),
     finaliseBlock: (header: Uint8Array): Uint8Array =>
       finaliseBlock(self, header),
-    generateBlock: (number: BN | number, utxs: Array<Uint8Array>): Uint8Array =>
-      generateBlock(self, number, utxs),
+    generateBlock: (number: BN | number, utxs: Array<Uint8Array>, timestamp?: number = Math.ceil(Date.now() / 1000)): Uint8Array =>
+      generateBlock(self, number, utxs, timestamp),
     importBlock: (block: Uint8Array): ?Executor$BlockImportResult =>
       importBlock(self, block),
     initialiseBlock: (header: Uint8Array): Uint8Array =>

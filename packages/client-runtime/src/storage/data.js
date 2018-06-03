@@ -30,7 +30,12 @@ module.exports = function data ({ l, heap, db }: RuntimeEnv): RuntimeInterface$S
       const key = heap.get(keyPtr, keyLength);
       const data = get(db, key, dataLength);
 
-      l.debug(() => ['get_storage_into', [keyPtr, keyLength, dataPtr, dataLength], '<-', key.toString(), '->', data.toString()]);
+      l.debug(() => ['get_storage_into', [keyPtr, keyLength, dataPtr, dataLength], '<-', key.toString(), '->', data === null ? null : data.toString()]);
+
+      if (data === null) {
+        // when nothing is there, return MAX_SAFE_INTEGER
+        return Number.MAX_SAFE_INTEGER;
+      }
 
       heap.set(dataPtr, data);
 

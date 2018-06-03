@@ -11,5 +11,10 @@ const initState = require('./state');
 module.exports = function genesis (self: ChainState, initialState: ChainGenesisState): ChainGenesis {
   initState(self, initialState);
 
-  return initBlock(self);
+  const genesis = initBlock(self);
+
+  self.stateDb.system.blockHashAt.set(genesis.headerHash, 0);
+  self.stateDb.db.commit();
+
+  return genesis;
 };

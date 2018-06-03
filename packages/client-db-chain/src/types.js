@@ -23,6 +23,7 @@ export type WrapDb = BaseDb & {
 };
 
 export type StorageMethod<P, R> = {
+  del: (...params?: Storage$Key$Values) => void,
   get: (...params?: Storage$Key$Values) => R,
   set: (value: P, ...params?: Storage$Key$Values) => void
 }
@@ -31,13 +32,15 @@ export type StorageMethod$Account = StorageMethod<Uint8Array, Uint8Array>;
 
 export type StorageMethod$Bn = StorageMethod<BN | number, BN>;
 
+export type StorageMethod$Bool = StorageMethod<boolean, boolean>;
+
 export type StorageMethod$U8a = StorageMethod<Uint8Array, Uint8Array>;
 
 export type StorageMethod$ArrayAccount = StorageMethod<Array<Uint8Array>, Array<Uint8Array>>;
 
 export type StorageMethod$ArrayU8a = StorageMethod<Array<Uint8Array>, Array<Uint8Array>>;
 
-export type StorageMethods = StorageMethod$Account | StorageMethod$Bn | StorageMethod$U8a | StorageMethod$ArrayU8a | StorageMethod$ArrayAccount;
+export type StorageMethods = StorageMethod$Account | StorageMethod$Bn | StorageMethod$Bool | StorageMethod$U8a | StorageMethod$ArrayU8a | StorageMethod$ArrayAccount;
 
 export type WrappedDb<O> = O & {
   db: WrapDb
