@@ -20,8 +20,8 @@ const proxy = require('../wasm/proxy_substrate.wasm.js');
 
 const CODE_KEY = key(storage.consensus.public.code)();
 
-module.exports = function call ({ config, genesis, l, runtime, stateDb: { db } }: ExecutorState, name: string): Call {
-  const code = db.get(CODE_KEY) || genesis.code;
+module.exports = function call ({ config, genesis, l, runtime, stateDb }: ExecutorState, name: string): Call {
+  const code = stateDb.db.get(CODE_KEY) || genesis.code;
   const instance = createWasm(config, runtime, code, proxy);
   const { heap } = runtime.environment;
 

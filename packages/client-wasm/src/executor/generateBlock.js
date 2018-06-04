@@ -7,17 +7,15 @@ import type BN from 'bn.js';
 import type { UncheckedRaw } from '@polkadot/primitives/extrinsic';
 import type { ExecutorState } from '../types';
 
-const methods = require('@polkadot/extrinsics');
-const encodeUnchecked = require('@polkadot/extrinsics-codec/encode/unchecked');
 const createHeader = require('@polkadot/primitives-builder/header');
 const decodeHeader = require('@polkadot/primitives-codec/header/decode');
 const encodeBlock = require('@polkadot/primitives-codec/block/encode');
 const encodeHeader = require('@polkadot/primitives-codec/header/encode');
 const bnToBn = require('@polkadot/util/bn/toBn');
-const keyring = require('@polkadot/util-keyring/testingPairs')();
 
 const applyExtrinsic = require('./applyExtrinsic');
 const finaliseBlock = require('./finaliseBlock');
+const withInherent = require('./inherentExtrinsics');
 const initialiseBlock = require('./initialiseBlock');
 
 module.exports = function generateBlock (self: ExecutorState, _number: number | BN, _extrinsics: Array<UncheckedRaw>, timestamp: number): Uint8Array {
@@ -26,29 +24,10 @@ module.exports = function generateBlock (self: ExecutorState, _number: number | 
 
   self.l.debug(() => `Generating block #${number.toString()}`);
 
-  const extrinsics = [
-    // encodeUnchecked(keyring.nobody, 0)(
-    //   methods.timestamp.public.set,
-    //   [0x5b13c3a4]
-    // ),
-    // encodeUnchecked(keyring.nobody, 0)(
-    //   methods.parachains.public.setHeads,
-    //   [[]]
-    // )
-    encodeUnchecked(keyring.nobody, 0)(
-      methods.timestamp.public.set,
-      [timestamp]
-    ),
-    encodeUnchecked(keyring.nobody, 0)(
-      methods.parachains.public.setHeads,
-      [[]]
-    )
-  ].concat(_extrinsics);
-
-  const parentHash = self.stateDb.system.blockHashAt.get(number.subn(1));
+  const extrinsics = withInherent(self, timestamp, _extrinsics);
   const header = createHeader({
     number,
-    parentHash
+    parentHash: self.stateDb.system.blockHashAt.get(number.subn(1))
   }, extrinsics);
   const headerRaw = encodeHeader(header);
 
@@ -60,7 +39,6 @@ module.exports = function generateBlock (self: ExecutorState, _number: number | 
   const { stateRoot } = decodeHeader(
     finaliseBlock(self, headerRaw)
   );
-
   const block = encodeBlock({
     extrinsics,
     header: {
