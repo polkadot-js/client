@@ -17,8 +17,15 @@ module.exports = function decodeArrayU8a <T> (db: BaseDb, key: Section$Item<T>):
   const createKey = creator(key);
 
   return {
+    del: (...keyParams?: Storage$Key$Values): void =>
+      db.del(createKey(keyParams)),
     get: (...keyParams?: Storage$Key$Values): Array<Uint8Array> => {
       const u8a = db.get(createKey(keyParams));
+
+      if (u8a === null) {
+        return [];
+      }
+
       const length = u8aToBn(u8a.subarray(0, 4)).toNumber();
       const result = [];
 

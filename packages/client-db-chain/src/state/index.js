@@ -4,8 +4,7 @@
 // @flow
 
 import type { Storage$Section } from '@polkadot/storage/types';
-import type { BaseDb, WrapDb } from '../types';
-import type { StateDb } from './types';
+import type { BaseDb, StateDb, WrapDb } from '../types';
 
 const storage = require('@polkadot/storage');
 
@@ -13,6 +12,7 @@ const createAcc = require('../db/account');
 const createArrAcc = require('../db/arrayAccount');
 const createArrU8a = require('../db/arrayU8a');
 const createBn = require('../db/bn');
+const createBool = require('../db/bool');
 const createU8a = require('../db/u8a');
 const createDb = require('../db');
 
@@ -53,6 +53,10 @@ const governance = (db: WrapDb, { public: { approvalsRatio } }: Storage$Section)
   approvalsRatio: createBn(db, approvalsRatio, BLOCKNUM_SIZE)
 });
 
+const parachains = (db: WrapDb, { public: { didUpdate } }: Storage$Section) => ({
+  didUpdate: createBool(db, didUpdate)
+});
+
 const session = (db: WrapDb, { public: { length, validators } }: Storage$Section) => ({
   length: createBn(db, length, BLOCKNUM_SIZE),
   validators: createArrAcc(db, validators)
@@ -73,7 +77,9 @@ const system = (db: WrapDb, { public: { accountIndexOf, blockHashAt } }: Storage
   blockHashAt: createU8a(db, blockHashAt)
 });
 
-const timestamp = (db: WrapDb, x: Storage$Section) => ({});
+const timestamp = (db: WrapDb, { public: { didUpdate } }: Storage$Section) => ({
+  didUpdate: createBool(db, didUpdate)
+});
 
 module.exports = function createState (baseDb: BaseDb): StateDb {
   const db = createDb(baseDb);
@@ -85,6 +91,7 @@ module.exports = function createState (baseDb: BaseDb): StateDb {
     councilVoting: councilVoting(db, storage.councilVoting),
     democracy: democracy(db, storage.democracy),
     governance: governance(db, storage.governance),
+    parachains: parachains(db, storage.parachains),
     session: session(db, storage.session),
     staking: staking(db, storage.staking),
     system: system(db, storage.system),

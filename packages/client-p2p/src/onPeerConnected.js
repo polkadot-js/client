@@ -12,9 +12,9 @@ module.exports = function onPeerConnected (self: P2pState): void {
     return peer.send(
       statusMessage({
         roles: self.config.roles,
-        bestNumber: self.chain.blocks.getBestNumber(),
-        bestHash: self.chain.blocks.getBestHash(),
-        genesisHash: self.chain.genesis.hash
+        bestNumber: self.chain.blocks.bestNumber.get(),
+        bestHash: self.chain.blocks.bestHash.get(),
+        genesisHash: self.chain.genesis.headerHash
       })
     );
   });

@@ -19,7 +19,7 @@ const stop = require('./stop');
 module.exports = async function start (self: P2pState): Promise<boolean> {
   stop(self);
 
-  self.node = await createNode(self.config.p2p.address, self.config.p2p.port, self.chain, self.config.p2p.peers);
+  self.node = await createNode(self.config.p2p.address, self.config.p2p.port, self.config.p2p.peers);
   self.node.handle(defaults.PROTOCOL, onProtocol(self));
   self.peers = createPeers(self.node);
 

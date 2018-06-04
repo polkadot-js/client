@@ -17,8 +17,8 @@ describe('onPeerConnected', () => {
       config: { roles: [] },
       chain: {
         blocks: {
-          getBestNumber: jest.fn(() => 123),
-          getBestHash: jest.fn(() => new Uint8Array([]))
+          bestNumber: { get: jest.fn(() => 123) },
+          bestHash: { get: jest.fn(() => new Uint8Array([])) }
         },
         genesis: {
           hash: new Uint8Array([])

@@ -5,7 +5,6 @@
 
 import type { Options } from 'yargs';
 
-const allRoles = require('@polkadot/primitives/role/all');
 const chains = require('@polkadot/client-chains/chains');
 const chainDefaults = require('@polkadot/client-chains/defaults');
 
@@ -25,9 +24,8 @@ module.exports = ({
     type: 'string'
   },
   'roles': {
-    // flowlint-next-line unclear-type:off
-    choices: ((Object.keys(allRoles): any): Array<mixed>),
-    default: ['none'],
+    choices: ['full', 'light'],
+    default: ['full'],
     description: 'Sets the type of roles the node operates as',
     type: 'array'
   }

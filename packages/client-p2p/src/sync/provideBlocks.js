@@ -16,7 +16,7 @@ const getBlockData = require('./getBlockData');
 module.exports = function provideBlocks (self: P2pState, peer: PeerInterface, request: BlockRequestMessage): void {
   // flowlint-next-line unclear-type:off
   const current = ((request.from: any): BN);
-  const best = self.chain.blocks.getBestNumber();
+  const best = self.chain.blocks.bestNumber.get();
   const blocks = [];
 
   // FIXME: Also send blocks starting with hash
@@ -25,7 +25,7 @@ module.exports = function provideBlocks (self: P2pState, peer: PeerInterface, re
   const increment = request.direction === 'ascending' ? new BN(1) : new BN(-1);
 
   while (count < max && current.lte(best) && !current.isNeg()) {
-    const hash = self.chain.state.getBlockHash(current);
+    const hash = self.chain.state.system.blockHashAt.get(current);
 
     blocks.push(
       getBlockData(self, request.fields, hash)

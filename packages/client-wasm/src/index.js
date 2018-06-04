@@ -3,24 +3,45 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
+import type BN from 'bn.js';
 import type { Config } from '@polkadot/client/types';
+import type { ChainGenesis } from '@polkadot/client-chains/types';
+import type { BlockDb, StateDb } from '@polkadot/client-db-chain/types';
 import type { RuntimeInterface } from '@polkadot/client-runtime/types';
+import type { UncheckedRaw } from '@polkadot/primitives/extrinsic';
+import type { ExecutorState, ExecutorInterface, Executor$BlockImportResult } from './types';
 
-const { HEAP_SIZE_KB } = require('./defaults');
-const createEnv = require('./create/env');
-const createExports = require('./create/exports');
-const createMemory = require('./create/memory');
+const l = require('@polkadot/util/logger')('executor');
 
-module.exports = function wasm ({ wasm: { heapSize = HEAP_SIZE_KB } }: Config, runtime: RuntimeInterface, chainCode: Uint8Array, chainProxy: Uint8Array): WebAssemblyInstance$Exports {
-  const env = createEnv(runtime, createMemory(0, 0));
-  const proxy = createExports(chainCode, { env });
-  const instance = createExports(chainProxy, { proxy }, createMemory(0, 0));
+const applyExtrinsic = require('./executor/applyExtrinsic');
+const executeBlock = require('./executor/executeBlock');
+const finaliseBlock = require('./executor/finaliseBlock');
+const generateBlock = require('./executor/generateBlock');
+const importBlock = require('./executor/importBlock');
+const initialiseBlock = require('./executor/initialiseBlock');
 
-  // flowlint-next-line unclear-type:off
-  const memory = ((proxy.memory: any): WebAssembly.Memory);
-  const offset = memory.grow(Math.ceil(heapSize / 64));
+module.exports = function executor (config: Config, blockDb: BlockDb, stateDb: StateDb, runtime: RuntimeInterface, genesis: ChainGenesis): ExecutorInterface {
+  const self: ExecutorState = {
+    blockDb,
+    config,
+    genesis,
+    l,
+    runtime,
+    stateDb
+  };
 
-  runtime.environment.heap.setWasmMemory(memory, offset * 64 * 1024);
-
-  return instance;
+  return {
+    applyExtrinsic: (extrinsic: UncheckedRaw): boolean =>
+      applyExtrinsic(self, extrinsic),
+    executeBlock: (block: Uint8Array): boolean =>
+      executeBlock(self, block),
+    finaliseBlock: (header: Uint8Array): Uint8Array =>
+      finaliseBlock(self, header),
+    generateBlock: (number: BN | number, utxs: Array<UncheckedRaw>, timestamp?: number = Math.ceil(Date.now() / 1000)): Uint8Array =>
+      generateBlock(self, number, utxs, timestamp),
+    importBlock: (block: Uint8Array): Executor$BlockImportResult =>
+      importBlock(self, block),
+    initialiseBlock: (header: Uint8Array): boolean =>
+      initialiseBlock(self, header)
+  };
 };

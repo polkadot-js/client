@@ -8,7 +8,6 @@ import type { DbState } from './types';
 module.exports = function del ({ pending }: DbState, k: Uint8Array): void {
   pending[k] = {
     k: k.slice(),
-    // $FlowFixMe yes, this shouldn't be null
     v: null
   };
 };

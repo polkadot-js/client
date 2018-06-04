@@ -5,13 +5,16 @@
 
 import type { BaseDb } from '@polkadot/client-db-chain/types';
 
-module.exports = function get (db: BaseDb, key: Uint8Array, maxLength: number = -1): Uint8Array {
+module.exports = function get (db: BaseDb, key: Uint8Array, maxLength: number = -1): Uint8Array | null {
   const data = db.get(key);
+
+  if (data === null) {
+    return null;
+  }
+
   const dataLength = maxLength === -1 || data.length < maxLength
     ? data.length
     : maxLength;
 
-  return dataLength === 0
-    ? new Uint8Array(maxLength)
-    : data.subarray(0, dataLength);
+  return data.subarray(0, dataLength);
 };

@@ -26,7 +26,7 @@ module.exports = function memory (): BaseDb {
       del(storage, k),
     isEmpty: (): boolean =>
       Object.keys(storage).length === 0,
-    get: (k: Uint8Array): Uint8Array =>
+    get: (k: Uint8Array): Uint8Array | null =>
       get(storage, k),
     pairs: (): Trie$Pairs =>
       pairs(storage),

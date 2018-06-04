@@ -12,19 +12,18 @@
 
 A wrapper around WebAssembly applications, creating an instance from the input and providing a consistent class with the methods exposed on top of it. It is non-specific to the Polkadot usage, rather is is a extended utility provider around the base WebAssembly interfaces, reducing boilerplate.
 
-## Usage
+## Updating the WASM proxies
 
-Installation -
+Development notes for updating the WASM proxies runtimes.
 
+First update the dependencies, e.g. binaryen and wabt (when not already available in the project root `tmp`) -
+
+```sh
+scripts/polkadot-wasm-build-binaryen.sh scripts/polkadot-wasm-build-wabt.sh
 ```
-npm install --save @polkadot/client-wasm
-```
 
-Calling -
+Compiling the WAT to WASM to JS, including converting the polkadot runtimes to a JS-compatible version -
 
-```js
-const Wasm = require('@polkadot/client-wasm');
-const wasm = Wasm.fromCode(new Uint8Array([...]));
-
-console.log('result', wasm.addTwo(1, 2)); // => 3
+```sh
+scripts/polkadot-wasm-js-compat.sh
 ```

@@ -10,18 +10,18 @@ const decodeBlock = require('@polkadot/primitives-codec/block/decodeRaw');
 
 module.exports = function getBlockData (self: P2pState, fields: BlockRequestMessage$Fields, hash: Uint8Array): BlockResponseMessage$BlockData {
   const { body, header } = decodeBlock(
-    self.chain.blocks.getBlock(hash)
+    self.chain.blocks.block.get(hash)
   );
   const data: BlockResponseMessage$BlockData = {
     hash
   };
 
   if (fields.includes('body')) {
-    data.header = header;
+    data.body = body;
   }
 
   if (fields.includes('header')) {
-    data.body = body;
+    data.header = header;
   }
 
   return data;

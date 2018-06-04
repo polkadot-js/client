@@ -6,13 +6,6 @@
   "engines": {
     "node": ">=8.0"
   },
-  "bin": {
-    "polkadot-wasm-wat2wasm": "./scripts/polkadot-wasm-wat2wasm.sh",
-    "polkadot-wasm-wasm2wat": "./scripts/polkadot-wasm-wasm2wat.sh",
-    "polkadot-wasm-wasm2js": "./scripts/polkadot-wasm-wasm2js.js",
-    "polkadot-wasm-build-wabt": "./scripts/polkadot-wasm-build-wabt.sh",
-    "polkadot-wasm-build-binaryen": "./scripts/polkadot-wasm-build-binaryen.sh"
-  },
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org"
@@ -39,8 +32,9 @@
   "dependencies": {
     "@babel/runtime": "^7.0.0-beta.47",
     "@polkadot/client-runtime": "^0.11.1",
-    "@polkadot/primitives-codec": "^0.17.7",
-    "@polkadot/util": "^0.22.2",
+    "@polkadot/primitives-codec": "^0.17.17",
+    "@polkadot/util": "^0.22.4",
+    "@polkadot/wasm-bin": "paritytech/polkadot-wasm-bin#5ab4fc6083501b26e5fd979b93c35e2f9010b324",
     "yargs": "^11.0.0"
   }
 }

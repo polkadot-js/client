@@ -3,7 +3,7 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { ChainConfig$Nodes } from '@polkadot/client-chains/types';
+import type { P2pNodes } from '../types';
 
 const KadDHT = require('libp2p-kad-dht');
 const Multicast = require('libp2p-mdns');
@@ -29,7 +29,7 @@ const DEFAULT_TRANSPORTS = [
   // WS
 ];
 
-module.exports = function createConfig (peerInfo: PeerInfo, bootNodes: ChainConfig$Nodes = []): LibP2P$Config {
+module.exports = function createConfig (peerInfo: PeerInfo, bootNodes: P2pNodes = []): LibP2P$Config {
   return {
     connection: {
       crypto: DEFAULT_CRYPTO,

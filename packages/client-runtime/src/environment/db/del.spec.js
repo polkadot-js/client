@@ -13,12 +13,17 @@ describe('del', () => {
 
   it('removes a set value', () => {
     int.set(new Uint8Array([1]), new Uint8Array([2]));
-    int.del(new Uint8Array([1]));
 
     expect(
       int.get(new Uint8Array([1]))
     ).toEqual(
-      new Uint8Array([])
+      new Uint8Array([2])
     );
+
+    int.del(new Uint8Array([1]));
+
+    expect(
+      int.get(new Uint8Array([1]))
+    ).toBeNull();
   });
 });

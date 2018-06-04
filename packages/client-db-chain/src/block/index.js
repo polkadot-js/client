@@ -3,8 +3,7 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { BaseDb } from '../types';
-import type { BlockDb } from './types';
+import type { BaseDb, BlockDb } from '../types';
 
 const createBn = require('../db/bn');
 const createU8a = require('../db/u8a');
