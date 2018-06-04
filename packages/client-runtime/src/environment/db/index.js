@@ -29,7 +29,7 @@ module.exports = function envDb (backend: BaseDb): BaseDb {
       del(self, k),
     isEmpty: (): boolean =>
       Object.keys(self.pending).length === 0,
-    get: (k: Uint8Array): Uint8Array =>
+    get: (k: Uint8Array): Uint8Array | null =>
       get(self, k),
     pairs: (): Trie$Pairs =>
       pairs(self),

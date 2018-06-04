@@ -7,14 +7,21 @@ import type { ChainState, ChainGenesis } from '../types';
 
 const createBlock = require('@polkadot/primitives-builder/block');
 const encodeHeader = require('@polkadot/primitives-codec/header/encode');
-const hexToU8a = require('@polkadot/util/hex/toU8a');
+const storage = require('@polkadot/storage');
+const key = require('@polkadot/storage/key');
 const blake2Asu8a = require('@polkadot/util-crypto/blake2/asU8a');
 const trieRoot = require('@polkadot/util-triehash/root');
 
-// FIXME We probably want to hash, but _should_ be pretty "safe"
-const CODE_KEY = hexToU8a('0x3a636f6465');
+const CODE_KEY = key(storage.consensus.public.code)();
 
 module.exports = function genesisBlock ({ stateDb: { db }, chain }: ChainState): ChainGenesis {
+  const code = db.get(CODE_KEY);
+
+  if (code === null) {
+    throw new Error('Unable to retrieve genesis code');
+  }
+
+  const codeHash = blake2Asu8a(code, 256);
   const block = createBlock({
     header: {
       stateRoot: db.trieRoot(),
@@ -23,8 +30,6 @@ module.exports = function genesisBlock ({ stateDb: { db }, chain }: ChainState):
   });
   const header = encodeHeader(block.header);
   const headerHash = blake2Asu8a(header, 256);
-  const code = db.get(CODE_KEY);
-  const codeHash = blake2Asu8a(code, 256);
 
   return {
     code,

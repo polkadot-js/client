@@ -10,5 +10,8 @@ module.exports = function pairs (storage: Memory$Storage): Trie$Pairs {
   // flowlint-next-line unclear-type:off
   const keys = ((Object.keys(storage): any): Array<Uint8Array>);
 
-  return keys.map((k) => storage[k]);
+  return keys
+    // $FlowFixMe we are filtering out the nulls next, don't panic
+    .map((k) => storage[k])
+    .filter((v) => v !== null);
 };

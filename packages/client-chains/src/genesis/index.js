@@ -8,7 +8,7 @@ import type { ChainState, ChainGenesis, ChainGenesisState } from '../types';
 const initBlock = require('./block');
 const initState = require('./state');
 
-module.exports = function genesis (self: ChainState, initialState: ChainGenesisState): ChainGenesis {
+module.exports = function initGenesis (self: ChainState, initialState: ChainGenesisState): ChainGenesis {
   initState(self, initialState);
 
   const genesis = initBlock(self);

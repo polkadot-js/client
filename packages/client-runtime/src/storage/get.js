@@ -5,7 +5,7 @@
 
 import type { BaseDb } from '@polkadot/client-db-chain/types';
 
-module.exports = function get (db: BaseDb, key: Uint8Array, maxLength: number = -1): ?Uint8Array {
+module.exports = function get (db: BaseDb, key: Uint8Array, maxLength: number = -1): Uint8Array | null {
   const data = db.get(key);
 
   if (data === null) {

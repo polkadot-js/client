@@ -8,9 +8,14 @@ import type { ExecutorState } from '../types';
 const call = require('./call');
 
 module.exports = function executeBlock (self: ExecutorState, block: Uint8Array): boolean {
+  const start = Date.now();
+
   self.l.debug(() => 'Executing block');
 
-  const start = Date.now();
+  // FIXME Not sure why this is needed, this may be due to the implementation with overlays?
+  self.stateDb.timestamp.didUpdate.del();
+  self.stateDb.parachains.didUpdate.del();
+
   const result = call(self, 'execute_block')(block);
 
   self.l.debug(() => `Block execution completed (${Date.now() - start}ms)`);

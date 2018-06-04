@@ -7,13 +7,14 @@ import type { ExecutorState } from '../types';
 
 const call = require('./call');
 
-module.exports = function initialiseBlock (self: ExecutorState, header: Uint8Array): Uint8Array {
+module.exports = function initialiseBlock (self: ExecutorState, header: Uint8Array): boolean {
+  const start = Date.now();
+
   self.l.debug(() => 'Initialising block');
 
-  const start = Date.now();
   const result = call(self, 'initialise_block')(header);
 
   self.l.debug(() => `Block initialised (${Date.now() - start}ms)`);
 
-  return result;
+  return result.lo === 1;
 };

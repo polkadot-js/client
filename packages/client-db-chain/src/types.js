@@ -12,7 +12,7 @@ export type BaseDb = {
   commit: (values?: Trie$Pairs) => void,
   del: (key: Uint8Array) => void,
   isEmpty: () => boolean,
-  get: (key: Uint8Array) => Uint8Array,
+  get: (key: Uint8Array) => Uint8Array | null,
   pairs: () => Trie$Pairs,
   set: (key: Uint8Array, value: Uint8Array) => void
 }
@@ -86,7 +86,9 @@ export type StateDb$Governance = {
   approvalsRatio: StorageMethod$Bn
 };
 
-export type StateDb$Parachains = {};
+export type StateDb$Parachains = {
+  didUpdate: StorageMethod$Bool
+};
 
 export type StateDb$Session = {
   length: StorageMethod$Bn,
@@ -108,7 +110,9 @@ export type StateDb$System = {
   blockHashAt: StorageMethod$U8a
 };
 
-export type StateDb$Timestamp = {};
+export type StateDb$Timestamp = {
+  didUpdate: StorageMethod$Bool
+};
 
 export type StateDb = WrappedDb<{
   consensus: StateDb$Consensus,

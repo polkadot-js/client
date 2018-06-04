@@ -19,12 +19,19 @@ module.exports = function data ({ l, heap, db }: RuntimeEnv): RuntimeInterface$S
     get_allocated_storage: (keyPtr: Pointer, keyLength: number, lenPtr: Pointer): Pointer => {
       const key = heap.get(keyPtr, keyLength);
       const data = get(db, key);
+      const length = data === null
+        ? Number.MAX_SAFE_INTEGER
+        : data.length;
 
       l.debug(() => ['get_allocated_storage', [keyPtr, keyLength, lenPtr], '<-', key.toString()]);
 
-      heap.setU32(lenPtr, data.length);
+      heap.setU32(lenPtr, length);
 
-      return heap.set(heap.allocate(data.length), data);
+      if (data == null) {
+        return length;
+      }
+
+      return heap.set(heap.allocate(length), data);
     },
     get_storage_into: (keyPtr: Pointer, keyLength: number, dataPtr: Pointer, dataLength: number): number => {
       const key = heap.get(keyPtr, keyLength);

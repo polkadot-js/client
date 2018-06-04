@@ -3,11 +3,12 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
+import type { Trie$Pair } from '@polkadot/util-triehash/types';
 import type { Memory$Storage } from './types';
 
 module.exports = function set (storage: Memory$Storage, k: Uint8Array, v: Uint8Array): void {
-  storage[k] = {
+  storage[k] = ({
     k: k.slice(),
     v: v.slice()
-  };
+  }: Trie$Pair);
 };

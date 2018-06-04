@@ -17,7 +17,7 @@ module.exports = function chains (config: Config, baseStateDb: BaseDb, baseBlock
   const initial = loadChain(config.chain);
   const self = createState(config, baseStateDb, baseBlockDb);
   const genesis = createGenesis(self, initial);
-  const executor = createExecutor(config, self.blockDb, self.stateDb, self.runtime);
+  const executor = createExecutor(config, self.blockDb, self.stateDb, self.runtime, genesis);
 
   return {
     blocks: self.blockDb,

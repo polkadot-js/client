@@ -8,9 +8,10 @@ import type { ExecutorState } from '../types';
 const call = require('./callAsU8a');
 
 module.exports = function finaliseBlock (self: ExecutorState, header: Uint8Array): Uint8Array {
+  const start = Date.now();
+
   self.l.debug(() => 'Finalising block');
 
-  const start = Date.now();
   const result = call(self, 'finalise_block')(header);
 
   self.l.debug(() => `Block finalised (${Date.now() - start}ms)`);

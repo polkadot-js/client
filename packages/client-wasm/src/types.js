@@ -5,8 +5,10 @@
 
 import type BN from 'bn.js';
 import type { Config } from '@polkadot/client/types';
+import type { ChainGenesis } from '@polkadot/client-chains/types';
 import type { BlockDb, StateDb } from '@polkadot/client-db-chain/types';
 import type { RuntimeInterface } from '@polkadot/client-runtime/types';
+import type { ExtrinsicUncheckedRaw } from '@polkadot/primitives/extrinsic';
 import type { Logger } from '@polkadot/util/types';
 
 export type WasmExports = {
@@ -28,22 +30,23 @@ export type ExecutorInstance = {
 
 export type Executor$BlockImportResult = {
   body: Uint8Array,
-  extrinsics: Array<Uint8Array>,
+  extrinsics: Array<ExtrinsicUncheckedRaw>,
   hash: Uint8Array,
   header: Uint8Array
 };
 
 export type ExecutorInterface = {
-  applyExtrinsic (extrinsic: Uint8Array): Uint8Array,
+  applyExtrinsic (extrinsic: ExtrinsicUncheckedRaw): Uint8Array,
   executeBlock (block: Uint8Array): boolean,
   finaliseBlock (header: Uint8Array): Uint8Array,
-  generateBlock (number: BN | number, extrinsics: Array<Uint8Array>): Uint8Array,
-  importBlock (block: Uint8Array): ?Executor$BlockImportResult
+  generateBlock (number: BN | number, extrinsics: Array<ExtrinsicUncheckedRaw>): Uint8Array,
+  importBlock (block: Uint8Array): Executor$BlockImportResult
 };
 
 export type ExecutorState = {
   blockDb: BlockDb,
   config: Config,
+  genesis: ChainGenesis,
   l: Logger,
   runtime: RuntimeInterface,
   stateDb: StateDb

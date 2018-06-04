@@ -11,21 +11,21 @@ import type { StorageMethod$Bn, BaseDb } from '../types';
 const bnToU8a = require('@polkadot/util/bn/toU8a');
 const u8aToBn = require('@polkadot/util/u8a/toBn');
 
-const creator = require('../key');
+const u8a = require('./u8a');
 
 module.exports = function decodeBn <T> (db: BaseDb, key: Section$Item<T>, bitLength: 32 | 64 | 128): StorageMethod$Bn {
-  const createKey = creator(key);
+  const base = u8a(db, key);
 
   return {
-    del: (...keyParams?: Storage$Key$Values): void =>
-      db.del(createKey(keyParams)),
+    del: base.del,
     get: (...keyParams?: Storage$Key$Values): BN =>
       u8aToBn(
-        db.get(createKey(keyParams)), true
+        base.get.apply(null, keyParams),
+        true
       ),
     set: (value: BN | number, ...keyParams?: Storage$Key$Values): void =>
-      db.set(
-        createKey(keyParams), bnToU8a(value, bitLength, true)
+      base.set.apply(
+        null, [bnToU8a(value, bitLength, true)].concat(keyParams)
       )
   };
 };

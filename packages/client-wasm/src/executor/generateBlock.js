@@ -4,10 +4,11 @@
 // @flow
 
 import type BN from 'bn.js';
+import type { ExtrinsicUncheckedRaw } from '@polkadot/primitives/extrinsic';
 import type { ExecutorState } from '../types';
 
 const methods = require('@polkadot/extrinsics');
-const encodeSigned = require('@polkadot/extrinsics-codec/encode/sign');
+const encodeUnchecked = require('@polkadot/extrinsics-codec/encode/unchecked');
 const createHeader = require('@polkadot/primitives-builder/header');
 const encodeBlock = require('@polkadot/primitives-codec/block/encodeRaw');
 const encodeHeader = require('@polkadot/primitives-codec/header/encode');
@@ -18,18 +19,18 @@ const applyExtrinsic = require('./applyExtrinsic');
 const finaliseBlock = require('./finaliseBlock');
 const initialiseBlock = require('./initialiseBlock');
 
-module.exports = function generateBlock (self: ExecutorState, _number: number | BN, _extrinsics: Array<Uint8Array>, timestamp: number): Uint8Array {
+module.exports = function generateBlock (self: ExecutorState, _number: number | BN, _extrinsics: Array<ExtrinsicUncheckedRaw>, timestamp: number): Uint8Array {
   const start = Date.now();
   const number = bnToBn(_number);
 
   self.l.debug(() => `Generating block #${number.toString()}`);
 
   const extrinsics = [
-    encodeSigned(keyring.nobody, 0)(
+    encodeUnchecked(keyring.nobody, 0)(
       methods.timestamp.public.set,
       [timestamp]
     ),
-    encodeSigned(keyring.nobody, 0)(
+    encodeUnchecked(keyring.nobody, 0)(
       methods.parachains.public.setHeads,
       [[]]
     )
@@ -45,7 +46,7 @@ module.exports = function generateBlock (self: ExecutorState, _number: number | 
 
   initialiseBlock(self, empty);
 
-  // FIXME Not sure why this is needed, this is due to the implementation with overlays
+  // FIXME Not sure why this is needed, this may be due to the implementation with overlays?
   self.stateDb.timestamp.didUpdate.del();
   self.stateDb.parachains.didUpdate.del();
 

@@ -3,11 +3,12 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
+import type { Trie$Pair } from '@polkadot/util-triehash/types';
 import type { DbState } from './types';
 
 module.exports = function set ({ pending }: DbState, k: Uint8Array, v: Uint8Array): void {
-  pending[k] = {
+  pending[k] = ({
     k: k.slice(),
     v: v.slice()
-  };
+  }: Trie$Pair);
 };

@@ -4,15 +4,12 @@
 // @flow
 
 import type { ExecutorState } from '../types';
-
-type CallResult = {
-  lo: number,
-  hi: number
-};
+import type { CallResult } from './types';
 
 type Call = (...data: Array<Uint8Array>) => CallResult;
 
-const hexToU8a = require('@polkadot/util/hex/toU8a');
+const storage = require('@polkadot/storage');
+const key = require('@polkadot/storage/key');
 const u8aToHex = require('@polkadot/util/u8a/toHex');
 
 const createWasm = require('../wasm');
@@ -21,11 +18,10 @@ const proxy = require('../wasm/proxy_substrate.wasm.js');
 // NOTE testing only, comparing results
 // const code = require('../wasm/polkadot_runtime.compact.wasm.js');
 
-// FIXME We probably want to hash, but _should_ be pretty "safe"
-const CODE_KEY = hexToU8a('0x3a636f6465');
+const CODE_KEY = key(storage.consensus.public.code)();
 
-module.exports = function call ({ config, l, runtime, stateDb: { db } }: ExecutorState, name: string): Call {
-  const code = db.get(CODE_KEY);
+module.exports = function call ({ config, genesis, l, runtime, stateDb: { db } }: ExecutorState, name: string): Call {
+  const code = db.get(CODE_KEY) || genesis.code;
   const instance = createWasm(config, runtime, code, proxy);
   const { heap } = runtime.environment;
 
@@ -43,20 +39,14 @@ module.exports = function call ({ config, l, runtime, stateDb: { db } }: Executo
 
     l.debug(() => ['executing', name, params]);
 
-    try {
-      const lo: number = instance[name].apply(null, params);
-      const hi: number = instance['get_result_hi']();
+    const lo: number = instance[name].apply(null, params);
+    const hi: number = instance['get_result_hi']();
 
-      l.debug(() => ['returned', [lo, hi]]);
-
-      return { hi, lo };
-    } catch (error) {
-      l.error('execution error', error);
-    }
+    l.debug(() => ['returned', [lo, hi]]);
 
     return {
-      hi: 0,
-      lo: 0
+      hi,
+      lo
     };
   };
 };
