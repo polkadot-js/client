@@ -8,7 +8,7 @@ import type { Config } from '@polkadot/client/types';
 import type { ChainGenesis } from '@polkadot/client-chains/types';
 import type { BlockDb, StateDb } from '@polkadot/client-db-chain/types';
 import type { RuntimeInterface } from '@polkadot/client-runtime/types';
-import type { ExtrinsicUncheckedRaw } from '@polkadot/primitives/extrinsic';
+import type { UncheckedRaw } from '@polkadot/primitives/extrinsic';
 import type { Logger } from '@polkadot/util/types';
 
 export type WasmExports = {
@@ -30,17 +30,18 @@ export type ExecutorInstance = {
 
 export type Executor$BlockImportResult = {
   body: Uint8Array,
-  extrinsics: Array<ExtrinsicUncheckedRaw>,
+  extrinsics: Array<UncheckedRaw>,
   hash: Uint8Array,
   header: Uint8Array
 };
 
 export type ExecutorInterface = {
-  applyExtrinsic (extrinsic: ExtrinsicUncheckedRaw): Uint8Array,
+  applyExtrinsic (extrinsic: UncheckedRaw): boolean,
   executeBlock (block: Uint8Array): boolean,
   finaliseBlock (header: Uint8Array): Uint8Array,
-  generateBlock (number: BN | number, extrinsics: Array<ExtrinsicUncheckedRaw>): Uint8Array,
-  importBlock (block: Uint8Array): Executor$BlockImportResult
+  generateBlock (number: BN | number, extrinsics: Array<UncheckedRaw>): Uint8Array,
+  importBlock (block: Uint8Array): Executor$BlockImportResult,
+  initialiseBlock (header: Uint8Array): boolean
 };
 
 export type ExecutorState = {

@@ -4,6 +4,7 @@
 // @flow
 
 export type CallResult = {
+  bool: boolean,
   lo: number,
   hi: number
 };

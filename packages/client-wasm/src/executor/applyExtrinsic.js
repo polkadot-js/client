@@ -3,19 +3,23 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { ExtrinsicUncheckedRaw } from '@polkadot/primitives/extrinsic';
+import type { UncheckedRaw } from '@polkadot/primitives/extrinsic';
 import type { ExecutorState } from '../types';
 
-const call = require('./callAsU8a');
+const encodeLength = require('@polkadot/extrinsics-codec/encode/length');
 
-module.exports = function applyExtrinsic (self: ExecutorState, extrinsic: ExtrinsicUncheckedRaw): Uint8Array {
+const call = require('./call');
+
+module.exports = function applyExtrinsic (self: ExecutorState, extrinsic: UncheckedRaw): boolean {
   const start = Date.now();
 
   self.l.debug(() => 'Apply extrinsic');
 
-  const result = call(self, 'apply_extrinsic')(extrinsic);
+  const result = call(self, 'apply_extrinsic')(
+    encodeLength(extrinsic)
+  );
 
   self.l.debug(() => `Apply extrinsic completed (${Date.now() - start}ms)`);
 
-  return result;
+  return result.bool;
 };

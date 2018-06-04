@@ -5,6 +5,7 @@
 
 import type { RuntimeEnv, RuntimeInterface$Crypto, Pointer } from '../types';
 
+const u8aToHex = require('@polkadot/util/u8a/toHex');
 const blake2AsU8a = require('@polkadot/util-crypto/blake2/asU8a');
 const naclVerify = require('@polkadot/util-crypto/nacl/verify');
 const xxhashAsU8a = require('@polkadot/util-crypto/xxhash/asU8a');
@@ -32,7 +33,7 @@ module.exports = function crypto ({ l, heap }: RuntimeEnv): RuntimeInterface$Cry
     const data = heap.get(dataPtr, dataLen);
     const hash = xxhashAsU8a(data, bitLength);
 
-    l.debug(() => [`twox_${bitLength}`, [dataPtr, dataLen, outPtr], '<-', u8aDisplay(data), '->', hash.toString()]);
+    l.debug(() => [`twox_${bitLength}`, [dataPtr, dataLen, outPtr], '<-', u8aDisplay(data), '->', u8aToHex(hash)]);
 
     heap.set(outPtr, hash);
   };
@@ -42,7 +43,7 @@ module.exports = function crypto ({ l, heap }: RuntimeEnv): RuntimeInterface$Cry
       const data = heap.get(dataPtr, dataLen);
       const hash = blake2AsU8a(data, 256);
 
-      l.debug(() => ['blake2_256', [dataPtr, dataLen, outPtr], '<-', data.toString(), '->', hash.toString()]);
+      l.debug(() => ['blake2_256', [dataPtr, dataLen, outPtr], '<-', u8aToHex(data), '->', u8aToHex(hash)]);
 
       heap.set(outPtr, hash);
     },

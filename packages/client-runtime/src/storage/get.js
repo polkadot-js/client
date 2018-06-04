@@ -16,7 +16,5 @@ module.exports = function get (db: BaseDb, key: Uint8Array, maxLength: number = 
     ? data.length
     : maxLength;
 
-  return dataLength === 0
-    ? new Uint8Array(maxLength)
-    : data.subarray(0, dataLength);
+  return data.subarray(0, dataLength);
 };

@@ -16,5 +16,5 @@ module.exports = function initialiseBlock (self: ExecutorState, header: Uint8Arr
 
   self.l.debug(() => `Block initialised (${Date.now() - start}ms)`);
 
-  return result.lo === 1;
+  return result.bool;
 };

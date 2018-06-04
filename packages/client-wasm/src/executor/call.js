@@ -45,6 +45,7 @@ module.exports = function call ({ config, genesis, l, runtime, stateDb: { db } }
     l.debug(() => ['returned', [lo, hi]]);
 
     return {
+      bool: hi === 0 && lo === 1,
       hi,
       lo
     };
