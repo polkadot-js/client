@@ -22,7 +22,9 @@ module.exports = function importBlock (self: ExecutorState, block: Uint8Array): 
   const { body, extrinsics, header, number } = decodeRaw(block);
   const headerHash = blake2Asu8a(header, 256);
 
+  // FIXME should be removed once block generation goes away
   self.stateDb.system.blockHashAt.set(headerHash, number);
+
   self.blockDb.bestHash.set(headerHash);
   self.blockDb.bestNumber.set(number);
   self.blockDb.block.set(block, headerHash);
