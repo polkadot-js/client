@@ -3,7 +3,10 @@
 // of the ISC license. See the LICENSE file for details.
 
 const memoryDb = require('@polkadot/client-db/memory');
+const methods = require('@polkadot/extrinsics');
+const encodeUnchecked = require('@polkadot/extrinsics-codec/encode/unchecked');
 const u8aConcat = require('@polkadot/util/u8a/concat');
+const keyring = require('@polkadot/util-keyring/testingPairs')();
 
 const init = require('@polkadot/client-chains');
 
@@ -52,6 +55,17 @@ describe('generateBlock', () => {
         PARACHAIN
       )
     );
+  });
+
+  it('generates a basic block (with real externals)', () => {
+    expect(
+      chain.executor.generateBlock(1, [
+        encodeUnchecked(keyring.alice, 0)(
+          methods.staking.public.transfer,
+          [keyring.bob.publicKey(), 69]
+        )
+      ])
+    ).not.toBeNull();
   });
 
   it('generated blocks are importable', () => {

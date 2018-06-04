@@ -23,7 +23,7 @@ module.exports = function decodeBn <T> (db: BaseDb, key: Section$Item<T>, bitLen
       base.del(createKey(keyParams)),
     get: (...keyParams?: Storage$Key$Values): BN =>
       u8aToBn(
-        base.get(createKey(keyParams))
+        base.get(createKey(keyParams)), true
       ),
     set: (value: BN | number, ...keyParams?: Storage$Key$Values): void =>
       base.set(createKey(keyParams), bnToU8a(value, bitLength, true))

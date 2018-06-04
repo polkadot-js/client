@@ -30,7 +30,7 @@ describe('commit', () => {
 
     expect(
       memory.get(k1)
-    ).toEqual(new Uint8Array([]));
+    ).toEqual(null);
     expect(
       memory.get(k2)
     ).toEqual(v2);
@@ -48,7 +48,7 @@ describe('commit', () => {
 
     expect(
       memory.get(k2)
-    ).toEqual(new Uint8Array([]));
+    ).toEqual(null);
   });
 
   it('ignores empty array', () => {

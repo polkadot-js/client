@@ -30,9 +30,6 @@ describe('initialiseBlock', () => {
           })
         )
       )
-    ).toEqual({
-      hi: 0,
-      lo: 1
-    });
+    ).toEqual(true);
   });
 });
