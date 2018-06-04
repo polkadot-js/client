@@ -20,18 +20,19 @@ module.exports = function importBlock (self: ExecutorState, block: Uint8Array): 
   self.stateDb.db.commit();
 
   const { body, extrinsics, header, number } = decodeRaw(block);
-  const hash = blake2Asu8a(header, 256);
+  const headerHash = blake2Asu8a(header, 256);
 
-  self.blockDb.bestHash.set(hash);
+  self.stateDb.system.blockHashAt.set(headerHash, number);
+  self.blockDb.bestHash.set(headerHash);
   self.blockDb.bestNumber.set(number);
-  self.blockDb.block.set(block, hash);
+  self.blockDb.block.set(block, headerHash);
 
   self.l.debug(() => `Imported block #${number.toString()} (${Date.now() - start}ms)`);
 
   return {
     body,
     extrinsics,
-    hash,
+    headerHash,
     header
   };
 };

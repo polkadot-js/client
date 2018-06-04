@@ -31,7 +31,7 @@ export type ExecutorInstance = {
 export type Executor$BlockImportResult = {
   body: Uint8Array,
   extrinsics: Array<UncheckedRaw>,
-  hash: Uint8Array,
+  headerHash: Uint8Array,
   header: Uint8Array
 };
 

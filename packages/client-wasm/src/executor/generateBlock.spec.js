@@ -69,10 +69,23 @@ describe('generateBlock', () => {
   });
 
   it('generated blocks are importable', () => {
-    const block = chain.executor.generateBlock(1, []);
-
     expect(
-      chain.executor.importBlock(block)
+      chain.executor.importBlock(
+        chain.executor.generateBlock(1, [])
+      )
+    ).not.toBeNull();
+  });
+
+  it('generated blocks are importable on top of each other', () => {
+    expect(
+      chain.executor.importBlock(
+        chain.executor.generateBlock(1, [])
+      )
+    ).not.toBeNull();
+    expect(
+      chain.executor.importBlock(
+        chain.executor.generateBlock(2, [])
+      )
     ).not.toBeNull();
   });
 });
