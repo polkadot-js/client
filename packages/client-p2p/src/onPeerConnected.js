@@ -9,6 +9,8 @@ const statusMessage = require('./message/status');
 
 module.exports = function onPeerConnected (self: P2pState): void {
   self.peers.on('connected', (peer: PeerInterface): boolean => {
+    self.l.debug(() => [`Sending status message`, peer.shortId]);
+
     return peer.send(
       statusMessage({
         roles: self.config.roles,

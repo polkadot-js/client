@@ -6,11 +6,10 @@
 import type { MessageInterface, PeerInterface$Events } from '../types';
 import type { PeerState } from './types';
 
-// flowlint-next-line unclear-type:off
-type EmitterOn = (PeerInterface$Events, (message: MessageInterface) => any) => any;
+type EmitterOn = (PeerInterface$Events, (message: MessageInterface) => void) => void;
 
 module.exports = function emitterOn (self: PeerState): EmitterOn {
-  // flowlint-next-line unclear-type:off
-  return (type: PeerInterface$Events, cb: (message: MessageInterface) => any): any =>
+  return (type: PeerInterface$Events, cb: (message: MessageInterface) => void): void => {
     self.emitter.on(type, cb);
+  };
 };

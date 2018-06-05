@@ -18,9 +18,9 @@ module.exports = ({
     description: 'The maximum allowed peers',
     type: 'number'
   },
-  'p2p-peers': {
+  'p2p-nodes': {
     default: [],
-    description: 'Peers to make initial connections to',
+    description: 'Bootnodes to make initial connections to',
     type: 'array'
   },
   'p2p-port': {

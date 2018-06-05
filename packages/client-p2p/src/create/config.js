@@ -5,47 +5,33 @@
 
 import type { P2pNodes } from '../types';
 
-const KadDHT = require('libp2p-kad-dht');
+const DHT = require('libp2p-kad-dht');
+const mplex = require('libp2p-mplex');
 const Multicast = require('libp2p-mdns');
-const Multiplex = require('libp2p-mplex');
 const Railing = require('libp2p-railing');
+// const secio = require('libp2p-secio');
+const spdy = require('libp2p-spdy');
 const TCP = require('libp2p-tcp');
 const PeerInfo = require('peer-info');
-// TODO: enable as required
-// const Secio = require('libp2p-secio');
-// const Spdy = require('libp2p-spdy');
-// const WS = require('libp2p-websockets');
+const WS = require('libp2p-websockets');
 
-const arrayFilter = require('@polkadot/util/array/filter');
-
-const DEFAULT_CRYPTO = []; // [Secio]
-const DEFAULT_DHT = KadDHT;
-const DEFAULT_MUXER = [
-  Multiplex
-  // Spdy
-];
-const DEFAULT_TRANSPORTS = [
-  TCP
-  // WS
-];
-
-module.exports = function createConfig (peerInfo: PeerInfo, bootNodes: P2pNodes = []): LibP2P$Config {
+module.exports = function createConfig (peerInfo: PeerInfo, bootNodes: P2pNodes): LibP2P$Config {
   return {
     connection: {
-      crypto: DEFAULT_CRYPTO,
-      muxer: DEFAULT_MUXER
-    },
-    DHT: DEFAULT_DHT,
-    discovery: arrayFilter(
-      [
-        new Multicast(peerInfo, {
-          serviceTag: 'dot.mdns.local'
-        }),
-        bootNodes.length
-          ? new Railing(bootNodes)
-          : void 0
+      crypto: [], // [secio],
+      muxer: [
+        mplex,
+        spdy
       ]
-    ),
-    transport: DEFAULT_TRANSPORTS.map((Clazz) => new Clazz())
+    },
+    DHT,
+    discovery: [
+      new Multicast(peerInfo),
+      new Railing(bootNodes)
+    ],
+    transport: [
+      new TCP(),
+      new WS()
+    ]
   };
 };

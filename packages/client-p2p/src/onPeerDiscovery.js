@@ -12,7 +12,11 @@ const defaults = require('./defaults');
 module.exports = function onPeerDiscovery (self: P2pState): void {
   self.peers.on('discovered', async (peer: PeerInterface): Promise<void> => {
     try {
+      self.l.debug(() => `dialing peer ${peer.shortId}`);
+
       const connection = await promisify(self.node, self.node.dialProtocol, peer.peerInfo, defaults.PROTOCOL);
+
+      self.l.error('connected', peer.shortId, connection);
 
       peer.addConnection(connection);
     } catch (error) {

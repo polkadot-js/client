@@ -3,6 +3,7 @@
 // of the ISC license. See the LICENSE file for details.
 
 const EventEmitter = require('eventemitter3');
+const l = require('@polkadot/util/logger')('test');
 
 const onPeerDiscovery = require('./onPeerDiscovery');
 
@@ -12,6 +13,7 @@ describe('onPeerDiscovery', () => {
 
   beforeEach(() => {
     self = {
+      l,
       peers: new EventEmitter(),
       node: {
         dialProtocol: jest.fn((peerInfo, protocol, cb) => cb(null, 'connection'))

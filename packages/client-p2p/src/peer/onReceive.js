@@ -8,15 +8,18 @@ import type { PeerState } from './types';
 
 const pull = require('pull-stream');
 const bufferToU8a = require('@polkadot/util/buffer/toU8a');
+const u8aToHex = require('@polkadot/util/u8a/toHex');
 
 const decode = require('../message/decode');
 
-module.exports = function onReceive ({ emitter, pushable }: PeerState, connection: LibP2P$Connection): boolean {
+module.exports = function onReceive ({ emitter, l, pushable }: PeerState, connection: LibP2P$Connection): boolean {
   const drain = pull.drain(
     (buffer: Buffer): void => {
-      emitter.emit('message', decode(
-        bufferToU8a(buffer)
-      ));
+      const u8a = bufferToU8a(buffer);
+
+      l.debug(() => `Received ${u8aToHex(u8a)}`);
+
+      emitter.emit('message', decode(u8a));
     },
     () => false
   );

@@ -12,6 +12,9 @@ describe('createListener', () => {
 
   beforeEach(() => {
     peerInfoMock = {
+      id: {
+        toB58String: () => '<someid>'
+      },
       multiaddrs: {
         add: jest.fn()
       }
@@ -65,7 +68,7 @@ describe('createListener', () => {
     it('adds tcp entry', () => {
       expect(
         peerInfoMock.multiaddrs.add
-      ).toHaveBeenCalledWith('/ip4/10.12.34.67/tcp/7788');
+      ).toHaveBeenCalledWith('/ip4/10.12.34.67/tcp/7788/ipfs/<someid>');
     });
   });
 
@@ -77,7 +80,7 @@ describe('createListener', () => {
     it('adds tcp entry', () => {
       expect(
         peerInfoMock.multiaddrs.add
-      ).toHaveBeenCalledWith('/ip6/2:3:4:5:6:7:8:9/tcp/6677');
+      ).toHaveBeenCalledWith('/ip6/2:3:4:5:6:7:8:9/tcp/6677/ipfs/<someid>');
     });
   });
 });

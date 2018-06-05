@@ -5,11 +5,10 @@
 
 import type { P2pState, P2pInterface$Events } from './types';
 
-// flowlint-next-line unclear-type:off
-type EmitterOn = (type: P2pInterface$Events, () => any) => any
+type EmitterOn = (type: P2pInterface$Events, () => void) => void
 
 module.exports = function emitterOn (self: P2pState): EmitterOn {
-  // flowlint-next-line unclear-type:off
-  return (type: P2pInterface$Events, cb: () => any): any =>
+  return (type: P2pInterface$Events, cb: () => void): void => {
     self.emitter.on(type, cb);
+  };
 };

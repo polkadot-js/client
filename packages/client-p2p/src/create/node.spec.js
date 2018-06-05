@@ -7,6 +7,7 @@ const PeerId = require('peer-id');
 const PeerInfo = require('peer-info');
 
 const isInstanceOf = require('@polkadot/util/is/instanceOf');
+const l = require('@polkadot/util/logger')('test');
 
 const createNode = require('./node');
 
@@ -26,7 +27,7 @@ describe('createNode', () => {
   });
 
   it('creates a valid LibP2p instance', async () => {
-    const libp2p = await createNode('127.0.0.1', 36789, []);
+    const libp2p = await createNode({ config: { p2p: { address: '127.0.0.1', port: 36789 } }, l });
 
     expect(
       isInstanceOf(libp2p, LibP2P)

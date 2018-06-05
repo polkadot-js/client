@@ -8,7 +8,12 @@ import type { PeerState } from './types';
 
 const onReceive = require('./onReceive');
 
-module.exports = function addConnection (self: PeerState, connection: LibP2P$Connection): boolean {
+module.exports = function addConnection (self: PeerState, connection?: LibP2P$Connection): boolean {
+  // NOTE in some case (e.g. JS -> Rust), connection may be empty, bail
+  if (connection === undefined) {
+    return false;
+  }
+
   self.connections.push(connection);
 
   return onReceive(self, connection);

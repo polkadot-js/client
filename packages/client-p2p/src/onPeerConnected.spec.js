@@ -3,6 +3,7 @@
 // of the ISC license. See the LICENSE file for details.
 
 const EventEmitter = require('eventemitter3');
+const l = require('@polkadot/util/logger')('test');
 
 const StatusMessage = require('./message/status');
 const onPeerConnected = require('./onPeerConnected');
@@ -13,6 +14,7 @@ describe('onPeerConnected', () => {
 
   beforeEach(() => {
     self = {
+      l,
       peers: new EventEmitter(),
       config: { roles: [] },
       chain: {
