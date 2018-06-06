@@ -4,12 +4,13 @@
 
 const pull = require('pull-stream');
 const pushable = require('pull-pushable');
+const l = require('@polkadot/util/logger')('test');
 const u8aToBuffer = require('@polkadot/util/u8a/toBuffer');
 
 const status = require('../message/status');
 const decode = require('../message/encode');
 
-const receive = require('./handleConnection');
+const receive = require('./receive');
 
 describe('receive', () => {
   let self;
@@ -19,6 +20,7 @@ describe('receive', () => {
       emitter: {
         emit: jest.fn(() => true)
       },
+      l,
       pushable: pushable()
     };
   });

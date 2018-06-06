@@ -9,26 +9,30 @@ import type { P2pState } from './types';
 const promisify = require('@polkadot/util/promisify');
 
 const defaults = require('./defaults');
+const dialPeers = require('./dialPeers');
 
-module.exports = function handleProtocol ({ chain, config, l, node, peers }: P2pState): void {
+module.exports = function handleProtocol (self: P2pState): void {
+  const { l, node, peers } = self;
+
   node.handle(
     defaults.PROTOCOL,
     async (protocol: string, connection: LibP2P$Connection): Promise<void> => {
-      l.debug(() => 'protocol connected');
-
       try {
         const peerInfo = await promisify(connection, connection.getPeerInfo);
         const peer = peers.add(peerInfo);
 
-        l.debug(() => [`adding connection, sending status`, peer.shortId]);
+        peers.log('protocol', peer);
+        peer.addConnection(connection, false);
 
-        peer.addConnection(connection);
+        if (!peer.isWritable()) {
+          dialPeers(self, peer);
+        }
       } catch (error) {
         l.error('protocol handling error', error);
       }
     }
     , (protocol: string, requested: string, callback: (error: null, accept: boolean) => void): void => {
-      l.debug(() => `matching protocol ${protocol} with ${requested}`);
+      l.debug(() => `matching protocol ${requested}`);
 
       callback(null, requested.indexOf(defaults.PROTOCOL) === 0);
     }

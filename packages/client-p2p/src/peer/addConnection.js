@@ -6,21 +6,37 @@
 import type { LibP2P$Connection } from 'libp2p';
 import type { PeerState } from './types';
 
+const Pushable = require('pull-pushable');
+const pull = require('pull-stream');
+
 const statusMessage = require('../message/status');
-const handleConnection = require('./handleConnection');
+const receive = require('./receive');
 const send = require('./send');
 
-module.exports = function addConnection (self: PeerState, connection: LibP2P$Connection): void {
-  self.connections.push(connection);
+module.exports = function addConnection (self: PeerState, connection: LibP2P$Connection, isWritable: boolean): void {
+  const pushable = isWritable
+    ? Pushable()
+    : undefined;
 
-  handleConnection(self, connection);
+  self.connections.push({
+    connection,
+    isConnected: true,
+    pushable
+  });
 
-  send(
-    self, statusMessage({
+  if (isWritable === false) {
+    receive(self, connection);
+  } else {
+    pull(
+      pushable,
+      connection
+    );
+
+    send(self, statusMessage({
       roles: self.config.roles,
       bestNumber: self.chain.blocks.bestNumber.get(),
       bestHash: self.chain.blocks.bestHash.get(),
       genesisHash: self.chain.genesis.headerHash
-    })
-  );
+    }));
+  }
 };

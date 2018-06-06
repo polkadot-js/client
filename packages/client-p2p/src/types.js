@@ -47,7 +47,8 @@ export type PeerInterface = {
   id: string,
   peerInfo: PeerInfo,
   shortId: string,
-  addConnection: (connection: LibP2P$Connection) => void,
+  addConnection: (connection: LibP2P$Connection, isWritable: boolean) => void,
+  isWritable: () => boolean,
   getBestHash: () => Uint8Array,
   getBestNumber: () => BN,
   getNextId: () => number,
@@ -57,12 +58,13 @@ export type PeerInterface = {
   setBest: (number: BN, hash: Uint8Array) => void
 }
 
-export type PeersInterface$Events = 'connected' | 'disconnected' | 'discovered' | 'message';
+export type PeersInterface$Events = 'connected' | 'disconnected' | 'discovered' | 'message' | 'protocol';
 
 export type PeersInterface = {
   add: (peerInfo: PeerInfo) => PeerInterface,
   count: () => number,
   get: (peerInfo: PeerInfo) => ?PeerInterface,
+  log: (event: PeersInterface$Events, peer: PeerInterface) => void,
   // flowlint-next-line unclear-type:off
   on: (type: PeersInterface$Events, (peer: any) => any) => any,
   peers: () => Array<PeerInterface>

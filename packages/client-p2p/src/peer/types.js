@@ -11,14 +11,19 @@ import type { Config } from '@polkadot/client/types';
 import type { ChainInterface } from '@polkadot/client-chains/types';
 import type { Logger } from '@polkadot/util/types';
 
+export type PeerConnection = {
+  connection: LibP2P$Connection,
+  isConnected: boolean,
+  pushable?: Pushable
+};
+
 export type PeerState = {
   bestHash: Uint8Array,
   bestNumber: BN,
   chain: ChainInterface,
   config: Config,
-  connections: Array<LibP2P$Connection>,
+  connections: Array<PeerConnection>,
   emitter: EventEmitter,
   l: Logger,
-  nextId: number,
-  pushable: Pushable
+  nextId: number
 }

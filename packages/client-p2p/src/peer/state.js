@@ -9,7 +9,6 @@ import type { PeerState } from './types';
 
 const BN = require('bn.js');
 const EventEmitter = require('eventemitter3');
-const pushable = require('pull-pushable');
 const l = require('@polkadot/util/logger')('p2p/peer');
 
 module.exports = function state (config: Config, chain: ChainInterface): PeerState {
@@ -21,7 +20,6 @@ module.exports = function state (config: Config, chain: ChainInterface): PeerSta
     connections: [],
     emitter: new EventEmitter(),
     l,
-    nextId: 0,
-    pushable: pushable()
+    nextId: 0
   };
 };

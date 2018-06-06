@@ -10,9 +10,17 @@ const u8aToBuffer = require('@polkadot/util/u8a/toBuffer');
 
 const encode = require('../message/encode');
 
-module.exports = function send ({ l, pushable }: PeerState, message: MessageInterface): boolean {
+module.exports = function send ({ connections, l }: PeerState, message: MessageInterface): boolean {
   try {
-    pushable.push(
+    const writable = connections.find(({ isConnected, pushable }) =>
+      isConnected && pushable !== undefined
+    );
+
+    if (writable === undefined || writable.pushable === undefined) {
+      return false;
+    }
+
+    writable.pushable.push(
       u8aToBuffer(
         encode(message)
       )

@@ -17,16 +17,16 @@ const defaults = require('./defaults');
 const dialQueue: Array<QueuedPeer> = [];
 
 async function dialPeer ({ chain, config, l, node }: P2pState, peer: PeerInterface): Promise<void> {
-  l.debug(() => `dialing peer ${peer.shortId}`);
+  l.debug(() => `dialing ${peer.shortId}`);
 
   try {
     const connection = await promisify(
       node, node.dialProtocol, peer.peerInfo, defaults.PROTOCOL
     );
 
-    peer.addConnection(connection);
+    peer.addConnection(connection, true);
   } catch (error) {
-    l.error('dial error', error);
+    // l.error('dial error', error);
   }
 }
 

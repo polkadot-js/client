@@ -3,11 +3,12 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { PeerInterface, PeersInterface, P2pState } from '../types';
+import type { PeerInterface, PeersInterface, PeersInterface$Events, P2pState } from '../types';
 import type PeerInfo from 'peer-info';
 
 const add = require('./add');
 const emitterOn = require('./emitterOn');
+const logPeer = require('./logPeer');
 const get = require('./get');
 const onConnect = require('./onConnect');
 const onDisconnect = require('./onDisconnect');
@@ -26,6 +27,8 @@ module.exports = function createPeers (state: P2pState): PeersInterface {
       add(self, peerInfo),
     count: (): number =>
       Object.keys(self.peers).length,
+    log: (event: PeersInterface$Events, peer: PeerInterface): void =>
+      logPeer(self, event, peer),
     get: (peerInfo: PeerInfo): ?PeerInterface =>
       get(self, peerInfo),
     on: emitterOn(self),

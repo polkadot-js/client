@@ -26,8 +26,12 @@ module.exports = function createPeer (config: Config, chain: ChainInterface, pee
     id,
     peerInfo,
     shortId: stringShorten(id),
-    addConnection: (connection: LibP2P$Connection): void =>
-      addConnection(self, connection),
+    addConnection: (connection: LibP2P$Connection, isWritable: boolean): void =>
+      addConnection(self, connection, isWritable),
+    isWritable: (): boolean =>
+      self.connections.find(({ isConnected, pushable }) =>
+        isConnected && pushable !== undefined
+      ) !== undefined,
     getBestHash: (): Uint8Array =>
       self.bestHash,
     getBestNumber: (): BN =>
