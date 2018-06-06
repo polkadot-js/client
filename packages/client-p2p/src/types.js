@@ -47,7 +47,7 @@ export type PeerInterface = {
   id: string,
   peerInfo: PeerInfo,
   shortId: string,
-  addConnection: (connection: LibP2P$Connection) => boolean,
+  addConnection: (connection: LibP2P$Connection) => void,
   getBestHash: () => Uint8Array,
   getBestNumber: () => BN,
   getNextId: () => number,

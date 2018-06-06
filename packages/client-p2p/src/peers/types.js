@@ -4,10 +4,14 @@
 // @flow
 
 import type EventEmitter from 'eventemitter3';
+import type { Config } from '@polkadot/client/types';
+import type { ChainInterface } from '@polkadot/client-chains/types';
 import type { Logger } from '@polkadot/util/types';
 import type { PeerInterface } from '../types';
 
 export type PeersState = {
+  chain: ChainInterface,
+  config: Config,
   emitter: EventEmitter,
   l: Logger,
   peers: { [string]: PeerInterface }

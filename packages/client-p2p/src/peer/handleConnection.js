@@ -12,12 +12,12 @@ const u8aToHex = require('@polkadot/util/u8a/toHex');
 
 const decode = require('../message/decode');
 
-module.exports = function onReceive ({ emitter, l, pushable }: PeerState, connection: LibP2P$Connection): boolean {
+module.exports = function handleConnection ({ emitter, l, pushable }: PeerState, connection: LibP2P$Connection): boolean {
   const drain = pull.drain(
     (buffer: Buffer): void => {
       const u8a = bufferToU8a(buffer);
 
-      l.debug(() => `Received ${u8aToHex(u8a)}`);
+      l.debug(() => `received ${u8aToHex(u8a)}`);
 
       emitter.emit('message', decode(u8a));
     },
@@ -28,6 +28,8 @@ module.exports = function onReceive ({ emitter, l, pushable }: PeerState, connec
     pull(pushable, connection);
     pull(connection, drain);
   } catch (error) {
+    l.error('receive error', error);
+
     return false;
   }
 

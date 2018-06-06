@@ -10,20 +10,27 @@ const promisify = require('@polkadot/util/promisify');
 
 const defaults = require('./defaults');
 
-module.exports = function handleProtocol ({ l, node, peers }: P2pState): void {
+module.exports = function handleProtocol ({ chain, config, l, node, peers }: P2pState): void {
   node.handle(
-    defaults.PROTOCOL_BASE,
+    defaults.PROTOCOL,
     async (protocol: string, connection: LibP2P$Connection): Promise<void> => {
-      l.debug(() => `protocol connected, ${protocol}`);
+      l.debug(() => 'protocol connected');
 
-      const peerInfo = await promisify(connection, connection.getPeerInfo);
-      const peer = peers.add(peerInfo);
+      try {
+        const peerInfo = await promisify(connection, connection.getPeerInfo);
+        const peer = peers.add(peerInfo);
 
-      peer.addConnection(connection);
-    },
-    (protocol: string, requestedProtocol, callback: (error: null, accept: boolean) => void): void => {
-      l.debug(() => `matching protocol ${protocol} with ${requestedProtocol}`);
+        l.debug(() => [`adding connection, sending status`, peer.shortId]);
 
-      callback(null, requestedProtocol.indexOf(defaults.PROTOCOL_BASE) === 0);
-    });
+        peer.addConnection(connection);
+      } catch (error) {
+        l.error('protocol handling error', error);
+      }
+    }
+    , (protocol: string, requested: string, callback: (error: null, accept: boolean) => void): void => {
+      l.debug(() => `matching protocol ${protocol} with ${requested}`);
+
+      callback(null, requested.indexOf(defaults.PROTOCOL) === 0);
+    }
+  );
 };

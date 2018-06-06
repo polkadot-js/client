@@ -6,15 +6,21 @@
 import type { LibP2P$Connection } from 'libp2p';
 import type { PeerState } from './types';
 
-const onReceive = require('./onReceive');
+const statusMessage = require('../message/status');
+const handleConnection = require('./handleConnection');
+const send = require('./send');
 
-module.exports = function addConnection (self: PeerState, connection?: LibP2P$Connection): boolean {
-  // NOTE in some case (e.g. JS -> Rust), connection may be empty, bail
-  if (connection === undefined) {
-    return false;
-  }
-
+module.exports = function addConnection (self: PeerState, connection: LibP2P$Connection): void {
   self.connections.push(connection);
 
-  return onReceive(self, connection);
+  handleConnection(self, connection);
+
+  send(
+    self, statusMessage({
+      roles: self.config.roles,
+      bestNumber: self.chain.blocks.bestNumber.get(),
+      bestHash: self.chain.blocks.bestHash.get(),
+      genesisHash: self.chain.genesis.headerHash
+    })
+  );
 };

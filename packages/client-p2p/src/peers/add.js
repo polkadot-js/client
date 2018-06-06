@@ -9,15 +9,15 @@ import type { PeersState } from './types';
 
 const createPeer = require('../peer');
 
-module.exports = function add (self: PeersState, peerInfo: PeerInfo): PeerInterface {
+module.exports = function add ({ chain, config, emitter, peers }: PeersState, peerInfo: PeerInfo): PeerInterface {
   const id = peerInfo.id.toB58String();
-  let peer = self.peers[id];
+  let peer = peers[id];
 
   if (!peer) {
-    self.peers[id] = peer = createPeer(peerInfo);
+    peers[id] = peer = createPeer(config, chain, peerInfo);
 
-    peer.on('message', (message: MessageInterface) => {
-      self.emitter.emit('message', {
+    peer.on('message', (message: MessageInterface): void => {
+      emitter.emit('message', {
         message,
         peer
       });

@@ -13,6 +13,8 @@ module.exports = function initGenesis (self: ChainState, initialState: ChainGene
 
   const genesis = initBlock(self);
 
+  self.blockDb.bestHash.set(genesis.headerHash);
+  self.blockDb.bestNumber.set(0);
   self.stateDb.system.blockHashAt.set(genesis.headerHash, 0);
   self.stateDb.db.commit();
 

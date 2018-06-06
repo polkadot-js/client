@@ -7,11 +7,15 @@ import type BN from 'bn.js';
 import type EventEmitter from 'eventemitter3';
 import type { LibP2P$Connection } from 'libp2p';
 import type { Pushable } from 'pull-pushable';
+import type { Config } from '@polkadot/client/types';
+import type { ChainInterface } from '@polkadot/client-chains/types';
 import type { Logger } from '@polkadot/util/types';
 
 export type PeerState = {
   bestHash: Uint8Array,
   bestNumber: BN,
+  chain: ChainInterface,
+  config: Config,
   connections: Array<LibP2P$Connection>,
   emitter: EventEmitter,
   l: Logger,

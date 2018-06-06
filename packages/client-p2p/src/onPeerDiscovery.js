@@ -5,22 +5,14 @@
 
 import type { P2pState, PeerInterface } from './types';
 
-const promisify = require('@polkadot/util/promisify');
-
-const defaults = require('./defaults');
+const dialPeers = require('./dialPeers');
 
 module.exports = function onPeerDiscovery (self: P2pState): void {
-  self.peers.on('discovered', async (peer: PeerInterface): Promise<void> => {
-    try {
-      self.l.debug(() => `dialing peer ${peer.shortId}`);
+  self.node.on('start', () =>
+    dialPeers(self)
+  );
 
-      const connection = await promisify(self.node, self.node.dialProtocol, peer.peerInfo, defaults.PROTOCOL);
-
-      self.l.error('connected', peer.shortId, connection);
-
-      peer.addConnection(connection);
-    } catch (error) {
-      self.l.error('dial error', error);
-    }
+  self.peers.on('discovered', (peer: PeerInterface): void => {
+    dialPeers(self, peer);
   });
 };
