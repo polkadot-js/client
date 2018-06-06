@@ -12,7 +12,7 @@ describe('Peers', () => {
 
   beforeEach(() => {
     node = new EventEmitter();
-    peers = createPeers(node);
+    peers = createPeers({ node });
   });
 
   it('creates an instance', () => {

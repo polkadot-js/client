@@ -30,7 +30,8 @@ module.exports = function createPeers (state: P2pState): PeersInterface {
       get(self, peerInfo),
     on: emitterOn(self),
     peers: (): Array<PeerInterface> =>
-      // flowlint-next-line unclear-type:off
-      ((Object.values(self.peers): any): Array<PeerInterface>)
+      Object.keys(self.peers).map((id) =>
+        self.peers[id]
+      )
   };
 };

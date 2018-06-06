@@ -22,7 +22,7 @@ describe('get', () => {
       }
     };
     node = new EventEmitter();
-    peers = createPeers(node);
+    peers = createPeers({ node });
   });
 
   it('returns undefined for non-existing peer', () => {

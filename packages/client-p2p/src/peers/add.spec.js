@@ -22,7 +22,7 @@ describe('add', () => {
       }
     };
     node = new EventEmitter();
-    peers = createPeers(node);
+    peers = createPeers({ node });
   });
 
   it('adds the peer', () => {

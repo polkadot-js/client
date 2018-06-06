@@ -16,7 +16,9 @@ describe('onPeerDiscovery', () => {
       l,
       peers: new EventEmitter(),
       node: {
-        dialProtocol: jest.fn((peerInfo, protocol, cb) => cb(null, 'connection'))
+        dialProtocol: jest.fn((peerInfo, protocol, cb) => cb(null, 'connection')),
+        isStarted: () => true,
+        on: () => {}
       }
     };
     peer = {
