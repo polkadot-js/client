@@ -6,7 +6,7 @@
 require('./license.js');
 
 const createChain = require('@polkadot/client-chains');
-const memoryDb = require('@polkadot/client-db/memory');
+const memoryDb = require('@polkadot/util-triedb/temp');
 const createP2p = require('@polkadot/client-p2p');
 const l = require('@polkadot/util/logger')('client');
 

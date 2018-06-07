@@ -4,23 +4,8 @@
 // @flow
 
 import type BN from 'bn.js';
-import type { Trie$Pairs } from '@polkadot/util-triehash/types';
+import type { TrieDb } from '@polkadot/util-triedb/types';
 import type { Storage$Key$Values } from '@polkadot/storage/types';
-
-export type BaseDb = {
-  clear: () => void,
-  commit: (values?: Trie$Pairs) => void,
-  del: (key: Uint8Array) => void,
-  isEmpty: () => boolean,
-  get: (key: Uint8Array) => Uint8Array | null,
-  pairs: () => Trie$Pairs,
-  set: (key: Uint8Array, value: Uint8Array) => void
-}
-
-export type WrapDb = BaseDb & {
-  debug: () => { [string]: string },
-  trieRoot: () => Uint8Array
-};
 
 export type StorageMethod<P, R> = {
   del: (...params?: Storage$Key$Values) => void,
@@ -43,7 +28,7 @@ export type StorageMethod$ArrayU8a = StorageMethod<Array<Uint8Array>, Array<Uint
 export type StorageMethods = StorageMethod$Account | StorageMethod$Bn | StorageMethod$Bool | StorageMethod$U8a | StorageMethod$ArrayU8a | StorageMethod$ArrayAccount;
 
 export type WrappedDb<O> = O & {
-  db: WrapDb
+  db: TrieDb
 }
 
 export type BlockDb = WrappedDb<{

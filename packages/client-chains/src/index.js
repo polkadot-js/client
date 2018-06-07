@@ -4,7 +4,7 @@
 // @flow
 
 import type { Config } from '@polkadot/client/types';
-import type { BaseDb } from '@polkadot/client-db-chain/types';
+import type { TrieDb } from '@polkadot/util-triedb/types';
 import type { ChainInterface } from './types';
 
 const createExecutor = require('@polkadot/client-wasm');
@@ -13,7 +13,7 @@ const loadChain = require('./load');
 const createGenesis = require('./genesis');
 const createState = require('./state');
 
-module.exports = function chains (config: Config, baseStateDb: BaseDb, baseBlockDb: BaseDb): ChainInterface {
+module.exports = function chains (config: Config, baseStateDb: TrieDb, baseBlockDb: TrieDb): ChainInterface {
   const initial = loadChain(config.chain);
   const self = createState(config, baseStateDb, baseBlockDb);
   const genesis = createGenesis(self, initial);

@@ -32,11 +32,8 @@
   "dependencies": {
     "@babel/runtime": "^7.0.0-beta.47",
     "@polkadot/client-state": "^0.8.6",
-    "@polkadot/util": "^0.22.4",
-    "leveldown": "^2.1.1",
-    "levelup": "^2.0.1",
-    "memdown": "^1.4.1",
-    "merkle-patricia-tree": "^2.3.0",
+    "@polkadot/util": "^0.22.5",
+    "@polkadot/util-triedb": "^0.22.5",
     "mkdirp": "^0.5.1"
   },
   "devDependencies": {

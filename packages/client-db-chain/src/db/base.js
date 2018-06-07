@@ -3,7 +3,7 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { BaseDb } from '../types';
+import type { TrieDb } from '@polkadot/util-triedb/types';
 
 type Base = {
   del (key: Uint8Array): void,
@@ -11,7 +11,7 @@ type Base = {
   set (key: Uint8Array, value: Uint8Array): void
 }
 
-module.exports = function base (db: BaseDb): Base {
+module.exports = function base (db: TrieDb): Base {
   return {
     del: (key: Uint8Array): void =>
       db.del(key),

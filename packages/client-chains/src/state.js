@@ -4,7 +4,7 @@
 // @flow
 
 import type { Config } from '@polkadot/client/types';
-import type { BaseDb } from '@polkadot/client-db-chain/types';
+import type { TrieDb } from '@polkadot/util-triedb/types';
 import type { ChainState } from './types';
 
 const createBlockDb = require('@polkadot/client-db-chain/block');
@@ -12,7 +12,7 @@ const createStateDb = require('@polkadot/client-db-chain/state');
 const createRuntime = require('@polkadot/client-runtime');
 const logger = require('@polkadot/util/logger');
 
-module.exports = function state (config: Config, baseStateDb: BaseDb, baseBlockDb: BaseDb): ChainState {
+module.exports = function state (config: Config, baseStateDb: TrieDb, baseBlockDb: TrieDb): ChainState {
   const l = logger(`chain-${config.chain}`);
   const runtime = createRuntime(baseStateDb);
   const blockDb = createBlockDb(baseBlockDb);
