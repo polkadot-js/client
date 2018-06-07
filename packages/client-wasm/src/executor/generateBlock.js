@@ -13,7 +13,7 @@ const encodeBlock = require('@polkadot/primitives-codec/block/encode');
 const encodeHeader = require('@polkadot/primitives-codec/header/encode');
 const bnToBn = require('@polkadot/util/bn/toBn');
 
-const applyExtrinsic = require('./applyExtrinsic');
+const applyExtrinsics = require('./applyExtrinsics');
 const finaliseBlock = require('./finaliseBlock');
 const withInherent = require('./inherentExtrinsics');
 const initialiseBlock = require('./initialiseBlock');
@@ -32,9 +32,9 @@ module.exports = function generateBlock (self: ExecutorState, _number: number | 
   const headerRaw = encodeHeader(header);
 
   initialiseBlock(self, headerRaw);
-  extrinsics.forEach((extrinsic) =>
-    applyExtrinsic(self, extrinsic)
-  );
+
+  // NOTE here we apply multiples using the same runtime, skipping the setup overhead
+  applyExtrinsics(self, extrinsics);
 
   const { stateRoot } = decodeHeader(
     finaliseBlock(self, headerRaw)
