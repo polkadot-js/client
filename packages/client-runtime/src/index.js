@@ -13,6 +13,7 @@ const createIo = require('./io');
 const createMemory = require('./memory');
 const createSandbox = require('./sandbox');
 const createStorage = require('./storage');
+const instrument = require('./instrument');
 
 module.exports = function runtime (stateDb: TrieDb): RuntimeInterface {
   const environment = createEnv(stateDb);
@@ -23,6 +24,10 @@ module.exports = function runtime (stateDb: TrieDb): RuntimeInterface {
       // flowlint-next-line unclear-type:off
       ({}: any),
       createChain(environment), createCrypto(environment), createIo(environment), createMemory(environment), createSandbox(environment), createStorage(environment)
-    ): $Shape<RuntimeInterface$Exports>)
+    ): $Shape<RuntimeInterface$Exports>),
+    instrument: {
+      start: instrument.clear,
+      stop: instrument.stats
+    }
   };
 };

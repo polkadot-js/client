@@ -5,13 +5,16 @@
 
 import type { RuntimeEnv, RuntimeInterface$Chain } from '../types';
 
+const instrument = require('../instrument');
+
 module.exports = function ({ l }: RuntimeEnv): RuntimeInterface$Chain {
   return {
-    chain_id: () => {
-      l.debug(() => ['chain_id', '->', 0]);
+    chain_id: (): number =>
+      instrument('chain_id', () => {
+        l.debug(() => ['chain_id', '->', 0]);
 
-      // FIXME This is not correct, to be retrieved
-      return 0;
-    }
+        // FIXME This is not correct, to be retrieved
+        return 0;
+      })
   };
 };

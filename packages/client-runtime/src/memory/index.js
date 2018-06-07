@@ -5,6 +5,7 @@
 
 import type { Pointer, RuntimeEnv, RuntimeInterface$Memory } from '../types';
 
+const instrument = require('../instrument');
 const memcpy = require('./memcpy');
 const memcmp = require('./memcmp');
 const memmove = require('./memmove');
@@ -12,37 +13,43 @@ const memset = require('./memset');
 
 module.exports = function memory ({ heap }: RuntimeEnv): RuntimeInterface$Memory {
   return {
-    free: (ptr: Pointer): void => {
-      // l.debug(() => ['free', [ptr]]);
+    free: (ptr: Pointer): void =>
+      instrument('free', (): void => {
+        // l.debug(() => ['free', [ptr]]);
 
-      heap.deallocate(ptr);
-    },
-    malloc: (size: number): Pointer => {
-      const ptr = heap.allocate(size);
+        heap.deallocate(ptr);
+      }),
+    malloc: (size: number): Pointer =>
+      instrument('malloc', (): Pointer => {
+        const ptr = heap.allocate(size);
 
-      // l.debug(() => ['malloc', [size], '->', ptr]);
+        // l.debug(() => ['malloc', [size], '->', ptr]);
 
-      return ptr;
-    },
-    memcpy: (dst: Pointer, src: Pointer, num: number): Pointer => {
-      // l.debug(() => ['memcpy', [dst, src, num]]);
+        return ptr;
+      }),
+    memcpy: (dst: Pointer, src: Pointer, num: number): Pointer =>
+      instrument('memcpy', (): Pointer => {
+        // l.debug(() => ['memcpy', [dst, src, num]]);
 
-      return memcpy(heap, dst, src, num);
-    },
-    memcmp: (s1: Pointer, s2: Pointer, length: number): number => {
-      // l.debug(() => ['memcmp', [s1, s2, length]]);
+        return memcpy(heap, dst, src, num);
+      }),
+    memcmp: (s1: Pointer, s2: Pointer, length: number): number =>
+      instrument('memcmp', (): number => {
+        // l.debug(() => ['memcmp', [s1, s2, length]]);
 
-      return memcmp(heap, s1, s2, length);
-    },
-    memmove: (dst: Pointer, src: Pointer, num: number): Pointer => {
-      // l.debug(() => ['memmove', [dst, src, num]]);
+        return memcmp(heap, s1, s2, length);
+      }),
+    memmove: (dst: Pointer, src: Pointer, num: number): Pointer =>
+      instrument('memmove', (): Pointer => {
+        // l.debug(() => ['memmove', [dst, src, num]]);
 
-      return memmove(heap, dst, src, num);
-    },
-    memset: (dst: Pointer, val: number, num: number): Pointer => {
-      // l.debug(() => ['memset', [dst, val, num]]);
+        return memmove(heap, dst, src, num);
+      }),
+    memset: (dst: Pointer, val: number, num: number): Pointer =>
+      instrument('memset', (): Pointer => {
+        // l.debug(() => ['memset', [dst, val, num]]);
 
-      return memset(heap, dst, val, num);
-    }
+        return memset(heap, dst, val, num);
+      })
   };
 };

@@ -8,6 +8,18 @@ import type { Logger } from '@polkadot/util/types';
 import type { SizeUsed } from './environment/heap/types';
 
 export type Pointer = number;
+export type RuntimeStats = {
+  [string]: {
+    average?: number,
+    calls: number,
+    elapsed: number
+  }
+};
+
+export type RuntimeInstrument = {
+  start: () => void,
+  stop: () => RuntimeStats
+}
 
 export type RuntimeEnv$Heap = {
   allocate: (size: number) => Pointer,
@@ -82,5 +94,6 @@ export type RuntimeInterface$Exports = RuntimeInterface$Chain & RuntimeInterface
 
 export type RuntimeInterface = {
   environment: RuntimeEnv,
-  exports: RuntimeInterface$Exports
+  exports: RuntimeInterface$Exports,
+  instrument: RuntimeInstrument
 };

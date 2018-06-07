@@ -10,6 +10,8 @@ const blake2AsU8a = require('@polkadot/util-crypto/blake2/asU8a');
 const naclVerify = require('@polkadot/util-crypto/nacl/verify');
 const xxhashAsU8a = require('@polkadot/util-crypto/xxhash/asU8a');
 
+const instrument = require('../instrument');
+
 // TODO: This _could_ be useful elsewhere, but as of now not moving it since it is used only here
 function u8aDisplay (u8a: Uint8Array): string {
   let isHex = false;
@@ -39,26 +41,32 @@ module.exports = function crypto ({ l, heap }: RuntimeEnv): RuntimeInterface$Cry
   };
 
   return {
-    blake2_256: (dataPtr: Pointer, dataLen: number, outPtr: Pointer): void => {
-      const data = heap.get(dataPtr, dataLen);
-      const hash = blake2AsU8a(data, 256);
+    blake2_256: (dataPtr: Pointer, dataLen: number, outPtr: Pointer): void =>
+      instrument('blake2_256', (): void => {
+        const data = heap.get(dataPtr, dataLen);
+        const hash = blake2AsU8a(data, 256);
 
-      l.debug(() => ['blake2_256', [dataPtr, dataLen, outPtr], '<-', u8aToHex(data), '->', u8aToHex(hash)]);
+        l.debug(() => ['blake2_256', [dataPtr, dataLen, outPtr], '<-', u8aToHex(data), '->', u8aToHex(hash)]);
 
-      heap.set(outPtr, hash);
-    },
-    ed25519_verify: (msgPtr: Pointer, msgLen: number, sigPtr: Pointer, pubkeyPtr: Pointer): number => {
-      l.debug(() => ['ed25519_verify', [msgPtr, msgLen, sigPtr, pubkeyPtr]]);
+        heap.set(outPtr, hash);
+      }),
+    ed25519_verify: (msgPtr: Pointer, msgLen: number, sigPtr: Pointer, pubkeyPtr: Pointer): number =>
+      instrument('ed25519_verify', (): number => {
+        l.debug(() => ['ed25519_verify', [msgPtr, msgLen, sigPtr, pubkeyPtr]]);
 
-      return naclVerify(
-        heap.get(msgPtr, msgLen),
-        heap.get(sigPtr, 64),
-        heap.get(pubkeyPtr, 32)
-      ) ? 0 : 5;
-    },
+        return naclVerify(
+          heap.get(msgPtr, msgLen),
+          heap.get(sigPtr, 64),
+          heap.get(pubkeyPtr, 32)
+        ) ? 0 : 5;
+      }),
     twox_128: (dataPtr: Pointer, dataLen: number, outPtr: Pointer): void =>
-      twox(128, dataPtr, dataLen, outPtr),
+      instrument('twox_128', (): void =>
+        twox(128, dataPtr, dataLen, outPtr)
+      ),
     twox_256: (dataPtr: Pointer, dataLen: number, outPtr: Pointer): void =>
-      twox(256, dataPtr, dataLen, outPtr)
+      instrument('twox_128', (): void =>
+        twox(256, dataPtr, dataLen, outPtr)
+      )
   };
 };

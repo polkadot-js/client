@@ -8,29 +8,33 @@ import type { RuntimeEnv, RuntimeInterface$Storage$Trie, Pointer } from '../type
 const trieRoot = require('@polkadot/util-triehash/root');
 const trieRootOrdered = require('@polkadot/util-triehash/rootOrdered');
 
+const instrument = require('../instrument');
+
 module.exports = function storage ({ l, heap, db }: RuntimeEnv): RuntimeInterface$Storage$Trie {
   return {
-    enumerated_trie_root: (valuesPtr: Pointer, lenPtr: Pointer, count: number, resultPtr: Pointer): void => {
-      // $FlowFixMe yes, the range approach here works
-      const pairs = Array.apply(null, { length: count }).map((_, index) => {
-        const length = heap.getU32(lenPtr + (index * 4));
-        const data = heap.get(valuesPtr, length);
+    enumerated_trie_root: (valuesPtr: Pointer, lenPtr: Pointer, count: number, resultPtr: Pointer): void =>
+      instrument('enumerated_trie_root', (): void => {
+        // $FlowFixMe yes, the range approach here works
+        const pairs = Array.apply(null, { length: count }).map((_, index) => {
+          const length = heap.getU32(lenPtr + (index * 4));
+          const data = heap.get(valuesPtr, length);
 
-        valuesPtr += length;
+          valuesPtr += length;
 
-        return data;
-      });
+          return data;
+        });
 
-      l.debug(() => ['enumerated_trie_root', [valuesPtr, lenPtr, count, resultPtr], '<-', pairs.length]);
+        l.debug(() => ['enumerated_trie_root', [valuesPtr, lenPtr, count, resultPtr], '<-', pairs.length]);
 
-      heap.set(resultPtr, trieRootOrdered(pairs));
-    },
-    storage_root: (resultPtr: Pointer): void => {
-      const pairs = db.pairs();
+        heap.set(resultPtr, trieRootOrdered(pairs));
+      }),
+    storage_root: (resultPtr: Pointer): void =>
+      instrument('storage_root', (): void => {
+        const pairs = db.pairs();
 
-      l.debug(() => ['storage_root', [resultPtr], '<-', pairs.length]);
+        l.debug(() => ['storage_root', [resultPtr], '<-', pairs.length]);
 
-      heap.set(resultPtr, trieRoot(pairs));
-    }
+        heap.set(resultPtr, trieRoot(pairs));
+      })
   };
 };
