@@ -8,17 +8,17 @@ import type { Config, Endpoint } from '../types';
 
 type AsyncCall = () => Promise<string>;
 
-const { name, version } = require('../clientId');
+const clientId = require('../clientId');
 
 const systemChain = ({ chain }: Config): AsyncCall =>
   async (): Promise<string> =>
     chain;
 
 const systemName = async (): Promise<string> =>
-  name;
+  clientId.name;
 
 const systemVersion = async (): Promise<string> =>
-  version;
+  clientId.version;
 
 module.exports = (config: Config, chain: ChainInterface): Endpoint => ({
   'system_chain': systemChain(config),
