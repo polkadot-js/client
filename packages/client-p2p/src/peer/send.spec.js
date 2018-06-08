@@ -15,15 +15,12 @@ describe('send', () => {
   beforeEach(() => {
     self = {
       l,
-      connections: [{
-        isConnected: true,
-        pushable: []
-      }]
+      pushable: []
     };
   });
 
   it('returns false when sending fails', () => {
-    self.connections[0].pushable = null;
+    self.pushable = null;
 
     expect(
       send(self)
@@ -42,7 +39,7 @@ describe('send', () => {
     send(self, message);
 
     expect(
-      self.connections[0].pushable[0]
+      self.pushable[0]
     ).toEqual(
       u8aToBuffer(
         encode(message)
