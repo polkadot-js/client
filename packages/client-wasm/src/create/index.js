@@ -3,18 +3,21 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-const createExports = require('./exports');
-const createImports = require('./imports');
-const createInstance = require('./instance');
-const createMemory = require('./memory');
-const createModule = require('./module');
-const createTable = require('./table');
+import type { Config } from '@polkadot/client/types';
+import type { RuntimeInterface } from '@polkadot/client-runtime/types';
 
-module.exports = {
-  createExports,
-  createImports,
-  createInstance,
-  createMemory,
-  createModule,
-  createTable
+const { HEAP_SIZE_KB } = require('../defaults');
+const createEnv = require('./env');
+const createExports = require('./exports');
+const createMemory = require('./memory');
+
+module.exports = function wasm ({ wasm: { heapSize = HEAP_SIZE_KB } }: Config, runtime: RuntimeInterface, chainCode: Uint8Array, chainProxy: Uint8Array): WebAssemblyInstance$Exports {
+  const env = createEnv(runtime, createMemory(0, 0));
+  const proxy = createExports(chainCode, { env });
+  const instance = createExports(chainProxy, { proxy }, createMemory(0, 0));
+  const offset = proxy.memory.grow(Math.ceil(heapSize / 64));
+
+  runtime.environment.heap.setWasmMemory(proxy.memory, offset * 64 * 1024);
+
+  return instance;
 };

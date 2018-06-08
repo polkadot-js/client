@@ -5,7 +5,7 @@
 const isInstanceOf = require('@polkadot/util/is/instanceOf');
 
 const { HEAP_SIZE_KB } = require('../defaults');
-const { createMemory } = require('./index');
+const createMemory = require('./memory');
 
 describe('createMemory', () => {
   let globalWasm;

@@ -17,5 +17,5 @@ module.exports = function createEnv (runtime: RuntimeInterface, memory: WebAssem
     result[extName] = proxy[extName];
 
     return result;
-  }, {});
+  }, ({}: $Shape<WebAssemblyInstance$Exports>));
 };

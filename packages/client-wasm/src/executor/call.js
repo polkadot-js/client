@@ -12,7 +12,7 @@ const storage = require('@polkadot/storage');
 const key = require('@polkadot/storage/key');
 const u8aToHex = require('@polkadot/util/u8a/toHex');
 
-const createWasm = require('../wasm');
+const createWasm = require('../create');
 const proxy = require('../wasm/proxy_substrate.wasm.js');
 
 // NOTE testing only, comparing results
