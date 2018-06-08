@@ -3,7 +3,7 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { BaseDb } from '@polkadot/client-db-chain/types';
+import type { TrieDb } from '@polkadot/util-triedb/types';
 import type { RuntimeInterface, RuntimeInterface$Exports } from './types';
 
 const createChain = require('./chain');
@@ -13,8 +13,9 @@ const createIo = require('./io');
 const createMemory = require('./memory');
 const createSandbox = require('./sandbox');
 const createStorage = require('./storage');
+const instrument = require('./instrument');
 
-module.exports = function runtime (stateDb: BaseDb): RuntimeInterface {
+module.exports = function runtime (stateDb: TrieDb): RuntimeInterface {
   const environment = createEnv(stateDb);
 
   return {
@@ -23,6 +24,10 @@ module.exports = function runtime (stateDb: BaseDb): RuntimeInterface {
       // flowlint-next-line unclear-type:off
       ({}: any),
       createChain(environment), createCrypto(environment), createIo(environment), createMemory(environment), createSandbox(environment), createStorage(environment)
-    ): $Shape<RuntimeInterface$Exports>)
+    ): $Shape<RuntimeInterface$Exports>),
+    instrument: {
+      start: instrument.clear,
+      stop: instrument.stats
+    }
   };
 };

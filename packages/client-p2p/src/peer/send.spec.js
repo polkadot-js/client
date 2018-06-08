@@ -2,6 +2,7 @@
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
 
+const l = require('@polkadot/util/logger')('test');
 const u8aToBuffer = require('@polkadot/util/u8a/toBuffer');
 
 const status = require('../message/status');
@@ -13,6 +14,7 @@ describe('send', () => {
 
   beforeEach(() => {
     self = {
+      l,
       pushable: []
     };
   });

@@ -25,7 +25,8 @@ module.exports = function onDiscovery (self: PeersState, node: LibP2P): void {
 
     peer = add(self, peerInfo);
 
-    logPeer(self, 'discovered', peer);
+    // NOTE Only place where we log the long id
+    logPeer(self, 'discovered', peer, false);
 
     return true;
   });

@@ -4,7 +4,8 @@
 // @flow
 
 import type { Storage$Section } from '@polkadot/storage/types';
-import type { BaseDb, StateDb, WrapDb } from '../types';
+import type { TrieDb } from '@polkadot/util-triedb/types';
+import type { StateDb } from '../types';
 
 const storage = require('@polkadot/storage');
 
@@ -14,18 +15,17 @@ const createArrU8a = require('../db/arrayU8a');
 const createBn = require('../db/bn');
 const createBool = require('../db/bool');
 const createU8a = require('../db/u8a');
-const createDb = require('../db');
 
 const BALANCE_SIZE = 128;
 const BLOCKNUM_SIZE = 64;
 
-const consensus = (db: WrapDb, { public: { authorityAt, authorityCount, code } }: Storage$Section) => ({
+const consensus = (db: TrieDb, { public: { authorityAt, authorityCount, code } }: Storage$Section) => ({
   authorityAt: createAcc(db, authorityAt),
   authorityCount: createBn(db, authorityCount, 32),
   code: createU8a(db, code)
 });
 
-const council = (db: WrapDb, { public: { activeCouncil, candidacyBond, carryCount, desiredSeats, inactiveGracePeriod, presentationDuration, presentSlashPerVoter, termDuration, votingBond, votingPeriod } }: Storage$Section) => ({
+const council = (db: TrieDb, { public: { activeCouncil, candidacyBond, carryCount, desiredSeats, inactiveGracePeriod, presentationDuration, presentSlashPerVoter, termDuration, votingBond, votingPeriod } }: Storage$Section) => ({
   activeCouncil: createArrU8a(db, activeCouncil),
   candidacyBond: createBn(db, candidacyBond, BALANCE_SIZE),
   carryCount: createBn(db, carryCount, 32),
@@ -38,31 +38,31 @@ const council = (db: WrapDb, { public: { activeCouncil, candidacyBond, carryCoun
   votingPeriod: createBn(db, votingPeriod, BLOCKNUM_SIZE)
 });
 
-const councilVoting = (db: WrapDb, { public: { cooloffPeriod, votingPeriod } }: Storage$Section) => ({
+const councilVoting = (db: TrieDb, { public: { cooloffPeriod, votingPeriod } }: Storage$Section) => ({
   cooloffPeriod: createBn(db, cooloffPeriod, BLOCKNUM_SIZE),
   votingPeriod: createBn(db, votingPeriod, BLOCKNUM_SIZE)
 });
 
-const democracy = (db: WrapDb, { public: { launchPeriod, minimumDeposit, votingPeriod } }: Storage$Section) => ({
+const democracy = (db: TrieDb, { public: { launchPeriod, minimumDeposit, votingPeriod } }: Storage$Section) => ({
   launchPeriod: createBn(db, launchPeriod, BLOCKNUM_SIZE),
   minimumDeposit: createBn(db, minimumDeposit, BALANCE_SIZE),
   votingPeriod: createBn(db, votingPeriod, BLOCKNUM_SIZE)
 });
 
-const governance = (db: WrapDb, { public: { approvalsRatio } }: Storage$Section) => ({
+const governance = (db: TrieDb, { public: { approvalsRatio } }: Storage$Section) => ({
   approvalsRatio: createBn(db, approvalsRatio, BLOCKNUM_SIZE)
 });
 
-const parachains = (db: WrapDb, { public: { didUpdate } }: Storage$Section) => ({
+const parachains = (db: TrieDb, { public: { didUpdate } }: Storage$Section) => ({
   didUpdate: createBool(db, didUpdate)
 });
 
-const session = (db: WrapDb, { public: { length, validators } }: Storage$Section) => ({
+const session = (db: TrieDb, { public: { length, validators } }: Storage$Section) => ({
   length: createBn(db, length, BLOCKNUM_SIZE),
   validators: createArrAcc(db, validators)
 });
 
-const staking = (db: WrapDb, { public: { bondingDuration, currentEra, freeBalanceOf, intentions, sessionsPerEra, transactionFee, validatorCount } }: Storage$Section) => ({
+const staking = (db: TrieDb, { public: { bondingDuration, currentEra, freeBalanceOf, intentions, sessionsPerEra, transactionFee, validatorCount } }: Storage$Section) => ({
   bondingDuration: createBn(db, bondingDuration, BLOCKNUM_SIZE),
   currentEra: createBn(db, currentEra, BLOCKNUM_SIZE),
   freeBalanceOf: createBn(db, freeBalanceOf, BALANCE_SIZE),
@@ -72,18 +72,16 @@ const staking = (db: WrapDb, { public: { bondingDuration, currentEra, freeBalanc
   validatorCount: createBn(db, validatorCount, 32)
 });
 
-const system = (db: WrapDb, { public: { accountIndexOf, blockHashAt } }: Storage$Section) => ({
+const system = (db: TrieDb, { public: { accountIndexOf, blockHashAt } }: Storage$Section) => ({
   accountIndexOf: createBn(db, accountIndexOf, 32),
   blockHashAt: createU8a(db, blockHashAt)
 });
 
-const timestamp = (db: WrapDb, { public: { didUpdate } }: Storage$Section) => ({
+const timestamp = (db: TrieDb, { public: { didUpdate } }: Storage$Section) => ({
   didUpdate: createBool(db, didUpdate)
 });
 
-module.exports = function createState (baseDb: BaseDb): StateDb {
-  const db = createDb(baseDb);
-
+module.exports = function createState (db: TrieDb): StateDb {
   return {
     db,
     consensus: consensus(db, storage.consensus),

@@ -9,21 +9,18 @@ const promisify = require('@polkadot/util/promisify');
 
 const createNode = require('./create/node');
 const createPeers = require('./peers');
-const defaults = require('./defaults');
-const onPeerConnected = require('./onPeerConnected');
+const handleProtocol = require('./handleProtocol');
 const onPeerDiscovery = require('./onPeerDiscovery');
 const onPeerMessage = require('./handler');
-const onProtocol = require('./onProtocol');
 const stop = require('./stop');
 
 module.exports = async function start (self: P2pState): Promise<boolean> {
   stop(self);
 
-  self.node = await createNode(self.config.p2p.address, self.config.p2p.port, self.config.p2p.peers);
-  self.node.handle(defaults.PROTOCOL, onProtocol(self));
-  self.peers = createPeers(self.node);
+  self.node = await createNode(self);
+  self.peers = createPeers(self);
 
-  onPeerConnected(self);
+  handleProtocol(self);
   onPeerDiscovery(self);
   onPeerMessage(self);
 

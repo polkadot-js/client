@@ -26,7 +26,7 @@ module.exports = function server (config: Config, chain: ChainInterface, handler
     emitter,
     handlers,
     l,
-    server: null
+    servers: []
   };
 
   validateConfig(config.rpc);

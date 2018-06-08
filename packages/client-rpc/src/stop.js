@@ -6,14 +6,16 @@
 import type { RpcState } from './types';
 
 module.exports = async function stop (self: RpcState): Promise<boolean> {
-  if (!self.server) {
+  if (self.servers.length === 0) {
     return false;
   }
 
-  const server = self.server;
+  const servers = self.servers;
 
-  self.server = null;
-  server.close();
+  self.servers = [];
+  servers.forEach((server) =>
+    server.close()
+  );
 
   self.l.log('Server stopped');
   self.emitter.emit('stopped');

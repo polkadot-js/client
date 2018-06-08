@@ -11,8 +11,10 @@ const MAX_PEERS = 25;
 const MAX_SYNC_BLOCKS = 64;
 const PORT = 39933;
 const ROLE: Role = 'full';
+const PROTOCOL_BASE = '/substrate';
+const PROTOCOL_TYPE = '/dot';
 const PROTOCOL_VERSION = 0;
-const PROTOCOL = `/substrate/dot/${PROTOCOL_VERSION}`;
+const PROTOCOL = `${PROTOCOL_BASE}${PROTOCOL_TYPE}/${PROTOCOL_VERSION}`;
 
 module.exports = {
   ADDRESS,
@@ -21,6 +23,8 @@ module.exports = {
   MAX_SYNC_BLOCKS,
   PORT,
   PROTOCOL,
+  PROTOCOL_BASE,
+  PROTOCOL_TYPE,
   PROTOCOL_VERSION,
   ROLE
 };

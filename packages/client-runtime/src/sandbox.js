@@ -5,6 +5,8 @@
 
 import type { RuntimeInterface$Sandbox, RuntimeEnv, Pointer } from './types';
 
+const instrument = require('./instrument');
+
 // TODO Implement according to https://github.com/paritytech/polkadot/tree/master/substrate/runtime-sandbox
 
 module.exports = function sandbox ({ l }: RuntimeEnv): RuntimeInterface$Sandbox {
@@ -12,18 +14,18 @@ module.exports = function sandbox ({ l }: RuntimeEnv): RuntimeInterface$Sandbox 
 
   return {
     sandbox_instantiate: (a: number, b: number, c: number, d: number, e: number, f: number): number =>
-      0,
+      instrument('sandbox_instantiate', (): number => 0),
     sandbox_instance_teardown: (instanceIdx: number): void =>
-      undefined,
+      instrument('sandbox_instance_teardown', (): void => undefined),
     sandbox_invoke: (instanceIdx: number, b: number, c: number, d: number): number =>
-      0,
+      instrument('sandbox_invoke', (): number => 0),
     sandbox_memory_get: (memoryIdx: number, offset: number, ptr: Pointer, len: number): number =>
-      0,
+      instrument('sandbox_memory_get', (): number => 0),
     sandbox_memory_new: (initial: number, maximum: number): number =>
-      0,
+      instrument('sandbox_memory_new', (): number => 0),
     sandbox_memory_set: (memoryIdx: number, offset: number, ptr: Pointer, len: number): number =>
-      0,
+      instrument('sandbox_memory_set', (): number => 0),
     sandbox_memory_teardown: (memoryIdx: number): void =>
-      undefined
+      instrument('sandbox_memory_teardown', (): void => undefined)
   };
 };

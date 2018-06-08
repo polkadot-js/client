@@ -3,7 +3,6 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type BN from 'bn.js';
 import type { Config } from '@polkadot/client/types';
 import type { ChainGenesis } from '@polkadot/client-chains/types';
 import type { BlockDb, StateDb } from '@polkadot/client-db-chain/types';
@@ -37,8 +36,8 @@ module.exports = function executor (config: Config, blockDb: BlockDb, stateDb: S
       executeBlock(self, block),
     finaliseBlock: (header: Uint8Array): Uint8Array =>
       finaliseBlock(self, header),
-    generateBlock: (number: BN | number, utxs: Array<UncheckedRaw>, timestamp?: number = Math.ceil(Date.now() / 1000)): Uint8Array =>
-      generateBlock(self, number, utxs, timestamp),
+    generateBlock: (utxs: Array<UncheckedRaw>, timestamp?: number = Math.ceil(Date.now() / 1000)): Uint8Array =>
+      generateBlock(self, utxs, timestamp),
     importBlock: (block: Uint8Array): Executor$BlockImportResult =>
       importBlock(self, block),
     initialiseBlock: (header: Uint8Array): boolean =>

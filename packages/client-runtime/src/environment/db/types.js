@@ -3,10 +3,17 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { BaseDb } from '@polkadot/client-db-chain/types';
-import type { Memory$Storage } from '@polkadot/client-db/memory/types';
+import type { TrieDb } from '@polkadot/util-triedb/types';
+import type { Trie$Pair } from '@polkadot/util-triehash/types';
+
+type Trie$Pair$Null = {
+  k: Uint8Array,
+  v: Uint8Array | null
+};
 
 export type DbState = {
-  backend: BaseDb,
-  pending: Memory$Storage
+  backend: TrieDb,
+  pending: {
+    [Uint8Array]: Trie$Pair | Trie$Pair$Null
+  }
 };

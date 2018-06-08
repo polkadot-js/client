@@ -5,26 +5,30 @@
 
 import type { RuntimeEnv, RuntimeInterface$Io, Pointer } from '../types';
 
+const instrument = require('../instrument');
 const printHex = require('./printHex');
 const printUtf8 = require('./printUtf8');
 const printNum = require('./printNum');
 
 module.exports = function io ({ heap, l }: RuntimeEnv): RuntimeInterface$Io {
   return {
-    print_hex: (ptr: Pointer, len: number): void => {
-      l.debug(() => ['print_hex', [ptr, len]]);
+    print_hex: (ptr: Pointer, len: number): void =>
+      instrument('print_hex', (): void => {
+        l.debug(() => ['print_hex', [ptr, len]]);
 
-      printHex(l, heap.get(ptr, len));
-    },
-    print_utf8: (ptr: Pointer, len: number): void => {
-      l.debug(() => ['print_utf8', [ptr, len]]);
+        printHex(l, heap.get(ptr, len));
+      }),
+    print_num: (hi: number, lo: number): void =>
+      instrument('print_num', (): void => {
+        l.debug(() => ['print_num', [hi, lo]]);
 
-      printUtf8(l, heap.get(ptr, len));
-    },
-    print_num: (hi: number, lo: number): void => {
-      l.debug(() => ['print_num', [hi, lo]]);
+        printNum(l, hi, lo);
+      }),
+    print_utf8: (ptr: Pointer, len: number): void =>
+      instrument('print_utf8', (): void => {
+        l.debug(() => ['print_utf8', [ptr, len]]);
 
-      printNum(l, hi, lo);
-    }
+        printUtf8(l, heap.get(ptr, len));
+      })
   };
 };

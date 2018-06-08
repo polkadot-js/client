@@ -6,6 +6,8 @@
 import type BN from 'bn.js';
 import type { LibP2P$Connection } from 'libp2p';
 import type PeerInfo from 'peer-info';
+import type { Config } from '@polkadot/client/types';
+import type { ChainInterface } from '@polkadot/client-chains/types';
 import type { MessageInterface, PeerInterface } from '../types';
 
 const stringShorten = require('@polkadot/util/string/shorten');
@@ -16,16 +18,18 @@ const send = require('./send');
 const setBest = require('./setBest');
 const state = require('./state');
 
-module.exports = function createPeer (peerInfo: PeerInfo): PeerInterface {
+module.exports = function createPeer (config: Config, chain: ChainInterface, peerInfo: PeerInfo): PeerInterface {
   const id = peerInfo.id.toB58String();
-  const self = state();
+  const self = state(config, chain);
 
   return {
     id,
     peerInfo,
     shortId: stringShorten(id),
-    addConnection: (connection: LibP2P$Connection): boolean =>
-      addConnection(self, connection),
+    addConnection: (connection: LibP2P$Connection, isWritable: boolean): void =>
+      addConnection(self, connection, isWritable),
+    isWritable: (): boolean =>
+      !!self.pushable,
     getBestHash: (): Uint8Array =>
       self.bestHash,
     getBestNumber: (): BN =>

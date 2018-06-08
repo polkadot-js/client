@@ -5,12 +5,13 @@
 
 import type { Section$Item } from '@polkadot/params/types';
 import type { Storage$Key$Values } from '@polkadot/storage/types';
-import type { StorageMethod$Bool, BaseDb } from '../types';
+import type { TrieDb } from '@polkadot/util-triedb/types';
+import type { StorageMethod$Bool } from '../types';
 
 const createBase = require('./base');
 const creator = require('../key');
 
-module.exports = function decodeBool <T> (db: BaseDb, key: Section$Item<T>): StorageMethod$Bool {
+module.exports = function decodeBool <T> (db: TrieDb, key: Section$Item<T>): StorageMethod$Bool {
   const createKey = creator(key);
   const base = createBase(db);
 

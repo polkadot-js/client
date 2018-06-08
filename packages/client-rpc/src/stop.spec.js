@@ -22,14 +22,14 @@ describe('stop', () => {
       l: {
         log: jest.fn()
       },
-      server: {
+      servers: [{
         close: () => true
-      }
+      }]
     };
   });
 
   it('returns false when internal server not started', () => {
-    self.server = null;
+    self.servers = [];
 
     return stop(self).then((result) => {
       expect(result).toEqual(false);
@@ -37,12 +37,12 @@ describe('stop', () => {
   });
 
   it('calls stop() on the internal server', (done) => {
-    self.server = {
+    self.servers = [{
       close: () => {
-        expect(self.server).toEqual(null);
+        expect(self.servers).toEqual([]);
         done();
       }
-    };
+    }];
 
     stop(self);
   });

@@ -6,7 +6,8 @@
 import type BN from 'bn.js';
 import type { Section$Item } from '@polkadot/params/types';
 import type { Storage$Key$Values } from '@polkadot/storage/types';
-import type { StorageMethod$Bn, BaseDb } from '../types';
+import type { TrieDb } from '@polkadot/util-triedb/types';
+import type { StorageMethod$Bn } from '../types';
 
 const bnToU8a = require('@polkadot/util/bn/toU8a');
 const u8aToBn = require('@polkadot/util/u8a/toBn');
@@ -14,7 +15,7 @@ const u8aToBn = require('@polkadot/util/u8a/toBn');
 const createBase = require('./base');
 const creator = require('../key');
 
-module.exports = function decodeBn <T> (db: BaseDb, key: Section$Item<T>, bitLength: 32 | 64 | 128): StorageMethod$Bn {
+module.exports = function decodeBn <T> (db: TrieDb, key: Section$Item<T>, bitLength: 32 | 64 | 128): StorageMethod$Bn {
   const createKey = creator(key);
   const base = createBase(db);
 

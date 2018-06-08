@@ -15,13 +15,13 @@ A very early, WIP and POC JavaScript version of a simplified Polkadot network cl
 
 It is split up into a number of internal packages -
 
-- [packages/client](packages/client/) The main JavaScript client
-- [packages/client-chains](packages/client-chains/) Chain definitions
-- [packages/client-db](packages/client-db/) Database interface
-- [packages/client-p2p](packages/client-p2p/) Peer-to-peer server
-- [packages/client-rpc](packages/client-rpc/) RPC server
-- [packages/client-runtime](packages/client-runtime/) Basic Wasm runtime wrapper
-- [packages/client-wasm](packages/client-wasm/) Wasm interface wrapper
+- [client](packages/client/) The main JavaScript client
+- [client-chains](packages/client-chains/) Chain definitions
+- [client-db](packages/client-db/) Database interface
+- [client-p2p](packages/client-p2p/) Peer-to-peer server
+- [client-rpc](packages/client-rpc/) RPC server
+- [client-runtime](packages/client-runtime/) Basic Wasm runtime wrapper
+- [client-wasm](packages/client-wasm/) Wasm interface wrapper
 
 ## Local development node
 
@@ -37,6 +37,5 @@ $ yarn run start --p2p-peers=/ip4/127.0.0.1/tcp/39933 --p2p-port=39934 --rpc-por
 
 ## Contributing
 
-- Make sure you have [Lerna](https://lernajs.io/) installed, `yarn install -g lerna`
 - Bootstrap the dependencies, `yarn`
 - Make any changes in the relevant package, on master merges new versions will be published automatically

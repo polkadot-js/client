@@ -14,7 +14,7 @@ const stop = require('./stop');
 module.exports = async function start (self: RpcState): Promise<boolean> {
   stop(self);
 
-  const app = createKoa({
+  const apps = createKoa({
     handlers: {
       http: handlePost(self),
       ws: handleWs(self)
@@ -23,9 +23,15 @@ module.exports = async function start (self: RpcState): Promise<boolean> {
     types: self.config.rpc.types
   });
 
-  self.server = app.listen(self.config.rpc.port);
+  self.servers = apps.map((app, index) => {
+    const port = self.config.rpc.port + index;
+    const server = app.listen(port);
 
-  self.l.log(`Server started on port=${self.config.rpc.port} for types=${self.config.rpc.types.join(',')}`);
+    self.l.log(`Server started on port=${port} for type=${self.config.rpc.types[index]}`);
+
+    return server;
+  });
+
   self.emitter.emit('started');
 
   return true;

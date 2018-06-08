@@ -15,7 +15,7 @@ describe('createKoa', () => {
         path: '/',
         types: ['http']
       })
-    ).toBeDefined();
+    ).toHaveLength(1);
   });
 
   it('creates an WS interface', () => {
@@ -27,8 +27,8 @@ describe('createKoa', () => {
         },
         path: '/',
         types: ['ws']
-      }).ws
-    ).toBeDefined();
+      })
+    ).toHaveLength(1);
   });
 
   it('creates an HTTP + WS interface', () => {
@@ -41,6 +41,6 @@ describe('createKoa', () => {
         path: '/',
         types: ['http', 'ws']
       })
-    ).toBeDefined();
+    ).toHaveLength(2);
   });
 });

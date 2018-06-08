@@ -3,9 +3,11 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type { BaseDb } from '@polkadot/client-db-chain/types';
+import type { TrieDb } from '@polkadot/util-triedb/types';
 import type { Trie$Pairs } from '@polkadot/util-triehash/types';
 import type { DbState } from './types';
+
+const trieRoot = require('@polkadot/util-triehash/root');
 
 const clear = require('./clear');
 const commit = require('./commit');
@@ -14,7 +16,7 @@ const get = require('./get');
 const pairs = require('./pairs');
 const set = require('./set');
 
-module.exports = function envDb (backend: BaseDb): BaseDb {
+module.exports = function envDb (backend: TrieDb): TrieDb {
   const self: DbState = {
     backend,
     pending: {}
@@ -34,6 +36,8 @@ module.exports = function envDb (backend: BaseDb): BaseDb {
     pairs: (): Trie$Pairs =>
       pairs(self),
     set: (k: Uint8Array, v: Uint8Array): void =>
-      set(self, k, v)
+      set(self, k, v),
+    trieRoot: (): Uint8Array =>
+      trieRoot(pairs(self))
   };
 };

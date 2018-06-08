@@ -9,9 +9,9 @@ import type { DbState } from './types';
 module.exports = function pairs ({ backend, pending }: DbState): Trie$Pairs {
   // flowlint-next-line unclear-type:off
   const pendingKeys = ((Object.keys(pending): any): Array<Uint8Array>);
-  // $FlowFixMe we are filtering out all the nulls...
   const pendingPairs: Trie$Pairs = pendingKeys
     .filter((k) => pending[k].v !== null)
+    // $FlowFixMe nulls have been filtered
     .map((k) => pending[k]);
 
   return (backend ? backend.pairs() : []).concat(pendingPairs);
