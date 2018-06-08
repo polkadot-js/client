@@ -20,23 +20,34 @@ const Koa = require('koa');
 const koaRoute = require('koa-route');
 const koaWebsocket = require('koa-websocket');
 
-module.exports = function createKoa ({ handlers, path, types }: CreateKoaOption): Koa {
-  let app = new Koa();
+module.exports = function createKoa ({ handlers, path, types }: CreateKoaOption): Array<Koa> {
+  return types.map((type) => {
+    switch (type) {
+      case 'http':
+        return (() => {
+          const app = new Koa();
 
-  if (types.includes('http')) {
-    app.use(
-      koaRoute.post(path, handlers.http)
-    );
-  }
+          app.use(
+            koaRoute.post(path, handlers.http)
+          );
 
-  if (types.includes('ws')) {
-    app = koaWebsocket(app);
+          return app;
+        })();
 
-    // flowlint-next-line unclear-type:off
-    (app: any).ws.use(
-      koaRoute.all(path, handlers.ws)
-    );
-  }
+      case 'ws':
+        return (() => {
+          const app = koaWebsocket(new Koa());
 
-  return app;
+          app.ws.use(
+            koaRoute.all(path, handlers.ws)
+          );
+
+          return app;
+        })();
+
+      default:
+        (type: empty); // eslint-disable-line
+        throw new Error(`Uanble to create RPC listener for ${type}`);
+    }
+  });
 };

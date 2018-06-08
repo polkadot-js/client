@@ -72,5 +72,5 @@ export type RpcState = {
   emitter: EventEmitter,
   handlers: Handlers,
   l: Logger,
-  server: ?net$Server
+  servers: Array<net$Server>
 };
