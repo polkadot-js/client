@@ -24,7 +24,7 @@ module.exports = async function start (self: RpcState): Promise<boolean> {
   });
 
   self.servers = apps.map((app, index) => {
-    const port = self.config.rpc.port + index;
+    const port = self.config.rpc.port + (11 * index);
     const server = app.listen(port);
 
     self.l.log(`Server started on port=${port} for type=${self.config.rpc.types[index]}`);

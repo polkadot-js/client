@@ -5,14 +5,14 @@
 
 import type { RpcInterface } from '@polkadot/client-rpc/types';
 import type { ChainInterface } from '@polkadot/client-chains/types';
-import type { Config, Endpoint } from '../types';
+import type { Config } from '../types';
 
 const createRpc = require('@polkadot/client-rpc');
 
-const client = require('./client');
-
-const handlers: Endpoint = Object.assign({}, client);
+const system = require('./system');
 
 module.exports = function rpc (config: Config, chain: ChainInterface): RpcInterface {
-  return createRpc(config, chain, handlers);
+  return createRpc(config, chain, {
+    ...system(config, chain)
+  });
 };
