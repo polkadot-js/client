@@ -12,18 +12,20 @@ const isFunction = require('@polkadot/util/is/function');
 const { createError, createResponse } = require('./create');
 const validateRequest = require('./validate/request');
 
-module.exports = async function handleMessage (self: RpcState, message: string): Promise<JsonRpcError | JsonRpcResponse> {
+module.exports = async function handleMessage ({ handlers, l }: RpcState, message: string): Promise<JsonRpcError | JsonRpcResponse> {
   try {
     const { id, jsonrpc, method, params }: JsonRpcRequest = JSON.parse(message);
 
     try {
       validateRequest(id, jsonrpc);
 
-      const handler = self.handlers[method];
+      const handler = handlers[method];
 
       assert(isFunction(handler), `Method '${method}' not found`, ExtError.CODES.METHOD_NOT_FOUND);
 
       const result = await handler(params);
+
+      l.debug(() => ['executed', method, params, '->', result]);
 
       if (isError(result)) {
         throw result;
@@ -31,6 +33,8 @@ module.exports = async function handleMessage (self: RpcState, message: string):
 
       return createResponse(id, result);
     } catch (error) {
+      l.debug(() => ['error', method, params, '->', error]);
+
       return createError(id, error);
     }
   } catch (error) {
