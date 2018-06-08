@@ -5,7 +5,7 @@
 
 import type { WasmExtraImports } from '../types';
 
-type CompiledCache = {
+type ModuleCache = {
   [Uint8Array]: WebAssemblyModule
 }
 
@@ -18,19 +18,21 @@ const DEFAULT_TABLE: WebAssemblyTable$Config = {
   element: 'anyfunc'
 };
 
-const moduleCache: CompiledCache = {};
+const moduleCache: ModuleCache = {};
 
-module.exports = function exports (bytecode: Uint8Array, _imports?: WasmExtraImports = {}, memory: ?WebAssembly.Memory): WebAssemblyInstance$Exports {
+module.exports = function exports (bytecode: Uint8Array, imports?: WasmExtraImports, memory: ?WebAssembly.Memory): WebAssemblyInstance$Exports {
   const codeHash = blake2AsU8a(bytecode);
 
+  // NOTE compilation is quite resource intensive, here we bypass the actual Uint8Array -> Module compilation when we already have this module bytecode in our cache
   if (!moduleCache[codeHash]) {
     moduleCache[codeHash] = new WebAssembly.Module(bytecode);
   }
 
-  const module = moduleCache[codeHash];
   const table = new WebAssembly.Table(DEFAULT_TABLE);
-  const imports = createImports(memory, table, _imports);
-  const instance = new WebAssembly.Instance(module, imports);
+  const instance = new WebAssembly.Instance(
+    moduleCache[codeHash],
+    createImports(memory, table, imports)
+  );
 
   return instance.exports;
 };
