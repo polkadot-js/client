@@ -3,7 +3,6 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type BN from 'bn.js';
 import type { Config } from '@polkadot/client/types';
 import type { ChainGenesis } from '@polkadot/client-chains/types';
 import type { BlockDb, StateDb } from '@polkadot/client-db-chain/types';
@@ -39,7 +38,7 @@ export type ExecutorInterface = {
   applyExtrinsic (extrinsic: UncheckedRaw): boolean,
   executeBlock (block: Uint8Array): boolean,
   finaliseBlock (header: Uint8Array): Uint8Array,
-  generateBlock (number: BN | number, extrinsics: Array<UncheckedRaw>): Uint8Array,
+  generateBlock (extrinsics: Array<UncheckedRaw>, timestamp?: number): Uint8Array,
   importBlock (block: Uint8Array): Executor$BlockImportResult,
   initialiseBlock (header: Uint8Array): boolean
 };

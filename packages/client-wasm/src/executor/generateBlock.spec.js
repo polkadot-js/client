@@ -40,7 +40,7 @@ describe('generateBlock', () => {
 
   it('generates a basic block (empty)', () => {
     expect(
-      chain.executor.generateBlock(1, [], 54321)
+      chain.executor.generateBlock([], 54321)
     ).toEqual(
       u8aConcat(
         new Uint8Array([
@@ -59,7 +59,7 @@ describe('generateBlock', () => {
 
   it('generates a basic block (with real externals)', () => {
     expect(
-      chain.executor.generateBlock(1, [
+      chain.executor.generateBlock([
         encodeUnchecked(keyring.alice, 0)(
           methods.staking.public.transfer,
           [keyring.bob.publicKey(), 69]
@@ -71,7 +71,7 @@ describe('generateBlock', () => {
   it('generated blocks are importable', () => {
     expect(
       chain.executor.importBlock(
-        chain.executor.generateBlock(1, [])
+        chain.executor.generateBlock([])
       )
     ).not.toBeNull();
   });
@@ -79,12 +79,12 @@ describe('generateBlock', () => {
   it('generated blocks are importable on top of each other', () => {
     expect(
       chain.executor.importBlock(
-        chain.executor.generateBlock(1, [])
+        chain.executor.generateBlock([])
       )
     ).not.toBeNull();
     expect(
       chain.executor.importBlock(
-        chain.executor.generateBlock(2, [])
+        chain.executor.generateBlock([])
       )
     ).not.toBeNull();
   });
