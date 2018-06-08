@@ -14,21 +14,13 @@ const receive = require('./receive');
 const send = require('./send');
 
 module.exports = function addConnection (self: PeerState, connection: LibP2P$Connection, isWritable: boolean): void {
-  const pushable = isWritable
-    ? Pushable()
-    : undefined;
+  receive(self, connection);
 
-  self.connections.push({
-    connection,
-    isConnected: true,
-    pushable
-  });
+  if (isWritable) {
+    self.pushable = Pushable();
 
-  if (isWritable === false) {
-    receive(self, connection);
-  } else {
     pull(
-      pushable,
+      self.pushable,
       connection
     );
 

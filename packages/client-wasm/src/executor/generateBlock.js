@@ -13,7 +13,7 @@ const encodeBlock = require('@polkadot/primitives-codec/block/encode');
 const encodeHeader = require('@polkadot/primitives-codec/header/encode');
 const bnToBn = require('@polkadot/util/bn/toBn');
 
-const applyExtrinsics = require('./applyExtrinsics');
+const applyExtrinsic = require('./applyExtrinsic');
 const finaliseBlock = require('./finaliseBlock');
 const withInherent = require('./inherentExtrinsics');
 const initialiseBlock = require('./initialiseBlock');
@@ -27,14 +27,15 @@ module.exports = function generateBlock (self: ExecutorState, _number: number | 
   const extrinsics = withInherent(self, timestamp, _extrinsics);
   const header = createHeader({
     number,
+    // FIXME This is horrible, this is probably not available, check logic here with importBlock as well (where we, in a hacky way, have to set it)
     parentHash: self.stateDb.system.blockHashAt.get(number.subn(1))
   }, extrinsics);
   const headerRaw = encodeHeader(header);
 
   initialiseBlock(self, headerRaw);
-
-  // NOTE here we apply multiples using the same runtime, skipping the setup overhead
-  applyExtrinsics(self, extrinsics);
+  extrinsics.forEach((extrinsic) =>
+    applyExtrinsic(self, extrinsic)
+  );
 
   const { stateRoot } = decodeHeader(
     finaliseBlock(self, headerRaw)
