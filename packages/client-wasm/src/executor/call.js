@@ -22,7 +22,7 @@ const CODE_KEY = key(storage.consensus.public.code)();
 
 module.exports = function call ({ config, genesis, l, runtime, stateDb }: ExecutorState, name: string): Call {
   const code = stateDb.db.get(CODE_KEY) || genesis.code;
-  const instance = createWasm(config, runtime, code, proxy);
+  const instance = createWasm({ config, l }, runtime, code, proxy);
   const { heap } = runtime.environment;
 
   return (...data: Array<Uint8Array>): CallResult => {

@@ -5,7 +5,11 @@
 
 import type { WasmExtraImports } from '../types';
 
-const assert = require('@polkadot/util/assert');
+type CompiledCache = {
+  [Uint8Array]: WebAssemblyModule
+}
+
+const blake2AsU8a = require('@polkadot/util-crypto/blake2/asU8a');
 
 const createImports = require('./imports');
 
@@ -14,10 +18,16 @@ const DEFAULT_TABLE: WebAssemblyTable$Config = {
   element: 'anyfunc'
 };
 
-module.exports = function exports (bytecode: Uint8Array, _imports?: WasmExtraImports = {}, memory: ?WebAssembly.Memory): WebAssemblyInstance$Exports {
-  assert(WebAssembly.validate(bytecode), 'Expected valid wasm bytecode');
+const moduleCache: CompiledCache = {};
 
-  const module = new WebAssembly.Module(bytecode);
+module.exports = function exports (bytecode: Uint8Array, _imports?: WasmExtraImports = {}, memory: ?WebAssembly.Memory): WebAssemblyInstance$Exports {
+  const codeHash = blake2AsU8a(bytecode);
+
+  if (!moduleCache[codeHash]) {
+    moduleCache[codeHash] = new WebAssembly.Module(bytecode);
+  }
+
+  const module = moduleCache[codeHash];
   const table = new WebAssembly.Table(DEFAULT_TABLE);
   const imports = createImports(memory, table, _imports);
   const instance = new WebAssembly.Instance(module, imports);
