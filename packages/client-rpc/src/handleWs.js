@@ -12,7 +12,7 @@ const handleMessage = require('./handleMessage');
 module.exports = function handleWs (self: RpcState): Handler {
   return (ctx: WsContext): void => {
     ctx.websocket.on('message', async (message: string) => {
-      const response = await handleMessage(self, message);
+      const response = await handleMessage(self, message, ctx.websocket);
 
       ctx.websocket.send(
         JSON.stringify(response)

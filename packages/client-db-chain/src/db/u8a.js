@@ -21,6 +21,8 @@ module.exports = function decodeU8a <T> (db: TrieDb, key: Section$Item<T>): Stor
     get: (...keyParams?: Storage$Key$Values): Uint8Array =>
       base.get(createKey(keyParams)),
     set: (value: Uint8Array, ...keyParams?: Storage$Key$Values): void =>
-      base.set(createKey(keyParams), value)
+      base.set(createKey(keyParams), value, value),
+    onUpdate: (updater: (value: Uint8Array, raw: Uint8Array) => void): void =>
+      base.onUpdate(updater)
   };
 };

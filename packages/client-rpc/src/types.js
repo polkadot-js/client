@@ -25,11 +25,22 @@ export type JsonRpcRequest = JsonRpcBase & {
   params: Array<mixed>
 };
 
+export type JsonRpcSubscription = JsonRpcBase & {
+  method: string,
+  params: {
+    error?: Error,
+    // flowlint-next-line unclear-type:off
+    result: any,
+    subscription: number
+  }
+};
+
 export type JsonRpcResponse = JsonRpcBase & {
   result: mixed
 };
 
-export type Handler = (mixed) => Promise<mixed>;
+// flowlint-next-line unclear-type:off
+export type Handler = (Array<any>) => Promise<any>;
 
 export type Handlers = {
   [string]: Handler
@@ -51,12 +62,13 @@ export type PostContext = {
   type: 'application/json'
 };
 
+export type WsContext$Socket = {
+  on: (type: 'close' | 'message', (message: string) => void | Promise<void>) => void,
+  send: (message: string) => void | Promise<void>
+};
+
 export type WsContext = {
-  websocket: {
-    // flowlint-next-line unclear-type:off
-    on: (type: 'message', (message: string) => any) => any,
-    send: (message: string) => void
-  }
+  websocket: WsContext$Socket
 };
 
 export type RpcInterface = {
@@ -66,11 +78,15 @@ export type RpcInterface = {
   stop (): Promise<boolean>
 }
 
+// flowlint-next-line unclear-type:off
+export type SubInterface = (socket?: WsContext$Socket, handler: Handler, params: Array<any>) => Promise<number>;
+
 export type RpcState = {
   chain: ChainInterface,
   config: Config,
   emitter: EventEmitter,
   handlers: Handlers,
   l: Logger,
-  servers: Array<net$Server>
+  servers: Array<net$Server>,
+  subscribe: SubInterface
 };

@@ -10,7 +10,8 @@ import type { Storage$Key$Values } from '@polkadot/storage/types';
 export type StorageMethod<P, R> = {
   del: (...params?: Storage$Key$Values) => void,
   get: (...params?: Storage$Key$Values) => R,
-  set: (value: P, ...params?: Storage$Key$Values) => void
+  set: (value: P, ...params?: Storage$Key$Values) => void,
+  onUpdate: (callback: (value: P) => void) => void
 }
 
 export type StorageMethod$Account = StorageMethod<Uint8Array, Uint8Array>;
@@ -34,7 +35,8 @@ export type WrappedDb<O> = O & {
 export type BlockDb = WrappedDb<{
   bestHash: StorageMethod$U8a,
   bestNumber: StorageMethod$Bn,
-  block: StorageMethod$U8a
+  block: StorageMethod$U8a,
+  header: StorageMethod$U8a
 }>;
 
 export type StateDb$Consensus = {

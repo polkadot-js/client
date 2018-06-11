@@ -15,6 +15,7 @@ module.exports = function blockDb (db: TrieDb): BlockDb {
     db,
     bestHash: createU8a(db, keys.public.bestHash),
     bestNumber: createBn(db, keys.public.bestNumber, 64),
-    block: createU8a(db, keys.public.blockByHash)
+    block: createU8a(db, keys.public.blockByHash),
+    header: createU8a(db, keys.public.headerByHash)
   };
 };

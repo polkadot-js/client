@@ -27,6 +27,8 @@ module.exports = function decodeBn <T> (db: TrieDb, key: Section$Item<T>, bitLen
         base.get(createKey(keyParams)), true
       ),
     set: (value: BN | number, ...keyParams?: Storage$Key$Values): void =>
-      base.set(createKey(keyParams), bnToU8a(value, bitLength, true))
+      base.set(createKey(keyParams), value, bnToU8a(value, bitLength, true)),
+    onUpdate: (updater: (value: BN | number, raw: Uint8Array) => void): void =>
+      base.onUpdate(updater)
   };
 };

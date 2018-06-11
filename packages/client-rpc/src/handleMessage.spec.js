@@ -3,6 +3,7 @@
 // of the ISC license. See the LICENSE file for details.
 
 const ExtError = require('@polkadot/util/ext/error');
+const l = require('@polkadot/util/logger')('test');
 
 const handleMessage = require('./handleMessage');
 
@@ -33,7 +34,8 @@ describe('handleMessage', () => {
         },
         test: jest.fn(() => Promise.resolve('test')),
         echo: (...params) => Promise.resolve(`echo: ${params.join(', ')}`)
-      }
+      },
+      l
     };
   });
 

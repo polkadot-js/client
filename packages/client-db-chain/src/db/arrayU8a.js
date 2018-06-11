@@ -40,6 +40,9 @@ module.exports = function decodeArrayU8a <T> (db: TrieDb, key: Section$Item<T>):
       db.set(createKey(keyParams), u8aConcat(
         bnToU8a(value.length, 32, true),
         u8aConcat.apply(null, value))
-      )
+      ),
+    onUpdate: (updater: (value: Array<Uint8Array>, raw: Uint8Array) => void): void => {
+      throw new Error(`No subscriber available for db/arrayU8a`);
+    }
   };
 };

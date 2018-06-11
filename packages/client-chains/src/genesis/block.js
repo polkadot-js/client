@@ -6,6 +6,7 @@
 import type { ChainState, ChainGenesis } from '../types';
 
 const createBlock = require('@polkadot/primitives-builder/block');
+const encodeBlock = require('@polkadot/primitives-codec/block/encode');
 const encodeHeader = require('@polkadot/primitives-codec/header/encode');
 const storage = require('@polkadot/storage');
 const key = require('@polkadot/storage/key');
@@ -32,6 +33,7 @@ module.exports = function genesisBlock ({ stateDb: { db }, chain }: ChainState):
   const headerHash = blake2Asu8a(header, 256);
 
   return {
+    block: encodeBlock(block),
     code,
     codeHash,
     header: block.header,
