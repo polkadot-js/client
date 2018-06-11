@@ -33,7 +33,7 @@ module.exports = async function handleMessage ({ handlers, l }: RpcState, messag
 
       return createResponse(id, result);
     } catch (error) {
-      l.debug(() => ['error', method, params, '->', error]);
+      l.error('error', error);
 
       return createError(id, error);
     }

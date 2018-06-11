@@ -6,15 +6,16 @@
 import type { ChainInterface } from '@polkadot/client-chains/types';
 import type { Config, Endpoint } from '../types';
 
-const u8aToHex = require('@polkadot/util/u8a/toHex');
-const u8aToU8a = require('@polkadot/util/u8a/toU8a');
+// type Subscriptions = {
+//   [number]: () => void
+// }
 
-const getStorage = ({ state: { db } }: ChainInterface): (params: Array<string>) => Promise<string> =>
-  async ([key]: Array<string>): Promise<string> =>
-    u8aToHex(
-      db.get(u8aToU8a(key))
-    );
+// const subscriptions: Subscriptions = {};
+
+const newHead = ({ state: { db } }: ChainInterface): () => Promise<string> =>
+  async (): Promise<string> =>
+    '0';
 
 module.exports = (config: Config, chain: ChainInterface): Endpoint => ({
-  'state_getStorage': getStorage(chain)
+  'subscribe_newHead': newHead(chain)
 });

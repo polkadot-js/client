@@ -29,7 +29,8 @@ export type JsonRpcResponse = JsonRpcBase & {
   result: mixed
 };
 
-export type Handler = (mixed) => Promise<mixed>;
+// flowlint-next-line unclear-type:off
+export type Handler = (Array<any>) => Promise<any>;
 
 export type Handlers = {
   [string]: Handler

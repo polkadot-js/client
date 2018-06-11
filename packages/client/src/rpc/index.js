@@ -10,11 +10,13 @@ import type { Config } from '../types';
 const createRpc = require('@polkadot/client-rpc');
 
 const state = require('./state');
+const subscribe = require('./subscribe');
 const system = require('./system');
 
 module.exports = function rpc (config: Config, chain: ChainInterface): RpcInterface {
   return createRpc(config, chain, {
     ...state(config, chain),
+    ...subscribe(config, chain),
     ...system(config, chain)
   });
 };
