@@ -14,36 +14,39 @@ const validateRequest = require('./validate/request');
 
 const SUBSCRIBE_REGEX = /^subscribe_/;
 
-module.exports = async function handleMessage ({ handlers, l, subscribe }: RpcState, message: string, socket?: WsContext$Socket): Promise<JsonRpcError | JsonRpcResponse> {
+const handleRequest = async ({ handlers, l, subscribe }: RpcState, { id, jsonrpc, method, params }: JsonRpcRequest, socket?: WsContext$Socket): Promise<JsonRpcError | JsonRpcResponse> => {
+  const isSubscription = SUBSCRIBE_REGEX.test(method);
+
+  if (isSubscription && socket === undefined) {
+    throw new Error(`Subscription for '${method}' not available on RPC interface`);
+  }
+
   try {
-    const { id, jsonrpc, method, params }: JsonRpcRequest = JSON.parse(message);
-    const isSubscription = SUBSCRIBE_REGEX.test(method);
+    validateRequest(id, jsonrpc);
 
-    if (isSubscription && socket === undefined) {
-      throw new Error(`Subscription for '${method}' not available on RPC interface`);
+    const handler = handlers[method];
+
+    assert(isFunction(handler), `Method '${method}' not found`, ExtError.CODES.METHOD_NOT_FOUND);
+
+    const result = isSubscription
+      ? await subscribe(socket, handler, params)
+      : await handler(params);
+
+    l.debug(() => ['executed', method, params, '->', result]);
+
+    if (isError(result)) {
+      throw result;
     }
 
-    try {
-      validateRequest(id, jsonrpc);
+    return createResponse(id, result);
+  } catch (error) {
+    return createError(id, error);
+  }
+};
 
-      const handler = handlers[method];
-
-      assert(isFunction(handler), `Method '${method}' not found`, ExtError.CODES.METHOD_NOT_FOUND);
-
-      const result = isSubscription
-        ? await subscribe(socket, handler, params)
-        : await handler(params);
-
-      l.debug(() => ['executed', method, params, '->', result]);
-
-      if (isError(result)) {
-        throw result;
-      }
-
-      return createResponse(id, result);
-    } catch (error) {
-      return createError(id, error);
-    }
+module.exports = async function handleMessage (self: RpcState, message: string, socket?: WsContext$Socket): Promise<JsonRpcError | JsonRpcResponse> {
+  try {
+    return handleRequest(self, JSON.parse(message), socket);
   } catch (error) {
     return createError(0, error);
   }
