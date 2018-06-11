@@ -17,6 +17,7 @@ const validateHandlers = require('./validate/handlers');
 const emitterOn = require('./emitterOn');
 const start = require('./start');
 const stop = require('./stop');
+const subscriptions = require('./subscriptions');
 
 module.exports = function server (config: Config, chain: ChainInterface, handlers: Handlers, autoStart?: boolean = true): RpcInterface {
   const emitter = new EventEmitter();
@@ -26,7 +27,8 @@ module.exports = function server (config: Config, chain: ChainInterface, handler
     emitter,
     handlers,
     l,
-    servers: []
+    servers: [],
+    subscribe: subscriptions(chain)
   };
 
   validateConfig(config.rpc);

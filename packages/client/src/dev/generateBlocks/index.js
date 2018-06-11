@@ -11,5 +11,5 @@ const interval = require('./interval');
 module.exports = function generateBlocks (l: Logger, { chain, p2p }: AllInterfaces): void {
   setInterval(() => {
     interval(l, chain, p2p);
-  }, 2500);
+  }, 5000);
 };

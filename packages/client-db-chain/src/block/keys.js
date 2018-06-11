@@ -35,6 +35,14 @@ module.exports = (createSection(name)(
         ],
         key: 'blk:hsh:',
         type: 'Bytes'
+      }),
+      headerByHash: createMethod('headerByHash')({
+        description: 'Retrieve header by hash',
+        params: [
+          param('hash', 'Hash')
+        ],
+        key: 'hdr:hsh:',
+        type: 'Bytes'
       })
     }
   })

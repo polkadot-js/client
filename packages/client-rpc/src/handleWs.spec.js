@@ -3,6 +3,7 @@
 // of the ISC license. See the LICENSE file for details.
 
 const isFunction = require('@polkadot/util/is/function');
+const l = require('@polkadot/util/logger')('test');
 
 const handleWs = require('./handleWs');
 
@@ -22,7 +23,8 @@ describe('handleWs', () => {
       },
       handlers: {
         test: jest.fn(() => Promise.resolve('test'))
-      }
+      },
+      l
     };
     context = {
       websocket: {

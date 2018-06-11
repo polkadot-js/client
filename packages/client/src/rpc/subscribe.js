@@ -6,16 +6,9 @@
 import type { ChainInterface } from '@polkadot/client-chains/types';
 import type { Config, Endpoint } from '../types';
 
-// type Subscriptions = {
-//   [number]: () => void
-// }
-
-// const subscriptions: Subscriptions = {};
-
-const newHead = ({ state: { db } }: ChainInterface): () => Promise<string> =>
-  async (): Promise<string> =>
-    '0';
+const newHead = async (): Promise<string> =>
+  'chain_newHead';
 
 module.exports = (config: Config, chain: ChainInterface): Endpoint => ({
-  'subscribe_newHead': newHead(chain)
+  'subscribe_newHead': newHead
 });

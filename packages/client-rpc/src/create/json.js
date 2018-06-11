@@ -3,7 +3,7 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-module.exports = function createJson<T> (id: number, body: $Shape<T>): T {
+module.exports = function createJson<T> (id?: number, body: $Shape<T>): T {
   return Object.assign({
     id,
     jsonrpc: '2.0'

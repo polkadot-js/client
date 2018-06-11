@@ -21,6 +21,8 @@ module.exports = function decodeBool <T> (db: TrieDb, key: Section$Item<T>): Sto
     get: (...keyParams?: Storage$Key$Values): boolean =>
       base.get(createKey(keyParams))[0] === 1,
     set: (value: boolean, ...keyParams?: Storage$Key$Values): void =>
-      base.set(createKey(keyParams), new Uint8Array([value ? 1 : 0]))
+      base.set(createKey(keyParams), value, new Uint8Array([value ? 1 : 0])),
+    onUpdate: (updater: (value: boolean, raw: Uint8Array) => void): void =>
+      base.onUpdate(updater)
   };
 };

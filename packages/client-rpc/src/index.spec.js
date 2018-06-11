@@ -10,11 +10,19 @@ const createServer = require('./index');
 
 describe('server', () => {
   let config;
+  let chain;
   let server;
   let handlers;
   let testSpy;
 
   beforeEach(() => {
+    chain = {
+      blocks: {
+        block: {
+          onUpdate: () => {}
+        }
+      }
+    };
     config = {
       rpc: {
         port: 9901,
@@ -51,7 +59,7 @@ describe('server', () => {
   });
 
   it('starts and accepts requests, sending responses (HTTP)', () => {
-    server = createServer(config, {}, handlers); // eslint-disable-line
+    server = createServer(config, chain, handlers); // eslint-disable-line
 
     return new HttpProvider('http://localhost:9901')
       .send('echo', [1, 'http', true])
