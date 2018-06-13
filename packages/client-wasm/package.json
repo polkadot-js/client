@@ -1,6 +1,6 @@
 {
   "name": "@polkadot/client-wasm",
-  "version": "0.11.7",
+  "version": "0.11.8",
   "description": "WASM compiler & call interface",
   "main": "index.js",
   "engines": {
@@ -35,7 +35,7 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.0.0-beta.47",
-    "@polkadot/client-runtime": "^0.11.7",
+    "@polkadot/client-runtime": "^0.11.8",
     "@polkadot/primitives-codec": "^0.17.24",
     "@polkadot/util": "^0.22.9",
     "@polkadot/wasm-bin": "paritytech/polkadot-wasm-bin#5ab4fc6083501b26e5fd979b93c35e2f9010b324",
