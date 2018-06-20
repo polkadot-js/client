@@ -7,14 +7,14 @@ import type { Storage$Section } from '@polkadot/storage/types';
 import type { TrieDb } from '@polkadot/util-triedb/types';
 import type { StateDb } from '../types';
 
-const storage = require('@polkadot/storage');
+import storage from '@polkadot/storage';
 
-const createAcc = require('../db/account');
-const createArrAcc = require('../db/arrayAccount');
-const createArrU8a = require('../db/arrayU8a');
-const createBn = require('../db/bn');
-const createBool = require('../db/bool');
-const createU8a = require('../db/u8a');
+import createAcc from '../db/account';
+import createArrAcc from '../db/arrayAccount';
+import createArrU8a from '../db/arrayU8a';
+import createBn from '../db/bn';
+import createBool from '../db/bool';
+import createU8a from '../db/u8a';
 
 const BALANCE_SIZE = 128;
 const BLOCKNUM_SIZE = 64;
@@ -81,7 +81,7 @@ const timestamp = (db: TrieDb, { public: { didUpdate } }: Storage$Section) => ({
   didUpdate: createBool(db, didUpdate)
 });
 
-module.exports = function createState (db: TrieDb): StateDb {
+export default function createState (db: TrieDb): StateDb {
   return {
     db,
     consensus: consensus(db, storage.consensus),
@@ -95,4 +95,4 @@ module.exports = function createState (db: TrieDb): StateDb {
     system: system(db, storage.system),
     timestamp: timestamp(db, storage.timestamp)
   };
-};
+}

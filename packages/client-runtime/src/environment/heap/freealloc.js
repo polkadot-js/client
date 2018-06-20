@@ -13,12 +13,12 @@ function findContaining (memory: Memory, size: number): Pointer {
   const [ptr] = Object
     .keys(memory.deallocated)
     // flowlint-next-line unclear-type:off
-    .filter((offset) => memory.deallocated[((offset: any): number)] >= size)
+    .filter((offset) => memory.deallocated[(offset: any)] >= size)
     .sort((a, b) => {
       // flowlint-next-line unclear-type:off
-      const sizeA = memory.deallocated[((a: any): number)];
+      const sizeA = memory.deallocated[(a: any)];
       // flowlint-next-line unclear-type:off
-      const sizeB = memory.deallocated[((b: any): number)];
+      const sizeB = memory.deallocated[(b: any)];
 
       if (sizeA < sizeB) {
         return -1;
@@ -36,7 +36,7 @@ function findContaining (memory: Memory, size: number): Pointer {
   return -1;
 }
 
-module.exports = function freealloc (memory: Memory, size: number): Pointer {
+export default function freealloc (memory: Memory, size: number): Pointer {
   const ptr = findContaining(memory, size);
 
   if (ptr === -1) {
@@ -49,4 +49,4 @@ module.exports = function freealloc (memory: Memory, size: number): Pointer {
   memory.allocated[ptr] = size;
 
   return ptr;
-};
+}

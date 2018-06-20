@@ -5,14 +5,14 @@
 
 import type { CreateItems, Section } from '@polkadot/params/types';
 
-const param = require('@polkadot/params/param');
-const createSection = require('@polkadot/params/section');
+import param from '@polkadot/params/param';
+import createSection from '@polkadot/params/section';
 
 type Block$Sections = 'block';
 
 const name: Block$Sections = 'block';
 
-module.exports = (createSection(name)(
+export default (createSection(name)(
   (createMethod: CreateItems<Block$Sections>) => ({
     description: 'Block storage (internal)',
     public: {

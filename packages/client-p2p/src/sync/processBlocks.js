@@ -5,9 +5,9 @@
 
 import type { P2pState } from '../types';
 
-const u8aConcat = require('@polkadot/util/u8a/concat');
+import u8aConcat from '@polkadot/util/u8a/concat';
 
-module.exports = function processBlocks ({ l, chain, sync }: P2pState): void {
+export default function processBlocks ({ l, chain, sync }: P2pState): void {
   const start = Date.now();
   const startNumber = chain.blocks.bestNumber.get().addn(1);
   let nextNumber = startNumber;
@@ -17,7 +17,7 @@ module.exports = function processBlocks ({ l, chain, sync }: P2pState): void {
     const { header, body } = sync.blockQueue[nextNumber];
     const block = u8aConcat(
       // flowlint-next-line unclear-type:off
-      ((header: any): Uint8Array), ((body: any): Uint8Array)
+      (header: any), (body: any)
     );
 
     if (!chain.executor.importBlock(block)) {
@@ -33,4 +33,4 @@ module.exports = function processBlocks ({ l, chain, sync }: P2pState): void {
   if (count) {
     l.log(`#${startNumber.toString()}- ${count} imported (${Date.now() - start}ms)`);
   }
-};
+}

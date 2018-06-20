@@ -6,13 +6,13 @@
 import type { StatusMessage } from '../types';
 import type { StatusEncoded } from './types';
 
-const accountIdDecode = require('@polkadot/primitives-json/accountId/decode');
-const bnDecode = require('@polkadot/primitives-json/bn/decode');
-const hashDecode = require('@polkadot/primitives-json/hash/decode');
-const parachainIdDecode = require('@polkadot/primitives-json/parachainId/decode');
-const signatureDecode = require('@polkadot/primitives-json/signature/decode');
+import accountIdDecode from '@polkadot/primitives-json/accountId/decode';
+import bnDecode from '@polkadot/primitives-json/bn/decode';
+import hashDecode from '@polkadot/primitives-json/hash/decode';
+import parachainIdDecode from '@polkadot/primitives-json/parachainId/decode';
+import signatureDecode from '@polkadot/primitives-json/signature/decode';
 
-module.exports = function rawDecode (raw: StatusMessage, { bestHash, bestNumber, genesisHash, parachainId = '0x00', roles, validatorId = '0x00', validatorSignature = '0x00', version }: StatusEncoded): StatusMessage {
+export default function rawDecode (raw: StatusMessage, { bestHash, bestNumber, genesisHash, parachainId = '0x00', roles, validatorId = '0x00', validatorSignature = '0x00', version }: StatusEncoded): StatusMessage {
   raw.bestNumber = bnDecode(bestNumber, 64);
   raw.bestHash = hashDecode(bestHash, 256);
   raw.genesisHash = hashDecode(genesisHash, 256);
@@ -23,4 +23,4 @@ module.exports = function rawDecode (raw: StatusMessage, { bestHash, bestNumber,
   raw.version = version;
 
   return raw;
-};
+}

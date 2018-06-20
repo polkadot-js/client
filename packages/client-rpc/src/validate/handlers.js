@@ -5,10 +5,10 @@
 
 import type { Handlers } from '../types';
 
-const assert = require('@polkadot/util/assert');
-const isFunction = require('@polkadot/util/is/function');
+import assert from '@polkadot/util/assert';
+import isFunction from '@polkadot/util/is/function';
 
-module.exports = function validateHandlers (handlers: Handlers = {}): void {
+export default function validateHandlers (handlers: Handlers = {}): void {
   const handlerKeys = Object.keys(handlers);
 
   assert(handlerKeys.length !== 0, 'Expected non-empty handler mapping');
@@ -19,4 +19,4 @@ module.exports = function validateHandlers (handlers: Handlers = {}): void {
     .join(', ');
 
   assert(invalid.length === 0, `Invalid method handlers found: ${invalid}`);
-};
+}

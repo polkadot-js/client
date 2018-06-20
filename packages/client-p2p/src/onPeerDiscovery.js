@@ -5,9 +5,9 @@
 
 import type { P2pState, PeerInterface } from './types';
 
-const dialPeers = require('./dialPeers');
+import dialPeers from './dialPeers';
 
-module.exports = function onPeerDiscovery (self: P2pState): void {
+export default function onPeerDiscovery (self: P2pState): void {
   self.node.on('start', () =>
     dialPeers(self)
   );
@@ -15,4 +15,4 @@ module.exports = function onPeerDiscovery (self: P2pState): void {
   self.peers.on('discovered', (peer: PeerInterface): void => {
     dialPeers(self, peer);
   });
-};
+}

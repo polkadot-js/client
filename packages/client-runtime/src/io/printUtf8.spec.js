@@ -3,10 +3,10 @@
 // of the ISC license. See the LICENSE file for details.
 /* eslint camelcase: 0 */
 
-const u8aFromUtf8 = require('@polkadot/util/u8a/fromUtf8');
+import u8aFromUtf8 from '@polkadot/util/u8a/fromUtf8';
 
-const env = require('../environment');
-const index = require('./index');
+import env from '../environment';
+import index from './index';
 
 describe('print_utf8', () => {
   const TEST = 'Привет, мир!';

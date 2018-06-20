@@ -6,11 +6,11 @@
 import type { TrieDb } from '@polkadot/util-triedb/types';
 import type { BlockDb } from '../types';
 
-const createBn = require('../db/bn');
-const createU8a = require('../db/u8a');
-const keys = require('./keys');
+import createBn from '../db/bn';
+import createU8a from '../db/u8a';
+import keys from './keys';
 
-module.exports = function blockDb (db: TrieDb): BlockDb {
+export default function blockDb (db: TrieDb): BlockDb {
   return {
     db,
     bestHash: createU8a(db, keys.public.bestHash),
@@ -18,4 +18,4 @@ module.exports = function blockDb (db: TrieDb): BlockDb {
     block: createU8a(db, keys.public.blockByHash),
     header: createU8a(db, keys.public.headerByHash)
   };
-};
+}

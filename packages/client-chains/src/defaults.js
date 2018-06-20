@@ -8,7 +8,7 @@ import type { ChainName } from './types';
 const MAIN: ChainName = 'dev';
 const TEST: ChainName = 'dev';
 
-module.exports = {
+export default {
   MAIN,
   TEST
 };

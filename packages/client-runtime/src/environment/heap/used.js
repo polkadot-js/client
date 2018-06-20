@@ -12,9 +12,9 @@ function calculateSize (buffer: Memory$Buffer): number {
     .reduce((total, size) => total + ((size: any): number), 0);
 }
 
-module.exports = function used (memory: Memory): SizeUsed {
+export default function used (memory: Memory): SizeUsed {
   return {
     allocated: calculateSize(memory.allocated),
     deallocated: calculateSize(memory.deallocated)
   };
-};
+}

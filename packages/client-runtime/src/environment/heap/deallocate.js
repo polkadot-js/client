@@ -6,10 +6,10 @@
 import type { Pointer } from '../../types';
 import type { Memory } from './types';
 
-const ExtError = require('@polkadot/util/ext/error');
-const isUndefined = require('@polkadot/util/is/undefined');
+import ExtError from '@polkadot/util/ext/error';
+import isUndefined from '@polkadot/util/is/undefined';
 
-module.exports = function deallocate (memory: Memory, ptr: Pointer): number {
+export default function deallocate (memory: Memory, ptr: Pointer): number {
   const size = memory.allocated[ptr];
 
   if (isUndefined(size)) {
@@ -22,4 +22,4 @@ module.exports = function deallocate (memory: Memory, ptr: Pointer): number {
   // memory.uint8.fill(0, ptr, size);
 
   return size;
-};
+}

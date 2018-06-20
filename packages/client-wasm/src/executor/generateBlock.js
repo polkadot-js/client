@@ -6,17 +6,17 @@
 import type { UncheckedRaw } from '@polkadot/primitives/extrinsic';
 import type { ExecutorState } from '../types';
 
-const createHeader = require('@polkadot/primitives-builder/header');
-const decodeHeader = require('@polkadot/primitives-codec/header/decode');
-const encodeBlock = require('@polkadot/primitives-codec/block/encode');
-const encodeHeader = require('@polkadot/primitives-codec/header/encode');
+import createHeader from '@polkadot/primitives-builder/header';
+import decodeHeader from '@polkadot/primitives-codec/header/decode';
+import encodeBlock from '@polkadot/primitives-codec/block/encode';
+import encodeHeader from '@polkadot/primitives-codec/header/encode';
 
-const applyExtrinsic = require('./applyExtrinsic');
-const finaliseBlock = require('./finaliseBlock');
-const withInherent = require('./inherentExtrinsics');
-const initialiseBlock = require('./initialiseBlock');
+import applyExtrinsic from './applyExtrinsic';
+import finaliseBlock from './finaliseBlock';
+import withInherent from './inherentExtrinsics';
+import initialiseBlock from './initialiseBlock';
 
-module.exports = function generateBlock (self: ExecutorState, _extrinsics: Array<UncheckedRaw>, timestamp: number): Uint8Array {
+export default function generateBlock (self: ExecutorState, _extrinsics: Array<UncheckedRaw>, timestamp: number): Uint8Array {
   const start = Date.now();
   const number = self.blockDb.bestNumber.get().addn(1);
 
@@ -50,4 +50,4 @@ module.exports = function generateBlock (self: ExecutorState, _extrinsics: Array
   self.l.log(() => `Block #${number.toString()} generated (${Date.now() - start}ms)`);
 
   return block;
-};
+}

@@ -8,8 +8,8 @@ import type { PeerState } from './types';
 
 type EmitterOn = (PeerInterface$Events, (message: MessageInterface) => void) => void;
 
-module.exports = function emitterOn (self: PeerState): EmitterOn {
+export default function emitterOn (self: PeerState): EmitterOn {
   return (type: PeerInterface$Events, cb: (message: MessageInterface) => void): void => {
     self.emitter.on(type, cb);
   };
-};
+}

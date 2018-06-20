@@ -5,8 +5,8 @@
 
 import type { RuntimeEnv$Heap, Pointer } from '../types';
 
-module.exports = function memset (heap: RuntimeEnv$Heap, dstPtr: Pointer, value: number, length: number): Pointer {
+export default function memset (heap: RuntimeEnv$Heap, dstPtr: Pointer, value: number, length: number): Pointer {
   heap.fill(dstPtr, value, length);
 
   return dstPtr;
-};
+}

@@ -6,8 +6,8 @@
 import type { Pointer } from '../../types';
 import type { Memory } from './types';
 
-module.exports = function set (memory: Memory, ptr: Pointer, data: Uint8Array): Pointer {
+export default function set (memory: Memory, ptr: Pointer, data: Uint8Array): Pointer {
   memory.uint8.set(data, ptr);
 
   return ptr;
-};
+}

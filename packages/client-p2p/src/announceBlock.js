@@ -5,11 +5,11 @@
 
 import type { P2pState } from './types';
 
-const decodeHeader = require('@polkadot/primitives-codec/header/decode');
+import decodeHeader from '@polkadot/primitives-codec/header/decode';
 
-const announceMessage = require('./message/blockAnnounce');
+import announceMessage from './message/blockAnnounce';
 
-module.exports = function announceBlock (self: P2pState, hash: Uint8Array, _header: Uint8Array, body: Uint8Array): void {
+export default function announceBlock (self: P2pState, hash: Uint8Array, _header: Uint8Array, body: Uint8Array): void {
   if (!self.peers) {
     return;
   }
@@ -22,4 +22,4 @@ module.exports = function announceBlock (self: P2pState, hash: Uint8Array, _head
       peer.send(message);
     }
   });
-};
+}

@@ -5,11 +5,11 @@
 
 import type { P2pNodes } from '../types';
 
-const PeerBook = require('peer-book');
+import PeerBook from 'peer-book';
 
-const createPeerInfo = require('./peerInfo');
+import createPeerInfo from './peerInfo';
 
-module.exports = async function createPeerBook (peers: P2pNodes = []): Promise<PeerBook> {
+export default async function createPeerBook (peers: P2pNodes = []): Promise<PeerBook> {
   const peerBook = new PeerBook();
   const peerInfos = await Promise.all(
     peers.map((peer) => createPeerInfo([peer]))
@@ -20,4 +20,4 @@ module.exports = async function createPeerBook (peers: P2pNodes = []): Promise<P
   });
 
   return peerBook;
-};
+}

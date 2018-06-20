@@ -5,11 +5,11 @@
 
 import type { JsonRpcError } from '../types';
 
-const ExtError = require('@polkadot/util/ext/error');
+import ExtError from '@polkadot/util/ext/error';
 
-const createJson = require('./json');
+import createJson from './json';
 
-module.exports = function createError (id: number, error: Error | ExtError): JsonRpcError {
+export default function createError (id: number, error: Error | ExtError): JsonRpcError {
   return createJson(id, ({
     error: {
       // flowlint-next-line unclear-type:off
@@ -17,4 +17,4 @@ module.exports = function createError (id: number, error: Error | ExtError): Jso
       message: error.message
     }
   }: $Shape<JsonRpcError>));
-};
+}

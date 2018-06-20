@@ -6,10 +6,10 @@
 import type { ChainInterface } from '@polkadot/client-chains/types';
 import type { Sockets, Subscriptions } from './types';
 
-const decodeHeader = require('@polkadot/primitives-codec/header/decode');
-const jsonHeader = require('@polkadot/primitives-json/header/encode');
+import decodeHeader from '@polkadot/primitives-codec/header/decode';
+import jsonHeader from '@polkadot/primitives-json/header/encode';
 
-const send = require('./send');
+import send from './send';
 
 const updateAll = (subscriptions: Subscriptions, sockets: Sockets, method: string, value: mixed): void => {
   if (subscriptions[method] === undefined) {
@@ -30,8 +30,8 @@ const updateAll = (subscriptions: Subscriptions, sockets: Sockets, method: strin
   });
 };
 
-module.exports = function update ({ blocks }: ChainInterface, subscriptions: Subscriptions, sockets: Sockets): void {
+export default function update ({ blocks }: ChainInterface, subscriptions: Subscriptions, sockets: Sockets): void {
   blocks.block.onUpdate((header: Uint8Array): void =>
     updateAll(subscriptions, sockets, 'chain_newHead', jsonHeader(decodeHeader(header)))
   );
-};
+}

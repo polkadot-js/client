@@ -3,11 +3,11 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-const createKoa = require('./koa');
-const createError = require('./error');
-const createResponse = require('./response');
+import createKoa from './koa';
+import createError from './error';
+import createResponse from './response';
 
-module.exports = {
+export {
   createKoa,
   createError,
   createResponse

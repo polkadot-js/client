@@ -5,6 +5,11 @@
 
 import type { P2pState, MessageInterface, PeerInterface } from '../types';
 
+import blockAnnounce from './blockAnnounce';
+import blockRequest from './blockRequest';
+import blockResponse from './blockResponse';
+import status from './status';
+
 type Message = {
   peer: PeerInterface,
   message: MessageInterface
@@ -15,16 +20,11 @@ type Handler = {
   TYPE: number
 };
 
-const blockAnnounce = require('./blockAnnounce');
-const blockRequest = require('./blockRequest');
-const blockResponse = require('./blockResponse');
-const status = require('./status');
-
 const HANDLERS: Array<Handler> = [
   blockAnnounce, blockRequest, blockResponse, status
 ];
 
-module.exports = function onPeerMessage (self: P2pState): void {
+export default function onPeerMessage (self: P2pState): void {
   self.peers.on('message', ({ peer, message }: Message): void => {
     const handler = HANDLERS.find((handler) => handler.TYPE === message.type);
 
@@ -35,4 +35,4 @@ module.exports = function onPeerMessage (self: P2pState): void {
 
     handler(self, peer, message);
   });
-};
+}

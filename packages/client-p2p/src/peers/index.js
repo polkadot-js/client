@@ -6,16 +6,16 @@
 import type { PeerInterface, PeersInterface, PeersInterface$Events, P2pState } from '../types';
 import type PeerInfo from 'peer-info';
 
-const add = require('./add');
-const emitterOn = require('./emitterOn');
-const logPeer = require('./logPeer');
-const get = require('./get');
-const onConnect = require('./onConnect');
-const onDisconnect = require('./onDisconnect');
-const onDiscovery = require('./onDiscovery');
-const createState = require('./state');
+import add from './add';
+import emitterOn from './emitterOn';
+import logPeer from './logPeer';
+import get from './get';
+import onConnect from './onConnect';
+import onDisconnect from './onDisconnect';
+import onDiscovery from './onDiscovery';
+import createState from './state';
 
-module.exports = function createPeers (state: P2pState): PeersInterface {
+export default function createPeers (state: P2pState): PeersInterface {
   const self = createState(state);
 
   onConnect(self, state.node);
@@ -37,4 +37,4 @@ module.exports = function createPeers (state: P2pState): PeersInterface {
         self.peers[id]
       )
   };
-};
+}

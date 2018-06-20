@@ -5,9 +5,9 @@
 
 import type { ExecutorState } from '../types';
 
-const call = require('./call');
+import call from './call';
 
-module.exports = function executeBlock (self: ExecutorState, block: Uint8Array): boolean {
+export default function executeBlock (self: ExecutorState, block: Uint8Array): boolean {
   const start = Date.now();
 
   self.l.debug(() => 'Executing block');
@@ -17,4 +17,4 @@ module.exports = function executeBlock (self: ExecutorState, block: Uint8Array):
   self.l.debug(() => `Block execution completed (${Date.now() - start}ms)`);
 
   return result.bool;
-};
+}

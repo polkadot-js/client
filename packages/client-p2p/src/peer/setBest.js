@@ -6,7 +6,7 @@
 import type BN from 'bn.js';
 import type { PeerState } from './types';
 
-module.exports = function setBest (self: PeerState, number: BN, hash: Uint8Array): void {
+export default function setBest (self: PeerState, number: BN, hash: Uint8Array): void {
   self.bestHash = hash;
   self.bestNumber = number;
-};
+}

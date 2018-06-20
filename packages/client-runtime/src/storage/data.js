@@ -5,12 +5,12 @@
 
 import type { RuntimeEnv, RuntimeInterface$Storage$Data, Pointer } from '../types';
 
-const u8aToHex = require('@polkadot/util/u8a/toHex');
+import u8aToHex from '@polkadot/util/u8a/toHex';
 
-const instrument = require('../instrument');
-const get = require('./get');
+import instrument from '../instrument';
+import get from './get';
 
-module.exports = function data ({ l, heap, db }: RuntimeEnv): RuntimeInterface$Storage$Data {
+export default function data ({ l, heap, db }: RuntimeEnv): RuntimeInterface$Storage$Data {
   return {
     clear_storage: (keyPtr: Pointer, keyLength: number): void =>
       instrument('clear_storage', (): void => {
@@ -64,4 +64,4 @@ module.exports = function data ({ l, heap, db }: RuntimeEnv): RuntimeInterface$S
         db.set(key, data);
       })
   };
-};
+}

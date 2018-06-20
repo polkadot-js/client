@@ -6,11 +6,11 @@
 import type { MessageInterface } from '../types';
 import type { PeerState } from './types';
 
-const u8aToBuffer = require('@polkadot/util/u8a/toBuffer');
+import u8aToBuffer from '@polkadot/util/u8a/toBuffer';
 
-const encode = require('../message/encode');
+import encode from '../message/encode';
 
-module.exports = function send ({ l, pushable }: PeerState, message: MessageInterface): boolean {
+export default function send ({ l, pushable }: PeerState, message: MessageInterface): boolean {
   if (pushable === undefined) {
     return false;
   }
@@ -27,4 +27,4 @@ module.exports = function send ({ l, pushable }: PeerState, message: MessageInte
   }
 
   return true;
-};
+}

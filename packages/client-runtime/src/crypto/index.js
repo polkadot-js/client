@@ -5,12 +5,12 @@
 
 import type { RuntimeEnv, RuntimeInterface$Crypto, Pointer } from '../types';
 
-const u8aToHex = require('@polkadot/util/u8a/toHex');
-const blake2AsU8a = require('@polkadot/util-crypto/blake2/asU8a');
-const naclVerify = require('@polkadot/util-crypto/nacl/verify');
-const xxhashAsU8a = require('@polkadot/util-crypto/xxhash/asU8a');
+import u8aToHex from '@polkadot/util/u8a/toHex';
+import blake2AsU8a from '@polkadot/util-crypto/blake2/asU8a';
+import naclVerify from '@polkadot/util-crypto/nacl/verify';
+import xxhashAsU8a from '@polkadot/util-crypto/xxhash/asU8a';
 
-const instrument = require('../instrument');
+import instrument from '../instrument';
 
 // TODO: This _could_ be useful elsewhere, but as of now not moving it since it is used only here
 function u8aDisplay (u8a: Uint8Array): string {
@@ -30,7 +30,7 @@ function u8aDisplay (u8a: Uint8Array): string {
   }, '');
 }
 
-module.exports = function crypto ({ l, heap }: RuntimeEnv): RuntimeInterface$Crypto {
+export default function crypto ({ l, heap }: RuntimeEnv): RuntimeInterface$Crypto {
   const twox = (bitLength: number, dataPtr: Pointer, dataLen: number, outPtr: Pointer): void => {
     const data = heap.get(dataPtr, dataLen);
     const hash = xxhashAsU8a(data, bitLength);
@@ -69,4 +69,4 @@ module.exports = function crypto ({ l, heap }: RuntimeEnv): RuntimeInterface$Cry
         twox(256, dataPtr, dataLen, outPtr)
       )
   };
-};
+}

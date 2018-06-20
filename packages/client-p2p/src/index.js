@@ -7,15 +7,17 @@ import type { Config } from '@polkadot/client/types';
 import type { ChainInterface } from '@polkadot/client-chains/types';
 import type { P2pInterface } from './types';
 
-const l = require('@polkadot/util/logger')('p2p');
+import logger from '@polkadot/util/logger';
 
-const announceBlock = require('./announceBlock');
-const emitterOn = require('./emitterOn');
-const start = require('./start');
-const state = require('./state');
-const stop = require('./stop');
+import announceBlock from './announceBlock';
+import emitterOn from './emitterOn';
+import start from './start';
+import state from './state';
+import stop from './stop';
 
-module.exports = function server (config: Config, chain: ChainInterface, autoStart: boolean = true): P2pInterface {
+const l = logger('p2p');
+
+export default function server (config: Config, chain: ChainInterface, autoStart: boolean = true): P2pInterface {
   const self = state(l, config, chain);
 
   if (autoStart) {
@@ -33,4 +35,4 @@ module.exports = function server (config: Config, chain: ChainInterface, autoSta
     stop: (): Promise<boolean> =>
       stop(self)
   };
-};
+}

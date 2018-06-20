@@ -7,16 +7,16 @@ import type { TrieDb } from '@polkadot/util-triedb/types';
 import type { Trie$Pairs } from '@polkadot/util-triehash/types';
 import type { DbState } from './types';
 
-const trieRoot = require('@polkadot/util-triehash/root');
+import trieRoot from '@polkadot/util-triehash/root';
 
-const clear = require('./clear');
-const commit = require('./commit');
-const del = require('./del');
-const get = require('./get');
-const pairs = require('./pairs');
-const set = require('./set');
+import clear from './clear';
+import commit from './commit';
+import del from './del';
+import get from './get';
+import pairs from './pairs';
+import set from './set';
 
-module.exports = function envDb (backend: TrieDb): TrieDb {
+export default function envDb (backend: TrieDb): TrieDb {
   const self: DbState = {
     backend,
     pending: {}
@@ -40,4 +40,4 @@ module.exports = function envDb (backend: TrieDb): TrieDb {
     trieRoot: (): Uint8Array =>
       trieRoot(pairs(self))
   };
-};
+}

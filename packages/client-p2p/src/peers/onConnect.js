@@ -7,10 +7,10 @@ import type LibP2P from 'libp2p';
 import type PeerInfo from 'peer-info';
 import type { PeersState } from './types';
 
-const get = require('./get');
-const logPeer = require('./logPeer');
+import get from './get';
+import logPeer from './logPeer';
 
-module.exports = function onConnect (self: PeersState, node: LibP2P): void {
+export default function onConnect (self: PeersState, node: LibP2P): void {
   node.on('peer:connect', (peerInfo: PeerInfo): boolean => {
     if (!peerInfo) {
       return false;
@@ -26,4 +26,4 @@ module.exports = function onConnect (self: PeersState, node: LibP2P): void {
 
     return true;
   });
-};
+}

@@ -7,15 +7,15 @@ import type { MessageInterface } from '../../types';
 import type { BlockAnnounceMessage } from '../types';
 import type { BlockAnnounceEncoded } from './types';
 
-const createHeader = require('@polkadot/primitives-builder/header');
+import createHeader from '@polkadot/primitives-builder/header';
 
-const base = require('../base');
-const rawDecode = require('./rawDecode');
-const rawEncode = require('./rawEncode');
+import base from '../base';
+import rawDecode from './rawDecode';
+import rawEncode from './rawEncode';
 
 const TYPE: number = 3;
 
-module.exports = function blockAnnounce ({ header = createHeader({}) }: $Shape<BlockAnnounceMessage>): MessageInterface {
+export default function blockAnnounce ({ header = createHeader({}) }: $Shape<BlockAnnounceMessage>): MessageInterface {
   const raw: BlockAnnounceMessage = {
     header
   };
@@ -27,6 +27,5 @@ module.exports = function blockAnnounce ({ header = createHeader({}) }: $Shape<B
     rawEncode: (): BlockAnnounceEncoded =>
       rawEncode(raw)
   });
-};
-
-module.exports.TYPE = TYPE;
+}
+blockAnnounce.TYPE = TYPE;

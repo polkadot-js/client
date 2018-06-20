@@ -5,26 +5,26 @@
 
 import type { Config } from '../../types';
 
-const yargs = require('yargs');
+import yargs from 'yargs';
 
-const { isDevelopment } = require('../../clientId');
-const db = require('./db');
-const dev = require('./dev');
-const operation = require('./operation');
-const p2p = require('./p2p');
-const rpc = require('./rpc');
-const wasm = require('./wasm');
+import { isDevelopment } from '../../clientId';
+import db from './db';
+import dev from './dev';
+import operation from './operation';
+import p2p from './p2p';
+import rpc from './rpc';
+import wasm from './wasm';
 
-module.exports = function argv (cli?: string): Config {
+export default function argv (cli?: string): Config {
   const devOpts = isDevelopment
     ? dev
     : {};
   const parser = yargs
     // flowlint-next-line unclear-type:off
-    .version(((operation['client-id'].default: any): string))
-    .options(
-      Object.assign({}, devOpts, operation, db, p2p, rpc, wasm)
-    )
+    .version((operation['client-id'].default: any))
+    .options({
+      ...devOpts, ...operation, ...db, ...p2p, ...rpc, ...wasm
+    })
     .wrap(
       Math.min(120, yargs.terminalWidth())
     )
@@ -42,5 +42,5 @@ module.exports = function argv (cli?: string): Config {
     : parser.argv;
 
   // flowlint-next-line unclear-type:off
-  return ((parsed: any): Config);
-};
+  return (parsed: any);
+}

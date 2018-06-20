@@ -5,11 +5,11 @@
 
 import type { RuntimeEnv$Heap, Pointer } from '../types';
 
-module.exports = function memmove (heap: RuntimeEnv$Heap, dst: Pointer, src: Pointer, num: number): Pointer {
+export default function memmove (heap: RuntimeEnv$Heap, dst: Pointer, src: Pointer, num: number): Pointer {
   heap.set(
     dst,
     heap.dup(src, num)
   );
 
   return dst;
-};
+}

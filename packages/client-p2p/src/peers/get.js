@@ -7,8 +7,8 @@ import type PeerInfo from 'peer-info';
 import type { PeerInterface } from '../types';
 import type { PeersState } from './types';
 
-module.exports = function get (self: PeersState, peerInfo: PeerInfo): ?PeerInterface {
+export default function get (self: PeersState, peerInfo: PeerInfo): ?PeerInterface {
   const id = peerInfo.id.toB58String();
 
   return self.peers[id];
-};
+}

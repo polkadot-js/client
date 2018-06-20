@@ -3,11 +3,11 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-const assert = require('@polkadot/util/assert');
-const ExtError = require('@polkadot/util/ext/error');
-const isNumber = require('@polkadot/util/is/number');
+import assert from '@polkadot/util/assert';
+import ExtError from '@polkadot/util/ext/error';
+import isNumber from '@polkadot/util/is/number';
 
-module.exports = function validateRequest (id: number, jsonrpc: string): void {
+export default function validateRequest (id: number, jsonrpc: string): void {
   assert(jsonrpc === '2.0', `Invalid jsonrpc field, expected '2.0'`, ExtError.CODES.INVALID_JSONRPC);
   assert(isNumber(id), `Expected a numeric id`, ExtError.CODES.INVALID_JSONRPC);
-};
+}

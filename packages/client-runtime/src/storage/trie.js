@@ -5,12 +5,12 @@
 
 import type { RuntimeEnv, RuntimeInterface$Storage$Trie, Pointer } from '../types';
 
-const trieRoot = require('@polkadot/util-triehash/root');
-const trieRootOrdered = require('@polkadot/util-triehash/rootOrdered');
+import trieRoot from '@polkadot/util-triehash/root';
+import trieRootOrdered from '@polkadot/util-triehash/rootOrdered';
 
-const instrument = require('../instrument');
+import instrument from '../instrument';
 
-module.exports = function storage ({ l, heap, db }: RuntimeEnv): RuntimeInterface$Storage$Trie {
+export default function storage ({ l, heap, db }: RuntimeEnv): RuntimeInterface$Storage$Trie {
   return {
     enumerated_trie_root: (valuesPtr: Pointer, lenPtr: Pointer, count: number, resultPtr: Pointer): void =>
       instrument('enumerated_trie_root', (): void => {
@@ -37,4 +37,4 @@ module.exports = function storage ({ l, heap, db }: RuntimeEnv): RuntimeInterfac
         heap.set(resultPtr, trieRoot(pairs));
       })
   };
-};
+}

@@ -8,10 +8,10 @@ import type { Storage$Key$Values } from '@polkadot/storage/types';
 import type { TrieDb } from '@polkadot/util-triedb/types';
 import type { StorageMethod$U8a } from '../types';
 
-const creator = require('../key');
-const createBase = require('./base');
+import creator from '../key';
+import createBase from './base';
 
-module.exports = function decodeU8a <T> (db: TrieDb, key: Section$Item<T>): StorageMethod$U8a {
+export default function decodeU8a <T> (db: TrieDb, key: Section$Item<T>): StorageMethod$U8a {
   const createKey = creator(key);
   const base = createBase(db);
 
@@ -25,4 +25,4 @@ module.exports = function decodeU8a <T> (db: TrieDb, key: Section$Item<T>): Stor
     onUpdate: (updater: (value: Uint8Array, raw: Uint8Array) => void): void =>
       base.onUpdate(updater)
   };
-};
+}

@@ -5,10 +5,10 @@
 
 import type { JsonRpcResponse } from '../types';
 
-const createJson = require('./json');
+import createJson from './json';
 
-module.exports = function createResponse (id: number, result: mixed): JsonRpcResponse {
+export default function createResponse (id: number, result: mixed): JsonRpcResponse {
   return createJson(id, ({
     result
   }: $Shape<JsonRpcResponse>));
-};
+}

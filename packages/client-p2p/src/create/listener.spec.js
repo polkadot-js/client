@@ -2,9 +2,9 @@
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
 
-const PeerInfo = require('peer-info');
+import PeerInfo from 'peer-info';
 
-const createListener = require('./listener');
+import createListener from './listener';
 
 describe('createListener', () => {
   let origPeerInfoCreate;

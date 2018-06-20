@@ -6,6 +6,6 @@
 // NOTE: Aligned with Rust implementation
 const HEAP_SIZE_KB = 8 * 64;
 
-module.exports = {
+export default {
   HEAP_SIZE_KB
 };

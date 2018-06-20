@@ -6,10 +6,10 @@
 import type { StatusMessage } from '../types';
 import type { StatusEncoded } from './types';
 
-const bnEncode = require('@polkadot/primitives-json/bn/encode');
-const hashEncode = require('@polkadot/primitives-json/hash/encode');
+import bnEncode from '@polkadot/primitives-json/bn/encode';
+import hashEncode from '@polkadot/primitives-json/hash/encode';
 
-module.exports = function rawEncode ({ bestHash, bestNumber, genesisHash, parachainId, roles, validatorId, validatorSignature, version }: StatusMessage): StatusEncoded {
+export default function rawEncode ({ bestHash, bestNumber, genesisHash, parachainId, roles, validatorId, validatorSignature, version }: StatusMessage): StatusEncoded {
   return {
     bestHash: hashEncode(bestHash, 256),
     bestNumber: bnEncode(bestNumber, 64),
@@ -18,4 +18,4 @@ module.exports = function rawEncode ({ bestHash, bestNumber, genesisHash, parach
     version
     // TODO: validatorId, validatorSignature, parachainId
   };
-};
+}

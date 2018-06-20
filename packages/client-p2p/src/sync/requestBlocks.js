@@ -6,9 +6,9 @@
 import type { BlockRequestMessage } from '../message/types';
 import type { P2pState, PeerInterface } from '../types';
 
-const blockRequest = require('../message/blockRequest');
+import blockRequest from '../message/blockRequest';
 
-module.exports = function requestBlocks (self: P2pState, peer: PeerInterface): void {
+export default function requestBlocks (self: P2pState, peer: PeerInterface): void {
   const from = self.chain.blocks.bestNumber.get().addn(1);
 
   // TODO: This assumes no stale block downloading
@@ -29,4 +29,4 @@ module.exports = function requestBlocks (self: P2pState, peer: PeerInterface): v
   };
 
   peer.send(request);
-};
+}

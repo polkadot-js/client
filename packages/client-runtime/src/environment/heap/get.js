@@ -6,6 +6,6 @@
 import type { Pointer } from '../../types';
 import type { Memory } from './types';
 
-module.exports = function get (memory: Memory, ptr: Pointer, len: number): Uint8Array {
+export default function get (memory: Memory, ptr: Pointer, len: number): Uint8Array {
   return memory.uint8.subarray(ptr, ptr + len);
-};
+}

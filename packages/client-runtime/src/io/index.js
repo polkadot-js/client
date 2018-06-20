@@ -5,12 +5,12 @@
 
 import type { RuntimeEnv, RuntimeInterface$Io, Pointer } from '../types';
 
-const instrument = require('../instrument');
-const printHex = require('./printHex');
-const printUtf8 = require('./printUtf8');
-const printNum = require('./printNum');
+import instrument from '../instrument';
+import printHex from './printHex';
+import printUtf8 from './printUtf8';
+import printNum from './printNum';
 
-module.exports = function io ({ heap, l }: RuntimeEnv): RuntimeInterface$Io {
+export default function io ({ heap, l }: RuntimeEnv): RuntimeInterface$Io {
   return {
     print_hex: (ptr: Pointer, len: number): void =>
       instrument('print_hex', (): void => {
@@ -31,4 +31,4 @@ module.exports = function io ({ heap, l }: RuntimeEnv): RuntimeInterface$Io {
         printUtf8(l, heap.get(ptr, len));
       })
   };
-};
+}

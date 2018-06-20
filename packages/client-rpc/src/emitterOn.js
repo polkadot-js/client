@@ -8,8 +8,8 @@ import type { RpcState, RpcInterface$Events } from './types';
 // flowlint-next-line unclear-type:off
 type EmitterOn = (type: RpcInterface$Events, cb: () => any) => any;
 
-module.exports = function emitterOn (self: RpcState): EmitterOn {
+export default function emitterOn (self: RpcState): EmitterOn {
   // flowlint-next-line unclear-type:off
   return (type: RpcInterface$Events, cb: () => any): any =>
     self.emitter.on(type, cb);
-};
+}

@@ -8,6 +8,6 @@ import type { ChainGenesisState, ChainName } from '../types';
 
 const dev = (require('./chain-dev.json'): ChainGenesisState);
 
-module.exports = ({
+export default ({
   dev
 }: { [ChainName]: ChainGenesisState });

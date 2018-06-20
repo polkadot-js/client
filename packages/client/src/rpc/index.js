@@ -7,16 +7,16 @@ import type { RpcInterface } from '@polkadot/client-rpc/types';
 import type { ChainInterface } from '@polkadot/client-chains/types';
 import type { Config } from '../types';
 
-const createRpc = require('@polkadot/client-rpc');
+import createRpc from '@polkadot/client-rpc';
 
-const state = require('./state');
-const subscribe = require('./subscribe');
-const system = require('./system');
+import state from './state';
+import subscribe from './subscribe';
+import system from './system';
 
-module.exports = function rpc (config: Config, chain: ChainInterface): RpcInterface {
+export default function rpc (config: Config, chain: ChainInterface): RpcInterface {
   return createRpc(config, chain, {
     ...state(config, chain),
     ...subscribe(config, chain),
     ...system(config, chain)
   });
-};
+}

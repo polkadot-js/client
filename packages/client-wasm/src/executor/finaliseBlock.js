@@ -5,9 +5,9 @@
 
 import type { ExecutorState } from '../types';
 
-const call = require('./callAsU8a');
+import call from './callAsU8a';
 
-module.exports = function finaliseBlock (self: ExecutorState, header: Uint8Array): Uint8Array {
+export default function finaliseBlock (self: ExecutorState, header: Uint8Array): Uint8Array {
   const start = Date.now();
 
   self.l.debug(() => 'Finalising block');
@@ -17,4 +17,4 @@ module.exports = function finaliseBlock (self: ExecutorState, header: Uint8Array
   self.l.debug(() => `Block finalised (${Date.now() - start}ms)`);
 
   return result;
-};
+}

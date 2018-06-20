@@ -6,15 +6,17 @@
 import type { TrieDb } from '@polkadot/util-triedb/types';
 import type { RuntimeEnv } from '../types';
 
-const l = require('@polkadot/util/logger')('runtime');
+import logger from '@polkadot/util/logger';
 
-const envDb = require('./db');
-const envHeap = require('./heap');
+import envDb from './db';
+import envHeap from './heap';
 
-module.exports = function environment (stateDb: TrieDb): RuntimeEnv {
+const l = logger('runtime');
+
+export default function environment (stateDb: TrieDb): RuntimeEnv {
   return {
     l,
     db: envDb(stateDb),
     heap: envHeap()
   };
-};
+}

@@ -2,10 +2,10 @@
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
 
-const fs = require('fs');
-const rimraf = require('rimraf');
+import fs from 'fs';
+import rimraf from 'rimraf';
 
-const createDir = require('./dir');
+import createDir from './dir';
 
 describe('createDir', () => {
   it('creates the path', () => {

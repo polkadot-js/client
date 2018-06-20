@@ -2,10 +2,12 @@
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
 
-const isFunction = require('@polkadot/util/is/function');
-const l = require('@polkadot/util/logger')('test');
+import isFunction from '@polkadot/util/is/function';
+import logger from '@polkadot/util/logger';
 
-const handleWs = require('./handleWs');
+import handleWs from './handleWs';
+
+const l = logger('test');
 
 describe('handleWs', () => {
   let self;

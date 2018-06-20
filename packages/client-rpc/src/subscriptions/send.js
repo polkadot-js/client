@@ -5,10 +5,10 @@
 
 import type { WsContext$Socket } from '../types';
 
-const createJson = require('../create/json');
+import createJson from '../create/json';
 
 // flowlint-next-line unclear-type:off
-module.exports = function send (socket: WsContext$Socket, method: string, subscription: number, result: any): void {
+export default function send (socket: WsContext$Socket, method: string, subscription: number, result: any): void {
   if (result === undefined) {
     return;
   }
@@ -24,4 +24,4 @@ module.exports = function send (socket: WsContext$Socket, method: string, subscr
       })
     )
   );
-};
+}

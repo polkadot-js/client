@@ -5,12 +5,13 @@
 
 import type { RpcState, PostContext } from './types';
 
+import coBody from 'co-body';
+
+import handleMessage from './handleMessage';
+
 type Handler = (ctx: PostContext) => Promise<void>;
-const coBody = require('co-body');
 
-const handleMessage = require('./handleMessage');
-
-module.exports = function handlePost (self: RpcState): Handler {
+export default function handlePost (self: RpcState): Handler {
   return async (ctx: PostContext): Promise<void> => {
     const message: string = await coBody.text(ctx.req);
     const response = await handleMessage(self, message);
@@ -18,4 +19,4 @@ module.exports = function handlePost (self: RpcState): Handler {
     ctx.type = 'application/json';
     ctx.body = JSON.stringify(response);
   };
-};
+}

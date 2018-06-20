@@ -7,9 +7,9 @@ import type PeerInfo from 'peer-info';
 import type { MessageInterface, PeerInterface } from '../types';
 import type { PeersState } from './types';
 
-const createPeer = require('../peer');
+import createPeer from '../peer';
 
-module.exports = function add ({ chain, config, emitter, peers }: PeersState, peerInfo: PeerInfo): PeerInterface {
+export default function add ({ chain, config, emitter, peers }: PeersState, peerInfo: PeerInfo): PeerInterface {
   const id = peerInfo.id.toB58String();
   let peer = peers[id];
 
@@ -25,4 +25,4 @@ module.exports = function add ({ chain, config, emitter, peers }: PeersState, pe
   }
 
   return peer;
-};
+}

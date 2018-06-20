@@ -5,7 +5,7 @@
 
 import type { DbState } from './types';
 
-module.exports = function get ({ backend, pending }: DbState, k: Uint8Array): Uint8Array | null {
+export default function get ({ backend, pending }: DbState, k: Uint8Array): Uint8Array | null {
   const value = pending[k];
 
   if (value) {
@@ -15,4 +15,4 @@ module.exports = function get ({ backend, pending }: DbState, k: Uint8Array): Ui
   }
 
   return backend.get(k) || null;
-};
+}

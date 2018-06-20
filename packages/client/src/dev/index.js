@@ -6,12 +6,14 @@
 import type { Config } from '../types';
 import type { AllInterfaces } from './types';
 
-const l = require('@polkadot/util/logger')('development');
+import logger from '@polkadot/util/logger';
 
-const generateBlocks = require('./generateBlocks');
+import generateBlocks from './generateBlocks';
 
-module.exports = function initDev ({ dev: { genBlocks } }: Config, interfaces: AllInterfaces): void {
+const l = logger('testing');
+
+export default function initDev ({ dev: { genBlocks } }: Config, interfaces: AllInterfaces): void {
   if (genBlocks) {
     generateBlocks(l, interfaces);
   }
-};
+}

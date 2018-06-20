@@ -10,15 +10,15 @@ import type { Config } from '@polkadot/client/types';
 import type { ChainInterface } from '@polkadot/client-chains/types';
 import type { MessageInterface, PeerInterface } from '../types';
 
-const stringShorten = require('@polkadot/util/string/shorten');
+import stringShorten from '@polkadot/util/string/shorten';
 
-const addConnection = require('./addConnection');
-const emitterOn = require('./emitterOn');
-const send = require('./send');
-const setBest = require('./setBest');
-const state = require('./state');
+import addConnection from './addConnection';
+import emitterOn from './emitterOn';
+import send from './send';
+import setBest from './setBest';
+import state from './state';
 
-module.exports = function createPeer (config: Config, chain: ChainInterface, peerInfo: PeerInfo): PeerInterface {
+export default function createPeer (config: Config, chain: ChainInterface, peerInfo: PeerInfo): PeerInterface {
   const id = peerInfo.id.toB58String();
   const self = state(config, chain);
 
@@ -42,4 +42,4 @@ module.exports = function createPeer (config: Config, chain: ChainInterface, pee
     setBest: (number: BN, hash: Uint8Array): void =>
       setBest(self, number, hash)
   };
-};
+}

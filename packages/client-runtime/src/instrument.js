@@ -50,4 +50,4 @@ instrument.stats = (): RuntimeStats => {
   return stats;
 };
 
-module.exports = instrument;
+export default instrument;

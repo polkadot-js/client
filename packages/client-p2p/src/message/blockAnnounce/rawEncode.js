@@ -6,10 +6,10 @@
 import type { BlockAnnounceMessage } from '../types';
 import type { BlockAnnounceEncoded } from './types';
 
-const headerEncode = require('@polkadot/primitives-json/header/encode');
+import headerEncode from '@polkadot/primitives-json/header/encode';
 
-module.exports = function rawEncode ({ header }: BlockAnnounceMessage): BlockAnnounceEncoded {
+export default function rawEncode ({ header }: BlockAnnounceMessage): BlockAnnounceEncoded {
   return {
     header: headerEncode(header)
   };
-};
+}

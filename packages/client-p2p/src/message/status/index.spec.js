@@ -2,10 +2,10 @@
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
 
-const BN = require('bn.js');
-const hexToU8a = require('@polkadot/util/hex/toU8a');
+import BN from 'bn.js';
+import hexToU8a from '@polkadot/util/hex/toU8a';
 
-const status = require('./index');
+import status from './index';
 
 describe('status', () => {
   it('assigns sane defaults', () => {

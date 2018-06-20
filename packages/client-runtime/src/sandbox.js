@@ -5,11 +5,11 @@
 
 import type { RuntimeInterface$Sandbox, RuntimeEnv, Pointer } from './types';
 
-const instrument = require('./instrument');
+import instrument from './instrument';
 
 // TODO Implement according to https://github.com/paritytech/polkadot/tree/master/substrate/runtime-sandbox
 
-module.exports = function sandbox ({ l }: RuntimeEnv): RuntimeInterface$Sandbox {
+export default function sandbox ({ l }: RuntimeEnv): RuntimeInterface$Sandbox {
   l.warn('sandbox not implemented, only stubbed');
 
   return {
@@ -28,4 +28,4 @@ module.exports = function sandbox ({ l }: RuntimeEnv): RuntimeInterface$Sandbox 
     sandbox_memory_teardown: (memoryIdx: number): void =>
       instrument('sandbox_memory_teardown', (): void => undefined)
   };
-};
+}

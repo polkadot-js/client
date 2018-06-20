@@ -6,5 +6,5 @@
 import type { JsonHeader } from '@polkadot/primitives-json/types';
 
 export type BlockAnnounceEncoded = {
-    header: JsonHeader
+  header: JsonHeader
 }

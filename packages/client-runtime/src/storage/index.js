@@ -6,10 +6,10 @@
 
 import type { RuntimeEnv, RuntimeInterface$Storage } from '../types';
 
-const data = require('./data');
-const trie = require('./trie');
+import data from './data';
+import trie from './trie';
 
-module.exports = function storage (env: RuntimeEnv): RuntimeInterface$Storage {
+export default function storage (env: RuntimeEnv): RuntimeInterface$Storage {
   const { clear_storage, get_allocated_storage, get_storage_into, set_storage } = data(env);
   const { enumerated_trie_root, storage_root } = trie(env);
 
@@ -21,4 +21,4 @@ module.exports = function storage (env: RuntimeEnv): RuntimeInterface$Storage {
     enumerated_trie_root,
     storage_root
   };
-};
+}

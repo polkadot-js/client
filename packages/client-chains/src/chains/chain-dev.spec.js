@@ -2,9 +2,9 @@
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
 
-const memDb = require('@polkadot/util-triedb/temp');
+import memDb from '@polkadot/util-triedb/temp';
 
-const init = require('../index');
+import init from '../index';
 
 describe('genesis', () => {
   let genesis;

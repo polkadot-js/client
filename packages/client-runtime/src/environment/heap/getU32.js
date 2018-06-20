@@ -6,6 +6,6 @@
 import type { Pointer } from '../../types';
 import type { Memory } from './types';
 
-module.exports = function getU32 (memory: Memory, ptr: Pointer): number {
+export default function getU32 (memory: Memory, ptr: Pointer): number {
   return memory.view.getUint32(ptr, true);
-};
+}

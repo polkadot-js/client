@@ -5,13 +5,13 @@
 
 import type { Pointer, RuntimeEnv, RuntimeInterface$Memory } from '../types';
 
-const instrument = require('../instrument');
-const memcpy = require('./memcpy');
-const memcmp = require('./memcmp');
-const memmove = require('./memmove');
-const memset = require('./memset');
+import instrument from '../instrument';
+import memcpy from './memcpy';
+import memcmp from './memcmp';
+import memmove from './memmove';
+import memset from './memset';
 
-module.exports = function memory ({ heap }: RuntimeEnv): RuntimeInterface$Memory {
+export default function memory ({ heap }: RuntimeEnv): RuntimeInterface$Memory {
   return {
     free: (ptr: Pointer): void =>
       instrument('free', (): void => {
@@ -52,4 +52,4 @@ module.exports = function memory ({ heap }: RuntimeEnv): RuntimeInterface$Memory
         return memset(heap, dst, val, num);
       })
   };
-};
+}

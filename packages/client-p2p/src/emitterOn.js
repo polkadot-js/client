@@ -7,8 +7,8 @@ import type { P2pState, P2pInterface$Events } from './types';
 
 type EmitterOn = (type: P2pInterface$Events, () => void) => void
 
-module.exports = function emitterOn (self: P2pState): EmitterOn {
+export default function emitterOn (self: P2pState): EmitterOn {
   return (type: P2pInterface$Events, cb: () => void): void => {
     self.emitter.on(type, cb);
   };
-};
+}

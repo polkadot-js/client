@@ -2,13 +2,15 @@
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
 
-const memoryDb = require('@polkadot/util-triedb/temp');
-const methods = require('@polkadot/extrinsics');
-const encodeUnchecked = require('@polkadot/extrinsics-codec/encode/unchecked');
-const u8aConcat = require('@polkadot/util/u8a/concat');
-const keyring = require('@polkadot/util-keyring/testingPairs')();
+import memoryDb from '@polkadot/util-triedb/temp';
+import methods from '@polkadot/extrinsics';
+import encodeUnchecked from '@polkadot/extrinsics-codec/encode/unchecked';
+import u8aConcat from '@polkadot/util/u8a/concat';
+import testingPairs from '@polkadot/util-keyring/testingPairs';
 
-const init = require('@polkadot/client-chains');
+import init from '@polkadot/client-chains';
+
+const keyring = testingPairs();
 
 const TIMESTAMP = new Uint8Array([
   110, 0, 0, 0,

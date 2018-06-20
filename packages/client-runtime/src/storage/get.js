@@ -5,7 +5,7 @@
 
 import type { TrieDb } from '@polkadot/util-triedb/types';
 
-module.exports = function get (db: TrieDb, key: Uint8Array, maxLength: number = -1): Uint8Array | null {
+export default function get (db: TrieDb, key: Uint8Array, maxLength: number = -1): Uint8Array | null {
   const data = db.get(key);
 
   if (data === null) {
@@ -17,4 +17,4 @@ module.exports = function get (db: TrieDb, key: Uint8Array, maxLength: number = 
     : maxLength;
 
   return data.subarray(0, dataLength);
-};
+}

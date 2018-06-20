@@ -10,16 +10,18 @@ import type { RuntimeInterface } from '@polkadot/client-runtime/types';
 import type { UncheckedRaw } from '@polkadot/primitives/extrinsic';
 import type { ExecutorState, ExecutorInterface, Executor$BlockImportResult } from './types';
 
-const l = require('@polkadot/util/logger')('executor');
+import logger from '@polkadot/util/logger';
 
-const applyExtrinsic = require('./executor/applyExtrinsic');
-const executeBlock = require('./executor/executeBlock');
-const finaliseBlock = require('./executor/finaliseBlock');
-const generateBlock = require('./executor/generateBlock');
-const importBlock = require('./executor/importBlock');
-const initialiseBlock = require('./executor/initialiseBlock');
+import applyExtrinsic from './executor/applyExtrinsic';
+import executeBlock from './executor/executeBlock';
+import finaliseBlock from './executor/finaliseBlock';
+import generateBlock from './executor/generateBlock';
+import importBlock from './executor/importBlock';
+import initialiseBlock from './executor/initialiseBlock';
 
-module.exports = function executor (config: Config, blockDb: BlockDb, stateDb: StateDb, runtime: RuntimeInterface, genesis: ChainGenesis): ExecutorInterface {
+const l = logger('executor');
+
+export default function executor (config: Config, blockDb: BlockDb, stateDb: StateDb, runtime: RuntimeInterface, genesis: ChainGenesis): ExecutorInterface {
   const self: ExecutorState = {
     blockDb,
     config,
@@ -43,4 +45,4 @@ module.exports = function executor (config: Config, blockDb: BlockDb, stateDb: S
     initialiseBlock: (header: Uint8Array): boolean =>
       initialiseBlock(self, header)
   };
-};
+}

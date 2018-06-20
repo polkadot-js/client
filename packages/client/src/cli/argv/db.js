@@ -5,9 +5,9 @@
 
 import type { Options } from 'yargs';
 
-const defaults = require('@polkadot/client-db/defaults');
+import defaults from '@polkadot/client-db/defaults';
 
-module.exports = ({
+export default ({
   'db-path': {
     default: defaults.PATH,
     description: 'Sets the path for all storage operations',

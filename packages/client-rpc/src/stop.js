@@ -5,7 +5,7 @@
 
 import type { RpcState } from './types';
 
-module.exports = async function stop (self: RpcState): Promise<boolean> {
+export default async function stop (self: RpcState): Promise<boolean> {
   if (self.servers.length === 0) {
     return false;
   }
@@ -21,4 +21,4 @@ module.exports = async function stop (self: RpcState): Promise<boolean> {
   self.emitter.emit('stopped');
 
   return true;
-};
+}

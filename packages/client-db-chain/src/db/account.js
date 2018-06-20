@@ -3,6 +3,6 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-const u8a = require('./u8a');
+import u8a from './u8a';
 
-module.exports = u8a;
+export default u8a;

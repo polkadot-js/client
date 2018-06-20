@@ -5,10 +5,10 @@
 
 import type { Logger } from '@polkadot/util/types';
 
-const u8aToHex = require('@polkadot/util/u8a/toHex');
+import u8aToHex from '@polkadot/util/u8a/toHex';
 
-module.exports = function print (l: Logger, data: Uint8Array): void {
+export default function print (l: Logger, data: Uint8Array): void {
   l.log(
     u8aToHex(data)
   );
-};
+}

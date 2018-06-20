@@ -4,13 +4,14 @@
 // @flow
 
 import type { JsonRpcError, JsonRpcRequest, JsonRpcResponse, RpcState, WsContext$Socket } from './types';
-const assert = require('@polkadot/util/assert');
-const ExtError = require('@polkadot/util/ext/error');
-const isError = require('@polkadot/util/is/error');
-const isFunction = require('@polkadot/util/is/function');
 
-const { createError, createResponse } = require('./create');
-const validateRequest = require('./validate/request');
+import assert from '@polkadot/util/assert';
+import ExtError from '@polkadot/util/ext/error';
+import isError from '@polkadot/util/is/error';
+import isFunction from '@polkadot/util/is/function';
+
+import { createError, createResponse } from './create';
+import validateRequest from './validate/request';
 
 const SUBSCRIBE_REGEX = /^subscribe_/;
 
@@ -44,10 +45,10 @@ const handleRequest = async ({ handlers, l, subscribe }: RpcState, { id, jsonrpc
   }
 };
 
-module.exports = async function handleMessage (self: RpcState, message: string, socket?: WsContext$Socket): Promise<JsonRpcError | JsonRpcResponse> {
+export default async function handleMessage (self: RpcState, message: string, socket?: WsContext$Socket): Promise<JsonRpcError | JsonRpcResponse> {
   try {
     return handleRequest(self, JSON.parse(message), socket);
   } catch (error) {
     return createError(0, error);
   }
-};
+}

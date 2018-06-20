@@ -5,9 +5,9 @@
 
 import type { RuntimeEnv$Heap, Pointer } from '../types';
 
-module.exports = function memcpy (heap: RuntimeEnv$Heap, dstPtr: Pointer, srcPtr: Pointer, num: number): Pointer {
+export default function memcpy (heap: RuntimeEnv$Heap, dstPtr: Pointer, srcPtr: Pointer, num: number): Pointer {
   return heap.set(
     dstPtr,
     heap.get(srcPtr, num)
   );
-};
+}

@@ -6,21 +6,21 @@
 import type { BlockRequestMessage } from '../message/types';
 import type { P2pState, PeerInterface } from '../types';
 
-const BN = require('bn.js');
-const isU8a = require('@polkadot/util/is/u8a');
+import BN from 'bn.js';
+import isU8a from '@polkadot/util/is/u8a';
 
-const blockResponse = require('../message/blockResponse');
-const { MAX_SYNC_BLOCKS } = require('../defaults');
-const getBlockData = require('./getBlockData');
+import blockResponse from '../message/blockResponse';
+import defaults from '../defaults';
+import getBlockData from './getBlockData';
 
-module.exports = function provideBlocks (self: P2pState, peer: PeerInterface, request: BlockRequestMessage): void {
+export default function provideBlocks (self: P2pState, peer: PeerInterface, request: BlockRequestMessage): void {
   // flowlint-next-line unclear-type:off
-  const current = ((request.from: any): BN);
+  const current: BN = (request.from: any);
   const best = self.chain.blocks.bestNumber.get();
   const blocks = [];
 
   // FIXME: Also send blocks starting with hash
-  const max = Math.min(request.max || MAX_SYNC_BLOCKS, MAX_SYNC_BLOCKS);
+  const max = Math.min(request.max || defaults.MAX_SYNC_BLOCKS, defaults.MAX_SYNC_BLOCKS);
   let count = isU8a(request.from) ? max : 0;
   const increment = request.direction === 'ascending' ? new BN(1) : new BN(-1);
 
@@ -41,4 +41,4 @@ module.exports = function provideBlocks (self: P2pState, peer: PeerInterface, re
       id: request.id
     })
   );
-};
+}

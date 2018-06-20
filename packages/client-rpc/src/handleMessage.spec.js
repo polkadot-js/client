@@ -2,10 +2,12 @@
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
 
-const ExtError = require('@polkadot/util/ext/error');
-const l = require('@polkadot/util/logger')('test');
+import ExtError from '@polkadot/util/ext/error';
+import logger from '@polkadot/util/logger';
 
-const handleMessage = require('./handleMessage');
+import handleMessage from './handleMessage';
+
+const l = logger('test');
 
 describe('handleMessage', () => {
   let self;

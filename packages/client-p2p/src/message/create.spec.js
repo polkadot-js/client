@@ -2,7 +2,7 @@
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
 
-const create = require('./create');
+import create from './create';
 
 describe('create', () => {
   it('throws when class is not found', () => {

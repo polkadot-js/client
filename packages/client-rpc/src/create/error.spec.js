@@ -2,9 +2,9 @@
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
 
-const ExtError = require('@polkadot/util/ext/error');
+import ExtError from '@polkadot/util/ext/error';
 
-const { createError } = require('./index');
+import { createError } from './index';
 
 describe('createError', () => {
   it('creates a valid JSONRPC structure', () => {

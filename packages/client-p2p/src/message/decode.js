@@ -5,11 +5,11 @@
 
 import type { MessageInterface, RawMessage } from '../types';
 
-const u8aToUtf8 = require('@polkadot/util/u8a/toUtf8');
+import u8aToUtf8 from '@polkadot/util/u8a/toUtf8';
 
-const createMessage = require('./create');
+import createMessage from './create';
 
-module.exports = function decode (u8a: Uint8Array): MessageInterface {
+export default function decode (u8a: Uint8Array): MessageInterface {
   const message: RawMessage = JSON.parse(
     u8aToUtf8(u8a)
   );
@@ -18,4 +18,4 @@ module.exports = function decode (u8a: Uint8Array): MessageInterface {
   instance.decode(message);
 
   return instance;
-};
+}

@@ -8,13 +8,13 @@ import type { Storage$Key$Values } from '@polkadot/storage/types';
 import type { TrieDb } from '@polkadot/util-triedb/types';
 import type { StorageMethod$ArrayU8a } from '../types';
 
-const bnToU8a = require('@polkadot/util/bn/toU8a');
-const u8aConcat = require('@polkadot/util/u8a/concat');
-const u8aToBn = require('@polkadot/util/u8a/toBn');
+import bnToU8a from '@polkadot/util/bn/toU8a';
+import u8aConcat from '@polkadot/util/u8a/concat';
+import u8aToBn from '@polkadot/util/u8a/toBn';
 
-const creator = require('../key');
+import creator from '../key';
 
-module.exports = function decodeArrayU8a <T> (db: TrieDb, key: Section$Item<T>): StorageMethod$ArrayU8a {
+export default function decodeArrayU8a <T> (db: TrieDb, key: Section$Item<T>): StorageMethod$ArrayU8a {
   const createKey = creator(key);
 
   return {
@@ -45,4 +45,4 @@ module.exports = function decodeArrayU8a <T> (db: TrieDb, key: Section$Item<T>):
       throw new Error(`No subscriber available for db/arrayU8a`);
     }
   };
-};
+}

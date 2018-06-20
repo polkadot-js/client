@@ -5,10 +5,10 @@
 
 import type { ChainState, ChainGenesis, ChainGenesisState } from '../types';
 
-const initBlock = require('./block');
-const initState = require('./state');
+import initBlock from './block';
+import initState from './state';
 
-module.exports = function initGenesis (self: ChainState, initialState: ChainGenesisState): ChainGenesis {
+export default function initGenesis (self: ChainState, initialState: ChainGenesisState): ChainGenesis {
   initState(self, initialState);
 
   const genesis = initBlock(self);
@@ -21,4 +21,4 @@ module.exports = function initGenesis (self: ChainState, initialState: ChainGene
   self.stateDb.db.commit();
 
   return genesis;
-};
+}

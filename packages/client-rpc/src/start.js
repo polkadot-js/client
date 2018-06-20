@@ -5,13 +5,12 @@
 
 import type { RpcState } from './types';
 
-const createKoa = require('./create/koa');
+import createKoa from './create/koa';
+import handlePost from './handlePost';
+import handleWs from './handleWs';
+import stop from './stop';
 
-const handlePost = require('./handlePost');
-const handleWs = require('./handleWs');
-const stop = require('./stop');
-
-module.exports = async function start (self: RpcState): Promise<boolean> {
+export default async function start (self: RpcState): Promise<boolean> {
   stop(self);
 
   const apps = createKoa({
@@ -35,4 +34,4 @@ module.exports = async function start (self: RpcState): Promise<boolean> {
   self.emitter.emit('started');
 
   return true;
-};
+}

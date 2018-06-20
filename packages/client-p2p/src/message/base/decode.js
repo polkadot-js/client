@@ -6,14 +6,14 @@
 import type { RawMessage } from '../../types';
 import type { MessageState } from '../types';
 
-const assert = require('@polkadot/util/assert');
+import assert from '@polkadot/util/assert';
 
 // flowlint-next-line unclear-type:off
-module.exports = function decode (self: MessageState, { type, message }: RawMessage): any {
+export default function decode (self: MessageState, { type, message }: RawMessage): any {
   assert(type === self.type, 'Expected message id to match');
 
   return {
     message: self.impl.rawDecode(message),
     type
   };
-};
+}

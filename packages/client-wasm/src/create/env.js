@@ -5,10 +5,10 @@
 
 import type { RuntimeInterface } from '@polkadot/client-runtime/types';
 
-const runtimeProxy = require('../wasm/proxy_runtime.wasm.js');
-const createExports = require('./exports');
+import runtimeProxy from '../wasm/proxy_runtime.wasm.js';
+import createExports from './exports';
 
-module.exports = function createEnv (runtime: RuntimeInterface, memory: WebAssembly.Memory): WebAssemblyInstance$Exports {
+export default function createEnv (runtime: RuntimeInterface, memory: WebAssembly.Memory): WebAssemblyInstance$Exports {
   const proxy = createExports(runtimeProxy, { runtime: runtime.exports }, memory);
 
   return Object.keys(runtime.exports).reduce((result, name) => {
@@ -18,4 +18,4 @@ module.exports = function createEnv (runtime: RuntimeInterface, memory: WebAssem
 
     return result;
   }, ({}: $Shape<WebAssemblyInstance$Exports>));
-};
+}

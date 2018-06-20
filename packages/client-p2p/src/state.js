@@ -8,11 +8,11 @@ import type { ChainInterface } from '@polkadot/client-chains/types';
 import type { Logger } from '@polkadot/util/types';
 import type { P2pState } from './types';
 
-const EventEmitter = require('eventemitter3');
+import EventEmitter from 'eventemitter3';
 
-const syncState = require('./sync/state');
+import syncState from './sync/state';
 
-module.exports = function state (l: Logger, config: Config, chain: ChainInterface): P2pState {
+export default function state (l: Logger, config: Config, chain: ChainInterface): P2pState {
   return {
     chain,
     config,
@@ -24,4 +24,4 @@ module.exports = function state (l: Logger, config: Config, chain: ChainInterfac
     peers: null,
     sync: syncState()
   };
-};
+}

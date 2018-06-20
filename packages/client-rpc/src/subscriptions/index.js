@@ -7,15 +7,15 @@ import type { ChainInterface } from '@polkadot/client-chains/types';
 import type { Handler, WsContext$Socket, SubInterface } from '../types';
 import type { Sockets, Subscriptions } from './types';
 
-const send = require('./send');
-const update = require('./update');
+import send from './send';
+import update from './update';
 
 const sockets: Sockets = {};
 const subscriptions: Subscriptions = {};
 
 let nextSubId = -1;
 
-module.exports = function subscriber (chain: ChainInterface): SubInterface {
+export default function subscriber (chain: ChainInterface): SubInterface {
   update(chain, subscriptions, sockets);
 
   // flowlint-next-line unclear-type:off
@@ -38,4 +38,4 @@ module.exports = function subscriber (chain: ChainInterface): SubInterface {
 
     return subId;
   };
-};
+}

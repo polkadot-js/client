@@ -6,10 +6,12 @@
 import type { P2pState } from '../types';
 import type { PeersState } from './types';
 
-const EventEmitter = require('eventemitter3');
-const l = require('@polkadot/util/logger')('p2p/peers');
+import EventEmitter from 'eventemitter3';
+import logger from '@polkadot/util/logger';
 
-module.exports = function createState ({ chain, config }: P2pState): PeersState {
+const l = logger('p2p/peers');
+
+export default function createState ({ chain, config }: P2pState): PeersState {
   return {
     chain,
     config,
@@ -17,4 +19,4 @@ module.exports = function createState ({ chain, config }: P2pState): PeersState 
     l,
     peers: {}
   };
-};
+}

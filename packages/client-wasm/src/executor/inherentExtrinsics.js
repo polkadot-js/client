@@ -6,11 +6,13 @@
 import type { UncheckedRaw } from '@polkadot/primitives/extrinsic';
 import type { ExecutorState } from '../types';
 
-const extrinsics = require('@polkadot/extrinsics');
-const encodeUnchecked = require('@polkadot/extrinsics-codec/encode/unchecked');
-const keyring = require('@polkadot/util-keyring/testingPairs')();
+import extrinsics from '@polkadot/extrinsics';
+import encodeUnchecked from '@polkadot/extrinsics-codec/encode/unchecked';
+import testingKeypairs from '@polkadot/util-keyring/testingPairs';
 
-module.exports = function inherentExtrinsics (self: ExecutorState, timestamp: number, _extrinsics: Array<UncheckedRaw>): Array<UncheckedRaw> {
+const keyring = testingKeypairs();
+
+export default function inherentExtrinsics (self: ExecutorState, timestamp: number, _extrinsics: Array<UncheckedRaw>): Array<UncheckedRaw> {
   return [
     encodeUnchecked(keyring.nobody, 0)(
       extrinsics.timestamp.public.set,
@@ -21,4 +23,4 @@ module.exports = function inherentExtrinsics (self: ExecutorState, timestamp: nu
       [[]]
     )
   ].concat(_extrinsics);
-};
+}

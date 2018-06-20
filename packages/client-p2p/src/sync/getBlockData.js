@@ -6,9 +6,9 @@
 import type { BlockRequestMessage$Fields, BlockResponseMessage$BlockData } from '../message/types';
 import type { P2pState } from '../types';
 
-const decodeBlock = require('@polkadot/primitives-codec/block/decodeRaw');
+import decodeBlock from '@polkadot/primitives-codec/block/decodeRaw';
 
-module.exports = function getBlockData (self: P2pState, fields: BlockRequestMessage$Fields, hash: Uint8Array): BlockResponseMessage$BlockData {
+export default function getBlockData (self: P2pState, fields: BlockRequestMessage$Fields, hash: Uint8Array): BlockResponseMessage$BlockData {
   const { body, header } = decodeBlock(
     self.chain.blocks.block.get(hash)
   );
@@ -25,4 +25,4 @@ module.exports = function getBlockData (self: P2pState, fields: BlockRequestMess
   }
 
   return data;
-};
+}

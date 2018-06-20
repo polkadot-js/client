@@ -5,9 +5,9 @@
 
 import type { Options } from 'yargs';
 
-const defaults = require('@polkadot/client-rpc/defaults');
+import defaults from '@polkadot/client-rpc/defaults';
 
-module.exports = ({
+export default ({
   'rpc-path': {
     default: defaults.PATH,
     description: 'Sets the endpoint for RPC POST requests',

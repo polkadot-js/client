@@ -3,24 +3,23 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-import type BN from 'bn.js';
 import type { BlockRequestMessage } from '../types';
 import type { BlockRequestEncoded } from './types';
 
-const bnEncode = require('@polkadot/primitives-json/bn/encode');
-const hashEncode = require('@polkadot/primitives-json/hash/encode');
-const isBn = require('@polkadot/util/is/bn');
+import bnEncode from '@polkadot/primitives-json/bn/encode';
+import hashEncode from '@polkadot/primitives-json/hash/encode';
+import isBn from '@polkadot/util/is/bn';
 
-module.exports = function rawEncode ({ direction, fields, from, id, max, to }: BlockRequestMessage): BlockRequestEncoded {
+export default function rawEncode ({ direction, fields, from, id, max, to }: BlockRequestMessage): BlockRequestEncoded {
   return {
     direction,
     fields,
     from: isBn(from)
       // flowlint-next-line unclear-type:off
-      ? bnEncode(((from: any): BN), 64)
+      ? bnEncode((from: any), 64)
       // flowlint-next-line unclear-type:off
-      : hashEncode(((from: any): Uint8Array), 256),
+      : hashEncode((from: any), 256),
     id,
     max
   };
-};
+}

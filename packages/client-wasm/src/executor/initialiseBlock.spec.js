@@ -2,11 +2,11 @@
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
 
-const createHeader = require('@polkadot/primitives-builder/header');
-const encodeHeader = require('@polkadot/primitives-codec/header/encode');
-const memoryDb = require('@polkadot/util-triedb/temp');
+import createHeader from '@polkadot/primitives-builder/header';
+import encodeHeader from '@polkadot/primitives-codec/header/encode';
+import memoryDb from '@polkadot/util-triedb/temp';
 
-const init = require('@polkadot/client-chains');
+import init from '@polkadot/client-chains';
 
 describe('initialiseBlock', () => {
   let chain;

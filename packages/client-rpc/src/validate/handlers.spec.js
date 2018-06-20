@@ -2,7 +2,7 @@
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
 
-const { validateHandlers } = require('./index');
+import { validateHandlers } from './index';
 
 describe('validateHandlers', () => {
   it('throws when handlers are empty', () => {

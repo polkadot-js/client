@@ -6,10 +6,10 @@
 import type { BlockRequestMessage } from '../types';
 import type { BlockRequestEncoded } from './types';
 
-const bnDecode = require('@polkadot/primitives-json/bn/decode');
-const hashDecode = require('@polkadot/primitives-json/hash/decode');
+import bnDecode from '@polkadot/primitives-json/bn/decode';
+import hashDecode from '@polkadot/primitives-json/hash/decode';
 
-module.exports = function rawDecode (raw: BlockRequestMessage, { direction, fields, from, id, max, to }: BlockRequestEncoded): BlockRequestMessage {
+export default function rawDecode (raw: BlockRequestMessage, { direction, fields, from, id, max, to }: BlockRequestEncoded): BlockRequestMessage {
   raw.direction = direction;
   raw.fields = fields;
   raw.from = from.length === 66
@@ -19,4 +19,4 @@ module.exports = function rawDecode (raw: BlockRequestMessage, { direction, fiel
   raw.max = max;
 
   return raw;
-};
+}

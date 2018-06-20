@@ -6,16 +6,16 @@
 import type { TrieDb } from '@polkadot/util-triedb/types';
 import type { RuntimeInterface, RuntimeInterface$Exports } from './types';
 
-const createChain = require('./chain');
-const createCrypto = require('./crypto');
-const createEnv = require('./environment');
-const createIo = require('./io');
-const createMemory = require('./memory');
-const createSandbox = require('./sandbox');
-const createStorage = require('./storage');
-const instrument = require('./instrument');
+import createChain from './chain';
+import createCrypto from './crypto';
+import createEnv from './environment';
+import createIo from './io';
+import createMemory from './memory';
+import createSandbox from './sandbox';
+import createStorage from './storage';
+import instrument from './instrument';
 
-module.exports = function runtime (stateDb: TrieDb): RuntimeInterface {
+export default function runtime (stateDb: TrieDb): RuntimeInterface {
   const environment = createEnv(stateDb);
 
   return {
@@ -30,4 +30,4 @@ module.exports = function runtime (stateDb: TrieDb): RuntimeInterface {
       stop: instrument.stats
     }
   };
-};
+}

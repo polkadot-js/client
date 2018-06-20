@@ -5,14 +5,14 @@
 
 import type { Options } from 'yargs';
 
-const chains = require('@polkadot/client-chains/chains');
-const chainDefaults = require('@polkadot/client-chains/defaults');
+import chains from '@polkadot/client-chains/chains';
+import chainDefaults from '@polkadot/client-chains/defaults';
 
-const { clientId } = require('../../clientId');
+import { clientId } from '../../clientId';
 
 const allChains = Object.keys(chains).map((chain) => `'${chain}'`);
 
-module.exports = ({
+export default ({
   'chain': {
     default: chainDefaults.MAIN,
     description: `Use the chain specified, one of ${allChains.join(', ')} or custom '<chain>.json'`,

@@ -5,6 +5,10 @@
 
 import type { Rpc, PostContext, WsContext } from '../types';
 
+import Koa from 'koa';
+import koaRoute from 'koa-route';
+import koaWebsocket from 'koa-websocket';
+
 type CreateKoaOption = {
   handlers: {
     // flowlint-next-line unclear-type:off
@@ -16,11 +20,7 @@ type CreateKoaOption = {
   types: Array<Rpc>
 };
 
-const Koa = require('koa');
-const koaRoute = require('koa-route');
-const koaWebsocket = require('koa-websocket');
-
-module.exports = function createKoa ({ handlers, path, types }: CreateKoaOption): Array<Koa> {
+export default function createKoa ({ handlers, path, types }: CreateKoaOption): Array<Koa> {
   return types.map((type) => {
     switch (type) {
       case 'http':
@@ -50,4 +50,4 @@ module.exports = function createKoa ({ handlers, path, types }: CreateKoaOption)
         throw new Error(`Uanble to create RPC listener for ${type}`);
     }
   });
-};
+}

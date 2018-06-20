@@ -6,13 +6,13 @@
 import type { Section$Item } from '@polkadot/params/types';
 import type { Storage$Key$Values } from '@polkadot/storage/types';
 
-const bindKey = require('@polkadot/storage/key');
+import bindKey from '@polkadot/storage/key';
 
 type Creator = (keyParams?: Storage$Key$Values) => Uint8Array;
 
-module.exports = function createKey <T> (key: Section$Item<T>): Creator {
+export default function createKey <T> (key: Section$Item<T>): Creator {
   const keyCreator = bindKey(key);
 
   return (keyParams?: Storage$Key$Values = []): Uint8Array =>
     keyCreator.apply(null, keyParams);
-};
+}

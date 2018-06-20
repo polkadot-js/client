@@ -5,14 +5,14 @@
 
 import type { DbPathPrefix, DbConfig$Type } from './types';
 
-const os = require('os');
-const path = require('path');
+import os from 'os';
+import path from 'path';
 
 const PREFIX_DB: DbPathPrefix = 'database';
 const PATH = path.join(os.homedir(), '.@polkadot');
 const TYPE: DbConfig$Type = 'memory';
 
-module.exports = {
+export default {
   PREFIX_DB,
   PATH,
   TYPE

@@ -6,18 +6,18 @@
 import type { RuntimeEnv$Heap, Pointer } from '../../types';
 import type { HeapState, SizeUsed } from './types';
 
-const allocate = require('./allocate');
-const deallocate = require('./deallocate');
-const dup = require('./dup');
-const fill = require('./fill');
-const get = require('./get');
-const getU32 = require('./getU32');
-const set = require('./set');
-const setMemory = require('./setMemory');
-const setU32 = require('./setU32');
-const used = require('./used');
+import allocate from './allocate';
+import deallocate from './deallocate';
+import dup from './dup';
+import fill from './fill';
+import get from './get';
+import getU32 from './getU32';
+import set from './set';
+import setMemory from './setMemory';
+import setU32 from './setU32';
+import used from './used';
 
-module.exports = function envHeap (): RuntimeEnv$Heap {
+export default function envHeap (): RuntimeEnv$Heap {
   let state = ({}: $Shape<HeapState>);
 
   return {
@@ -44,4 +44,4 @@ module.exports = function envHeap (): RuntimeEnv$Heap {
     used: (): SizeUsed =>
       used(state.memory)
   };
-};
+}

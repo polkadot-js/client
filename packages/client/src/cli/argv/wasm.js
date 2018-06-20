@@ -5,9 +5,9 @@
 
 import type { Options } from 'yargs';
 
-const defaults = require('@polkadot/client-wasm/defaults');
+import defaults from '@polkadot/client-wasm/defaults';
 
-module.exports = ({
+export default ({
   'wasm-heap-size': {
     default: defaults.HEAP_SIZE_KB,
     description: 'Initial size for the WASM runtime heap (kB)',

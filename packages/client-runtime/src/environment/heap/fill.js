@@ -6,6 +6,6 @@
 import type { Pointer } from '../../types';
 import type { Memory } from './types';
 
-module.exports = function fill (memory: Memory, ptr: Pointer, value: number, len: number): Uint8Array {
+export default function fill (memory: Memory, ptr: Pointer, value: number, len: number): Uint8Array {
   return memory.uint8.fill(value, ptr, ptr + len);
-};
+}

@@ -6,10 +6,10 @@
 import type { AllInterfaces } from '../types';
 import type { Logger } from '@polkadot/util/types';
 
-const interval = require('./interval');
+import interval from './interval';
 
-module.exports = function generateBlocks (l: Logger, { chain, p2p }: AllInterfaces): void {
+export default function generateBlocks (l: Logger, { chain, p2p }: AllInterfaces): void {
   setInterval(() => {
     interval(l, chain, p2p);
-  }, 5000);
-};
+  }, 1000);
+}

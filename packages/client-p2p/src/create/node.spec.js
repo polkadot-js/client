@@ -2,14 +2,16 @@
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
 
-const LibP2P = require('libp2p');
-const PeerId = require('peer-id');
-const PeerInfo = require('peer-info');
+import LibP2P from 'libp2p';
+import PeerId from 'peer-id';
+import PeerInfo from 'peer-info';
 
-const isInstanceOf = require('@polkadot/util/is/instanceOf');
-const l = require('@polkadot/util/logger')('test');
+import isInstanceOf from '@polkadot/util/is/instanceOf';
+import logger from '@polkadot/util/logger';
 
-const createNode = require('./node');
+import createNode from './node';
+
+const l = logger('test');
 
 describe('createNode', () => {
   let origPeerInfoCreate;

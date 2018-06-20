@@ -5,16 +5,16 @@
 
 import type { P2pState } from './types';
 
-const promisify = require('@polkadot/util/promisify');
+import promisify from '@polkadot/util/promisify';
 
-const createNode = require('./create/node');
-const createPeers = require('./peers');
-const handleProtocol = require('./handleProtocol');
-const onPeerDiscovery = require('./onPeerDiscovery');
-const onPeerMessage = require('./handler');
-const stop = require('./stop');
+import createNode from './create/node';
+import createPeers from './peers';
+import handleProtocol from './handleProtocol';
+import onPeerDiscovery from './onPeerDiscovery';
+import onPeerMessage from './handler';
+import stop from './stop';
 
-module.exports = async function start (self: P2pState): Promise<boolean> {
+export default async function start (self: P2pState): Promise<boolean> {
   stop(self);
 
   self.node = await createNode(self);
@@ -30,4 +30,4 @@ module.exports = async function start (self: P2pState): Promise<boolean> {
   self.emitter.emit('started');
 
   return true;
-};
+}

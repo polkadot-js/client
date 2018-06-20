@@ -7,11 +7,13 @@ import type { Config } from '@polkadot/client/types';
 import type { ChainInterface } from '@polkadot/client-chains/types';
 import type { PeerState } from './types';
 
-const BN = require('bn.js');
-const EventEmitter = require('eventemitter3');
-const l = require('@polkadot/util/logger')('p2p/peer');
+import BN from 'bn.js';
+import EventEmitter from 'eventemitter3';
+import logger from '@polkadot/util/logger';
 
-module.exports = function state (config: Config, chain: ChainInterface): PeerState {
+const l = logger('p2p/peer');
+
+export default function state (config: Config, chain: ChainInterface): PeerState {
   return {
     bestHash: new Uint8Array([]),
     bestNumber: new BN(0),
@@ -22,4 +24,4 @@ module.exports = function state (config: Config, chain: ChainInterface): PeerSta
     l,
     nextId: 0
   };
-};
+}

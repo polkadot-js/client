@@ -7,16 +7,16 @@ import type { MessageInterface } from '../../types';
 import type { BlockRequestMessage } from '../types';
 import type { BlockRequestEncoded } from './types';
 
-const BN = require('bn.js');
+import BN from 'bn.js';
 
-const { MAX_SYNC_BLOCKS } = require('../../defaults');
-const base = require('../base');
-const rawDecode = require('./rawDecode');
-const rawEncode = require('./rawEncode');
+import defaults from '../../defaults';
+import base from '../base';
+import rawDecode from './rawDecode';
+import rawEncode from './rawEncode';
 
 const TYPE: number = 1;
 
-module.exports = function blockRequest ({ direction = 'ascending', fields = ['header', 'body'], from, id, max = MAX_SYNC_BLOCKS, to }: $Shape<BlockRequestMessage>): MessageInterface {
+export default function blockRequest ({ direction = 'ascending', fields = ['header', 'body'], from, id, max = defaults.MAX_SYNC_BLOCKS, to }: $Shape<BlockRequestMessage>): MessageInterface {
   const raw: BlockRequestMessage = {
     direction,
     fields,
@@ -33,6 +33,6 @@ module.exports = function blockRequest ({ direction = 'ascending', fields = ['he
     rawEncode: (): BlockRequestEncoded =>
       rawEncode(raw)
   });
-};
+}
 
-module.exports.TYPE = TYPE;
+blockRequest.TYPE = TYPE;

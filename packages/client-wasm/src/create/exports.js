@@ -5,13 +5,13 @@
 
 import type { WasmExtraImports } from '../types';
 
+import blake2AsU8a from '@polkadot/util-crypto/blake2/asU8a';
+
+import createImports from './imports';
+
 type ModuleCache = {
   [Uint8Array]: WebAssemblyModule
 }
-
-const blake2AsU8a = require('@polkadot/util-crypto/blake2/asU8a');
-
-const createImports = require('./imports');
 
 const DEFAULT_TABLE: WebAssemblyTable$Config = {
   initial: 0,
@@ -20,7 +20,7 @@ const DEFAULT_TABLE: WebAssemblyTable$Config = {
 
 const moduleCache: ModuleCache = {};
 
-module.exports = function exports (bytecode: Uint8Array, imports?: WasmExtraImports, memory: ?WebAssembly.Memory): WebAssemblyInstance$Exports {
+export default function createExports (bytecode: Uint8Array, imports?: WasmExtraImports, memory: ?WebAssembly.Memory): WebAssemblyInstance$Exports {
   const codeHash = blake2AsU8a(bytecode);
 
   // NOTE compilation is quite resource intensive, here we bypass the actual Uint8Array -> Module compilation when we already have this module bytecode in our cache
@@ -35,4 +35,4 @@ module.exports = function exports (bytecode: Uint8Array, imports?: WasmExtraImpo
   );
 
   return instance.exports;
-};
+}

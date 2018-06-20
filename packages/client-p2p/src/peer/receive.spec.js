@@ -2,15 +2,16 @@
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
 
-const pull = require('pull-stream');
-const pushable = require('pull-pushable');
-const l = require('@polkadot/util/logger')('test');
-const u8aToBuffer = require('@polkadot/util/u8a/toBuffer');
+import pull from 'pull-stream';
+import pushable from 'pull-pushable';
+import logger from '@polkadot/util/logger';
+import u8aToBuffer from '@polkadot/util/u8a/toBuffer';
 
-const status = require('../message/status');
-const decode = require('../message/encode');
+import status from '../message/status';
+import decode from '../message/encode';
+import receive from './receive';
 
-const receive = require('./receive');
+const l = logger('test');
 
 describe('receive', () => {
   let self;

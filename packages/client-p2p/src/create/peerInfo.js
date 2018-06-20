@@ -5,12 +5,12 @@
 
 import type { P2pNodes } from '../types';
 
-const PeerInfo = require('peer-info');
+import PeerInfo from 'peer-info';
 
-const assert = require('@polkadot/util/assert');
-const promisify = require('@polkadot/util/promisify');
+import assert from '@polkadot/util/assert';
+import promisify from '@polkadot/util/promisify';
 
-module.exports = async function createPeerInfo (addresses: P2pNodes): Promise<PeerInfo> {
+export default async function createPeerInfo (addresses: P2pNodes): Promise<PeerInfo> {
   assert(addresses.length, 'Expected at least one network address');
 
   const peerInfo: PeerInfo = await promisify(null, PeerInfo.create);
@@ -20,4 +20,4 @@ module.exports = async function createPeerInfo (addresses: P2pNodes): Promise<Pe
   });
 
   return peerInfo;
-};
+}

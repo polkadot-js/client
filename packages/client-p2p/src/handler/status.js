@@ -6,15 +6,15 @@
 import type { StatusMessage } from '../message/types';
 import type { P2pState, MessageInterface, PeerInterface } from '../types';
 
-const message = require('../message/status');
+import message from '../message/status';
 
 // TODO: We should check the genesisHash here and act appropriately
-module.exports = function handleStatus (self: P2pState, peer: PeerInterface, message: MessageInterface): void {
+export default function handleStatus (self: P2pState, peer: PeerInterface, message: MessageInterface): void {
   self.l.debug(() => [peer.shortId, 'Status', JSON.stringify(message.encode().message)]);
 
   const { bestHash, bestNumber } = (message.raw: StatusMessage);
 
   peer.setBest(bestNumber, bestHash);
-};
+}
 
-module.exports.TYPE = message.TYPE;
+handleStatus.TYPE = message.TYPE;

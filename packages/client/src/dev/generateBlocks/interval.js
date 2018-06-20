@@ -7,7 +7,7 @@ import type { ChainInterface } from '@polkadot/client-chains/types';
 import type { P2pInterface } from '@polkadot/client-p2p/types';
 import type { Logger } from '@polkadot/util/types';
 
-module.exports = function interval (l: Logger, { blocks, executor }: ChainInterface, p2p: P2pInterface): void {
+export default function interval (l: Logger, { blocks, executor }: ChainInterface, p2p: P2pInterface): void {
   l.debug(() => 'Running block generation');
 
   const block = executor.generateBlock([]);
@@ -18,4 +18,4 @@ module.exports = function interval (l: Logger, { blocks, executor }: ChainInterf
 
     p2p._announceBlock(headerHash, header, body);
   }
-};
+}

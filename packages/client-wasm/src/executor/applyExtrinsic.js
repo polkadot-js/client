@@ -6,11 +6,11 @@
 import type { UncheckedRaw } from '@polkadot/primitives/extrinsic';
 import type { ExecutorState } from '../types';
 
-const encodeLength = require('@polkadot/extrinsics-codec/encode/length');
+import encodeLength from '@polkadot/extrinsics-codec/encode/length';
 
-const call = require('./call');
+import call from './call';
 
-module.exports = function applyExtrinsic (self: ExecutorState, extrinsic: UncheckedRaw): boolean {
+export default function applyExtrinsic (self: ExecutorState, extrinsic: UncheckedRaw): boolean {
   const start = Date.now();
 
   self.l.debug(() => 'Apply extrinsic');
@@ -22,4 +22,4 @@ module.exports = function applyExtrinsic (self: ExecutorState, extrinsic: Unchec
   self.l.debug(() => `Apply extrinsic completed (${Date.now() - start}ms)`);
 
   return result.bool;
-};
+}

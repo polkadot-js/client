@@ -6,14 +6,14 @@
 import type { LibP2P$Connection } from 'libp2p';
 import type { PeerState } from './types';
 
-const Pushable = require('pull-pushable');
-const pull = require('pull-stream');
+import Pushable from 'pull-pushable';
+import pull from 'pull-stream';
 
-const statusMessage = require('../message/status');
-const receive = require('./receive');
-const send = require('./send');
+import statusMessage from '../message/status';
+import receive from './receive';
+import send from './send';
 
-module.exports = function addConnection (self: PeerState, connection: LibP2P$Connection, isWritable: boolean): void {
+export default function addConnection (self: PeerState, connection: LibP2P$Connection, isWritable: boolean): void {
   receive(self, connection);
 
   if (isWritable) {
@@ -31,4 +31,4 @@ module.exports = function addConnection (self: PeerState, connection: LibP2P$Con
       genesisHash: self.chain.genesis.headerHash
     }));
   }
-};
+}

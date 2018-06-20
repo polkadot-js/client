@@ -5,13 +5,13 @@
 
 import type { P2pState } from '../types';
 
-const Libp2p = require('libp2p');
+import Libp2p from 'libp2p';
 
-const createConfig = require('./config');
-const createListener = require('./listener');
-const createPeerBook = require('./peerBook');
+import createConfig from './config';
+import createListener from './listener';
+import createPeerBook from './peerBook';
 
-module.exports = async function createNode ({ config: { p2p: { address, port, nodes = [] } }, l }: P2pState): Promise<Libp2p> {
+export default async function createNode ({ config: { p2p: { address, port, nodes = [] } }, l }: P2pState): Promise<Libp2p> {
   const peerBook = await createPeerBook([]);
   const listener = await createListener(address, port);
   const nodeConfig = createConfig(listener, nodes);
@@ -20,4 +20,4 @@ module.exports = async function createNode ({ config: { p2p: { address, port, no
   l.log(`creating Libp2p with ${addrs.join(', ')}`);
 
   return new Libp2p(nodeConfig, listener, peerBook);
-};
+}

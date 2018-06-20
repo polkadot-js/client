@@ -5,9 +5,9 @@
 
 import type { DbState } from './types';
 
-module.exports = function del ({ pending }: DbState, k: Uint8Array): void {
+export default function del ({ pending }: DbState, k: Uint8Array): void {
   pending[k] = {
     k: k.slice(),
     v: null
   };
-};
+}

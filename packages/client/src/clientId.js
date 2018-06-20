@@ -3,38 +3,40 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
+import npmQuery from 'package-json';
+import semcmp from 'semver-compare';
+
 type PackageJson = {
   name: string,
   version: string
 };
 
-const npmQuery = require('package-json');
-const semcmp = require('semver-compare');
-
 const DEVELOPMENT = 'development';
-
-const name = 'polkadot-js';
 let pkgJson: PackageJson;
-let stability = 'release';
+let _stability = 'release';
 
 try {
   // $FlowFixMe production version
   pkgJson = require('./package.json');
 } catch (error) {
-  stability = DEVELOPMENT;
+  _stability = DEVELOPMENT;
   // flowlint-next-line untyped-import:off
   pkgJson = require('../package.json');
 }
 
-const isDevelopment = stability === DEVELOPMENT;
+export const name = 'polkadot-js';
+export const stability = _stability;
+export const version = pkgJson.version;
+export const isDevelopment = stability === DEVELOPMENT;
+export const clientId = `${name}/${version}-${stability}`;
 
-async function getNpmVersion (): Promise<string> {
+export async function getNpmVersion (): Promise<string> {
   return npmQuery(pkgJson.name)
     .then((npmJson: PackageJson) => npmJson.version)
     .catch(() => 'unknown');
 }
 
-async function getNpmStatus (): Promise<string> {
+export async function getNpmStatus (): Promise<string> {
   const verNpm = await getNpmVersion();
 
   if (verNpm === 'unknown') {
@@ -52,13 +54,3 @@ async function getNpmStatus (): Promise<string> {
       return `outdated, ${verNpm} available`;
   }
 }
-
-module.exports = {
-  clientId: `${name}/${pkgJson.version}-${stability}`,
-  isDevelopment,
-  getNpmStatus,
-  getNpmVersion,
-  name,
-  stability,
-  version: pkgJson.version
-};

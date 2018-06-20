@@ -7,16 +7,16 @@ import type { MessageInterface } from '../../types';
 import type { StatusMessage } from '../types';
 import type { StatusEncoded } from './types';
 
-const BN = require('bn.js');
+import BN from 'bn.js';
 
-const defaults = require('../../defaults');
-const base = require('../base');
-const rawDecode = require('./rawDecode');
-const rawEncode = require('./rawEncode');
+import defaults from '../../defaults';
+import base from '../base';
+import rawDecode from './rawDecode';
+import rawEncode from './rawEncode';
 
 const TYPE: number = 0;
 
-module.exports = function status ({ bestHash = new Uint8Array(32), bestNumber = new BN(0), genesisHash = new Uint8Array(32), parachainId = new BN(0), roles = ['none'], validatorId = new Uint8Array(32), validatorSignature = new Uint8Array(64), version = defaults.PROTOCOL_VERSION }: $Shape<StatusMessage>): MessageInterface {
+export default function status ({ bestHash = new Uint8Array(32), bestNumber = new BN(0), genesisHash = new Uint8Array(32), parachainId = new BN(0), roles = ['none'], validatorId = new Uint8Array(32), validatorSignature = new Uint8Array(64), version = defaults.PROTOCOL_VERSION }: $Shape<StatusMessage>): MessageInterface {
   const raw: StatusMessage = {
     bestHash,
     bestNumber,
@@ -35,6 +35,6 @@ module.exports = function status ({ bestHash = new Uint8Array(32), bestNumber = 
     rawEncode: (): StatusEncoded =>
       rawEncode(raw)
   });
-};
+}
 
-module.exports.TYPE = TYPE;
+status.TYPE = TYPE;

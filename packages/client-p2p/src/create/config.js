@@ -5,17 +5,17 @@
 
 import type { P2pNodes } from '../types';
 
-const DHT = require('libp2p-kad-dht');
-const mplex = require('libp2p-mplex');
-// const Multicast = require('libp2p-mdns');
-const Railing = require('libp2p-railing');
-// const secio = require('libp2p-secio');
-const spdy = require('libp2p-spdy');
-const TCP = require('libp2p-tcp');
-const PeerInfo = require('peer-info');
-// const WS = require('libp2p-websockets');
+import DHT from 'libp2p-kad-dht';
+import mplex from 'libp2p-mplex';
+// import Multicast from 'libp2p-mdns';
+import Railing from 'libp2p-railing';
+// import secio from 'libp2p-secio';
+import spdy from 'libp2p-spdy';
+import TCP from 'libp2p-tcp';
+import PeerInfo from 'peer-info';
+// import WS from 'libp2p-websockets';
 
-module.exports = function createConfig (peerInfo: PeerInfo, bootNodes: P2pNodes): LibP2P$Config {
+export default function createConfig (peerInfo: PeerInfo, bootNodes: P2pNodes): LibP2P$Config {
   return {
     connection: {
       crypto: [
@@ -36,4 +36,4 @@ module.exports = function createConfig (peerInfo: PeerInfo, bootNodes: P2pNodes)
       // new WS()
     ]
   };
-};
+}

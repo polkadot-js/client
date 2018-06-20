@@ -3,17 +3,20 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-require('./license.js');
+import './license.js';
 
-const createChain = require('@polkadot/client-chains');
-const memoryDb = require('@polkadot/util-triedb/temp');
-const createP2p = require('@polkadot/client-p2p');
-const l = require('@polkadot/util/logger')('client');
+import createChain from '@polkadot/client-chains';
+import memoryDb from '@polkadot/util-triedb/temp';
+import createP2p from '@polkadot/client-p2p';
+import logger from '@polkadot/util/logger';
 
-const clientId = require('./clientId');
-const config = require('./cli')();
-const initDev = require('./dev');
-const createRpc = require('./rpc');
+import * as clientId from './clientId';
+import cli from './cli';
+import initDev from './dev';
+import createRpc from './rpc';
+
+const l = logger('client');
+const config = cli();
 
 (async function main (): Promise<void> {
   const verStatus = await clientId.getNpmStatus();

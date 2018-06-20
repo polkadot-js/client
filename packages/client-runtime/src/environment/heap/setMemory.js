@@ -5,7 +5,7 @@
 
 import type { HeapState } from './types';
 
-module.exports = function setMemory (state: HeapState, { buffer }: WebAssembly.Memory, offset?: number = 256 * 1024): void {
+export default function setMemory (state: HeapState, { buffer }: WebAssembly.Memory, offset?: number = 256 * 1024): void {
   const uint8 = new Uint8Array(buffer);
 
   state.memory = {
@@ -16,4 +16,4 @@ module.exports = function setMemory (state: HeapState, { buffer }: WebAssembly.M
     uint8,
     view: new DataView(uint8.buffer)
   };
-};
+}

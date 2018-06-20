@@ -6,6 +6,6 @@
 import type { Pointer } from '../../types';
 import type { Memory } from './types';
 
-module.exports = function dup (memory: Memory, ptr: Pointer, len: number): Uint8Array {
+export default function dup (memory: Memory, ptr: Pointer, len: number): Uint8Array {
   return memory.uint8.slice(ptr, ptr + len);
-};
+}

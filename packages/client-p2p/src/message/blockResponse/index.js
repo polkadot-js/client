@@ -7,13 +7,13 @@ import type { MessageInterface } from '../../types';
 import type { BlockResponseMessage } from '../types';
 import type { BlockResponseEncoded } from './types';
 
-const base = require('../base');
-const rawDecode = require('./rawDecode');
-const rawEncode = require('./rawEncode');
+import base from '../base';
+import rawDecode from './rawDecode';
+import rawEncode from './rawEncode';
 
 const TYPE: number = 2;
 
-module.exports = function blockResponse ({ blocks = [], id = 0 }: $Shape<BlockResponseMessage>): MessageInterface {
+export default function blockResponse ({ blocks = [], id = 0 }: $Shape<BlockResponseMessage>): MessageInterface {
   const raw: BlockResponseMessage = {
     blocks,
     id
@@ -26,6 +26,6 @@ module.exports = function blockResponse ({ blocks = [], id = 0 }: $Shape<BlockRe
     rawEncode: (): BlockResponseEncoded =>
       rawEncode(raw)
   });
-};
+}
 
-module.exports.TYPE = TYPE;
+blockResponse.TYPE = TYPE;

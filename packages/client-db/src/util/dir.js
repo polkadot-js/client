@@ -5,13 +5,13 @@
 
 import type { DbPathPrefix } from '../types';
 
-const mkdirp = require('mkdirp');
-const path = require('path');
+import mkdirp from 'mkdirp';
+import path from 'path';
 
-module.exports = function createDir (rootDir: string, prefix: DbPathPrefix, subDir: string): string {
+export default function createDir (rootDir: string, prefix: DbPathPrefix, subDir: string): string {
   const location = path.join(rootDir, prefix, subDir);
 
   mkdirp.sync(location);
 
   return location;
-};
+}

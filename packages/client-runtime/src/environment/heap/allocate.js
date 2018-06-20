@@ -6,9 +6,9 @@
 import type { Pointer } from '../../types';
 import type { Memory } from './types';
 
-const freealloc = require('./freealloc');
+import freealloc from './freealloc';
 
-module.exports = function allocate (memory: Memory, size: number): Pointer {
+export default function allocate (memory: Memory, size: number): Pointer {
   if (size === 0) {
     return 0;
   }
@@ -24,4 +24,4 @@ module.exports = function allocate (memory: Memory, size: number): Pointer {
   }
 
   return freealloc(memory, size);
-};
+}

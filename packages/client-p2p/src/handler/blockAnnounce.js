@@ -6,13 +6,13 @@
 import type { BlockAnnounceMessage } from '../message/types';
 import type { P2pState, MessageInterface, PeerInterface } from '../types';
 
-const encodeHeader = require('@polkadot/primitives-codec/header/encode');
-const blake2Asu8a = require('@polkadot/util-crypto/blake2/asU8a');
+import encodeHeader from '@polkadot/primitives-codec/header/encode';
+import blake2Asu8a from '@polkadot/util-crypto/blake2/asU8a';
 
-const message = require('../message/blockAnnounce');
-const requestsBlocks = require('../sync/requestBlocks');
+import message from '../message/blockAnnounce';
+import requestsBlocks from '../sync/requestBlocks';
 
-module.exports = function handleBlockAnnounce (self: P2pState, peer: PeerInterface, message: MessageInterface): void {
+export default function handleBlockAnnounce (self: P2pState, peer: PeerInterface, message: MessageInterface): void {
   self.l.debug(() => [peer.shortId, 'BlockAnnounce', JSON.stringify(message.encode().message)]);
 
   const header = (message.raw: BlockAnnounceMessage).header;
@@ -25,6 +25,6 @@ module.exports = function handleBlockAnnounce (self: P2pState, peer: PeerInterfa
   }
 
   requestsBlocks(self, peer);
-};
+}
 
-module.exports.TYPE = message.TYPE;
+handleBlockAnnounce.TYPE = message.TYPE;

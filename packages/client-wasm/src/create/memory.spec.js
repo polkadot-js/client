@@ -2,10 +2,10 @@
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
 
-const isInstanceOf = require('@polkadot/util/is/instanceOf');
+import isInstanceOf from '@polkadot/util/is/instanceOf';
 
-const { HEAP_SIZE_KB } = require('../defaults');
-const createMemory = require('./memory');
+import defaults from '../defaults';
+import createMemory from './memory';
 
 describe('createMemory', () => {
   let globalWasm;
@@ -40,8 +40,8 @@ describe('createMemory', () => {
     expect(
       constructInstanceSpy
     ).toHaveBeenCalledWith({
-      initial: HEAP_SIZE_KB / 16,
-      maximum: HEAP_SIZE_KB / 16
+      initial: defaults.HEAP_SIZE_KB / 16,
+      maximum: defaults.HEAP_SIZE_KB / 16
     });
   });
 

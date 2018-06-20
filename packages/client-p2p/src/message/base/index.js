@@ -6,10 +6,10 @@
 import type { MessageInterface, RawMessage } from '../../types';
 import type { MessageImpl } from '../types';
 
-const decode = require('./decode');
-const encode = require('./encode');
+import decode from './decode';
+import encode from './encode';
 
-module.exports = function base (type: number, impl: MessageImpl): MessageInterface {
+export default function base (type: number, impl: MessageImpl): MessageInterface {
   const self = {
     type,
     impl
@@ -24,4 +24,4 @@ module.exports = function base (type: number, impl: MessageImpl): MessageInterfa
     raw: impl.raw,
     type
   };
-};
+}

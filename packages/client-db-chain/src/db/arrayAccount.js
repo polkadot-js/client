@@ -3,6 +3,6 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-const arrayU8a = require('./arrayU8a');
+import arrayU8a from './arrayU8a';
 
-module.exports = arrayU8a;
+export default arrayU8a;

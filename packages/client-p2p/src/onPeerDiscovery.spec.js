@@ -2,10 +2,12 @@
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
 
-const EventEmitter = require('eventemitter3');
-const l = require('@polkadot/util/logger')('test');
+import EventEmitter from 'eventemitter3';
+import logger from '@polkadot/util/logger';
 
-const onPeerDiscovery = require('./onPeerDiscovery');
+import onPeerDiscovery from './onPeerDiscovery';
+
+const l = logger('test');
 
 describe('onPeerDiscovery', () => {
   let peer;

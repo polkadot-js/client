@@ -2,13 +2,13 @@
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
 
-const Railing = require('libp2p-railing');
-const PeerInfo = require('peer-info');
+import Railing from 'libp2p-railing';
+import PeerInfo from 'peer-info';
 
-const isInstanceOf = require('@polkadot/util/is/instanceOf');
-const promisify = require('@polkadot/util/promisify');
+import isInstanceOf from '@polkadot/util/is/instanceOf';
+import promisify from '@polkadot/util/promisify';
 
-const createConfig = require('./config');
+import createConfig from './config';
 
 // FIXMe times out on CI
 describe.skip('createConfig', () => {

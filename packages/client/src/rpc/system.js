@@ -6,7 +6,7 @@
 import type { ChainInterface } from '@polkadot/client-chains/types';
 import type { Config, Endpoint } from '../types';
 
-const clientId = require('../clientId');
+import * as clientId from '../clientId';
 
 const systemChain = ({ chain }: Config): () => Promise<string> =>
   async (): Promise<string> =>
@@ -18,7 +18,7 @@ const systemName = async (): Promise<string> =>
 const systemVersion = async (): Promise<string> =>
   clientId.version;
 
-module.exports = (config: Config, chain: ChainInterface): Endpoint => ({
+export default (config: Config, chain: ChainInterface): Endpoint => ({
   'system_chain': systemChain(config),
   'system_name': systemName,
   'system_version': systemVersion

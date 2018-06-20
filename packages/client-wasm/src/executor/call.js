@@ -6,21 +6,21 @@
 import type { ExecutorState } from '../types';
 import type { CallResult } from './types';
 
+import storage from '@polkadot/storage';
+import key from '@polkadot/storage/key';
+import u8aToHex from '@polkadot/util/u8a/toHex';
+
+import createWasm from '../create';
+import proxy from '../wasm/proxy_substrate.wasm.js';
+
 type Call = (...data: Array<Uint8Array>) => CallResult;
 
-const storage = require('@polkadot/storage');
-const key = require('@polkadot/storage/key');
-const u8aToHex = require('@polkadot/util/u8a/toHex');
-
-const createWasm = require('../create');
-const proxy = require('../wasm/proxy_substrate.wasm.js');
-
 // NOTE testing only, comparing results
-// const code = require('../wasm/polkadot_runtime.compact.wasm.js');
+// const code from '../wasm/polkadot_runtime.compact.wasm.js');
 
 const CODE_KEY = key(storage.consensus.public.code)();
 
-module.exports = function call ({ config, genesis, l, runtime, stateDb }: ExecutorState, name: string): Call {
+export default function call ({ config, genesis, l, runtime, stateDb }: ExecutorState, name: string): Call {
   const code = stateDb.db.get(CODE_KEY) || genesis.code;
   const instance = createWasm({ config, l }, runtime, code, proxy);
   const { heap } = runtime.environment;
@@ -55,4 +55,4 @@ module.exports = function call ({ config, genesis, l, runtime, stateDb }: Execut
       lo
     };
   };
-};
+}

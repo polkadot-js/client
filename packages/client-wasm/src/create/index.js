@@ -7,15 +7,15 @@ import type { Config } from '@polkadot/client/types';
 import type { RuntimeInterface } from '@polkadot/client-runtime/types';
 import type { Logger } from '@polkadot/util/types';
 
+import defaults from '../defaults';
+import createEnv from './env';
+import createExports from './exports';
+import createMemory from './memory';
+
 type Options = {
   config: Config,
   l: Logger
 }
-
-const { HEAP_SIZE_KB } = require('../defaults');
-const createEnv = require('./env');
-const createExports = require('./exports');
-const createMemory = require('./memory');
 
 function instrument <T> (name: string, elapsed: Array<string>, fn: () => T): T {
   const start = Date.now();
@@ -26,7 +26,7 @@ function instrument <T> (name: string, elapsed: Array<string>, fn: () => T): T {
   return result;
 }
 
-module.exports = function wasm ({ config: { wasm: { heapSize = HEAP_SIZE_KB } }, l }: Options, runtime: RuntimeInterface, chainCode: Uint8Array, chainProxy: Uint8Array): WebAssemblyInstance$Exports {
+export default function wasm ({ config: { wasm: { heapSize = defaults.HEAP_SIZE_KB } }, l }: Options, runtime: RuntimeInterface, chainCode: Uint8Array, chainProxy: Uint8Array): WebAssemblyInstance$Exports {
   const elapsed = [];
   const env = instrument('runtime', elapsed, (): WebAssemblyInstance$Exports =>
     createEnv(runtime, createMemory(0, 0))
@@ -45,4 +45,4 @@ module.exports = function wasm ({ config: { wasm: { heapSize = HEAP_SIZE_KB } },
   l.debug(() => `WASM created ${elapsed.join(', ')}`);
 
   return instance;
-};
+}

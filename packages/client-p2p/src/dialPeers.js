@@ -5,14 +5,14 @@
 
 import type { P2pState, PeerInterface } from './types';
 
+import promisify from '@polkadot/util/promisify';
+
+import defaults from './defaults';
+
 type QueuedPeer = {
   peer: PeerInterface,
   isDialled: boolean
 };
-
-const promisify = require('@polkadot/util/promisify');
-
-const defaults = require('./defaults');
 
 const dialQueue: Array<QueuedPeer> = [];
 
@@ -30,7 +30,7 @@ async function dialPeer ({ chain, config, l, node }: P2pState, peer: PeerInterfa
   }
 }
 
-module.exports = function dialPeers (self: P2pState, peer?: PeerInterface): void {
+export default function dialPeers (self: P2pState, peer?: PeerInterface): void {
   if (peer !== undefined) {
     dialQueue.push({
       isDialled: false,
@@ -53,4 +53,4 @@ module.exports = function dialPeers (self: P2pState, peer?: PeerInterface): void
       dialPeer(self, item.peer);
     }
   );
-};
+}

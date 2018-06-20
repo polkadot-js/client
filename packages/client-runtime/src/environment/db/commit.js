@@ -6,12 +6,12 @@
 import type { Trie$Pairs } from '@polkadot/util-triehash/types';
 import type { DbState } from './types';
 
-const clear = require('./clear');
-const pairs = require('./pairs');
+import clear from './clear';
+import pairs from './pairs';
 
-module.exports = function commit (self: DbState, values: Trie$Pairs): void {
+export default function commit (self: DbState, values: Trie$Pairs): void {
   self.backend.commit(
     pairs(self).concat(values)
   );
   clear(self);
-};
+}

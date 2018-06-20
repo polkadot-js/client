@@ -5,10 +5,10 @@
 
 import type { Config } from '../types';
 
-const getArgv = require('./argv');
-const keyToCamel = require('./keyToCamel');
+import getArgv from './argv';
+import keyToCamel from './keyToCamel';
 
-module.exports = function cli (params?: string): Config {
+export default function cli (params?: string): Config {
   const argv = getArgv(params);
 
   return Object
@@ -28,4 +28,4 @@ module.exports = function cli (params?: string): Config {
 
       return config;
     }, ({}: $Shape<Config>));
-};
+}

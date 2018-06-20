@@ -5,12 +5,12 @@
 
 import type { ExecutorState, Executor$BlockImportResult } from '../types';
 
-const decodeRaw = require('@polkadot/primitives-codec/block/decodeRaw');
-const blake2Asu8a = require('@polkadot/util-crypto/blake2/asU8a');
+import decodeRaw from '@polkadot/primitives-codec/block/decodeRaw';
+import blake2Asu8a from '@polkadot/util-crypto/blake2/asU8a';
 
-const executeBlock = require('./executeBlock');
+import executeBlock from './executeBlock';
 
-module.exports = function importBlock (self: ExecutorState, block: Uint8Array): Executor$BlockImportResult {
+export default function importBlock (self: ExecutorState, block: Uint8Array): Executor$BlockImportResult {
   const start = Date.now();
 
   self.l.debug(() => 'Importing block');
@@ -34,4 +34,4 @@ module.exports = function importBlock (self: ExecutorState, block: Uint8Array): 
     headerHash,
     header
   };
-};
+}

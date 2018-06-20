@@ -5,13 +5,13 @@
 
 import type { ExecutorState } from '../types';
 
+import u8aToHex from '@polkadot/util/u8a/toHex';
+
+import call from './call';
+
 export type CallU8a = (...data: Array<Uint8Array>) => Uint8Array;
 
-const u8aToHex = require('@polkadot/util/u8a/toHex');
-
-const call = require('./call');
-
-module.exports = function callAsU8a (self: ExecutorState, name: string): CallU8a {
+export default function callAsU8a (self: ExecutorState, name: string): CallU8a {
   const fn = call(self, name);
   const { l, heap } = self.runtime.environment;
 
@@ -23,4 +23,4 @@ module.exports = function callAsU8a (self: ExecutorState, name: string): CallU8a
 
     return result;
   };
-};
+}

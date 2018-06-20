@@ -8,9 +8,9 @@ import type { SyncState$Request } from './types';
 
 type Requests = Array<SyncState$Request>;
 
-module.exports = function peerRequests ({ sync: { blockRequests } }: P2pState, peer: PeerInterface): Requests {
+export default function peerRequests ({ sync: { blockRequests } }: P2pState, peer: PeerInterface): Requests {
   // flowlint-next-line unclear-type:off
-  const requests = ((Object.values(blockRequests): any): Requests);
+  const requests: Requests = (Object.values(blockRequests): any);
 
   return requests.filter(({ peer: { id } }) => peer.id === id);
-};
+}

@@ -6,13 +6,13 @@
 import type { LibP2P$Connection } from 'libp2p';
 import type { PeerState } from './types';
 
-const pull = require('pull-stream');
-const bufferToU8a = require('@polkadot/util/buffer/toU8a');
-const u8aToHex = require('@polkadot/util/u8a/toHex');
+import pull from 'pull-stream';
+import bufferToU8a from '@polkadot/util/buffer/toU8a';
+import u8aToHex from '@polkadot/util/u8a/toHex';
 
-const decode = require('../message/decode');
+import decode from '../message/decode';
 
-module.exports = function receive ({ emitter, l }: PeerState, connection: LibP2P$Connection): boolean {
+export default function receive ({ emitter, l }: PeerState, connection: LibP2P$Connection): boolean {
   try {
     pull(
       connection,
@@ -34,4 +34,4 @@ module.exports = function receive ({ emitter, l }: PeerState, connection: LibP2P
   }
 
   return true;
-};
+}

@@ -5,9 +5,9 @@
 
 import type { Options } from 'yargs';
 
-const defaults = require('@polkadot/client-p2p/defaults');
+import defaults from '@polkadot/client-p2p/defaults';
 
-module.exports = ({
+export default ({
   'p2p-address': {
     default: defaults.ADDRESS,
     description: 'The interface to bind to (p2p-port > 0)',

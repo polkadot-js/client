@@ -5,9 +5,9 @@
 
 import type { RuntimeEnv, RuntimeInterface$Chain } from '../types';
 
-const instrument = require('../instrument');
+import instrument from '../instrument';
 
-module.exports = function ({ l }: RuntimeEnv): RuntimeInterface$Chain {
+export default function ({ l }: RuntimeEnv): RuntimeInterface$Chain {
   return {
     chain_id: (): number =>
       instrument('chain_id', () => {
@@ -17,4 +17,4 @@ module.exports = function ({ l }: RuntimeEnv): RuntimeInterface$Chain {
         return 0;
       })
   };
-};
+}

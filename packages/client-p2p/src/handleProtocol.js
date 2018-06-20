@@ -6,12 +6,12 @@
 import type { LibP2P$Connection } from 'libp2p';
 import type { P2pState } from './types';
 
-const promisify = require('@polkadot/util/promisify');
+import promisify from '@polkadot/util/promisify';
 
-const defaults = require('./defaults');
-const dialPeers = require('./dialPeers');
+import defaults from './defaults';
+import dialPeers from './dialPeers';
 
-module.exports = function handleProtocol (self: P2pState): void {
+export default function handleProtocol (self: P2pState): void {
   const { l, node, peers } = self;
 
   node.handle(
@@ -37,4 +37,4 @@ module.exports = function handleProtocol (self: P2pState): void {
       callback(null, requested.indexOf(defaults.PROTOCOL) === 0);
     }
   );
-};
+}

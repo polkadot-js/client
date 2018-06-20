@@ -5,6 +5,6 @@
 
 import type { DbState } from './types';
 
-module.exports = function clear (self: DbState): void {
+export default function clear (self: DbState): void {
   self.pending = {};
-};
+}

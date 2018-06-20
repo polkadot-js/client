@@ -6,13 +6,13 @@
 import type { BlockResponseMessage } from '../message/types';
 import type { P2pState, MessageInterface, PeerInterface } from '../types';
 
-const message = require('../message/blockResponse');
-const queueBlocks = require('../sync/queueBlocks');
+import message from '../message/blockResponse';
+import queueBlocks from '../sync/queueBlocks';
 
-module.exports = function handleBlockResponse (self: P2pState, peer: PeerInterface, message: MessageInterface): void {
+export default function handleBlockResponse (self: P2pState, peer: PeerInterface, message: MessageInterface): void {
   self.l.debug(() => [peer.shortId, 'BlockResponse', JSON.stringify(message.encode().message)]);
 
   queueBlocks(self, peer, (message.raw: BlockResponseMessage));
-};
+}
 
-module.exports.TYPE = message.TYPE;
+handleBlockResponse.TYPE = message.TYPE;

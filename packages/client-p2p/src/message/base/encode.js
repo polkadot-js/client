@@ -6,9 +6,9 @@
 import type { RawMessage } from '../../types';
 import type { MessageState } from '../types';
 
-module.exports = function encode (self: MessageState): RawMessage {
+export default function encode (self: MessageState): RawMessage {
   return {
     message: self.impl.rawEncode(),
     type: self.type
   };
-};
+}

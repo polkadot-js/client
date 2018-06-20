@@ -6,8 +6,8 @@
 import type { Pointer } from '../../types';
 import type { Memory } from './types';
 
-module.exports = function setU32 (memory: Memory, ptr: Pointer, value: number): Pointer {
+export default function setU32 (memory: Memory, ptr: Pointer, value: number): Pointer {
   memory.view.setUint32(ptr, value, true);
 
   return ptr;
-};
+}

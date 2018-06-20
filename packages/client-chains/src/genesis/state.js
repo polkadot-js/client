@@ -5,12 +5,12 @@
 
 import type { ChainState, ChainGenesisState } from '../types';
 
-const hexToU8a = require('@polkadot/util/hex/toU8a');
+import hexToU8a from '@polkadot/util/hex/toU8a';
 
-module.exports = function genesisState ({ stateDb: { db } }: ChainState, initial: ChainGenesisState): void {
+export default function genesisState ({ stateDb: { db } }: ChainState, initial: ChainGenesisState): void {
   Object.keys(initial).forEach((key) =>
     db.set(hexToU8a(key), hexToU8a(initial[key]))
   );
 
   db.commit();
-};
+}

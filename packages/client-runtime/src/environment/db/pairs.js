@@ -6,13 +6,13 @@
 import type { Trie$Pairs } from '@polkadot/util-triehash/types';
 import type { DbState } from './types';
 
-module.exports = function pairs ({ backend, pending }: DbState): Trie$Pairs {
+export default function pairs ({ backend, pending }: DbState): Trie$Pairs {
   // flowlint-next-line unclear-type:off
-  const pendingKeys = ((Object.keys(pending): any): Array<Uint8Array>);
+  const pendingKeys: Array<Uint8Array> = (Object.keys(pending): any);
   const pendingPairs: Trie$Pairs = pendingKeys
     .filter((k) => pending[k].v !== null)
     // $FlowFixMe nulls have been filtered
     .map((k) => pending[k]);
 
   return (backend ? backend.pairs() : []).concat(pendingPairs);
-};
+}

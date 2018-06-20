@@ -6,10 +6,10 @@
 import type { BlockResponseMessage, BlockResponseMessage$BlockData } from '../types';
 import type { BlockResponseEncoded } from './types';
 
-const bytesDecode = require('@polkadot/primitives-json/bytes/decode');
-const hashDecode = require('@polkadot/primitives-json/hash/decode');
+import bytesDecode from '@polkadot/primitives-json/bytes/decode';
+import hashDecode from '@polkadot/primitives-json/hash/decode';
 
-module.exports = function rawDecode (raw: BlockResponseMessage, { id, blocks }: BlockResponseEncoded): BlockResponseMessage {
+export default function rawDecode (raw: BlockResponseMessage, { id, blocks }: BlockResponseEncoded): BlockResponseMessage {
   raw.id = id;
   raw.blocks = blocks.map(({ body, hash, header }) => {
     const result: BlockResponseMessage$BlockData = {
@@ -30,4 +30,4 @@ module.exports = function rawDecode (raw: BlockResponseMessage, { id, blocks }: 
   });
 
   return raw;
-};
+}

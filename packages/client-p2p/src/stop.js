@@ -5,9 +5,9 @@
 
 import type { P2pState } from './types';
 
-const promisify = require('@polkadot/util/promisify');
+import promisify from '@polkadot/util/promisify';
 
-module.exports = async function stop (self: P2pState): Promise<boolean> {
+export default async function stop (self: P2pState): Promise<boolean> {
   if (!self.node) {
     return false;
   }
@@ -26,4 +26,4 @@ module.exports = async function stop (self: P2pState): Promise<boolean> {
   self.emitter.emit('stopped');
 
   return true;
-};
+}

@@ -9,9 +9,9 @@ import type { PeersState } from './types';
 // flowlint-next-line unclear-type:off
 type EmitterOn = (type: PeersInterface$Events, cb: (peer: any) => void) => void;
 
-module.exports = function emitterOn (self: PeersState): EmitterOn {
+export default function emitterOn (self: PeersState): EmitterOn {
   // flowlint-next-line unclear-type:off
   return (type: PeersInterface$Events, cb: (peer: any) => void): void => {
     self.emitter.on(type, cb);
   };
-};
+}

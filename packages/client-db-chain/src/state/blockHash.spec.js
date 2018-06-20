@@ -2,10 +2,10 @@
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
 
-const hexToU8a = require('@polkadot/util/hex/toU8a');
-const u8aToHex = require('@polkadot/util/u8a/toHex');
+import hexToU8a from '@polkadot/util/hex/toU8a';
+import u8aToHex from '@polkadot/util/u8a/toHex';
 
-const db = require('./index');
+import db from './index';
 
 const TEST_HASH = hexToU8a('0x1025e5db74fdaf4d2818822dccf0e1604ae9ccc62f26cecfde23448ff0248abf');
 

@@ -16,7 +16,7 @@ const PROTOCOL_TYPE = '/dot';
 const PROTOCOL_VERSION = 0;
 const PROTOCOL = `${PROTOCOL_BASE}${PROTOCOL_TYPE}/${PROTOCOL_VERSION}`;
 
-module.exports = {
+export default {
   ADDRESS,
   CLIENT_ID,
   MAX_PEERS,

@@ -5,7 +5,7 @@
 
 import type { RuntimeEnv$Heap, Pointer } from '../types';
 
-module.exports = function memcmp (heap: RuntimeEnv$Heap, s1: Pointer, s2: Pointer, length: number): number {
+export default function memcmp (heap: RuntimeEnv$Heap, s1: Pointer, s2: Pointer, length: number): number {
   const v1 = heap.get(s1, length);
   const v2 = heap.get(s2, length);
 
@@ -18,4 +18,4 @@ module.exports = function memcmp (heap: RuntimeEnv$Heap, s1: Pointer, s2: Pointe
   }
 
   return 0;
-};
+}

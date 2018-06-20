@@ -5,7 +5,7 @@
 
 import type { Options } from 'yargs';
 
-module.exports = ({
+export default ({
   'dev-gen-blocks': {
     default: false,
     description: '(unused) Generate sample blocks',

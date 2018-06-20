@@ -6,7 +6,7 @@
 const NAME: string = 'dot';
 const VERSION: string = '0.0.0';
 
-module.exports = {
+export default {
   NAME,
   VERSION
 };

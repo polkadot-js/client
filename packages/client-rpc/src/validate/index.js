@@ -3,11 +3,11 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
-const validateConfig = require('./config');
-const validateHandlers = require('./handlers');
-const validateRequest = require('./request');
+import validateConfig from './config';
+import validateHandlers from './handlers';
+import validateRequest from './request';
 
-module.exports = {
+export {
   validateConfig,
   validateHandlers,
   validateRequest

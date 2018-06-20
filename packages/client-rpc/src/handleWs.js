@@ -5,11 +5,11 @@
 
 import type { RpcState, WsContext } from './types';
 
+import handleMessage from './handleMessage';
+
 type Handler = (ctx: WsContext) => void;
 
-const handleMessage = require('./handleMessage');
-
-module.exports = function handleWs (self: RpcState): Handler {
+export default function handleWs (self: RpcState): Handler {
   return (ctx: WsContext): void => {
     ctx.websocket.on('message', async (message: string) => {
       const response = await handleMessage(self, message, ctx.websocket);
@@ -19,4 +19,4 @@ module.exports = function handleWs (self: RpcState): Handler {
       );
     });
   };
-};
+}

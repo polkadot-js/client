@@ -6,11 +6,11 @@
 import type { BlockResponseMessage } from '../message/types';
 import type { P2pState, PeerInterface } from '../types';
 
-const decodeHeader = require('@polkadot/primitives-codec/header/decodeRaw');
+import decodeHeader from '@polkadot/primitives-codec/header/decodeRaw';
 
-const processBlocks = require('./processBlocks');
+import processBlocks from './processBlocks';
 
-module.exports = function queueBlocks (self: P2pState, peer: PeerInterface, { blocks, id }: BlockResponseMessage): void {
+export default function queueBlocks (self: P2pState, peer: PeerInterface, { blocks, id }: BlockResponseMessage): void {
   const request = self.sync.blockRequests[peer.id];
 
   delete self.sync.blockRequests[peer.id];
@@ -23,7 +23,7 @@ module.exports = function queueBlocks (self: P2pState, peer: PeerInterface, { bl
   const count = blocks.reduce((count, block) => {
     const hasImported = self.chain.blocks.block.get(block.hash).length !== 0;
     // flowlint-next-line unclear-type:off
-    const { number } = decodeHeader(((block.header: any): Uint8Array));
+    const { number } = decodeHeader((block.header: any));
     const hasQueued = !!self.sync.blockQueue[number];
 
     if (hasImported && hasQueued) {
@@ -38,4 +38,4 @@ module.exports = function queueBlocks (self: P2pState, peer: PeerInterface, { bl
   self.l.log(`Added ${count} blocks from ${peer.shortId}`);
 
   processBlocks(self);
-};
+}

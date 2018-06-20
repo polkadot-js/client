@@ -14,7 +14,7 @@ type Base <T> = {
 
 type Subscribers <T> = Array<(value: T, raw: Uint8Array) => void>;
 
-module.exports = function base <T> (db: TrieDb): Base<T> {
+export default function base <T> (db: TrieDb): Base<T> {
   const subscribers: Subscribers<T> = [];
 
   return {
@@ -32,4 +32,4 @@ module.exports = function base <T> (db: TrieDb): Base<T> {
       subscribers.push(subscriber);
     }
   };
-};
+}

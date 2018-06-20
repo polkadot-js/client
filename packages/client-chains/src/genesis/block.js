@@ -5,17 +5,17 @@
 
 import type { ChainState, ChainGenesis } from '../types';
 
-const createBlock = require('@polkadot/primitives-builder/block');
-const encodeBlock = require('@polkadot/primitives-codec/block/encode');
-const encodeHeader = require('@polkadot/primitives-codec/header/encode');
-const storage = require('@polkadot/storage');
-const key = require('@polkadot/storage/key');
-const blake2Asu8a = require('@polkadot/util-crypto/blake2/asU8a');
-const trieRoot = require('@polkadot/util-triehash/root');
+import createBlock from '@polkadot/primitives-builder/block';
+import encodeBlock from '@polkadot/primitives-codec/block/encode';
+import encodeHeader from '@polkadot/primitives-codec/header/encode';
+import storage from '@polkadot/storage';
+import key from '@polkadot/storage/key';
+import blake2Asu8a from '@polkadot/util-crypto/blake2/asU8a';
+import trieRoot from '@polkadot/util-triehash/root';
 
 const CODE_KEY = key(storage.consensus.public.code)();
 
-module.exports = function genesisBlock ({ stateDb: { db }, chain }: ChainState): ChainGenesis {
+export default function genesisBlock ({ stateDb: { db }, chain }: ChainState): ChainGenesis {
   const code = db.get(CODE_KEY);
 
   if (code === null) {
@@ -39,4 +39,4 @@ module.exports = function genesisBlock ({ stateDb: { db }, chain }: ChainState):
     header: block.header,
     headerHash
   };
-};
+}

@@ -9,6 +9,6 @@ import type { Config, Endpoint } from '../types';
 const newHead = async (): Promise<string> =>
   'chain_newHead';
 
-module.exports = (config: Config, chain: ChainInterface): Endpoint => ({
+export default (config: Config, chain: ChainInterface): Endpoint => ({
   'subscribe_newHead': newHead
 });
