@@ -34,10 +34,10 @@
     "test": "echo \"Tests only available from root wrapper\""
   },
   "dependencies": {
-    "@babel/runtime": "^7.0.0-beta.47",
+    "@babel/runtime": "^7.0.0-beta.51",
     "@polkadot/client-state": "^0.8.6",
-    "@polkadot/util": "^0.24.3",
-    "@polkadot/util-triedb": "^0.24.3",
+    "@polkadot/util": "^0.24.5",
+    "@polkadot/util-triedb": "^0.24.5",
     "@types/mkdirp": "^0.5.2",
     "mkdirp": "^0.5.1"
   },

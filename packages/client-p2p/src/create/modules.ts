@@ -14,7 +14,7 @@ import TCP from 'libp2p-tcp';
 import PeerInfo from 'peer-info';
 // import WS from 'libp2p-websockets';
 
-export default function createConfig (peerInfo: PeerInfo, bootNodes: P2pNodes): LibP2P$Config {
+export default function createModules (peerInfo: PeerInfo, bootNodes: P2pNodes): LibP2p.CreateModules {
   return {
     connection: {
       crypto: [
@@ -28,7 +28,7 @@ export default function createConfig (peerInfo: PeerInfo, bootNodes: P2pNodes): 
     DHT,
     discovery: [
       // new Multicast(peerInfo),
-      new Railing(bootNodes)
+      new Railing({ list: bootNodes })
     ],
     transport: [
       new TCP()

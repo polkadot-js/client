@@ -6,17 +6,17 @@ import { P2pState } from '../types';
 
 import Libp2p from 'libp2p';
 
-import createConfig from './config';
+import createModules from './modules';
 import createListener from './listener';
 import createPeerBook from './peerBook';
 
 export default async function createNode ({ config: { p2p: { address, port, nodes = [] } }, l }: P2pState): Promise<Libp2p> {
   const peerBook = await createPeerBook([]);
   const listener = await createListener(address, port);
-  const nodeConfig = createConfig(listener, nodes);
+  const modules = createModules(listener, nodes);
   const addrs = listener.multiaddrs.toArray().map((addr) => addr.toString());
 
   l.log(`creating Libp2p with ${addrs.join(', ')}`);
 
-  return new Libp2p(nodeConfig, listener, peerBook);
+  return new Libp2p(modules, listener, peerBook);
 }

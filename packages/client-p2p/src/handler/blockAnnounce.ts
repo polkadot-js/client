@@ -14,7 +14,7 @@ import requestsBlocks from '../sync/requestBlocks';
 export default function handleBlockAnnounce (self: P2pState, peer: PeerInterface, message: MessageInterface): void {
   self.l.debug(() => [peer.shortId, 'BlockAnnounce', JSON.stringify(message.encode().message)]);
 
-  const header = (message.raw: BlockAnnounceMessage).header;
+  const header = (message.raw as BlockAnnounceMessage).header;
 
   if (peer.getBestNumber().lt(header.number)) {
     peer.setBest(header.number, blake2Asu8a(

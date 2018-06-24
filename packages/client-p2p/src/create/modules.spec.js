@@ -8,10 +8,10 @@ import PeerInfo from 'peer-info';
 import isInstanceOf from '@polkadot/util/is/instanceOf';
 import promisify from '@polkadot/util/promisify';
 
-import createConfig from './config';
+import createConfig from './modules';
 
 // FIXMe times out on CI
-describe.skip('createConfig', () => {
+describe.skip('createModules', () => {
   let peerInfo;
 
   beforeEach(async () => {

@@ -33,14 +33,14 @@
     "test": "echo \"Tests only available from root wrapper\""
   },
   "dependencies": {
-    "@babel/runtime": "^7.0.0-beta.47",
+    "@babel/runtime": "^7.0.0-beta.51",
     "@polkadot/client-db": "^0.11.8",
-    "@polkadot/storage": "^0.19.3",
-    "@polkadot/util": "^0.24.3",
-    "@polkadot/util-crypto": "^0.24.3",
-    "@polkadot/util-triehash": "^0.24.3"
+    "@polkadot/storage": "^0.19.4",
+    "@polkadot/util": "^0.24.5",
+    "@polkadot/util-crypto": "^0.24.5",
+    "@polkadot/util-triehash": "^0.24.5"
   },
   "devDependencies": {
-    "@polkadot/storage": "^0.19.3"
+    "@polkadot/storage": "^0.19.4"
   }
 }

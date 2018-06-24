@@ -69,7 +69,7 @@ export type P2pInterface$Events = 'started' | 'stopped';
 export type P2pInterface = {
   _announceBlock: (hash: Uint8Array, header: Uint8Array, body: Uint8Array) => void,
   isStarted: () => boolean,
-  on: (type: P2pInterface$Events, () => any) => any,
+  on: (type: P2pInterface$Events, cb: () => any) => any,
   start: () => Promise<boolean>,
   stop: () => Promise<boolean>
 }
