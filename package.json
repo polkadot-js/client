@@ -19,7 +19,7 @@
     "test": "jest --coverage"
   },
   "devDependencies": {
-    "@polkadot/dev": "^0.19.28",
+    "@polkadot/dev": "^0.20.2",
     "lerna": "^2.11.0"
   }
 }

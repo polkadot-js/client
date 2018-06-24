@@ -36,8 +36,8 @@
   "dependencies": {
     "@babel/runtime": "^7.0.0-beta.47",
     "@polkadot/client-state": "^0.8.6",
-    "@polkadot/util": "^0.23.1",
-    "@polkadot/util-triedb": "^0.23.1",
+    "@polkadot/util": "^0.24.2",
+    "@polkadot/util-triedb": "^0.24.2",
     "mkdirp": "^0.5.1"
   },
   "devDependencies": {
