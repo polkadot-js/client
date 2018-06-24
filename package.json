@@ -9,17 +9,18 @@
     "packages/*"
   ],
   "scripts": {
-    "build": "polkadot-dev-build-babel",
-    "check": "eslint packages && flow check",
+    "build": "polkadot-dev-build-ts",
+    "check": "tsc --noEmit",
     "clean": "polkadot-dev-clean-build",
     "postinstall": "polkadot-dev-yarn-only",
+    "test": "jest --coverage",
     "start": "node packages/client/scripts/polkadot.js --db-path ./tmp/start-1",
     "start2": "node packages/client/scripts/polkadot.js --db-path ./tmp/start-2 --p2p-nodes /ip4/127.0.0.1/tcp/39933/ipfs/QmfUiXCYtrKotHgDbP4Kc74NUi2LxckEiAdkK1SMSosLaz --p2p-port 39934 --rpc-port 9934",
-    "start-rust": "node packages/client/scripts/polkadot.js --db-path ./tmp/start-rust --p2p-nodes /ip4/127.0.0.1/tcp/30333/ipfs/QmWLtV5gpCzJCh9Eo7SxkrT3ZTApovHM1WpCY2Lp3XkaqF /ip4/127.0.0.1/tcp/39933/ipfs/QmfUiXCYtrKotHgDbP4Kc74NUi2LxckEiAdkK1SMSosLaz --p2p-port 39935 --rpc-port 9935",
-    "test": "jest --coverage"
+    "start-rust": "node packages/client/scripts/polkadot.js --db-path ./tmp/start-rust --p2p-nodes /ip4/127.0.0.1/tcp/30333/ipfs/QmWLtV5gpCzJCh9Eo7SxkrT3ZTApovHM1WpCY2Lp3XkaqF /ip4/127.0.0.1/tcp/39933/ipfs/QmfUiXCYtrKotHgDbP4Kc74NUi2LxckEiAdkK1SMSosLaz --p2p-port 39935 --rpc-port 9935"
   },
   "devDependencies": {
     "@polkadot/dev": "^0.20.2",
+    "@polkadot/ts": "^0.0.24",
     "lerna": "^2.11.0"
   }
 }
