@@ -19,16 +19,16 @@ export default function queueBlocks (self: P2pState, peer: PeerInterface, { bloc
     return;
   }
 
-  const count = blocks.reduce((count, block) => {
+  const count = blocks.reduce((count: number, block) => {
     const hasImported = self.chain.blocks.block.get(block.hash).length !== 0;
-    const { number } = decodeHeader((block.header: any));
-    const hasQueued = !!self.sync.blockQueue[number];
+    const { number } = decodeHeader(block.header as Uint8Array);
+    const hasQueued = !!self.sync.blockQueue[number.toString()];
 
     if (hasImported && hasQueued) {
       return count;
     }
 
-    self.sync.blockQueue[number] = block;
+    self.sync.blockQueue[number.toString()] = block;
 
     return count + 1;
   }, 0);

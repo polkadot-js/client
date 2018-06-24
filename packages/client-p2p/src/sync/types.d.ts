@@ -13,9 +13,9 @@ export type SyncState$Request = {
 
 export type SyncState = {
   blockRequests: {
-    [string]: SyncState$Request
+    [index: string]: SyncState$Request
   },
   blockQueue: {
-    [BN]: BlockResponseMessage$BlockData
+    [index: string]: BlockResponseMessage$BlockData
   }
 };

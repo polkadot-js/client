@@ -14,8 +14,8 @@ export default function rawEncode ({ direction, fields, from, id, max, to }: Blo
     direction,
     fields,
     from: isBn(from)
-      ? bnEncode((from: any), 64)
-      : hashEncode((from: any), 256),
+      ? bnEncode(from, 64)
+      : hashEncode((from as Uint8Array), 256),
     id,
     max
   };

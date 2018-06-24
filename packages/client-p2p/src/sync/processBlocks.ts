@@ -12,17 +12,17 @@ export default function processBlocks ({ l, chain, sync }: P2pState): void {
   let nextNumber = startNumber;
   let count = 0;
 
-  while (sync.blockQueue[nextNumber]) {
-    const { header, body } = sync.blockQueue[nextNumber];
+  while (sync.blockQueue[nextNumber.toString()]) {
+    const { header, body } = sync.blockQueue[nextNumber.toString()];
     const block = u8aConcat(
-      (header: any), (body: any)
+      (header as Uint8Array), (body as Uint8Array)
     );
 
     if (!chain.executor.importBlock(block)) {
       break;
     }
 
-    delete sync.blockQueue[nextNumber];
+    delete sync.blockQueue[nextNumber.toString()];
 
     count++;
     nextNumber = nextNumber.addn(1);

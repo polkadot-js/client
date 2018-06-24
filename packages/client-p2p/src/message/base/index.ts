@@ -8,7 +8,7 @@ import { MessageImpl } from '../types';
 import decode from './decode';
 import encode from './encode';
 
-export default function base (type: number, impl: MessageImpl): MessageInterface {
+export default function base <T, E> (type: number, impl: MessageImpl): MessageInterface {
   const self = {
     type,
     impl

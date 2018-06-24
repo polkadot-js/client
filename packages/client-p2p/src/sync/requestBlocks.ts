@@ -20,11 +20,11 @@ export default function requestBlocks (self: P2pState, peer: PeerInterface): voi
   const request = blockRequest({
     from,
     id: peer.getNextId()
-  });
+  } as BlockRequestMessage);
 
   self.sync.blockRequests[peer.id] = {
     peer,
-    request: (request.raw: BlockRequestMessage)
+    request: (request.raw as BlockRequestMessage)
   };
 
   peer.send(request);

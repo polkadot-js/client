@@ -13,7 +13,7 @@ import defaults from '../defaults';
 import getBlockData from './getBlockData';
 
 export default function provideBlocks (self: P2pState, peer: PeerInterface, request: BlockRequestMessage): void {
-  const current: BN = (request.from: any);
+  const current = (request.from as BN);
   const best = self.chain.blocks.bestNumber.get();
   const blocks = [];
 
