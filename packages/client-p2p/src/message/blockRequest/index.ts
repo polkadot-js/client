@@ -3,7 +3,7 @@
 // of the ISC license. See the LICENSE file for details.
 
 import { MessageInterface } from '../../types';
-import { BlockRequestMessage } from '../types';
+import { BlockRequestMessage, MessageFactory } from '../types';
 import { BlockRequestEncoded } from './types';
 
 import BN from 'bn.js';
@@ -15,7 +15,7 @@ import rawEncode from './rawEncode';
 
 const TYPE: number = 1;
 
-export default function blockRequest ({ direction = 'ascending', fields = ['header', 'body'], from, id, max = defaults.MAX_SYNC_BLOCKS, to }: $Shape<BlockRequestMessage>): MessageInterface {
+function blockRequest ({ direction = 'ascending', fields = ['header', 'body'], from, id, max = defaults.MAX_SYNC_BLOCKS, to }: BlockRequestMessage): MessageInterface {
   const raw: BlockRequestMessage = {
     direction,
     fields,
@@ -34,4 +34,6 @@ export default function blockRequest ({ direction = 'ascending', fields = ['head
   });
 }
 
-blockRequest.TYPE = TYPE;
+(blockRequest as MessageFactory<any>).TYPE = TYPE;
+
+export default (blockRequest as MessageFactory<BlockRequestMessage>);

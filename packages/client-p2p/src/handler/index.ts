@@ -3,6 +3,7 @@
 // of the ISC license. See the LICENSE file for details.
 
 import { P2pState, MessageInterface, PeerInterface } from '../types';
+import { Handler } from './types';
 
 import blockAnnounce from './blockAnnounce';
 import blockRequest from './blockRequest';
@@ -12,11 +13,6 @@ import status from './status';
 type Message = {
   peer: PeerInterface,
   message: MessageInterface
-};
-
-type Handler = {
-  (self: P2pState, peer: PeerInterface, message: MessageInterface): void,
-  TYPE: number
 };
 
 const HANDLERS: Array<Handler> = [

@@ -3,8 +3,9 @@
 // of the ISC license. See the LICENSE file for details.
 
 import BN from 'bn.js';
-import LibP2P, { LibP2P$Connection } from 'libp2p';
-import EventEmitter from 'eventemitter3';
+// import { LibP2pConnection } from 'interface-connection';
+import LibP2p from 'libp2p';
+import E3 from 'eventemitter3';
 import { Logger } from '@polkadot/util/types';
 import { Config } from '@polkadot/client/types';
 import { ChainInterface } from '@polkadot/client-chains/types';
@@ -43,12 +44,12 @@ export type PeerInterface = {
   id: string,
   peerInfo: PeerInfo,
   shortId: string,
-  addConnection: (connection: LibP2P$Connection, isWritable: boolean) => void,
+  addConnection: (connection: LibP2pConnection, isWritable: boolean) => void,
   isWritable: () => boolean,
   getBestHash: () => Uint8Array,
   getBestNumber: () => BN,
   getNextId: () => number,
-  on (type: PeerInterface$Events, (message: MessageInterface) => any): any,
+  on (type: PeerInterface$Events, cb: (message: MessageInterface) => any): any,
   send: (message: MessageInterface) => boolean,
   setBest: (number: BN, hash: Uint8Array) => void
 }
@@ -58,9 +59,9 @@ export type PeersInterface$Events = 'connected' | 'disconnected' | 'discovered' 
 export type PeersInterface = {
   add: (peerInfo: PeerInfo) => PeerInterface,
   count: () => number,
-  get: (peerInfo: PeerInfo) => ?PeerInterface,
+  get: (peerInfo: PeerInfo) => PeerInterface | undefined,
   log: (event: PeersInterface$Events, peer: PeerInterface) => void,
-  on: (type: PeersInterface$Events, (peer: any) => any) => any,
+  on: (type: PeersInterface$Events, cb: (peer: any) => any) => any,
   peers: () => Array<PeerInterface>
 }
 
@@ -77,9 +78,9 @@ export type P2pInterface = {
 export type P2pState = {
   chain: ChainInterface,
   config: Config,
-  emitter: EventEmitter,
+  emitter: E3.EventEmitter,
   l: Logger,
-  node: LibP2P,
+  node: LibP2p,
   peers: PeersInterface,
   sync: SyncState
 };

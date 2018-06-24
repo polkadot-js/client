@@ -4,14 +4,17 @@
 
 import { BlockRequestMessage } from '../message/types';
 import { P2pState, MessageInterface, PeerInterface } from '../types';
+import { Handler } from './types';
 
 import message from '../message/blockRequest';
 import provideBlocks from '../sync/provideBlocks';
 
-export default function handleBlockRequest (self: P2pState, peer: PeerInterface, message: MessageInterface): void {
+function handleBlockRequest (self: P2pState, peer: PeerInterface, message: MessageInterface): void {
   self.l.debug(() => [peer.shortId, 'BlockRequest', JSON.stringify(message.encode().message)]);
 
-  provideBlocks(self, peer, (message.raw: BlockRequestMessage));
+  provideBlocks(self, peer, (message.raw as BlockRequestMessage));
 }
 
-handleBlockRequest.TYPE = message.TYPE;
+(handleBlockRequest as Handler).TYPE = message.TYPE;
+
+export default (handleBlockRequest as Handler);

@@ -6,7 +6,7 @@ import PeerInfo from 'peer-info';
 import { PeerInterface } from '../types';
 import { PeersState } from './types';
 
-export default function get (self: PeersState, peerInfo: PeerInfo): ?PeerInterface {
+export default function get (self: PeersState, peerInfo: PeerInfo): PeerInterface | undefined {
   const id = peerInfo.id.toB58String();
 
   return self.peers[id];

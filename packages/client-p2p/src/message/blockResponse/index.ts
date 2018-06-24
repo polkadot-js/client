@@ -3,7 +3,7 @@
 // of the ISC license. See the LICENSE file for details.
 
 import { MessageInterface } from '../../types';
-import { BlockResponseMessage } from '../types';
+import { BlockResponseMessage, MessageFactory } from '../types';
 import { BlockResponseEncoded } from './types';
 
 import base from '../base';
@@ -12,7 +12,7 @@ import rawEncode from './rawEncode';
 
 const TYPE: number = 2;
 
-export default function blockResponse ({ blocks = [], id = 0 }: $Shape<BlockResponseMessage>): MessageInterface {
+function blockResponse ({ blocks = [], id = 0 }: BlockResponseMessage): MessageInterface {
   const raw: BlockResponseMessage = {
     blocks,
     id
@@ -27,4 +27,6 @@ export default function blockResponse ({ blocks = [], id = 0 }: $Shape<BlockResp
   });
 }
 
-blockResponse.TYPE = TYPE;
+(blockResponse as MessageFactory<any>).TYPE = TYPE;
+
+export default (blockResponse as MessageFactory<BlockResponseMessage>);

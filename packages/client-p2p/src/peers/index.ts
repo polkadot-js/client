@@ -28,7 +28,7 @@ export default function createPeers (state: P2pState): PeersInterface {
       Object.keys(self.peers).length,
     log: (event: PeersInterface$Events, peer: PeerInterface): void =>
       logPeer(self, event, peer),
-    get: (peerInfo: PeerInfo): ?PeerInterface =>
+    get: (peerInfo: PeerInfo): PeerInterface | undefined =>
       get(self, peerInfo),
     on: emitterOn(self),
     peers: (): Array<PeerInterface> =>

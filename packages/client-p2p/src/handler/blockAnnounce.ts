@@ -4,6 +4,7 @@
 
 import { BlockAnnounceMessage } from '../message/types';
 import { P2pState, MessageInterface, PeerInterface } from '../types';
+import { Handler } from './types';
 
 import encodeHeader from '@polkadot/primitives-codec/header/encode';
 import blake2Asu8a from '@polkadot/util-crypto/blake2/asU8a';
@@ -11,7 +12,7 @@ import blake2Asu8a from '@polkadot/util-crypto/blake2/asU8a';
 import message from '../message/blockAnnounce';
 import requestsBlocks from '../sync/requestBlocks';
 
-export default function handleBlockAnnounce (self: P2pState, peer: PeerInterface, message: MessageInterface): void {
+function handleBlockAnnounce (self: P2pState, peer: PeerInterface, message: MessageInterface): void {
   self.l.debug(() => [peer.shortId, 'BlockAnnounce', JSON.stringify(message.encode().message)]);
 
   const header = (message.raw as BlockAnnounceMessage).header;
@@ -26,4 +27,6 @@ export default function handleBlockAnnounce (self: P2pState, peer: PeerInterface
   requestsBlocks(self, peer);
 }
 
-handleBlockAnnounce.TYPE = message.TYPE;
+(handleBlockAnnounce as Handler).TYPE = message.TYPE;
+
+export default (handleBlockAnnounce as Handler);

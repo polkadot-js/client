@@ -3,7 +3,7 @@
 // of the ISC license. See the LICENSE file for details.
 
 import { MessageInterface } from '../../types';
-import { BlockAnnounceMessage } from '../types';
+import { BlockAnnounceMessage, MessageFactory } from '../types';
 import { BlockAnnounceEncoded } from './types';
 
 import createHeader from '@polkadot/primitives-builder/header';
@@ -14,7 +14,7 @@ import rawEncode from './rawEncode';
 
 const TYPE: number = 3;
 
-export default function blockAnnounce ({ header = createHeader({}) }: $Shape<BlockAnnounceMessage>): MessageInterface {
+function blockAnnounce ({ header = createHeader({}) }: BlockAnnounceMessage): MessageInterface {
   const raw: BlockAnnounceMessage = {
     header
   };
@@ -27,4 +27,7 @@ export default function blockAnnounce ({ header = createHeader({}) }: $Shape<Blo
       rawEncode(raw)
   });
 }
-blockAnnounce.TYPE = TYPE;
+
+(blockAnnounce as MessageFactory<any>).TYPE = TYPE;
+
+export default (blockAnnounce as MessageFactory<BlockAnnounceMessage>);

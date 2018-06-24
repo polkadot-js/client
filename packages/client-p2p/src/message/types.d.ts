@@ -7,6 +7,12 @@ import { AccountId, BlockNumber, HeaderHash, ParaChainId, Signature } from '@pol
 import { Justification } from '@polkadot/primitives/bft';
 import { Header } from '@polkadot/primitives/header';
 import { Role } from '@polkadot/primitives/role';
+import { MessageInterface } from '../types';
+
+export type MessageFactory<T> = {
+  (message: T): MessageInterface,
+  TYPE: number
+}
 
 export type BlockAnnounceMessage = {
   header: Header
