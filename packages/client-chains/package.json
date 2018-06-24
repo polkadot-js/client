@@ -37,17 +37,17 @@
     "@polkadot/client-db-chain": "^0.11.8",
     "@polkadot/client-runtime": "^0.11.8",
     "@polkadot/client-wasm": "^0.11.8",
-    "@polkadot/storage": "^0.19.2",
-    "@polkadot/util": "^0.24.2",
-    "@polkadot/util-crypto": "^0.24.2",
-    "@polkadot/util-keyring": "^0.24.2"
+    "@polkadot/storage": "^0.19.3",
+    "@polkadot/util": "^0.24.3",
+    "@polkadot/util-crypto": "^0.24.3",
+    "@polkadot/util-keyring": "^0.24.3"
   },
   "devDependencies": {
     "@polkadot/client": "^0.11.8",
     "@polkadot/client-db": "^0.11.8",
-    "@polkadot/extrinsics-codec": "^0.19.2",
-    "@polkadot/primitives-builder": "^0.19.2",
-    "@polkadot/primitives-codec": "^0.19.2",
-    "@polkadot/storage": "^0.19.2"
+    "@polkadot/extrinsics-codec": "^0.19.3",
+    "@polkadot/primitives-builder": "^0.19.3",
+    "@polkadot/primitives-codec": "^0.19.3",
+    "@polkadot/storage": "^0.19.3"
   }
 }

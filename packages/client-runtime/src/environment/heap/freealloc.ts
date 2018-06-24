@@ -11,10 +11,12 @@ import { Memory } from './types';
 function findContaining (memory: Memory, size: number): Pointer {
   const [ptr] = Object
     .keys(memory.deallocated)
-    .filter((offset) => memory.deallocated[(offset: any)] >= size)
-    .sort((a, b) => {
-      const sizeA = memory.deallocated[(a: any)];
-      const sizeB = memory.deallocated[(b: any)];
+    .filter((offset) =>
+      memory.deallocated[offset as any] >= size
+    )
+    .sort((a: any, b: any) => {
+      const sizeA = memory.deallocated[a];
+      const sizeB = memory.deallocated[b];
 
       if (sizeA < sizeB) {
         return -1;

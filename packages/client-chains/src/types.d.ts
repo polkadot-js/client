@@ -13,7 +13,7 @@ export type ChainName = 'dev';
 export type ChainType = 'polkadot' | 'substrate';
 
 export type ChainGenesisState = {
-  [string]: string
+  [index: string]: string
 };
 
 export type ChainGenesis = {

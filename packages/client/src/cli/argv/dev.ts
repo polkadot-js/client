@@ -10,4 +10,4 @@ export default ({
     description: '(unused) Generate sample blocks',
     type: 'boolean'
   }
-}: { [key: string]: Options });
+} as { [index: string]: Options });

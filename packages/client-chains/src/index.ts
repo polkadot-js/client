@@ -6,7 +6,7 @@ import { Config } from '@polkadot/client/types';
 import { TrieDb } from '@polkadot/util-triedb/types';
 import { ChainInterface } from './types';
 
-import createExecutor from '@polkadot/client-wasm';
+import createExecutor from '@polkadot/client-wasm/index';
 
 import loadChain from './load';
 import createGenesis from './genesis';

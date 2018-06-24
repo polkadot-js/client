@@ -6,7 +6,7 @@ import { RpcInterface } from '@polkadot/client-rpc/types';
 import { ChainInterface } from '@polkadot/client-chains/types';
 import { Config } from '../types';
 
-import createRpc from '@polkadot/client-rpc';
+import createRpc from '@polkadot/client-rpc/index';
 
 import state from './state';
 import subscribe from './subscribe';

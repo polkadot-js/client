@@ -8,7 +8,7 @@ import { ChainState } from './types';
 
 import createBlockDb from '@polkadot/client-db-chain/block';
 import createStateDb from '@polkadot/client-db-chain/state';
-import createRuntime from '@polkadot/client-runtime';
+import createRuntime from '@polkadot/client-runtime/index';
 import logger from '@polkadot/util/logger';
 
 export default function state (config: Config, baseStateDb: TrieDb, baseBlockDb: TrieDb): ChainState {

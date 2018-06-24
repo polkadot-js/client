@@ -12,4 +12,4 @@ export default ({
     description: 'Initial size for the WASM runtime heap (kB)',
     type: 'number'
   }
-}: { [key: string]: Options });
+} as { [index: string]: Options });

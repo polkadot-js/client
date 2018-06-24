@@ -28,4 +28,4 @@ export default ({
     description: 'Sets the type of roles the node operates as',
     type: 'array'
   }
-}: { [key: string]: Options });
+} as { [index: string]: Options });

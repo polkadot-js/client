@@ -83,15 +83,25 @@ const timestamp = (db: TrieDb, { public: { didUpdate } }: Storage$Section) => ({
 export default function createState (db: TrieDb): StateDb {
   return {
     db,
-    consensus: consensus(db, storage.consensus),
-    council: council(db, storage.council),
-    councilVoting: councilVoting(db, storage.councilVoting),
-    democracy: democracy(db, storage.democracy),
-    governance: governance(db, storage.governance),
-    parachains: parachains(db, storage.parachains),
-    session: session(db, storage.session),
-    staking: staking(db, storage.staking),
-    system: system(db, storage.system),
-    timestamp: timestamp(db, storage.timestamp)
+    // @ts-ignore check?
+    consensus: consensus(db, storage.get('consensus')),
+    // @ts-ignore check?
+    council: council(db, storage.get('council')),
+    // @ts-ignore check?
+    councilVoting: councilVoting(db, storage.get('councilVoting')),
+    // @ts-ignore check?
+    democracy: democracy(db, storage.get('democracy')),
+    // @ts-ignore check?
+    governance: governance(db, storage.get('governance')),
+    // @ts-ignore check?
+    parachains: parachains(db, storage.get('parachains')),
+    // @ts-ignore check?
+    session: session(db, storage.get('session')),
+    // @ts-ignore check?
+    staking: staking(db, storage.get('staking')),
+    // @ts-ignore check?
+    system: system(db, storage.get('system')),
+    // @ts-ignore check?
+    timestamp: timestamp(db, storage.get('timestamp'))
   };
 }

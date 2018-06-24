@@ -4,7 +4,7 @@
 
 import BN from 'bn.js';
 import { Section$Item } from '@polkadot/params/types';
-import { Storage$Key$Values } from '@polkadot/storage/types';
+import { Storage$Key$Value } from '@polkadot/storage/types';
 import { TrieDb } from '@polkadot/util-triedb/types';
 import { StorageMethod$Bn } from '../types';
 
@@ -16,16 +16,16 @@ import creator from '../key';
 
 export default function decodeBn <T> (db: TrieDb, key: Section$Item<T>, bitLength: 32 | 64 | 128): StorageMethod$Bn {
   const createKey = creator(key);
-  const base = createBase(db);
+  const base = createBase<BN | number>(db);
 
   return {
-    del: (...keyParams?: Storage$Key$Values): void =>
+    del: (...keyParams: Array<Storage$Key$Value>): void =>
       base.del(createKey(keyParams)),
-    get: (...keyParams?: Storage$Key$Values): BN =>
+    get: (...keyParams: Array<Storage$Key$Value>): BN =>
       u8aToBn(
         base.get(createKey(keyParams)), true
       ),
-    set: (value: BN | number, ...keyParams?: Storage$Key$Values): void =>
+    set: (value: BN | number, ...keyParams: Array<Storage$Key$Value>): void =>
       base.set(createKey(keyParams), value, bnToU8a(value, bitLength, true)),
     onUpdate: (updater: (value: BN | number, raw: Uint8Array) => void): void =>
       base.onUpdate(updater)

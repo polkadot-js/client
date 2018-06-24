@@ -3,7 +3,7 @@
 // of the ISC license. See the LICENSE file for details.
 
 import { Section$Item } from '@polkadot/params/types';
-import { Storage$Key$Values } from '@polkadot/storage/types';
+import { Storage$Key$Value } from '@polkadot/storage/types';
 import { TrieDb } from '@polkadot/util-triedb/types';
 import { StorageMethod$ArrayU8a } from '../types';
 
@@ -17,9 +17,9 @@ export default function decodeArrayU8a <T> (db: TrieDb, key: Section$Item<T>): S
   const createKey = creator(key);
 
   return {
-    del: (...keyParams?: Storage$Key$Values): void =>
+    del: (...keyParams: Array<Storage$Key$Value>): void =>
       db.del(createKey(keyParams)),
-    get: (...keyParams?: Storage$Key$Values): Array<Uint8Array> => {
+    get: (...keyParams: Array<Storage$Key$Value>): Array<Uint8Array> => {
       const u8a = db.get(createKey(keyParams));
 
       if (u8a === null) {
@@ -35,7 +35,7 @@ export default function decodeArrayU8a <T> (db: TrieDb, key: Section$Item<T>): S
 
       return result;
     },
-    set: (value: Array<Uint8Array>, ...keyParams?: Storage$Key$Values): void =>
+    set: (value: Array<Uint8Array>, ...keyParams: Array<Storage$Key$Value>): void =>
       db.set(createKey(keyParams), u8aConcat(
         bnToU8a(value.length, 32, true),
         u8aConcat.apply(null, value))

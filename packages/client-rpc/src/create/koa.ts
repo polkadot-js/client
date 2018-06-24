@@ -43,7 +43,7 @@ export default function createKoa ({ handlers, path, types }: CreateKoaOption): 
         })();
 
       default:
-        (type: empty); // eslint-disable-line
+        (type as never); // eslint-disable-line
         throw new Error(`Uanble to create RPC listener for ${type}`);
     }
   });

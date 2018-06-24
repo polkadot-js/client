@@ -18,4 +18,4 @@ export default ({
     description: 'The type of database storage to use',
     type: 'string'
   }
-}: { [key: string]: Options });
+} as { [index: string]: Options });

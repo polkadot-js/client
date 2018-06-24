@@ -27,4 +27,4 @@ export default ({
     description: 'Sets the peer-to-peer port, 0 for non-listening mode',
     type: 'number'
   }
-}: { [key: string]: Options });
+} as { [index: string]: Options });

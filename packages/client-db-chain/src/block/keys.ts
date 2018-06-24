@@ -45,4 +45,4 @@ export default (createSection(name)(
       })
     }
   })
-): Section<Block$Sections>);
+) as Section<Block$Sections>);

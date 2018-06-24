@@ -6,7 +6,7 @@ import { Config } from '@polkadot/client/types';
 import { ChainInterface } from '@polkadot/client-chains/types';
 import { Handlers, RpcInterface, RpcState } from './types';
 
-import EventEmitter from 'eventemitter3';
+import E3 from 'eventemitter3';
 
 import logger from '@polkadot/util/logger';
 
@@ -19,8 +19,8 @@ import subscriptions from './subscriptions';
 
 const l = logger('rpc');
 
-export default function server (config: Config, chain: ChainInterface, handlers: Handlers, autoStart?: boolean = true): RpcInterface {
-  const emitter = new EventEmitter();
+export default function server (config: Config, chain: ChainInterface, handlers: Handlers, autoStart: boolean = true): RpcInterface {
+  const emitter = new E3.EventEmitter();
   const self: RpcState = {
     chain,
     config,

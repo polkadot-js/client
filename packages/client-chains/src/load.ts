@@ -11,7 +11,7 @@ import chains from './chains';
 // TODO We should load chains from json files as well
 
 export default function load (name: string): ChainGenesisState {
-  const chain = chains[(name: any)];
+  const chain = chains[name];
 
   assert(chain, `Unable to find builtin chain '${name}'`);
 

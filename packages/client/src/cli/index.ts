@@ -17,14 +17,17 @@ export default function cli (params?: string): Config {
         const section = key.substr(0, key.indexOf('-'));
         const name = keyToCamel(key, 1);
 
+        // @ts-ignore ummm... no index, not Map-ing this one
         config[section] = config[section] || {};
+        // @ts-ignore ummm... no index, not Map-ing this one
         config[section][name] = argv[key];
       } else if (!/^(db|dev|p2p|rpc|wasm)[A-Z]/.test(key)) {
         const name = keyToCamel(key);
 
+        // @ts-ignore ummm... no index, not Map-ing this one
         config[name] = argv[key];
       }
 
       return config;
-    }, ({}: $Shape<Config>));
+    }, {} as Config);
 }

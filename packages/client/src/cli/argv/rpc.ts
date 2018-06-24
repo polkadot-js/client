@@ -23,4 +23,4 @@ export default ({
     type: 'array',
     choices: ['http', 'ws']
   }
-}: { [key: string]: Options });
+} as { [index: string]: Options });

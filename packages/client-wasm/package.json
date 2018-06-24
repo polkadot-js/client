@@ -36,8 +36,8 @@
   "dependencies": {
     "@babel/runtime": "^7.0.0-beta.47",
     "@polkadot/client-runtime": "^0.11.8",
-    "@polkadot/primitives-codec": "^0.19.2",
-    "@polkadot/util": "^0.24.2",
+    "@polkadot/primitives-codec": "^0.19.3",
+    "@polkadot/util": "^0.24.3",
     "@polkadot/wasm-bin": "paritytech/polkadot-wasm-bin#5ab4fc6083501b26e5fd979b93c35e2f9010b324",
     "@types/webassembly-js-api": "^0.0.1",
     "yargs": "^11.0.0"

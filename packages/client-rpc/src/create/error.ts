@@ -9,10 +9,10 @@ import ExtError from '@polkadot/util/ext/error';
 import createJson from './json';
 
 export default function createError (id: number, error: Error | ExtError): JsonRpcError {
-  return createJson(id, ({
+  return createJson(id, {
     error: {
-      code: ((error: any): ExtError).code || ExtError.CODES.UNKNOWN,
+      code: (error as ExtError).code || ExtError.CODES.UNKNOWN,
       message: error.message
     }
-  }: $Shape<JsonRpcError>));
+  } as JsonRpcError);
 }

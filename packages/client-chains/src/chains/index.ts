@@ -2,10 +2,10 @@
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
 
-import { ChainGenesisState, ChainName } from '../types';
+import { ChainGenesisState } from '../types';
 
-const dev = (require('./chain-dev.json'): ChainGenesisState);
+const dev = (require('./chain-dev.json') as ChainGenesisState);
 
 export default ({
   dev
-}: { [ChainName]: ChainGenesisState });
+} as { [index: string]: ChainGenesisState });

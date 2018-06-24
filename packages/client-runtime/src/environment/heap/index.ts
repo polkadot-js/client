@@ -17,7 +17,7 @@ import setU32 from './setU32';
 import used from './used';
 
 export default function envHeap (): RuntimeEnv$Heap {
-  let state = ({}: $Shape<HeapState>);
+  let state = {} as HeapState;
 
   return {
     allocate: (size: number): Pointer =>

@@ -19,7 +19,7 @@ export default function argv (cli?: string): Config {
     ? dev
     : {};
   const parser = yargs
-    .version((operation['client-id'].default: any))
+    .version(operation['client-id'].default)
     .options({
       ...devOpts, ...operation, ...db, ...p2p, ...rpc, ...wasm
     })
@@ -38,5 +38,5 @@ export default function argv (cli?: string): Config {
     ? parser.parse(cli).argv
     : parser.argv;
 
-  return (parsed: any);
+  return (parsed as Config);
 }

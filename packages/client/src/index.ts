@@ -4,9 +4,9 @@
 
 import './license.js';
 
-import createChain from '@polkadot/client-chains';
+import createChain from '@polkadot/client-chains/index';
 import memoryDb from '@polkadot/util-triedb/temp';
-import createP2p from '@polkadot/client-p2p';
+import createP2p from '@polkadot/client-p2p/index';
 import logger from '@polkadot/util/logger';
 
 import * as clientId from './clientId';

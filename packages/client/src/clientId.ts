@@ -29,7 +29,9 @@ export const clientId = `${name}/${version}-${stability}`;
 
 export async function getNpmVersion (): Promise<string> {
   return npmQuery(pkgJson.name)
-    .then((npmJson: PackageJson) => npmJson.version)
+    .then((npmJson) =>
+      (npmJson as PackageJson).version
+    )
     .catch(() => 'unknown');
 }
 

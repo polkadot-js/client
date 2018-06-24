@@ -2,7 +2,7 @@
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
 
-import EventEmitter from 'eventemitter3';
+import E3 from 'eventemitter3';
 import { Config } from '@polkadot/client/types';
 import { ChainInterface } from '@polkadot/client-chains/types';
 import { Logger } from '@polkadot/util/types';
@@ -37,10 +37,10 @@ export type JsonRpcResponse = JsonRpcBase & {
   result: any
 };
 
-export type Handler = (Array<any>) => Promise<any>;
+export type Handler = (...params: Array<any>) => Promise<any>;
 
 export type Handlers = {
-  [string]: Handler
+  [index: string]: Handler
 };
 
 export type Rpc = 'http' | 'ws';
@@ -60,7 +60,7 @@ export type PostContext = {
 };
 
 export type WsContext$Socket = {
-  on: (type: 'close' | 'message', (message: string) => void | Promise<void>) => void,
+  on: (type: 'close' | 'message', cb: (message: string) => void | Promise<void>) => void,
   send: (message: string) => void | Promise<void>
 };
 
@@ -69,17 +69,17 @@ export type WsContext = {
 };
 
 export type RpcInterface = {
-  on (type: RpcInterface$Events, () => any): any,
+  on (type: RpcInterface$Events, cb: () => any): any,
   start (): Promise<boolean>,
   stop (): Promise<boolean>
 }
 
-export type SubInterface = (socket?: WsContext$Socket, handler: Handler, params: Array<any>) => Promise<number>;
+export type SubInterface = (socket: WsContext$Socket | undefined, handler: Handler, params: Array<any>) => Promise<number>;
 
 export type RpcState = {
   chain: ChainInterface,
   config: Config,
-  emitter: EventEmitter,
+  emitter: E3.EventEmitter,
   handlers: Handlers,
   l: Logger,
   servers: Array<net$Server>,
