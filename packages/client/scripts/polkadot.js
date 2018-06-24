@@ -4,7 +4,6 @@
 // of the ISC license. See the LICENSE file for details.
 
 try {
-  // $FlowFixMe production version
   require('../index.js');
 } catch (error) {
   require('@babel/register')({
