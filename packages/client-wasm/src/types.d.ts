@@ -9,6 +9,10 @@ import { RuntimeInterface } from '@polkadot/client-runtime/types';
 import { UncheckedRaw } from '@polkadot/primitives/extrinsic';
 import { Logger } from '@polkadot/util/types';
 
+export type WasmInstanceExports = {
+  [index: string]: any
+}
+
 export type WasmExports = {
   env: Object
 };
@@ -17,10 +21,12 @@ export type WasmConfig = {
   heapSize: number
 };
 
-export type WasmExtraImports = Object;
+export type WasmExtraImports = {
+  [index: string]: any
+};
 
 export type ExecutorInstance = {
-  instance: WebAssemblyInstance$Exports,
+  instance: WasmInstanceExports,
   runtime: RuntimeInterface
 };
 

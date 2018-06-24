@@ -4,7 +4,7 @@
 
 import { WasmExtraImports } from '../types';
 
-export default function createImports (memory: WebAssembly.Memory, table: WebAssembly.Table, imports: WasmExtraImports = {}): WebAssemblyImports {
+export default function createImports (memory: WebAssembly.Memory | null | undefined, table: WebAssembly.Table, imports: WasmExtraImports = {}): { [index: string]: any } {
   return Object.assign({}, imports, {
     env: Object.assign({
       memory,

@@ -2,7 +2,7 @@
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
 
-import { WasmExtraImports } from '../types';
+import { WasmExtraImports, WasmInstanceExports } from '../types';
 
 import blake2AsU8a from '@polkadot/util-crypto/blake2/asU8a';
 
@@ -19,7 +19,7 @@ const DEFAULT_TABLE: WebAssembly.TableDescriptor = {
 
 const moduleCache: ModuleCache = {};
 
-export default function createExports (bytecode: Uint8Array, imports?: WasmExtraImports, memory?: WebAssembly.Memory | null): WebAssemblyInstance$Exports {
+export default function createExports (bytecode: Uint8Array, imports?: WasmExtraImports, memory?: WebAssembly.Memory | null): WasmInstanceExports {
   const codeHash = blake2AsU8a(bytecode).toString();
 
   // NOTE compilation is quite resource intensive, here we bypass the actual Uint8Array -> Module compilation when we already have this module bytecode in our cache
