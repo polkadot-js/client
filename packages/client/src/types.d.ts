@@ -24,5 +24,5 @@ export type Config = {
 };
 
 export type Endpoint = {
-  [string]: Handler
+  [index: string]: Handler
 };

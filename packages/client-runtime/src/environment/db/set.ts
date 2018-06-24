@@ -6,8 +6,8 @@ import { Trie$Pair } from '@polkadot/util-triehash/types';
 import { DbState } from './types';
 
 export default function set ({ pending }: DbState, k: Uint8Array, v: Uint8Array): void {
-  pending[k] = ({
+  pending[k.toString()] = ({
     k: k.slice(),
     v: v.slice()
-  }: Trie$Pair);
+  } as Trie$Pair);
 }

@@ -2,13 +2,15 @@
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
 
+/// <reference types="webassembly-js-api"/>
+
 import { TrieDb } from '@polkadot/util-triedb/types';
 import { Logger } from '@polkadot/util/types';
 import { SizeUsed } from './environment/heap/types';
 
 export type Pointer = number;
 export type RuntimeStats = {
-  [string]: {
+  [index: string]: {
     average?: number,
     calls: number,
     elapsed: number
@@ -60,6 +62,7 @@ export type RuntimeInterface$Io = {
 export type RuntimeInterface$Memory = {
   free: (ptr: Pointer) => void,
   malloc: (size: number) => Pointer,
+  memcmp: (s1: Pointer, s2: Pointer, length: number) => number,
   memcpy: (dst: Pointer, src: Pointer, num: number) => Pointer,
   memmove: (dst: Pointer, src: Pointer, num: number) => Pointer,
   memset: (dst: Pointer, val: number, num: number) => Pointer

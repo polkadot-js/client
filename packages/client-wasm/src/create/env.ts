@@ -2,6 +2,8 @@
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
 
+/// <reference types="webassembly-js-api"/>
+
 import { RuntimeInterface } from '@polkadot/client-runtime/types';
 
 import runtimeProxy from '../wasm/proxy_runtime.wasm.js';

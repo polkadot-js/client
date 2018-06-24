@@ -6,7 +6,8 @@ import { Trie$Pairs } from '@polkadot/util-triehash/types';
 import { DbState } from './types';
 
 export default function pairs ({ backend, pending }: DbState): Trie$Pairs {
-  const pendingKeys: Array<Uint8Array> = (Object.keys(pending): any);
+  const pendingKeys = Object.keys(pending);
+  // @ts-ignore yes, we strip nulls, so all ok here
   const pendingPairs: Trie$Pairs = pendingKeys
     .filter((k) => pending[k].v !== null)
     .map((k) => pending[k]);

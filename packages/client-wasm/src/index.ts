@@ -37,7 +37,7 @@ export default function executor (config: Config, blockDb: BlockDb, stateDb: Sta
       executeBlock(self, block),
     finaliseBlock: (header: Uint8Array): Uint8Array =>
       finaliseBlock(self, header),
-    generateBlock: (utxs: Array<UncheckedRaw>, timestamp?: number = Math.ceil(Date.now() / 1000)): Uint8Array =>
+    generateBlock: (utxs: Array<UncheckedRaw>, timestamp: number = Math.ceil(Date.now() / 1000)): Uint8Array =>
       generateBlock(self, utxs, timestamp),
     importBlock: (block: Uint8Array): Executor$BlockImportResult =>
       importBlock(self, block),

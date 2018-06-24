@@ -20,9 +20,8 @@ export default function runtime (stateDb: TrieDb): RuntimeInterface {
   return {
     environment,
     exports: (Object.assign(
-      ({}: any),
-      createChain(environment), createCrypto(environment), createIo(environment), createMemory(environment), createSandbox(environment), createStorage(environment)
-    ): $Shape<RuntimeInterface$Exports>),
+      {}, createChain(environment), createCrypto(environment), createIo(environment), createMemory(environment), createSandbox(environment), createStorage(environment)
+    ) as RuntimeInterface$Exports),
     instrument: {
       start: instrument.clear,
       stop: instrument.stats

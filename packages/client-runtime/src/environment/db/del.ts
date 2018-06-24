@@ -5,7 +5,7 @@
 import { DbState } from './types';
 
 export default function del ({ pending }: DbState, k: Uint8Array): void {
-  pending[k] = {
+  pending[k.toString()] = {
     k: k.slice(),
     v: null
   };

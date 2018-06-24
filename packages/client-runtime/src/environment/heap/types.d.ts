@@ -5,7 +5,7 @@
 import { Pointer } from '../../types';
 
 export type Memory$Buffer = {
-  [Pointer]: number // offset -> size
+  [index: number]: number // offset -> size
 }
 
 export type Memory = {

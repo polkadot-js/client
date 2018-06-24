@@ -13,6 +13,6 @@ type Trie$Pair$Null = {
 export type DbState = {
   backend: TrieDb,
   pending: {
-    [Uint8Array]: Trie$Pair | Trie$Pair$Null
+    [index: string]: Trie$Pair | Trie$Pair$Null
   }
 };

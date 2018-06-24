@@ -9,18 +9,18 @@ import blake2AsU8a from '@polkadot/util-crypto/blake2/asU8a';
 import createImports from './imports';
 
 type ModuleCache = {
-  [Uint8Array]: WebAssemblyModule
+  [index: string]: WebAssembly.Module
 }
 
-const DEFAULT_TABLE: WebAssemblyTable$Config = {
+const DEFAULT_TABLE: WebAssembly.TableDescriptor = {
   initial: 0,
   element: 'anyfunc'
 };
 
 const moduleCache: ModuleCache = {};
 
-export default function createExports (bytecode: Uint8Array, imports?: WasmExtraImports, memory: ?WebAssembly.Memory): WebAssemblyInstance$Exports {
-  const codeHash = blake2AsU8a(bytecode);
+export default function createExports (bytecode: Uint8Array, imports?: WasmExtraImports, memory?: WebAssembly.Memory | null): WebAssemblyInstance$Exports {
+  const codeHash = blake2AsU8a(bytecode).toString();
 
   // NOTE compilation is quite resource intensive, here we bypass the actual Uint8Array -> Module compilation when we already have this module bytecode in our cache
   if (!moduleCache[codeHash]) {

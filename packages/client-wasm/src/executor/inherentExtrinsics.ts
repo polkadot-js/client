@@ -10,16 +10,18 @@ import encodeUnchecked from '@polkadot/extrinsics-codec/encode/unchecked';
 import testingKeypairs from '@polkadot/util-keyring/testingPairs';
 
 const keyring = testingKeypairs();
+// @ts-ignore check?
+const timestampSet = extrinsics.get('timestamp').public.set;
+// @ts-ignore check?
+const parachainsSet = extrinsics.get('parachains').public.setHeads;
 
 export default function inherentExtrinsics (self: ExecutorState, timestamp: number, _extrinsics: Array<UncheckedRaw>): Array<UncheckedRaw> {
   return [
     encodeUnchecked(keyring.nobody, 0)(
-      extrinsics.timestamp.public.set,
-      [timestamp]
+      timestampSet,[timestamp]
     ),
     encodeUnchecked(keyring.nobody, 0)(
-      extrinsics.parachains.public.setHeads,
-      [[]]
+      parachainsSet, [[]]
     )
   ].concat(_extrinsics);
 }

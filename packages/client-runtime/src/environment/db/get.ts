@@ -5,7 +5,7 @@
 import { DbState } from './types';
 
 export default function get ({ backend, pending }: DbState, k: Uint8Array): Uint8Array | null {
-  const value = pending[k];
+  const value = pending[k.toString()];
 
   if (value) {
     return value.v
