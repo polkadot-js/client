@@ -4,7 +4,7 @@
 
 import { HeapState } from './types';
 
-export default function setMemory (state: HeapState, { buffer }: WebAssembly.Memory, offset?: number = 256 * 1024): void {
+export default function setMemory (state: HeapState, { buffer }: WebAssembly.Memory, offset: number = 256 * 1024): void {
   const uint8 = new Uint8Array(buffer);
 
   state.memory = {

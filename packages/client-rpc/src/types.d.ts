@@ -3,6 +3,8 @@
 // of the ISC license. See the LICENSE file for details.
 
 import E3 from 'eventemitter3';
+import * as http from 'http';
+import * as net from 'net';
 import { Config } from '@polkadot/client/types';
 import { ChainInterface } from '@polkadot/client-chains/types';
 import { Logger } from '@polkadot/util/types';
@@ -55,7 +57,7 @@ export type RpcInterface$Events = 'started' | 'stopped';
 
 export type PostContext = {
   body: string,
-  req: http$IncomingMessage,
+  req: http.IncomingMessage,
   type: 'application/json'
 };
 
@@ -82,6 +84,6 @@ export type RpcState = {
   emitter: E3.EventEmitter,
   handlers: Handlers,
   l: Logger,
-  servers: Array<net$Server>,
+  servers: Array<net.Server>,
   subscribe: SubInterface
 };

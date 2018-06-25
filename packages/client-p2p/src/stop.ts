@@ -13,9 +13,8 @@ export default async function stop (self: P2pState): Promise<boolean> {
 
   const node = self.node;
 
-  self.node = null;
-
-  self.peers = null;
+  delete self.node;
+  delete self.peers;
 
   await promisify(node, node.stop);
 

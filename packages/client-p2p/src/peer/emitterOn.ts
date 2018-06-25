@@ -5,7 +5,7 @@
 import { MessageInterface, PeerInterface$Events } from '../types';
 import { PeerState } from './types';
 
-type EmitterOn = (PeerInterface$Events, (message: MessageInterface) => void) => void;
+type EmitterOn = (type: PeerInterface$Events, cb: (message: MessageInterface) => void) => void;
 
 export default function emitterOn (self: PeerState): EmitterOn {
   return (type: PeerInterface$Events, cb: (message: MessageInterface) => void): void => {

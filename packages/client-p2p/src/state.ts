@@ -7,7 +7,7 @@ import { ChainInterface } from '@polkadot/client-chains/types';
 import { Logger } from '@polkadot/util/types';
 import { P2pState } from './types';
 
-import EventEmitter from 'eventemitter3';
+import E3 from 'eventemitter3';
 
 import syncState from './sync/state';
 
@@ -15,10 +15,8 @@ export default function state (l: Logger, config: Config, chain: ChainInterface)
   return {
     chain,
     config,
-    emitter: new EventEmitter(),
+    emitter: new E3.EventEmitter(),
     l,
-    node: null,
-    peers: null,
     sync: syncState()
-  };
+  } as P2pState;
 }

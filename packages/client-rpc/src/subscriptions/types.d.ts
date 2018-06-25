@@ -5,12 +5,12 @@
 import { WsContext$Socket } from '../types';
 
 export type Sockets = {
-  [number]: WsContext$Socket
+  [index: number]: WsContext$Socket
 };
 
 // method -> Array<subIds>
 export type Subscriptions = {
-  [string]: {
+  [index: string]: {
     subscriptions: Array<number>,
     value: any
   }

@@ -2,7 +2,7 @@
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
 
-import { LibP2P$Connection } from 'libp2p';
+import { StatusMessage } from '../message/types';
 import { PeerState } from './types';
 
 import Pushable from 'pull-pushable';
@@ -12,7 +12,7 @@ import statusMessage from '../message/status';
 import receive from './receive';
 import send from './send';
 
-export default function addConnection (self: PeerState, connection: LibP2P$Connection, isWritable: boolean): void {
+export default function addConnection (self: PeerState, connection: LibP2pConnection, isWritable: boolean): void {
   receive(self, connection);
 
   if (isWritable) {
@@ -28,6 +28,6 @@ export default function addConnection (self: PeerState, connection: LibP2P$Conne
       bestNumber: self.chain.blocks.bestNumber.get(),
       bestHash: self.chain.blocks.bestHash.get(),
       genesisHash: self.chain.genesis.headerHash
-    }));
+    } as StatusMessage));
   }
 }

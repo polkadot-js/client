@@ -35,10 +35,10 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.0.0-beta.51",
-    "@polkadot/primitives": "^0.19.4",
-    "@polkadot/primitives-json": "^0.19.4",
+    "@polkadot/primitives": "^0.19.5",
+    "@polkadot/primitives-json": "^0.19.5",
     "@polkadot/primitives-rlp": "^0.17.9",
-    "@polkadot/util": "^0.24.5",
+    "@polkadot/util": "^0.24.6",
     "eventemitter3": "^2.0.3",
     "libp2p": "^0.20.4",
     "libp2p-kad-dht": "^0.10.0",

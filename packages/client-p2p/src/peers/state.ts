@@ -5,7 +5,7 @@
 import { P2pState } from '../types';
 import { PeersState } from './types';
 
-import EventEmitter from 'eventemitter3';
+import E3 from 'eventemitter3';
 import logger from '@polkadot/util/logger';
 
 const l = logger('p2p/peers');
@@ -14,7 +14,7 @@ export default function createState ({ chain, config }: P2pState): PeersState {
   return {
     chain,
     config,
-    emitter: new EventEmitter(),
+    emitter: new E3.EventEmitter(),
     l,
     peers: {}
   };

@@ -2,7 +2,6 @@
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
 
-import { LibP2P$Connection } from 'libp2p';
 import { PeerState } from './types';
 
 import pull from 'pull-stream';
@@ -11,7 +10,7 @@ import u8aToHex from '@polkadot/util/u8a/toHex';
 
 import decode from '../message/decode';
 
-export default function receive ({ emitter, l }: PeerState, connection: LibP2P$Connection): boolean {
+export default function receive ({ emitter, l }: PeerState, connection: LibP2pConnection): boolean {
   try {
     pull(
       connection,

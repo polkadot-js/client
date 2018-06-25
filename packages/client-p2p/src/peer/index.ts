@@ -3,7 +3,6 @@
 // of the ISC license. See the LICENSE file for details.
 
 import BN from 'bn.js';
-import { LibP2P$Connection } from 'libp2p';
 import PeerInfo from 'peer-info';
 import { Config } from '@polkadot/client/types';
 import { ChainInterface } from '@polkadot/client-chains/types';
@@ -25,7 +24,7 @@ export default function createPeer (config: Config, chain: ChainInterface, peerI
     id,
     peerInfo,
     shortId: stringShorten(id),
-    addConnection: (connection: LibP2P$Connection, isWritable: boolean): void =>
+    addConnection: (connection: LibP2pConnection, isWritable: boolean): void =>
       addConnection(self, connection, isWritable),
     isWritable: (): boolean =>
       !!self.pushable,

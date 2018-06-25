@@ -7,7 +7,7 @@ import { Config, Endpoint } from '../types';
 
 import * as clientId from '../clientId';
 
-const systemChain = ({ chain }: Config): () => Promise<string> =>
+const systemChain = ({ chain }: Config) =>
   async (): Promise<string> =>
     chain;
 

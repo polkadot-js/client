@@ -20,11 +20,10 @@ import subscriptions from './subscriptions';
 const l = logger('rpc');
 
 export default function server (config: Config, chain: ChainInterface, handlers: Handlers, autoStart: boolean = true): RpcInterface {
-  const emitter = new E3.EventEmitter();
   const self: RpcState = {
     chain,
     config,
-    emitter,
+    emitter: new E3.EventEmitter(),
     handlers,
     l,
     servers: [],
