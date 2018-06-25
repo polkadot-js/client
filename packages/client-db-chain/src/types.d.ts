@@ -4,12 +4,12 @@
 
 import BN from 'bn.js';
 import { TrieDb } from '@polkadot/util-triedb/types';
-import { Storage$Key$Values } from '@polkadot/storage/types';
+import { Storage$Key$Value } from '@polkadot/storage/types';
 
 export type StorageMethod<P, R> = {
-  del: (...params?: Storage$Key$Values) => void,
-  get: (...params?: Storage$Key$Values) => R,
-  set: (value: P, ...params?: Storage$Key$Values) => void,
+  del: (...params: Array<Storage$Key$Value>) => void,
+  get: (...params: Array<Storage$Key$Value>) => R,
+  set: (value: P, ...params: Array<Storage$Key$Value>) => void,
   onUpdate: (callback: (value: P) => void) => void
 }
 

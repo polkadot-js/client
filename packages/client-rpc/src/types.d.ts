@@ -5,6 +5,7 @@
 import E3 from 'eventemitter3';
 import * as http from 'http';
 import * as net from 'net';
+import * as Koa from 'koa';
 import { Config } from '@polkadot/client/types';
 import { ChainInterface } from '@polkadot/client-chains/types';
 import { Logger } from '@polkadot/util/types';
@@ -55,18 +56,12 @@ export type RpcConfig = {
 
 export type RpcInterface$Events = 'started' | 'stopped';
 
-export type PostContext = {
-  body: string,
-  req: http.IncomingMessage,
-  type: 'application/json'
-};
-
 export type WsContext$Socket = {
   on: (type: 'close' | 'message', cb: (message: string) => void | Promise<void>) => void,
   send: (message: string) => void | Promise<void>
 };
 
-export type WsContext = {
+export type WsContext = Koa.Context & {
   websocket: WsContext$Socket
 };
 

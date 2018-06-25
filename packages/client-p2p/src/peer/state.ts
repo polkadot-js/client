@@ -7,7 +7,7 @@ import { ChainInterface } from '@polkadot/client-chains/types';
 import { PeerState } from './types';
 
 import BN from 'bn.js';
-import EventEmitter from 'eventemitter3';
+import E3 from 'eventemitter3';
 import logger from '@polkadot/util/logger';
 
 const l = logger('p2p/peer');
@@ -18,8 +18,7 @@ export default function state (config: Config, chain: ChainInterface): PeerState
     bestNumber: new BN(0),
     chain,
     config,
-    connections: [],
-    emitter: new EventEmitter(),
+    emitter: new E3.EventEmitter(),
     l,
     nextId: 0
   };

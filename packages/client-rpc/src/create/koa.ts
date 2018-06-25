@@ -2,7 +2,7 @@
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
 
-import { Rpc, PostContext, WsContext } from '../types';
+import { Rpc } from '../types';
 
 import Koa from 'koa';
 import koaRoute from 'koa-route';
@@ -10,8 +10,8 @@ import koaWebsocket from 'koa-websocket';
 
 type CreateKoaOption = {
   handlers: {
-    http: (ctx: PostContext) => any,
-    ws: (ctx: WsContext) => any
+    http: (...params: any[]) => any,
+    ws: (...params: any[]) => any
   },
   path: string,
   types: Array<Rpc>
@@ -36,6 +36,7 @@ export default function createKoa ({ handlers, path, types }: CreateKoaOption): 
           const app = koaWebsocket(new Koa());
 
           app.ws.use(
+            // @ts-ignore defintions are not correct here
             koaRoute.all(path, handlers.ws)
           );
 

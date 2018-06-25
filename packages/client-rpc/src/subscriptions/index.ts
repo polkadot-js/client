@@ -6,6 +6,8 @@ import { ChainInterface } from '@polkadot/client-chains/types';
 import { Handler, WsContext$Socket, SubInterface } from '../types';
 import { Sockets, Subscriptions } from './types';
 
+import isUndefined from '@polkadot/util/is/undefined';
+
 import send from './send';
 import update from './update';
 
@@ -17,12 +19,12 @@ let nextSubId = -1;
 export default function subscriber (chain: ChainInterface): SubInterface {
   update(chain, subscriptions, sockets);
 
-  return async (socket?: WsContext$Socket, handler: Handler, params: Array<any>): Promise<number> => {
+  return async (socket: WsContext$Socket | undefined, handler: Handler, params: Array<any>): Promise<number> => {
     const method = await handler(params);
 
     const subId = nextSubId++;
 
-    if (socket !== undefined) {
+    if (!isUndefined(socket)) {
       sockets[subId] = socket;
       subscriptions[method] = subscriptions[method] || { value: undefined, subscriptions: [] };
       subscriptions[method].subscriptions.push(subId);
