@@ -4,9 +4,10 @@
 // of the ISC license. See the LICENSE file for details.
 
 try {
-  require('../index.js');
+  require('../index');
 } catch (error) {
   require('@babel/register')({
+    extensions: ['.js', '.ts'],
     plugins: [
       ['module-resolver', {
         alias: {
@@ -15,5 +16,5 @@ try {
       }]
     ]
   });
-  require('../src/index.js');
+  require('../src');
 }

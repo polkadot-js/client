@@ -2,7 +2,7 @@
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
 
-import './license.js';
+import './license';
 
 import createChain from '@polkadot/client-chains/index';
 import memoryDb from '@polkadot/util-triedb/temp';
