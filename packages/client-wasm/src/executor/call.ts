@@ -17,8 +17,7 @@ type Call = (...data: Array<Uint8Array>) => CallResult;
 // NOTE testing only, comparing results
 // const code from '../wasm/polkadot_runtime.compact.wasm.js');
 
-// @ts-ignore check?
-const CODE_KEY = key(storage.get('consensus').public.code)();
+const CODE_KEY = key(storage.consensus.public.code)();
 
 export default function call ({ config, genesis, l, runtime, stateDb }: ExecutorState, name: string): Call {
   const code = stateDb.db.get(CODE_KEY) || genesis.code;

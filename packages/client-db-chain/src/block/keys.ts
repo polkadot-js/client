@@ -7,12 +7,14 @@ import { CreateItems, Section } from '@polkadot/params/types';
 import param from '@polkadot/params/param';
 import createSection from '@polkadot/params/section';
 
-type Block$Sections = 'block';
+type Blocks = {
+  block: Section<Blocks>
+};
 
-const name: Block$Sections = 'block';
+const name: keyof Blocks = 'block';
 
 export default (createSection(name)(
-  (createMethod: CreateItems<Block$Sections>) => ({
+  (createMethod: CreateItems<Blocks>) => ({
     description: 'Block storage (internal)',
     public: {
       bestHash: createMethod('bestHash')({
@@ -45,4 +47,4 @@ export default (createSection(name)(
       })
     }
   })
-) as Section<Block$Sections>);
+) as Section<Blocks>);

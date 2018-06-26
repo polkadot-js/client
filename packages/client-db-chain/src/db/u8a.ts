@@ -2,7 +2,7 @@
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
 
-import { Section$Item } from '@polkadot/params/types';
+import { SectionItem } from '@polkadot/params/types';
 import { Storage$Key$Value } from '@polkadot/storage/types';
 import { TrieDb } from '@polkadot/util-triedb/types';
 import { StorageMethod$U8a } from '../types';
@@ -10,7 +10,7 @@ import { StorageMethod$U8a } from '../types';
 import creator from '../key';
 import createBase from './base';
 
-export default function decodeU8a <T> (db: TrieDb, key: Section$Item<T>): StorageMethod$U8a {
+export default function decodeU8a <T> (db: TrieDb, key: SectionItem<T>): StorageMethod$U8a {
   const createKey = creator(key);
   const base = createBase<Uint8Array>(db);
 

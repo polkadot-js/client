@@ -3,7 +3,7 @@
 // of the ISC license. See the LICENSE file for details.
 
 import BN from 'bn.js';
-import { Section$Item } from '@polkadot/params/types';
+import { SectionItem } from '@polkadot/params/types';
 import { Storage$Key$Value } from '@polkadot/storage/types';
 import { TrieDb } from '@polkadot/util-triedb/types';
 import { StorageMethod$Bn } from '../types';
@@ -14,7 +14,7 @@ import u8aToBn from '@polkadot/util/u8a/toBn';
 import createBase from './base';
 import creator from '../key';
 
-export default function decodeBn <T> (db: TrieDb, key: Section$Item<T>, bitLength: 32 | 64 | 128): StorageMethod$Bn {
+export default function decodeBn <T> (db: TrieDb, key: SectionItem<T>, bitLength: 32 | 64 | 128): StorageMethod$Bn {
   const createKey = creator(key);
   const base = createBase<BN | number>(db);
 

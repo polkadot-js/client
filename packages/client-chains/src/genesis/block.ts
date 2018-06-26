@@ -12,8 +12,7 @@ import key from '@polkadot/storage/key';
 import blake2Asu8a from '@polkadot/util-crypto/blake2/asU8a';
 import trieRoot from '@polkadot/util-triehash/root';
 
-// @ts-ignore check?
-const CODE_KEY = key(storage.get('consensus').public.code)();
+const CODE_KEY = key(storage.consensus.public.code)();
 
 export default function genesisBlock ({ stateDb: { db } }: ChainState): ChainGenesis {
   const code = db.get(CODE_KEY);

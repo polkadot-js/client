@@ -35,8 +35,8 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.0.0-beta.51",
-    "@polkadot/primitives": "^0.19.5",
-    "@polkadot/primitives-json": "^0.19.5",
+    "@polkadot/primitives": "^0.20.1",
+    "@polkadot/primitives-json": "^0.20.1",
     "@polkadot/primitives-rlp": "^0.17.9",
     "@polkadot/util": "^0.24.6",
     "eventemitter3": "^2.0.3",
