@@ -720,9 +720,9 @@
     "@polkadot/util" "^0.16.5"
     babel-runtime "^6.26.0"
 
-"@polkadot/dev@^0.20.3":
-  version "0.20.3"
-  resolved "https://registry.yarnpkg.com/@polkadot/dev/-/dev-0.20.3.tgz#4650600dd1f5952ee0054f267c7ebc76dd883593"
+"@polkadot/dev@^0.20.4":
+  version "0.20.4"
+  resolved "https://registry.yarnpkg.com/@polkadot/dev/-/dev-0.20.4.tgz#20a2cb53cfd2bb9627fadfad3f63ccbd1b4ac893"
   dependencies:
     "@babel/cli" "^7.0.0-beta.51"
     "@babel/core" "^7.0.0-beta.51"
@@ -922,6 +922,17 @@
     tweetnacl "^1.0.0"
     xxhashjs "^0.2.2"
 
+"@polkadot/util-crypto@^0.24.7":
+  version "0.24.7"
+  resolved "https://registry.yarnpkg.com/@polkadot/util-crypto/-/util-crypto-0.24.7.tgz#26af689c0716991aa2cf2eccb275bccd6a3024c8"
+  dependencies:
+    "@babel/runtime" "^7.0.0-beta.51"
+    "@polkadot/util" "^0.24.7"
+    blakejs "^1.1.0"
+    js-sha3 "^0.7.0"
+    tweetnacl "^1.0.0"
+    xxhashjs "^0.2.2"
+
 "@polkadot/util-keyring@^0.22.2":
   version "0.22.2"
   resolved "https://registry.yarnpkg.com/@polkadot/util-keyring/-/util-keyring-0.22.2.tgz#38513315d46e7124621e5bbc61f5d82ce8694e0e"
@@ -941,6 +952,16 @@
     "@types/bs58" "^3.0.30"
     bs58 "^4.0.1"
 
+"@polkadot/util-keyring@^0.24.7":
+  version "0.24.7"
+  resolved "https://registry.yarnpkg.com/@polkadot/util-keyring/-/util-keyring-0.24.7.tgz#5382c37a9bee1888410551b7a9aa92f530b34f3c"
+  dependencies:
+    "@babel/runtime" "^7.0.0-beta.51"
+    "@polkadot/util" "^0.24.7"
+    "@polkadot/util-crypto" "^0.24.7"
+    "@types/bs58" "^3.0.30"
+    bs58 "^4.0.1"
+
 "@polkadot/util-rlp@^0.22.2":
   version "0.22.2"
   resolved "https://registry.yarnpkg.com/@polkadot/util-rlp/-/util-rlp-0.22.2.tgz#51a9d6728791a7e7de5c6451ba5b1cbbf4418a71"
@@ -955,15 +976,22 @@
     "@babel/runtime" "^7.0.0-beta.51"
     "@polkadot/util" "^0.24.6"
 
-"@polkadot/util-triedb@^0.24.6":
-  version "0.24.6"
-  resolved "https://registry.yarnpkg.com/@polkadot/util-triedb/-/util-triedb-0.24.6.tgz#5b4c6d8796637666f30b1bcd7d33241f88b3a853"
+"@polkadot/util-rlp@^0.24.7":
+  version "0.24.7"
+  resolved "https://registry.yarnpkg.com/@polkadot/util-rlp/-/util-rlp-0.24.7.tgz#192e86b3cbe498bb185bde77a472324353a5280b"
   dependencies:
     "@babel/runtime" "^7.0.0-beta.51"
-    "@polkadot/util" "^0.24.6"
-    "@polkadot/util-crypto" "^0.24.6"
-    "@polkadot/util-rlp" "^0.24.6"
-    "@polkadot/util-triehash" "^0.24.6"
+    "@polkadot/util" "^0.24.7"
+
+"@polkadot/util-triedb@^0.24.7":
+  version "0.24.7"
+  resolved "https://registry.yarnpkg.com/@polkadot/util-triedb/-/util-triedb-0.24.7.tgz#0f6a920be41cf54cd99b5b6eebd28c7e256ce05f"
+  dependencies:
+    "@babel/runtime" "^7.0.0-beta.51"
+    "@polkadot/util" "^0.24.7"
+    "@polkadot/util-crypto" "^0.24.7"
+    "@polkadot/util-rlp" "^0.24.7"
+    "@polkadot/util-triehash" "^0.24.7"
     leveldown "^4.0.1"
     levelup "^3.0.1"
     memdown "^3.0.0"
@@ -986,6 +1014,15 @@
     "@polkadot/util-crypto" "^0.24.6"
     "@polkadot/util-rlp" "^0.24.6"
 
+"@polkadot/util-triehash@^0.24.7":
+  version "0.24.7"
+  resolved "https://registry.yarnpkg.com/@polkadot/util-triehash/-/util-triehash-0.24.7.tgz#de78c3c72c264461d9195f31010b9dca0757eeba"
+  dependencies:
+    "@babel/runtime" "^7.0.0-beta.51"
+    "@polkadot/util" "^0.24.7"
+    "@polkadot/util-crypto" "^0.24.7"
+    "@polkadot/util-rlp" "^0.24.7"
+
 "@polkadot/util@^0.16.5":
   version "0.16.5"
   resolved "https://registry.yarnpkg.com/@polkadot/util/-/util-0.16.5.tgz#72a669714631dc33b9c7085dc92a289a579a4a6b"
@@ -1007,6 +1044,19 @@
 "@polkadot/util@^0.24.6":
   version "0.24.6"
   resolved "https://registry.yarnpkg.com/@polkadot/util/-/util-0.24.6.tgz#e7da40873ac4445f892ca842e9ef58c735ea6832"
+  dependencies:
+    "@babel/runtime" "^7.0.0-beta.51"
+    "@types/deasync" "^0.1.0"
+    "@types/ip-regex" "^2.0.0"
+    "@types/xxhashjs" "^0.1.1"
+    bn.js "^4.11.8"
+    chalk "^2.4.1"
+    deasync "^0.1.13"
+    ip-regex "^2.1.0"
+
+"@polkadot/util@^0.24.7":
+  version "0.24.7"
+  resolved "https://registry.yarnpkg.com/@polkadot/util/-/util-0.24.7.tgz#3e8e5288291bfeacc0df484a1b67c30e09fbf492"
   dependencies:
     "@babel/runtime" "^7.0.0-beta.51"
     "@types/deasync" "^0.1.0"

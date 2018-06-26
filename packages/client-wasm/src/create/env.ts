@@ -7,7 +7,7 @@
 import { RuntimeInterface } from '@polkadot/client-runtime/types';
 import { WasmInstanceExports } from '../types';
 
-import runtimeProxy from '../wasm/proxy_runtime.wasm.js';
+import runtimeProxy from '../wasm/proxy_runtime_wasm';
 import createExports from './exports';
 
 export default function createEnv (runtime: RuntimeInterface, memory: WebAssembly.Memory): WasmInstanceExports {

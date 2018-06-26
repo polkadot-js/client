@@ -98,6 +98,11 @@
       (param i32 i32 i32 i32) (result i32)
     )
   )
+  (import "runtime" "sandbox_invoke_poc2"
+    (func $sandbox_invoke_poc2
+      (param i32 i32 i32 i32 i32 i32 i32 i32) (result i32)
+    )
+  )
   (import "runtime" "sandbox_memory_get"
     (func $sandbox_memory_get
       (param i32 i32 i32 i32) (result i32)
@@ -175,6 +180,7 @@
   (export "ext_print_hex" (func $print_hex))
   (export "ext_print_utf8" (func $print_utf8))
   (export "ext_sandbox_invoke" (func $sandbox_invoke))
+  (export "ext_sandbox_invoke_poc2" (func $sandbox_invoke_poc2))
   (export "ext_sandbox_instance_teardown" (func $sandbox_instance_teardown))
   (export "ext_sandbox_instantiate" (func $sandbox_instantiate))
   (export "ext_sandbox_memory_get" (func $sandbox_memory_get))

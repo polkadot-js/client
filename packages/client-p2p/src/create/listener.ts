@@ -13,6 +13,7 @@ import defaults from '../defaults';
 export default async function createListener (ip: string = defaults.ADDRESS, port: number = defaults.PORT): Promise<PeerInfo> {
   assert(isIp(ip), `Expected an IP address`);
 
+  // FIXME this is currently non-operational in the underlying util
   const type = isIp(ip, 'v4') ? 'ip4' : 'ip6';
   const peerInfo = await promisify(null, PeerInfo.create);
 

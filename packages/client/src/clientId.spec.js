@@ -5,6 +5,7 @@
 jest.mock('package-json');
 
 const npmJson = require('package-json');
+
 const clientId = require('./clientId');
 
 describe('clientId', () => {

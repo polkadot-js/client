@@ -18,6 +18,8 @@ export default function sandbox ({ l }: RuntimeEnv): RuntimeInterface$Sandbox {
       instrument('sandbox_instance_teardown', (): void => undefined),
     sandbox_invoke: (instanceIdx: number, b: number, c: number, d: number): number =>
       instrument('sandbox_invoke', (): number => 0),
+    sandbox_invoke_poc2: (instanceIdx: number, exportPtr: Pointer, exportLen: number, argsPtr: Pointer, argsLen: number, returnValPtr: Pointer, returnValLen: number, state: number): number =>
+      instrument('sandbox_invoke_poc2', (): number => 0),
     sandbox_memory_get: (memoryIdx: number, offset: number, ptr: Pointer, len: number): number =>
       instrument('sandbox_memory_get', (): number => 0),
     sandbox_memory_new: (initial: number, maximum: number): number =>

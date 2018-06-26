@@ -30,9 +30,10 @@ function wasm2js () {
   DIR=$1
   SRC=$2
 
-  echo "*** $SRC :: Creating JS Uint8Array output"
+  USSRC=${SRC/.compact/_compact}
+  JSSRC=${USSRC/.wasm/_wasm.ts}
 
-  JSSRC=${SRC/.wasm/.wasm.ts}
+  echo "*** $SRC :: Creating JS Uint8Array output $JSSRC"
 
   $BASEDIR/polkadot-wasm-wasm2js.js --input $DIR/$SRC --output $DST/$JSSRC
 

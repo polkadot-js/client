@@ -10,12 +10,12 @@ import key from '@polkadot/storage/key';
 import u8aToHex from '@polkadot/util/u8a/toHex';
 
 import createWasm from '../create';
-import proxy from '../wasm/proxy_substrate.wasm.js';
-
-type Call = (...data: Array<Uint8Array>) => CallResult;
+import proxy from '../wasm/proxy_substrate_wasm';
 
 // NOTE testing only, comparing results
-// const code from '../wasm/polkadot_runtime.compact.wasm.js');
+// import code from '../wasm/polkadot_runtime_compact_wasm';
+
+type Call = (...data: Array<Uint8Array>) => CallResult;
 
 const CODE_KEY = key(storage.consensus.public.code)();
 
