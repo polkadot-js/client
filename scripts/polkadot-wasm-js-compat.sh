@@ -1,5 +1,5 @@
 #!/bin/bash
-# Copyright 2017-2018 Jaco Greeff
+# Copyright 2017-2018 @polkadot/client-wasm authors & contributors
 # This software may be modified and distributed under the terms
 # of the ISC license. See the LICENSE file for details.
 
@@ -32,7 +32,7 @@ function wasm2js () {
 
   echo "*** $SRC :: Creating JS Uint8Array output"
 
-  JSSRC=${SRC/.wasm/.wasm.js}
+  JSSRC=${SRC/.wasm/.wasm.ts}
 
   $BASEDIR/polkadot-wasm-wasm2js.js --input $DIR/$SRC --output $DST/$JSSRC
 
