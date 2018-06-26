@@ -2,13 +2,13 @@
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
 
-const EventEmitter = require('eventemitter3');
+import EventEmitter from 'eventemitter3';
 
 const mockCreateEE = () => new EventEmitter();
 
 jest.mock('../peer', () => mockCreateEE);
 
-const createPeers = require('./index');
+const createPeers = require('./index').default;
 
 describe('add', () => {
   let node;

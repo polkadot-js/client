@@ -2,10 +2,12 @@
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
 
-const l = require('@polkadot/util/logger')('test');
+import logger from '@polkadot/util/logger';
 
-const index = require('./index');
-const envHeap = require('../environment/heap');
+import index from './index';
+import envHeap from '../environment/heap';
+
+const l = logger('test');
 
 describe('memset', () => {
   let runtime;

@@ -1,6 +1,6 @@
 {
   "name": "@polkadot/client-p2p",
-  "version": "0.11.8",
+  "version": "0.12.0",
   "description": "Interfaces to P2P layers used in the Polkadot network",
   "main": "index.js",
   "keywords": [
@@ -34,17 +34,16 @@
     "test": "echo \"Tests only available from root wrapper\""
   },
   "dependencies": {
-    "@babel/runtime": "^7.0.0-beta.47",
-    "@polkadot/primitives": "^0.17.24",
-    "@polkadot/primitives-json": "^0.17.24",
-    "@polkadot/primitives-rlp": "^0.17.9",
-    "@polkadot/util": "^0.22.9",
+    "@babel/runtime": "^7.0.0-beta.51",
+    "@polkadot/primitives": "^0.20.2",
+    "@polkadot/primitives-json": "^0.20.2",
+    "@polkadot/util": "^0.24.7",
     "eventemitter3": "^2.0.3",
     "libp2p": "^0.20.4",
     "libp2p-kad-dht": "^0.10.0",
     "libp2p-mdns": "^0.11.0",
     "libp2p-mplex": "^0.7.0",
-    "libp2p-railing": "^0.8.1",
+    "libp2p-railing": "^0.9.1",
     "libp2p-secio": "^0.10.0",
     "libp2p-spdy": "^0.12.1",
     "libp2p-tcp": "^0.12.0",
@@ -54,6 +53,6 @@
     "pump": "^3.0.0"
   },
   "devDependencies": {
-    "@polkadot/client": "^0.11.8"
+    "@polkadot/client": "^0.12.0"
   }
 }

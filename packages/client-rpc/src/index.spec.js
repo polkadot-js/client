@@ -2,11 +2,11 @@
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
 
-const ExtError = require('@polkadot/util/ext/error');
-const HttpProvider = require('@polkadot/api-provider/http');
-const WsProvider = require('@polkadot/api-provider/ws');
+import ExtError from '@polkadot/util/ext/error';
+import HttpProvider from '@polkadot/api-provider/http';
+import WsProvider from '@polkadot/api-provider/ws';
 
-const createServer = require('./index');
+import createServer from './index';
 
 describe('server', () => {
   let config;

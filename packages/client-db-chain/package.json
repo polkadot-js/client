@@ -1,6 +1,6 @@
 {
   "name": "@polkadot/client-db-chain",
-  "version": "0.11.8",
+  "version": "0.12.0",
   "description": "Wrapper databases for managing on-chain storage",
   "main": "index.js",
   "engines": {
@@ -33,14 +33,14 @@
     "test": "echo \"Tests only available from root wrapper\""
   },
   "dependencies": {
-    "@babel/runtime": "^7.0.0-beta.47",
-    "@polkadot/client-db": "^0.11.8",
-    "@polkadot/storage": "^0.17.24",
-    "@polkadot/util": "^0.22.9",
-    "@polkadot/util-crypto": "^0.22.9",
-    "@polkadot/util-triehash": "^0.22.9"
+    "@babel/runtime": "^7.0.0-beta.51",
+    "@polkadot/client-db": "^0.12.0",
+    "@polkadot/storage": "^0.20.2",
+    "@polkadot/util": "^0.24.7",
+    "@polkadot/util-crypto": "^0.24.7",
+    "@polkadot/util-triehash": "^0.24.7"
   },
   "devDependencies": {
-    "@polkadot/storage": "^0.17.24"
+    "@polkadot/storage": "^0.20.2"
   }
 }

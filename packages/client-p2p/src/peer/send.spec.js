@@ -2,12 +2,14 @@
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
 
-const l = require('@polkadot/util/logger')('test');
-const u8aToBuffer = require('@polkadot/util/u8a/toBuffer');
+import logger from '@polkadot/util/logger';
+import u8aToBuffer from '@polkadot/util/u8a/toBuffer';
 
-const status = require('../message/status');
-const encode = require('../message/encode');
-const send = require('./send');
+import status from '../message/status';
+import encode from '../message/encode';
+import send from './send';
+
+const l = logger('test');
 
 describe('send', () => {
   let self;

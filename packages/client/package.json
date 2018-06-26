@@ -1,6 +1,6 @@
 {
   "name": "@polkadot/client",
-  "version": "0.11.8",
+  "version": "0.12.0",
   "description": "A JavaScript client node for the polkadot network",
   "main": "polkadot.js",
   "bin": {
@@ -37,24 +37,26 @@
     "test": "echo \"Tests only available from root wrapper\""
   },
   "dependencies": {
-    "@babel/runtime": "^7.0.0-beta.47",
-    "@polkadot/client-chains": "^0.11.8",
-    "@polkadot/client-db": "^0.11.8",
-    "@polkadot/client-p2p": "^0.11.8",
-    "@polkadot/client-rpc": "^0.11.8",
-    "@polkadot/client-wasm": "^0.11.8",
-    "@polkadot/jsonrpc": "^0.17.24",
-    "@polkadot/primitives": "^0.17.24",
-    "@polkadot/util": "^0.22.9",
-    "@polkadot/util-triedb": "^0.22.9",
+    "@babel/runtime": "^7.0.0-beta.51",
+    "@polkadot/client-chains": "^0.12.0",
+    "@polkadot/client-db": "^0.12.0",
+    "@polkadot/client-p2p": "^0.12.0",
+    "@polkadot/client-rpc": "^0.12.0",
+    "@polkadot/client-wasm": "^0.12.0",
+    "@polkadot/jsonrpc": "^0.20.2",
+    "@polkadot/primitives": "^0.20.2",
+    "@polkadot/util": "^0.24.7",
+    "@polkadot/util-triedb": "^0.24.7",
+    "@types/package-json": "^4.0.1",
+    "@types/semver-compare": "^1.0.0",
+    "@types/yargs": "^11.0.0",
     "package-json": "^4.0.1",
     "semver-compare": "^1.0.0",
     "yargs": "^11.0.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.0.0-beta.47",
-    "@babel/register": "^7.0.0-beta.47",
-    "@babel/runtime": "^7.0.0-beta.47",
+    "@babel/core": "^7.0.0-beta.51",
+    "@babel/register": "^7.0.0-beta.51",
     "babel-plugin-module-resolver": "^3.1.1"
   }
 }

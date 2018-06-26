@@ -2,7 +2,7 @@
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
 
-const createJson = require('./json');
+import createJson from './json';
 
 describe('createJson', () => {
   it('creates a valid JSONRPC structure', () => {

@@ -2,11 +2,13 @@
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
 
-const hexToU8a = require('@polkadot/util/hex/toU8a');
-const u8aToHex = require('@polkadot/util/u8a/toHex');
-const keyring = require('@polkadot/util-keyring/testingPairs')();
+import hexToU8a from '@polkadot/util/hex/toU8a';
+import u8aToHex from '@polkadot/util/u8a/toHex';
+import testingPairs from '@polkadot/util-keyring/testingPairs';
 
-const db = require('./index');
+import db from './index';
+
+const keyring = testingPairs();
 
 describe('accountIndexOf', () => {
   let system;

@@ -1,6 +1,6 @@
 {
   "name": "@polkadot/client-wasm",
-  "version": "0.11.8",
+  "version": "0.12.0",
   "description": "WASM compiler & call interface",
   "main": "index.js",
   "engines": {
@@ -34,11 +34,12 @@
     "test": "echo \"Tests only available from root wrapper\""
   },
   "dependencies": {
-    "@babel/runtime": "^7.0.0-beta.47",
-    "@polkadot/client-runtime": "^0.11.8",
-    "@polkadot/primitives-codec": "^0.17.24",
-    "@polkadot/util": "^0.22.9",
+    "@babel/runtime": "^7.0.0-beta.51",
+    "@polkadot/client-runtime": "^0.12.0",
+    "@polkadot/primitives-codec": "^0.20.2",
+    "@polkadot/util": "^0.24.7",
     "@polkadot/wasm-bin": "paritytech/polkadot-wasm-bin#5ab4fc6083501b26e5fd979b93c35e2f9010b324",
+    "@types/webassembly-js-api": "^0.0.1",
     "yargs": "^11.0.0"
   }
 }

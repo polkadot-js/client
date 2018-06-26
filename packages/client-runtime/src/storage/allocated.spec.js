@@ -3,12 +3,14 @@
 // of the ISC license. See the LICENSE file for details.
 /* eslint camelcase: 0 */
 
-const l = require('@polkadot/util/logger')('test');
-const u8aFromString = require('@polkadot/util/u8a/fromString');
+import logger from '@polkadot/util/logger';
+import u8aFromString from '@polkadot/util/u8a/fromString';
 
-const envDb = require('../environment/db');
-const envHeap = require('../environment/heap');
-const index = require('./index');
+import envDb from '../environment/db';
+import envHeap from '../environment/heap';
+import index from './index';
+
+const l = logger('test');
 
 describe('get_allocated_storage', () => {
   let get_allocated_storage;

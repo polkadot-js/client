@@ -1,0 +1,20 @@
+{
+  "extends": "./node_modules/@polkadot/dev/config/tsconfig",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@polkadot/client-chains/*": [ "packages/client-chains/src/*" ],
+      "@polkadot/client-db-chain/*": [ "packages/client-db-chain/src/*" ],
+      "@polkadot/client-db/*": [ "packages/client-db/src/*" ],
+      "@polkadot/client-p2p/*": [ "packages/client-p2p/src/*" ],
+      "@polkadot/client-rpc/*": [ "packages/client-rpc/src/*" ],
+      "@polkadot/client-runtime/*": [ "packages/client-runtime/src/*" ],
+      "@polkadot/client-wasm/*": [ "packages/client-wasm/src/*" ],
+      "@polkadot/client/*": [ "packages/client/src/*" ]
+    },
+    "typeRoots": [
+      "./node_modules/@polkadot/ts",
+      "./node_modules/@types"
+    ]
+  }
+}

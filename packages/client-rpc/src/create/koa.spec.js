@@ -2,7 +2,7 @@
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
 
-const createKoa = require('./koa');
+import createKoa from './koa';
 
 describe('createKoa', () => {
   it('creates an HTTP interface', () => {

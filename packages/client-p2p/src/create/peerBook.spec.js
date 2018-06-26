@@ -2,13 +2,13 @@
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
 
-const PeerBook = require('peer-book');
-const PeerId = require('peer-id');
-const PeerInfo = require('peer-info');
+import PeerBook from 'peer-book';
+import PeerId from 'peer-id';
+import PeerInfo from 'peer-info';
 
-const isInstanceOf = require('@polkadot/util/is/instanceOf');
+import isInstanceOf from '@polkadot/util/is/instanceOf';
 
-const createPeerBook = require('./peerBook');
+import createPeerBook from './peerBook';
 
 describe('createPeerBook', () => {
   let origPeerInfoCreate;

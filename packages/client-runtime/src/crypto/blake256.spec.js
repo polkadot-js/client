@@ -3,9 +3,11 @@
 // of the ISC license. See the LICENSE file for details.
 /* eslint camelcase: 0 */
 
-const l = require('@polkadot/util/logger')('test');
+import logger from '@polkadot/util/logger';
 
-const index = require('./index');
+import index from './index';
+
+const l = logger('test');
 
 describe('blake2_256', () => {
   let heap;

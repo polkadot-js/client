@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Copyright 2017-2018 Jaco Greeff
+// Copyright 2017-2018 @polkadot/client-wasm authors & contributors
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
 
@@ -17,4 +17,4 @@ if (!fs.existsSync(input)) {
 }
 
 const buffer = fs.readFileSync(input);
-fs.writeFileSync(output, `// Copyright 2017-2018 Jaco Greeff\n// This software may be modified and distributed under the terms\n// of the ISC license. See the LICENSE file for details.\n// @flow\n\n// Generated with polkadot-wasm-wasm2js (${buffer.length} bytes)\n\nconst hexToU8a = require('@polkadot/util/hex/toU8a');\n\nmodule.exports = hexToU8a('0x${buffer.toString('hex')}');\n`);
+fs.writeFileSync(output, `// Copyright 2017-2018 @polkadot/client-wasm authors & contributors\n// This software may be modified and distributed under the terms\n// of the ISC license. See the LICENSE file for details.\n\n// Generated with polkadot-wasm-wasm2js (${buffer.length} bytes)\n\nimport hexToU8a from '@polkadot/util/hex/toU8a';\n\nexport default hexToU8a('0x${buffer.toString('hex')}');\n`);

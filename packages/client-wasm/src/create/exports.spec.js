@@ -2,8 +2,8 @@
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
 
-const createExports = require('./exports');
-const createMemory = require('./memory');
+import createExports from './exports';
+import createMemory from './memory';
 
 describe('exports', () => {
   let instance;

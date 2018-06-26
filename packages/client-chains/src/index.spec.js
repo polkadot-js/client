@@ -2,9 +2,9 @@
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
 
-const memoryDb = require('@polkadot/util-triedb/temp');
+import memoryDb from '@polkadot/util-triedb/temp';
 
-const createChain = require('./index');
+import createChain from './index';
 
 describe('client-chains', () => {
   let config;

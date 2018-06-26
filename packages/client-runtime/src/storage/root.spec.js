@@ -3,11 +3,13 @@
 // of the ISC license. See the LICENSE file for details.
 /* eslint camelcase: 0 */
 
-const l = require('@polkadot/util/logger')('test');
-const hexToU8a = require('@polkadot/util/hex/toU8a');
-const u8aFromString = require('@polkadot/util/u8a/fromString');
+import logger from '@polkadot/util/logger';
+import hexToU8a from '@polkadot/util/hex/toU8a';
+import u8aFromString from '@polkadot/util/u8a/fromString';
 
-const index = require('./index');
+import index from './index';
+
+const l = logger('test');
 
 describe('storage_root', () => {
   let heap;

@@ -2,9 +2,9 @@
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
 
-const memDb = require('@polkadot/util-triedb/temp');
+import memDb from '@polkadot/util-triedb/temp';
 
-const init = require('../index');
+import init from '../index';
 
 describe('genesis', () => {
   let genesis;
@@ -21,7 +21,7 @@ describe('genesis', () => {
       genesis.header.stateRoot
     ).toEqual(
       new Uint8Array([
-        183, 79, 108, 134, 124, 245, 189, 86, 29, 84, 33, 80, 31, 234, 186, 201, 226, 21, 241, 214, 43, 76, 90, 92, 146, 31, 182, 6, 147, 161, 56, 103
+        232, 3, 212, 239, 20, 49, 65, 77, 86, 68, 197, 212, 177, 241, 76, 178, 26, 142, 255, 94, 53, 233, 250, 34, 213, 124, 35, 178, 189, 131, 41, 79
       ])
     );
   });
@@ -41,7 +41,7 @@ describe('genesis', () => {
       genesis.headerHash
     ).toEqual(
       new Uint8Array([
-        168, 135, 224, 93, 140, 222, 226, 83, 13, 116, 138, 197, 164, 6, 48, 190, 101, 18, 221, 166, 40, 179, 158, 112, 133, 154, 215, 198, 177, 76, 212, 228
+        27, 232, 237, 33, 3, 51, 112, 44, 133, 33, 8, 49, 146, 238, 217, 114, 216, 28, 16, 255, 124, 53, 209, 85, 192, 157, 181, 247, 78, 101, 19, 96
       ])
     );
   });

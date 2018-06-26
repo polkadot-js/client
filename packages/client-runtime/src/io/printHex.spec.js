@@ -3,8 +3,8 @@
 // of the ISC license. See the LICENSE file for details.
 /* eslint camelcase: 0 */
 
-const env = require('../environment');
-const index = require('./index');
+import env from '../environment';
+import index from './index';
 
 describe('print_hex', () => {
   let heap;
