@@ -6,7 +6,7 @@ import { MessageInterface } from '../../types';
 import { BlockAnnounceMessage, MessageFactory } from '../types';
 import { BlockAnnounceEncoded } from './types';
 
-import createHeader from '@polkadot/primitives-builder/header';
+import createHeader from '@polkadot/primitives/create/header';
 
 import base from '../base';
 import rawDecode from './rawDecode';

@@ -42,14 +42,14 @@ export default function dialPeers (self: P2pState, peer?: PeerInterface): void {
   }
 
   dialQueue.forEach(
-    (item: QueuedPeer): void => {
+    async (item: QueuedPeer): Promise<void> => {
       if (item.isDialled) {
         return;
       }
 
       item.isDialled = true;
 
-      dialPeer(self, item.peer);
+      return dialPeer(self, item.peer);
     }
   );
 }

@@ -15,7 +15,7 @@ import createMemory from './memory';
 type Options = {
   config: Config,
   l: Logger
-}
+};
 
 function instrument <T> (name: string, elapsed: Array<string>, fn: () => T): T {
   const start = Date.now();

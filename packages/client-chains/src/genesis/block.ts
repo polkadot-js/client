@@ -4,13 +4,13 @@
 
 import { ChainState, ChainGenesis } from '../types';
 
-import createBlock from '@polkadot/primitives-builder/block';
-import encodeBlock from '@polkadot/primitives-codec/block/encode';
-import encodeHeader from '@polkadot/primitives-codec/header/encode';
+import createBlock from '@polkadot/primitives/create/block';
+import encodeBlock from '@polkadot/primitives/codec/block/encode';
+import encodeHeader from '@polkadot/primitives/codec/header/encode';
 import storage from '@polkadot/storage';
 import key from '@polkadot/storage/key';
 import blake2Asu8a from '@polkadot/util-crypto/blake2/asU8a';
-import trieRoot from '@polkadot/util-triehash/root';
+import trieRoot from '@polkadot/trie-hash/root';
 
 const CODE_KEY = key(storage.consensus.public.code)();
 

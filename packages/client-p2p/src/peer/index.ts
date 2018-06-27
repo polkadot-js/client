@@ -37,6 +37,7 @@ export default function createPeer (config: Config, chain: ChainInterface, peerI
     on: emitterOn(self),
     send: (message: MessageInterface): boolean =>
       send(self, message),
+    // tslint:disable-next-line:variable-name
     setBest: (number: BN, hash: Uint8Array): void =>
       setBest(self, number, hash)
   };

@@ -17,6 +17,7 @@ import createRpc from './rpc';
 const l = logger('client');
 const config = cli();
 
+// tslint:disable-next-line
 (async function main (): Promise<void> {
   const verStatus = await clientId.getNpmStatus();
 

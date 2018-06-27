@@ -3,10 +3,10 @@
 // of the ISC license. See the LICENSE file for details.
 
 import { TrieDb } from '@polkadot/util-triedb/types';
-import { Trie$Pairs } from '@polkadot/util-triehash/types';
+import { Trie$Pairs } from '@polkadot/trie-hash/types';
 import { DbState } from './types';
 
-import trieRoot from '@polkadot/util-triehash/root';
+import trieRoot from '@polkadot/trie-hash/root';
 
 import clear from './clear';
 import commit from './commit';

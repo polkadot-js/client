@@ -5,6 +5,7 @@
 import BN from 'bn.js';
 import { PeerState } from './types';
 
+// tslint:disable-next-line:variable-name
 export default function setBest (self: PeerState, number: BN, hash: Uint8Array): void {
   self.bestHash = hash;
   self.bestNumber = number;

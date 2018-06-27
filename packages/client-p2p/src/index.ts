@@ -20,6 +20,7 @@ export default function server (config: Config, chain: ChainInterface, autoStart
   const self = state(l, config, chain);
 
   if (autoStart) {
+    // tslint:disable-next-line
     start(self);
   }
 

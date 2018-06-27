@@ -4,7 +4,7 @@
 
 import memoryDb from '@polkadot/util-triedb/temp';
 import methods from '@polkadot/extrinsics';
-import encodeUnchecked from '@polkadot/extrinsics-codec/encode/unchecked';
+import encodeUnchecked from '@polkadot/extrinsics/codec/encode/unchecked';
 import u8aConcat from '@polkadot/util/u8a/concat';
 import testingPairs from '@polkadot/util-keyring/testingPairs';
 

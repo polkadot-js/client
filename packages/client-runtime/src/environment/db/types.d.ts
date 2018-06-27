@@ -3,7 +3,7 @@
 // of the ISC license. See the LICENSE file for details.
 
 import { TrieDb } from '@polkadot/util-triedb/types';
-import { Trie$Pair } from '@polkadot/util-triehash/types';
+import { Trie$Pair } from '@polkadot/trie-hash/types';
 
 type Trie$Pair$Null = {
   k: Uint8Array,

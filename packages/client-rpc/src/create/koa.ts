@@ -44,7 +44,8 @@ export default function createKoa ({ handlers, path, types }: CreateKoaOption): 
         })();
 
       default:
-        (type as never); // eslint-disable-line
+        // tslint:disable-next-line
+        (type as never);
         throw new Error(`Uanble to create RPC listener for ${type}`);
     }
   });

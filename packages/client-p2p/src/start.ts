@@ -14,7 +14,7 @@ import onPeerMessage from './handler';
 import stop from './stop';
 
 export default async function start (self: P2pState): Promise<boolean> {
-  stop(self);
+  await stop(self);
 
   self.node = await createNode(self);
   self.peers = createPeers(self);

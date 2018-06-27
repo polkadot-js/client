@@ -28,8 +28,9 @@ export default function decodeArrayU8a <T> (db: TrieDb, key: SectionItem<T>): St
 
       const length = u8aToBn(u8a.subarray(0, 4)).toNumber();
       const result = [];
+      let offset = 4;
 
-      for (let index = 0, offset = 4; index < length; index++, offset += 32) {
+      for (let index = 0; index < length; index++, offset += 32) {
         result.push(u8a.subarray(offset, offset + 32));
       }
 

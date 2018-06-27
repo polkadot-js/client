@@ -5,13 +5,13 @@
 import { ChainInterface } from '@polkadot/client-chains/types';
 import { Sockets, Subscriptions } from './types';
 
-import decodeHeader from '@polkadot/primitives-codec/header/decode';
-import jsonHeader from '@polkadot/primitives-json/header/encode';
+import decodeHeader from '@polkadot/primitives/codec/header/decode';
+import jsonHeader from '@polkadot/primitives/json/header/encode';
 
 import send from './send';
 
 const updateAll = (subscriptions: Subscriptions, sockets: Sockets, method: string, value: any): void => {
-  if (subscriptions[method] === undefined) {
+  if (!subscriptions[method]) {
     subscriptions[method] = {
       value,
       subscriptions: []

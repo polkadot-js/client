@@ -5,8 +5,8 @@
 import { BlockRequestMessage } from '../types';
 import { BlockRequestEncoded } from './types';
 
-import bnDecode from '@polkadot/primitives-json/bn/decode';
-import hashDecode from '@polkadot/primitives-json/hash/decode';
+import bnDecode from '@polkadot/primitives/json/bn/decode';
+import hashDecode from '@polkadot/primitives/json/hash/decode';
 
 export default function rawDecode (raw: BlockRequestMessage, { direction, fields, from, id, max, to }: BlockRequestEncoded): BlockRequestMessage {
   raw.direction = direction;

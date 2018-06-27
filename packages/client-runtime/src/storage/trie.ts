@@ -4,8 +4,8 @@
 
 import { RuntimeEnv, RuntimeInterface$Storage$Trie, Pointer } from '../types';
 
-import trieRoot from '@polkadot/util-triehash/root';
-import trieRootOrdered from '@polkadot/util-triehash/rootOrdered';
+import trieRoot from '@polkadot/trie-hash/root';
+import trieRootOrdered from '@polkadot/trie-hash/rootOrdered';
 
 import instrument from '../instrument';
 

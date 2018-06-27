@@ -6,7 +6,7 @@ import { UncheckedRaw } from '@polkadot/primitives/extrinsic';
 import { ExecutorState } from '../types';
 
 import extrinsics from '@polkadot/extrinsics';
-import encodeUnchecked from '@polkadot/extrinsics-codec/encode/unchecked';
+import encodeUnchecked from '@polkadot/extrinsics/codec/encode/unchecked';
 import testingKeypairs from '@polkadot/util-keyring/testingPairs';
 
 const keyring = testingKeypairs();
