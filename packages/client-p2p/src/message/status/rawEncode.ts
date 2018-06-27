@@ -5,8 +5,8 @@
 import { StatusMessage } from '../types';
 import { StatusEncoded } from './types';
 
-import bnEncode from '@polkadot/primitives-json/bn/encode';
-import hashEncode from '@polkadot/primitives-json/hash/encode';
+import bnEncode from '@polkadot/primitives/json/bn/encode';
+import hashEncode from '@polkadot/primitives/json/hash/encode';
 
 export default function rawEncode ({ bestHash, bestNumber, genesisHash, parachainId, roles, validatorId, validatorSignature, version }: StatusMessage): StatusEncoded {
   return {

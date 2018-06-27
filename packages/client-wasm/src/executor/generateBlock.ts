@@ -5,10 +5,10 @@
 import { UncheckedRaw } from '@polkadot/primitives/extrinsic';
 import { ExecutorState } from '../types';
 
-import createHeader from '@polkadot/primitives-builder/header';
-import decodeHeader from '@polkadot/primitives-codec/header/decode';
-import encodeBlock from '@polkadot/primitives-codec/block/encode';
-import encodeHeader from '@polkadot/primitives-codec/header/encode';
+import createHeader from '@polkadot/primitives/create/header';
+import decodeHeader from '@polkadot/primitives/codec/header/decode';
+import encodeBlock from '@polkadot/primitives/codec/block/encode';
+import encodeHeader from '@polkadot/primitives/codec/header/encode';
 
 import applyExtrinsic from './applyExtrinsic';
 import finaliseBlock from './finaliseBlock';
@@ -17,6 +17,7 @@ import initialiseBlock from './initialiseBlock';
 
 export default function generateBlock (self: ExecutorState, _extrinsics: Array<UncheckedRaw>, timestamp: number): Uint8Array {
   const start = Date.now();
+  // tslint:disable-next-line:variable-name
   const number = self.blockDb.bestNumber.get().addn(1);
 
   self.l.debug(() => `Generating block #${number.toString()}`);

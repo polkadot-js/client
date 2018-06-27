@@ -2,7 +2,7 @@
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
 
-import { Trie$Pair } from '@polkadot/util-triehash/types';
+import { Trie$Pair } from '@polkadot/trie-hash/types';
 import { DbState } from './types';
 
 export default function set ({ pending }: DbState, k: Uint8Array, v: Uint8Array): void {

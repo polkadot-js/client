@@ -7,7 +7,7 @@ import { Memory, Memory$Buffer, SizeUsed } from './types';
 function calculateSize (buffer: Memory$Buffer): number {
   return Object
     .values(buffer)
-    .reduce((total, size) => total + (size as number), 0);
+    .reduce((total, size) => total + (size), 0);
 }
 
 export default function used (memory: Memory): SizeUsed {

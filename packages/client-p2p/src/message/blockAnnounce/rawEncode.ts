@@ -5,7 +5,7 @@
 import { BlockAnnounceMessage } from '../types';
 import { BlockAnnounceEncoded } from './types';
 
-import headerEncode from '@polkadot/primitives-json/header/encode';
+import headerEncode from '@polkadot/primitives/json/header/encode';
 
 export default function rawEncode ({ header }: BlockAnnounceMessage): BlockAnnounceEncoded {
   return {

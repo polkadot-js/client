@@ -10,7 +10,7 @@ import handleWs from './handleWs';
 import stop from './stop';
 
 export default async function start (self: RpcState): Promise<boolean> {
-  stop(self);
+  await stop(self);
 
   const apps = createKoa({
     handlers: {

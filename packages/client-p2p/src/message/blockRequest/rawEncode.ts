@@ -5,8 +5,8 @@
 import { BlockRequestMessage } from '../types';
 import { BlockRequestEncoded } from './types';
 
-import bnEncode from '@polkadot/primitives-json/bn/encode';
-import hashEncode from '@polkadot/primitives-json/hash/encode';
+import bnEncode from '@polkadot/primitives/json/bn/encode';
+import hashEncode from '@polkadot/primitives/json/hash/encode';
 import isBn from '@polkadot/util/is/bn';
 
 export default function rawEncode ({ direction, fields, from, id, max, to }: BlockRequestMessage): BlockRequestEncoded {
@@ -15,7 +15,7 @@ export default function rawEncode ({ direction, fields, from, id, max, to }: Blo
     fields,
     from: isBn(from)
       ? bnEncode(from, 64)
-      : hashEncode((from as Uint8Array), 256),
+      : hashEncode((from), 256),
     id,
     max
   };

@@ -6,7 +6,7 @@ import { BlockAnnounceMessage } from '../message/types';
 import { P2pState, MessageInterface, PeerInterface } from '../types';
 import { Handler } from './types';
 
-import encodeHeader from '@polkadot/primitives-codec/header/encode';
+import encodeHeader from '@polkadot/primitives/codec/header/encode';
 import blake2Asu8a from '@polkadot/util-crypto/blake2/asU8a';
 
 import message from '../message/blockAnnounce';

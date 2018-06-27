@@ -4,7 +4,7 @@
 
 import { P2pState } from './types';
 
-import decodeHeader from '@polkadot/primitives-codec/header/decode';
+import decodeHeader from '@polkadot/primitives/codec/header/decode';
 
 import announceMessage from './message/blockAnnounce';
 

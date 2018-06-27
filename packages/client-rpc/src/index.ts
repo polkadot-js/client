@@ -34,6 +34,7 @@ export default function server (config: Config, chain: ChainInterface, handlers:
   validateHandlers(handlers);
 
   if (autoStart) {
+    // tslint:disable-next-line
     start(self);
   }
 

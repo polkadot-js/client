@@ -31,7 +31,7 @@ export default function data ({ l, heap, db }: RuntimeEnv): RuntimeInterface$Sto
 
         heap.setU32(lenPtr, length);
 
-        if (data == null) {
+        if (!data) {
           return length;
         }
 

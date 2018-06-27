@@ -5,7 +5,7 @@
 import { BlockResponseMessage } from '../message/types';
 import { P2pState, PeerInterface } from '../types';
 
-import decodeHeader from '@polkadot/primitives-codec/header/decodeRaw';
+import decodeHeader from '@polkadot/primitives/codec/header/decodeRaw';
 
 import processBlocks from './processBlocks';
 
@@ -21,6 +21,7 @@ export default function queueBlocks (self: P2pState, peer: PeerInterface, { bloc
 
   const count = blocks.reduce((count: number, block) => {
     const hasImported = self.chain.blocks.block.get(block.hash).length !== 0;
+    // tslint:disable-next-line:variable-name
     const { number } = decodeHeader(block.header as Uint8Array);
     const hasQueued = !!self.sync.blockQueue[number.toString()];
 

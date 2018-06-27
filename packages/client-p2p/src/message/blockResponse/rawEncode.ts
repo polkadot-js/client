@@ -5,8 +5,8 @@
 import { BlockResponseMessage } from '../types';
 import { BlockResponseEncoded, BlockResponseEncoded$BlockData } from './types';
 
-import bytesEncode from '@polkadot/primitives-json/bytes/encode';
-import hashEncode from '@polkadot/primitives-json/hash/encode';
+import bytesEncode from '@polkadot/primitives/json/bytes/encode';
+import hashEncode from '@polkadot/primitives/json/hash/encode';
 
 export default function rawEncode ({ id, blocks }: BlockResponseMessage): BlockResponseEncoded {
   return {

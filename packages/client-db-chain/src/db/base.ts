@@ -9,7 +9,7 @@ type Base <T> = {
   get (key: Uint8Array): Uint8Array,
   set (key: Uint8Array, value: T, raw: Uint8Array): void,
   onUpdate (subscriber: (value: T, raw: Uint8Array) => void): void
-}
+};
 
 type Subscribers <T> = Array<(value: T, raw: Uint8Array) => void>;
 

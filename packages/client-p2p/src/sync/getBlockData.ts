@@ -5,7 +5,7 @@
 import { BlockRequestMessage$Fields, BlockResponseMessage$BlockData } from '../message/types';
 import { P2pState } from '../types';
 
-import decodeBlock from '@polkadot/primitives-codec/block/decodeRaw';
+import decodeBlock from '@polkadot/primitives/codec/block/decodeRaw';
 
 export default function getBlockData (self: P2pState, fields: BlockRequestMessage$Fields, hash: Uint8Array): BlockResponseMessage$BlockData {
   const { body, header } = decodeBlock(

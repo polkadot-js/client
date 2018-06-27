@@ -4,7 +4,7 @@
 
 import { ExecutorState, Executor$BlockImportResult } from '../types';
 
-import decodeRaw from '@polkadot/primitives-codec/block/decodeRaw';
+import decodeRaw from '@polkadot/primitives/codec/block/decodeRaw';
 import blake2Asu8a from '@polkadot/util-crypto/blake2/asU8a';
 
 import executeBlock from './executeBlock';
@@ -18,6 +18,7 @@ export default function importBlock (self: ExecutorState, block: Uint8Array): Ex
 
   self.stateDb.db.commit();
 
+  // tslint:disable-next-line:variable-name
   const { body, extrinsics, header, number } = decodeRaw(block);
   const headerHash = blake2Asu8a(header, 256);
 

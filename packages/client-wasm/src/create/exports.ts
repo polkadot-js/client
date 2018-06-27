@@ -10,7 +10,7 @@ import createImports from './imports';
 
 type ModuleCache = {
   [index: string]: WebAssembly.Module
-}
+};
 
 const DEFAULT_TABLE: WebAssembly.TableDescriptor = {
   initial: 0,

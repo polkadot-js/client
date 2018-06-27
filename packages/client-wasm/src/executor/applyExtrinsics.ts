@@ -5,7 +5,7 @@
 import { UncheckedRaw } from '@polkadot/primitives/extrinsic';
 import { ExecutorState } from '../types';
 
-import encodeLength from '@polkadot/extrinsics-codec/encode/length';
+import encodeLength from '@polkadot/extrinsics/codec/encode/length';
 
 import call from './call';
 

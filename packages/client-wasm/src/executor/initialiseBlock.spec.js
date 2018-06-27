@@ -2,8 +2,8 @@
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
 
-import createHeader from '@polkadot/primitives-builder/header';
-import encodeHeader from '@polkadot/primitives-codec/header/encode';
+import createHeader from '@polkadot/primitives/create/header';
+import encodeHeader from '@polkadot/primitives/codec/header/encode';
 import memoryDb from '@polkadot/util-triedb/temp';
 
 import init from '@polkadot/client-chains';

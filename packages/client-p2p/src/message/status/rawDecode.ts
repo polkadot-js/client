@@ -5,11 +5,11 @@
 import { StatusMessage } from '../types';
 import { StatusEncoded } from './types';
 
-import accountIdDecode from '@polkadot/primitives-json/accountId/decode';
-import bnDecode from '@polkadot/primitives-json/bn/decode';
-import hashDecode from '@polkadot/primitives-json/hash/decode';
-import parachainIdDecode from '@polkadot/primitives-json/parachainId/decode';
-import signatureDecode from '@polkadot/primitives-json/signature/decode';
+import accountIdDecode from '@polkadot/primitives/json/accountId/decode';
+import bnDecode from '@polkadot/primitives/json/bn/decode';
+import hashDecode from '@polkadot/primitives/json/hash/decode';
+import parachainIdDecode from '@polkadot/primitives/json/parachainId/decode';
+import signatureDecode from '@polkadot/primitives/json/signature/decode';
 
 export default function rawDecode (raw: StatusMessage, { bestHash, bestNumber, genesisHash, parachainId = '0x00', roles, validatorId = '0x00', validatorSignature = '0x00', version }: StatusEncoded): StatusMessage {
   raw.bestNumber = bnDecode(bestNumber, 64);
