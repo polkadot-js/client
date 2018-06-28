@@ -7,8 +7,8 @@ import { BlockRequestMessage$BlockAttribute, BlockRequestMessage$Direction } fro
 export type BlockRequestEncoded = {
   direction: BlockRequestMessage$Direction,
   fields: Array<BlockRequestMessage$BlockAttribute>,
-  from: string,
+  from: string | number,
   id: number,
   max: number,
-  to?: string
+  to?: string | number | null
 };

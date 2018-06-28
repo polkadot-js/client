@@ -803,9 +803,9 @@
     "@polkadot/util-crypto" "^0.26.9"
     "@polkadot/util-rlp" "^0.26.9"
 
-"@polkadot/ts@^0.1.5":
-  version "0.1.5"
-  resolved "https://registry.yarnpkg.com/@polkadot/ts/-/ts-0.1.5.tgz#bd944090a788d9379866059fb61b5708b4696cc7"
+"@polkadot/ts@^0.1.6":
+  version "0.1.6"
+  resolved "https://registry.yarnpkg.com/@polkadot/ts/-/ts-0.1.6.tgz#0138490e0e625ea34a9931be94fd436dd6015c7d"
 
 "@polkadot/util-crypto@^0.26.9":
   version "0.26.9"
@@ -962,9 +962,9 @@
   version "3.2.2"
   resolved "https://registry.yarnpkg.com/@types/koa-compose/-/koa-compose-3.2.2.tgz#dc106e000bbf92a3ac900f756df47344887ee847"
 
-"@types/koa-route@^3.2.3":
-  version "3.2.3"
-  resolved "https://registry.yarnpkg.com/@types/koa-route/-/koa-route-3.2.3.tgz#eda27cfd4240208babce905b1e4e2055b24e508b"
+"@types/koa-route@^3.2.4":
+  version "3.2.4"
+  resolved "https://registry.yarnpkg.com/@types/koa-route/-/koa-route-3.2.4.tgz#65fe3308f00bb33c5d0d95a79b441c30a6b1c989"
   dependencies:
     "@types/koa" "*"
     path-to-regexp "^1.7.0"

@@ -5,6 +5,9 @@
 import { MessageInterface } from '../types';
 import { PeerState } from './types';
 
+import varint from 'varint';
+import bufferToU8a from '@polkadot/util/buffer/toU8a';
+import u8aConcat from '@polkadot/util/u8a/concat';
 import u8aToBuffer from '@polkadot/util/u8a/toBuffer';
 
 import encode from '../message/encode';
@@ -15,9 +18,16 @@ export default function send ({ l, pushable }: PeerState, message: MessageInterf
   }
 
   try {
+    const encoded = encode(message);
+    const length = varint.encode(encoded.length + 1);
+
     pushable.push(
       u8aToBuffer(
-        encode(message)
+        u8aConcat(
+          bufferToU8a(length),
+          new Uint8Array([0]),
+          encoded
+        )
       )
     );
   } catch (error) {

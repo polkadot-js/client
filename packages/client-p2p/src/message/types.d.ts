@@ -19,11 +19,11 @@ export type BlockAnnounceMessage = {
   header: Header
 }
 
-export type BlockRequestMessage$BlockAttribute = 'header' | 'body' | 'receipt' | 'messageQueue' | 'justification';
+export type BlockRequestMessage$BlockAttribute = 'Header' | 'Body' | 'Receipt' | 'MessageQueue' | 'Justification';
 
 export type BlockRequestMessage$Fields = Array<BlockRequestMessage$BlockAttribute>;
 
-export type BlockRequestMessage$Direction = 'ascending' | 'descending';
+export type BlockRequestMessage$Direction = 'Ascending' | 'Descending';
 
 export type BlockRequestMessage = {
   direction: BlockRequestMessage$Direction,
@@ -31,7 +31,7 @@ export type BlockRequestMessage = {
   from: HeaderHash | BN,
   id: number,
   max: number,
-  to: HeaderHash
+  to: HeaderHash | null
 }
 
 export type BlockResponseMessage$BlockData$Justification = {};

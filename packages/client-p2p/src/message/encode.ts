@@ -4,16 +4,12 @@
 
 import { MessageInterface } from '../types';
 
-import u8aConcat from '@polkadot/util/u8a/concat';
 import u8aFromUtf8 from '@polkadot/util/u8a/fromUtf8';
 
 export default function encode (message: MessageInterface): Uint8Array {
-  return u8aConcat(
-    new Uint8Array([message.type]),
-    u8aFromUtf8(
-      JSON.stringify(
-        message.encode().message
-      )
+  return u8aFromUtf8(
+    JSON.stringify(
+      message.encode().message
     )
   );
 }

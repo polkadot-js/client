@@ -4,16 +4,30 @@
 
 import { MessageInterface, RawMessage } from '../types';
 
+import isUndefined from '@polkadot/util/is/undefined';
 import u8aToUtf8 from '@polkadot/util/u8a/toUtf8';
 
 import createMessage from './create';
 
 export default function decode (u8a: Uint8Array): MessageInterface {
+  const utf8 = u8aToUtf8(u8a);
+  const parsed = JSON.parse(utf8);
+
   const message: RawMessage = {
-    message: JSON.parse(
-      u8aToUtf8(u8a.subarray(1))
-    ),
-    type: u8a[0]
+    message: parsed,
+    type: (() => {
+      if (!isUndefined(parsed.BlockAnnounce)) {
+        return 3;
+      } else if (!isUndefined(parsed.BlockResponse)) {
+        return 2;
+      } else if (!isUndefined(parsed.BlockRequest)) {
+        return 1;
+      } else if (!isUndefined(parsed.Status)) {
+        return 0;
+      } else {
+        throw new Error(`Unknown message received, ${utf8}`);
+      }
+    })()
   };
   const instance = createMessage(message.type);
 

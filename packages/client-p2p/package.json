@@ -49,7 +49,8 @@
     "libp2p-websockets": "^0.12.0",
     "pull-pushable": "^2.2.0",
     "pull-stream": "^3.6.8",
-    "pump": "^3.0.0"
+    "pump": "^3.0.0",
+    "varint": "^5.0.0"
   },
   "devDependencies": {
     "@polkadot/client": "^0.12.3"

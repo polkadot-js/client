@@ -15,11 +15,11 @@ export default function getBlockData (self: P2pState, fields: BlockRequestMessag
     hash
   };
 
-  if (fields.includes('body')) {
+  if (fields.includes('Body')) {
     data.body = body;
   }
 
-  if (fields.includes('header')) {
+  if (fields.includes('Header')) {
     data.header = header;
   }
 

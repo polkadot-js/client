@@ -36,7 +36,6 @@ export default function createKoa ({ handlers, path, types }: CreateKoaOption): 
           const app = koaWebsocket(new Koa());
 
           app.ws.use(
-            // @ts-ignore defintions are not correct here
             koaRoute.all(path, handlers.ws)
           );
 

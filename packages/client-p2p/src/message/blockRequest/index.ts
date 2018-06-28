@@ -15,7 +15,7 @@ import rawEncode from './rawEncode';
 
 const TYPE = 1;
 
-function BlockRequest ({ direction = 'ascending', fields = ['header', 'body'], from, id, max = defaults.MAX_SYNC_BLOCKS, to }: BlockRequestMessage): MessageInterface {
+function BlockRequest ({ direction = 'Ascending', fields = ['Header', 'Body', 'Justification'], from, id, max = defaults.MAX_SYNC_BLOCKS, to }: BlockRequestMessage): MessageInterface {
   const raw: BlockRequestMessage = {
     direction,
     fields,

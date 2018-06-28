@@ -5,18 +5,23 @@
 import { BlockRequestMessage } from '../types';
 import { BlockRequestEncoded } from './types';
 
-import bnEncode from '@polkadot/primitives/json/bn/encode';
+// import bnEncode from '@polkadot/primitives/json/bn/encode';
 import hashEncode from '@polkadot/primitives/json/hash/encode';
 import isBn from '@polkadot/util/is/bn';
+import isU8a from '@polkadot/util/is/u8a';
+import u8aToHex from '@polkadot/util/u8a/toHex';
 
-export default function rawEncode ({ direction, fields, from, id, max, to }: BlockRequestMessage): BlockRequestEncoded {
+export default function rawEncode ({ direction, fields, from, id, max, to = null }: BlockRequestMessage): BlockRequestEncoded {
   return {
     direction,
     fields,
     from: isBn(from)
-      ? bnEncode(from, 64)
-      : hashEncode((from), 256),
+      ? from.toNumber() // bnEncode(from, 64)
+      : hashEncode(from, 256),
     id,
-    max
+    max,
+    to: isU8a(to)
+      ? u8aToHex(to)
+      : to
   };
 }

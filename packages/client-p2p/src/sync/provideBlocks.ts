@@ -20,7 +20,7 @@ export default function provideBlocks (self: P2pState, peer: PeerInterface, requ
   // FIXME: Also send blocks starting with hash
   const max = Math.min(request.max || defaults.MAX_SYNC_BLOCKS, defaults.MAX_SYNC_BLOCKS);
   let count = isU8a(request.from) ? max : 0;
-  const increment = request.direction === 'ascending' ? new BN(1) : new BN(-1);
+  const increment = request.direction === 'Ascending' ? new BN(1) : new BN(-1);
 
   while (count < max && current.lte(best) && !current.isNeg()) {
     const hash = self.chain.state.system.blockHashAt.get(current);
