@@ -5,12 +5,12 @@
 import { Role } from '@polkadot/primitives/role';
 
 export type StatusEncoded = {
-  bestHash: string,
-  bestNumber: string,
-  genesisHash: string,
-  parachainId?: string,
+  best_hash: string,
+  best_number: string,
+  genesis_hash: string,
+  parachain_id?: string | null,
   roles: Array<Role>,
-  validatorId?: string,
-  validatorSignature?: string,
+  validator_id?: string | null,
+  validator_signature?: string | null,
   version: number
 };

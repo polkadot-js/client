@@ -7,7 +7,9 @@ import { MessageState } from '../types';
 
 export default function encode (self: MessageState): RawMessage {
   return {
-    message: self.impl.rawEncode(),
+    message: {
+      [self.name]: self.impl.rawEncode()
+    },
     type: self.type
   };
 }

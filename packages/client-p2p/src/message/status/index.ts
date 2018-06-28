@@ -13,7 +13,8 @@ import base from '../base';
 import rawDecode from './rawDecode';
 import rawEncode from './rawEncode';
 
-const TYPE: number = 0;
+const NAME = 'Status';
+const TYPE = 0;
 
 function status ({ bestHash = new Uint8Array(32), bestNumber = new BN(0), genesisHash = new Uint8Array(32), parachainId = new BN(0), roles = ['none'], validatorId = new Uint8Array(32), validatorSignature = new Uint8Array(64), version = defaults.PROTOCOL_VERSION }: StatusMessage): MessageInterface {
   const raw: StatusMessage = {
@@ -27,7 +28,7 @@ function status ({ bestHash = new Uint8Array(32), bestNumber = new BN(0), genesi
     version
   };
 
-  return base(TYPE, {
+  return base(NAME, TYPE, {
     raw,
     rawDecode: (data: StatusEncoded): StatusMessage =>
       rawDecode(raw, data),
@@ -36,6 +37,7 @@ function status ({ bestHash = new Uint8Array(32), bestNumber = new BN(0), genesi
   });
 }
 
-(status as MessageFactory<any>).TYPE = TYPE;
+(status as MessageFactory<any>).name = NAME;
+(status as MessageFactory<any>).type = TYPE;
 
 export default (status as MessageFactory<StatusMessage>);

@@ -14,7 +14,9 @@ import { SyncState } from './sync/types';
 export type P2pNodes = Array<string>;
 
 export type RawMessage = {
-  message: any,
+  message: {
+    [index: string]: any
+  },
   type: number
 };
 

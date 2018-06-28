@@ -10,11 +10,14 @@ import hashEncode from '@polkadot/primitives/json/hash/encode';
 
 export default function rawEncode ({ bestHash, bestNumber, genesisHash, parachainId, roles, validatorId, validatorSignature, version }: StatusMessage): StatusEncoded {
   return {
-    bestHash: hashEncode(bestHash, 256),
-    bestNumber: bnEncode(bestNumber, 64),
-    genesisHash: hashEncode(genesisHash, 256),
+    best_hash: hashEncode(bestHash, 256),
+    best_number: bnEncode(bestNumber, 64),
+    genesis_hash: hashEncode(genesisHash, 256),
     roles,
-    version
-    // TODO: validatorId, validatorSignature, parachainId
+    version,
+    // TODO actual values as required
+    parachain_id: null,
+    validator_id: null,
+    validator_signature: null
   };
 }

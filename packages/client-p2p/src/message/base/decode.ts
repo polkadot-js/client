@@ -6,12 +6,14 @@ import { RawMessage } from '../../types';
 import { MessageState } from '../types';
 
 import assert from '@polkadot/util/assert';
+import isUndefined from '@polkadot/util/is/undefined';
 
 export default function decode (self: MessageState, { type, message }: RawMessage): any {
   assert(type === self.type, 'Expected message id to match');
+  assert(!isUndefined(message[self.name]), `Unable to find root '${self.name}'`);
 
   return {
-    message: self.impl.rawDecode(message),
+    message: self.impl.rawDecode(message[self.name]),
     type
   };
 }

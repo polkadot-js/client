@@ -11,7 +11,8 @@ import { MessageInterface } from '../types';
 
 export type MessageFactory<T> = {
   (message: T): MessageInterface,
-  TYPE: number
+  name: string,
+  type: number
 }
 
 export type BlockAnnounceMessage = {
@@ -69,6 +70,7 @@ export type MessageImpl = {
 };
 
 export type MessageState = {
+  name: string,
   type: number,
   impl: MessageImpl
 };

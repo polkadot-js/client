@@ -11,14 +11,14 @@ import hashDecode from '@polkadot/primitives/json/hash/decode';
 import parachainIdDecode from '@polkadot/primitives/json/parachainId/decode';
 import signatureDecode from '@polkadot/primitives/json/signature/decode';
 
-export default function rawDecode (raw: StatusMessage, { bestHash, bestNumber, genesisHash, parachainId = '0x00', roles, validatorId = '0x00', validatorSignature = '0x00', version }: StatusEncoded): StatusMessage {
-  raw.bestNumber = bnDecode(bestNumber, 64);
-  raw.bestHash = hashDecode(bestHash, 256);
-  raw.genesisHash = hashDecode(genesisHash, 256);
-  raw.parachainId = parachainIdDecode(parachainId);
+export default function rawDecode (raw: StatusMessage, { best_hash, best_number, genesis_hash, parachain_id = '0x00', roles, validator_id = null, validator_signature = null, version }: StatusEncoded): StatusMessage {
+  raw.bestNumber = bnDecode(best_number, 64);
+  raw.bestHash = hashDecode(best_hash, 256);
+  raw.genesisHash = hashDecode(genesis_hash, 256);
+  raw.parachainId = parachainIdDecode(parachain_id || '0x00');
   raw.roles = roles;
-  raw.validatorId = accountIdDecode(validatorId);
-  raw.validatorSignature = signatureDecode(validatorSignature);
+  raw.validatorId = accountIdDecode(validator_id || '0x00');
+  raw.validatorSignature = signatureDecode(validator_signature || '0x00');
   raw.version = version;
 
   return raw;
