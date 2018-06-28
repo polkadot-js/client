@@ -12,15 +12,14 @@ import base from '../base';
 import rawDecode from './rawDecode';
 import rawEncode from './rawEncode';
 
-const NAME = 'BlockAnnounce';
 const TYPE = 3;
 
-function blockAnnounce ({ header = createHeader({}) }: BlockAnnounceMessage): MessageInterface {
+function BlockAnnounce ({ header = createHeader({}) }: BlockAnnounceMessage): MessageInterface {
   const raw: BlockAnnounceMessage = {
     header
   };
 
-  return base(NAME, TYPE, {
+  return base(BlockAnnounce.name, TYPE, {
     raw,
     rawDecode: (data: BlockAnnounceEncoded): BlockAnnounceMessage =>
       rawDecode(raw, data),
@@ -29,7 +28,6 @@ function blockAnnounce ({ header = createHeader({}) }: BlockAnnounceMessage): Me
   });
 }
 
-(blockAnnounce as MessageFactory<any>).name = NAME;
-(blockAnnounce as MessageFactory<any>).type = TYPE;
+(BlockAnnounce as MessageFactory<any>).type = TYPE;
 
-export default (blockAnnounce as MessageFactory<BlockAnnounceMessage>);
+export default (BlockAnnounce as MessageFactory<BlockAnnounceMessage>);

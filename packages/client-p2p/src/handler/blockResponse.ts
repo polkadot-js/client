@@ -15,6 +15,6 @@ function handleBlockResponse (self: P2pState, peer: PeerInterface, message: Mess
   queueBlocks(self, peer, (message.raw as BlockResponseMessage));
 }
 
-(handleBlockResponse as Handler).TYPE = message.TYPE;
+(handleBlockResponse as Handler).type = message.type;
 
 export default (handleBlockResponse as Handler);

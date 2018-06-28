@@ -15,6 +15,6 @@ function handleBlockRequest (self: P2pState, peer: PeerInterface, message: Messa
   provideBlocks(self, peer, (message.raw as BlockRequestMessage));
 }
 
-(handleBlockRequest as Handler).TYPE = message.TYPE;
+(handleBlockRequest as Handler).type = message.type;
 
 export default (handleBlockRequest as Handler);

@@ -6,5 +6,5 @@ import { P2pState, MessageInterface, PeerInterface } from '../types';
 
 export type Handler = {
   (self: P2pState, peer: PeerInterface, message: MessageInterface): void,
-  TYPE: number
+  type: number
 };

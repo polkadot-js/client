@@ -27,6 +27,6 @@ function handleBlockAnnounce (self: P2pState, peer: PeerInterface, message: Mess
   requestsBlocks(self, peer);
 }
 
-(handleBlockAnnounce as Handler).TYPE = message.TYPE;
+(handleBlockAnnounce as Handler).type = message.type;
 
 export default (handleBlockAnnounce as Handler);

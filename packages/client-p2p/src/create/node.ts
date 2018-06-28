@@ -18,5 +18,13 @@ export default async function createNode ({ config: { p2p: { address, port, node
 
   l.log(`creating Libp2p with ${addrs.join(', ')}`);
 
-  return new Libp2p(modules, listener, peerBook);
+  const node = new Libp2p(modules, listener, peerBook);
+
+  // HACK stub floodsub (it is not enabled for Polkadot Rust, however it is a default for JS, noop the start). With libp2p 0.21.0 this won't be needed anymore since floodsub can be switched on/off
+  // @ts-ignore
+  node._floodSub.start = (cb) => {
+    cb();
+  };
+
+  return node;
 }

@@ -12,7 +12,7 @@ export default function encode (message: MessageInterface): Uint8Array {
     new Uint8Array([message.type]),
     u8aFromUtf8(
       JSON.stringify(
-        message.encode()
+        message.encode().message
       )
     )
   );

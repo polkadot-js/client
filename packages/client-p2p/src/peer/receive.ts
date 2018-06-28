@@ -19,6 +19,7 @@ export default function receive ({ emitter, l }: PeerState, connection: LibP2pCo
         (buffer: Buffer): void => {
           const u8a = bufferToU8a(buffer);
 
+          console.error(`received ${u8aToHex(u8a)}, ${u8aToUtf8(u8a)}`);
           l.debug(() => `received ${u8aToHex(u8a)}, ${u8aToUtf8(u8a)}`);
 
           emitter.emit('message', decode(u8a));

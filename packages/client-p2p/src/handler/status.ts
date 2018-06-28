@@ -17,6 +17,6 @@ function handleStatus (self: P2pState, peer: PeerInterface, message: MessageInte
   peer.setBest(bestNumber, bestHash);
 }
 
-(handleStatus as Handler).TYPE = message.TYPE;
+(handleStatus as Handler).type = message.type;
 
 export default (handleStatus as Handler);

@@ -21,7 +21,7 @@ const HANDLERS: Array<Handler> = [
 
 export default function onPeerMessage (self: P2pState): void {
   self.peers.on('message', ({ peer, message }: Message): void => {
-    const handler = HANDLERS.find((handler) => handler.TYPE === message.type);
+    const handler = HANDLERS.find((handler) => handler.type === message.type);
 
     if (!handler) {
       self.l.error(`Unhandled message type=${message.type}`);

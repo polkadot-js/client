@@ -10,16 +10,15 @@ import base from '../base';
 import rawDecode from './rawDecode';
 import rawEncode from './rawEncode';
 
-const NAME = 'BlockResponse';
 const TYPE = 2;
 
-function blockResponse ({ blocks = [], id = 0 }: BlockResponseMessage): MessageInterface {
+function BlockResponse ({ blocks = [], id = 0 }: BlockResponseMessage): MessageInterface {
   const raw: BlockResponseMessage = {
     blocks,
     id
   };
 
-  return base(NAME, TYPE, {
+  return base(BlockResponse.name, TYPE, {
     raw,
     rawDecode: (data: BlockResponseEncoded): BlockResponseMessage =>
       rawDecode(raw, data),
@@ -28,7 +27,6 @@ function blockResponse ({ blocks = [], id = 0 }: BlockResponseMessage): MessageI
   });
 }
 
-(blockResponse as MessageFactory<any>).name = NAME;
-(blockResponse as MessageFactory<any>).type = TYPE;
+(BlockResponse as MessageFactory<any>).type = TYPE;
 
-export default (blockResponse as MessageFactory<BlockResponseMessage>);
+export default (BlockResponse as MessageFactory<BlockResponseMessage>);

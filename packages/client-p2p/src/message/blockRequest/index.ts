@@ -13,10 +13,9 @@ import base from '../base';
 import rawDecode from './rawDecode';
 import rawEncode from './rawEncode';
 
-const NAME = 'BlockRequest';
 const TYPE = 1;
 
-function blockRequest ({ direction = 'ascending', fields = ['header', 'body'], from, id, max = defaults.MAX_SYNC_BLOCKS, to }: BlockRequestMessage): MessageInterface {
+function BlockRequest ({ direction = 'ascending', fields = ['header', 'body'], from, id, max = defaults.MAX_SYNC_BLOCKS, to }: BlockRequestMessage): MessageInterface {
   const raw: BlockRequestMessage = {
     direction,
     fields,
@@ -26,7 +25,7 @@ function blockRequest ({ direction = 'ascending', fields = ['header', 'body'], f
     to
   };
 
-  return base(NAME, TYPE, {
+  return base(BlockRequest.name, TYPE, {
     raw,
     rawDecode: (data: BlockRequestEncoded): BlockRequestMessage =>
       rawDecode(raw, data),
@@ -35,7 +34,6 @@ function blockRequest ({ direction = 'ascending', fields = ['header', 'body'], f
   });
 }
 
-(blockRequest as MessageFactory<any>).name = NAME;
-(blockRequest as MessageFactory<any>).type = TYPE;
+(BlockRequest as MessageFactory<any>).type = TYPE;
 
-export default (blockRequest as MessageFactory<BlockRequestMessage>);
+export default (BlockRequest as MessageFactory<BlockRequestMessage>);

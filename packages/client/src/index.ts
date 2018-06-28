@@ -14,12 +14,6 @@ import cli from './cli';
 import initDev from './dev';
 import createRpc from './rpc';
 
-import multiaddr, { Multiaddr } from 'multiaddr';
-
-const addr: Multiaddr = multiaddr('test');
-
-console.log(addr);
-
 const l = logger('client');
 const config = cli();
 

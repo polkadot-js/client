@@ -20,7 +20,7 @@ type CreateMap = {
 const creators = [
   blockAnnounce, blockRequest, blockResponse, status
 ].reduce((creators, message) => {
-  creators[message.TYPE] = message;
+  creators[message.type] = message;
 
   return creators;
 }, {} as CreateMap);
