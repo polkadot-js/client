@@ -2,7 +2,8 @@
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
 
-import { P2pState, MessageInterface, PeerInterface } from '../types';
+import { MessageInterface } from '@polkadot/client-p2p-messages/types';
+import { P2pState, PeerInterface } from '../types';
 
 export type Handler = {
   (self: P2pState, peer: PeerInterface, message: MessageInterface): void,

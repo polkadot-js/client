@@ -11,7 +11,7 @@ import bufferToU8a from '@polkadot/util/buffer/toU8a';
 import u8aToHex from '@polkadot/util/u8a/toHex';
 import u8aToUtf8 from '@polkadot/util/u8a/toUtf8';
 
-import decode from '../message/decode';
+import decodeMessage from '@polkadot/client-p2p-messages/index';
 
 export default function receive ({ emitter, l }: PeerState, connection: LibP2pConnection): boolean {
   try {
@@ -23,13 +23,14 @@ export default function receive ({ emitter, l }: PeerState, connection: LibP2pCo
           const length = varint.decode(buffer);
           const offset = varint.decode.bytes;
           const u8a = bufferToU8a(buffer.slice(offset + 1));
+          const utf8 = u8aToUtf8(u8a);
 
           // TODO Do we keep this peer or drop it (like Rust does on invalid messages). Additionally, do we _really_ want to throw here?
           assert(u8a.length === length - 1, 'Invalid buffer length received');
 
-          l.debug(() => `received ${u8aToHex(u8a)} => ${u8aToUtf8(u8a)}`);
+          l.debug(() => `received ${u8aToHex(u8a)} => ${utf8}`);
 
-          emitter.emit('message', decode(u8a));
+          emitter.emit('message', decodeMessage(utf8));
         },
         () => false
       )

@@ -1,0 +1,42 @@
+{
+  "name": "@polkadot/client-p2p-messages",
+  "version": "0.12.3",
+  "description": "Network message definitions",
+  "main": "index.js",
+  "engines": {
+    "node": ">=8.0"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/polkadot-js/client.git"
+  },
+  "keywords": [
+    "Polkadot",
+    "Merkel Patricia Tree"
+  ],
+  "author": "Jaco Greeff <jacogr@gmail.com>",
+  "maintainers": [
+    "Jaco Greeff <jacogr@gmail.com>"
+  ],
+  "contributors": [],
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/polkadot-js/client/issues"
+  },
+  "homepage": "https://github.com/polkadot-js/client/tree/master/packages/client-db#readme",
+  "scripts": {
+    "build": "polkadot-dev-build-babel",
+    "check": "eslint src && flow check",
+    "test": "echo \"Tests only available from root wrapper\""
+  },
+  "dependencies": {
+    "@babel/runtime": "^7.0.0-beta.51",
+    "@polkadot/jsonrpc": "^0.26.10",
+    "@polkadot/primitives": "^0.26.10",
+    "@polkadot/util": "^0.26.10"
+  }
+}

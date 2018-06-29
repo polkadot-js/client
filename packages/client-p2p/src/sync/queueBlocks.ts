@@ -2,10 +2,8 @@
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
 
-import { BlockResponseMessage } from '../message/types';
+import { BlockResponseMessage } from '@polkadot/client-p2p-messages/types';
 import { P2pState, PeerInterface } from '../types';
-
-import decodeHeader from '@polkadot/primitives/codec/header/decodeRaw';
 
 import processBlocks from './processBlocks';
 
@@ -32,7 +30,7 @@ export default function queueBlocks (self: P2pState, peer: PeerInterface, { bloc
     return count + 1;
   }, 0);
 
-  self.l.log(`Added ${count} blocks from ${peer.shortId}`);
+  self.l.log(`Queued ${count} blocks from ${peer.shortId}`);
 
   processBlocks(self);
 }

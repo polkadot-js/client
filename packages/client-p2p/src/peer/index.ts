@@ -6,7 +6,8 @@ import BN from 'bn.js';
 import PeerInfo from 'peer-info';
 import { Config } from '@polkadot/client/types';
 import { ChainInterface } from '@polkadot/client-chains/types';
-import { MessageInterface, PeerInterface } from '../types';
+import { MessageInterface } from '@polkadot/client-p2p-messages/types';
+import { PeerInterface } from '../types';
 
 import stringShorten from '@polkadot/util/string/shorten';
 
