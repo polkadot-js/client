@@ -37,12 +37,10 @@ export type BlockRequestMessage = {
 export type BlockResponseMessage$BlockData$Justification = {};
 
 export type BlockResponseMessage$BlockData = {
-  hash: HeaderHash,
-  header?: Uint8Array,
-  body?: Uint8Array,
-  receipt?: Uint8Array,
-  messageQueue?: Uint8Array,
+  hash: Uint8Array,
+  importable: Uint8Array,
   justification?: Justification,
+  number: BN
 }
 
 export type BlockResponseMessage$Blocks = Array<BlockResponseMessage$BlockData>;

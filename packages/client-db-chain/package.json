@@ -35,12 +35,12 @@
   "dependencies": {
     "@babel/runtime": "^7.0.0-beta.51",
     "@polkadot/client-db": "^0.12.3",
-    "@polkadot/storage": "^0.26.9",
-    "@polkadot/trie-hash": "^0.26.9",
-    "@polkadot/util": "^0.26.9",
-    "@polkadot/util-crypto": "^0.26.9"
+    "@polkadot/storage": "^0.26.10",
+    "@polkadot/trie-hash": "^0.26.10",
+    "@polkadot/util": "^0.26.10",
+    "@polkadot/util-crypto": "^0.26.10"
   },
   "devDependencies": {
-    "@polkadot/storage": "^0.26.9"
+    "@polkadot/storage": "^0.26.10"
   }
 }

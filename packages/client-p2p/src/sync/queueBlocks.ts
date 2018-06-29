@@ -21,15 +21,13 @@ export default function queueBlocks (self: P2pState, peer: PeerInterface, { bloc
 
   const count = blocks.reduce((count: number, block) => {
     const hasImported = self.chain.blocks.block.get(block.hash).length !== 0;
-    // tslint:disable-next-line:variable-name
-    const { number } = decodeHeader(block.header as Uint8Array);
-    const hasQueued = !!self.sync.blockQueue[number.toString()];
+    const hasQueued = !!self.sync.blockQueue[block.number.toString()];
 
     if (hasImported && hasQueued) {
       return count;
     }
 
-    self.sync.blockQueue[number.toString()] = block;
+    self.sync.blockQueue[block.number.toString()] = block;
 
     return count + 1;
   }, 0);

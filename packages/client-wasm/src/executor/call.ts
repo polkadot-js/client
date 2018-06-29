@@ -28,8 +28,7 @@ export default function call ({ config, genesis, l, runtime, stateDb }: Executor
     const start = Date.now();
 
     l.debug(() => ['preparing', name]);
-
-    runtime.instrument.start();
+    // runtime.instrument.start();
 
     const params = data.reduce((params, data) => {
       l.debug(() => ['storing', u8aToHex(data)]);
@@ -45,7 +44,7 @@ export default function call ({ config, genesis, l, runtime, stateDb }: Executor
     const lo: number = instance[name].apply(null, params);
     const hi: number = instance['get_result_hi']();
 
-    l.debug(() => runtime.instrument.stop());
+    // l.debug(() => runtime.instrument.stop());
     l.debug(() => [name, 'returned', [lo, hi], `(${Date.now() - start}ms)`]);
 
     return {
