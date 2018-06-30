@@ -20,7 +20,9 @@ describe('get_allocated_storage', () => {
   beforeEach(() => {
     heap = envHeap();
     heap.setWasmMemory({ buffer: new Uint8Array(1024 * 1024) });
-    db = envDb({});
+    db = envDb({
+      get: () => null
+    });
 
     get_allocated_storage = index({ l, heap, db }).get_allocated_storage;
   });
@@ -43,5 +45,18 @@ describe('get_allocated_storage', () => {
         heap.getU32(lenPtr)
       )
     ).toEqual(value);
+  });
+
+  it('returns 0, setting MAX_U32 when non-existent', () => {
+    const key = u8aFromString('key');
+    const keyPtr = heap.allocate(key.length);
+    const lenPtr = heap.allocate(4);
+
+    expect(
+      get_allocated_storage(keyPtr, key.length, lenPtr)
+    ).toEqual(0);
+    expect(
+      heap.getU32(lenPtr)
+    ).toEqual(4294967295);
   });
 });
