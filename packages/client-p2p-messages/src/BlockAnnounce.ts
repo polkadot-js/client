@@ -3,26 +3,18 @@
 // of the ISC license. See the LICENSE file for details.
 
 import { Header } from '@polkadot/primitives/header';
-import { JsonHeader } from '@polkadot/primitives/json/types';
-import { MessageEncoder, BlockAnnounceMessage } from './types';
+import { BlockAnnounceEncoded, BlockAnnounceMessage, MessageEncoder } from './types';
 
 import headerDecode from '@polkadot/primitives/json/header/decode';
 import headerEncode from '@polkadot/primitives/json/header/encode';
 
-type BlockAnnounceEncoded = {
-  BlockAnnounce: {
-    header: JsonHeader
-  }
-};
-
 export default class BlockAnnounce implements MessageEncoder<BlockAnnounceEncoded>, BlockAnnounceMessage {
   static type = 3;
+  readonly type = BlockAnnounce.type;
 
-  type: number;
   header: Header;
 
   constructor ({ header }: BlockAnnounceMessage) {
-    this.type = BlockAnnounce.type;
     this.header = header;
   }
 

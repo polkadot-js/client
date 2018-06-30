@@ -4,7 +4,7 @@
 
 import { AccountId, BlockNumber, HeaderHash, ParaChainId, Signature } from '@polkadot/primitives/base';
 import { Role } from '@polkadot/primitives/role';
-import { MessageEncoder, StatusMessage } from './types';
+import { MessageEncoder, StatusEncoded, StatusMessage } from './types';
 
 import accountIdDecode from '@polkadot/primitives/json/accountId/decode';
 import bnDecode from '@polkadot/primitives/json/bn/decode';
@@ -15,23 +15,10 @@ import signatureDecode from '@polkadot/primitives/json/signature/decode';
 // import bnEncode from '@polkadot/primitives/json/bn/encode';
 import hashEncode from '@polkadot/primitives/json/hash/encode';
 
-type StatusEncoded = {
-  Status: {
-    best_hash: string,
-    best_number: number,
-    genesis_hash: string,
-    parachain_id?: string | null,
-    roles: Array<string>,
-    validator_id?: string | null,
-    validator_signature?: string | null,
-    version: number
-  }
-};
-
 export default class Status implements MessageEncoder<StatusEncoded>, StatusMessage {
   static type = 0;
+  readonly type = Status.type;
 
-  type: number;
   bestHash: HeaderHash;
   bestNumber: BlockNumber;
   genesisHash: HeaderHash;
@@ -42,7 +29,6 @@ export default class Status implements MessageEncoder<StatusEncoded>, StatusMess
   version: number;
 
   constructor ({ bestHash, bestNumber, genesisHash, parachainId = null, roles, validatorId = null, validatorSignature = null, version }: StatusMessage) {
-    this.type = Status.type;
     this.bestHash = bestHash;
     this.bestNumber = bestNumber;
     this.genesisHash = genesisHash;

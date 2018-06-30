@@ -4,7 +4,7 @@
 
 import BN from 'bn.js';
 import { HeaderHash } from '@polkadot/primitives/base';
-import { MessageEncoder, BlockRequestMessage, BlockRequestMessageDirection, BlockRequestMessageField } from './types';
+import { MessageEncoder, BlockRequestEncoded, BlockRequestMessage, BlockRequestMessageDirection, BlockRequestMessageField } from './types';
 
 import defaults from '@polkadot/client-p2p/defaults';
 import hashEncode from '@polkadot/primitives/json/hash/encode';
@@ -13,21 +13,10 @@ import bnDecode from '@polkadot/primitives/json/bn/decode';
 import hashDecode from '@polkadot/primitives/json/hash/decode';
 import isString from '@polkadot/util/is/string';
 
-type BlockRequestEncoded = {
-  BlockRequest: {
-    direction: BlockRequestMessageDirection,
-    fields: Array<BlockRequestMessageField>,
-    from: string | number,
-    id: number,
-    max: number,
-    to?: string | number | null
-  }
-};
-
 export default class BlockRequest implements MessageEncoder<BlockRequestEncoded>, BlockRequestMessage {
   static type = 3;
+  readonly type = BlockRequest.type;
 
-  type: number;
   direction: BlockRequestMessageDirection;
   fields: Array<BlockRequestMessageField>;
   from: HeaderHash | BN;
@@ -36,7 +25,6 @@ export default class BlockRequest implements MessageEncoder<BlockRequestEncoded>
   // to: HeaderHash | null;
 
   constructor ({ direction, fields, from, id, max }: BlockRequestMessage) {
-    this.type = BlockRequest.type;
     this.direction = direction;
     this.fields = fields;
     this.from = from;

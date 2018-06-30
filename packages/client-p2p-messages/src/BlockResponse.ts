@@ -2,9 +2,7 @@
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
 
-import { Justification } from '@polkadot/primitives/bft';
-import { Header } from '@polkadot/primitives/header';
-import { MessageEncoder, BlockResponseMessage, BlockResponseMessageBlock } from './types';
+import { MessageEncoder, BlockResponseEncoded, BlockResponseMessage, BlockResponseMessageBlock } from './types';
 
 import bnToBn from '@polkadot/util/bn/toBn';
 import bnToU8a from '@polkadot/util/bn/toU8a';
@@ -13,31 +11,14 @@ import u8aToU8a from '@polkadot/util/u8a/toU8a';
 import encodeHeader from '@polkadot/primitives/codec/header/encode';
 import hashDecode from '@polkadot/primitives/json/hash/decode';
 
-type BlockResponseEncodedBlock = {
-  hash: string,
-  header: Header,
-  body: Array<Array<number>>,
-  receipt: null,
-  messageQueue: null,
-  justification: Justification
-};
-
-export type BlockResponseEncoded = {
-  BlockResponse: {
-    id: number,
-    blocks: Array<BlockResponseEncodedBlock>
-  }
-};
-
 export default class BlockResponse implements MessageEncoder<BlockResponseEncoded>, BlockResponseMessage {
   static type = 2;
+  readonly type = BlockResponse.type;
 
-  type: number;
   id: number;
   blocks: Array<BlockResponseMessageBlock>;
 
   constructor ({ blocks, id }: BlockResponseMessage) {
-    this.type = BlockResponse.type;
     this.blocks = blocks;
     this.id = id;
   }
