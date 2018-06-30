@@ -2,50 +2,51 @@
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
 
+import BN from 'bn.js';
 import logger from '@polkadot/util/logger';
-import u8aToBuffer from '@polkadot/util/u8a/toBuffer';
+import Status from '@polkadot/client-p2p-messages/Status';
 
-import status from '../message/status';
-import encode from '../message/encode';
 import send from './send';
 
 const l = logger('test');
 
 describe('send', () => {
   let self;
+  let status;
 
   beforeEach(() => {
     self = {
       l,
       pushable: []
     };
+    status = new Status({
+      bestHash: new Uint8Array(),
+      bestNumber: new BN(0),
+      genesisHash: new Uint8Array(),
+      roles: [],
+      version: 0
+    });
   });
 
   it('returns false when sending fails', () => {
     self.pushable = null;
 
     expect(
-      send(self)
+      send(self, status)
     ).toEqual(false);
   });
 
   it('returns true when sent', () => {
     expect(
-      send(self, status({}))
+      send(self, status)
     ).toEqual(true);
   });
 
   it('upopn sending, message is added to pushable', () => {
-    const message = status({});
-
-    send(self, message);
+    send(self, status);
 
     expect(
       self.pushable[0]
-    ).toEqual(
-      u8aToBuffer(
-        encode(message)
-      )
-    );
+    ).toBeDefined();
   });
 });
