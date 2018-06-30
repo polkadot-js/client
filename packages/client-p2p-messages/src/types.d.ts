@@ -11,13 +11,15 @@ import { Role } from '@polkadot/primitives/role';
 
 export interface MessageEncoder <M> {
   readonly type: number;
+
   encode (): M;
 }
 
 export type MessageInterface = MessageEncoder<any>;
 
 export interface MessageDecoder <M, C> {
-  type: number;
+  readonly type: number;
+
   decode (input: M): C;
 }
 
