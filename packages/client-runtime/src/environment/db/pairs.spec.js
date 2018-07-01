@@ -47,4 +47,21 @@ describe('pairs', () => {
       { k: new Uint8Array([2]), v: new Uint8Array([2]) }
     ]);
   });
+
+  it('retrieves, ignoring deleted pairs', () => {
+    const int = index(backend);
+
+    int.set(new Uint8Array([1]), new Uint8Array([1]));
+    int.set(new Uint8Array([2]), new Uint8Array([2]));
+    int.del(new Uint8Array([4]));
+
+    expect(
+      int.pairs()
+    ).toEqual([
+      { k: new Uint8Array([1]), v: new Uint8Array([0]) },
+      { k: new Uint8Array([3]), v: new Uint8Array([3]) },
+      { k: new Uint8Array([1]), v: new Uint8Array([1]) },
+      { k: new Uint8Array([2]), v: new Uint8Array([2]) }
+    ]);
+  });
 });

@@ -6,11 +6,20 @@ import { Trie$Pairs } from '@polkadot/trie-hash/types';
 import { DbState } from './types';
 
 export default function pairs ({ backend, pending }: DbState): Trie$Pairs {
+  const backendPairs = backend
+    ? backend.pairs()
+    : [];
   const pendingKeys = Object.keys(pending);
-  // @ts-ignore yes, we strip nulls, so all ok here
-  const pendingPairs: Trie$Pairs = pendingKeys
-    .filter((k) => pending[k].v !== null)
-    .map((k) => pending[k]);
+  const deletedKeys = pendingKeys.filter((k) =>
+    pending[k].v === null
+  );
+  const pendingPairs = Object.values(pending).filter(({ v }) =>
+    v !== null
+  );
 
-  return (backend ? backend.pairs() : []).concat(pendingPairs);
+  return backendPairs
+    .filter(({ k }) =>
+      deletedKeys.indexOf(k.toString()) === -1
+    )
+    .concat(pendingPairs as Trie$Pairs);
 }
