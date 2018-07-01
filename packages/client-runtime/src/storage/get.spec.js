@@ -38,7 +38,7 @@ describe('get_storage_into', () => {
   });
 
   it('retrieves the correct value from storage', () => {
-    get_storage_into(1, 3, 3, 3);
+    get_storage_into(1, 3, 3, 3, 0);
 
     expect(
       db.get
@@ -49,7 +49,7 @@ describe('get_storage_into', () => {
 
   it('retrieves the full value when length >= available', () => {
     expect(
-      get_storage_into(1, 0, 3, 10)
+      get_storage_into(1, 0, 3, 10, 0)
     ).toEqual(5);
     expect(
       heap.set
@@ -58,16 +58,25 @@ describe('get_storage_into', () => {
 
   it('retrieves a partial value when length < available', () => {
     expect(
-      get_storage_into(1, 0, 3, 3)
+      get_storage_into(1, 0, 3, 3, 0)
     ).toEqual(3);
     expect(
       heap.set
     ).toHaveBeenCalledWith(3, new Uint8Array([0x1, 0x2, 0x3]));
   });
 
+  it('retrieves a partial value with offset', () => {
+    expect(
+      get_storage_into(1, 0, 3, 13, 2)
+    ).toEqual(3);
+    expect(
+      heap.set
+    ).toHaveBeenCalledWith(3, new Uint8Array([0x3, 0x4, 0x5]));
+  });
+
   it('retrieves zero value when not available', () => {
     expect(
-      get_storage_into(0, 3, 3, 5)
+      get_storage_into(0, 3, 3, 5, 0)
     ).toEqual(5);
     expect(
       heap.set

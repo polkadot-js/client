@@ -24,7 +24,7 @@ export default function data ({ l, heap, db }: RuntimeEnv): RuntimeInterface$Sto
     get_allocated_storage: (keyPtr: Pointer, keyLength: number, lenPtr: Pointer): Pointer =>
       instrument('get_allocated_storage', (): Pointer => {
         const key = heap.get(keyPtr, keyLength);
-        const data = get(db, key);
+        const data = get(db, key, 0, U32_MAX);
         const length = data
           ? data.length
           : U32_MAX;
@@ -39,12 +39,12 @@ export default function data ({ l, heap, db }: RuntimeEnv): RuntimeInterface$Sto
 
         return heap.set(heap.allocate(length), data);
       }),
-    get_storage_into: (keyPtr: Pointer, keyLength: number, dataPtr: Pointer, dataLength: number): number =>
+    get_storage_into: (keyPtr: Pointer, keyLength: number, dataPtr: Pointer, dataLength: number, offset: number): number =>
       instrument('get_storage_into', (): number => {
         const key = heap.get(keyPtr, keyLength);
-        const data = get(db, key, dataLength);
+        const data = get(db, key, offset, dataLength);
 
-        l.debug(() => ['get_storage_into', [keyPtr, keyLength, dataPtr, dataLength], '<-', u8aToHex(key), '->', data === null ? null : u8aToHex(data)]);
+        l.debug(() => ['get_storage_into', [keyPtr, keyLength, dataPtr, dataLength, offset], '<-', u8aToHex(key), '->', data === null ? null : u8aToHex(data)]);
 
         if (data === null) {
           return U32_MAX;

@@ -4,16 +4,14 @@
 
 import { TrieDb } from '@polkadot/util-triedb/types';
 
-export default function get (db: TrieDb, key: Uint8Array, maxLength: number = -1): Uint8Array | null {
+export default function get (db: TrieDb, key: Uint8Array, offset: number, maxLength: number): Uint8Array | null {
   const data = db.get(key);
 
   if (data === null) {
     return null;
   }
 
-  const dataLength = maxLength === -1 || data.length < maxLength
-    ? data.length
-    : maxLength;
+  const dataLength = Math.min(maxLength, data.length - offset);
 
-  return data.subarray(0, dataLength);
+  return data.subarray(offset, offset + dataLength);
 }
