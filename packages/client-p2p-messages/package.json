@@ -1,7 +1,7 @@
 {
-  "name": "@polkadot/client-wasm",
+  "name": "@polkadot/client-p2p-messages",
   "version": "0.13.0",
-  "description": "WASM compiler & call interface",
+  "description": "Network message definitions",
   "main": "index.js",
   "engines": {
     "node": ">=8.0"
@@ -16,7 +16,7 @@
   },
   "keywords": [
     "Polkadot",
-    "wasm"
+    "Merkel Patricia Tree"
   ],
   "author": "Jaco Greeff <jacogr@gmail.com>",
   "maintainers": [
@@ -27,7 +27,7 @@
   "bugs": {
     "url": "https://github.com/polkadot-js/client/issues"
   },
-  "homepage": "https://github.com/polkadot-js/client/tree/master/packages/client-wasm#readme",
+  "homepage": "https://github.com/polkadot-js/client/tree/master/packages/client-db#readme",
   "scripts": {
     "build": "polkadot-dev-build-babel",
     "check": "eslint src && flow check",
@@ -35,11 +35,8 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.0.0-beta.51",
-    "@polkadot/client-runtime": "^0.13.0",
+    "@polkadot/jsonrpc": "^0.26.10",
     "@polkadot/primitives": "^0.26.10",
-    "@polkadot/util": "^0.26.10",
-    "@polkadot/wasm-bin": "paritytech/polkadot-wasm-bin#5ab4fc6083501b26e5fd979b93c35e2f9010b324",
-    "@types/webassembly-js-api": "^0.0.1",
-    "yargs": "^11.0.0"
+    "@polkadot/util": "^0.26.10"
   }
 }

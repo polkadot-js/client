@@ -2,10 +2,8 @@
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
 
-import { BlockResponseMessage } from '../message/types';
+import { BlockResponseMessage } from '@polkadot/client-p2p-messages/types';
 import { P2pState, PeerInterface } from '../types';
-
-import decodeHeader from '@polkadot/primitives/codec/header/decodeRaw';
 
 import processBlocks from './processBlocks';
 
@@ -21,20 +19,18 @@ export default function queueBlocks (self: P2pState, peer: PeerInterface, { bloc
 
   const count = blocks.reduce((count: number, block) => {
     const hasImported = self.chain.blocks.block.get(block.hash).length !== 0;
-    // tslint:disable-next-line:variable-name
-    const { number } = decodeHeader(block.header as Uint8Array);
-    const hasQueued = !!self.sync.blockQueue[number.toString()];
+    const hasQueued = !!self.sync.blockQueue[block.number.toString()];
 
     if (hasImported && hasQueued) {
       return count;
     }
 
-    self.sync.blockQueue[number.toString()] = block;
+    self.sync.blockQueue[block.number.toString()] = block;
 
     return count + 1;
   }, 0);
 
-  self.l.log(`Added ${count} blocks from ${peer.shortId}`);
+  self.l.log(`Queued ${count} blocks from ${peer.shortId}`);
 
   processBlocks(self);
 }

@@ -2,7 +2,8 @@
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
 
-import { P2pState, MessageInterface, PeerInterface } from '../types';
+import { MessageInterface } from '@polkadot/client-p2p-messages/types';
+import { P2pState, PeerInterface } from '../types';
 import { Handler } from './types';
 
 import blockAnnounce from './blockAnnounce';
@@ -21,7 +22,7 @@ const HANDLERS: Array<Handler> = [
 
 export default function onPeerMessage (self: P2pState): void {
   self.peers.on('message', ({ peer, message }: Message): void => {
-    const handler = HANDLERS.find((handler) => handler.TYPE === message.type);
+    const handler = HANDLERS.find((handler) => handler.type === message.type);
 
     if (!handler) {
       self.l.error(`Unhandled message type=${message.type}`);

@@ -10,13 +10,28 @@ import createModules from './modules';
 import createListener from './listener';
 import createPeerBook from './peerBook';
 
+const config = {
+  dht: {
+    kBucketSize: 20
+  },
+  EXPERIMENTAL: {
+    pubsub: false,
+    dht: true
+  }
+};
+
 export default async function createNode ({ config: { p2p: { address, port, nodes = [] } }, l }: P2pState): Promise<Libp2p> {
   const peerBook = await createPeerBook([]);
-  const listener = await createListener(address, port);
-  const modules = createModules(listener, nodes);
-  const addrs = listener.multiaddrs.toArray().map((addr) => addr.toString());
+  const peerInfo = await createListener(address, port);
+  const modules = createModules(peerInfo, nodes);
+  const addrs = peerInfo.multiaddrs.toArray().map((addr) => addr.toString());
 
   l.log(`creating Libp2p with ${addrs.join(', ')}`);
 
-  return new Libp2p(modules, listener, peerBook);
+  return new Libp2p({
+    config,
+    modules,
+    peerBook,
+    peerInfo
+  });
 }

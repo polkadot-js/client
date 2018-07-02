@@ -1,6 +1,6 @@
 {
   "name": "@polkadot/client-rpc",
-  "version": "0.12.3",
+  "version": "0.13.0",
   "description": "RPC server for a Polkadot client",
   "main": "index.js",
   "keywords": [
@@ -34,15 +34,15 @@
     "test": "echo \"Tests only available from root wrapper\""
   },
   "devDependencies": {
-    "@polkadot/api-provider": "^0.14.9",
-    "@polkadot/client": "^0.12.3"
+    "@polkadot/api-provider": "^0.14.12",
+    "@polkadot/client": "^0.13.0"
   },
   "dependencies": {
     "@babel/runtime": "^7.0.0-beta.51",
-    "@polkadot/util": "^0.26.6",
+    "@polkadot/util": "^0.26.10",
     "@types/co-body": "^0.0.3",
     "@types/koa": "^2.0.46",
-    "@types/koa-route": "^3.2.3",
+    "@types/koa-route": "^3.2.4",
     "@types/koa-websocket": "^5.0.0",
     "co-body": "^5.1.1",
     "eventemitter3": "^2.0.3",

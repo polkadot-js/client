@@ -4,7 +4,7 @@
 
 import { P2pState } from '../types';
 
-import u8aConcat from '@polkadot/util/u8a/concat';
+import u8aToHex from '@polkadot/util/u8a/toHex';
 
 export default function processBlocks ({ l, chain, sync }: P2pState): void {
   const start = Date.now();
@@ -13,12 +13,11 @@ export default function processBlocks ({ l, chain, sync }: P2pState): void {
   let count = 0;
 
   while (sync.blockQueue[nextNumber.toString()]) {
-    const { header, body } = sync.blockQueue[nextNumber.toString()];
-    const block = u8aConcat(
-      (header as Uint8Array), (body as Uint8Array)
-    );
+    const { hash, importable } = sync.blockQueue[nextNumber.toString()];
 
-    if (!chain.executor.importBlock(block)) {
+    l.debug(() => `Importing block #${nextNumber.toString()}, ${u8aToHex(hash)}`);
+
+    if (!chain.executor.importBlock(importable)) {
       break;
     }
 

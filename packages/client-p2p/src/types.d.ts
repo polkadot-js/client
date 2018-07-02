@@ -9,21 +9,17 @@ import E3 from 'eventemitter3';
 import { Logger } from '@polkadot/util/types';
 import { Config } from '@polkadot/client/types';
 import { ChainInterface } from '@polkadot/client-chains/types';
+import { MessageInterface } from '@polkadot/client-p2p-messages/types';
 import { SyncState } from './sync/types';
 
 export type P2pNodes = Array<string>;
 
 export type RawMessage = {
-  message: any,
+  message: {
+    [index: string]: any
+  },
   type: number
 };
-
-export interface MessageInterface {
-  encode: () => RawMessage,
-  decode: (message: RawMessage) => any,
-  raw: any,
-  type: number
-}
 
 export type P2pNode = {
   address: string,

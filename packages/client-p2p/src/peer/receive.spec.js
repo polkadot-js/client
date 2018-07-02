@@ -5,10 +5,7 @@
 import pull from 'pull-stream';
 import pushable from 'pull-pushable';
 import logger from '@polkadot/util/logger';
-import u8aToBuffer from '@polkadot/util/u8a/toBuffer';
 
-import status from '../message/status';
-import decode from '../message/encode';
 import receive from './receive';
 
 const l = logger('test');
@@ -36,21 +33,5 @@ describe('receive', () => {
     expect(
       receive(self, pull.through())
     ).toEqual(true);
-  });
-
-  // FIXME: Not operational, make it work
-  it.skip('emits the decoded message', (done) => {
-    const message = u8aToBuffer(
-      decode(status().raw)
-    );
-
-    self.emitter.emit = (type, _message) => {
-      expect(type).toEqual('message');
-      expect(_message).toEqual(message);
-
-      done();
-    };
-
-    receive(self, pull.through([ message ]));
   });
 });

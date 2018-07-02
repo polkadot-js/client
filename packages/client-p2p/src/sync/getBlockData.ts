@@ -2,26 +2,26 @@
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
 
-import { BlockRequestMessage$Fields, BlockResponseMessage$BlockData } from '../message/types';
+import { BlockRequestMessageField, BlockResponseMessageBlock } from '@polkadot/client-p2p-messages/types';
 import { P2pState } from '../types';
 
 import decodeBlock from '@polkadot/primitives/codec/block/decodeRaw';
 
-export default function getBlockData (self: P2pState, fields: BlockRequestMessage$Fields, hash: Uint8Array): BlockResponseMessage$BlockData {
+export default function getBlockData (self: P2pState, fields: Array<BlockRequestMessageField>, hash: Uint8Array): BlockResponseMessageBlock {
   const { body, header } = decodeBlock(
     self.chain.blocks.block.get(hash)
   );
-  const data: BlockResponseMessage$BlockData = {
-    hash
-  };
+  const data: BlockResponseMessageBlock = {
+    // hash
+  } as BlockResponseMessageBlock;
 
-  if (fields.includes('body')) {
-    data.body = body;
-  }
+  // if (fields.includes('Body')) {
+  //   data.body = body;
+  // }
 
-  if (fields.includes('header')) {
-    data.header = header;
-  }
+  // if (fields.includes('Header')) {
+  //   data.header = header;
+  // }
 
   return data;
 }

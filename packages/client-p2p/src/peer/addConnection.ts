@@ -2,13 +2,13 @@
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
 
-import { StatusMessage } from '../message/types';
 import { PeerState } from './types';
 
 import Pushable from 'pull-pushable';
 import pull from 'pull-stream';
+import Status from '@polkadot/client-p2p-messages/Status';
 
-import statusMessage from '../message/status';
+import defaults from '../defaults';
 import receive from './receive';
 import send from './send';
 
@@ -23,11 +23,12 @@ export default function addConnection (self: PeerState, connection: LibP2pConnec
       connection
     );
 
-    send(self, statusMessage({
+    send(self, new Status({
       roles: self.config.roles,
       bestNumber: self.chain.blocks.bestNumber.get(),
       bestHash: self.chain.blocks.bestHash.get(),
-      genesisHash: self.chain.genesis.headerHash
-    } as StatusMessage));
+      genesisHash: self.chain.genesis.headerHash,
+      version: defaults.PROTOCOL_VERSION
+    }));
   }
 }

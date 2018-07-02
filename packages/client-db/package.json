@@ -1,6 +1,6 @@
 {
   "name": "@polkadot/client-db",
-  "version": "0.12.3",
+  "version": "0.13.0",
   "description": "Database interface layer for network client",
   "main": "index.js",
   "engines": {
@@ -35,13 +35,13 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.0.0-beta.51",
-    "@polkadot/util": "^0.26.6",
-    "@polkadot/util-triedb": "^0.26.6",
+    "@polkadot/util": "^0.26.10",
+    "@polkadot/util-triedb": "^0.26.10",
     "@types/mkdirp": "^0.5.2",
     "mkdirp": "^0.5.1"
   },
   "devDependencies": {
-    "@polkadot/client": "^0.12.3",
+    "@polkadot/client": "^0.13.0",
     "rimraf": "^2.6.2"
   }
 }

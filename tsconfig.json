@@ -6,6 +6,7 @@
       "@polkadot/client-chains/*": [ "packages/client-chains/src/*" ],
       "@polkadot/client-db-chain/*": [ "packages/client-db-chain/src/*" ],
       "@polkadot/client-db/*": [ "packages/client-db/src/*" ],
+      "@polkadot/client-p2p-messages/*": [ "packages/client-p2p-messages/src/*" ],
       "@polkadot/client-p2p/*": [ "packages/client-p2p/src/*" ],
       "@polkadot/client-rpc/*": [ "packages/client-rpc/src/*" ],
       "@polkadot/client-runtime/*": [ "packages/client-runtime/src/*" ],

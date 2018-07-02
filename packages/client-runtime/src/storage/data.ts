@@ -9,6 +9,8 @@ import u8aToHex from '@polkadot/util/u8a/toHex';
 import instrument from '../instrument';
 import get from './get';
 
+const U32_MAX = 4294967295;
+
 export default function data ({ l, heap, db }: RuntimeEnv): RuntimeInterface$Storage$Data {
   return {
     clear_storage: (keyPtr: Pointer, keyLength: number): void =>
@@ -22,31 +24,30 @@ export default function data ({ l, heap, db }: RuntimeEnv): RuntimeInterface$Sto
     get_allocated_storage: (keyPtr: Pointer, keyLength: number, lenPtr: Pointer): Pointer =>
       instrument('get_allocated_storage', (): Pointer => {
         const key = heap.get(keyPtr, keyLength);
-        const data = get(db, key);
-        const length = data === null
-          ? Number.MAX_SAFE_INTEGER
-          : data.length;
+        const data = get(db, key, 0, U32_MAX);
+        const length = data
+          ? data.length
+          : U32_MAX;
 
-        l.debug(() => ['get_allocated_storage', [keyPtr, keyLength, lenPtr], '<-', u8aToHex(key)]);
+        l.debug(() => ['get_allocated_storage', [keyPtr, keyLength, lenPtr], '<-', u8aToHex(key), length]);
 
         heap.setU32(lenPtr, length);
 
         if (!data) {
-          return length;
+          return 0;
         }
 
         return heap.set(heap.allocate(length), data);
       }),
-    get_storage_into: (keyPtr: Pointer, keyLength: number, dataPtr: Pointer, dataLength: number): number =>
+    get_storage_into: (keyPtr: Pointer, keyLength: number, dataPtr: Pointer, dataLength: number, offset: number): number =>
       instrument('get_storage_into', (): number => {
         const key = heap.get(keyPtr, keyLength);
-        const data = get(db, key, dataLength);
+        const data = get(db, key, offset, dataLength);
 
-        l.debug(() => ['get_storage_into', [keyPtr, keyLength, dataPtr, dataLength], '<-', u8aToHex(key), '->', data === null ? null : u8aToHex(data)]);
+        l.debug(() => ['get_storage_into', [keyPtr, keyLength, dataPtr, dataLength, offset], '<-', u8aToHex(key), '->', data === null ? null : u8aToHex(data)]);
 
         if (data === null) {
-          // when nothing is there, return MAX_SAFE_INTEGER
-          return Number.MAX_SAFE_INTEGER;
+          return U32_MAX;
         }
 
         heap.set(dataPtr, data);

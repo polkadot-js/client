@@ -3,18 +3,25 @@
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
 
-try {
-  require('../index');
-} catch (error) {
+const fs = require('fs');
+const path = require('path');
+
+const [compiled] = ['../index.js']
+  .map((file) => path.join(__dirname, file))
+  .filter((file) => fs.existsSync(file));
+
+if (compiled) {
+  require(compiled);
+} else {
   require('@babel/register')({
     extensions: ['.js', '.ts'],
     plugins: [
       ['module-resolver', {
         alias: {
-          '^@polkadot/client-(chains|db-chain|db|p2p|rpc|runtime|wasm)(.*)': './packages/client-\\1/src\\2'
+          '^@polkadot/client-(chains|db-chain|db|p2p-messages|p2p|rpc|runtime|wasm)(.*)': './packages/client-\\1/src\\2'
         }
       }]
     ]
   });
-  require('../src');
+  require('../src/index.ts');
 }

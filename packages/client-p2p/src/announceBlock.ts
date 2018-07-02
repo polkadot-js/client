@@ -4,9 +4,8 @@
 
 import { P2pState } from './types';
 
+import BlockAnnounce from '@polkadot/client-p2p-messages/BlockAnnounce';
 import decodeHeader from '@polkadot/primitives/codec/header/decode';
-
-import announceMessage from './message/blockAnnounce';
 
 export default function announceBlock (self: P2pState, hash: Uint8Array, _header: Uint8Array, body: Uint8Array): void {
   if (!self.peers) {
@@ -14,7 +13,9 @@ export default function announceBlock (self: P2pState, hash: Uint8Array, _header
   }
 
   const header = decodeHeader(_header);
-  const message = announceMessage({ header });
+  const message = new BlockAnnounce({
+    header
+  });
 
   self.peers.peers().forEach((peer) => {
     if (header.number.gt(peer.getBestNumber())) {

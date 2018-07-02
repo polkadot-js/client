@@ -2,8 +2,9 @@
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
 
+import { MessageInterface } from '@polkadot/client-p2p-messages/types';
 import PeerInfo from 'peer-info';
-import { MessageInterface, PeerInterface } from '../types';
+import { PeerInterface } from '../types';
 import { PeersState } from './types';
 
 import createPeer from '../peer';

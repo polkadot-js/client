@@ -14,19 +14,17 @@ import TCP from 'libp2p-tcp';
 import PeerInfo from 'peer-info';
 // import WS from 'libp2p-websockets';
 
-export default function createModules (peerInfo: PeerInfo, bootNodes: P2pNodes): LibP2p.CreateModules {
+export default function createModules (peerInfo: PeerInfo, bootNodes: P2pNodes): LibP2p.OptionsModules {
   return {
-    connection: {
-      crypto: [
-        // secio
-      ],
-      muxer: [
-        mplex,
-        spdy
-      ]
-    },
-    DHT,
-    discovery: [
+    connEncryption: [
+      // secio
+    ],
+    streamMuxer: [
+      mplex,
+      spdy
+    ],
+    dht: DHT,
+    peerDiscovery: [
       // new Multicast(peerInfo),
       new Railing({ list: bootNodes })
     ],
