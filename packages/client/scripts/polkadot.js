@@ -3,9 +3,16 @@
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
 
-try {
-  require('../index');
-} catch (error) {
+const fs = require('fs');
+const path = require('path');
+
+const [compiled] = ['../index.js']
+  .map((file) => path.join(__dirname, file))
+  .filter((file) => fs.existsSync(file));
+
+if (compiled) {
+  require(compiled);
+} else {
   require('@babel/register')({
     extensions: ['.js', '.ts'],
     plugins: [
@@ -16,5 +23,5 @@ try {
       }]
     ]
   });
-  require('../src');
+  require('../src/index.ts');
 }

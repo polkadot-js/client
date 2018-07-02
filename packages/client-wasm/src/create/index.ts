@@ -31,16 +31,16 @@ export default function wasm ({ config: { wasm: { heapSize = defaults.HEAP_SIZE_
   const env = instrument('runtime', elapsed, (): WasmInstanceExports =>
     createEnv(runtime, createMemory(0, 0))
   );
-  const proxy = instrument('chain', elapsed, (): WasmInstanceExports =>
+  const chain = instrument('chain', elapsed, (): WasmInstanceExports =>
     createExports(chainCode, { env })
   );
   const instance = instrument('proxy', elapsed, (): WasmInstanceExports =>
-    createExports(chainProxy, { proxy }, createMemory(0, 0))
+    createExports(chainProxy, { proxy: chain }, createMemory(0, 0))
   );
 
-  const offset = proxy.memory.grow(Math.ceil(heapSize / 64));
+  const offset = chain.memory.grow(Math.ceil(heapSize / 64));
 
-  runtime.environment.heap.setWasmMemory(proxy.memory, offset * 64 * 1024);
+  runtime.environment.heap.setWasmMemory(chain.memory, offset * 64 * 1024);
 
   l.debug(() => `WASM created ${elapsed.join(', ')}`);
 
