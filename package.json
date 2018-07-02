@@ -20,8 +20,8 @@
     "start-rust-build": "node packages/client/scripts/polkadot.js --db-path ./tmp/start-rust --p2p-nodes /ip4/127.0.0.1/tcp/30333/ipfs/QmWLtV5gpCzJCh9Eo7SxkrT3ZTApovHM1WpCY2Lp3XkaqF /ip4/127.0.0.1/tcp/39933/ipfs/QmfUiXCYtrKotHgDbP4Kc74NUi2LxckEiAdkK1SMSosLaz --p2p-port 39935 --rpc-port 9935"
   },
   "devDependencies": {
-    "@polkadot/dev": "^0.20.8",
-    "@polkadot/ts": "^0.1.6",
+    "@polkadot/dev": "^0.20.9",
+    "@polkadot/ts": "^0.1.8",
     "lerna": "^2.11.0"
   }
 }

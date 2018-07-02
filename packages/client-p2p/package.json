@@ -39,7 +39,7 @@
     "@polkadot/primitives": "^0.26.10",
     "@polkadot/util": "^0.26.10",
     "eventemitter3": "^2.0.3",
-    "libp2p": "^0.20.4",
+    "libp2p": "^0.22.0",
     "libp2p-kad-dht": "^0.10.0",
     "libp2p-mdns": "^0.11.0",
     "libp2p-mplex": "^0.7.0",

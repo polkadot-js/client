@@ -705,9 +705,9 @@
     isomorphic-fetch "^2.2.1"
     websocket "^1.0.25"
 
-"@polkadot/dev@^0.20.8":
-  version "0.20.8"
-  resolved "https://registry.yarnpkg.com/@polkadot/dev/-/dev-0.20.8.tgz#48d96f5b8c9b16c3abb94fa0df25705b48055bba"
+"@polkadot/dev@^0.20.9":
+  version "0.20.9"
+  resolved "https://registry.yarnpkg.com/@polkadot/dev/-/dev-0.20.9.tgz#beab8dbf6f359240fa2dd426b8dfe54661d93ee1"
   dependencies:
     "@babel/cli" "^7.0.0-beta.51"
     "@babel/core" "^7.0.0-beta.51"
@@ -803,9 +803,9 @@
     "@polkadot/util-crypto" "^0.26.10"
     "@polkadot/util-rlp" "^0.26.10"
 
-"@polkadot/ts@^0.1.6":
-  version "0.1.6"
-  resolved "https://registry.yarnpkg.com/@polkadot/ts/-/ts-0.1.6.tgz#0138490e0e625ea34a9931be94fd436dd6015c7d"
+"@polkadot/ts@^0.1.8":
+  version "0.1.8"
+  resolved "https://registry.yarnpkg.com/@polkadot/ts/-/ts-0.1.8.tgz#04e936fca0b104b8e0c4902bbfcc75ff5d58b98c"
 
 "@polkadot/util-crypto@^0.26.10":
   version "0.26.10"
@@ -2394,7 +2394,7 @@ debug@*, debug@^3.1.0:
   dependencies:
     ms "2.0.0"
 
-debug@^2.1.2, debug@^2.2.0, debug@^2.3.3, debug@^2.6.8:
+debug@^2.1.2, debug@^2.2.0, debug@^2.3.3, debug@^2.6.0, debug@^2.6.8:
   version "2.6.9"
   resolved "https://registry.yarnpkg.com/debug/-/debug-2.6.9.tgz#5d128515df134ff327e90a4c93f4e077a536341f"
   dependencies:
@@ -3577,6 +3577,10 @@ hoek@4.x.x:
   version "4.2.0"
   resolved "https://registry.yarnpkg.com/hoek/-/hoek-4.2.0.tgz#72d9d0754f7fe25ca2d01ad8f8f9a9449a89526d"
 
+hoek@5.x.x:
+  version "5.0.3"
+  resolved "https://registry.yarnpkg.com/hoek/-/hoek-5.0.3.tgz#b71d40d943d0a95da01956b547f83c4a5b4a34ac"
+
 home-or-tmp@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/home-or-tmp/-/home-or-tmp-2.0.0.tgz#e36c3f2d2cae7d746a857e38d18d5f32a7882db8"
@@ -4060,6 +4064,12 @@ isarray@1.0.0, isarray@^1.0.0, isarray@~1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/isarray/-/isarray-1.0.0.tgz#bb935d48582cba168c06834957a54a3e07124f11"
 
+isemail@3.x.x:
+  version "3.1.2"
+  resolved "https://registry.yarnpkg.com/isemail/-/isemail-3.1.2.tgz#937cf919002077999a73ea8b1951d590e84e01dd"
+  dependencies:
+    punycode "2.x.x"
+
 isexe@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/isexe/-/isexe-2.0.0.tgz#e8fbf374dc556ff8947a10dcb0572d633f2cfa10"
@@ -4431,6 +4441,18 @@ jest@^23.0.0:
     import-local "^1.0.0"
     jest-cli "^23.1.0"
 
+joi-browser@^13.4.0:
+  version "13.4.0"
+  resolved "https://registry.yarnpkg.com/joi-browser/-/joi-browser-13.4.0.tgz#b72ba61b610e3f58e51b563a14e0f5225cfb6896"
+
+joi@^13.4.0:
+  version "13.4.0"
+  resolved "https://registry.yarnpkg.com/joi/-/joi-13.4.0.tgz#afc359ee3d8bc5f9b9ba6cdc31b46d44af14cecc"
+  dependencies:
+    hoek "5.x.x"
+    isemail "3.x.x"
+    topo "3.x.x"
+
 js-levenshtein@^1.1.3:
   version "1.1.3"
   resolved "https://registry.yarnpkg.com/js-levenshtein/-/js-levenshtein-1.1.3.tgz#3ef627df48ec8cf24bacf05c0f184ff30ef413c5"
@@ -4674,6 +4696,13 @@ koa@^2.4.1:
     type-is "^1.5.5"
     vary "^1.0.0"
 
+latency-monitor@^0.2.1:
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/latency-monitor/-/latency-monitor-0.2.1.tgz#4043d5f23de86e2bfcef6ced4a3b5b922e1dd7ed"
+  dependencies:
+    debug "^2.6.0"
+    lodash "^4.17.4"
+
 lazy-cache@^1.0.3:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/lazy-cache/-/lazy-cache-1.0.4.tgz#a1d78fc3a50474cb80845d3b3b6e1da49a446e8e"
@@ -4809,6 +4838,13 @@ libp2p-circuit@~0.2.0:
     safe-buffer "^5.1.1"
     setimmediate "^1.0.5"
 
+libp2p-connection-manager@~0.0.2:
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/libp2p-connection-manager/-/libp2p-connection-manager-0.0.2.tgz#ea3db3efce8b7bb3c55af9002b8edbf65244fb1e"
+  dependencies:
+    debug "^3.1.0"
+    latency-monitor "^0.2.1"
+
 libp2p-crypto-secp256k1@~0.2.2:
   version "0.2.2"
   resolved "https://registry.yarnpkg.com/libp2p-crypto-secp256k1/-/libp2p-crypto-secp256k1-0.2.2.tgz#0dd521f18abc4e36a152e24e9b36307b0ae9cf05"
@@ -4871,7 +4907,7 @@ libp2p-crypto@~0.13.0:
     tweetnacl "^1.0.0"
     webcrypto-shim "github:dignifiedquire/webcrypto-shim#master"
 
-libp2p-floodsub@^0.15.0:
+libp2p-floodsub@~0.15.0:
   version "0.15.0"
   resolved "https://registry.yarnpkg.com/libp2p-floodsub/-/libp2p-floodsub-0.15.0.tgz#2ab70bed288b105d7cb80bef05a4ab91c08af768"
   dependencies:
@@ -5007,13 +5043,14 @@ libp2p-spdy@^0.12.1:
     spdy-transport "^2.1.0"
     stream-to-pull-stream "^1.7.2"
 
-libp2p-switch@~0.39.2:
-  version "0.39.2"
-  resolved "https://registry.yarnpkg.com/libp2p-switch/-/libp2p-switch-0.39.2.tgz#1a9a8846b646042b3a4c1ce57163a8b612f47335"
+libp2p-switch@~0.40.4:
+  version "0.40.4"
+  resolved "https://registry.yarnpkg.com/libp2p-switch/-/libp2p-switch-0.40.4.tgz#ef40674862a4854dec0d0bfd23a0cc19082a56dc"
   dependencies:
     async "^2.6.0"
     big.js "^5.0.3"
     debug "^3.1.0"
+    hashlru "^2.2.1"
     interface-connection "~0.3.2"
     ip-address "^5.8.9"
     libp2p-circuit "~0.2.0"
@@ -5026,7 +5063,6 @@ libp2p-switch@~0.39.2:
     peer-id "~0.10.7"
     peer-info "~0.14.1"
     pull-stream "^3.6.7"
-    quick-lru "^1.1.0"
 
 libp2p-tcp@^0.12.0, libp2p-tcp@~0.12.0:
   version "0.12.0"
@@ -5043,7 +5079,7 @@ libp2p-tcp@^0.12.0, libp2p-tcp@~0.12.0:
     once "^1.4.0"
     stream-to-pull-stream "^1.7.2"
 
-libp2p-websockets@^0.12.0:
+libp2p-websockets@^0.12.0, libp2p-websockets@~0.12.0:
   version "0.12.0"
   resolved "https://registry.yarnpkg.com/libp2p-websockets/-/libp2p-websockets-0.12.0.tgz#b0044535041b7689f116f36e46f511671c8b1f12"
   dependencies:
@@ -5053,18 +5089,21 @@ libp2p-websockets@^0.12.0:
     mafmt "^6.0.0"
     pull-ws "^3.3.1"
 
-libp2p@^0.20.4:
-  version "0.20.4"
-  resolved "https://registry.yarnpkg.com/libp2p/-/libp2p-0.20.4.tgz#c4e177ada316063e0e6d33225a08b8ee3180c969"
+libp2p@^0.22.0:
+  version "0.22.0"
+  resolved "https://registry.yarnpkg.com/libp2p/-/libp2p-0.22.0.tgz#a67ac6748b05d760c3b87d3d9c6920e8704c78ce"
   dependencies:
-    async "^2.6.0"
-    libp2p-floodsub "^0.15.0"
+    async "^2.6.1"
+    joi "^13.4.0"
+    joi-browser "^13.4.0"
+    libp2p-connection-manager "~0.0.2"
+    libp2p-floodsub "~0.15.0"
     libp2p-ping "~0.8.0"
-    libp2p-switch "~0.39.2"
-    libp2p-websockets "^0.12.0"
+    libp2p-switch "~0.40.4"
+    libp2p-websockets "~0.12.0"
     mafmt "^6.0.0"
     multiaddr "^5.0.0"
-    peer-book "~0.7.0"
+    peer-book "~0.8.0"
     peer-id "~0.10.7"
     peer-info "~0.14.1"
 
@@ -6045,13 +6084,13 @@ path-type@^3.0.0:
   dependencies:
     pify "^3.0.0"
 
-peer-book@~0.7.0:
-  version "0.7.0"
-  resolved "https://registry.yarnpkg.com/peer-book/-/peer-book-0.7.0.tgz#1b9ce0bba24605abd152cee07b39f5b55d9856fc"
+peer-book@~0.8.0:
+  version "0.8.0"
+  resolved "https://registry.yarnpkg.com/peer-book/-/peer-book-0.8.0.tgz#a15fdc3faca42ab575f5faae0ed0a0999fab8832"
   dependencies:
     bs58 "^4.0.1"
     peer-id "^0.10.7"
-    peer-info "^0.14.0"
+    peer-info "^0.14.1"
 
 peer-id@^0.10.7, peer-id@~0.10.7:
   version "0.10.7"
@@ -6071,7 +6110,7 @@ peer-id@~0.10.0:
     lodash "^4.17.4"
     multihashes "~0.4.12"
 
-peer-info@^0.14.0, peer-info@~0.14.0, peer-info@~0.14.1:
+peer-info@^0.14.0, peer-info@^0.14.1, peer-info@~0.14.0, peer-info@~0.14.1:
   version "0.14.1"
   resolved "https://registry.yarnpkg.com/peer-info/-/peer-info-0.14.1.tgz#ac5aec421e9965f7b0e7576d717941bb25676134"
   dependencies:
@@ -6325,6 +6364,10 @@ pump@^3.0.0:
     end-of-stream "^1.1.0"
     once "^1.3.1"
 
+punycode@2.x.x:
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/punycode/-/punycode-2.1.1.tgz#b58b010ac40c22c5657616c8d2c2c02c7bf479ec"
+
 punycode@^1.4.1:
   version "1.4.1"
   resolved "https://registry.yarnpkg.com/punycode/-/punycode-1.4.1.tgz#c0d5a63b2718800ad8e1eb0fa5269c84dd41845e"
@@ -6349,7 +6392,7 @@ qs@~6.4.0:
   version "6.4.0"
   resolved "https://registry.yarnpkg.com/qs/-/qs-6.4.0.tgz#13e26d28ad6b0ffaa91312cd3bf708ed351e7233"
 
-quick-lru@^1.0.0, quick-lru@^1.1.0:
+quick-lru@^1.0.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/quick-lru/-/quick-lru-1.1.0.tgz#4360b17c61136ad38078397ff11416e186dcfbb8"
 
@@ -7442,6 +7485,12 @@ to-regex@^3.0.1, to-regex@^3.0.2:
     extend-shallow "^3.0.2"
     regex-not "^1.0.2"
     safe-regex "^1.1.0"
+
+topo@3.x.x:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/topo/-/topo-3.0.0.tgz#37e48c330efeac784538e0acd3e62ca5e231fe7a"
+  dependencies:
+    hoek "5.x.x"
 
 tough-cookie@>=2.3.3, tough-cookie@^2.3.3, tough-cookie@~2.3.0, tough-cookie@~2.3.3:
   version "2.3.3"
