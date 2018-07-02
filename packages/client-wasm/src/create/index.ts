@@ -26,6 +26,9 @@ function instrument <T> (name: string, elapsed: Array<string>, fn: () => T): T {
   return result;
 }
 
+let prevChain: WasmInstanceExports;
+let offset: number = 0;
+
 export default function wasm ({ config: { wasm: { heapSize = defaults.HEAP_SIZE_KB } }, l }: Options, runtime: RuntimeInterface, chainCode: Uint8Array, chainProxy: Uint8Array): WasmInstanceExports {
   const elapsed: string[] = [];
   const env = instrument('runtime', elapsed, (): WasmInstanceExports =>
@@ -34,11 +37,16 @@ export default function wasm ({ config: { wasm: { heapSize = defaults.HEAP_SIZE_
   const chain = instrument('chain', elapsed, (): WasmInstanceExports =>
     createExports(chainCode, { env })
   );
-  const instance = instrument('proxy', elapsed, (): WasmInstanceExports =>
-    createExports(chainProxy, { proxy: chain }, createMemory(0, 0))
-  );
+  const isNewCode = chain !== prevChain;
 
-  const offset = chain.memory.grow(Math.ceil(heapSize / 64));
+  if (isNewCode) {
+    offset = chain.memory.grow(Math.ceil(heapSize / 64));
+    prevChain = chain;
+  }
+
+  const instance = instrument('proxy', elapsed, (): WasmInstanceExports =>
+    createExports(chainProxy, { proxy: chain }, createMemory(0, 0), isNewCode)
+  );
 
   runtime.environment.heap.setWasmMemory(chain.memory, offset * 64 * 1024);
 

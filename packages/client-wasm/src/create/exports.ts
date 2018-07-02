@@ -8,8 +8,8 @@ import blake2AsU8a from '@polkadot/util-crypto/blake2/asU8a';
 
 import createImports from './imports';
 
-type ModuleCache = {
-  [index: string]: WebAssembly.Module
+type Cache = {
+  [index: string]: WebAssembly.Instance
 };
 
 const DEFAULT_TABLE: WebAssembly.TableDescriptor = {
@@ -17,21 +17,20 @@ const DEFAULT_TABLE: WebAssembly.TableDescriptor = {
   element: 'anyfunc'
 };
 
-const moduleCache: ModuleCache = {};
+const cache: Cache = {};
 
-export default function createExports (bytecode: Uint8Array, imports?: WasmExtraImports, memory?: WebAssembly.Memory | null): WasmInstanceExports {
-  const codeHash = blake2AsU8a(bytecode).toString();
+export default function createExports (bytecode: Uint8Array, imports?: WasmExtraImports, memory?: WebAssembly.Memory | null, forceCreate: boolean = false): WasmInstanceExports {
+  const codeHash = blake2AsU8a(bytecode.subarray(0, 2048), 0).toString();
 
   // NOTE compilation is quite resource intensive, here we bypass the actual Uint8Array -> Module compilation when we already have this module bytecode in our cache
-  if (!moduleCache[codeHash]) {
-    moduleCache[codeHash] = new WebAssembly.Module(bytecode);
+  if (!cache[codeHash] || forceCreate) {
+    const table = new WebAssembly.Table(DEFAULT_TABLE);
+
+    cache[codeHash] = new WebAssembly.Instance(
+      new WebAssembly.Module(bytecode),
+      createImports(memory, table, imports)
+    );
   }
 
-  const table = new WebAssembly.Table(DEFAULT_TABLE);
-  const instance = new WebAssembly.Instance(
-    moduleCache[codeHash],
-    createImports(memory, table, imports)
-  );
-
-  return instance.exports;
+  return cache[codeHash].exports;
 }
