@@ -3,26 +3,11 @@
 // of the ISC license. See the LICENSE file for details.
 
 import BN from 'bn.js';
-import u8aToHex from '@polkadot/util/u8a/toHex';
 
-import Base from './Base';
+import BlockMessage from './BlockMessage';
 
-export default class BlockImport extends Base {
-  readonly bestHash: Uint8Array;
-  readonly bestNumber: BN;
-
+export default class BlockImport extends BlockMessage {
   constructor (bestHash: Uint8Array, bestNumber: BN) {
-    super('block.import');
-
-    this.bestHash = bestHash;
-    this.bestNumber = bestNumber;
-  }
-
-  toJSON (): any {
-    return {
-      ...super.toJSON(),
-      best: u8aToHex(this.bestHash),
-      height: this.bestNumber.toNumber()
-    };
+    super('block.import', bestHash, bestNumber);
   }
 }
