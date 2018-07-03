@@ -1,6 +1,6 @@
 {
   "name": "@polkadot/client-telemetry",
-  "version": "0.13.2",
+  "version": "0.13.3",
   "description": "Telementry client",
   "main": "index.js",
   "engines": {
@@ -42,7 +42,7 @@
     "websocket": "^1.0.26"
   },
   "devDependencies": {
-    "@polkadot/client": "^0.13.2",
+    "@polkadot/client": "^0.13.3",
     "rimraf": "^2.6.2"
   }
 }

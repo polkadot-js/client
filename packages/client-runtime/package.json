@@ -1,6 +1,6 @@
 {
   "name": "@polkadot/client-runtime",
-  "version": "0.13.2",
+  "version": "0.13.3",
   "description": "Basic execution wrapper interface for WASM programs",
   "main": "index.js",
   "engines": {
