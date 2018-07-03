@@ -24,7 +24,7 @@ describe('blockHash', () => {
 
           return store[u8aToHex(key)] || new Uint8Array([]);
         },
-        set: (value, key) => {
+        put: (value, key) => {
           console.log('setting', u8aToHex(key), value);
 
           store[u8aToHex(key)] = value;
@@ -45,7 +45,7 @@ describe('blockHash', () => {
 
       system = db({
         get: (key) => store[u8aToHex(key)] || new Uint8Array([]),
-        set: (key, value) => {
+        put: (key, value) => {
           store[u8aToHex(key)] = value;
         }
       }).system;

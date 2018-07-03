@@ -3,7 +3,7 @@
 // of the ISC license. See the LICENSE file for details.
 
 import BN from 'bn.js';
-import { TrieDb } from '@polkadot/util-triedb/types';
+import { BaseDb, TrieDb } from '@polkadot/client-db/types';
 import { Storage$Key$Value } from '@polkadot/storage/types';
 
 export type StorageMethod<P, R> = {
@@ -27,16 +27,13 @@ export type StorageMethod$ArrayU8a = StorageMethod<Array<Uint8Array>, Array<Uint
 
 export type StorageMethods = StorageMethod$Account | StorageMethod$Bn | StorageMethod$Bool | StorageMethod$U8a | StorageMethod$ArrayU8a | StorageMethod$ArrayAccount;
 
-export type WrappedDb<O> = O & {
-  db: TrieDb
-}
-
-export type BlockDb = WrappedDb<{
+export type BlockDb = {
+  db: BaseDb,
   bestHash: StorageMethod$U8a,
   bestNumber: StorageMethod$Bn,
   block: StorageMethod$U8a,
   header: StorageMethod$U8a
-}>;
+};
 
 export type StateDb$Consensus = {
   authorityAt: StorageMethod$Account,
@@ -100,7 +97,8 @@ export type StateDb$Timestamp = {
   didUpdate: StorageMethod$Bool
 };
 
-export type StateDb = WrappedDb<{
+export type StateDb = {
+  db: TrieDb,
   consensus: StateDb$Consensus,
   council: StateDb$Council,
   councilVoting: StateDb$CouncilVoting,
@@ -111,4 +109,4 @@ export type StateDb = WrappedDb<{
   staking: StateDb$Staking,
   system: StateDb$System,
   timestamp: StateDb$Timestamp
-}>;
+};

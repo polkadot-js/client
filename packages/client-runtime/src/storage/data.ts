@@ -61,7 +61,7 @@ export default function data ({ l, heap, db }: RuntimeEnv): RuntimeInterface$Sto
 
         l.debug(() => ['set_storage', [keyPtr, keyLength, dataPtr, dataLength], '<-', u8aToHex(key), '=', u8aToHex(data)]);
 
-        db.set(key, data);
+        db.put(key, data);
       })
   };
 }

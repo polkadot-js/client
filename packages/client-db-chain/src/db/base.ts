@@ -2,7 +2,7 @@
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
 
-import { TrieDb } from '@polkadot/util-triedb/types';
+import { BaseDb } from '@polkadot/client-db/types';
 
 type Base <T> = {
   del (key: Uint8Array): void,
@@ -13,7 +13,7 @@ type Base <T> = {
 
 type Subscribers <T> = Array<(value: T, raw: Uint8Array) => void>;
 
-export default function base <T> (db: TrieDb): Base<T> {
+export default function base <T> (db: BaseDb): Base<T> {
   const subscribers: Subscribers<T> = [];
 
   return {
@@ -22,7 +22,7 @@ export default function base <T> (db: TrieDb): Base<T> {
     get: (key: Uint8Array): Uint8Array =>
       db.get(key) || new Uint8Array([]),
     set: (key: Uint8Array, value: T, raw: Uint8Array): void => {
-      db.set(key, raw);
+      db.put(key, raw);
       subscribers.forEach((subscriber) =>
         subscriber(value, raw)
       );

@@ -3,10 +3,10 @@
 // of the ISC license. See the LICENSE file for details.
 /* eslint camelcase: 0 */
 
+import HashDb from '@polkadot/client-db/Hash';
 import logger from '@polkadot/util/logger';
 import u8aFromString from '@polkadot/util/u8a/fromString';
 
-import envDb from '../environment/db';
 import envHeap from '../environment/heap';
 import index from './index';
 
@@ -20,9 +20,8 @@ describe('get_allocated_storage', () => {
   beforeEach(() => {
     heap = envHeap();
     heap.setWasmMemory({ buffer: new Uint8Array(1024 * 1024) });
-    db = envDb({
-      get: () => null
-    });
+
+    db = new HashDb();
 
     get_allocated_storage = index({ l, heap, db }).get_allocated_storage;
   });
@@ -31,7 +30,7 @@ describe('get_allocated_storage', () => {
     const key = u8aFromString('key');
     const value = u8aFromString('some value');
 
-    db.set(key, value);
+    db.put(key, value);
 
     const keyPtr = heap.allocate(key.length);
     const lenPtr = heap.allocate(4);

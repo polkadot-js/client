@@ -4,7 +4,7 @@
 
 import { SectionItem } from '@polkadot/params/types';
 import { Storage$Key$Value } from '@polkadot/storage/types';
-import { TrieDb } from '@polkadot/util-triedb/types';
+import { BaseDb } from '@polkadot/client-db/types';
 import { StorageMethod$ArrayU8a } from '../types';
 
 import bnToU8a from '@polkadot/util/bn/toU8a';
@@ -13,7 +13,7 @@ import u8aToBn from '@polkadot/util/u8a/toBn';
 
 import creator from '../key';
 
-export default function decodeArrayU8a <T> (db: TrieDb, key: SectionItem<T>): StorageMethod$ArrayU8a {
+export default function decodeArrayU8a <T> (db: BaseDb, key: SectionItem<T>): StorageMethod$ArrayU8a {
   const createKey = creator(key);
 
   return {
@@ -37,7 +37,7 @@ export default function decodeArrayU8a <T> (db: TrieDb, key: SectionItem<T>): St
       return result;
     },
     set: (value: Array<Uint8Array>, ...keyParams: Array<Storage$Key$Value>): void =>
-      db.set(createKey(keyParams), u8aConcat(
+      db.put(createKey(keyParams), u8aConcat(
         bnToU8a(value.length, 32, true),
         u8aConcat.apply(null, value))
       ),

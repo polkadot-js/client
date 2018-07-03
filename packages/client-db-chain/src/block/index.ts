@@ -2,14 +2,14 @@
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
 
-import { TrieDb } from '@polkadot/util-triedb/types';
+import { BaseDb } from '@polkadot/client-db/types';
 import { BlockDb } from '../types';
 
 import createBn from '../db/bn';
 import createU8a from '../db/u8a';
 import keys from './keys';
 
-export default function blockDb (db: TrieDb): BlockDb {
+export default function blockDb (db: BaseDb): BlockDb {
   return {
     db,
     bestHash: createU8a(db, keys.public.bestHash),

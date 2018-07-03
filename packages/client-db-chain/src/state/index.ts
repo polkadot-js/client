@@ -4,7 +4,7 @@
 
 import { Section } from '@polkadot/params/types';
 import { Storages } from '@polkadot/storage/types';
-import { TrieDb } from '@polkadot/util-triedb/types';
+import { TrieDb } from '@polkadot/client-db/types';
 import { StateDb } from '../types';
 
 import storage from '@polkadot/storage';

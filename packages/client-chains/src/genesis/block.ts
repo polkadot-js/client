@@ -21,7 +21,6 @@ export default function genesisBlock ({ stateDb: { db } }: ChainState): ChainGen
     throw new Error('Unable to retrieve genesis code');
   }
 
-  const codeHash = blake2Asu8a(code, 256);
   const block = createBlock({
     header: {
       stateRoot: db.trieRoot(),
@@ -34,7 +33,6 @@ export default function genesisBlock ({ stateDb: { db } }: ChainState): ChainGen
   return {
     block: encodeBlock(block),
     code,
-    codeHash,
     header: block.header,
     headerHash
   };

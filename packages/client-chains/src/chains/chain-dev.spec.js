@@ -2,7 +2,8 @@
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
 
-import memDb from '@polkadot/util-triedb/temp';
+import HashDb from '@polkadot/client-db/Hash';
+import MemoryDb from '@polkadot/client-db/Memory';
 
 import init from '../index';
 
@@ -10,8 +11,8 @@ describe('genesis', () => {
   let genesis;
 
   beforeEach(() => {
-    const stateDb = memDb();
-    const blockDb = memDb();
+    const stateDb = new MemoryDb();
+    const blockDb = new HashDb();
 
     genesis = init({ chain: 'dev' }, stateDb, blockDb).genesis;
   });

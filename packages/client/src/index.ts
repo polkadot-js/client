@@ -5,10 +5,11 @@
 import './license';
 
 import createChain from '@polkadot/client-chains/index';
-import memoryDb from '@polkadot/util-triedb/temp';
 import createP2p from '@polkadot/client-p2p/index';
 import telemetry from '@polkadot/client-telemetry/index';
 import logger from '@polkadot/util/logger';
+import HashDb from '@polkadot/client-db/Hash';
+import MemoryDb from '@polkadot/client-db/Memory';
 
 import * as clientId from './clientId';
 import cli from './cli';
@@ -24,7 +25,7 @@ const config = cli();
   l.log(`Running version ${clientId.version} (${verStatus})`);
   l.log(`Initialising for roles=${config.roles.join(',')} on chain=${config.chain}`);
 
-  const chain = createChain(config, memoryDb(), memoryDb());
+  const chain = createChain(config, new MemoryDb(), new HashDb());
 
   telemetry.init(config, chain);
 

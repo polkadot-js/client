@@ -2,7 +2,8 @@
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
 
-import memoryDb from '@polkadot/util-triedb/temp';
+import HashDb from '@polkadot/client-db/Hash';
+import MemoryDb from '@polkadot/client-db/Memory';
 import methods from '@polkadot/extrinsics';
 import encodeUnchecked from '@polkadot/extrinsics/codec/encode/unchecked';
 import u8aConcat from '@polkadot/util/u8a/concat';
@@ -39,7 +40,7 @@ describe('generateBlock', () => {
       wasm: {}
     };
 
-    chain = init(config, memoryDb(), memoryDb());
+    chain = init(config, new MemoryDb(), new HashDb());
   });
 
   it('generates a basic block (empty)', () => {

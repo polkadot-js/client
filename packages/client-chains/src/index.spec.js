@@ -2,7 +2,8 @@
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
 
-import memoryDb from '@polkadot/util-triedb/temp';
+import HashDb from '@polkadot/client-db/Hash';
+import MemoryDb from '@polkadot/client-db/Memory';
 
 import createChain from './index';
 
@@ -15,8 +16,8 @@ describe('client-chains', () => {
     config = {
       chain: 'dev'
     };
-    blockDb = memoryDb();
-    stateDb = memoryDb();
+    blockDb = new HashDb();
+    stateDb = new MemoryDb();
   });
 
   it('instantiates a known chain', () => {
