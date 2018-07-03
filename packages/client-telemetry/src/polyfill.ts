@@ -2,6 +2,8 @@
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
 
-export type Level = 'INFO';
-
-export type Message = 'system.connected' | 'system.interval' | 'node.start' | 'block.import';
+// tslint:disable-next-line
+if (typeof WebSocket === 'undefined') {
+  // @ts-ignore
+  global.WebSocket = require('websocket').w3cwebsocket;
+}

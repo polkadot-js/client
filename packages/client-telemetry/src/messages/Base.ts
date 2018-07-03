@@ -18,7 +18,7 @@ export default class Base {
     return {
       level: this.level,
       msg: this.message,
-      ts: this.timestamp.toString()
+      ts: this.timestamp.toISOString()
     };
   }
 }

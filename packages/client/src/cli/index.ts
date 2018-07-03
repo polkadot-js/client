@@ -13,7 +13,7 @@ export default function cli (params?: string): Config {
   return Object
     .keys(argv)
     .reduce((config, key) => {
-      if (/^(db|dev|p2p|rpc|wasm)-/.test(key)) {
+      if (/^(db|dev|p2p|rpc|telemetry|wasm)-/.test(key)) {
         const section = key.substr(0, key.indexOf('-'));
         const name = keyToCamel(key, 1);
 
@@ -21,7 +21,7 @@ export default function cli (params?: string): Config {
         config[section] = config[section] || {};
         // @ts-ignore ummm... no index, not Map-ing this one
         config[section][name] = argv[key];
-      } else if (!/^(db|dev|p2p|rpc|wasm)[A-Z]/.test(key)) {
+      } else if (!/^(db|dev|p2p|rpc|telemetry|wasm)[A-Z]/.test(key)) {
         const name = keyToCamel(key);
 
         // @ts-ignore ummm... no index, not Map-ing this one

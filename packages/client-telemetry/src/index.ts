@@ -4,20 +4,30 @@
 
 import { Config } from '@polkadot/client/types';
 import { ChainInterface } from '@polkadot/client-chains/types';
+import { State, Telemetry } from './types';
 
-import logger from '@polkadot/util/logger';
+import './polyfill';
 
-const l = logger('telemetry');
+import connect from './connect';
+import sendBlockImport from './sendBlockImport';
+import createState from './state';
 
-export default function telemetry ({ telemetry: { name, url } }: Config, chain: ChainInterface) {
-  if (!name || !url) {
-    return;
+let self: State;
+
+function init (config: Config, chain: ChainInterface): void {
+  self = createState(config, chain);
+
+  if (self.isActive) {
+    self.l.log(`Connecting to telemetry, url=${self.url}, name=${self.name}`);
+
+    connect(self);
   }
-
-  const websocket = new WebSocket(url);
-
-  // self.websocket.onclose = onClose(self);
-  // self.websocket.onerror = onError(self);
-  // self.websocket.onmessage = onMessage(self);
-  // self.websocket.onopen = onOpen(self);
 }
+
+const telemetry: Telemetry = {
+  blockImported: (): void =>
+    sendBlockImport(self),
+  init
+};
+
+export default telemetry;

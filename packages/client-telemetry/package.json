@@ -38,7 +38,8 @@
     "@polkadot/util": "^0.26.10",
     "@polkadot/util-triedb": "^0.26.10",
     "@types/mkdirp": "^0.5.2",
-    "mkdirp": "^0.5.1"
+    "mkdirp": "^0.5.1",
+    "websocket": "^1.0.26"
   },
   "devDependencies": {
     "@polkadot/client": "^0.13.2",

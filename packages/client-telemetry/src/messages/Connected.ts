@@ -2,6 +2,7 @@
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
 
+import { name as implementation, version } from '@polkadot/client/clientId';
 import Base from './Base';
 
 export default class Connected extends Base {
@@ -21,7 +22,9 @@ export default class Connected extends Base {
       ...super.toJSON(),
       chain: this.chain,
       config: this.config,
-      name: this.name
+      implementation,
+      name: this.name,
+      version
     };
   }
 }

@@ -7,7 +7,7 @@ import './license';
 import createChain from '@polkadot/client-chains/index';
 import memoryDb from '@polkadot/util-triedb/temp';
 import createP2p from '@polkadot/client-p2p/index';
-import createTelemetry from '@polkadot/client-telemetry/index';
+import telemetry from '@polkadot/client-telemetry/index';
 import logger from '@polkadot/util/logger';
 
 import * as clientId from './clientId';
@@ -26,7 +26,8 @@ const config = cli();
 
   const chain = createChain(config, memoryDb(), memoryDb());
 
+  telemetry.init(config, chain);
+
   createP2p(config, chain);
   createRpc(config, chain);
-  createTelemetry(config, chain);
 })();
