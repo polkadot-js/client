@@ -16,13 +16,15 @@ type Message = {
   message: MessageInterface
 };
 
-const HANDLERS: Array<Handler> = [
+const handlers: Array<Handler> = [
   blockAnnounce, blockRequest, blockResponse, status
 ];
 
 export default function onPeerMessage (self: P2pState): void {
   self.peers.on('message', ({ peer, message }: Message): void => {
-    const handler = HANDLERS.find((handler) => handler.type === message.type);
+    const handler = handlers.find(({ type }) =>
+      type === message.type
+    );
 
     if (!handler) {
       self.l.error(`Unhandled message type=${message.type}`);
