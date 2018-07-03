@@ -42,6 +42,7 @@
     "@polkadot/client-db": "^0.13.2",
     "@polkadot/client-p2p": "^0.13.2",
     "@polkadot/client-rpc": "^0.13.2",
+    "@polkadot/client-telemetry": "^0.13.2",
     "@polkadot/client-wasm": "^0.13.2",
     "@polkadot/jsonrpc": "^0.26.10",
     "@polkadot/primitives": "^0.26.10",

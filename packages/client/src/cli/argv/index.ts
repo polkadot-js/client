@@ -12,6 +12,7 @@ import dev from './dev';
 import operation from './operation';
 import p2p from './p2p';
 import rpc from './rpc';
+import telemetry from './telemetry';
 import wasm from './wasm';
 
 export default function argv (cli?: string): Config {
@@ -21,7 +22,7 @@ export default function argv (cli?: string): Config {
   const parser = yargs
     .version(operation['client-id'].default)
     .options({
-      ...devOpts, ...operation, ...db, ...p2p, ...rpc, ...wasm
+      ...devOpts, ...operation, ...db, ...p2p, ...rpc, ...telemetry, ...wasm
     })
     .wrap(
       Math.min(120, yargs.terminalWidth())
@@ -31,7 +32,8 @@ export default function argv (cli?: string): Config {
     .group(Object.keys(db), 'Database')
     .group(Object.keys(p2p), 'Peer-to-peer')
     .group(Object.keys(rpc), 'RPC server')
-    .group(Object.keys(wasm), 'WASM Runtime')
+    .group(Object.keys(telemetry), 'Telemetry client')
+    .group(Object.keys(wasm), 'Wasm Runtime')
     .strict();
 
   const parsed = cli

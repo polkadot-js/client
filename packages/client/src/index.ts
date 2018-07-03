@@ -7,11 +7,11 @@ import './license';
 import createChain from '@polkadot/client-chains/index';
 import memoryDb from '@polkadot/util-triedb/temp';
 import createP2p from '@polkadot/client-p2p/index';
+import telemetry from '@polkadot/client-telemetry/index';
 import logger from '@polkadot/util/logger';
 
 import * as clientId from './clientId';
 import cli from './cli';
-import initDev from './dev';
 import createRpc from './rpc';
 
 const l = logger('client');
@@ -25,8 +25,9 @@ const config = cli();
   l.log(`Initialising for roles=${config.roles.join(',')} on chain=${config.chain}`);
 
   const chain = createChain(config, memoryDb(), memoryDb());
-  const p2p = createP2p(config, chain);
-  const rpc = createRpc(config, chain);
 
-  initDev(config, { chain, p2p, rpc });
+  telemetry.init(config, chain);
+
+  createP2p(config, chain);
+  createRpc(config, chain);
 })();

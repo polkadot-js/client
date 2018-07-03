@@ -6,6 +6,8 @@ import { P2pState } from '../types';
 
 import u8aToHex from '@polkadot/util/u8a/toHex';
 
+import telemetry from '@polkadot/client-telemetry/index';
+
 export default function processBlocks ({ l, chain, sync }: P2pState): void {
   const start = Date.now();
   const startNumber = chain.blocks.bestNumber.get().addn(1);
@@ -29,5 +31,6 @@ export default function processBlocks ({ l, chain, sync }: P2pState): void {
 
   if (count) {
     l.log(`#${startNumber.toString()}- ${count} imported (${Date.now() - start}ms)`);
+    telemetry.blockImported();
   }
 }
