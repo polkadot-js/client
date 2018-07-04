@@ -8,7 +8,7 @@ import path from 'path';
 import { Worker } from 'worker_threads';
 import logger from '@polkadot/util/logger';
 import promisify from '@polkadot/util/promisify';
-import u8aToHex from '@polkadot/util/u8a/toHex';
+// import u8aToHex from '@polkadot/util/u8a/toHex';
 
 import commands from './commands';
 
@@ -48,11 +48,7 @@ export default class SyncDb implements TrieDb {
         type
       });
 
-      // console.error(type, 'wait', state[0]);
-
       Atomics.wait(state, 0, commands.START);
-
-      // console.error(type, 'wake', state[0]);
     };
 
     if (!returnable.includes(type)) {
@@ -74,7 +70,6 @@ export default class SyncDb implements TrieDb {
     while (true) {
       switch (state[0]) {
         case commands.END:
-          // console.error(type, 'returning', result ? u8aToHex(result) : 'null');
           return result;
 
         case commands.ERROR:
@@ -84,7 +79,6 @@ export default class SyncDb implements TrieDb {
           size = view.getUint32(0);
 
           if (size === U32_MAX) {
-            // console.error(type, 'returning not found');
             return null;
           }
 
@@ -94,7 +88,7 @@ export default class SyncDb implements TrieDb {
           break;
 
         case commands.READ:
-          const available = Math.min((buffer as Uint8Array).length, size - offset);
+          const available = Math.min(buffer.length, size - offset);
 
           (result as Uint8Array).set(buffer.subarray(0, available), offset);
           offset += available;

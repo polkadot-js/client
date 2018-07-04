@@ -32,11 +32,13 @@ function notify (state, command) {
   Atomics.wake(state, 0, +Infinity);
 }
 
+// function wait (state: Int32Array, command: number): void {
 function wait (state, command) {
   Atomics.wait(state, 0, command);
 }
 
-async function notifyResult (state, fn) {
+// function notifyDone (state: Int32Array, fn: () => Promise<any>): Promise<void> {
+async function notifyDone (state, fn) {
   try {
     await fn();
     notify(state, commands.END);
@@ -45,6 +47,7 @@ async function notifyResult (state, fn) {
   }
 }
 
+// function returnValue (state: Int32Array, buffer: Uint8Array, value: Uint8Array | null): void
 function returnValue (state, buffer, value) {
   const view = new DataView(buffer.buffer);
 
@@ -74,24 +77,28 @@ function returnValue (state, buffer, value) {
   notify(state, commands.END);
 }
 
+// function checkpoint (state: Int32Array): void
 function checkpoint (state) {
-  notifyResult(state, () =>
+  notifyDone(state, () =>
     trie.checkpoint()
   );
 }
 
+// function commit (state: Int32Array): void
 function commit (state) {
-  notifyResult(state, () =>
+  notifyDone(state, () =>
     trie.commit()
   );
 }
 
+// function del (state: Int32Array, buffer: Uint8Array, key: Uint8Array): void
 function del (state, buffer, key) {
-  notifyResult(state, () =>
+  notifyDone(state, () =>
     trie.del(key)
   );
 }
 
+// function get (state: Int32Array, buffer: Uint8Array, key: Uint8Array): void
 async function get (state, buffer, key) {
   let result;
 
@@ -105,18 +112,21 @@ async function get (state, buffer, key) {
   returnValue(state, buffer, result);
 }
 
+// function put (state: Int32Array, buffer: Uint8Array, key: Uint8Array, value: Uint8Array): void
 async function put (state, buffer, key, value) {
-  notifyResult(state, () =>
+  notifyDone(state, () =>
     trie.put(key, value)
   );
 }
 
+// function revert (state: Int32Array): void
 async function revert (state) {
-  notifyResult(state, () =>
+  notifyDone(state, () =>
     trie.revert()
   );
 }
 
+// function root (state: Int32Array, buffer: Uint8Array): void
 function root (state, buffer) {
   returnValue(state, buffer, trie.root);
 }
