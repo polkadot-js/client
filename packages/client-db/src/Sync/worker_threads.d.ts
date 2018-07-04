@@ -9,8 +9,18 @@ declare namespace WorkerThreads {
     on (type: 'message', db: (message: any) => any): void
   }
 
+  type WorkerOptions = {
+    eval?: boolean,
+    stderr?: boolean,
+    stdin?: boolean,
+    stdout?: boolean,
+    workerData?: any
+  }
+
   class Worker {
-    constructor (path: string);
+    readonly threadId: number;
+
+    constructor (path: string, options?: WorkerOptions);
 
     postMessage (message: any): void;
     terminate (): void;

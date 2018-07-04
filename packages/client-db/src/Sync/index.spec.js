@@ -4,14 +4,14 @@
 
 import toU8a from '@polkadot/util/u8a/toU8a';
 
-import MemoryDb from './Memory';
+import SyncDb from './index';
 
 const EMPTY_ROOT = toU8a('0x56e81f171bcc55a6ff8345e692c0f86e5b48e01b996cadc001622fb5e363b421');
 const HELLO_ROOT = toU8a('0x0a915659b88f80bfa200570bd2767a6ab8cb0a4e44fd240cc5ed7a27728c4531');
 const FOO_ROOT = toU8a('0xed4e32371288ee83be74f78fb492f01261b7c3dc9c422581bb705c4376492dc6');
 
-describe('MemoryDb', () => {
-  let memory = new MemoryDb();
+describe('SyncDb', () => {
+  let memory = new SyncDb();
 
   it('starts with the default root', () => {
     expect(
@@ -87,5 +87,9 @@ describe('MemoryDb', () => {
     ).toEqual(
       toU8a('0x116267e482ab94eb8824af425ea7f20ee84d10a8fa735f26204d80000e2a907e')
     );
+  });
+
+  it('terminates', () => {
+    return memory.terminate();
   });
 });

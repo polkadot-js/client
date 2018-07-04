@@ -12,10 +12,10 @@ import createRuntime from '@polkadot/client-runtime/index';
 import logger from '@polkadot/util/logger';
 
 export default function state (config: Config, baseStateDb: TrieDb, baseBlockDb: BaseDb): ChainState {
-  const l = logger(`chain-${config.chain}`);
+  const l = logger(`chain/${config.chain}`);
   const runtime = createRuntime(baseStateDb);
   const blockDb = createBlockDb(baseBlockDb);
-  const stateDb = createStateDb(runtime.environment.db);
+  const stateDb = createStateDb(baseStateDb);
 
   return {
     blockDb,

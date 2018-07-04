@@ -21,5 +21,6 @@ export interface TrieDb extends BaseDb {
   checkpoint: () => void,
   commit: () => void,
   revert: () => void,
-  trieRoot: () => Uint8Array
+  trieRoot: () => Uint8Array,
+  terminate: () => Promise<any>
 }

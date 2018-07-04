@@ -8,17 +8,11 @@ import MemoryDb from '@polkadot/client-db/Memory';
 import createChain from './index';
 
 describe('client-chains', () => {
-  let config;
-  let blockDb;
-  let stateDb;
-
-  beforeEach(() => {
-    config = {
-      chain: 'dev'
-    };
-    blockDb = new HashDb();
-    stateDb = new MemoryDb();
-  });
+  const config = {
+    chain: 'dev'
+  };
+  const blockDb = new HashDb();
+  const stateDb = new MemoryDb();
 
   it('instantiates a known chain', () => {
     expect(
@@ -32,5 +26,9 @@ describe('client-chains', () => {
     expect(
       () => createChain(config, stateDb, blockDb)
     ).toThrow(/Unable to find builtin chain/);
+  });
+
+  it('terminates', () => {
+    return stateDb.terminate();
   });
 });

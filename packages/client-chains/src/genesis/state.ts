@@ -7,11 +7,11 @@ import { ChainState, ChainGenesisState } from '../types';
 import hexToU8a from '@polkadot/util/hex/toU8a';
 
 export default function genesisState ({ stateDb: { db } }: ChainState, initial: ChainGenesisState): void {
-  // db.checkpoint();
+  db.checkpoint();
 
   Object.keys(initial).forEach((key) =>
     db.put(hexToU8a(key), hexToU8a(initial[key]))
   );
 
-  // db.commit();
+  db.commit();
 }

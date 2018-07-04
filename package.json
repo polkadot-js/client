@@ -13,10 +13,10 @@
     "check": "tslint --project . && tsc --noEmit",
     "clean": "polkadot-dev-clean-build",
     "postinstall": "polkadot-dev-yarn-only",
-    "test": "jest --coverage",
-    "start": "node packages/client/scripts/polkadot.js --db-path ./tmp/start-1",
-    "start2": "node packages/client/scripts/polkadot.js --db-path ./tmp/start-2 --p2p-nodes /ip4/127.0.0.1/tcp/39933/ipfs/QmfUiXCYtrKotHgDbP4Kc74NUi2LxckEiAdkK1SMSosLaz --p2p-port 39934 --rpc-port 9934",
-    "start-rust": "node packages/client/scripts/polkadot.js --db-path ./tmp/start-rust --p2p-nodes /ip4/127.0.0.1/tcp/30333/ipfs/QmX1nafodGEN1m2ueX26UvqLVXhvR2A1g8HdFBVD7GHgjJ --p2p-port 39935 --rpc-port 9935"
+    "test": "NODE_OPTIONS=--experimental-worker jest --coverage",
+    "start": "NODE_OPTIONS=--experimental-worker node packages/client/scripts/polkadot.js --db-path ./tmp/start-1",
+    "start2": "NODE_OPTIONS=--experimental-worker node packages/client/scripts/polkadot.js --db-path ./tmp/start-2 --p2p-nodes /ip4/127.0.0.1/tcp/39933/ipfs/QmfUiXCYtrKotHgDbP4Kc74NUi2LxckEiAdkK1SMSosLaz --p2p-port 39934 --rpc-port 9934",
+    "start-rust": "NODE_OPTIONS=--experimental-worker node packages/client/scripts/polkadot.js --db-path ./tmp/start-rust --p2p-nodes /ip4/127.0.0.1/tcp/30333/ipfs/QmRZB66LjCH9MSMLsTZjkQGBo7sGmqi6PfRyV5dDL9wPyr --p2p-port 39935 --rpc-port 9935"
   },
   "devDependencies": {
     "@polkadot/dev": "^0.20.9",

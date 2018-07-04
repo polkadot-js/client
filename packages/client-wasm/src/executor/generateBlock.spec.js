@@ -32,16 +32,13 @@ const PARACHAIN = new Uint8Array([
 ]);
 
 describe('generateBlock', () => {
-  let chain;
+  const config = {
+    chain: 'dev',
+    wasm: {}
+  };
 
-  beforeEach(() => {
-    const config = {
-      chain: 'dev',
-      wasm: {}
-    };
-
-    chain = init(config, new MemoryDb(), new HashDb());
-  });
+  const stateDb = new MemoryDb();
+  const chain = init(config, stateDb, new HashDb());
 
   it('generates a basic block (empty)', () => {
     expect(
@@ -93,5 +90,9 @@ describe('generateBlock', () => {
         chain.executor.generateBlock([], 54321 + 10)
       )
     ).not.toBeNull();
+  });
+
+  it('terminates', () => {
+    return stateDb.terminate();
   });
 });

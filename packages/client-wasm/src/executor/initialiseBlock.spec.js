@@ -10,16 +10,12 @@ import MemoryDb from '@polkadot/client-db/Memory';
 import init from '@polkadot/client-chains';
 
 describe('initialiseBlock', () => {
-  let chain;
-
-  beforeEach(() => {
-    const config = {
-      chain: 'dev',
-      wasm: {}
-    };
-
-    chain = init(config, new MemoryDb(), new HashDb());
-  });
+  const config = {
+    chain: 'dev',
+    wasm: {}
+  };
+  const stateDb = new MemoryDb();
+  const chain = init(config, stateDb, new HashDb());
 
   it('initialises a block', () => {
     expect(
@@ -32,5 +28,9 @@ describe('initialiseBlock', () => {
         )
       )
     ).toEqual(true);
+  });
+
+  it('terminates', () => {
+    return stateDb.terminate();
   });
 });
