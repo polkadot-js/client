@@ -23,14 +23,14 @@ export default function createExports (bytecode: Uint8Array, imports?: WasmExtra
   const codeHash = xxhash(bytecode.subarray(0, 2048), 0);
 
   // NOTE compilation is quite resource intensive, here we bypass the actual Uint8Array -> Module compilation when we already have this module bytecode in our cache
-  // if (!cache[codeHash] || forceCreate) {
-  const table = new WebAssembly.Table(DEFAULT_TABLE);
+  if (!cache[codeHash] || forceCreate) {
+    const table = new WebAssembly.Table(DEFAULT_TABLE);
 
-  cache[codeHash] = new WebAssembly.Instance(
-    new WebAssembly.Module(bytecode),
-    createImports(memory, table, imports)
-  );
-  // }
+    cache[codeHash] = new WebAssembly.Instance(
+      new WebAssembly.Module(bytecode),
+      createImports(memory, table, imports)
+    );
+  }
 
   return cache[codeHash].exports;
 }
