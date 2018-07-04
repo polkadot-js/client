@@ -26,17 +26,21 @@ const U32_MAX = 4294967295;
 
 const trie = new Trie();
 
-// function notify (state: Int32Array, command: number): void {
-function notify (state, command) {
+// Sets the state and wakes any Atomics waiting on the current state to change.
+// If we are not done, assume that we will have to do something afterwards, so
+// enter a wait period.
+// function notify (state: Int32Array, command: number, doWait: boolean = false): void {
+function notify (state, command, doWait = false) {
   state[0] = command;
   Atomics.wake(state, 0, +Infinity);
+
+  if (doWait) {
+    Atomics.wait(state, 0, command);
+  }
 }
 
-// function wait (state: Int32Array, command: number): void {
-function wait (state, command) {
-  Atomics.wait(state, 0, command);
-}
-
+// Waits on a function (returning a promise) to complete. Notify either on end or
+// error, discarding the actual result.
 // function notifyDone (state: Int32Array, fn: () => Promise<any>): Promise<void> {
 async function notifyDone (state, fn) {
   try {
@@ -47,6 +51,11 @@ async function notifyDone (state, fn) {
   }
 }
 
+// Send the value (caller got it from a function return) back to the parent. Since the result
+// may be quite large, we do this is phases -
+//   - send the actual size of the result first (or U32_MAX if null)
+//   - loop through the actual result, sending buffer.length bytes per iteration
+//   - since most results are smaller, the 4K buffer should capture a lot, but :code is >250K
 // function returnValue (state: Int32Array, buffer: Uint8Array, value: Uint8Array | null): void
 function returnValue (state, buffer, value) {
   const view = new DataView(buffer.buffer);
@@ -61,8 +70,7 @@ function returnValue (state, buffer, value) {
   let offset = 0;
 
   view.setUint32(0, size);
-  notify(state, commands.SIZE);
-  wait(state, commands.SIZE);
+  notify(state, commands.SIZE, true);
 
   while (offset !== size) {
     const available = Math.min(buffer.length, size - offset);
@@ -70,8 +78,7 @@ function returnValue (state, buffer, value) {
     buffer.set(value.subarray(offset, offset + available), 0);
     offset += available;
 
-    notify(state, commands.READ);
-    wait(state, commands.READ);
+    notify(state, commands.READ, true);
   }
 
   notify(state, commands.END);

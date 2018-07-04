@@ -26,13 +26,8 @@ export default class SyncDb implements TrieDb {
     this.child = new Worker(path.join(__dirname, './worker.js'));
   }
 
-  private _notifyFill (state: Int32Array): void {
-    state[0] = commands.FILL;
-
-    Atomics.wake(state, 0, +Infinity);
-    Atomics.wait(state, 0, commands.FILL);
-  }
-
+  // Sends a message to the worker, optionally (in the case of get/root) returning the
+  // actual result.
   private _sendMessage (type: string, key?: Uint8Array, value?: Uint8Array): Uint8Array | null {
     const state = new Int32Array(new SharedArrayBuffer(8));
     let view: DataView | null = null;
@@ -51,11 +46,15 @@ export default class SyncDb implements TrieDb {
       Atomics.wait(state, 0, commands.START);
     };
 
+    // Ok, this is not something that returns a value, just send the message and
+    // return when we the call has been done
     if (!returnable.includes(type)) {
       start();
       return null;
     }
 
+    // The shared data buffer that will be used by the worker to send info back
+    // (wrapped in Uint8Array for binary data or in DataView for Int32 data)
     const shared = new SharedArrayBuffer(4096);
 
     buffer = new Uint8Array(shared);
@@ -67,14 +66,20 @@ export default class SyncDb implements TrieDb {
 
     start();
 
+    // Here we loop through the states and either read data to fill the buffer
+    // or return when it is time to do so
     while (true) {
       switch (state[0]) {
+        // we have reached the end, result what we have
         case commands.END:
           return result;
 
+        // Error, so just return a null for the caller to handle
         case commands.ERROR:
           return null;
 
+        // Ahah, we need to read the size (first result) to detemine how
+        // big of a result buffer we need.
         case commands.SIZE:
           size = view.getUint32(0);
 
@@ -87,6 +92,8 @@ export default class SyncDb implements TrieDb {
           this._notifyFill(state);
           break;
 
+        // Get the available data from the buffer and write it into our result
+        // array.
         case commands.READ:
           const available = Math.min(buffer.length, size - offset);
 
@@ -96,11 +103,20 @@ export default class SyncDb implements TrieDb {
           this._notifyFill(state);
           break;
 
+        // This _should_ never happen... but...
         default:
           l.error('Unknown worker state', state[0]);
           return null;
       }
     }
+  }
+
+  // Notifies the worker that it should continue filling the result buffer
+  private _notifyFill (state: Int32Array): void {
+    state[0] = commands.FILL;
+
+    Atomics.wake(state, 0, +Infinity);
+    Atomics.wait(state, 0, commands.FILL);
   }
 
   checkpoint () {
