@@ -20,7 +20,6 @@ const commands = {
 };
 
 const exitCommands = [commands.END, commands.ERROR];
-const waitTimeout = 5000;
 
 // type FnMap = {
 //   [index: string]: (message: Message) => any
@@ -39,7 +38,7 @@ function notify (state, command) {
   Atomics.notify(state, 0, 1);
 
   if (!exitCommands.includes(command)) {
-    Atomics.wait(state, 0, command, waitTimeout);
+    Atomics.wait(state, 0, command);
   }
 }
 

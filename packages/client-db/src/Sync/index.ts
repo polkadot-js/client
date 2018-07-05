@@ -11,7 +11,6 @@ import promisify from '@polkadot/util/promisify';
 
 import commands from './commands';
 
-const waitTimeout = 5000;
 const isTest = process.env.NODE_ENV === 'test';
 const emptyBuffer = new Uint8Array();
 
@@ -71,7 +70,7 @@ export default class SyncDb implements TrieDb {
       type
     } as Message);
 
-    Atomics.wait(state, 0, commands.START, waitTimeout);
+    Atomics.wait(state, 0, commands.START);
 
     return state;
   }
@@ -82,7 +81,7 @@ export default class SyncDb implements TrieDb {
 
     // @ts-ignore Node is a bit ahead, still to be renamed
     Atomics.notify(state, 0, 1);
-    Atomics.wait(state, 0, commands.FILL, waitTimeout);
+    Atomics.wait(state, 0, commands.FILL);
   }
 
   // Ok, this is not something that returns a value, just send the message and
