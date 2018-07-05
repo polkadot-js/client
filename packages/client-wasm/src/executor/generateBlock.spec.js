@@ -2,7 +2,8 @@
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
 
-import memoryDb from '@polkadot/util-triedb/temp';
+import HashDb from '@polkadot/client-db/Hash';
+import MemoryDb from '@polkadot/client-db/Memory';
 import methods from '@polkadot/extrinsics';
 import encodeUnchecked from '@polkadot/extrinsics/codec/encode/unchecked';
 import u8aConcat from '@polkadot/util/u8a/concat';
@@ -31,16 +32,13 @@ const PARACHAIN = new Uint8Array([
 ]);
 
 describe('generateBlock', () => {
-  let chain;
+  const config = {
+    chain: 'dev',
+    wasm: {}
+  };
 
-  beforeEach(() => {
-    const config = {
-      chain: 'dev',
-      wasm: {}
-    };
-
-    chain = init(config, memoryDb(), memoryDb());
-  });
+  const stateDb = new MemoryDb();
+  const chain = init(config, stateDb, new HashDb());
 
   it('generates a basic block (empty)', () => {
     expect(
@@ -92,5 +90,9 @@ describe('generateBlock', () => {
         chain.executor.generateBlock([], 54321 + 10)
       )
     ).not.toBeNull();
+  });
+
+  it('terminates', () => {
+    return stateDb.terminate();
   });
 });

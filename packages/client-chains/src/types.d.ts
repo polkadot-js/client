@@ -19,7 +19,6 @@ export type ChainGenesisState = {
 export type ChainGenesis = {
   block: Uint8Array,
   code: Uint8Array,
-  codeHash: Uint8Array,
   header: Header,
   headerHash: Uint8Array
 };

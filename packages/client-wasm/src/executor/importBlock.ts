@@ -14,6 +14,8 @@ export default function importBlock (self: ExecutorState, block: Uint8Array): Ex
 
   self.l.debug(() => 'Importing block');
 
+  self.stateDb.db.checkpoint();
+
   executeBlock(self, block);
 
   self.stateDb.db.commit();

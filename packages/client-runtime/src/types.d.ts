@@ -4,7 +4,7 @@
 
 /// <reference types="webassembly-js-api"/>
 
-import { TrieDb } from '@polkadot/util-triedb/types';
+import { TrieDb } from '@polkadot/client-db/types';
 import { Logger } from '@polkadot/util/types';
 import { SizeUsed } from './environment/heap/types';
 
@@ -38,8 +38,8 @@ export type RuntimeEnv$Heap = {
 
 export type RuntimeEnv = {
   heap: RuntimeEnv$Heap,
-  l: Logger,
-  db: TrieDb
+  db: TrieDb,
+  l: Logger
 };
 
 export type RuntimeInterface$Chain = {

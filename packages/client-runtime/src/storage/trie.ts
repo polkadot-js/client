@@ -4,7 +4,6 @@
 
 import { RuntimeEnv, RuntimeInterface$Storage$Trie, Pointer } from '../types';
 
-import trieRoot from '@polkadot/trie-hash/root';
 import trieRootOrdered from '@polkadot/trie-hash/rootOrdered';
 import u8aToHex from '@polkadot/util/u8a/toHex';
 
@@ -30,10 +29,9 @@ export default function storage ({ l, heap, db }: RuntimeEnv): RuntimeInterface$
       }),
     storage_root: (resultPtr: Pointer): void =>
       instrument('storage_root', (): void => {
-        const pairs = db.pairs();
-        const root = trieRoot(pairs);
+        const root = db.trieRoot();
 
-        l.debug(() => ['storage_root', [resultPtr], '<-', pairs.length, '->', u8aToHex(root)]);
+        l.debug(() => ['storage_root', [resultPtr], '->', u8aToHex(root)]);
 
         heap.set(resultPtr, root);
       })

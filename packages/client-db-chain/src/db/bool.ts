@@ -4,13 +4,13 @@
 
 import { SectionItem } from '@polkadot/params/types';
 import { Storage$Key$Value } from '@polkadot/storage/types';
-import { TrieDb } from '@polkadot/util-triedb/types';
+import { BaseDb } from '@polkadot/client-db/types';
 import { StorageMethod$Bool } from '../types';
 
 import createBase from './base';
 import creator from '../key';
 
-export default function decodeBool <T> (db: TrieDb, key: SectionItem<T>): StorageMethod$Bool {
+export default function decodeBool <T> (db: BaseDb, key: SectionItem<T>): StorageMethod$Bool {
   const createKey = creator(key);
   const base = createBase<boolean>(db);
 

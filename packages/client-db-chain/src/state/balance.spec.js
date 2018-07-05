@@ -54,7 +54,7 @@ describe('balance', () => {
 
       staking = db({
         get: (key) => store[u8aToHex(key)] || new Uint8Array([]),
-        set: (key, value) => {
+        put: (key, value) => {
           store[u8aToHex(key)] = value;
         }
       }).staking;

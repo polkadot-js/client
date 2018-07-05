@@ -4,13 +4,13 @@
 
 import { SectionItem } from '@polkadot/params/types';
 import { Storage$Key$Value } from '@polkadot/storage/types';
-import { TrieDb } from '@polkadot/util-triedb/types';
+import { BaseDb } from '@polkadot/client-db/types';
 import { StorageMethod$U8a } from '../types';
 
 import creator from '../key';
 import createBase from './base';
 
-export default function decodeU8a <T> (db: TrieDb, key: SectionItem<T>): StorageMethod$U8a {
+export default function decodeU8a <T> (db: BaseDb, key: SectionItem<T>): StorageMethod$U8a {
   const createKey = creator(key);
   const base = createBase<Uint8Array>(db);
 

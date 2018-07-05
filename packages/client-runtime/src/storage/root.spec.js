@@ -3,6 +3,7 @@
 // of the ISC license. See the LICENSE file for details.
 /* eslint camelcase: 0 */
 
+import MemoryDb from '@polkadot/client-db/Memory';
 import logger from '@polkadot/util/logger';
 import hexToU8a from '@polkadot/util/hex/toU8a';
 import u8aFromString from '@polkadot/util/u8a/fromString';
@@ -21,17 +22,16 @@ describe('storage_root', () => {
       set: jest.fn()
     };
 
-    db = {};
+    db = new MemoryDb();
 
     storage_root = index({ l, heap, db }).storage_root;
   });
 
   it('creates a basic storage root', () => {
-    db.pairs = () => ([
-      { k: u8aFromString('doe'), v: u8aFromString('reindeer') },
-      { k: u8aFromString('dog'), v: u8aFromString('puppy') },
-      { k: u8aFromString('dogglesworth'), v: u8aFromString('cat') }
-    ]);
+    db.put(u8aFromString('doe'), u8aFromString('reindeer'));
+    db.put(u8aFromString('dog'), u8aFromString('puppy'));
+    db.put(u8aFromString('dogglesworth'), u8aFromString('cat'));
+
     storage_root(5);
 
     expect(

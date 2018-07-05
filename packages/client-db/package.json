@@ -4,7 +4,7 @@
   "description": "Database interface layer for network client",
   "main": "index.js",
   "engines": {
-    "node": ">=8.0"
+    "node": ">=10.5"
   },
   "publishConfig": {
     "access": "public",
@@ -35,8 +35,8 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.0.0-beta.51",
-    "@polkadot/util": "^0.26.10",
-    "@polkadot/util-triedb": "^0.26.10",
+    "@polkadot/trie-db": "^0.26.14",
+    "@polkadot/util": "^0.26.14",
     "@types/mkdirp": "^0.5.2",
     "mkdirp": "^0.5.1"
   },

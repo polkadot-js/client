@@ -24,7 +24,7 @@ describe('accountIndexOf', () => {
 
         return store[u8aToHex(key)] || new Uint8Array([]);
       },
-      set: (key, value) => {
+      put: (key, value) => {
         console.log('setting', u8aToHex(key), value);
 
         store[u8aToHex(key)] = value;

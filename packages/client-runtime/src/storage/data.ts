@@ -9,7 +9,7 @@ import u8aToHex from '@polkadot/util/u8a/toHex';
 import instrument from '../instrument';
 import get from './get';
 
-const U32_MAX = 4294967295;
+const U32_MAX = 2 ** 32 - 1;
 
 export default function data ({ l, heap, db }: RuntimeEnv): RuntimeInterface$Storage$Data {
   return {
@@ -61,7 +61,7 @@ export default function data ({ l, heap, db }: RuntimeEnv): RuntimeInterface$Sto
 
         l.debug(() => ['set_storage', [keyPtr, keyLength, dataPtr, dataLength], '<-', u8aToHex(key), '=', u8aToHex(data)]);
 
-        db.set(key, data);
+        db.put(key, data);
       })
   };
 }

@@ -22,7 +22,7 @@ describe('set_storage', () => {
     };
 
     db = {
-      set: jest.fn()
+      put: jest.fn()
     };
 
     set_storage = index({ l, heap, db }).set_storage;
@@ -32,7 +32,7 @@ describe('set_storage', () => {
     set_storage(0, 3, 3, 5);
 
     expect(
-      db.set
+      db.put
     ).toHaveBeenCalledWith(
       new Uint8Array([0x53, 0x61, 0x79]),
       new Uint8Array([72, 101, 108, 108, 111])

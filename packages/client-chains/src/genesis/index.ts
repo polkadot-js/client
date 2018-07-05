@@ -16,8 +16,9 @@ export default function initGenesis (self: ChainState, initialState: ChainGenesi
   self.blockDb.bestNumber.set(0);
   self.blockDb.block.set(genesis.block, genesis.headerHash);
 
-  self.stateDb.system.blockHashAt.set(genesis.headerHash, 0);
-  self.stateDb.db.commit();
+  // self.stateDb.db.checkpoint();
+  // self.stateDb.system.blockHashAt.set(genesis.headerHash, 0);
+  // self.stateDb.db.commit();
 
   return genesis;
 }

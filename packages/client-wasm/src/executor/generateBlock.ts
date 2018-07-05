@@ -22,6 +22,8 @@ export default function generateBlock (self: ExecutorState, _extrinsics: Array<U
 
   self.l.debug(() => `Generating block #${number.toString()}`);
 
+  self.stateDb.db.checkpoint();
+
   const extrinsics = withInherent(self, timestamp, _extrinsics);
   const header = createHeader({
     number,
@@ -45,7 +47,7 @@ export default function generateBlock (self: ExecutorState, _extrinsics: Array<U
     }
   });
 
-  self.stateDb.db.clear();
+  self.stateDb.db.revert();
 
   self.l.log(() => `Block #${number.toString()} generated (${Date.now() - start}ms)`);
 

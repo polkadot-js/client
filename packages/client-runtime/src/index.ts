@@ -2,7 +2,7 @@
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
 
-import { TrieDb } from '@polkadot/util-triedb/types';
+import { TrieDb } from '@polkadot/client-db/types';
 import { RuntimeInterface, RuntimeInterface$Exports } from './types';
 
 import createChain from './chain';
