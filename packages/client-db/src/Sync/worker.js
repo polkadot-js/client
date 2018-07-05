@@ -8,8 +8,6 @@
 const { parentPort } = require('worker_threads');
 // import Trie from '@polkadot/trie-db';
 const Trie = require('@polkadot/trie-db').default;
-// import isUndefined from '@polkadot/util/is/undefined';
-const isUndefined = require('@polkadot/util/is/undefined').default;
 
 // import commands from './commands';
 const commands = {
@@ -21,7 +19,8 @@ const commands = {
   ERROR: 0xff
 };
 
-const WAIT_TIMEOUT = 5000;
+const exitCommands = [commands.END, commands.ERROR];
+const waitTimeout = 5000;
 
 // type FnMap = {
 //   [index: string]: (message: Message) => any
@@ -33,14 +32,14 @@ const trie = new Trie();
 // Sets the state and wakes any Atomics waiting on the current state to change.
 // If we are not done, assume that we will have to do something afterwards, so
 // enter a wait period.
-// function notify (state: Int32Array, command: number, doWait: boolean = false): void {
-function notify (state, command, doWait = false) {
+// function notify (state: Int32Array, command: number): void {
+function notify (state, command) {
   state[0] = command;
 
   Atomics.notify(state, 0, 1);
 
-  if (doWait) {
-    Atomics.wait(state, 0, command, WAIT_TIMEOUT);
+  if (!exitCommands.includes(command)) {
+    Atomics.wait(state, 0, command, waitTimeout);
   }
 }
 
@@ -63,11 +62,6 @@ async function notifyOnDone (state, fn) {
 //   - since most results are smaller, the 4K buffer should capture a lot, but :code is >250K
 // async function notifyOnValue (state: Int32Array, buffer: Uint8Array | undefined, fn: () => Promise<Uint8Array | null>): Promise<void> {
 async function notifyOnValue (state, buffer, fn) {
-  if (isUndefined(buffer)) {
-    notify(state, commands.ERROR);
-    return;
-  }
-
   const view = new DataView(buffer.buffer);
   let value; // : Uint8Array | null = null;
 
@@ -85,7 +79,7 @@ async function notifyOnValue (state, buffer, fn) {
   let offset = 0;
 
   view.setUint32(0, size);
-  notify(state, commands.SIZE, true);
+  notify(state, commands.SIZE);
 
   while (offset !== size) {
     const available = Math.min(buffer.length, size - offset);
@@ -93,13 +87,10 @@ async function notifyOnValue (state, buffer, fn) {
     buffer.set(value.subarray(offset, offset + available), 0);
     offset += available;
 
-    if (offset === size) {
-      // we are done, last bytes incoming
-      notify(state, commands.END);
-    } else {
-      // we have more data to come
-      notify(state, commands.READ, true);
-    }
+    notify(state, offset !== size
+      ? commands.READ
+      : commands.END
+    );
   }
 }
 

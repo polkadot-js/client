@@ -9,7 +9,7 @@ export type MessageTypeWrite = 'checkpoint' | 'commit' | 'del' | 'put' | 'revert
 export type MessageType = MessageTypeRead | MessageTypeWrite;
 
 export type MessageData = {
-  buffer?: Uint8Array,
+  buffer: Uint8Array,
   key?: Uint8Array,
   value?: Uint8Array
 }

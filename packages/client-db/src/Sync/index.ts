@@ -11,8 +11,9 @@ import promisify from '@polkadot/util/promisify';
 
 import commands from './commands';
 
-const WAIT_TIMEOUT = 5000;
+const waitTimeout = 5000;
 const isTest = process.env.NODE_ENV === 'test';
+const emptyBuffer = new Uint8Array();
 
 export default class SyncDb implements TrieDb {
   private worker: WorkerThreads.Worker;
@@ -70,7 +71,7 @@ export default class SyncDb implements TrieDb {
       type
     } as Message);
 
-    Atomics.wait(state, 0, commands.START, WAIT_TIMEOUT);
+    Atomics.wait(state, 0, commands.START, waitTimeout);
 
     return state;
   }
@@ -81,13 +82,14 @@ export default class SyncDb implements TrieDb {
 
     // @ts-ignore Node is a bit ahead, still to be renamed
     Atomics.notify(state, 0, 1);
-    Atomics.wait(state, 0, commands.FILL, WAIT_TIMEOUT);
+    Atomics.wait(state, 0, commands.FILL, waitTimeout);
   }
 
   // Ok, this is not something that returns a value, just send the message and
   // return when we the call has been done
   private _executeWrite (type: MessageTypeWrite, key?: Uint8Array, value?: Uint8Array): void {
     this._waitOnStart(type, {
+      buffer: emptyBuffer,
       key,
       value
     });
