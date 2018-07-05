@@ -15,8 +15,7 @@ import commands from './commands';
 
 const l = logger('db/main');
 
-const U32_MAX = Math.pow(2, 32) - 1;
-const returnable = ['get', 'root'];
+const returnable: Array<MessageType> = ['get', 'root'];
 
 export default class SyncDb implements TrieDb {
   private child: WorkerThreads.Worker;
@@ -61,11 +60,31 @@ export default class SyncDb implements TrieDb {
     buffer = new Uint8Array(shared);
     view = new DataView(shared);
 
-    let result: Uint8Array | null = null;
     let size = 0;
     let offset = 0;
 
     start();
+
+    // expect to read SIZE, END/ERROR here
+    switch (state[0]) {
+      case commands.END:
+      case commands.ERROR:
+        return null;
+
+      // Ahah, we need to read the size (first result) to detemine how
+      // big of a result buffer we need.
+      case commands.SIZE:
+        size = view.getUint32(0);
+        this._notifyFill(state);
+        break;
+
+      // This _should_ never happen... but...
+      default:
+        l.error('Unknown worker state', state[0]);
+        return null;
+    }
+
+    const result: Uint8Array = new Uint8Array(size);
 
     // Here we loop through the states and either read data to fill the buffer
     // or return when it is time to do so
@@ -79,28 +98,13 @@ export default class SyncDb implements TrieDb {
         case commands.ERROR:
           return null;
 
-        // Ahah, we need to read the size (first result) to detemine how
-        // big of a result buffer we need.
-        case commands.SIZE:
-          size = view.getUint32(0);
-
-          if (size === U32_MAX) {
-            return null;
-          }
-
-          result = new Uint8Array(size);
-
-          this._notifyFill(state);
-          break;
-
         // Get the available data from the buffer and write it into our result
         // array.
         case commands.READ:
           const available = Math.min(buffer.length, size - offset);
 
-          (result as Uint8Array).set(buffer.subarray(0, available), offset);
+          result.set(buffer.subarray(0, available), offset);
           offset += available;
-
           this._notifyFill(state);
           break;
 
@@ -116,7 +120,8 @@ export default class SyncDb implements TrieDb {
   private _notifyFill (state: Int32Array): void {
     state[0] = commands.FILL;
 
-    Atomics.wake(state, 0, +Infinity);
+    // FIXME This is going to be renamed '.notify', not in Node (yet)
+    Atomics.wake(state, 0, 1);
     Atomics.wait(state, 0, commands.FILL);
   }
 

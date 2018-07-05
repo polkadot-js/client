@@ -22,8 +22,6 @@ const commands = {
   ERROR: 0xff
 };
 
-const U32_MAX = Math.pow(2, 32) - 1;
-
 const trie = new Trie();
 
 // Sets the state and wakes any Atomics waiting on the current state to change.
@@ -32,7 +30,9 @@ const trie = new Trie();
 // function notify (state: Int32Array, command: number, doWait: boolean = false): void {
 function notify (state, command, doWait = false) {
   state[0] = command;
-  Atomics.wake(state, 0, +Infinity);
+
+  // FIXME This is going to be renamed '.notify', not in Node (yet)
+  Atomics.wake(state, 0, 1);
 
   if (doWait) {
     Atomics.wait(state, 0, command);
@@ -61,8 +61,7 @@ function returnValue (state, buffer, value) {
   const view = new DataView(buffer.buffer);
 
   if (!value) {
-    view.setUint32(0, U32_MAX);
-    notify(state, commands.SIZE);
+    notify(state, commands.END);
     return;
   }
 
