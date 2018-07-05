@@ -84,7 +84,7 @@ export default class SyncDb implements TrieDb {
         return null;
     }
 
-    const result: Uint8Array = new Uint8Array(size);
+    const result = new Uint8Array(size);
 
     // Here we loop through the states and either read data to fill the buffer
     // or return when it is time to do so
