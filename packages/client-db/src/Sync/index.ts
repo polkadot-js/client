@@ -11,17 +11,19 @@ import promisify from '@polkadot/util/promisify';
 
 import commands from './commands';
 
+const WAIT_TIMEOUT = 5000;
+const isTest = process.env.NODE_ENV === 'test';
+
 export default class SyncDb implements TrieDb {
-  private child: WorkerThreads.Worker;
+  private worker: WorkerThreads.Worker;
 
   constructor () {
-    // FIXME We should probably be passing the trie params info into construction
-    // NOTE Some other options for creation exist
-    //   1. With --experimental-modules (ESNext targets) this can become
-    //      this.child = new Worker(new URL('./worker.js', import.meta.url).pathname);
-    //   2. When using isMainThread, we can construct with __filename
-    //   3. With Node 10.6 onwards, relative paths are supported
-    this.child = new Worker(path.join(__dirname, './worker.js'));
+    // FIXME We should be passing the trie params info into construction
+    this.worker = new Worker(path.join(__dirname, './worker.js'), {
+      stderr: isTest,
+      stdin: isTest,
+      stdout: isTest
+    });
   }
 
   checkpoint (): void {
@@ -55,7 +57,31 @@ export default class SyncDb implements TrieDb {
   async terminate () {
     // TODO We should cleanup the trie instance gracefully, so another message here
     // to cleanup and then the termination up next
-    return promisify(this.child, this.child.terminate);
+    return promisify(this.worker, this.worker.terminate);
+  }
+
+  // Sends a message to the worker, waiting until started
+  private _waitOnStart (type: MessageType, message: MessageData): Int32Array {
+    const state = new Int32Array(new SharedArrayBuffer(8));
+
+    this.worker.postMessage({
+      ...message,
+      state,
+      type
+    } as Message);
+
+    Atomics.wait(state, 0, commands.START, WAIT_TIMEOUT);
+
+    return state;
+  }
+
+  // Notifies the worker that it should continue filling the result buffer
+  private _waitOnRead (state: Int32Array): void {
+    state[0] = commands.FILL;
+
+    // @ts-ignore Node is a bit ahead, still to be renamed
+    Atomics.notify(state, 0, 1);
+    Atomics.wait(state, 0, commands.FILL, WAIT_TIMEOUT);
   }
 
   // Ok, this is not something that returns a value, just send the message and
@@ -85,30 +111,6 @@ export default class SyncDb implements TrieDb {
     }
 
     return this._readBuffer(state, buffer, size);
-  }
-
-  // Sends a message to the worker, waiting until started
-  private _waitOnStart (type: MessageType, message: MessageData): Int32Array {
-    const state = new Int32Array(new SharedArrayBuffer(8));
-
-    this.child.postMessage({
-      ...message,
-      state,
-      type
-    } as Message);
-
-    Atomics.wait(state, 0, commands.START, 5000);
-
-    return state;
-  }
-
-  // Notifies the worker that it should continue filling the result buffer
-  private _waitOnRead (state: Int32Array): void {
-    state[0] = commands.FILL;
-
-    // FIXME This is going to be renamed '.notify', Node 10.6 warns, 10.5 allows
-    Atomics.wake(state, 0, 1);
-    Atomics.wait(state, 0, commands.FILL, 5000);
   }
 
   // Read the size of a structure to be returned from the stream

@@ -1,1 +1,0 @@
-../../build/Sync/worker.js
