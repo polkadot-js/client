@@ -15,7 +15,7 @@ import commands from './commands';
 
 const l = logger('db/main');
 
-const U32_MAX = 4294967295;
+const U32_MAX = Math.pow(2, 32) - 1;
 const returnable = ['get', 'root'];
 
 export default class SyncDb implements TrieDb {

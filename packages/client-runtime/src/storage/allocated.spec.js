@@ -56,6 +56,6 @@ describe('get_allocated_storage', () => {
     ).toEqual(0);
     expect(
       heap.getU32(lenPtr)
-    ).toEqual(4294967295);
+    ).toEqual(Math.pow(2, 32) - 1);
   });
 });
