@@ -16,7 +16,7 @@
     "test": "NODE_OPTIONS=--experimental-worker jest --coverage",
     "start": "NODE_OPTIONS=--experimental-worker node packages/client/scripts/polkadot.js --db-path ./tmp/start-1",
     "start2": "NODE_OPTIONS=--experimental-worker node packages/client/scripts/polkadot.js --db-path ./tmp/start-2 --p2p-nodes /ip4/127.0.0.1/tcp/39933/ipfs/QmfUiXCYtrKotHgDbP4Kc74NUi2LxckEiAdkK1SMSosLaz --p2p-port 39934 --rpc-port 9934",
-    "start-rust": "NODE_OPTIONS=--experimental-worker node packages/client/scripts/polkadot.js --db-path ./tmp/start-rust --p2p-nodes /ip4/127.0.0.1/tcp/30333/ipfs/QmfYmj4h4z426ihGd4PoDmRHg8rawCKmomK4EqZb8QeNyg --p2p-port 39935 --rpc-port 9935"
+    "start-rust": "NODE_OPTIONS=--experimental-worker node packages/client/scripts/polkadot.js --db-path ./tmp/start-rust --p2p-nodes /ip4/127.0.0.1/tcp/30333/ipfs/QmXBQmmjNsBLobf5Xx8Kqz7rvUrGgiBLTYm2EmQvcZyrKR --p2p-port 39935 --rpc-port 9935"
   },
   "devDependencies": {
     "@polkadot/dev": "^0.20.9",

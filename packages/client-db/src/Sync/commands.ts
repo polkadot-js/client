@@ -2,6 +2,7 @@
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
 
+// NOTE Start should be at 0x00 since it is the default value
 const START = 0x00;
 const SIZE = 0x01;
 const FILL = 0x02;

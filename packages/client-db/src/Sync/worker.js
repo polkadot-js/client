@@ -53,7 +53,7 @@ async function notifyDone (state, fn) {
 
 // Send the value (caller got it from a function return) back to the parent. Since the result
 // may be quite large, we do this is phases -
-//   - send the actual size of the result first (or U32_MAX if null)
+//   - send the actual size of the result first
 //   - loop through the actual result, sending buffer.length bytes per iteration
 //   - since most results are smaller, the 4K buffer should capture a lot, but :code is >250K
 // function returnValue (state: Int32Array, buffer: Uint8Array, value: Uint8Array | null): void
@@ -77,10 +77,14 @@ function returnValue (state, buffer, value) {
     buffer.set(value.subarray(offset, offset + available), 0);
     offset += available;
 
-    notify(state, commands.READ, true);
+    if (offset === size) {
+      // we are done, last bytes incoming
+      notify(state, commands.END);
+    } else {
+      // we have more data to come
+      notify(state, commands.READ, true);
+    }
   }
-
-  notify(state, commands.END);
 }
 
 // function checkpoint (state: Int32Array): void
