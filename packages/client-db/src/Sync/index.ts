@@ -97,7 +97,7 @@ export default class SyncDb implements TrieDb {
       type
     } as Message);
 
-    Atomics.wait(state, 0, commands.START);
+    Atomics.wait(state, 0, commands.START, 5000);
 
     return state;
   }
@@ -106,9 +106,9 @@ export default class SyncDb implements TrieDb {
   private _waitOnRead (state: Int32Array): void {
     state[0] = commands.FILL;
 
-    // FIXME This is going to be renamed '.notify', not in Node (yet)
+    // FIXME This is going to be renamed '.notify', Node 10.6 warns, 10.5 allows
     Atomics.wake(state, 0, 1);
-    Atomics.wait(state, 0, commands.FILL);
+    Atomics.wait(state, 0, commands.FILL, 5000);
   }
 
   // Read the size of a structure to be returned from the stream
