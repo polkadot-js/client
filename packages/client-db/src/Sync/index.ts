@@ -3,6 +3,7 @@
 // of the ISC license. See the LICENSE file for details.
 
 import { TrieDb } from '../types';
+import { Message, MessageType } from './types';
 
 import path from 'path';
 import { Worker } from 'worker_threads';
@@ -28,7 +29,7 @@ export default class SyncDb implements TrieDb {
 
   // Sends a message to the worker, optionally (in the case of get/root) returning the
   // actual result.
-  private _sendMessage (type: string, key?: Uint8Array, value?: Uint8Array): Uint8Array | null {
+  private _sendMessage (type: MessageType, key?: Uint8Array, value?: Uint8Array): Uint8Array | null {
     const state = new Int32Array(new SharedArrayBuffer(8));
     let view: DataView | null = null;
     let buffer: Uint8Array | null = null;
@@ -41,7 +42,7 @@ export default class SyncDb implements TrieDb {
         state,
         value,
         type
-      });
+      } as Message);
 
       Atomics.wait(state, 0, commands.START);
     };
@@ -70,7 +71,7 @@ export default class SyncDb implements TrieDb {
     // or return when it is time to do so
     while (true) {
       switch (state[0]) {
-        // we have reached the end, result what we have
+        // we have reached the end, return what we have
         case commands.END:
           return result;
 
