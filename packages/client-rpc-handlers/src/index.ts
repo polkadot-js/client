@@ -1,10 +1,10 @@
-// Copyright 2017-2018 @polkadot/client authors & contributors
+// Copyright 2017-2018 @polkadot/client-rpc-handlers authors & contributors
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
 
-import { Handlers } from '@polkadot/client-rpc/types';
 import { ChainInterface } from '@polkadot/client-chains/types';
-import { Config } from '../types';
+import { Config } from '@polkadot/client/types';
+import { Handlers } from './types';
 
 import state from './state';
 import subscribe from './subscribe';

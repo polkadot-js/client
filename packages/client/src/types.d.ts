@@ -5,7 +5,7 @@
 import { ChainName } from '@polkadot/client-chains/types';
 import { DbConfig } from '@polkadot/client-db/types';
 import { P2pConfig } from '@polkadot/client-p2p/types';
-import { RpcConfig, Handler } from '@polkadot/client-rpc/types';
+import { RpcConfig } from '@polkadot/client-rpc/types';
 import { TelemetryConfig } from '@polkadot/client-telemetry/types';
 import { WasmConfig } from '@polkadot/client-wasm/types';
 import { Role } from '@polkadot/primitives/role';
@@ -23,8 +23,4 @@ export type Config = {
   roles: Array<Role>,
   telemetry: TelemetryConfig,
   wasm: WasmConfig
-};
-
-export type Endpoint = {
-  [index: string]: Handler
 };

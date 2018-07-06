@@ -23,7 +23,6 @@ import Rpc from '@polkadot/client-rpc/index';
 import * as clientId from './clientId';
 import defaults from './defaults';
 import cli from './cli';
-import handlers from './rpc';
 
 class Client {
   private l: Logger;
@@ -44,11 +43,12 @@ class Client {
 
     this.chain = createChain(config, new MemoryDb(), new HashDb());
     this.p2p = createP2p(config, this.chain);
-    this.rpc = new Rpc(config, this.chain, handlers);
+    this.rpc = new Rpc(config, this.chain);
 
     telemetry.init(config, this.chain);
 
-    this.rpc.start();
+    await this.rpc.start();
+
     this.startInformant();
   }
 

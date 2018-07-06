@@ -8,6 +8,7 @@ import * as net from 'net';
 import * as Koa from 'koa';
 import { Config } from '@polkadot/client/types';
 import { ChainInterface } from '@polkadot/client-chains/types';
+import { Handler, Handlers } from '@polkadot/client-rpc-handlers/types';
 import { Logger } from '@polkadot/util/types';
 
 export type JsonRpcBase = {
@@ -39,14 +40,6 @@ export type JsonRpcSubscription = JsonRpcBase & {
 export type JsonRpcResponse = JsonRpcBase & {
   result: any
 };
-
-export type Handler = (...params: Array<any>) => Promise<any>;
-
-export type Handlers = {
-  [index: string]: Handler
-};
-
-export type HandlersFactory = (config: Config, chain: ChainInterface) => Handlers
 
 export type Rpc = 'http' | 'ws';
 

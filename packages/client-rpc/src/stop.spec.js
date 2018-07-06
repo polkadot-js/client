@@ -18,7 +18,7 @@ describe('stop', () => {
       }
     };
 
-    server = new Rpc(config, {}, () => {});
+    server = new Rpc(config, { state: {} });
     server.servers = [{
       close: () => true
     }];

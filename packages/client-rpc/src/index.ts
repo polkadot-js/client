@@ -7,8 +7,9 @@ import * as Koa from 'koa';
 import * as net from 'net';
 import { Config } from '@polkadot/client/types';
 import { ChainInterface } from '@polkadot/client-chains/types';
+import { Handlers } from '@polkadot/client-rpc-handlers/types';
 import { Logger } from '@polkadot/util/types';
-import { Handlers, HandlersFactory, JsonRpcError, JsonRpcRequest, JsonRpcResponse, RpcInterface, SubInterface, WsContext, WsContext$Socket } from './types';
+import { JsonRpcError, JsonRpcRequest, JsonRpcResponse, RpcInterface, SubInterface, WsContext, WsContext$Socket } from './types';
 
 import coBody from 'co-body';
 import assert from '@polkadot/util/assert';
@@ -17,6 +18,7 @@ import isError from '@polkadot/util/is/error';
 import isFunction from '@polkadot/util/is/function';
 import isUndefined from '@polkadot/util/is/undefined';
 import logger from '@polkadot/util/logger';
+import handlers from '@polkadot/client-rpc-handlers/index';
 
 import validateConfig from './validate/config';
 import validateRequest from './validate/request';
@@ -33,7 +35,7 @@ export default class Rpc extends E3.EventEmitter implements RpcInterface {
   private servers: Array<net.Server>;
   private subscribe: SubInterface;
 
-  constructor (config: Config, chain: ChainInterface, handlers: HandlersFactory) {
+  constructor (config: Config, chain: ChainInterface) {
     super();
 
     this.l = logger('rpc');

@@ -3,6 +3,26 @@
 // of the ISC license. See the LICENSE file for details.
 
 import ExtError from '@polkadot/util/ext/error';
+
+const mockExtError = ExtError;
+
+jest.mock('@polkadot/client-rpc-handlers/index', () => () => ({
+  errorThrow: () => {
+    throw new Error('errorThrow');
+  },
+  errorThrowEx: () => {
+    throw new mockExtError('errorThrowEx', -123);
+  },
+  errorRet: () => {
+    return Promise.resolve(new Error('errorRet'));
+  },
+  errorRetEx: () => {
+    return Promise.resolve(new mockExtError('errorRetEx', -456));
+  },
+  test: jest.fn(() => Promise.resolve('test')),
+  echo: (...params) => Promise.resolve(`echo: ${params.join(', ')}`)
+}));
+
 import HttpProvider from '@polkadot/api-provider/http';
 import WsProvider from '@polkadot/api-provider/ws';
 
@@ -21,6 +41,8 @@ describe('server', () => {
         block: {
           onUpdate: () => {}
         }
+      },
+      state: {
       }
     };
     config = {
@@ -30,28 +52,9 @@ describe('server', () => {
         types: ['http']
       }
     };
-    testSpy = jest.fn(() => Promise.resolve('test'));
-    handlers = {
-      errorThrow: () => {
-        throw new Error('errorThrow');
-      },
-      errorThrowEx: () => {
-        throw new ExtError('errorThrowEx', -123);
-      },
-      errorRet: () => {
-        return Promise.resolve(new Error('errorRet'));
-      },
-      errorRetEx: () => {
-        return Promise.resolve(new ExtError('errorRetEx', -456));
-      },
-      test: testSpy,
-      echo: (...params) => Promise.resolve(`echo: ${params.join(', ')}`)
-    };
   });
 
   afterEach(() => {
-    testSpy.mockRestore();
-
     if (server) {
       server.stop();
       server = null;
@@ -59,7 +62,7 @@ describe('server', () => {
   });
 
   it('starts and accepts requests, sending responses (HTTP)', () => {
-    server = new Rpc(config, chain, () => handlers);
+    server = new Rpc(config, chain);
     server.start(); // eslint-disable-line
 
     return new HttpProvider('http://localhost:9901')

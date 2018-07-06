@@ -2,6 +2,10 @@
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
 
+jest.mock('@polkadot/client-rpc-handlers/index', () => () => ({
+  test: jest.fn(() => Promise.resolve('test'))
+}));
+
 import isFunction from '@polkadot/util/is/function';
 
 import Rpc from './index';
@@ -19,9 +23,6 @@ describe('handleWs', () => {
         types: ['ws']
       }
     };
-    const handlers = {
-      test: jest.fn(() => Promise.resolve('test'))
-    };
     context = {
       websocket: {
         on: jest.fn((type, cb) => {
@@ -33,7 +34,7 @@ describe('handleWs', () => {
       }
     };
 
-    server = new Rpc(config, {}, () => handlers);
+    server = new Rpc(config, {});
   });
 
   it('calls the socket with the result', () => {

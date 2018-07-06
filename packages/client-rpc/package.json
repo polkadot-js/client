@@ -39,6 +39,7 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.0.0-beta.51",
+    "@polakdort/client-rpc-handlers": "^0.13.6",
     "@polkadot/util": "^0.26.14",
     "@types/co-body": "^0.0.3",
     "@types/koa": "^2.0.46",

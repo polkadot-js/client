@@ -4,10 +4,29 @@
 
 import ExtError from '@polkadot/util/ext/error';
 
+const mockExtError = ExtError;
+const mockHandlers = ({
+  errorThrow: () => {
+    throw new Error('errorThrow');
+  },
+  errorThrowEx: () => {
+    throw new mockExtError('errorThrowEx', -123);
+  },
+  errorRet: () => {
+    return Promise.resolve(new Error('errorRet'));
+  },
+  errorRetEx: () => {
+    return Promise.resolve(new mockExtError('errorRetEx', -456));
+  },
+  test: jest.fn(() => Promise.resolve('test')),
+  echo: (...params) => Promise.resolve(`echo: ${params.join(', ')}`)
+});
+
+jest.mock('@polkadot/client-rpc-handlers/index', () => () => mockHandlers);
+
 import Rpc from './index';
 
 describe('handleMessage', () => {
-  let handlers;
   let server;
 
   beforeEach(() => {
@@ -18,24 +37,8 @@ describe('handleMessage', () => {
         types: ['http']
       }
     };
-    handlers = {
-      errorThrow: () => {
-        throw new Error('errorThrow');
-      },
-      errorThrowEx: () => {
-        throw new ExtError('errorThrowEx', -123);
-      },
-      errorRet: () => {
-        return Promise.resolve(new Error('errorRet'));
-      },
-      errorRetEx: () => {
-        return Promise.resolve(new ExtError('errorRetEx', -456));
-      },
-      test: jest.fn(() => Promise.resolve('test')),
-      echo: (...params) => Promise.resolve(`echo: ${params.join(', ')}`)
-    };
 
-    server = new Rpc(config, {}, () => handlers);
+    server = new Rpc(config, {});
   });
 
   it('fails when invalid JSON', () => {
@@ -92,7 +95,7 @@ describe('handleMessage', () => {
     });
 
     return server.handleMessage(message).then((result) => {
-      expect(handlers.test).toHaveBeenCalledWith(['a', 'b']);
+      expect(mockHandlers.test).toHaveBeenCalledWith(['a', 'b']);
     });
   });
 
