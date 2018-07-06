@@ -3,46 +3,43 @@
 // of the ISC license. See the LICENSE file for details.
 
 import ExtError from '@polkadot/util/ext/error';
-import logger from '@polkadot/util/logger';
 
-import handleMessage from './handleMessage';
-
-const l = logger('test');
+import Rpc from './index';
 
 describe('handleMessage', () => {
-  let self;
+  let handlers;
+  let server;
 
   beforeEach(() => {
-    self = {
-      config: {
-        rpc: {
-          port: 9901,
-          path: '/',
-          types: ['http']
-        }
-      },
-      handlers: {
-        errorThrow: () => {
-          throw new Error('errorThrow');
-        },
-        errorThrowEx: () => {
-          throw new ExtError('errorThrowEx', -123);
-        },
-        errorRet: () => {
-          return Promise.resolve(new Error('errorRet'));
-        },
-        errorRetEx: () => {
-          return Promise.resolve(new ExtError('errorRetEx', -456));
-        },
-        test: jest.fn(() => Promise.resolve('test')),
-        echo: (...params) => Promise.resolve(`echo: ${params.join(', ')}`)
-      },
-      l
+    const config = {
+      rpc: {
+        port: 9901,
+        path: '/',
+        types: ['http']
+      }
     };
+    handlers = {
+      errorThrow: () => {
+        throw new Error('errorThrow');
+      },
+      errorThrowEx: () => {
+        throw new ExtError('errorThrowEx', -123);
+      },
+      errorRet: () => {
+        return Promise.resolve(new Error('errorRet'));
+      },
+      errorRetEx: () => {
+        return Promise.resolve(new ExtError('errorRetEx', -456));
+      },
+      test: jest.fn(() => Promise.resolve('test')),
+      echo: (...params) => Promise.resolve(`echo: ${params.join(', ')}`)
+    };
+
+    server = new Rpc(config, {}, () => handlers);
   });
 
   it('fails when invalid JSON', () => {
-    return handleMessage(self, 'notJson').then((result) => {
+    return server.handleMessage('notJson').then((result) => {
       expect(result).toMatchObject({
         id: 0,
         error: {
@@ -59,7 +56,7 @@ describe('handleMessage', () => {
       id: 'notNumber'
     });
 
-    return handleMessage(self, message).then((result) => {
+    return server.handleMessage(message).then((result) => {
       expect(result).toMatchObject({
         error: {
           code: ExtError.CODES.INVALID_JSONRPC,
@@ -76,7 +73,7 @@ describe('handleMessage', () => {
       method: 'noSuchThing'
     });
 
-    return handleMessage(self, message).then((result) => {
+    return server.handleMessage(message).then((result) => {
       expect(result).toMatchObject({
         error: {
           code: ExtError.CODES.METHOD_NOT_FOUND,
@@ -94,8 +91,8 @@ describe('handleMessage', () => {
       params: ['a', 'b']
     });
 
-    return handleMessage(self, message).then((result) => {
-      expect(self.handlers.test).toHaveBeenCalledWith(['a', 'b']);
+    return server.handleMessage(message).then((result) => {
+      expect(handlers.test).toHaveBeenCalledWith(['a', 'b']);
     });
   });
 
@@ -107,7 +104,7 @@ describe('handleMessage', () => {
       params: []
     });
 
-    return handleMessage(self, message).then((result) => {
+    return server.handleMessage(message).then((result) => {
       expect(result).toMatchObject({
         error: {
           code: ExtError.CODES.UNKNOWN,
@@ -125,7 +122,7 @@ describe('handleMessage', () => {
       params: []
     });
 
-    return handleMessage(self, message).then((result) => {
+    return server.handleMessage(message).then((result) => {
       expect(result).toMatchObject({
         id: 1,
         error: {
@@ -144,7 +141,7 @@ describe('handleMessage', () => {
       params: ['a', 'b']
     });
 
-    return handleMessage(self, message).then((result) => {
+    return server.handleMessage(message).then((result) => {
       expect(result).toMatchObject({
         id: 1,
         result: 'test'

@@ -46,6 +46,8 @@ export type Handlers = {
   [index: string]: Handler
 };
 
+export type HandlersFactory = (config: Config, chain: ChainInterface) => Handlers
+
 export type Rpc = 'http' | 'ws';
 
 export type RpcConfig = {
@@ -65,7 +67,7 @@ export type WsContext = Koa.Context & {
   websocket: WsContext$Socket
 };
 
-export type RpcInterface = {
+export interface RpcInterface {
   on (type: RpcInterface$Events, cb: () => any): any,
   start (): Promise<boolean>,
   stop (): Promise<boolean>

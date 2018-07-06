@@ -6,7 +6,7 @@ import ExtError from '@polkadot/util/ext/error';
 import HttpProvider from '@polkadot/api-provider/http';
 import WsProvider from '@polkadot/api-provider/ws';
 
-import createServer from './index';
+import Rpc from './index';
 
 describe('server', () => {
   let config;
@@ -59,7 +59,8 @@ describe('server', () => {
   });
 
   it('starts and accepts requests, sending responses (HTTP)', () => {
-    server = createServer(config, chain, handlers); // eslint-disable-line
+    server = new Rpc(config, chain, () => handlers);
+    server.start(); // eslint-disable-line
 
     return new HttpProvider('http://localhost:9901')
       .send('echo', [1, 'http', true])
@@ -70,7 +71,7 @@ describe('server', () => {
 
   it.skip('starts and accepts requests, sending responses (WS)', () => {
     config.rpc.types = ['ws'];
-    server = new Server(config, {}, handlers); // eslint-disable-line
+    server = new Rpc(config, {}, handlers); // eslint-disable-line
 
     return new WsProvider('ws://localhost:9901')
       .send('echo', [1, 'ws', true])
@@ -81,7 +82,7 @@ describe('server', () => {
 
   it.skip('starts and accepts requests, sending responses (HTTP & WS)', () => {
     config.rpc.types = ['http', 'ws'];
-    server = new Server(config, {}, handlers); // eslint-disable-line
+    server = new Rpc(config, {}, handlers); // eslint-disable-line
 
     return new WsProvider('ws://localhost:9901')
       .send('echo', [1, 'ws', true])

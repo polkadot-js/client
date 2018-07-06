@@ -19,10 +19,11 @@ import MemoryDb from '@polkadot/client-db/Memory';
 import isUndefined from '@polkadot/util/is/undefined';
 import u8aToHex from '@polkadot/util/u8a/toHex';
 
+import Rpc from '@polkadot/client-rpc/index';
 import * as clientId from './clientId';
 import defaults from './defaults';
 import cli from './cli';
-import createRpc from './rpc';
+import handlers from './rpc';
 
 class Client {
   private l: Logger;
@@ -43,10 +44,11 @@ class Client {
 
     this.chain = createChain(config, new MemoryDb(), new HashDb());
     this.p2p = createP2p(config, this.chain);
-    this.rpc = createRpc(config, this.chain);
+    this.rpc = new Rpc(config, this.chain, handlers);
 
     telemetry.init(config, this.chain);
 
+    this.rpc.start();
     this.startInformant();
   }
 
