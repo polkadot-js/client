@@ -2,7 +2,7 @@
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
 
-export default {
+module.exports = {
   // NOTE Start should be at 0x00 since it is the default value
   START: 0x00,
   SIZE: 0x01,

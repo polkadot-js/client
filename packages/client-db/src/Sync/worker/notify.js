@@ -2,31 +2,11 @@
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
 
-// import { Message } from './types';
+const commands = require('./commands');
 
-// import { parentPort } from 'worker_threads';
-const { parentPort } = require('worker_threads');
-// import Trie from '@polkadot/trie-db';
-const Trie = require('@polkadot/trie-db').default;
-
-// import commands from './commands';
-const commands = {
-  START: 0x00,
-  SIZE: 0x01,
-  FILL: 0x02,
-  READ: 0x03,
-  END: 0x0f,
-  ERROR: 0xff
-};
-
-const exitCommands = [commands.END, commands.ERROR];
-
-// type FnMap = {
-//   [index: string]: (message: Message) => any
-// };
-
-// @ts-ignore Oops, we need the params here
-const trie = new Trie();
+const exitCommands = [
+  commands.END, commands.ERROR
+];
 
 // Sets the state and wakes any Atomics waiting on the current state to change.
 // If we are not done, assume that we will have to do something afterwards, so
@@ -59,7 +39,7 @@ async function notifyOnDone (state, fn) {
 //   - send the actual size of the result first
 //   - loop through the actual result, sending buffer.length bytes per iteration
 //   - since most results are smaller, the 4K buffer should capture a lot, but :code is >250K
-// async function notifyOnValue (state: Int32Array, buffer: Uint8Array | undefined, fn: () => Promise<Uint8Array | null>): Promise<void> {
+// async function notifyOnValue (state: Int32Array, buffer: Uint8Array, fn: () => Promise<Uint8Array | null>): Promise<void> {
 async function notifyOnValue (state, buffer, fn) {
   const view = new DataView(buffer.buffer);
   let value; // : Uint8Array | null = null;
@@ -93,52 +73,7 @@ async function notifyOnValue (state, buffer, fn) {
   }
 }
 
-// const functions: FnMap = {
-const functions = {
-  // checkpoint: ({ state }: Message) =>
-  checkpoint: ({ state }) =>
-    notifyOnDone(state, () =>
-      trie.checkpoint()
-    ),
-  // commit: ({ state }: Message) =>
-  commit: ({ state }) =>
-    notifyOnDone(state, () =>
-      trie.commit()
-    ),
-  // commit: ({ state }: Message) =>
-  del: ({ key, state }) =>
-    notifyOnDone(state, () =>
-      trie.del(key)
-    ),
-  // get: async ({ buffer, key, state }: Message) =>
-  get: async ({ buffer, key, state }) =>
-    notifyOnValue(state, buffer, () =>
-      trie.get(key)
-    ),
-  // put: ({ key, state, value }: Message) =>
-  put: ({ key, state, value }) =>
-    notifyOnDone(state, () =>
-      trie.put(key, value)
-    ),
-  // revert: ({ state }: Message) =>
-  revert: ({ state }) =>
-    notifyOnDone(state, () =>
-      trie.revert()
-    ),
-  // root ({ buffer, state }: Message) =>
-  root: ({ buffer, state }) =>
-    notifyOnValue(state, buffer, async () =>
-      trie.root
-    )
+module.exports = {
+  notifyOnDone,
+  notifyOnValue
 };
-
-// parentPort.on('message', (message: Message): void => {
-parentPort.on('message', (message) => {
-  const fn = functions[message.type];
-
-  if (fn) {
-    fn(message);
-  } else {
-    notify(message.state, commands.ERROR);
-  }
-});

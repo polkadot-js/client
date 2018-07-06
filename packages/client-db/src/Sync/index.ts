@@ -9,21 +9,18 @@ import path from 'path';
 import { Worker } from 'worker_threads';
 import promisify from '@polkadot/util/promisify';
 
-import commands from './commands';
+import commands from './worker/commands';
 
-const isTest = process.env.NODE_ENV === 'test';
 const emptyBuffer = new Uint8Array();
 
 export default class SyncDb implements TrieDb {
   private worker: WorkerThreads.Worker;
 
   constructor () {
+    // NOTE Node 10.6 relative paths for Workers are broken - adding here tries to load
+    // the worker from /client, not client-db.
     // FIXME We should be passing the trie params info into construction
-    this.worker = new Worker(path.join(__dirname, './worker.js'), {
-      stderr: isTest,
-      stdin: isTest,
-      stdout: isTest
-    });
+    this.worker = new Worker(path.join(__dirname, './worker/index.js'));
   }
 
   checkpoint (): void {
@@ -97,7 +94,6 @@ export default class SyncDb implements TrieDb {
   // Sends a message to the worker, reading and returning the actual result
   private _executeRead (type: MessageTypeRead, key?: Uint8Array, value?: Uint8Array): Uint8Array | null {
     // The shared data buffer that will be used by the worker to send info back
-    // (wrapped in Uint8Array for binary data or in DataView for Int32 data)
     const shared = new SharedArrayBuffer(4096);
     const buffer = new Uint8Array(shared);
     const state = this._waitOnStart(type, {
@@ -124,8 +120,7 @@ export default class SyncDb implements TrieDb {
       case commands.ERROR:
         return -1;
 
-      // Ahah, we need to read the size (first result) to detemine how
-      // big of a result buffer we need.
+      // Read the size to detemine how big of a result buffer we need.
       case commands.SIZE:
         return view.getUint32(0);
 
@@ -152,7 +147,6 @@ export default class SyncDb implements TrieDb {
           return null;
 
         // Get the available data from the buffer and write it into our result
-        // array.
         case commands.END:
         case commands.READ:
           available = Math.min(buffer.length, size - written);
