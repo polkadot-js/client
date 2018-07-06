@@ -21,17 +21,6 @@ const config = cli();
 
 // tslint:disable-next-line
 (async function main (): Promise<void> {
-  function informant () {
-    const numPeers = p2p.getNumPeers();
-    const status = p2p.getSyncStatus();
-    const bestHash = chain.blocks.bestHash.get();
-    const bestNumber = chain.blocks.bestNumber.get();
-
-    l.log(`${status} (${numPeers} peers), #${bestNumber.toNumber()}, ${u8aToHex(bestHash, 48)}`);
-
-    telemetry.intervalInfo(numPeers, status);
-  }
-
   const verStatus = await clientId.getNpmStatus();
 
   l.log(`Running version ${clientId.version} (${verStatus})`);
@@ -41,7 +30,16 @@ const config = cli();
   const p2p = createP2p(config, chain);
 
   telemetry.init(config, chain);
-
   createRpc(config, chain);
-  setInterval(informant, 10000);
+
+  setInterval(() => {
+    const numPeers = p2p.getNumPeers();
+    const status = p2p.getSyncStatus();
+    const bestHash = chain.blocks.bestHash.get();
+    const bestNumber = chain.blocks.bestNumber.get();
+
+    l.log(`${status} (${numPeers} peers), #${bestNumber.toNumber()}, ${u8aToHex(bestHash, 48)}`);
+
+    telemetry.intervalInfo(numPeers, status);
+  }, 10000);
 })();
