@@ -4,7 +4,7 @@
   "description": "Database interface layer for network client",
   "main": "index.js",
   "engines": {
-    "node": ">=10.5"
+    "node": ">=10.6"
   },
   "publishConfig": {
     "access": "public",

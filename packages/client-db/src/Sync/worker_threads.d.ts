@@ -22,6 +22,7 @@ declare namespace WorkerThreads {
 
     constructor (path: string, options?: WorkerOptions);
 
+    on (type: 'error' | 'exit' | 'online' | 'message', cb?: (...params: any[]) => any): void;
     postMessage (message: any): void;
     terminate (cb?: (error: Error | null) => any): void;
   }
