@@ -4,7 +4,7 @@
 
 import { Config } from '@polkadot/client/types';
 import { ChainInterface } from '@polkadot/client-chains/types';
-import { P2pInterface } from './types';
+import { P2pInterface, SyncStatus } from './types';
 
 import logger from '@polkadot/util/logger';
 
@@ -30,6 +30,10 @@ export default function server (config: Config, chain: ChainInterface, autoStart
     isStarted: (): boolean =>
       !!self.node,
     on: emitterOn(self),
+    getSyncStatus: (): SyncStatus =>
+      self.sync.status,
+    getNumPeers: (): number =>
+      self.peers.count(),
     start: (): Promise<boolean> =>
       start(self),
     stop: (): Promise<boolean> =>

@@ -10,6 +10,7 @@ import telemetry from '@polkadot/client-telemetry/index';
 import logger from '@polkadot/util/logger';
 import HashDb from '@polkadot/client-db/Hash';
 import MemoryDb from '@polkadot/client-db/Memory';
+import u8aToHex from '@polkadot/util/u8a/toHex';
 
 import * as clientId from './clientId';
 import cli from './cli';
@@ -26,9 +27,19 @@ const config = cli();
   l.log(`Initialising for roles=${config.roles.join(',')} on chain=${config.chain}`);
 
   const chain = createChain(config, new MemoryDb(), new HashDb());
+  const p2p = createP2p(config, chain);
 
   telemetry.init(config, chain);
-
-  createP2p(config, chain);
   createRpc(config, chain);
+
+  setInterval(() => {
+    const numPeers = p2p.getNumPeers();
+    const status = p2p.getSyncStatus();
+    const bestHash = chain.blocks.bestHash.get();
+    const bestNumber = chain.blocks.bestNumber.get();
+
+    l.log(`${status} (${numPeers} peers), #${bestNumber.toNumber()}, ${u8aToHex(bestHash, 48)}`);
+
+    telemetry.intervalInfo(numPeers, status);
+  }, 10000);
 })();

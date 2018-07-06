@@ -4,7 +4,7 @@
 
 import BN from 'bn.js';
 import { BlockResponseMessageBlock } from '@polkadot/client-p2p-messages/types';
-import { PeerInterface } from '../types';
+import { PeerInterface, SyncStatus } from '../types';
 
 import BlockRequest from '@polkadot/client-p2p-messages/BlockRequest';
 
@@ -19,5 +19,6 @@ export type SyncState = {
   },
   blockQueue: {
     [index: string]: BlockResponseMessageBlock
-  }
+  },
+  status: SyncStatus
 };

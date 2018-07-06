@@ -6,6 +6,7 @@ import BN from 'bn.js';
 import { Config } from '@polkadot/client/types';
 import { ChainInterface } from '@polkadot/client-chains/types';
 import { BlockDb } from '@polkadot/client-db-chain/types';
+import { SyncStatus } from '@polkadot/client-p2p/types';
 import { Logger } from '@polkadot/util/types';
 import Base from './messages/Base';
 
@@ -27,5 +28,6 @@ export type State = {
 
 export type Telemetry = {
   blockImported: () => void,
+  intervalInfo: (peers: number, status: SyncStatus) => void,
   init: (config: Config, chain: ChainInterface) => void
 };

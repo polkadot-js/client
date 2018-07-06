@@ -12,6 +12,8 @@ import { ChainInterface } from '@polkadot/client-chains/types';
 import { MessageInterface } from '@polkadot/client-p2p-messages/types';
 import { SyncState } from './sync/types';
 
+export type SyncStatus = 'Idle' | 'Sync';
+
 export type P2pNodes = Array<string>;
 
 export type RawMessage = {
@@ -67,6 +69,8 @@ export type P2pInterface = {
   _announceBlock: (hash: Uint8Array, header: Uint8Array, body: Uint8Array) => void,
   isStarted: () => boolean,
   on: (type: P2pInterface$Events, cb: () => any) => any,
+  getNumPeers: () => number,
+  getSyncStatus: () => SyncStatus,
   start: () => Promise<boolean>,
   stop: () => Promise<boolean>
 }

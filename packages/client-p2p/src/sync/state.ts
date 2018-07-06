@@ -7,6 +7,7 @@ import { SyncState } from './types';
 export default function state (): SyncState {
   return {
     blockRequests: {},
-    blockQueue: {}
+    blockQueue: {},
+    status: 'Idle'
   };
 }

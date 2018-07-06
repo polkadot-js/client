@@ -2,11 +2,11 @@
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
 
-import { Level, Message } from './types';
+import { Level, Message, BaseJson } from './types';
 
 export default class Base {
   readonly level: Level;
-  readonly message: string;
+  readonly message: Message;
   readonly timestamp: Date = new Date();
 
   constructor (message: Message, level: Level = 'INFO') {
@@ -14,7 +14,7 @@ export default class Base {
     this.message = message;
   }
 
-  toJSON (): any {
+  toJSON (): BaseJson {
     return {
       level: this.level,
       msg: this.message,
