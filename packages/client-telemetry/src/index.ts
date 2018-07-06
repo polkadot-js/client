@@ -4,12 +4,14 @@
 
 import { Config } from '@polkadot/client/types';
 import { ChainInterface } from '@polkadot/client-chains/types';
+import { SyncStatus } from '@polkadot/client-p2p/types';
 import { State, Telemetry } from './types';
 
 import './polyfill';
 
 import connect from './connect';
 import sendBlockImport from './sendBlockImport';
+import sendInterval from './sendInterval';
 import createState from './state';
 
 let self: State;
@@ -27,6 +29,8 @@ function init (config: Config, chain: ChainInterface): void {
 const telemetry: Telemetry = {
   blockImported: (): void =>
     sendBlockImport(self),
+  intervalInfo: (peers: number, status: SyncStatus): void =>
+    sendInterval(self, peers, status),
   init
 };
 

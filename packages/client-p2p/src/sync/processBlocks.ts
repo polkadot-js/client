@@ -33,4 +33,8 @@ export default function processBlocks ({ l, chain, sync }: P2pState): void {
     l.log(`#${startNumber.toString()}- ${count} imported (${Date.now() - start}ms)`);
     telemetry.blockImported();
   }
+
+  sync.status = (count > 1)
+    ? 'Sync'
+    : 'Idle';
 }

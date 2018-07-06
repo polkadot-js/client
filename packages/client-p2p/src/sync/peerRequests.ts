@@ -10,5 +10,7 @@ type Requests = Array<SyncState$Request>;
 export default function peerRequests ({ sync: { blockRequests } }: P2pState, peer: PeerInterface): Requests {
   const requests: Requests = Object.values(blockRequests);
 
-  return requests.filter(({ peer: { id } }) => peer.id === id);
+  return requests.filter(({ peer: { id } }) =>
+    peer.id === id
+  );
 }

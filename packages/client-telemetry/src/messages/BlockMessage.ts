@@ -2,7 +2,7 @@
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
 
-import { Message } from './types';
+import { Message, BlockJson } from './types';
 
 import BN from 'bn.js';
 import u8aToHex from '@polkadot/util/u8a/toHex';
@@ -20,7 +20,7 @@ export default class BlockMessage extends Base {
     this.bestNumber = bestNumber;
   }
 
-  toJSON (): any {
+  toJSON (): BlockJson {
     return {
       ...super.toJSON(),
       // NOTE the endpoint expects non-prefixed values, as much as I hate doing it...
