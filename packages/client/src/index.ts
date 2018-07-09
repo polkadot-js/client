@@ -82,10 +82,11 @@ class Client {
     const numPeers = this.p2p.getNumPeers();
     const bestHash = this.chain.blocks.bestHash.get();
     const bestNumber = this.chain.blocks.bestNumber.get();
+    const status = this.p2p.sync.status;
 
     this.l.log(`${status} (${numPeers} peers), #${bestNumber.toNumber()}, ${u8aToHex(bestHash, 48)}`);
 
-    telemetry.intervalInfo(numPeers, this.p2p.sync.status);
+    telemetry.intervalInfo(numPeers, status);
   }
 }
 
