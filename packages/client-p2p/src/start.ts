@@ -7,7 +7,7 @@ import { P2pState } from './types';
 import promisify from '@polkadot/util/promisify';
 
 import createNode from './create/node';
-import createPeers from './peers';
+import Peers from './peers';
 import handleProtocol from './handleProtocol';
 import onPeerDiscovery from './onPeerDiscovery';
 import onPeerMessage from './handler';
@@ -17,7 +17,7 @@ export default async function start (self: P2pState): Promise<boolean> {
   await stop(self);
 
   self.node = await createNode(self);
-  self.peers = createPeers(self);
+  self.peers = new Peers(self.config, self.chain, self.node);
 
   handleProtocol(self);
   onPeerDiscovery(self);

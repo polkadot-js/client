@@ -4,7 +4,7 @@
 
 import EventEmitter from 'eventemitter3';
 
-const createPeers = require('./index').default;
+import Peers from './index';
 
 describe('get', () => {
   let node;
@@ -18,7 +18,7 @@ describe('get', () => {
       }
     };
     node = new EventEmitter();
-    peers = createPeers({ node });
+    peers = new Peers({}, {}, node);
   });
 
   it('returns undefined for non-existing peer', () => {
