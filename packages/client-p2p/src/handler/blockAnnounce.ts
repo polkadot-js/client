@@ -16,7 +16,7 @@ function handleBlockAnnounce (self: P2pState, peer: PeerInterface, message: Bloc
 
   const header = message.header;
 
-  if (peer.getBestNumber().lt(header.number)) {
+  if (peer.bestNumber.lt(header.number)) {
     peer.setBest(header.number, blake2Asu8a(
       encodeHeader(header),
       256

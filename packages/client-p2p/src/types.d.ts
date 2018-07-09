@@ -38,14 +38,15 @@ export type P2pConfig = {
 
 export type PeerInterface$Events = 'message';
 
-export type PeerInterface = {
-  id: string,
-  peerInfo: PeerInfo,
-  shortId: string,
+export interface PeerInterface {
+  readonly bestHash: Uint8Array;
+  readonly bestNumber: BN;
+  readonly id: string,
+  readonly peerInfo: PeerInfo,
+  readonly shortId: string,
+
   addConnection: (connection: LibP2pConnection, isWritable: boolean) => void,
   isWritable: () => boolean,
-  getBestHash: () => Uint8Array,
-  getBestNumber: () => BN,
   getNextId: () => number,
   on (type: PeerInterface$Events, cb: (message: MessageInterface) => any): any,
   send: (message: MessageInterface) => boolean,

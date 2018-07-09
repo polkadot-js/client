@@ -10,7 +10,7 @@ export default function requestBlocks (self: P2pState, peer: PeerInterface): voi
   const from = self.chain.blocks.bestNumber.get().addn(1);
 
   // TODO: This assumes no stale block downloading
-  if (self.sync.blockRequests[peer.id] || from.gt(peer.getBestNumber())) {
+  if (self.sync.blockRequests[peer.id] || from.gt(peer.bestNumber)) {
     return;
   }
 

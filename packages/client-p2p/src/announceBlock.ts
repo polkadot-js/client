@@ -18,7 +18,7 @@ export default function announceBlock (self: P2pState, hash: Uint8Array, _header
   });
 
   self.peers.peers().forEach((peer) => {
-    if (header.number.gt(peer.getBestNumber())) {
+    if (header.number.gt(peer.bestNumber)) {
       peer.send(message);
     }
   });

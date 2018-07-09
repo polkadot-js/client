@@ -2,7 +2,7 @@
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
 
-import createPeer from './index';
+import Peer from './index';
 
 describe('createPeer', () => {
   const id = '0123456789';
@@ -15,7 +15,7 @@ describe('createPeer', () => {
         toB58String: () => id
       }
     };
-    peer = createPeer({}, {}, peerInfo);
+    peer = new Peer({}, {}, peerInfo);
   });
 
   it('stores the peerInfo id', () => {

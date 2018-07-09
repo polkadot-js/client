@@ -4,10 +4,6 @@
 
 import EventEmitter from 'eventemitter3';
 
-const mockCreateEE = () => new EventEmitter();
-
-jest.mock('../peer', () => mockCreateEE);
-
 const createPeers = require('./index').default;
 
 describe('add', () => {
