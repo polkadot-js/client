@@ -2,7 +2,7 @@
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
 
-import { P2pState } from '../types';
+import { Config } from '@polkadot/client/types';
 
 import Libp2p from 'libp2p';
 
@@ -20,13 +20,10 @@ const config = {
   }
 };
 
-export default async function createNode ({ config: { p2p: { address, port, nodes = [] } }, l }: P2pState): Promise<Libp2p> {
+export default async function createNode ({ p2p: { address, port, nodes = [] } }: Config): Promise<Libp2p> {
   const peerBook = await createPeerBook([]);
   const peerInfo = await createListener(address, port);
   const modules = createModules(peerInfo, nodes);
-  const addrs = peerInfo.multiaddrs.toArray().map((addr) => addr.toString());
-
-  l.log(`creating Libp2p with ${addrs.join(', ')}`);
 
   return new Libp2p({
     config,

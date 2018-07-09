@@ -3,9 +3,9 @@
 // of the ISC license. See the LICENSE file for details.
 
 import { MessageInterface } from '@polkadot/client-p2p-messages/types';
-import { P2pState, PeerInterface } from '../types';
+import { P2pInterface, PeerInterface } from '../types';
 
 export type Handler = {
-  (self: P2pState, peer: PeerInterface, message: MessageInterface): void,
+  (self: P2pInterface, peer: PeerInterface, message: MessageInterface): void,
   type: number
 };

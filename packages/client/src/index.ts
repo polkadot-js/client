@@ -11,15 +11,15 @@ import { Logger } from '@polkadot/util/types';
 import './license';
 
 import createChain from '@polkadot/client-chains/index';
-import createP2p from '@polkadot/client-p2p/index';
 import telemetry from '@polkadot/client-telemetry/index';
 import logger from '@polkadot/util/logger';
 import HashDb from '@polkadot/client-db/Hash';
 import MemoryDb from '@polkadot/client-db/Memory';
+import Rpc from '@polkadot/client-rpc/index';
+import P2p from '@polkadot/client-p2p/index';
 import isUndefined from '@polkadot/util/is/undefined';
 import u8aToHex from '@polkadot/util/u8a/toHex';
 
-import Rpc from '@polkadot/client-rpc/index';
 import * as clientId from './clientId';
 import defaults from './defaults';
 import cli from './cli';
@@ -42,11 +42,12 @@ class Client {
     this.l.log(`Initialising for roles=${config.roles.join(',')} on chain=${config.chain}`);
 
     this.chain = createChain(config, new MemoryDb(), new HashDb());
-    this.p2p = createP2p(config, this.chain);
+    this.p2p = new P2p(config, this.chain);
     this.rpc = new Rpc(config, this.chain);
 
     telemetry.init(config, this.chain);
 
+    await this.p2p.start();
     await this.rpc.start();
 
     this.startInformant();
@@ -79,13 +80,12 @@ class Client {
     }
 
     const numPeers = this.p2p.getNumPeers();
-    const status = this.p2p.getSyncStatus();
     const bestHash = this.chain.blocks.bestHash.get();
     const bestNumber = this.chain.blocks.bestNumber.get();
 
     this.l.log(`${status} (${numPeers} peers), #${bestNumber.toNumber()}, ${u8aToHex(bestHash, 48)}`);
 
-    telemetry.intervalInfo(numPeers, status);
+    telemetry.intervalInfo(numPeers, this.p2p.sync.status);
   }
 }
 

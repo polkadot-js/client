@@ -11,6 +11,7 @@ import { Config } from '@polkadot/client/types';
 import { ChainInterface } from '@polkadot/client-chains/types';
 import { MessageInterface } from '@polkadot/client-p2p-messages/types';
 import { SyncState } from './sync/types';
+import Sync from './sync';
 
 export type SyncStatus = 'Idle' | 'Sync';
 
@@ -67,11 +68,13 @@ export type PeersInterface = {
 export type P2pInterface$Events = 'started' | 'stopped';
 
 export type P2pInterface = {
+  readonly l: Logger;
+  readonly sync: Sync;
+
   _announceBlock: (hash: Uint8Array, header: Uint8Array, body: Uint8Array) => void,
   isStarted: () => boolean,
   on: (type: P2pInterface$Events, cb: () => any) => any,
   getNumPeers: () => number,
-  getSyncStatus: () => SyncStatus,
   start: () => Promise<boolean>,
   stop: () => Promise<boolean>
 }

@@ -11,8 +11,6 @@ import logger from '@polkadot/util/logger';
 
 import createNode from './node';
 
-const l = logger('test');
-
 describe('createNode', () => {
   let origPeerInfoCreate;
   let count = 0;
@@ -29,7 +27,7 @@ describe('createNode', () => {
   });
 
   it('creates a valid LibP2p instance', async () => {
-    const libp2p = await createNode({ config: { p2p: { address: '127.0.0.1', port: 36789 } }, l });
+    const libp2p = await createNode({ p2p: { address: '127.0.0.1', port: 36789 } });
 
     expect(
       isInstanceOf(libp2p, LibP2P)
