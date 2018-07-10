@@ -72,6 +72,12 @@ export default class Executor implements ExecutorInterface {
     return result.bool;
   }
 
+  applyExtrinsics (extrinsics: Array<UncheckedRaw>): void {
+    extrinsics.forEach((extrinsic) =>
+      this.applyExtrinsic(extrinsic)
+    );
+  }
+
   executeBlock (block: Uint8Array): boolean {
     const start = Date.now();
 
@@ -98,23 +104,20 @@ export default class Executor implements ExecutorInterface {
 
   generateBlock (utxs: Array<UncheckedRaw>, timestamp: number = Math.ceil(Date.now() / 1000)): Uint8Array {
     const start = Date.now();
-    // tslint:disable-next-line:variable-name
-    const number = this.blockDb.bestNumber.get().addn(1);
+    const nextNumber = this.blockDb.bestNumber.get().addn(1);
 
-    this.l.debug(() => `Generating block #${number.toString()}`);
+    this.l.debug(() => `Generating block #${nextNumber.toString()}`);
     this.stateDb.db.checkpoint();
 
     const extrinsics = this.withInherent(timestamp, utxs);
     const header = createHeader({
-      number,
+      number: nextNumber,
       parentHash: this.blockDb.bestHash.get()
     }, extrinsics);
     const headerRaw = encodeHeader(header);
 
     this.initialiseBlock(headerRaw);
-    extrinsics.forEach((extrinsic) =>
-      this.applyExtrinsic(extrinsic)
-    );
+    this.applyExtrinsics(extrinsics);
 
     const { stateRoot } = decodeHeader(
       this.finaliseBlock(headerRaw)
@@ -128,7 +131,7 @@ export default class Executor implements ExecutorInterface {
     });
 
     this.stateDb.db.revert();
-    this.l.log(() => `Block #${number.toString()} generated (${Date.now() - start}ms)`);
+    this.l.log(() => `Block #${nextNumber.toString()} generated (${Date.now() - start}ms)`);
 
     return block;
   }

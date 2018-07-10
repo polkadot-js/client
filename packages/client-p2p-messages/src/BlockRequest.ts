@@ -14,7 +14,7 @@ import hashDecode from '@polkadot/primitives/json/hash/decode';
 import isString from '@polkadot/util/is/string';
 
 export default class BlockRequest implements MessageEncoder<BlockRequestEncoded>, BlockRequestMessage {
-  static type = 3;
+  static type = 1;
   readonly type = BlockRequest.type;
 
   direction: BlockRequestMessageDirection;
