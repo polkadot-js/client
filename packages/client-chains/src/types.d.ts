@@ -23,12 +23,12 @@ export type ChainGenesis = {
   headerHash: Uint8Array
 };
 
-export type ChainInterface = {
-  blocks: BlockDb,
-  executor: ExecutorInterface,
-  genesis: ChainGenesis,
-  state: StateDb
-};
+export interface ChainInterface {
+  readonly blocks: BlockDb,
+  readonly executor: ExecutorInterface,
+  readonly genesis: ChainGenesis,
+  readonly state: StateDb
+}
 
 export type ChainState = {
   blockDb: BlockDb,

@@ -2,7 +2,7 @@
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
 
-import { validateRequest } from './index';
+import validateRequest from './request';
 
 describe('validateRequest', () => {
   it('fails when jsonrpc !== 2.0', () => {

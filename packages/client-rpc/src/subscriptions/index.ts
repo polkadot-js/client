@@ -3,7 +3,8 @@
 // of the ISC license. See the LICENSE file for details.
 
 import { ChainInterface } from '@polkadot/client-chains/types';
-import { Handler, WsContext$Socket, SubInterface } from '../types';
+import { Handler } from '@polkadot/client-rpc-handlers/types';
+import { WsContext$Socket, SubInterface } from '../types';
 import { Sockets, Subscriptions } from './types';
 
 import isUndefined from '@polkadot/util/is/undefined';

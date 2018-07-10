@@ -7,6 +7,7 @@ import { Sockets, Subscriptions } from './types';
 
 import decodeHeader from '@polkadot/primitives/codec/header/decode';
 import jsonHeader from '@polkadot/primitives/json/header/encode';
+import isUndefined from '@polkadot/util/is/undefined';
 
 import send from './send';
 
@@ -30,6 +31,10 @@ const updateAll = (subscriptions: Subscriptions, sockets: Sockets, method: strin
 };
 
 export default function update ({ blocks }: ChainInterface, subscriptions: Subscriptions, sockets: Sockets): void {
+  if (isUndefined(blocks)) {
+    return;
+  }
+
   blocks.block.onUpdate((header: Uint8Array): void =>
     updateAll(subscriptions, sockets, 'chain_newHead', jsonHeader(decodeHeader(header)))
   );

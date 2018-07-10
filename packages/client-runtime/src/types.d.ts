@@ -22,7 +22,7 @@ export type RuntimeInstrument = {
   stop: () => RuntimeStats
 }
 
-export type RuntimeEnv$Heap = {
+export interface RuntimeEnv$Heap {
   allocate: (size: number) => Pointer,
   deallocate: (ptr: Pointer) => number,
   dup: (ptr: Pointer, length: number) => Uint8Array,
@@ -34,7 +34,7 @@ export type RuntimeEnv$Heap = {
   setWasmMemory: (memory: WebAssembly.Memory, offset?: number) => void,
   size: () => number,
   used: () => SizeUsed
-};
+}
 
 export type RuntimeEnv = {
   heap: RuntimeEnv$Heap,

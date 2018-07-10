@@ -7,7 +7,7 @@ import { RuntimeEnv } from '../types';
 
 import logger from '@polkadot/util/logger';
 
-import envHeap from './heap';
+import Heap from './heap';
 
 const l = logger('runtime');
 
@@ -15,6 +15,6 @@ export default function environment (db: TrieDb): RuntimeEnv {
   return {
     l,
     db,
-    heap: envHeap()
+    heap: new Heap()
   };
 }

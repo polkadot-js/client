@@ -2,13 +2,15 @@
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
 
-import deallocate from './deallocate';
+import Heap from './index';
 
 describe('deallocate', () => {
-  let memory;
+  let heap;
 
   beforeEach(() => {
-    memory = {
+    heap = new Heap();
+
+    heap.memory = {
       allocated: { 123: 456 },
       deallocated: {}
     };
@@ -16,23 +18,23 @@ describe('deallocate', () => {
 
   it('throws when no allocation found', () => {
     expect(
-      () => deallocate(memory, 456)
+      () => heap.deallocate(456)
     ).toThrow(/on unallocated memory/);
   });
 
   it('removes the allocation from the allocation table', () => {
-    deallocate(memory, 123);
+    heap.deallocate(123);
 
     expect(
-      memory.allocated
+      heap.memory.allocated
     ).toEqual({});
   });
 
   it('adds the allocation from the deallocated table', () => {
-    deallocate(memory, 123);
+    heap.deallocate(123);
 
     expect(
-      memory.deallocated
+      heap.memory.deallocated
     ).toEqual({ 123: 456 });
   });
 });

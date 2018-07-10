@@ -6,32 +6,29 @@ import pull from 'pull-stream';
 import pushable from 'pull-pushable';
 import logger from '@polkadot/util/logger';
 
-import receive from './receive';
-
-const l = logger('test');
+import Peer from './index';
 
 describe('receive', () => {
-  let self;
+  let peer;
 
   beforeEach(() => {
-    self = {
-      emitter: {
-        emit: jest.fn(() => true)
-      },
-      l,
-      pushable: pushable()
+    const peerInfo = {
+      id: {
+        toB58String: () => '123'
+      }
     };
+    peer = new Peer({}, {}, peerInfo);
   });
 
   it('returns false when on error', () => {
     expect(
-      receive(self)
+      peer._receive()
     ).toEqual(false);
   });
 
   it('returns true when no error', () => {
     expect(
-      receive(self, pull.through())
+      peer._receive(pull.through())
     ).toEqual(true);
   });
 });

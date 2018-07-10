@@ -4,59 +4,47 @@
 
 import EventEmitter from 'eventemitter3';
 
-import stop from './stop';
+import Rpc from './index';
 
 describe('stop', () => {
-  let self;
+  let server;
 
   beforeEach(() => {
-    self = {
-      config: {
-        rpc: {
-          port: 9901,
-          path: '/',
-          types: ['http']
-        }
-      },
-      emitter: new EventEmitter(),
-      l: {
-        log: jest.fn()
-      },
-      servers: [{
-        close: () => true
-      }]
+    const config = {
+      rpc: {
+        port: 9901,
+        path: '/',
+        types: ['http']
+      }
     };
+
+    server = new Rpc(config, { state: {} });
+    server.servers = [{
+      close: () => true
+    }];
   });
 
   it('returns false when internal server not started', () => {
-    self.servers = [];
+    server.servers = [];
 
-    return stop(self).then((result) => {
+    return server.stop().then((result) => {
       expect(result).toEqual(false);
     });
   });
 
   it('calls stop() on the internal server', (done) => {
-    self.servers = [{
+    server.servers = [{
       close: () => {
-        expect(self.servers).toEqual([]);
+        expect(server.servers).toEqual([]);
         done();
       }
     }];
 
-    stop(self);
-  });
-
-  it('emits the stopped event', (done) => {
-    self.emitter.on('stopped', () => {
-      done();
-    });
-
-    stop(self);
+    server.stop();
   });
 
   it('returns true when completed', () => {
-    return stop(self).then((result) => {
+    return server.stop().then((result) => {
       expect(result).toEqual(true);
     });
   });

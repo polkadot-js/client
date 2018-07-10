@@ -9,6 +9,7 @@
       "@polkadot/client-db/*": [ "packages/client-db/src/*" ],
       "@polkadot/client-p2p-messages/*": [ "packages/client-p2p-messages/src/*" ],
       "@polkadot/client-p2p/*": [ "packages/client-p2p/src/*" ],
+      "@polkadot/client-rpc-handlers/*": [ "packages/client-rpc-handlers/src/*" ],
       "@polkadot/client-rpc/*": [ "packages/client-rpc/src/*" ],
       "@polkadot/client-runtime/*": [ "packages/client-runtime/src/*" ],
       "@polkadot/client-telemetry/*": [ "packages/client-telemetry/src/*" ],

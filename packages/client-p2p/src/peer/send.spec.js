@@ -6,47 +6,48 @@ import BN from 'bn.js';
 import logger from '@polkadot/util/logger';
 import Status from '@polkadot/client-p2p-messages/Status';
 
-import send from './send';
-
-const l = logger('test');
+import Peer from './index';
 
 describe('send', () => {
-  let self;
+  let peer;
   let status;
 
   beforeEach(() => {
-    self = {
-      l,
-      pushable: []
+    const peerInfo = {
+      id: {
+        toB58String: () => '123'
+      }
     };
+    peer = new Peer({}, {}, peerInfo);
+    peer.pushable = [];
+
     status = new Status({
-      bestHash: new Uint8Array(),
+      bestHash: new Uint8Array([]),
       bestNumber: new BN(0),
-      genesisHash: new Uint8Array(),
-      roles: [],
-      version: 0
+      geneisHash: new Uint8Array([]),
+      roles: []
     });
   });
 
   it('returns false when sending fails', () => {
-    self.pushable = null;
+    peer.pushable = null;
 
     expect(
-      send(self, status)
+      peer.send(status)
     ).toEqual(false);
   });
 
   it('returns true when sent', () => {
     expect(
-      send(self, status)
+      peer.send(status)
     ).toEqual(true);
   });
 
   it('upopn sending, message is added to pushable', () => {
-    send(self, status);
+    peer.send(status);
 
     expect(
-      self.pushable[0]
+      peer.pushable[0]
     ).toBeDefined();
   });
 });

@@ -2,47 +2,148 @@
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
 
+import E3 from 'eventemitter3';
+import * as Koa from 'koa';
+import * as net from 'net';
 import { Config } from '@polkadot/client/types';
 import { ChainInterface } from '@polkadot/client-chains/types';
-import { Handlers, RpcInterface, RpcState } from './types';
+import { Handlers } from '@polkadot/client-rpc-handlers/types';
+import { Logger } from '@polkadot/util/types';
+import { JsonRpcError, JsonRpcRequest, JsonRpcResponse, RpcInterface, SubInterface, WsContext, WsContext$Socket } from './types';
 
-import E3 from 'eventemitter3';
-
+import coBody from 'co-body';
+import assert from '@polkadot/util/assert';
+import ExtError from '@polkadot/util/ext/error';
+import isError from '@polkadot/util/is/error';
+import isFunction from '@polkadot/util/is/function';
+import isUndefined from '@polkadot/util/is/undefined';
 import logger from '@polkadot/util/logger';
+import handlers from '@polkadot/client-rpc-handlers/index';
 
 import validateConfig from './validate/config';
-import validateHandlers from './validate/handlers';
-import emitterOn from './emitterOn';
-import start from './start';
-import stop from './stop';
+import validateRequest from './validate/request';
 import subscriptions from './subscriptions';
+import createKoa from './create/koa';
+import { createError, createResponse } from './create';
 
-const l = logger('rpc');
+const SUBSCRIBE_REGEX = /^subscribe_/;
 
-export default function server (config: Config, chain: ChainInterface, handlers: Handlers, autoStart: boolean = true): RpcInterface {
-  const self: RpcState = {
-    chain,
-    config,
-    emitter: new E3.EventEmitter(),
-    handlers,
-    l,
-    servers: [],
-    subscribe: subscriptions(chain)
-  };
+export default class Rpc extends E3.EventEmitter implements RpcInterface {
+  private l: Logger;
+  private config: Config;
+  private handlers: Handlers;
+  private servers: Array<net.Server>;
+  private subscribe: SubInterface;
 
-  validateConfig(config.rpc);
-  validateHandlers(handlers);
+  constructor (config: Config, chain: ChainInterface) {
+    super();
 
-  if (autoStart) {
-    // tslint:disable-next-line
-    start(self);
+    this.l = logger('rpc');
+    this.config = config;
+    this.handlers = handlers(config, chain);
+    this.servers = [];
+    this.subscribe = subscriptions(chain);
+
+    validateConfig(config.rpc);
   }
 
-  return {
-    on: emitterOn(self),
-    start: (): Promise<boolean> =>
-      start(self),
-    stop: (): Promise<boolean> =>
-      stop(self)
-  };
+  async start (): Promise<boolean> {
+    await this.stop();
+
+    const apps = createKoa({
+      handlers: {
+        http: this.handlePost,
+        ws: this.handleWs
+      },
+      path: this.config.rpc.path,
+      types: this.config.rpc.types
+    });
+
+    this.servers = apps.map((app, index) => {
+      const port = this.config.rpc.port + (11 * index);
+      const server = app.listen(port);
+
+      this.l.log(`Server started on port=${port} for type=${this.config.rpc.types[index]}`);
+
+      return server;
+    });
+
+    this.emit('started');
+
+    return true;
+  }
+
+  async stop (): Promise<boolean> {
+    if (this.servers.length === 0) {
+      return false;
+    }
+
+    const servers = this.servers;
+
+    this.servers = [];
+    servers.forEach((server) =>
+      server.close()
+    );
+
+    this.l.log('Server stopped');
+    this.emit('stopped');
+
+    return true;
+  }
+
+  private handleRequest = async ({ id, jsonrpc, method, params }: JsonRpcRequest, socket?: WsContext$Socket): Promise<JsonRpcError | JsonRpcResponse> => {
+    const isSubscription = SUBSCRIBE_REGEX.test(method);
+
+    if (isSubscription && isUndefined(socket)) {
+      throw new Error(`Subscription for '${method}' not available on RPC interface`);
+    }
+
+    try {
+      validateRequest(id, jsonrpc);
+
+      const handler = this.handlers[method];
+
+      assert(isFunction(handler), `Method '${method}' not found`, ExtError.CODES.METHOD_NOT_FOUND);
+
+      const result = isSubscription
+        ? await this.subscribe(socket, handler, params)
+        : await handler(params);
+
+      this.l.debug(() => ['executed', method, params, '->', result]);
+
+      if (isError(result)) {
+        throw result;
+      }
+
+      return createResponse(id, result);
+    } catch (error) {
+      return createError(id, error);
+    }
+  }
+
+  private handleMessage = async (message: string, socket?: WsContext$Socket): Promise<JsonRpcError | JsonRpcResponse> => {
+    try {
+      return this.handleRequest(JSON.parse(message), socket);
+    } catch (error) {
+      return createError(0, error);
+    }
+  }
+
+  private handlePost = async (ctx: Koa.Context): Promise<void> => {
+    const message: string = await coBody.text(ctx.req);
+    const response = await this.handleMessage(message);
+
+    ctx.type = 'application/json';
+    ctx.body = JSON.stringify(response);
+  }
+
+  private handleWs = (ctx: WsContext): void => {
+    ctx.websocket.on('message', async (message: string) => {
+      const response = await this.handleMessage(message, ctx.websocket);
+
+      ctx.websocket.send(
+        JSON.stringify(response)
+      );
+    });
+  }
 }

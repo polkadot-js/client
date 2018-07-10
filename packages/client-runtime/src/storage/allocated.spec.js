@@ -7,7 +7,7 @@ import HashDb from '@polkadot/client-db/Hash';
 import logger from '@polkadot/util/logger';
 import u8aFromString from '@polkadot/util/u8a/fromString';
 
-import envHeap from '../environment/heap';
+import Heap from '../environment/heap';
 import index from './index';
 
 const l = logger('test');
@@ -18,7 +18,7 @@ describe('get_allocated_storage', () => {
   let db;
 
   beforeEach(() => {
-    heap = envHeap();
+    heap = new Heap();
     heap.setWasmMemory({ buffer: new Uint8Array(1024 * 1024) });
 
     db = new HashDb();

@@ -3,10 +3,30 @@
 // of the ISC license. See the LICENSE file for details.
 
 import ExtError from '@polkadot/util/ext/error';
+
+const mockExtError = ExtError;
+
+jest.mock('@polkadot/client-rpc-handlers/index', () => () => ({
+  errorThrow: () => {
+    throw new Error('errorThrow');
+  },
+  errorThrowEx: () => {
+    throw new mockExtError('errorThrowEx', -123);
+  },
+  errorRet: () => {
+    return Promise.resolve(new Error('errorRet'));
+  },
+  errorRetEx: () => {
+    return Promise.resolve(new mockExtError('errorRetEx', -456));
+  },
+  test: jest.fn(() => Promise.resolve('test')),
+  echo: (...params) => Promise.resolve(`echo: ${params.join(', ')}`)
+}));
+
 import HttpProvider from '@polkadot/api-provider/http';
 import WsProvider from '@polkadot/api-provider/ws';
 
-import createServer from './index';
+import Rpc from './index';
 
 describe('server', () => {
   let config;
@@ -21,6 +41,8 @@ describe('server', () => {
         block: {
           onUpdate: () => {}
         }
+      },
+      state: {
       }
     };
     config = {
@@ -30,28 +52,9 @@ describe('server', () => {
         types: ['http']
       }
     };
-    testSpy = jest.fn(() => Promise.resolve('test'));
-    handlers = {
-      errorThrow: () => {
-        throw new Error('errorThrow');
-      },
-      errorThrowEx: () => {
-        throw new ExtError('errorThrowEx', -123);
-      },
-      errorRet: () => {
-        return Promise.resolve(new Error('errorRet'));
-      },
-      errorRetEx: () => {
-        return Promise.resolve(new ExtError('errorRetEx', -456));
-      },
-      test: testSpy,
-      echo: (...params) => Promise.resolve(`echo: ${params.join(', ')}`)
-    };
   });
 
   afterEach(() => {
-    testSpy.mockRestore();
-
     if (server) {
       server.stop();
       server = null;
@@ -59,7 +62,8 @@ describe('server', () => {
   });
 
   it('starts and accepts requests, sending responses (HTTP)', () => {
-    server = createServer(config, chain, handlers); // eslint-disable-line
+    server = new Rpc(config, chain);
+    server.start(); // eslint-disable-line
 
     return new HttpProvider('http://localhost:9901')
       .send('echo', [1, 'http', true])
@@ -70,7 +74,7 @@ describe('server', () => {
 
   it.skip('starts and accepts requests, sending responses (WS)', () => {
     config.rpc.types = ['ws'];
-    server = new Server(config, {}, handlers); // eslint-disable-line
+    server = new Rpc(config, {}, handlers); // eslint-disable-line
 
     return new WsProvider('ws://localhost:9901')
       .send('echo', [1, 'ws', true])
@@ -81,7 +85,7 @@ describe('server', () => {
 
   it.skip('starts and accepts requests, sending responses (HTTP & WS)', () => {
     config.rpc.types = ['http', 'ws'];
-    server = new Server(config, {}, handlers); // eslint-disable-line
+    server = new Rpc(config, {}, handlers); // eslint-disable-line
 
     return new WsProvider('ws://localhost:9901')
       .send('echo', [1, 'ws', true])

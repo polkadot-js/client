@@ -13,12 +13,22 @@ export type SyncState$Request = {
   request: BlockRequest
 }
 
+export type SyncState$BlockRequests = {
+  [index: string]: SyncState$Request
+};
+
+export type SyncState$BlockQueue = {
+  [index: string]: BlockResponseMessageBlock
+};
+
 export type SyncState = {
-  blockRequests: {
-    [index: string]: SyncState$Request
-  },
-  blockQueue: {
-    [index: string]: BlockResponseMessageBlock
-  },
+  blockRequests: SyncState$BlockRequests,
+  blockQueue: SyncState$BlockQueue,
   status: SyncStatus
 };
+
+export type SyncInterface$Events = 'imported';
+
+export interface SyncInterface {
+  on: (type: SyncInterface$Events, cb: () => any) => any,
+}

@@ -4,7 +4,7 @@
 
 import EventEmitter from 'eventemitter3';
 
-import createPeers from './index';
+import Peers from './index';
 
 describe('Peers', () => {
   let node;
@@ -12,7 +12,7 @@ describe('Peers', () => {
 
   beforeEach(() => {
     node = new EventEmitter();
-    peers = createPeers({ node });
+    peers = new Peers({}, {}, node);
   });
 
   it('creates an instance', () => {

@@ -11,6 +11,7 @@ import { Config } from '@polkadot/client/types';
 import { ChainInterface } from '@polkadot/client-chains/types';
 import { MessageInterface } from '@polkadot/client-p2p-messages/types';
 import { SyncState } from './sync/types';
+import Sync from './sync';
 
 export type SyncStatus = 'Idle' | 'Sync';
 
@@ -38,14 +39,15 @@ export type P2pConfig = {
 
 export type PeerInterface$Events = 'message';
 
-export type PeerInterface = {
-  id: string,
-  peerInfo: PeerInfo,
-  shortId: string,
+export interface PeerInterface {
+  readonly bestHash: Uint8Array;
+  readonly bestNumber: BN;
+  readonly id: string,
+  readonly peerInfo: PeerInfo,
+  readonly shortId: string,
+
   addConnection: (connection: LibP2pConnection, isWritable: boolean) => void,
   isWritable: () => boolean,
-  getBestHash: () => Uint8Array,
-  getBestNumber: () => BN,
   getNextId: () => number,
   on (type: PeerInterface$Events, cb: (message: MessageInterface) => any): any,
   send: (message: MessageInterface) => boolean,
@@ -66,11 +68,13 @@ export type PeersInterface = {
 export type P2pInterface$Events = 'started' | 'stopped';
 
 export type P2pInterface = {
+  readonly l: Logger;
+  readonly sync: Sync;
+
   _announceBlock: (hash: Uint8Array, header: Uint8Array, body: Uint8Array) => void,
   isStarted: () => boolean,
   on: (type: P2pInterface$Events, cb: () => any) => any,
   getNumPeers: () => number,
-  getSyncStatus: () => SyncStatus,
   start: () => Promise<boolean>,
   stop: () => Promise<boolean>
 }

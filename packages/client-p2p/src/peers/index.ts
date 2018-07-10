@@ -2,38 +2,135 @@
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
 
-import { PeerInterface, PeersInterface, PeersInterface$Events, P2pState } from '../types';
+import LibP2p from 'libp2p';
+import { Config } from '@polkadot/client/types';
+import { ChainInterface } from '@polkadot/client-chains/types';
+import { MessageInterface } from '@polkadot/client-p2p-messages/types';
+import { Logger } from '@polkadot/util/types';
+import { PeerInterface, PeersInterface, PeersInterface$Events } from '../types';
+
+import E3 from 'eventemitter3';
 import PeerInfo from 'peer-info';
+import logger from '@polkadot/util/logger';
 
-import add from './add';
-import emitterOn from './emitterOn';
-import logPeer from './logPeer';
-import get from './get';
-import onConnect from './onConnect';
-import onDisconnect from './onDisconnect';
-import onDiscovery from './onDiscovery';
-import createState from './state';
+import Peer from '../peer';
 
-export default function createPeers (state: P2pState): PeersInterface {
-  const self = createState(state);
-
-  onConnect(self, state.node);
-  onDisconnect(self, state.node);
-  onDiscovery(self, state.node);
-
-  return {
-    add: (peerInfo: PeerInfo): PeerInterface =>
-      add(self, peerInfo),
-    count: (): number =>
-      Object.keys(self.peers).length,
-    log: (event: PeersInterface$Events, peer: PeerInterface): void =>
-      logPeer(self, event, peer),
-    get: (peerInfo: PeerInfo): PeerInterface | undefined =>
-      get(self, peerInfo),
-    on: emitterOn(self),
-    peers: (): Array<PeerInterface> =>
-      Object.keys(self.peers).map((id) =>
-        self.peers[id]
-      )
+export default class Peers extends E3.EventEmitter implements PeersInterface {
+  readonly chain: ChainInterface;
+  readonly config: Config;
+  readonly l: Logger;
+  private map: {
+    [index: string]: PeerInterface
   };
+
+  constructor (config: Config, chain: ChainInterface, node: LibP2p) {
+    super();
+
+    this.chain = chain;
+    this.config = config;
+    this.l = logger('p2p/peers');
+    this.map = {};
+
+    this._onConnect(node);
+    this._onDisconnect(node);
+    this._onDiscovery(node);
+  }
+
+  add (peerInfo: PeerInfo): PeerInterface {
+    const id = peerInfo.id.toB58String();
+    let peer = this.map[id];
+
+    if (!peer) {
+      this.map[id] = peer = new Peer(this.config, this.chain, peerInfo);
+
+      peer.on('message', (message: MessageInterface): void => {
+        this.emit('message', {
+          message,
+          peer
+        });
+      });
+    }
+
+    return peer;
+  }
+
+  count (): number {
+    return Object.keys(this.map).length;
+  }
+
+  log (event: PeersInterface$Events, peer: PeerInterface, withShort: boolean = true): void {
+    this.l.log(withShort ? peer.shortId : peer.id, event);
+
+    this.emit(event, peer);
+  }
+
+  get (peerInfo: PeerInfo): PeerInterface | undefined {
+    const id = peerInfo.id.toB58String();
+
+    return this.map[id];
+  }
+
+  peers (): Array<PeerInterface> {
+    return Object.keys(this.map).map((id) =>
+      this.map[id]
+    );
+  }
+
+  private _onConnect (node: LibP2p): void {
+    node.on('peer:connect', (peerInfo: PeerInfo): boolean => {
+      if (!peerInfo) {
+        return false;
+      }
+
+      const peer = this.get(peerInfo);
+
+      if (!peer) {
+        return false;
+      }
+
+      this.log('connected', peer);
+
+      return true;
+    });
+  }
+
+  private _onDisconnect (node: LibP2p): void {
+    node.on('peer:disconnect', (peerInfo: PeerInfo): boolean => {
+      if (!peerInfo) {
+        return false;
+      }
+
+      const peer = this.get(peerInfo);
+
+      if (!peer) {
+        return false;
+      }
+
+      delete this.map[peer.id];
+
+      this.log('disconnected', peer);
+
+      return true;
+    });
+  }
+
+  private _onDiscovery (node: LibP2p): void {
+    node.on('peer:discovery', (peerInfo: PeerInfo): boolean => {
+      if (!peerInfo) {
+        return false;
+      }
+
+      let peer = this.get(peerInfo);
+
+      if (peer) {
+        return false;
+      }
+
+      peer = this.add(peerInfo);
+
+      this.log('discovered', peer, false);
+
+      return true;
+    });
+  }
 }

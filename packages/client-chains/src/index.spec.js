@@ -5,7 +5,7 @@
 import HashDb from '@polkadot/client-db/Hash';
 import MemoryDb from '@polkadot/client-db/Memory';
 
-import createChain from './index';
+import Chain from './index';
 
 describe('client-chains', () => {
   const config = {
@@ -16,7 +16,7 @@ describe('client-chains', () => {
 
   it('instantiates a known chain', () => {
     expect(
-      createChain(config, stateDb, blockDb).executor
+      new Chain(config, stateDb, blockDb).executor
     ).toBeDefined();
   });
 
@@ -24,7 +24,7 @@ describe('client-chains', () => {
     config.chain = 'someUnknown';
 
     expect(
-      () => createChain(config, stateDb, blockDb)
+      () => new Chain(config, stateDb, blockDb)
     ).toThrow(/Unable to find builtin chain/);
   });
 

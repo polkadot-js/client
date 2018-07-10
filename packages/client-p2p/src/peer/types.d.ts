@@ -10,8 +10,6 @@ import { ChainInterface } from '@polkadot/client-chains/types';
 import { Logger } from '@polkadot/util/types';
 
 export type PeerState = {
-  bestHash: Uint8Array,
-  bestNumber: BN,
   chain: ChainInterface,
   config: Config,
   emitter: E3.EventEmitter,

@@ -8,6 +8,7 @@ import * as net from 'net';
 import * as Koa from 'koa';
 import { Config } from '@polkadot/client/types';
 import { ChainInterface } from '@polkadot/client-chains/types';
+import { Handler, Handlers } from '@polkadot/client-rpc-handlers/types';
 import { Logger } from '@polkadot/util/types';
 
 export type JsonRpcBase = {
@@ -40,12 +41,6 @@ export type JsonRpcResponse = JsonRpcBase & {
   result: any
 };
 
-export type Handler = (...params: Array<any>) => Promise<any>;
-
-export type Handlers = {
-  [index: string]: Handler
-};
-
 export type Rpc = 'http' | 'ws';
 
 export type RpcConfig = {
@@ -65,7 +60,7 @@ export type WsContext = Koa.Context & {
   websocket: WsContext$Socket
 };
 
-export type RpcInterface = {
+export interface RpcInterface {
   on (type: RpcInterface$Events, cb: () => any): any,
   start (): Promise<boolean>,
   stop (): Promise<boolean>

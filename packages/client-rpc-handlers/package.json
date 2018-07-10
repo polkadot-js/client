@@ -1,7 +1,7 @@
 {
-  "name": "@polkadot/client-p2p-messages",
+  "name": "@polkadot/client-rpc-handlers",
   "version": "0.13.6",
-  "description": "Network message definitions",
+  "description": "Handlers for RPC messages",
   "main": "index.js",
   "engines": {
     "node": ">=8.0"
@@ -14,10 +14,6 @@
     "type": "git",
     "url": "git+https://github.com/polkadot-js/client.git"
   },
-  "keywords": [
-    "Polkadot",
-    "Merkel Patricia Tree"
-  ],
   "author": "Jaco Greeff <jacogr@gmail.com>",
   "maintainers": [
     "Jaco Greeff <jacogr@gmail.com>"
@@ -27,7 +23,7 @@
   "bugs": {
     "url": "https://github.com/polkadot-js/client/issues"
   },
-  "homepage": "https://github.com/polkadot-js/client/tree/master/packages/client-p2p-messages#readme",
+  "homepage": "https://github.com/polkadot-js/client/tree/master/packages/client-rpc-handlers#readme",
   "scripts": {
     "build": "polkadot-dev-build-babel",
     "check": "eslint src && flow check",

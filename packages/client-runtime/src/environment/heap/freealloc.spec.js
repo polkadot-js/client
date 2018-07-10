@@ -2,13 +2,14 @@
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
 
-import freealloc from './freealloc';
+import Heap from './index';
 
 describe('freealloc', () => {
-  let memory;
+  let heap;
 
   beforeEach(() => {
-    memory = {
+    heap = new Heap();
+    heap.memory = {
       allocated: {},
       // ok, these don't make much sense as a layout, but it allows for sorting inside the actual findContaining function to find the first & smallest
       deallocated: {
@@ -22,31 +23,31 @@ describe('freealloc', () => {
 
   it('returns 0 when matching size is not found', () => {
     expect(
-      freealloc(memory, 501)
+      heap.freealloc(501)
     ).toEqual(0);
   });
 
   it('returns the smallest matching slot (exact)', () => {
     expect(
-      freealloc(memory, 120)
+      heap.freealloc(120)
     ).toEqual(3);
   });
 
   it('returns the smallest matching slot (lesser)', () => {
     expect(
-      freealloc(memory, 100)
+      heap.freealloc(100)
     ).toEqual(3);
   });
 
   it('removes the previous deallocated slot', () => {
-    freealloc(memory, 100);
+    heap.freealloc(100);
 
-    expect(memory.deallocated[3]).not.toBeDefined();
+    expect(heap.memory.deallocated[3]).not.toBeDefined();
   });
 
   it('adds the allocated slot', () => {
-    freealloc(memory, 100);
+    heap.freealloc(100);
 
-    expect(memory.allocated[3]).toEqual(100);
+    expect(heap.memory.allocated[3]).toEqual(100);
   });
 });
