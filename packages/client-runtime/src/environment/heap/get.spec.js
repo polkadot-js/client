@@ -2,7 +2,7 @@
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
 
-import envHeap from './index';
+import Heap from './index';
 
 describe('get', () => {
   let heap;
@@ -10,7 +10,7 @@ describe('get', () => {
   beforeEach(() => {
     const buffer = [0x1, 0x2, 0x3, 0x4, 0x0, 0x0, 0x0, 0x0];
 
-    heap = envHeap();
+    heap = new Heap();
     heap.setWasmMemory({ buffer });
   });
 

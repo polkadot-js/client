@@ -17,10 +17,6 @@ export type Memory = {
   view: DataView
 };
 
-export type HeapState = {
-  memory: Memory
-};
-
 export type SizeUsed = {
   allocated: number,
   deallocated: number

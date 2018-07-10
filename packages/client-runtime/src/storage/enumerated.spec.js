@@ -7,7 +7,7 @@ import logger from '@polkadot/util/logger';
 import hexToU8a from '@polkadot/util/hex/toU8a';
 import u8aFromString from '@polkadot/util/u8a/fromString';
 
-import envHeap from '../environment/heap';
+import Heap from '../environment/heap';
 import index from './index';
 
 const l = logger('test');
@@ -17,7 +17,7 @@ describe('enumerated_trie_root', () => {
   let heap;
 
   beforeEach(() => {
-    heap = envHeap();
+    heap = new Heap();
     heap.setWasmMemory({ buffer: new Uint8Array(1024 * 1024) });
 
     enumerated = (arr) => {

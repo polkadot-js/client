@@ -5,7 +5,7 @@
 import logger from '@polkadot/util/logger';
 
 import index from './index';
-import envHeap from '../environment/heap';
+import Heap from '../environment/heap';
 
 const l = logger('test');
 
@@ -16,7 +16,7 @@ describe('memset', () => {
   beforeEach(() => {
     runtime = {
       l,
-      heap: envHeap()
+      heap: new Heap()
     };
     runtime.heap.setWasmMemory({ buffer: new Uint8Array(5) });
     memset = index(runtime).memset;
