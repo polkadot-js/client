@@ -6,12 +6,12 @@ import toU8a from '@polkadot/util/u8a/toU8a';
 import HashDb from '@polkadot/client-db/Hash';
 import MemoryDb from '@polkadot/client-db/Memory';
 
-import init from '../index';
+import Chain from '../index';
 
 describe('genesis', () => {
   const blockDb = new HashDb();
   const stateDb = new MemoryDb();
-  const genesis = init({ chain: 'dev' }, stateDb, blockDb).genesis;
+  const genesis = new Chain({ chain: 'dev' }, stateDb, blockDb).genesis;
 
   it('creates a correct genesis block (stateRoot)', () => {
     expect(

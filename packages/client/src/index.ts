@@ -10,7 +10,7 @@ import { Logger } from '@polkadot/util/types';
 
 import './license';
 
-import createChain from '@polkadot/client-chains/index';
+import Chain from '@polkadot/client-chains/index';
 import telemetry from '@polkadot/client-telemetry/index';
 import logger from '@polkadot/util/logger';
 import HashDb from '@polkadot/client-db/Hash';
@@ -41,7 +41,7 @@ class Client {
     this.l.log(`Running version ${clientId.version} (${verStatus})`);
     this.l.log(`Initialising for roles=${config.roles.join(',')} on chain=${config.chain}`);
 
-    this.chain = createChain(config, new MemoryDb(), new HashDb());
+    this.chain = new Chain(config, new MemoryDb(), new HashDb());
     this.p2p = new P2p(config, this.chain);
     this.rpc = new Rpc(config, this.chain);
 

@@ -9,7 +9,7 @@ import encodeUnchecked from '@polkadot/extrinsics/codec/encode/unchecked';
 import u8aConcat from '@polkadot/util/u8a/concat';
 import testingPairs from '@polkadot/util-keyring/testingPairs';
 
-import init from '@polkadot/client-chains';
+import Chain from '@polkadot/client-chains';
 
 const keyring = testingPairs();
 
@@ -38,7 +38,7 @@ describe('generateBlock', () => {
   };
 
   const stateDb = new MemoryDb();
-  const chain = init(config, stateDb, new HashDb());
+  const chain = new Chain(config, stateDb, new HashDb());
 
   it('generates a basic block (empty)', () => {
     expect(

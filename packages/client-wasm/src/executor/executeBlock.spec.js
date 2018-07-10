@@ -5,7 +5,7 @@
 import HashDb from '@polkadot/client-db/Hash';
 import MemoryDb from '@polkadot/client-db/Memory';
 
-import init from '@polkadot/client-chains';
+import Chain from '@polkadot/client-chains';
 
 describe('executeBlock', () => {
   const TEST = new Uint8Array([
@@ -17,7 +17,7 @@ describe('executeBlock', () => {
   };
 
   const memory = new MemoryDb();
-  const chain = init(config, memory, new HashDb());
+  const chain = new Chain(config, memory, new HashDb());
 
   it('executes an actual block', () => {
     expect(

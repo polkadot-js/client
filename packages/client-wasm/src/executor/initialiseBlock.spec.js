@@ -7,7 +7,7 @@ import encodeHeader from '@polkadot/primitives/codec/header/encode';
 import HashDb from '@polkadot/client-db/Hash';
 import MemoryDb from '@polkadot/client-db/Memory';
 
-import init from '@polkadot/client-chains';
+import Chain from '@polkadot/client-chains';
 
 describe('initialiseBlock', () => {
   const config = {
@@ -15,7 +15,7 @@ describe('initialiseBlock', () => {
     wasm: {}
   };
   const stateDb = new MemoryDb();
-  const chain = init(config, stateDb, new HashDb());
+  const chain = new Chain(config, stateDb, new HashDb());
 
   it('initialises a block', () => {
     expect(
