@@ -37,7 +37,7 @@ export default class Chain implements ChainInterface {
     this.blocks = createBlockDb(blockDb);
     this.state = createStateDb(stateDb);
     this.genesis = this.initGenesis(initial);
-    this.executor = createExecutor(config, this.blocks, this.state, runtime, this.genesis);
+    this.executor = createExecutor(config, this.blocks, this.state, runtime);
   }
 
   // TODO We should load chains from json files as well

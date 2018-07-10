@@ -7,6 +7,7 @@ import { CallResult } from './types';
 
 import storage from '@polkadot/storage';
 import key from '@polkadot/storage/key';
+import assert from '@polkadot/util/assert';
 import u8aToHex from '@polkadot/util/u8a/toHex';
 
 import createWasm from '../create';
@@ -19,8 +20,12 @@ type Call = (...data: Array<Uint8Array>) => CallResult;
 
 const CODE_KEY = key(storage.consensus.public.code)();
 
-export default function call ({ config, genesis, l, runtime, stateDb }: ExecutorState, name: string): Call {
-  const code = stateDb.db.get(CODE_KEY) || genesis.code;
+export default function call ({ config, l, runtime, stateDb }: ExecutorState, name: string): Call {
+  const code = stateDb.db.get(CODE_KEY);
+
+  assert(code, 'Expected to have code available in runtime');
+
+  // @ts-ignore code check above
   const instance = createWasm({ config, l }, runtime, code, proxy);
   const { heap } = runtime.environment;
 

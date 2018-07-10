@@ -49,7 +49,6 @@ export type ExecutorInterface = {
 export type ExecutorState = {
   blockDb: BlockDb,
   config: Config,
-  genesis: ChainGenesis,
   l: Logger,
   runtime: RuntimeInterface,
   stateDb: StateDb

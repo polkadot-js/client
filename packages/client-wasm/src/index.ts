@@ -20,11 +20,10 @@ import initialiseBlock from './executor/initialiseBlock';
 
 const l = logger('executor');
 
-export default function executor (config: Config, blockDb: BlockDb, stateDb: StateDb, runtime: RuntimeInterface, genesis: ChainGenesis): ExecutorInterface {
+export default function executor (config: Config, blockDb: BlockDb, stateDb: StateDb, runtime: RuntimeInterface): ExecutorInterface {
   const self: ExecutorState = {
     blockDb,
     config,
-    genesis,
     l,
     runtime,
     stateDb
