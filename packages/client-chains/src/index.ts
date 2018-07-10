@@ -11,7 +11,7 @@ import { ChainInterface, ChainGenesis, ChainGenesisState } from './types';
 import createBlockDb from '@polkadot/client-db-chain/block';
 import createStateDb from '@polkadot/client-db-chain/state';
 import createRuntime from '@polkadot/client-runtime/index';
-import createExecutor from '@polkadot/client-wasm/index';
+import Executor from '@polkadot/client-wasm/index';
 import createBlock from '@polkadot/primitives/create/block';
 import encodeBlock from '@polkadot/primitives/codec/block/encode';
 import encodeHeader from '@polkadot/primitives/codec/header/encode';
@@ -37,7 +37,7 @@ export default class Chain implements ChainInterface {
     this.blocks = createBlockDb(blockDb);
     this.state = createStateDb(stateDb);
     this.genesis = this.initGenesis(initial);
-    this.executor = createExecutor(config, this.blocks, this.state, runtime);
+    this.executor = new Executor(config, this.blocks, this.state, runtime);
   }
 
   // TODO We should load chains from json files as well
