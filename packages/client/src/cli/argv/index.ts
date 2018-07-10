@@ -6,9 +6,7 @@ import { Config } from '../../types';
 
 import yargs from 'yargs';
 
-import { isDevelopment } from '../../clientId';
 import db from './db';
-import dev from './dev';
 import operation from './operation';
 import p2p from './p2p';
 import rpc from './rpc';
@@ -16,18 +14,14 @@ import telemetry from './telemetry';
 import wasm from './wasm';
 
 export default function argv (cli?: string): Config {
-  const devOpts = isDevelopment
-    ? dev
-    : {};
   const parser = yargs
     .version(operation['client-id'].default)
     .options({
-      ...devOpts, ...operation, ...db, ...p2p, ...rpc, ...telemetry, ...wasm
+      ...operation, ...db, ...p2p, ...rpc, ...telemetry, ...wasm
     })
     .wrap(
       Math.min(120, yargs.terminalWidth())
     )
-    .group(Object.keys(devOpts), 'Development')
     .group(Object.keys(operation), 'Operation')
     .group(Object.keys(db), 'Database')
     .group(Object.keys(p2p), 'Peer-to-peer')
