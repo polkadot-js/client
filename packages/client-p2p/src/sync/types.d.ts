@@ -26,3 +26,9 @@ export type SyncState = {
   blockQueue: SyncState$BlockQueue,
   status: SyncStatus
 };
+
+export type SyncInterface$Events = 'imported';
+
+export interface SyncInterface {
+  on: (type: SyncInterface$Events, cb: () => any) => any,
+}

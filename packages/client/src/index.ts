@@ -6,12 +6,13 @@ import { Config } from './types';
 import { ChainInterface } from '@polkadot/client-chains/types';
 import { P2pInterface } from '@polkadot/client-p2p/types';
 import { RpcInterface } from '@polkadot/client-rpc/types';
+import { TelemetryInterface } from '@polkadot/client-telemetry/types';
 import { Logger } from '@polkadot/util/types';
 
 import './license';
 
 import Chain from '@polkadot/client-chains/index';
-import telemetry from '@polkadot/client-telemetry/index';
+import Telemetry from '@polkadot/client-telemetry/index';
 import logger from '@polkadot/util/logger';
 import HashDb from '@polkadot/client-db/Hash';
 import MemoryDb from '@polkadot/client-db/Memory';
@@ -27,9 +28,10 @@ import cli from './cli';
 class Client {
   private l: Logger;
   private chain?: ChainInterface;
+  private informantId?: NodeJS.Timer;
   private p2p?: P2pInterface;
   private rpc?: RpcInterface;
-  private informantId?: NodeJS.Timer;
+  private telemetry?: TelemetryInterface;
 
   constructor () {
     this.l = logger('client');
@@ -44,11 +46,11 @@ class Client {
     this.chain = new Chain(config, new MemoryDb(), new HashDb());
     this.p2p = new P2p(config, this.chain);
     this.rpc = new Rpc(config, this.chain);
-
-    telemetry.init(config, this.chain);
+    this.telemetry = new Telemetry(config, this.chain);
 
     await this.p2p.start();
     await this.rpc.start();
+    await this.telemetry.start();
 
     this.startInformant();
   }
@@ -62,6 +64,16 @@ class Client {
 
   private startInformant () {
     this.informantId = setInterval(this.runInformant, defaults.INFORMANT_DELAY);
+
+    if (isUndefined(this.p2p)) {
+      return;
+    }
+
+    this.p2p.sync.on('imported', () => {
+      if (!isUndefined(this.telemetry)) {
+        this.telemetry.blockImported();
+      }
+    });
   }
 
   private stopInformant () {
@@ -86,7 +98,9 @@ class Client {
 
     this.l.log(`${status} (${numPeers} peers), #${bestNumber.toNumber()}, ${u8aToHex(bestHash, 48)}`);
 
-    telemetry.intervalInfo(numPeers, status);
+    if (!isUndefined(this.telemetry)) {
+      this.telemetry.intervalInfo(numPeers, status);
+    }
   }
 }
 

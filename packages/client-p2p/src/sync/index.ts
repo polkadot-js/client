@@ -7,13 +7,12 @@ import { ChainInterface } from '@polkadot/client-chains/types';
 import { BlockRequestMessageField, BlockResponseMessage, BlockResponseMessageBlock } from '@polkadot/client-p2p-messages/types';
 import { Logger } from '@polkadot/util/types';
 import { PeerInterface, SyncStatus } from '../types';
-import { SyncState$Request, SyncState$BlockRequests, SyncState$BlockQueue } from './types';
+import { SyncInterface, SyncState$Request, SyncState$BlockRequests, SyncState$BlockQueue } from './types';
 
 import BN from 'bn.js';
 import E3 from 'eventemitter3';
 import BlockRequest from '@polkadot/client-p2p-messages/BlockRequest';
 import BlockResponse from '@polkadot/client-p2p-messages/BlockResponse';
-import telemetry from '@polkadot/client-telemetry/index';
 import decodeBlock from '@polkadot/primitives/codec/block/decodeRaw';
 import isU8a from '@polkadot/util/is/u8a';
 import logger from '@polkadot/util/logger';
@@ -23,7 +22,7 @@ import defaults from '../defaults';
 
 type Requests = Array<SyncState$Request>;
 
-export default class Sync extends E3.EventEmitter {
+export default class Sync extends E3.EventEmitter implements SyncInterface {
   private chain: ChainInterface;
   private l: Logger;
   private blockRequests: SyncState$BlockRequests = {};
@@ -87,7 +86,7 @@ export default class Sync extends E3.EventEmitter {
 
     if (count) {
       this.l.log(`#${startNumber.toString()}- ${count} imported (${Date.now() - start}ms)`);
-      telemetry.blockImported();
+      this.emit('imported');
     }
 
     this.status = (count > 1)

@@ -4,34 +4,100 @@
 
 import { Config } from '@polkadot/client/types';
 import { ChainInterface } from '@polkadot/client-chains/types';
+import { BlockDb } from '@polkadot/client-db-chain/types';
 import { SyncStatus } from '@polkadot/client-p2p/types';
-import { State, Telemetry } from './types';
+import { Logger } from '@polkadot/util/types';
+import { TelemetryInterface } from './types';
 
 import './polyfill';
 
-import connect from './connect';
-import sendBlockImport from './sendBlockImport';
-import sendInterval from './sendInterval';
-import createState from './state';
+import logger from '@polkadot/util/logger';
 
-let self: State;
+import Base from './messages/Base';
+import BlockImport from './messages/BlockImport';
+import Connected from './messages/Connected';
+import Interval from './messages/Interval';
+import Started from './messages/Started';
 
-function init (config: Config, chain: ChainInterface): void {
-  self = createState(config, chain);
+export default class Telemetry implements TelemetryInterface {
+  private l: Logger;
+  private blocks: BlockDb;
+  private isActive: boolean = false;
+  private chain: string;
+  private name: string;
+  private url: string;
+  private websocket: WebSocket | null = null;
 
-  if (self.isActive) {
-    self.l.log(`Connecting to telemetry, url=${self.url}, name=${self.name}`);
+  constructor ({ chain, telemetry: { name, url } }: Config, { blocks }: ChainInterface) {
+    this.l = logger('telemetry');
+    this.blocks = blocks;
+    this.isActive = !!name && !!url;
+    this.chain = chain;
+    this.name = name;
+    this.url = url;
+  }
 
-    connect(self);
+  async start () {
+    if (!this.isActive) {
+      return;
+    }
+
+    this.connect();
+  }
+
+  private connect () {
+    this.l.log(`Connecting to telemetry, url=${this.url}, name=${this.name}`);
+
+    const websocket = new WebSocket(this.url);
+
+    websocket.onclose = () => {
+      this.l.debug(() => 'Disconnected from telemetry');
+
+      this.websocket = null;
+
+      setTimeout(() => {
+        this.connect();
+      }, 5000);
+    };
+
+    websocket.onopen = () => {
+      this.l.debug(() => 'Connected to telemetry');
+
+      this.websocket = websocket;
+      this.sendInitial();
+    };
+  }
+
+  blockImported (): void {
+    const bestHash = this.blocks.bestHash.get();
+    const bestNumber = this.blocks.bestNumber.get();
+
+    this.send(new BlockImport(bestHash, bestNumber));
+  }
+
+  intervalInfo (peers: number, status: SyncStatus): void {
+    const bestHash = this.blocks.bestHash.get();
+    const bestNumber = this.blocks.bestNumber.get();
+
+    this.send(new Interval(bestHash, bestNumber, peers, status));
+  }
+
+  private sendInitial () {
+    const bestHash = this.blocks.bestHash.get();
+    const bestNumber = this.blocks.bestNumber.get();
+
+    this.send(new Connected(this.chain, this.name));
+    this.send(new Started(bestHash, bestNumber));
+  }
+
+  private send (message: Base): void {
+    if (!this.websocket) {
+      return;
+    }
+
+    const json = JSON.stringify(message);
+
+    this.l.debug(() => `Sending ${json}`);
+    this.websocket.send(json);
   }
 }
-
-const telemetry: Telemetry = {
-  blockImported: (): void =>
-    sendBlockImport(self),
-  intervalInfo: (peers: number, status: SyncStatus): void =>
-    sendInterval(self, peers, status),
-  init
-};
-
-export default telemetry;

@@ -15,19 +15,8 @@ export type TelemetryConfig = {
   url: string
 };
 
-export type State = {
-  blocks: BlockDb,
-  chain: string,
-  isActive: boolean,
-  l: Logger,
-  name: string,
-  queued: Array<Base>,
-  url: string,
-  websocket: WebSocket | null
-}
-
-export type Telemetry = {
+export interface TelemetryInterface {
   blockImported: () => void,
   intervalInfo: (peers: number, status: SyncStatus) => void,
-  init: (config: Config, chain: ChainInterface) => void
-};
+  start: () => Promise<void>
+}
