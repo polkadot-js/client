@@ -8,6 +8,10 @@
   "workspaces": [
     "packages/*"
   ],
+  "resolutions": {
+    "babel-core": "^7.0.0-bridge.0",
+    "typescript": "^2.9.2"
+  },
   "scripts": {
     "build": "polkadot-dev-build-ts && cp -r packages/client/scripts build",
     "check": "tslint --project . && tsc --noEmit",
@@ -19,8 +23,8 @@
     "start-rust": "NODE_OPTIONS=--experimental-worker node packages/client/scripts/polkadot.js --db-path ./tmp/start-rust --p2p-nodes /ip4/127.0.0.1/tcp/30333/ipfs/QmXBQmmjNsBLobf5Xx8Kqz7rvUrGgiBLTYm2EmQvcZyrKR --p2p-port 39935 --rpc-port 9935"
   },
   "devDependencies": {
-    "@polkadot/dev": "^0.20.9",
-    "@polkadot/ts": "^0.1.8",
+    "@polkadot/dev": "^0.20.12",
+    "@polkadot/ts": "^0.1.9",
     "lerna": "^2.11.0"
   }
 }

@@ -35,8 +35,8 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.0.0-beta.51",
-    "@polkadot/trie-db": "^0.26.14",
-    "@polkadot/util": "^0.26.14",
+    "@polkadot/trie-db": "^0.26.20",
+    "@polkadot/util": "^0.26.20",
     "@types/mkdirp": "^0.5.2",
     "mkdirp": "^0.5.1"
   },
