@@ -1,6 +1,6 @@
 {
   "name": "@polkadot/client-rpc-handlers",
-  "version": "0.13.7",
+  "version": "0.13.8",
   "description": "Handlers for RPC messages",
   "main": "index.js",
   "engines": {
