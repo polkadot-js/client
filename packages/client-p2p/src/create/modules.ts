@@ -14,7 +14,9 @@ import TCP from 'libp2p-tcp';
 import PeerInfo from 'peer-info';
 // import WS from 'libp2p-websockets';
 
-export default function createModules (peerInfo: PeerInfo, bootNodes: P2pNodes): LibP2p.OptionsModules {
+export default function createModules (peerInfo: PeerInfo, bootNodes: P2pNodes, nodes: P2pNodes): LibP2p.OptionsModules {
+  const list = bootNodes.concat(nodes);
+
   return {
     connEncryption: [
       // secio
@@ -26,7 +28,7 @@ export default function createModules (peerInfo: PeerInfo, bootNodes: P2pNodes):
     dht: DHT,
     peerDiscovery: [
       // new Multicast(peerInfo),
-      new Railing({ list: bootNodes })
+      new Railing({ list })
     ],
     transport: [
       new TCP()

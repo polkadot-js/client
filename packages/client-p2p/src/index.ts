@@ -62,7 +62,7 @@ export default class P2p extends E3.EventEmitter implements P2pInterface {
   async start (): Promise<boolean> {
     await this.stop();
 
-    this.node = await createNode(this.config, this.l);
+    this.node = await createNode(this.config, this.chain, this.l);
     this.peers = new Peers(this.config, this.chain, this.node);
 
     this._handleProtocol(this.node, this.peers);
