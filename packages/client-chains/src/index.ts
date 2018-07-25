@@ -6,7 +6,7 @@ import { Config } from '@polkadot/client/types';
 import { BaseDb, TrieDb } from '@polkadot/client-db/types';
 import { BlockDb, StateDb } from '@polkadot/client-db-chain/types';
 import { ExecutorInterface } from '@polkadot/client-wasm/types';
-import { ChainInterface, ChainGenesis, ChainGenesisState } from './types';
+import { ChainInterface, ChainGenesis, ChainJson } from './types';
 
 import createBlockDb from '@polkadot/client-db-chain/block';
 import createStateDb from '@polkadot/client-db-chain/state';
@@ -26,22 +26,23 @@ import chains from './chains';
 
 export default class Chain implements ChainInterface {
   readonly blocks: BlockDb;
+  readonly chain: ChainJson;
   readonly executor: ExecutorInterface;
   readonly genesis: ChainGenesis;
   readonly state: StateDb;
 
   constructor (config: Config, stateDb: TrieDb, blockDb: BaseDb) {
-    const initial = this.load(config.chain);
     const runtime = createRuntime(stateDb);
 
+    this.chain = this.load(config.chain);
     this.blocks = createBlockDb(blockDb);
     this.state = createStateDb(stateDb);
-    this.genesis = this.initGenesis(initial);
+    this.genesis = this.initGenesis();
     this.executor = new Executor(config, this.blocks, this.state, runtime);
   }
 
   // TODO We should load chains from json files as well
-  private load (name: string): ChainGenesisState {
+  private load (name: string): ChainJson {
     const chain = chains[name];
 
     assert(chain, `Unable to find builtin chain '${name}'`);
@@ -49,8 +50,8 @@ export default class Chain implements ChainInterface {
     return chain;
   }
 
-  private initGenesis (initial: ChainGenesisState) {
-    this.initGenesisState(initial);
+  private initGenesis () {
+    this.initGenesisState();
 
     const genesis = this.initGenesisBlock();
 
@@ -87,13 +88,15 @@ export default class Chain implements ChainInterface {
     };
   }
 
-  private initGenesisState (initial: ChainGenesisState) {
+  private initGenesisState () {
+    const { genesis: { raw } } = this.chain;
+
     this.state.db.checkpoint();
 
-    Object.keys(initial).forEach((key) =>
+    Object.keys(raw).forEach((key) =>
       this.state.db.put(
         hexToU8a(key),
-        hexToU8a(initial[key])
+        hexToU8a(raw[key])
       )
     );
 

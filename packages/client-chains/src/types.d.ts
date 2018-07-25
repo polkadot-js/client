@@ -12,8 +12,15 @@ import { Logger } from '@polkadot/util/types';
 export type ChainName = 'dev';
 export type ChainType = 'polkadot' | 'substrate';
 
-export type ChainGenesisState = {
-  [index: string]: string
+export type ChainJson = {
+  bootNodes: Array<string>,
+  genesis: {
+    raw: {
+      [index: string]: string
+    }
+  },
+  id: string,
+  name: string
 };
 
 export type ChainGenesis = {
@@ -25,6 +32,7 @@ export type ChainGenesis = {
 
 export interface ChainInterface {
   readonly blocks: BlockDb,
+  readonly chain: ChainJson,
   readonly executor: ExecutorInterface,
   readonly genesis: ChainGenesis,
   readonly state: StateDb
