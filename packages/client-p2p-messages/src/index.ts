@@ -6,29 +6,33 @@ import { MessageDecoder, MessageInterface } from './types';
 
 import assert from '@polkadot/util/assert';
 import isUndefined from '@polkadot/util/is/undefined';
+import u8aToHex from '@polkadot/util/u8a/toHex';
 
+import Bft from './Bft';
 import BlockAnnounce from './BlockAnnounce';
 import BlockRequest from './BlockRequest';
 import BlockResponse from './BlockResponse';
 import Status from './Status';
+import Transactions from './Transactions';
 
 type DecoderMapping = {
-  [index: string]: MessageDecoder<any, any>
+  [index: number]: MessageDecoder<any>
 };
 
 const decoders: DecoderMapping = {
-  BlockAnnounce,
-  BlockRequest,
-  BlockResponse,
-  Status
+  [Bft.type]: Bft,
+  [BlockAnnounce.type]: BlockAnnounce,
+  [BlockRequest.type]: BlockRequest,
+  [BlockResponse.type]: BlockResponse,
+  [Status.type]: Status,
+  [Transactions.type]: Transactions
 };
 
-export default function decodeMessage (encoded: string): MessageInterface {
-  const json: any = JSON.parse(encoded);
-  const [type] = Object.keys(json);
-  const Decoder = decoders[type];
+export default function decodeMessage (encoded: Uint8Array): MessageInterface {
+  const id = encoded[0];
+  const Decoder = decoders[id];
 
-  assert(!isUndefined(Decoder), `Unknown message received, ${json}`);
+  assert(!isUndefined(Decoder), `Unknown message received, id=${id}, ${u8aToHex(encoded)}`);
 
-  return Decoder.decode(json);
+  return Decoder.decode(encoded.subarray(1));
 }

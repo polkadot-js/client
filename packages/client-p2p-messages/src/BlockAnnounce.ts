@@ -3,32 +3,39 @@
 // of the ISC license. See the LICENSE file for details.
 
 import { Header } from '@polkadot/primitives/header';
-import { BlockAnnounceEncoded, BlockAnnounceMessage, MessageEncoder } from './types';
+import { MessageInterface, BlockAnnounceMessage } from './types';
 
-import headerDecode from '@polkadot/primitives/json/header/decode';
-import headerEncode from '@polkadot/primitives/json/header/encode';
+import headerDecode from '@polkadot/primitives/codec/header/decode';
+import headerEncode from '@polkadot/primitives/codec/header/encode';
+import u8aConcat from '@polkadot/util/u8a/concat';
 
-export default class BlockAnnounce implements MessageEncoder<BlockAnnounceEncoded>, BlockAnnounceMessage {
+import BaseMessage from './BaseMessage';
+
+export default class BlockAnnounce extends BaseMessage implements MessageInterface, BlockAnnounceMessage {
   static type = 3;
-  readonly type = BlockAnnounce.type;
 
   header: Header;
 
   constructor ({ header }: BlockAnnounceMessage) {
+    super(BlockAnnounce.type);
+
     this.header = header;
   }
 
-  encode (): BlockAnnounceEncoded {
-    return {
-      BlockAnnounce: {
-        header: headerEncode(this.header)
-      }
-    };
+  encode (): Uint8Array {
+    return u8aConcat(
+      super.encode(),
+      headerEncode(this.header)
+    );
   }
 
-  static decode ({ BlockAnnounce: { header } }: BlockAnnounceEncoded): BlockAnnounce {
+  toJSON (): any {
+    return this.header;
+  }
+
+  static decode (u8a: Uint8Array): BlockAnnounce {
     return new BlockAnnounce({
-      header: headerDecode(header)
+      header: headerDecode(u8a)
     });
   }
 }

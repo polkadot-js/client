@@ -21,10 +21,8 @@ import bufferToU8a from '@polkadot/util/buffer/toU8a';
 import logger from '@polkadot/util/logger';
 import stringShorten from '@polkadot/util/string/shorten';
 import u8aConcat from '@polkadot/util/u8a/concat';
-import u8aFromUtf8 from '@polkadot/util/u8a/fromUtf8';
 import u8aToBuffer from '@polkadot/util/u8a/toBuffer';
 import u8aToHex from '@polkadot/util/u8a/toHex';
-import u8aToUtf8 from '@polkadot/util/u8a/toUtf8';
 
 import defaults from '../defaults';
 
@@ -62,14 +60,20 @@ export default class Peer extends E3.EventEmitter implements PeerInterface {
         connection
       );
 
-      this.send(new Status({
-        roles: this.config.roles,
-        bestNumber: this.chain.blocks.bestNumber.get(),
-        bestHash: this.chain.blocks.bestHash.get(),
-        genesisHash: this.chain.genesis.headerHash,
-        version: defaults.PROTOCOL_VERSION
-      }));
+      this.send(
+        new Status({
+          roles: this.config.roles,
+          bestNumber: this.chain.blocks.bestNumber.get(),
+          bestHash: this.chain.blocks.bestHash.get(),
+          genesisHash: this.chain.genesis.headerHash,
+          version: defaults.PROTOCOL_VERSION
+        })
+      );
     }
+  }
+
+  isActive (): boolean {
+    return this.bestHash.length !== 0;
   }
 
   isWritable (): boolean {
@@ -90,14 +94,13 @@ export default class Peer extends E3.EventEmitter implements PeerInterface {
             const length = varint.decode(buffer);
             const offset = varint.decode.bytes;
             const u8a = bufferToU8a(buffer.slice(offset + 1));
-            const utf8 = u8aToUtf8(u8a);
 
             // TODO Do we keep this peer or drop it (like Rust does on invalid messages). Additionally, do we _really_ want to throw here?
             assert(u8a.length === length - 1, 'Invalid buffer length received');
 
-            this.l.debug(() => `received ${u8aToHex(u8a)} => ${utf8}`);
+            // this.l.debug(() => `received ${u8a.length} bytes, ${u8aToHex(u8a)}`);
 
-            this.emit('message', decodeMessage(utf8));
+            this.emit('message', decodeMessage(u8a));
           },
           () => false
         )
@@ -117,11 +120,10 @@ export default class Peer extends E3.EventEmitter implements PeerInterface {
     }
 
     try {
-      const utf8 = JSON.stringify(message.encode());
-      const encoded = u8aFromUtf8(utf8);
+      const encoded = message.encode();
       const length = varint.encode(encoded.length + 1);
 
-      this.l.debug(() => `sending ${u8aToHex(encoded)} <= ${utf8}`);
+      this.l.debug(() => `sending ${u8aToHex(encoded)}`);
 
       this.pushable.push(
         u8aToBuffer(

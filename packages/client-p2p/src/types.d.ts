@@ -47,6 +47,7 @@ export interface PeerInterface {
   readonly shortId: string,
 
   addConnection: (connection: LibP2pConnection, isWritable: boolean) => void,
+  isActive: () => boolean,
   isWritable: () => boolean,
   getNextId: () => number,
   on (type: PeerInterface$Events, cb: (message: MessageInterface) => any): any,

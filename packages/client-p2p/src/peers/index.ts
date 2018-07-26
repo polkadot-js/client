@@ -55,7 +55,11 @@ export default class Peers extends E3.EventEmitter implements PeersInterface {
   }
 
   count (): number {
-    return Object.keys(this.map).length;
+    return Object
+      .values(this.map)
+      .filter((peer) =>
+        peer.isActive()
+      ).length;
   }
 
   log (event: PeersInterface$Events, peer: PeerInterface, withShort: boolean = true): void {

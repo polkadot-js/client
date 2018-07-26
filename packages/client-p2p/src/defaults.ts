@@ -4,7 +4,7 @@
 
 import { Role } from '@polkadot/primitives/role';
 
-const ADDRESS = '127.0.0.1';
+const ADDRESS = '0.0.0.0';
 const CLIENT_ID = 'polkadot-js/0.0.0';
 const MAX_PEERS = 25;
 const MAX_SYNC_BLOCKS = 64;
@@ -12,7 +12,7 @@ const PORT = 39933;
 const ROLE: Role = 'full';
 const PROTOCOL_BASE = '/substrate';
 const PROTOCOL_TYPE = '/dot';
-const PROTOCOL_VERSION = 0;
+const PROTOCOL_VERSION = 1;
 const PROTOCOL = `${PROTOCOL_BASE}${PROTOCOL_TYPE}/${PROTOCOL_VERSION}`;
 
 export default {

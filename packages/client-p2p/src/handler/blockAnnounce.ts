@@ -10,7 +10,7 @@ import encodeHeader from '@polkadot/primitives/codec/header/encode';
 import blake2Asu8a from '@polkadot/util-crypto/blake2/asU8a';
 
 function handleBlockAnnounce (self: P2pInterface, peer: PeerInterface, message: BlockAnnounce): void {
-  self.l.debug(() => [peer.shortId, 'BlockAnnounce', JSON.stringify(message.encode())]);
+  self.l.debug(() => [peer.shortId, 'BlockAnnounce', JSON.stringify(message)]);
 
   const header = message.header;
 
