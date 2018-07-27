@@ -11,6 +11,7 @@ import u8aToBn from '@polkadot/util/u8a/toBn';
 import bnToU8a from '@polkadot/util/bn/toU8a';
 
 import BaseMessage from './BaseMessage';
+import u8aToHex from '../../../node_modules/@polkadot/util/u8a/toHex';
 
 const COUNT_OFF = 8;
 const BLOCK_OFF = COUNT_OFF + 4;
@@ -52,7 +53,7 @@ export default class BlockResponse extends BaseMessage implements MessageInterfa
 
     for (let i = 0; i < numBlocks; i++) {
       const hash = u8a.slice(offset, offset + I_HDRP_OFF);
-      const headerRaw = decodeHeaderRaw(u8a.subarray(offset + I_HDRD_OFF)).header;
+      const headerRaw = decodeHeaderRaw(u8a.subarray(offset + I_HDRD_OFF)).header.slice();
       const header = decodeHeader(headerRaw);
 
       offset += I_HDRD_OFF + headerRaw.length + 1; // skip 00/01
@@ -70,13 +71,13 @@ export default class BlockResponse extends BaseMessage implements MessageInterfa
         offset += 4 + length;
       }
 
-      const encoded = u8aConcat.apply(null, [headerRaw, bnToU8a(numExt, 32, true)].concat(extrinsics));
+      offset += 3; // skip reciept, queue and justification
 
       blocks.push({
         hash,
         header,
-        encoded,
-        justification: u8a.slice(offset + 3); // skip reciept, queue and assume we are at justification
+        encoded: u8aConcat.apply(null, [headerRaw, bnToU8a(numExt, 32, true)].concat(extrinsics)),
+        justification: new Uint8Array([])
       });
     }
 

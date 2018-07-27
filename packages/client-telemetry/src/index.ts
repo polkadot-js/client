@@ -28,13 +28,15 @@ export default class Telemetry implements TelemetryInterface {
   private url: string;
   private websocket: WebSocket | null = null;
 
-  constructor ({ chain, telemetry: { name, url } }: Config, { blocks }: ChainInterface) {
+  constructor ({ telemetry }: Config, { blocks, chain }: ChainInterface) {
+    const name = telemetry.name ? telemetry.name.trim() : '';
+
     this.l = logger('telemetry');
     this.blocks = blocks;
-    this.isActive = !!name && !!url;
-    this.chain = chain;
+    this.isActive = !!name.length && !!telemetry.url.length;
+    this.chain = chain.name;
     this.name = name;
-    this.url = url;
+    this.url = telemetry.url;
   }
 
   async start () {

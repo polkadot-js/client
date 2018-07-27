@@ -72,7 +72,7 @@ export type P2pInterface = {
   readonly l: Logger;
   readonly sync: Sync;
 
-  _announceBlock: (hash: Uint8Array, header: Uint8Array, body: Uint8Array) => void,
+  // _announceBlock: (hash: Uint8Array, header: Uint8Array, body: Uint8Array) => void,
   isStarted: () => boolean,
   on: (type: P2pInterface$Events, cb: () => any) => any,
   getNumPeers: () => number,

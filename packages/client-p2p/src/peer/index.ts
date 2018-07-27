@@ -2,6 +2,7 @@
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
 
+import LibP2p from 'libp2p';
 import PeerInfo from 'peer-info';
 import { Config } from '@polkadot/client/types';
 import { ChainInterface } from '@polkadot/client-chains/types';
@@ -11,6 +12,7 @@ import { PeerInterface } from '../types';
 
 import BN from 'bn.js';
 import E3 from 'eventemitter3';
+import Ping from 'libp2p-ping';
 import PullPushable, { Pushable } from 'pull-pushable';
 import pull from 'pull-stream';
 import varint from 'varint';
@@ -22,7 +24,7 @@ import logger from '@polkadot/util/logger';
 import stringShorten from '@polkadot/util/string/shorten';
 import u8aConcat from '@polkadot/util/u8a/concat';
 import u8aToBuffer from '@polkadot/util/u8a/toBuffer';
-import u8aToHex from '@polkadot/util/u8a/toHex';
+// import u8aToHex from '@polkadot/util/u8a/toHex';
 
 import defaults from '../defaults';
 
@@ -34,17 +36,19 @@ export default class Peer extends E3.EventEmitter implements PeerInterface {
   readonly id: string;
   readonly l: Logger;
   private nextId: number = 0;
+  private node: LibP2p;
   readonly peerInfo: PeerInfo;
   private pushable: Pushable | null = null;
   readonly shortId: string;
 
-  constructor (config: Config, chain: ChainInterface, peerInfo: PeerInfo) {
+  constructor (config: Config, chain: ChainInterface, peerInfo: PeerInfo, node: LibP2p) {
     super();
 
     this.chain = chain;
     this.config = config;
     this.id = peerInfo.id.toB58String();
     this.l = logger('p2p/peer');
+    this.node = node;
     this.peerInfo = peerInfo;
     this.shortId = stringShorten(this.id);
   }
@@ -54,6 +58,15 @@ export default class Peer extends E3.EventEmitter implements PeerInterface {
 
     if (isWritable) {
       this.pushable = PullPushable();
+
+      const p = new Ping(this.node, this.peerInfo); // Ping peerDst, peerDst must be a peer-info object
+
+      p.on('ping', (time: number) => {
+        console.log(time + 'ms');
+        // p.stop() // stop sending pings
+      });
+
+      p.start();
 
       pull(
         this.pushable,

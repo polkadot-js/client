@@ -95,22 +95,22 @@ export default class P2p extends E3.EventEmitter implements P2pInterface {
     return true;
   }
 
-  _announceBlock (hash: Uint8Array, _header: Uint8Array, body: Uint8Array): void {
-    if (!this.peers) {
-      return;
-    }
+  // _announceBlock (hash: Uint8Array, _header: Uint8Array, body: Uint8Array): void {
+  //   if (!this.peers) {
+  //     return;
+  //   }
 
-    const header = decodeHeader(_header);
-    const message = new BlockAnnounce({
-      header
-    });
+  //   const header = decodeHeader(_header);
+  //   const message = new BlockAnnounce({
+  //     header
+  //   });
 
-    this.peers.peers().forEach((peer) => {
-      if (header.number.gt(peer.bestNumber)) {
-        peer.send(message);
-      }
-    });
-  }
+  //   this.peers.peers().forEach((peer) => {
+  //     if (header.number.gt(peer.bestNumber)) {
+  //       peer.send(message);
+  //     }
+  //   });
+  // }
 
   private _onPeerDiscovery (node: LibP2p, peers: PeersInterface): void {
     node.on('start', () =>
