@@ -5074,14 +5074,6 @@ libp2p-mplex@^0.7.0:
     through2 "^2.0.3"
     varint "^5.0.0"
 
-libp2p-ping@jacogr/js-libp2p-ping#jg-dialProtocol:
-  version "0.8.0"
-  resolved "https://codeload.github.com/jacogr/js-libp2p-ping/tar.gz/19a1a53799b7a3a8303466a54eade3bcff6ae2b4"
-  dependencies:
-    libp2p-crypto "~0.13.0"
-    pull-handshake "^1.1.4"
-    pull-stream "^3.6.7"
-
 libp2p-ping@~0.8.0:
   version "0.8.0"
   resolved "https://registry.yarnpkg.com/libp2p-ping/-/libp2p-ping-0.8.0.tgz#14e23d87c69005a1e02895568359c34d2e89fa65"

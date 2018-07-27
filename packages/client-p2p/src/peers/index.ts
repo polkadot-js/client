@@ -36,12 +36,12 @@ export default class Peers extends E3.EventEmitter implements PeersInterface {
     this._onDiscovery(node);
   }
 
-  add (peerInfo: PeerInfo, node: LibP2p): PeerInterface {
+  add (peerInfo: PeerInfo): PeerInterface {
     const id = peerInfo.id.toB58String();
     let peer = this.map[id];
 
     if (!peer) {
-      this.map[id] = peer = new Peer(this.config, this.chain, peerInfo, node);
+      this.map[id] = peer = new Peer(this.config, this.chain, peerInfo);
 
       peer.on('message', (message: MessageInterface): void => {
         this.emit('message', {
@@ -130,7 +130,7 @@ export default class Peers extends E3.EventEmitter implements PeersInterface {
         return false;
       }
 
-      peer = this.add(peerInfo, node);
+      peer = this.add(peerInfo);
 
       this.log('discovered', peer, false);
 

@@ -14,12 +14,14 @@ const PROTOCOL_BASE = '/substrate';
 const PROTOCOL_TYPE = '/dot';
 const PROTOCOL_VERSION = 1;
 const PROTOCOL = `${PROTOCOL_BASE}${PROTOCOL_TYPE}/${PROTOCOL_VERSION}`;
+const PING_PROTOCOL = '/ipfs/ping/1.0.0';
 
 export default {
   ADDRESS,
   CLIENT_ID,
   MAX_PEERS,
   MAX_SYNC_BLOCKS,
+  PING_PROTOCOL,
   PORT,
   PROTOCOL,
   PROTOCOL_BASE,

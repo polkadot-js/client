@@ -43,7 +43,6 @@
     "libp2p-kad-dht": "^0.10.0",
     "libp2p-mdns": "^0.11.0",
     "libp2p-mplex": "^0.7.0",
-    "libp2p-ping": "jacogr/js-libp2p-ping#jg-dialProtocol",
     "libp2p-railing": "^0.9.1",
     "libp2p-secio": "^0.10.0",
     "libp2p-spdy": "^0.12.1",

@@ -11,6 +11,8 @@ import { P2pInterface, PeerInterface, PeersInterface } from './types';
 import handlers from './handler';
 
 import E3 from 'eventemitter3';
+import pull from 'pull-stream';
+import handshake from 'pull-handshake';
 import BlockAnnounce from '@polkadot/client-p2p-messages/BlockAnnounce';
 import decodeHeader from '@polkadot/primitives/codec/header/decode';
 import logger from '@polkadot/util/logger';
@@ -65,11 +67,14 @@ export default class P2p extends E3.EventEmitter implements P2pInterface {
     this.node = await createNode(this.config, this.chain, this.l);
     this.peers = new Peers(this.config, this.chain, this.node);
 
+    this._handlePing(this.node);
     this._handleProtocol(this.node, this.peers);
     this._onPeerDiscovery(this.node, this.peers);
     this._onPeerMessage(this.node, this.peers);
 
     await promisify(this.node, this.node.start);
+
+    console.error('node=', this.node);
 
     this.l.log(`Started on address=${this.config.p2p.address}, port=${this.config.p2p.port}`);
     this.emit('started');
@@ -137,6 +142,42 @@ export default class P2p extends E3.EventEmitter implements P2pInterface {
     });
   }
 
+  private _handlePing (node: LibP2p): void {
+    node.handle(
+      defaults.PING_PROTOCOL,
+      (protocol: string, connection: LibP2pConnection): void => {
+        console.error('##### new pong proto', protocol, connection);
+
+        const stream = handshake({ timeout: 0 });
+        const shake = stream.handshake;
+
+        // receive and echo back
+        function next () {
+          shake.read(32, (error, buf) => {
+            console.error('##### received ping', buf);
+
+            if (error) {
+              return;
+            }
+
+            console.error('##### writing pong', buf);
+
+            shake.write(buf);
+            return next();
+          });
+        }
+
+        pull(
+          connection,
+          stream,
+          connection
+        );
+
+        next();
+      }
+    );
+  }
+
   private _handleProtocol (node: LibP2p, peers: PeersInterface): void {
     node.handle(
       defaults.PROTOCOL,
@@ -155,11 +196,11 @@ export default class P2p extends E3.EventEmitter implements P2pInterface {
           this.l.error('protocol handling error', error);
         }
       }
-      , (protocol: string, requested: string, callback: (error: null, accept: boolean) => void): void => {
-        this.l.debug(() => `matching protocol ${requested}`);
+      // , (protocol: string, requested: string, callback: (error: null, accept: boolean) => void): void => {
+      //   this.l.debug(() => `matching protocol ${requested}`);
 
-        callback(null, requested.indexOf(defaults.PROTOCOL) === 0);
-      }
+      //   callback(null, requested.indexOf(defaults.PROTOCOL) === 0);
+      // }
     );
   }
 
