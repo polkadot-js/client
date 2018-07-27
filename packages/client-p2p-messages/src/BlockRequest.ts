@@ -19,6 +19,10 @@ import fromAttrs from './attrs/fromAttrs';
 import toAttrs from './attrs/toAttrs';
 import BaseMessage from './BaseMessage';
 
+const FIELD_OFF = 8;
+const FROM_OFF = FIELD_OFF + 1;
+const FROM_DATA = FROM_OFF + 1;
+
 export default class BlockRequest extends BaseMessage implements MessageInterface, BlockRequestMessage {
   static type = 1;
 
@@ -29,7 +33,7 @@ export default class BlockRequest extends BaseMessage implements MessageInterfac
   max: number;
   to: HeaderHash | null;
 
-  constructor ({ direction, fields, from, id, max, to = null }: BlockRequestMessage) {
+  constructor ({ direction = 'Ascending', fields = ['header', 'body', 'justification'], from, id, max, to = null }: BlockRequestMessage) {
     super(BlockRequest.type);
 
     this.direction = direction;
@@ -43,7 +47,7 @@ export default class BlockRequest extends BaseMessage implements MessageInterfac
   encode (): Uint8Array {
     return u8aConcat(
       super.encode(),
-      bnToU8a(this.id, 32, true),
+      bnToU8a(this.id, 64, true),
       bnToU8a(fromAttrs(this.fields), 8, true),
       new Uint8Array(isBn(this.from) ? [1] : [0]),
       isBn(this.from)
@@ -56,35 +60,41 @@ export default class BlockRequest extends BaseMessage implements MessageInterfac
           this.to
         ),
       new Uint8Array(this.direction === 'Ascending' ? [0] : [1]),
+      new Uint8Array([1]),
       bnToU8a(this.max, 32, true)
     );
   }
 
   toJSON (): any {
     return {
+      id: this.id,
       direction: this.direction,
       from: isBn(this.from)
         ? bnToHex(this.from)
-        : u8aToHex(this.from)
+        : u8aToHex(this.from),
+      max: this.max
     };
   }
 
   static decode (u8a: Uint8Array): BlockRequest {
-    const fromLength = u8a[5] === 0 ? 16 : 32;
-    const fromTo = u8a[5 + fromLength] === 0 ? 0 : 32;
-    const atDirection = 5 + fromLength + fromTo;
+    const fromLength = u8a[FROM_OFF] === 0 ? 16 : 32;
+    const fromTo = u8a[FROM_DATA + fromLength] === 0 ? 0 : 32;
+    const atDirection = FROM_DATA + fromLength + fromTo;
+    const maxOff = atDirection + 1;
 
     return new BlockRequest({
-      id: u8aToBn(u8a.subarray(0, 4), true).toNumber(),
-      fields: toAttrs(u8a[4]),
+      id: u8aToBn(u8a.subarray(0, FIELD_OFF), true).toNumber(),
+      fields: toAttrs(u8a[FIELD_OFF]),
       from: fromLength === 16
-        ? u8aToBn(u8a.subarray(5, 21), true)
-        : u8a.slice(5, 37),
+        ? u8aToBn(u8a.subarray(FROM_DATA, FROM_DATA + fromLength), true)
+        : u8a.slice(FROM_DATA, FROM_DATA + fromLength),
       to: fromTo === 0
         ? null
-        : u8a.slice(5 + fromLength, atDirection),
+        : u8a.slice(FROM_DATA + fromLength, atDirection),
       direction: u8a[atDirection] === 0 ? 'Ascending' : 'Descending',
-      max: u8aToBn(u8a.subarray(atDirection, atDirection + 32), true).toNumber()
+      max: u8a[maxOff] === 1
+        ? u8aToBn(u8a.subarray(maxOff + 1, maxOff + 1 + 32), true).toNumber()
+        : null
     });
   }
 }

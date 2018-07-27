@@ -8,6 +8,8 @@ import { MessageInterface, BlockAnnounceMessage } from './types';
 import headerDecode from '@polkadot/primitives/codec/header/decode';
 import headerEncode from '@polkadot/primitives/codec/header/encode';
 import u8aConcat from '@polkadot/util/u8a/concat';
+import u8aToHex from '@polkadot/util/u8a/toHex';
+import bnToHex from '@polkadot/util/bn/toHex';
 
 import BaseMessage from './BaseMessage';
 
@@ -30,7 +32,15 @@ export default class BlockAnnounce extends BaseMessage implements MessageInterfa
   }
 
   toJSON (): any {
-    return this.header;
+    const { digest, extrinsicsRoot, parentHash, stateRoot } = this.header;
+
+    return {
+      number: bnToHex(this.header.number),
+      extrinsicsRoot: u8aToHex(extrinsicsRoot),
+      parentHash: u8aToHex(parentHash),
+      stateRoot: u8aToHex(stateRoot),
+      digest
+    };
   }
 
   static decode (u8a: Uint8Array): BlockAnnounce {

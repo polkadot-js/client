@@ -42,29 +42,19 @@ export type BlockAttr = keyof BlockAttrMap;
 export type BlockRequestMessageDirection = 'Ascending' | 'Descending';
 
 export type BlockRequestMessage = {
-  direction: BlockRequestMessageDirection,
-  fields: Array<BlockAttr>,
+  direction?: BlockRequestMessageDirection,
+  fields?: Array<BlockAttr>,
   from: HeaderHash | BN,
   id: number,
   max?: number | null,
   to?: HeaderHash | null
 }
 
-export type BlockResponseEncodedBlock = {
-  hash: string,
-  header: Header,
-  body: Array<Array<number>>,
-  receipt: null,
-  messageQueue: null,
-  justification: Justification
-};
-
 export type BlockResponseMessageBlock = {
   hash: Uint8Array,
   header: Header,
-  importable: Uint8Array,
-  justification: Justification,
-  number: BN
+  encoded: Uint8Array,
+  justification: Uint8Array // Justification
 }
 
 export type BlockResponseMessage = {

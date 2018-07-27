@@ -123,7 +123,7 @@ export default class Peer extends E3.EventEmitter implements PeerInterface {
       const encoded = message.encode();
       const length = varint.encode(encoded.length + 1);
 
-      this.l.debug(() => `sending ${u8aToHex(encoded)}`);
+      // this.l.debug(() => `sending ${u8aToHex(encoded)}`);
 
       this.pushable.push(
         u8aToBuffer(

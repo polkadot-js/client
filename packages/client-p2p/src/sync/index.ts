@@ -4,7 +4,7 @@
 
 import { Config } from '@polkadot/client/types';
 import { ChainInterface } from '@polkadot/client-chains/types';
-import { BlockRequestMessageField, BlockResponseMessage, BlockResponseMessageBlock } from '@polkadot/client-p2p-messages/types';
+import { BlockAttr, BlockResponseMessage, BlockResponseMessageBlock } from '@polkadot/client-p2p-messages/types';
 import { Logger } from '@polkadot/util/types';
 import { PeerInterface, SyncStatus } from '../types';
 import { SyncInterface, SyncState$Request, SyncState$BlockRequests, SyncState$BlockQueue } from './types';
@@ -36,7 +36,7 @@ export default class Sync extends E3.EventEmitter implements SyncInterface {
     this.l = logger('sync');
   }
 
-  getBlockData (fields: Array<BlockRequestMessageField>, hash: Uint8Array): BlockResponseMessageBlock {
+  getBlockData (fields: Array<BlockAttr>, hash: Uint8Array): BlockResponseMessageBlock {
     const { body, header } = decodeBlock(
       this.chain.blocks.block.get(hash)
     );
@@ -70,11 +70,11 @@ export default class Sync extends E3.EventEmitter implements SyncInterface {
     let count = 0;
 
     while (this.blockQueue[nextNumber.toString()]) {
-      const { hash, importable } = this.blockQueue[nextNumber.toString()];
+      const { hash, encoded } = this.blockQueue[nextNumber.toString()];
 
       this.l.debug(() => `Importing block #${nextNumber.toString()}, ${u8aToHex(hash)}`);
 
-      if (!this.chain.executor.importBlock(importable)) {
+      if (!this.chain.executor.importBlock(encoded)) {
         break;
       }
 
@@ -135,13 +135,14 @@ export default class Sync extends E3.EventEmitter implements SyncInterface {
 
     const count = blocks.reduce((count: number, block) => {
       const hasImported = this.chain.blocks.block.get(block.hash).length !== 0;
-      const hasQueued = !!this.blockQueue[block.number.toString()];
+      const blockNumber = block.header.number.toString();
+      const hasQueued = !!this.blockQueue[blockNumber];
 
       if (hasImported && hasQueued) {
         return count;
       }
 
-      this.blockQueue[block.number.toString()] = block;
+      this.blockQueue[blockNumber] = block;
 
       return count + 1;
     }, 0);
@@ -162,8 +163,6 @@ export default class Sync extends E3.EventEmitter implements SyncInterface {
     this.l.debug(() => `Requesting blocks from ${peer.shortId}, #${from.toString()} -`);
 
     const request = new BlockRequest({
-      direction: 'Ascending',
-      fields: ['Body', 'Header', 'Justification'],
       from,
       id: peer.getNextId()
     });

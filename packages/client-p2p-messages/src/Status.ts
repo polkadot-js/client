@@ -16,9 +16,14 @@ import u8aToHex from '@polkadot/util/u8a/toHex';
 
 import BaseMessage from './BaseMessage';
 
+const ROLES_OFF = 4;
+const BEST_OFF = ROLES_OFF + 1;
+const HASH_OFF = BEST_OFF + 8;
+const GEN_OFF = HASH_OFF + 32;
+const CHAIN_OFF = GEN_OFF + 32;
+
 export default class Status extends BaseMessage implements MessageInterface, StatusMessage {
   static type = 0;
-  readonly type = Status.type;
 
   bestHash: HeaderHash;
   bestNumber: BlockNumber;
@@ -62,11 +67,11 @@ export default class Status extends BaseMessage implements MessageInterface, Sta
 
   static decode (u8a: Uint8Array): Status {
     return new Status({
-      version: u8aToBn(u8a.subarray(0, 4), true).toNumber(),
-      roles: rolesFromId(u8a[4]),
-      bestNumber: u8aToBn(u8a.subarray(5, 13), true),
-      bestHash: u8a.slice(13, 45),
-      genesisHash: u8a.slice(45, 77)
+      version: u8aToBn(u8a.subarray(0, ROLES_OFF), true).toNumber(),
+      roles: rolesFromId(u8a[ROLES_OFF]),
+      bestNumber: u8aToBn(u8a.subarray(BEST_OFF, HASH_OFF), true),
+      bestHash: u8a.slice(HASH_OFF, GEN_OFF),
+      genesisHash: u8a.slice(GEN_OFF, CHAIN_OFF)
       // ignoring chainStatus for now
     });
   }

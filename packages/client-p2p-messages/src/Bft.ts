@@ -10,7 +10,6 @@ import BaseMessage from './BaseMessage';
 
 export default class Bft extends BaseMessage implements MessageInterface, BftMessage {
   static type = 5;
-  readonly type = Bft.type;
 
   constructor () {
     super(Bft.type);
