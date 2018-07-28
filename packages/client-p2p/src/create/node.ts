@@ -7,7 +7,6 @@ import { Config } from '@polkadot/client/types';
 import { Logger } from '@polkadot/util/types';
 
 import Libp2p from 'libp2p';
-import Ping from 'libp2p-ping';
 
 import createModules from './modules';
 import createListener from './listener';
@@ -31,14 +30,10 @@ export default async function createNode ({ p2p: { address, nodes = [], port } }
 
   l.log(`creating Libp2p with ${addrs.join(', ')}`);
 
-  const libp2p = new Libp2p({
+  return new Libp2p({
     config,
     modules,
     peerBook,
     peerInfo
   });
-
-  Ping.mount(libp2p);
-
-  return libp2p;
 }

@@ -4,7 +4,7 @@
 
 import { Role } from '@polkadot/primitives/role';
 
-const ADDRESS = '0.0.0.0';
+const ADDRESS = '127.0.0.1';
 const CLIENT_ID = 'polkadot-js/0.0.0';
 const MAX_PEERS = 25;
 const MAX_SYNC_BLOCKS = 64;
@@ -14,14 +14,12 @@ const PROTOCOL_BASE = '/substrate';
 const PROTOCOL_TYPE = '/dot';
 const PROTOCOL_VERSION = 1;
 const PROTOCOL = `${PROTOCOL_BASE}${PROTOCOL_TYPE}/${PROTOCOL_VERSION}`;
-const PING_PROTOCOL = '/ipfs/ping/1.0.0';
 
 export default {
   ADDRESS,
   CLIENT_ID,
   MAX_PEERS,
   MAX_SYNC_BLOCKS,
-  PING_PROTOCOL,
   PORT,
   PROTOCOL,
   PROTOCOL_BASE,
