@@ -11,6 +11,7 @@ function handleBlockResponse (self: P2pInterface, peer: PeerInterface, message: 
   self.l.debug(() => [peer.shortId, 'BlockResponse', JSON.stringify(message)]);
 
   self.sync.queueBlocks(peer, message);
+  self.sync.requestBlocks(peer);
 }
 
 (handleBlockResponse as Handler).type = BlockResponse.type;
