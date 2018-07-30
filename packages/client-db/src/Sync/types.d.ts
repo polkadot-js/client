@@ -2,9 +2,11 @@
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
 
-export type MessageTypeRead = 'get' | 'root';
+import { DbConfig$Type } from '../types';
 
-export type MessageTypeWrite = 'checkpoint' | 'commit' | 'del' | 'put' | 'revert';
+export type MessageTypeRead = 'get' | 'getRoot';
+
+export type MessageTypeWrite = 'checkpoint' | 'commit' | 'del' | 'put' | 'revert' | 'setRoot';
 
 export type MessageType = MessageTypeRead | MessageTypeWrite;
 
@@ -18,3 +20,8 @@ export type Message = MessageData & {
   state: Int32Array,
   type: MessageType
 }
+
+export type WorkerData = {
+  path: string,
+  type: DbConfig$Type
+};

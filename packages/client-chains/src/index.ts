@@ -3,11 +3,15 @@
 // of the ISC license. See the LICENSE file for details.
 
 import { Config } from '@polkadot/client/types';
-import { BaseDb, TrieDb } from '@polkadot/client-db/types';
 import { BlockDb, StateDb } from '@polkadot/client-db-chain/types';
 import { ExecutorInterface } from '@polkadot/client-wasm/types';
 import { ChainInterface, ChainGenesis, ChainJson } from './types';
 
+import path from 'path';
+import HashDiskDb from '@polkadot/client-db/Hash/Disk';
+import HashMemoryDb from '@polkadot/client-db/Hash/Memory';
+import TrieDiskDb from '@polkadot/client-db/Trie/Disk';
+import TrieMemoryDb from '@polkadot/client-db/Trie/Memory';
 import createBlockDb from '@polkadot/client-db-chain/block';
 import createStateDb from '@polkadot/client-db-chain/state';
 import createRuntime from '@polkadot/client-runtime/index';
@@ -19,6 +23,7 @@ import storage from '@polkadot/storage';
 import key from '@polkadot/storage/key';
 import assert from '@polkadot/util/assert';
 import hexToU8a from '@polkadot/util/hex/toU8a';
+import u8aToHex from '@polkadot/util/u8a/toHex';
 import blake2Asu8a from '@polkadot/util-crypto/blake2/asU8a';
 import trieRoot from '@polkadot/trie-hash/root';
 
@@ -31,14 +36,23 @@ export default class Chain implements ChainInterface {
   readonly genesis: ChainGenesis;
   readonly state: StateDb;
 
-  constructor (config: Config, stateDb: TrieDb, blockDb: BaseDb) {
+  constructor (config: Config) {
+    this.chain = this.load(config.chain);
+
+    const isDisk = config.db && config.db.type === 'disk';
+    const genesisRoot = this.calcGenesisRoot();
+    const dbPath = isDisk ? path.join(config.db.path, 'chains', `${this.chain.id}-${u8aToHex(genesisRoot)}`) : '.';
+
+    const stateDb = isDisk ? new TrieDiskDb(path.join(dbPath, 'state')) : new TrieMemoryDb();
+    const blockDb = isDisk ? new HashDiskDb(path.join(dbPath, 'block')) : new HashMemoryDb();
     const runtime = createRuntime(stateDb);
 
-    this.chain = this.load(config.chain);
     this.blocks = createBlockDb(blockDb);
     this.state = createStateDb(stateDb);
     this.genesis = this.initGenesis();
     this.executor = new Executor(config, this.blocks, this.state, runtime);
+
+    console.log('checking', u8aToHex(genesisRoot), u8aToHex(this.genesis.header.stateRoot));
   }
 
   // TODO We should load chains from json files as well
@@ -50,10 +64,24 @@ export default class Chain implements ChainInterface {
     return chain;
   }
 
+  private calcGenesisRoot (): Uint8Array {
+    const { genesis: { raw } } = this.chain;
+
+    return trieRoot(
+      Object.keys(raw).map((key) => ({
+        k: hexToU8a(key),
+        v: hexToU8a(raw[key])
+      }))
+    );
+  }
+
   private initGenesis () {
+    console.error('updating statedb');
     this.initGenesisState();
 
     const genesis = this.initGenesisBlock();
+
+    console.error('updating blockdb');
 
     this.blocks.bestHash.set(genesis.headerHash);
     this.blocks.bestNumber.set(0);
@@ -73,7 +101,7 @@ export default class Chain implements ChainInterface {
 
     const block = createBlock({
       header: {
-        stateRoot: this.state.db.trieRoot(),
+        stateRoot: this.state.db.getRoot(),
         extrinsicsRoot: trieRoot([])
       }
     });

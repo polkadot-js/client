@@ -2,7 +2,7 @@
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
 
-import { TrieDb } from './types';
+import { TrieDb } from '../types';
 
 import isUndefined from '@polkadot/util/is/undefined';
 import logger from '@polkadot/util/logger';
@@ -24,7 +24,7 @@ export default class OverlayDb implements TrieDb {
   }
 
   checkpoint () {
-    l.debug(() => ['checkpoint at', u8aToHex(this.trieRoot())]);
+    l.debug(() => ['checkpoint at', u8aToHex(this.getRoot())]);
 
     this.wrapped.checkpoint();
   }
@@ -32,14 +32,14 @@ export default class OverlayDb implements TrieDb {
   commit () {
     this.wrapped.commit();
 
-    l.debug(() => ['committed at', u8aToHex(this.trieRoot())]);
+    l.debug(() => ['committed at', u8aToHex(this.getRoot())]);
   }
 
   revert () {
     this.cache = {};
     this.wrapped.revert();
 
-    l.debug(() => ['reverted to', u8aToHex(this.trieRoot())]);
+    l.debug(() => ['reverted to', u8aToHex(this.getRoot())]);
   }
 
   del (key: Uint8Array): void {
@@ -68,8 +68,12 @@ export default class OverlayDb implements TrieDb {
     return this.wrapped.put(key, value);
   }
 
-  trieRoot (): Uint8Array {
-    return this.wrapped.trieRoot();
+  getRoot (): Uint8Array {
+    return this.wrapped.getRoot();
+  }
+
+  setRoot (value: Uint8Array): void {
+    return this.wrapped.setRoot(value);
   }
 
   terminate () {

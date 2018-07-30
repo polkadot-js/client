@@ -11,7 +11,6 @@ import u8aToBn from '@polkadot/util/u8a/toBn';
 import bnToU8a from '@polkadot/util/bn/toU8a';
 
 import BaseMessage from './BaseMessage';
-import u8aToHex from '../../../node_modules/@polkadot/util/u8a/toHex';
 
 const COUNT_OFF = 8;
 const BLOCK_OFF = COUNT_OFF + 4;

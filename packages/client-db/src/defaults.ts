@@ -7,12 +7,10 @@ import { DbPathPrefix, DbConfig$Type } from './types';
 import os from 'os';
 import path from 'path';
 
-const PREFIX_DB: DbPathPrefix = 'database';
-const PATH = path.join(os.homedir(), '.@polkadot');
+const PATH = path.join(os.homedir(), '.polkadot-js');
 const TYPE: DbConfig$Type = 'memory';
 
 export default {
-  PREFIX_DB,
   PATH,
   TYPE
 };

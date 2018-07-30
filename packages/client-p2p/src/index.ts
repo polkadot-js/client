@@ -212,7 +212,7 @@ export default class P2p extends E3.EventEmitter implements P2pInterface {
         this.node, this.node.dialProtocol, peer.peerInfo, defaults.PROTOCOL
       );
 
-      this._pingPeer(peer);
+      await this._pingPeer(peer);
 
       peer.addConnection(connection, true);
 

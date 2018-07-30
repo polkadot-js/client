@@ -3,7 +3,7 @@
 // of the ISC license. See the LICENSE file for details.
 
 import BN from 'bn.js';
-import { BaseDb, TrieDb } from '@polkadot/client-db/types';
+import { AsyncBaseDb, BaseDb, TrieDb } from '@polkadot/client-db/types';
 import { Storage$Key$Value } from '@polkadot/storage/types';
 
 export type StorageMethod<P, R> = {
@@ -28,7 +28,7 @@ export type StorageMethod$ArrayU8a = StorageMethod<Array<Uint8Array>, Array<Uint
 export type StorageMethods = StorageMethod$Account | StorageMethod$Bn | StorageMethod$Bool | StorageMethod$U8a | StorageMethod$ArrayU8a | StorageMethod$ArrayAccount;
 
 export type BlockDb = {
-  db: BaseDb,
+  db: AsyncBaseDb,
   bestHash: StorageMethod$U8a,
   bestNumber: StorageMethod$Bn,
   block: StorageMethod$U8a,

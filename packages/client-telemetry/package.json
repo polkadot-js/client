@@ -35,7 +35,7 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.0.0-beta.51",
-    "@polkadot/util": "^0.26.30",
+    "@polkadot/util": "^0.26.33",
     "websocket": "^1.0.26"
   }
 }

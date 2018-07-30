@@ -2,10 +2,10 @@
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
 
-import { TrieDb } from '../types';
+import { TrieDb, DbConfig$Type } from '../types';
 import { Message, MessageData, MessageType, MessageTypeRead, MessageTypeWrite } from './types';
 
-import path from 'path';
+import nodePath from 'path';
 import { Worker } from 'worker_threads';
 import promisify from '@polkadot/util/promisify';
 
@@ -16,11 +16,16 @@ const emptyBuffer = new Uint8Array();
 export default class SyncDb implements TrieDb {
   private worker: WorkerThreads.Worker;
 
-  constructor () {
+  constructor (type: DbConfig$Type = 'memory', path: string = '.') {
     // NOTE Node 10.6 relative paths for Workers are broken - adding here tries to load
     // the worker from /client, not client-db.
     // FIXME We should be passing the trie params info into construction
-    this.worker = new Worker(path.join(__dirname, './worker/index.js'));
+    this.worker = new Worker(nodePath.join(__dirname, './worker/index.js'), {
+      workerData: {
+        path,
+        type
+      }
+    });
   }
 
   checkpoint (): void {
@@ -47,8 +52,12 @@ export default class SyncDb implements TrieDb {
     this._executeWrite('put', key, value);
   }
 
-  trieRoot (): Uint8Array {
-    return this._executeRead('root') as Uint8Array;
+  getRoot (): Uint8Array {
+    return this._executeRead('getRoot') as Uint8Array;
+  }
+
+  setRoot (value: Uint8Array): void {
+    this._executeWrite('setRoot', undefined, value);
   }
 
   async terminate () {
