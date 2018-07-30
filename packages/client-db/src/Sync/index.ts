@@ -5,9 +5,9 @@
 import { TrieDb, DbConfig$Type } from '../types';
 import { Message, MessageData, MessageType, MessageTypeRead, MessageTypeWrite } from './types';
 
-import nodePath from 'path';
+import path from 'path';
 import { Worker } from 'worker_threads';
-import promisify from '@polkadot/util/promisify';
+// import promisify from '@polkadot/util/promisify';
 
 import commands from './worker/commands';
 
@@ -16,16 +16,18 @@ const emptyBuffer = new Uint8Array();
 export default class SyncDb implements TrieDb {
   private worker: WorkerThreads.Worker;
 
-  constructor (type: DbConfig$Type = 'memory', path: string = '.') {
+  constructor (type: DbConfig$Type = 'memory', dbPath: string = '.') {
     // NOTE Node 10.6 relative paths for Workers are broken - adding here tries to load
     // the worker from /client, not client-db.
-    // FIXME We should be passing the trie params info into construction
-    this.worker = new Worker(nodePath.join(__dirname, './worker/index.js'), {
-      workerData: {
-        path,
-        type
+    this.worker = new Worker(
+      path.join(__dirname, './worker/index.js'),
+      {
+        workerData: {
+          path: dbPath,
+          type
+        }
       }
-    });
+    );
   }
 
   checkpoint (): void {
@@ -61,14 +63,19 @@ export default class SyncDb implements TrieDb {
   }
 
   async terminate () {
+    this.worker.unref();
+    this.worker = null;
     // TODO We should cleanup the trie instance gracefully, so another message here
     // to cleanup and then the termination up next
-    return promisify(this.worker, this.worker.terminate);
+    // return promisify(this.worker, this.worker.terminate);
   }
 
   // Sends a message to the worker, waiting until started
   private _waitOnStart (type: MessageType, message: MessageData): Int32Array {
+    console.error('_waitOnStart', type);
     const state = new Int32Array(new SharedArrayBuffer(8));
+
+    console.error('state', state);
 
     this.worker.postMessage({
       ...message,
@@ -76,13 +83,16 @@ export default class SyncDb implements TrieDb {
       type
     } as Message);
 
-    Atomics.wait(state, 0, commands.START);
+    Atomics.wait(state, 0, commands.START, 5000);
+
+    console.error('_waitOnStart', type, 'started');
 
     return state;
   }
 
   // Notifies the worker that it should continue filling the result buffer
   private _waitOnRead (state: Int32Array): void {
+    console.error('_waitOnRead');
     state[0] = commands.FILL;
 
     // @ts-ignore Node is a bit ahead, still to be renamed
@@ -93,6 +103,7 @@ export default class SyncDb implements TrieDb {
   // Ok, this is not something that returns a value, just send the message and
   // return when we the call has been done
   private _executeWrite (type: MessageTypeWrite, key?: Uint8Array, value?: Uint8Array): void {
+    console.error('_executeWrite', type);
     this._waitOnStart(type, {
       buffer: emptyBuffer,
       key,
@@ -102,6 +113,7 @@ export default class SyncDb implements TrieDb {
 
   // Sends a message to the worker, reading and returning the actual result
   private _executeRead (type: MessageTypeRead, key?: Uint8Array, value?: Uint8Array): Uint8Array | null {
+    console.error('_executeRead', type);
     // The shared data buffer that will be used by the worker to send info back
     const shared = new SharedArrayBuffer(4096);
     const buffer = new Uint8Array(shared);
@@ -121,6 +133,7 @@ export default class SyncDb implements TrieDb {
 
   // Read the size of a structure to be returned from the stream
   private _readSize (state: Int32Array, shared: SharedArrayBuffer): number {
+    console.error('_readSize');
     const view = new DataView(shared);
 
     // expect to read SIZE, END/ERROR here

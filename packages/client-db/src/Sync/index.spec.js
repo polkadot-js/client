@@ -15,7 +15,7 @@ describe('SyncDb', () => {
 
   it('starts with the default root', () => {
     expect(
-      memory.trieRoot()
+      memory.getRoot()
     ).toEqual(EMPTY_ROOT);
   });
 
@@ -23,7 +23,7 @@ describe('SyncDb', () => {
     memory.put(toU8a('hello'), toU8a('world'));
 
     expect(
-      memory.trieRoot()
+      memory.getRoot()
     ).toEqual(
       HELLO_ROOT
     );
@@ -33,7 +33,7 @@ describe('SyncDb', () => {
     memory.del(toU8a('hello'));
 
     expect(
-      memory.trieRoot()
+      memory.getRoot()
     ).toEqual(
       EMPTY_ROOT
     );
@@ -43,7 +43,7 @@ describe('SyncDb', () => {
     memory.put(toU8a('hello'), toU8a('world'));
 
     expect(
-      memory.trieRoot()
+      memory.getRoot()
     ).toEqual(
       HELLO_ROOT
     );
@@ -53,7 +53,7 @@ describe('SyncDb', () => {
     memory.put(toU8a('foo'), toU8a('bar'));
 
     expect(
-      memory.trieRoot()
+      memory.getRoot()
     ).toEqual(
       FOO_ROOT
     );
@@ -63,7 +63,7 @@ describe('SyncDb', () => {
     memory.del(toU8a('hello'));
 
     expect(
-      memory.trieRoot()
+      memory.getRoot()
     ).toEqual(
       toU8a('0x99650c730bbb99f6f58ce8b09bca2a8d90b36ac662e71bf81ec401ed23d199fb')
     );
@@ -73,7 +73,7 @@ describe('SyncDb', () => {
     memory.put(toU8a('hello'), toU8a('world'));
 
     expect(
-      memory.trieRoot()
+      memory.getRoot()
     ).toEqual(
       FOO_ROOT
     );
@@ -83,7 +83,7 @@ describe('SyncDb', () => {
     memory.put(toU8a('hello'), toU8a('mars'));
 
     expect(
-      memory.trieRoot()
+      memory.getRoot()
     ).toEqual(
       toU8a('0x116267e482ab94eb8824af425ea7f20ee84d10a8fa735f26204d80000e2a907e')
     );

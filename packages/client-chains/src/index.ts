@@ -79,13 +79,16 @@ export default class Chain implements ChainInterface {
     console.error('updating statedb');
     this.initGenesisState();
 
+    console.error('initi genesis');
     const genesis = this.initGenesisBlock();
 
     console.error('updating blockdb');
 
-    this.blocks.bestHash.set(genesis.headerHash);
-    this.blocks.bestNumber.set(0);
-    this.blocks.block.set(genesis.block, genesis.headerHash);
+    Promise.all([
+      this.blocks.bestHash.set(genesis.headerHash),
+      this.blocks.bestNumber.set(0),
+      this.blocks.block.set(genesis.block, genesis.headerHash)
+    ]);
 
     return genesis;
   }

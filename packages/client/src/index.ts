@@ -82,7 +82,7 @@ class Client {
     this.informantId = undefined;
   }
 
-  private runInformant = (): void => {
+  private async runInformant = (): void => {
     if (isUndefined(this.chain) || isUndefined(this.p2p) || isUndefined(this.rpc)) {
       this.stopInformant();
 
@@ -90,8 +90,8 @@ class Client {
     }
 
     const numPeers = this.p2p.getNumPeers();
-    const bestHash = this.chain.blocks.bestHash.get();
-    const bestNumber = this.chain.blocks.bestNumber.get();
+    const bestHash = await this.chain.blocks.bestHash.get();
+    const bestNumber = await this.chain.blocks.bestNumber.get();
     const status = this.p2p.sync.status;
 
     this.l.log(`${status} (${numPeers} peers), #${bestNumber.toNumber()}, ${u8aToHex(bestHash, 48)}`);

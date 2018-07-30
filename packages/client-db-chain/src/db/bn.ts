@@ -5,7 +5,7 @@
 import BN from 'bn.js';
 import { SectionItem } from '@polkadot/params/types';
 import { Storage$Key$Value } from '@polkadot/storage/types';
-import { BaseDb } from '@polkadot/client-db/types';
+import { AsyncBaseDb } from '@polkadot/client-db/types';
 import { StorageMethod$Bn } from '../types';
 
 import bnToU8a from '@polkadot/util/bn/toU8a';
@@ -14,18 +14,18 @@ import u8aToBn from '@polkadot/util/u8a/toBn';
 import createBase from './base';
 import creator from '../key';
 
-export default function decodeBn <T> (db: BaseDb, key: SectionItem<T>, bitLength: 32 | 64 | 128): StorageMethod$Bn {
+export default function decodeBn <T> (db: AsyncBaseDb, key: SectionItem<T>, bitLength: 32 | 64 | 128): StorageMethod$Bn {
   const createKey = creator(key);
   const base = createBase<BN | number>(db);
 
   return {
-    del: (...keyParams: Array<Storage$Key$Value>): void =>
+    del: (...keyParams: Array<Storage$Key$Value>): Promise<void> =>
       base.del(createKey(keyParams)),
-    get: (...keyParams: Array<Storage$Key$Value>): BN =>
+    get: async (...keyParams: Array<Storage$Key$Value>): Promise<BN> =>
       u8aToBn(
-        base.get(createKey(keyParams)), true
+        await base.get(createKey(keyParams)), true
       ),
-    set: (value: BN | number, ...keyParams: Array<Storage$Key$Value>): void =>
+    set: (value: BN | number, ...keyParams: Array<Storage$Key$Value>): Promise<void> =>
       base.set(createKey(keyParams), value, bnToU8a(value, bitLength, true)),
     onUpdate: (updater: (value: BN | number, raw: Uint8Array) => void): void =>
       base.onUpdate(updater)

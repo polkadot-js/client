@@ -40,9 +40,9 @@ describe('generateBlock', () => {
   const stateDb = new MemoryDb();
   const chain = new Chain(config, stateDb, new HashDb());
 
-  it('generates a basic block (empty)', () => {
+  it('generates a basic block (empty)', async () => {
     expect(
-      chain.executor.generateBlock([], 54321)
+      await chain.executor.generateBlock([], 54321)
     ).toEqual(
       u8aConcat(
         new Uint8Array([
@@ -59,9 +59,9 @@ describe('generateBlock', () => {
     );
   });
 
-  it('generates a basic block (with real externals)', () => {
+  it('generates a basic block (with real externals)', async () => {
     expect(
-      chain.executor.generateBlock([
+      await chain.executor.generateBlock([
         encodeUnchecked(keyring.alice, 0)(
           methods.staking.public.transfer,
           [keyring.bob.publicKey(), 69]
@@ -70,24 +70,24 @@ describe('generateBlock', () => {
     ).not.toBeNull();
   });
 
-  it.skip('generated blocks are importable', () => {
+  it.skip('generated blocks are importable', async () => {
     expect(
-      chain.executor.importBlock(
-        chain.executor.generateBlock([])
+      await chain.executor.importBlock(
+        await chain.executor.generateBlock([])
       )
     ).not.toBeNull();
   });
 
   // NOTE Timestamps now check for elapsed times
-  it.skip('generated blocks are importable on top of each other', () => {
+  it.skip('generated blocks are importable on top of each other', async () => {
     expect(
-      chain.executor.importBlock(
-        chain.executor.generateBlock([], 54321)
+      await chain.executor.importBlock(
+        await chain.executor.generateBlock([], 54321)
       )
     ).not.toBeNull();
     expect(
-      chain.executor.importBlock(
-        chain.executor.generateBlock([], 54321 + 10)
+      await chain.executor.importBlock(
+        await chain.executor.generateBlock([], 54321 + 10)
       )
     ).not.toBeNull();
   });

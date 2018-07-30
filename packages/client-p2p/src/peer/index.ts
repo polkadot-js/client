@@ -49,7 +49,7 @@ export default class Peer extends E3.EventEmitter implements PeerInterface {
     this.shortId = stringShorten(this.id);
   }
 
-  addConnection (connection: LibP2pConnection, isWritable: boolean): void {
+  async addConnection (connection: LibP2pConnection, isWritable: boolean): Promise<void> {
     this._receive(connection);
 
     if (isWritable) {
@@ -63,8 +63,8 @@ export default class Peer extends E3.EventEmitter implements PeerInterface {
       this.send(
         new Status({
           roles: this.config.roles,
-          bestNumber: this.chain.blocks.bestNumber.get(),
-          bestHash: this.chain.blocks.bestHash.get(),
+          bestNumber: await this.chain.blocks.bestNumber.get(),
+          bestHash: await this.chain.blocks.bestHash.get(),
           genesisHash: this.chain.genesis.headerHash,
           version: defaults.PROTOCOL_VERSION
         })

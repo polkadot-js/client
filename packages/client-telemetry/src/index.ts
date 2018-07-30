@@ -70,23 +70,23 @@ export default class Telemetry implements TelemetryInterface {
     };
   }
 
-  blockImported (): void {
-    const bestHash = this.blocks.bestHash.get();
-    const bestNumber = this.blocks.bestNumber.get();
+  async blockImported () {
+    const bestHash = await this.blocks.bestHash.get();
+    const bestNumber = await this.blocks.bestNumber.get();
 
     this.send(new BlockImport(bestHash, bestNumber));
   }
 
-  intervalInfo (peers: number, status: SyncStatus): void {
-    const bestHash = this.blocks.bestHash.get();
-    const bestNumber = this.blocks.bestNumber.get();
+  async intervalInfo (peers: number, status: SyncStatus) {
+    const bestHash = await this.blocks.bestHash.get();
+    const bestNumber = await this.blocks.bestNumber.get();
 
     this.send(new Interval(bestHash, bestNumber, peers, status));
   }
 
-  private sendInitial () {
-    const bestHash = this.blocks.bestHash.get();
-    const bestNumber = this.blocks.bestNumber.get();
+  private async sendInitial () {
+    const bestHash = await this.blocks.bestHash.get();
+    const bestNumber = await this.blocks.bestNumber.get();
 
     this.send(new Connected(this.chain, this.name));
     this.send(new Started(bestHash, bestNumber));

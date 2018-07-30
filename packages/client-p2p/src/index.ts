@@ -147,7 +147,8 @@ export default class P2p extends E3.EventEmitter implements P2pInterface {
           const peer = peers.add(peerInfo);
 
           peers.log('protocol', peer);
-          peer.addConnection(connection, false);
+
+          await peer.addConnection(connection, false);
 
           if (!peer.isWritable()) {
             this._dialPeers(peer);

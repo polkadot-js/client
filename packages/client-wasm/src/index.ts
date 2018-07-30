@@ -102,9 +102,10 @@ export default class Executor implements ExecutorInterface {
     return result;
   }
 
-  generateBlock (utxs: Array<UncheckedRaw>, timestamp: number = Math.ceil(Date.now() / 1000)): Uint8Array {
+  async generateBlock (utxs: Array<UncheckedRaw>, timestamp: number = Math.ceil(Date.now() / 1000)): Promise<Uint8Array> {
     const start = Date.now();
-    const nextNumber = this.blockDb.bestNumber.get().addn(1);
+    const bestNumber = await this.blockDb.bestNumber.get();
+    const nextNumber = bestNumber.addn(1);
 
     this.l.debug(() => `Generating block #${nextNumber.toString()}`);
     this.stateDb.db.checkpoint();
@@ -112,7 +113,7 @@ export default class Executor implements ExecutorInterface {
     const extrinsics = this.withInherent(timestamp, utxs);
     const header = createHeader({
       number: nextNumber,
-      parentHash: this.blockDb.bestHash.get()
+      parentHash: await this.blockDb.bestHash.get()
     }, extrinsics);
     const headerRaw = encodeHeader(header);
 
@@ -136,7 +137,7 @@ export default class Executor implements ExecutorInterface {
     return block;
   }
 
-  importBlock (block: Uint8Array): Executor$BlockImportResult {
+  async importBlock (block: Uint8Array): Promise<Executor$BlockImportResult> {
     const start = Date.now();
 
     this.l.debug(() => 'Importing block');
@@ -151,9 +152,11 @@ export default class Executor implements ExecutorInterface {
     const { body, extrinsics, header, number } = decodeRaw(block);
     const headerHash = blake2Asu8a(header, 256);
 
-    this.blockDb.bestHash.set(headerHash);
-    this.blockDb.bestNumber.set(number);
-    this.blockDb.block.set(block, headerHash);
+    await Promise.all([
+      this.blockDb.bestHash.set(headerHash),
+      this.blockDb.bestNumber.set(number),
+      this.blockDb.block.set(block, headerHash)
+    ]);
 
     this.l.debug(() => `Imported block #${number.toString()} (${Date.now() - start}ms)`);
 

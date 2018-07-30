@@ -5,21 +5,29 @@
 // import { Message } from '../types';
 // import { FnMap } from './types;
 
-const leveldown = require('leveldown');
+console.error('1');
+
+// const leveldown = require('leveldown');
 const memdown = require('memdown');
-// import { parentPort } from 'worker_threads';
-const worker = require('worker_threads');
+// import { parentPort, workerData } from 'worker_threads';
+const { parentPort, workerData } = require('worker_threads');
 // import Trie from '@polkadot/trie-db';
 const Trie = require('@polkadot/trie-db').default;
 
+console.error('2');
+
 const { notifyOnDone, notifyOnValue } = require('./notify');
+
+console.error('3');
 
 // @ts-ignore Oops, we need the params here
 const trie = new Trie(
-  worker.workerData.type === 'disk'
-    ? leveldown(worker.workerData.path)
-    : memdown()
+  workerData.type === 'disk'
+    ? leveldown(workerData.path)
+    : undefined // memdown()
 );
+
+console.error('4');
 
 // const functions: FnMap = {
 const functions = {
@@ -38,8 +46,8 @@ const functions = {
     notifyOnDone(state, () =>
       trie.del(key)
     ),
-  // get: async ({ buffer, key, state }: Message) =>
-  get: async ({ buffer, key, state }) =>
+  // get: ({ buffer, key, state }: Message) =>
+  get: ({ buffer, key, state }) =>
     notifyOnValue(state, buffer, () =>
       trie.get(key)
     ),
@@ -63,11 +71,13 @@ const functions = {
     notifyOnDone(state, async () => {
       trie.root = value;
     })
-
 };
 
-// worker.parentPort.on('message', (message: Message): void => {
-  worker.parentPort.on('message', (message) => {
+console.error('trie', trie);
+
+// parentPort.on('message', (message: Message): void => {
+parentPort.on('message', (message) => {
+  console.error('onMessage', message.type);
   const fn = functions[message.type];
 
   if (fn) {

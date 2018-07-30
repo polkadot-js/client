@@ -7,9 +7,9 @@ import { AsyncBaseDb, BaseDb, TrieDb } from '@polkadot/client-db/types';
 import { Storage$Key$Value } from '@polkadot/storage/types';
 
 export type StorageMethod<P, R> = {
-  del: (...params: Array<Storage$Key$Value>) => void,
-  get: (...params: Array<Storage$Key$Value>) => R,
-  set: (value: P, ...params: Array<Storage$Key$Value>) => void,
+  del: (...params: Array<Storage$Key$Value>) => Promise<void>,
+  get: (...params: Array<Storage$Key$Value>) => Promise<R>,
+  set: (value: P, ...params: Array<Storage$Key$Value>) => Promise<void>,
   onUpdate: (callback: (value: P) => void) => void
 }
 
@@ -98,15 +98,15 @@ export type StateDb$Timestamp = {
 };
 
 export type StateDb = {
-  db: TrieDb,
-  consensus: StateDb$Consensus,
-  council: StateDb$Council,
-  councilVoting: StateDb$CouncilVoting,
-  democracy: StateDb$Democracy,
-  governance: StateDb$Governance,
-  parachains: StateDb$Parachains,
-  session: StateDb$Session,
-  staking: StateDb$Staking,
-  system: StateDb$System,
-  timestamp: StateDb$Timestamp
+  db: TrieDb
+  // consensus: StateDb$Consensus,
+  // council: StateDb$Council,
+  // councilVoting: StateDb$CouncilVoting,
+  // democracy: StateDb$Democracy,
+  // governance: StateDb$Governance,
+  // parachains: StateDb$Parachains,
+  // session: StateDb$Session,
+  // staking: StateDb$Staking,
+  // system: StateDb$System,
+  // timestamp: StateDb$Timestamp
 };
