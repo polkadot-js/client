@@ -82,7 +82,7 @@ class Client {
     this.informantId = undefined;
   }
 
-  private async runInformant = (): void => {
+  private runInformant = async () => {
     if (isUndefined(this.chain) || isUndefined(this.p2p) || isUndefined(this.rpc)) {
       this.stopInformant();
 

@@ -124,7 +124,7 @@ export default class Sync extends E3.EventEmitter implements SyncInterface {
     // );
   }
 
-  async queueBlocks (peer: PeerInterface, { blocks, id }: BlockResponseMessage): void {
+  async queueBlocks (peer: PeerInterface, { blocks, id }: BlockResponseMessage) {
     const request = this.blockRequests[peer.id];
 
     delete this.blockRequests[peer.id];

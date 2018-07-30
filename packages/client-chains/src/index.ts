@@ -40,8 +40,10 @@ export default class Chain implements ChainInterface {
     this.chain = this.load(config.chain);
 
     const isDisk = config.db && config.db.type === 'disk';
-    const genesisRoot = this.calcGenesisRoot();
-    const dbPath = isDisk ? path.join(config.db.path, 'chains', `${this.chain.id}-${u8aToHex(genesisRoot)}`) : '.';
+    const genesisStateRoot = this.calcGenesisStateRoot();
+    const dbPath = isDisk
+      ? path.join(config.db.path, 'chains', `${this.chain.id}-${u8aToHex(genesisStateRoot)}`)
+      : '.';
 
     const stateDb = isDisk ? new TrieDiskDb(path.join(dbPath, 'state')) : new TrieMemoryDb();
     const blockDb = isDisk ? new HashDiskDb(path.join(dbPath, 'block')) : new HashMemoryDb();
@@ -51,8 +53,6 @@ export default class Chain implements ChainInterface {
     this.state = createStateDb(stateDb);
     this.genesis = this.initGenesis();
     this.executor = new Executor(config, this.blocks, this.state, runtime);
-
-    console.log('checking', u8aToHex(genesisRoot), u8aToHex(this.genesis.header.stateRoot));
   }
 
   // TODO We should load chains from json files as well
@@ -64,7 +64,7 @@ export default class Chain implements ChainInterface {
     return chain;
   }
 
-  private calcGenesisRoot (): Uint8Array {
+  private calcGenesisStateRoot (): Uint8Array {
     const { genesis: { raw } } = this.chain;
 
     return trieRoot(
@@ -76,13 +76,9 @@ export default class Chain implements ChainInterface {
   }
 
   private initGenesis () {
-    console.error('updating statedb');
     this.initGenesisState();
 
-    console.error('initi genesis');
     const genesis = this.initGenesisBlock();
-
-    console.error('updating blockdb');
 
     Promise.all([
       this.blocks.bestHash.set(genesis.headerHash),

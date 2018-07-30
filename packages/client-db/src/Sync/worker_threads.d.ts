@@ -24,6 +24,8 @@ declare namespace WorkerThreads {
 
     on (type: 'error' | 'exit' | 'online' | 'message', cb?: (...params: any[]) => any): void;
     postMessage (message: any): void;
+    ref (): void;
+    unref (): void;
     terminate (cb?: (error: Error | null) => any): void;
   }
 }
