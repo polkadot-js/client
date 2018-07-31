@@ -40,7 +40,7 @@ export type ExecutorInterface = {
   applyExtrinsic (extrinsic: UncheckedRaw): boolean,
   executeBlock (block: Uint8Array): boolean,
   finaliseBlock (header: Uint8Array): Uint8Array,
-  generateBlock (extrinsics: Array<UncheckedRaw>, timestamp?: number): Promise<Uint8Array>,
-  importBlock (block: Uint8Array): Promise<Executor$BlockImportResult>,
+  generateBlock (extrinsics: Array<UncheckedRaw>, timestamp?: number): Uint8Array,
+  importBlock (block: Uint8Array): Executor$BlockImportResult,
   initialiseBlock (header: Uint8Array): boolean
 };

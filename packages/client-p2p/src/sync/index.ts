@@ -36,9 +36,9 @@ export default class Sync extends E3.EventEmitter implements SyncInterface {
     this.l = logger('sync');
   }
 
-  async getBlockData (fields: Array<BlockAttr>, hash: Uint8Array): Promise<BlockResponseMessageBlock> {
+  getBlockData (fields: Array<BlockAttr>, hash: Uint8Array): BlockResponseMessageBlock {
     const { body, header } = decodeBlock(
-      await this.chain.blocks.block.get(hash)
+      this.chain.blocks.block.get(hash)
     );
     const data: BlockResponseMessageBlock = {
       // hash
@@ -63,9 +63,9 @@ export default class Sync extends E3.EventEmitter implements SyncInterface {
     );
   }
 
-  async processBlocks () {
+  processBlocks () {
     const start = Date.now();
-    const bestNumber = await this.chain.blocks.bestNumber.get();
+    const bestNumber = this.chain.blocks.bestNumber.get();
     const startNumber = bestNumber.addn(1);
     let nextNumber = startNumber;
     let count = 0;
@@ -95,36 +95,36 @@ export default class Sync extends E3.EventEmitter implements SyncInterface {
       : 'Idle';
   }
 
-  async provideBlocks (peer: PeerInterface, request: BlockRequest) {
-    // const current = (request.from as BN);
-    // const best = await this.chain.blocks.bestNumber.get();
-    // const blocks = [];
+  provideBlocks (peer: PeerInterface, request: BlockRequest) {
+    const current = (request.from as BN);
+    const best = this.chain.blocks.bestNumber.get();
+    const blocks = [];
 
-    // // FIXME: Also send blocks starting with hash
-    // const max = Math.min(request.max || defaults.MAX_SYNC_BLOCKS, defaults.MAX_SYNC_BLOCKS);
-    // let count = isU8a(request.from) ? max : 0;
-    // const increment = request.direction === 'Ascending' ? new BN(1) : new BN(-1);
+    // FIXME: Also send blocks starting with hash
+    const max = Math.min(request.max || defaults.MAX_SYNC_BLOCKS, defaults.MAX_SYNC_BLOCKS);
+    let count = isU8a(request.from) ? max : 0;
+    const increment = request.direction === 'Ascending' ? new BN(1) : new BN(-1);
 
-    // while (count < max && current.lte(best) && !current.isNeg()) {
-    //   const hash = await this.chain.state.system.blockHashAt.get(current);
+    while (count < max && current.lte(best) && !current.isNeg()) {
+      const hash = this.chain.state.system.blockHashAt.get(current);
 
-    //   blocks.push(
-    //     this.getBlockData(request.fields, hash)
-    //   );
+      blocks.push(
+        this.getBlockData(request.fields, hash)
+      );
 
-    //   count++;
-    //   current.iadd(increment);
-    // }
+      count++;
+      current.iadd(increment);
+    }
 
-    // peer.send(
-    //   new BlockResponse({
-    //     blocks,
-    //     id: request.id
-    //   })
-    // );
+    peer.send(
+      new BlockResponse({
+        blocks,
+        id: request.id
+      })
+    );
   }
 
-  async queueBlocks (peer: PeerInterface, { blocks, id }: BlockResponseMessage) {
+  queueBlocks (peer: PeerInterface, { blocks, id }: BlockResponseMessage) {
     const request = this.blockRequests[peer.id];
 
     delete this.blockRequests[peer.id];
@@ -138,7 +138,7 @@ export default class Sync extends E3.EventEmitter implements SyncInterface {
 
     for (let i = 0; i < blocks.length; i++) {
       const block = blocks[i];
-      const data = await this.chain.blocks.block.get(block.hash);
+      const data = this.chain.blocks.block.get(block.hash);
       const hasImported = data.length !== 0;
       const blockNumber = block.header.number.toString();
       const hasQueued = !!this.blockQueue[blockNumber];
@@ -157,8 +157,8 @@ export default class Sync extends E3.EventEmitter implements SyncInterface {
     this.processBlocks();
   }
 
-  async requestBlocks (peer: PeerInterface) {
-    const bestNumber = await this.chain.blocks.bestNumber.get();
+  requestBlocks (peer: PeerInterface) {
+    const bestNumber = this.chain.blocks.bestNumber.get();
     const from = bestNumber.addn(1);
 
     // TODO: This assumes no stale block downloading

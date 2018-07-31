@@ -80,11 +80,9 @@ export default class Chain implements ChainInterface {
 
     const genesis = this.initGenesisBlock();
 
-    Promise.all([
-      this.blocks.bestHash.set(genesis.headerHash),
-      this.blocks.bestNumber.set(0),
-      this.blocks.block.set(genesis.block, genesis.headerHash)
-    ]);
+    this.blocks.bestHash.set(genesis.headerHash);
+    this.blocks.bestNumber.set(0);
+    this.blocks.block.set(genesis.block, genesis.headerHash);
 
     return genesis;
   }
