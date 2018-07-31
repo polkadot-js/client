@@ -3,8 +3,8 @@
 // of the ISC license. See the LICENSE file for details.
 
 import toU8a from '@polkadot/util/u8a/toU8a';
-import HashDb from '@polkadot/client-db/Hash';
-import MemoryDb from '@polkadot/client-db/Memory';
+import HashDb from '@polkadot/client-db/Hash/Memory';
+import MemoryDb from '@polkadot/client-db/Trie/Memory';
 
 import Chain from '../index';
 

@@ -2,8 +2,8 @@
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
 
-import HashDb from '@polkadot/client-db/Hash';
-import MemoryDb from '@polkadot/client-db/Memory';
+import HashDb from '@polkadot/client-db/Hash/Memory';
+import MemoryDb from '@polkadot/client-db/Trie/Memory';
 import methods from '@polkadot/extrinsics';
 import encodeUnchecked from '@polkadot/extrinsics/codec/encode/unchecked';
 import u8aConcat from '@polkadot/util/u8a/concat';

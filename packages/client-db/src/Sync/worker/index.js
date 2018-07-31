@@ -5,9 +5,10 @@
 // import { Message } from '../types';
 // import { FnMap } from './types;
 
-const leveldown = require('leveldown');
+// const leveldown = require('leveldown');
 const levelup = require('levelup');
 const memdown = require('memdown');
+// const rocksdb = require('rocksdb');
 const { parentPort, threadId, workerData } = require('worker_threads');
 const Trie = require('@polkadot/trie-db').default;
 const encoder = require('@polkadot/trie-db/encoder').default;
@@ -18,7 +19,7 @@ const handlers = {};
 
 function initDb () {
   const downdb = workerData.type === 'disk'
-    ? leveldown(workerData.path)
+    ? rocksdb(workerData.path)
     : memdown();
 
   return workerData.isTrie

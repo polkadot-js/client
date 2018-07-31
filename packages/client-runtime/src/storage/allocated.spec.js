@@ -3,7 +3,7 @@
 // of the ISC license. See the LICENSE file for details.
 /* eslint camelcase: 0 */
 
-import HashDb from '@polkadot/client-db/Hash';
+import HashDb from '@polkadot/client-db/Hash/Memory';
 import logger from '@polkadot/util/logger';
 import u8aFromString from '@polkadot/util/u8a/fromString';
 
