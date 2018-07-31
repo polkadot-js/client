@@ -15,13 +15,8 @@ export type DbConfig = {
 export interface BaseDb {
   del: (key: Uint8Array) => void,
   get: (key: Uint8Array) => Uint8Array | null,
-  put: (key: Uint8Array, value: Uint8Array) => void
-}
-
-export interface AsyncBaseDb {
-  del: (key: Uint8Array) => Promise<void>,
-  get: (key: Uint8Array) => Promise<Uint8Array | null>,
-  put: (key: Uint8Array, value: Uint8Array) => Promise<void>
+  put: (key: Uint8Array, value: Uint8Array) => void,
+  terminate: () => Promise<any>
 }
 
 export interface TrieDb extends BaseDb {
@@ -29,6 +24,5 @@ export interface TrieDb extends BaseDb {
   commit: () => void,
   revert: () => void,
   getRoot: () => Uint8Array,
-  setRoot: (value: Uint8Array) => void,
-  terminate: () => Promise<any>
+  setRoot: (value: Uint8Array) => void
 }

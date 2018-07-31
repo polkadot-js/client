@@ -18,7 +18,7 @@ export default class DiskDb extends OverlayDb {
       mkdirp.sync(path);
     }
 
-    super(new SyncDb('disk', path));
+    super(new SyncDb('disk', path, true));
 
     this.hasAtStart = hasAtStart;
   }

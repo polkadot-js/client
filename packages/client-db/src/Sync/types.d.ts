@@ -22,6 +22,7 @@ export type Message = MessageData & {
 }
 
 export type WorkerData = {
+  isTrie: boolean,
   path: string,
   type: DbConfig$Type
 };

@@ -4,25 +4,25 @@
 
 import { SectionItem } from '@polkadot/params/types';
 import { Storage$Key$Value } from '@polkadot/storage/types';
-import { AsyncBaseDb } from '@polkadot/client-db/types';
+import { BaseDb } from '@polkadot/client-db/types';
 import { StorageMethod$Bool } from '../types';
 
 import createBase from './base';
 import creator from '../key';
 
-export default function decodeBool <T> (db: AsyncBaseDb, key: SectionItem<T>): StorageMethod$Bool {
+export default function decodeBool <T> (db: BaseDb, key: SectionItem<T>): StorageMethod$Bool {
   const createKey = creator(key);
   const base = createBase<boolean>(db);
 
   return {
-    del: (...keyParams: Array<Storage$Key$Value>): Promise<void> =>
+    del: (...keyParams: Array<Storage$Key$Value>): void =>
       base.del(createKey(keyParams)),
-    get: async (...keyParams: Array<Storage$Key$Value>): Promise<boolean> => {
-      const value = await base.get(createKey(keyParams));
+    get: (...keyParams: Array<Storage$Key$Value>): boolean => {
+      const value = base.get(createKey(keyParams));
 
       return value[0] === 1;
     },
-    set: (value: boolean, ...keyParams: Array<Storage$Key$Value>): Promise<void> =>
+    set: (value: boolean, ...keyParams: Array<Storage$Key$Value>): void =>
       base.set(createKey(keyParams), value, new Uint8Array([value ? 1 : 0])),
     onUpdate: (updater: (value: boolean, raw: Uint8Array) => void): void =>
       base.onUpdate(updater)

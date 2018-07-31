@@ -3,13 +3,13 @@
 // of the ISC license. See the LICENSE file for details.
 
 import BN from 'bn.js';
-import { AsyncBaseDb, BaseDb, TrieDb } from '@polkadot/client-db/types';
+import { BaseDb, TrieDb } from '@polkadot/client-db/types';
 import { Storage$Key$Value } from '@polkadot/storage/types';
 
 export type StorageMethod<P, R> = {
-  del: (...params: Array<Storage$Key$Value>) => Promise<void>,
-  get: (...params: Array<Storage$Key$Value>) => Promise<R>,
-  set: (value: P, ...params: Array<Storage$Key$Value>) => Promise<void>,
+  del: (...params: Array<Storage$Key$Value>) => void,
+  get: (...params: Array<Storage$Key$Value>) => R,
+  set: (value: P, ...params: Array<Storage$Key$Value>) => void,
   onUpdate: (callback: (value: P) => void) => void
 }
 
@@ -28,7 +28,7 @@ export type StorageMethod$ArrayU8a = StorageMethod<Array<Uint8Array>, Array<Uint
 export type StorageMethods = StorageMethod$Account | StorageMethod$Bn | StorageMethod$Bool | StorageMethod$U8a | StorageMethod$ArrayU8a | StorageMethod$ArrayAccount;
 
 export type BlockDb = {
-  db: AsyncBaseDb,
+  db: BaseDb,
   bestHash: StorageMethod$U8a,
   bestNumber: StorageMethod$Bn,
   block: StorageMethod$U8a,
@@ -98,15 +98,15 @@ export type StateDb$Timestamp = {
 };
 
 export type StateDb = {
-  db: TrieDb
-  // consensus: StateDb$Consensus,
-  // council: StateDb$Council,
-  // councilVoting: StateDb$CouncilVoting,
-  // democracy: StateDb$Democracy,
-  // governance: StateDb$Governance,
-  // parachains: StateDb$Parachains,
-  // session: StateDb$Session,
-  // staking: StateDb$Staking,
-  // system: StateDb$System,
-  // timestamp: StateDb$Timestamp
+  db: TrieDb,
+  consensus: StateDb$Consensus,
+  council: StateDb$Council,
+  councilVoting: StateDb$CouncilVoting,
+  democracy: StateDb$Democracy,
+  governance: StateDb$Governance,
+  parachains: StateDb$Parachains,
+  session: StateDb$Session,
+  staking: StateDb$Staking,
+  system: StateDb$System,
+  timestamp: StateDb$Timestamp
 };

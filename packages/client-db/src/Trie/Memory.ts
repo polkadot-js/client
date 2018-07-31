@@ -7,6 +7,6 @@ import OverlayDb from './Overlay';
 
 export default class MemoryDb extends OverlayDb {
   constructor () {
-    super(new SyncDb('memory'));
+    super(new SyncDb('memory', '.', true));
   }
 }

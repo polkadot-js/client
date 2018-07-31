@@ -18,7 +18,7 @@ function notify (state, command) {
   Atomics.notify(state, 0, 1);
 
   if (!exitCommands.includes(command)) {
-    Atomics.wait(state, 0, command);
+    Atomics.wait(state, 0, command, 5000);
   }
 }
 

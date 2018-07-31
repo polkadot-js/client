@@ -8,6 +8,6 @@ import HashBaseDb from './Base';
 
 export default class HashMemoryDb extends HashBaseDb {
   constructor () {
-    super(memdown());
+    super('memory');
   }
 }

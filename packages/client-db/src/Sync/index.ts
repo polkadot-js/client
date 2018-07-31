@@ -16,13 +16,14 @@ const emptyBuffer = new Uint8Array();
 export default class SyncDb implements TrieDb {
   private worker: WorkerThreads.Worker;
 
-  constructor (type: DbConfig$Type = 'memory', dbPath: string = '.') {
+  constructor (type: DbConfig$Type = 'memory', dbPath: string = '.', isTrie: boolean = true) {
     // NOTE Node 10.6 relative paths for Workers are broken - adding here tries to load
     // the worker from /client, not client-db.
     this.worker = new Worker(
       path.join(__dirname, './worker/index.js'),
       {
         workerData: {
+          isTrie,
           path: dbPath,
           type
         }
@@ -64,8 +65,11 @@ export default class SyncDb implements TrieDb {
 
   async terminate () {
     this.worker.unref();
+
     // TODO We should cleanup the trie instance gracefully, so another message here
     // to cleanup and then the termination up next
+
+    // TODO We should be terminating the worker when no references
     // return promisify(this.worker, this.worker.terminate);
   }
 
@@ -90,7 +94,7 @@ export default class SyncDb implements TrieDb {
 
     // @ts-ignore Node is a bit ahead, still to be renamed
     Atomics.notify(state, 0, 1);
-    Atomics.wait(state, 0, commands.FILL);
+    Atomics.wait(state, 0, commands.FILL, 5000);
   }
 
   // Ok, this is not something that returns a value, just send the message and

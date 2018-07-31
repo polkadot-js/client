@@ -8,6 +8,6 @@ import HashBaseDb from './Base';
 
 export default class HashDiskDb extends HashBaseDb {
   constructor (path: string) {
-    super(leveldown(path));
+    super('disk', path);
   }
 }
