@@ -157,11 +157,11 @@ export default class P2p extends E3.EventEmitter implements P2pInterface {
           this.l.error('protocol handling error', error);
         }
       }
-      , (protocol: string, requested: string, callback: (error: null, accept: boolean) => void): void => {
-        this.l.debug(() => `matching protocol ${requested}`);
+      // , (protocol: string, requested: string, callback: (error: null, accept: boolean) => void): void => {
+      //   this.l.debug(() => `matching protocol ${requested}`);
 
-        callback(null, requested.indexOf(defaults.PROTOCOL) === 0);
-      }
+      //   callback(null, requested.indexOf(defaults.PROTOCOL) === 0);
+      // }
     );
   }
 
@@ -182,6 +182,8 @@ export default class P2p extends E3.EventEmitter implements P2pInterface {
         connection
       );
 
+      // FIXME Once uni-directional pings are available network-wide, properly ping,
+      // don't just pong
       pull(
         connection,
         pull.drain(

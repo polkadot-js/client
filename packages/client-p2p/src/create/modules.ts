@@ -8,7 +8,7 @@ import DHT from 'libp2p-kad-dht';
 import mplex from 'libp2p-mplex';
 // import Multicast from 'libp2p-mdns';
 import Railing from 'libp2p-railing';
-// import secio from 'libp2p-secio';
+import secio from 'libp2p-secio';
 import spdy from 'libp2p-spdy';
 import TCP from 'libp2p-tcp';
 import PeerInfo from 'peer-info';
@@ -19,7 +19,7 @@ export default function createModules (peerInfo: PeerInfo, bootNodes: P2pNodes, 
 
   return {
     connEncryption: [
-      // secio
+      secio
     ],
     streamMuxer: [
       mplex,

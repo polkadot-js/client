@@ -73,7 +73,7 @@ export default class Sync extends E3.EventEmitter implements SyncInterface {
     while (this.blockQueue[nextNumber.toString()]) {
       const { hash, encoded } = this.blockQueue[nextNumber.toString()];
 
-      this.l.debug(() => `Importing block #${nextNumber.toString()}, ${u8aToHex(hash)}`);
+      // this.l.debug(() => `Importing block #${nextNumber.toString()}, ${u8aToHex(hash)}`);
 
       if (!this.chain.executor.importBlock(encoded)) {
         break;
@@ -166,12 +166,12 @@ export default class Sync extends E3.EventEmitter implements SyncInterface {
       return;
     }
 
-    this.l.debug(() => `Requesting blocks from ${peer.shortId}, #${from.toString()} -`);
-
     const request = new BlockRequest({
       from,
       id: peer.getNextId()
     });
+
+    this.l.debug(() => `Requesting blocks from ${peer.shortId}, #${from.toString()} -`);
 
     this.blockRequests[peer.id] = {
       peer,

@@ -34,7 +34,7 @@ export default class Transactions extends BaseMessage implements MessageInterfac
   toJSON (): any {
     return {
       transactions: this.transactions.map((transaction) =>
-        u8aToHex(transaction)
+        u8aToHex(transaction, 128)
       )
     };
   }

@@ -22,7 +22,7 @@ import logger from '@polkadot/util/logger';
 import stringShorten from '@polkadot/util/string/shorten';
 import u8aConcat from '@polkadot/util/u8a/concat';
 import u8aToBuffer from '@polkadot/util/u8a/toBuffer';
-// import u8aToHex from '@polkadot/util/u8a/toHex';
+import u8aToHex from '@polkadot/util/u8a/toHex';
 
 import defaults from '../defaults';
 
@@ -123,7 +123,7 @@ export default class Peer extends E3.EventEmitter implements PeerInterface {
       const encoded = message.encode();
       const length = varint.encode(encoded.length + 1);
 
-      // this.l.debug(() => `sending ${u8aToHex(encoded)}`);
+      this.l.debug(() => `sending ${u8aToHex(encoded)}`);
 
       this.pushable.push(
         u8aToBuffer(
