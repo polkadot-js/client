@@ -16,7 +16,7 @@ import BlockResponse from '@polkadot/client-p2p-messages/BlockResponse';
 import decodeBlock from '@polkadot/primitives/codec/block/decodeRaw';
 import isU8a from '@polkadot/util/is/u8a';
 import logger from '@polkadot/util/logger';
-import u8aToHex from '@polkadot/util/u8a/toHex';
+// import u8aToHex from '@polkadot/util/u8a/toHex';
 
 import defaults from '../defaults';
 
@@ -71,9 +71,9 @@ export default class Sync extends E3.EventEmitter implements SyncInterface {
     let count = 0;
 
     while (this.blockQueue[nextNumber.toString()]) {
-      const { hash, encoded } = this.blockQueue[nextNumber.toString()];
+      const { encoded } = this.blockQueue[nextNumber.toString()];
 
-      // this.l.debug(() => `Importing block #${nextNumber.toString()}, ${u8aToHex(hash)}`);
+      // this.l.debug(() => `Importing block #${nextNumber.toString()}`);
 
       if (!this.chain.executor.importBlock(encoded)) {
         break;

@@ -24,14 +24,14 @@ describe('add', () => {
   it('adds the peer', () => {
     peers.add(peerInfo);
 
-    expect(peers.count()).toEqual(1);
+    expect(peers.countAll()).toEqual(1);
   });
 
   it('does not re-add a peer', () => {
     peers.add(peerInfo);
     peers.add(peerInfo);
 
-    expect(peers.count()).toEqual(1);
+    expect(peers.countAll()).toEqual(1);
   });
 
   it('emits message when peer receives', (done) => {

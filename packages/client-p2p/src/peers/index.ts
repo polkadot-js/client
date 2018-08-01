@@ -54,6 +54,12 @@ export default class Peers extends E3.EventEmitter implements PeersInterface {
     return peer;
   }
 
+  countAll (): number {
+    return Object
+      .values(this.map)
+      .length;
+  }
+
   count (): number {
     return Object
       .values(this.map)

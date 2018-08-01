@@ -15,7 +15,7 @@ import PeerInfo from 'peer-info';
 // import WS from 'libp2p-websockets';
 
 export default function createModules (peerInfo: PeerInfo, bootNodes: P2pNodes, nodes: P2pNodes): LibP2p.OptionsModules {
-  const list = bootNodes.concat(nodes).map((node) => node.replace('/p2p/', '/ipfs/'));
+  const list = nodes/*.concat(bootNodes)*/.map((node) => node.replace('/p2p/', '/ipfs/'));
 
   return {
     connEncryption: [

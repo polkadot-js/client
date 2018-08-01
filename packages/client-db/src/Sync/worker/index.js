@@ -5,21 +5,27 @@
 // import { Message } from '../types';
 // import { FnMap } from './types;
 
-// const leveldown = require('leveldown');
+// FIXME Waiting on native lib support in workers -
+//    https://github.com/nodejs/node/issues/21481
+//    https://github.com/nodejs/node/issues/21783
+// const leveldb = require('leveldown');
+// const leveldb = require('rocksdb');
+const leveldb = undefined;
+
 const levelup = require('levelup');
 const memdown = require('memdown');
-// const rocksdb = require('rocksdb');
 const { parentPort, threadId, workerData } = require('worker_threads');
 const Trie = require('@polkadot/trie-db').default;
 const encoder = require('@polkadot/trie-db/encoder').default;
+const isFunction = require('@polkadot/util/is/function').default;
 
 const { notifyOnDone, notifyOnValue } = require('./notify');
 
 const handlers = {};
 
 function initDb () {
-  const downdb = workerData.type === 'disk'
-    ? rocksdb(workerData.path)
+  const downdb = isFunction(leveldb) && workerData.type === 'disk'
+    ? leveldb(workerData.path)
     : memdown();
 
   return workerData.isTrie

@@ -17,8 +17,14 @@ describe('stop', () => {
         types: ['http']
       }
     };
+    const chain = {
+      chain: {
+        name: 'test'
+      },
+      state: {}
+    };
 
-    server = new Rpc(config, { state: {} });
+    server = new Rpc(config, chain);
     server.servers = [{
       close: () => true
     }];
