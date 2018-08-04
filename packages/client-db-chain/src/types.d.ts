@@ -84,7 +84,8 @@ export type StateDb$Staking = {
   freeBalanceOf: StorageMethod$Bn,
   intentions: StorageMethod$ArrayAccount,
   sessionsPerEra: StorageMethod$Bn,
-  transactionFee: StorageMethod$Bn,
+  transactionBaseFee: StorageMethod$Bn,
+  transactionByteFee: StorageMethod$Bn,
   validatorCount: StorageMethod$Bn
 };
 
@@ -103,7 +104,6 @@ export type StateDb = {
   council: StateDb$Council,
   councilVoting: StateDb$CouncilVoting,
   democracy: StateDb$Democracy,
-  governance: StateDb$Governance,
   parachains: StateDb$Parachains,
   session: StateDb$Session,
   staking: StateDb$Staking,

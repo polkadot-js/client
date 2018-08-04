@@ -49,10 +49,6 @@ const democracy = (db: TrieDb, { public: { launchPeriod, minimumDeposit, votingP
   votingPeriod: createBn(db, votingPeriod, BLOCKNUM_SIZE)
 });
 
-const governance = (db: TrieDb, { public: { approvalsRatio } }: Section<Storages>) => ({
-  approvalsRatio: createBn(db, approvalsRatio, BLOCKNUM_SIZE)
-});
-
 const parachains = (db: TrieDb, { public: { didUpdate } }: Section<Storages>) => ({
   didUpdate: createBool(db, didUpdate)
 });
@@ -62,13 +58,14 @@ const session = (db: TrieDb, { public: { length, validators } }: Section<Storage
   validators: createArrAcc(db, validators)
 });
 
-const staking = (db: TrieDb, { public: { bondingDuration, currentEra, freeBalanceOf, intentions, sessionsPerEra, transactionFee, validatorCount } }: Section<Storages>) => ({
+const staking = (db: TrieDb, { public: { bondingDuration, currentEra, freeBalanceOf, intentions, sessionsPerEra, transactionBaseFee, transactionByteFee, validatorCount } }: Section<Storages>) => ({
   bondingDuration: createBn(db, bondingDuration, BLOCKNUM_SIZE),
   currentEra: createBn(db, currentEra, BLOCKNUM_SIZE),
   freeBalanceOf: createBn(db, freeBalanceOf, BALANCE_SIZE),
   intentions: createArrAcc(db, intentions),
   sessionsPerEra: createBn(db, sessionsPerEra, BLOCKNUM_SIZE),
-  transactionFee: createBn(db, transactionFee, BALANCE_SIZE),
+  transactionBaseFee: createBn(db, transactionBaseFee, BALANCE_SIZE),
+  transactionByteFee: createBn(db, transactionByteFee, BALANCE_SIZE),
   validatorCount: createBn(db, validatorCount, 32)
 });
 
@@ -88,7 +85,6 @@ export default function createState (db: TrieDb): StateDb {
     council: council(db, storage.council),
     councilVoting: councilVoting(db, storage.councilVoting),
     democracy: democracy(db, storage.democracy),
-    governance: governance(db, storage.governance),
     parachains: parachains(db, storage.parachains),
     session: session(db, storage.session),
     staking: staking(db, storage.staking),

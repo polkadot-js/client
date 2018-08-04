@@ -10,7 +10,8 @@
 //    https://github.com/nodejs/node/issues/21783
 // const leveldb = require('leveldown');
 // const leveldb = require('rocksdb');
-const leveldb = undefined;
+const leveldb = require('medeadown');
+// const leveldb = undefined;
 
 const levelup = require('levelup');
 const memdown = require('memdown');

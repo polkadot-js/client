@@ -11,12 +11,10 @@ describe('client-chains', () => {
   const config = {
     chain: 'dev'
   };
-  const blockDb = new HashDb();
-  const stateDb = new MemoryDb();
 
   it('instantiates a known chain', () => {
     expect(
-      new Chain(config, stateDb, blockDb).executor
+      new Chain(config).executor
     ).toBeDefined();
   });
 
@@ -24,11 +22,7 @@ describe('client-chains', () => {
     config.chain = 'someUnknown';
 
     expect(
-      () => new Chain(config, stateDb, blockDb)
+      () => new Chain(config)
     ).toThrow(/Unable to find builtin chain/);
-  });
-
-  it('terminates', () => {
-    return stateDb.terminate();
   });
 });

@@ -15,7 +15,7 @@ describe('initialiseBlock', () => {
     wasm: {}
   };
   const stateDb = new MemoryDb();
-  const chain = new Chain(config, stateDb, new HashDb());
+  const chain = new Chain(config);
 
   it('initialises a block', () => {
     expect(

@@ -3,15 +3,11 @@
 // of the ISC license. See the LICENSE file for details.
 
 import toU8a from '@polkadot/util/u8a/toU8a';
-import HashDb from '@polkadot/client-db/Hash/Memory';
-import MemoryDb from '@polkadot/client-db/Trie/Memory';
 
 import Chain from '../index';
 
 describe('genesis', () => {
-  const blockDb = new HashDb();
-  const stateDb = new MemoryDb();
-  const genesis = new Chain({ chain: 'dev' }, stateDb, blockDb).genesis;
+  const genesis = new Chain({ chain: 'dev' }).genesis;
 
   it('creates a correct genesis block (stateRoot)', () => {
     expect(
@@ -41,9 +37,5 @@ describe('genesis', () => {
         13, 85, 34, 171, 245, 12, 16, 73, 197, 106, 231, 219, 139, 87, 173, 252, 126, 2, 55, 165, 8, 237, 221, 136, 95, 19, 249, 60, 247, 193, 8, 201
       ])
     );
-  });
-
-  it('terminates', () => {
-    return stateDb.terminate();
   });
 });
