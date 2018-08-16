@@ -34,9 +34,9 @@
     "test": "echo \"Tests only available from root wrapper\""
   },
   "dependencies": {
-    "@babel/runtime": "^7.0.0-beta.51",
-    "@polkadot/jsonrpc": "^0.26.36",
-    "@polkadot/primitives": "^0.26.36",
-    "@polkadot/util": "^0.26.36"
+    "@babel/runtime": "^7.0.0-rc.1",
+    "@polkadot/jsonrpc": "^0.28.15",
+    "@polkadot/primitives": "^0.28.15",
+    "@polkadot/util": "^0.28.3"
   }
 }

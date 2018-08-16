@@ -10,7 +10,7 @@ import { Logger } from '@polkadot/util/types';
 import { PeerInterface } from '../types';
 
 import BN from 'bn.js';
-import E3 from 'eventemitter3';
+import EventEmitter from 'eventemitter3';
 import PullPushable, { Pushable } from 'pull-pushable';
 import pull from 'pull-stream';
 import varint from 'varint';
@@ -26,7 +26,7 @@ import u8aToHex from '@polkadot/util/u8a/toHex';
 
 import defaults from '../defaults';
 
-export default class Peer extends E3.EventEmitter implements PeerInterface {
+export default class Peer extends EventEmitter implements PeerInterface {
   bestHash: Uint8Array = new Uint8Array([]);
   bestNumber: BN = new BN(0);
   readonly chain: ChainInterface;

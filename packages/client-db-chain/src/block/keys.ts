@@ -8,7 +8,7 @@ import param from '@polkadot/params/param';
 import createSection from '@polkadot/params/section';
 
 type Blocks = {
-  block: Section<Blocks>
+  block: Section<Blocks, any, any>
 };
 
 const name: keyof Blocks = 'block';
@@ -47,4 +47,4 @@ export default (createSection(name)(
       })
     }
   })
-) as Section<Blocks>);
+) as Section<Blocks, any, any>);

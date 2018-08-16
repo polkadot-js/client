@@ -34,12 +34,10 @@
     "test": "echo \"Tests only available from root wrapper\""
   },
   "dependencies": {
-    "@babel/runtime": "^7.0.0-beta.51",
+    "@babel/runtime": "^7.0.0-rc.1",
     "@polkadot/client-runtime": "^0.13.8",
-    "@polkadot/primitives": "^0.26.36",
-    "@polkadot/util": "^0.26.36",
-    "@polkadot/wasm-bin": "paritytech/polkadot-wasm-bin#5ab4fc6083501b26e5fd979b93c35e2f9010b324",
-    "@types/webassembly-js-api": "^0.0.1",
-    "yargs": "^11.0.0"
+    "@polkadot/primitives": "^0.28.15",
+    "@polkadot/util": "^0.28.3",
+    "@types/webassembly-js-api": "^0.0.1"
   }
 }

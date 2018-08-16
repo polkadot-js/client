@@ -5,7 +5,7 @@
 import BN from 'bn.js';
 // import { LibP2pConnection } from 'interface-connection';
 import LibP2p from 'libp2p';
-import E3 from 'eventemitter3';
+import EventEmitter from 'eventemitter3';
 import { Logger } from '@polkadot/util/types';
 import { Config } from '@polkadot/client/types';
 import { ChainInterface } from '@polkadot/client-chains/types';
@@ -83,7 +83,7 @@ export type P2pInterface = {
 export type P2pState = {
   chain: ChainInterface,
   config: Config,
-  emitter: E3.EventEmitter,
+  emitter: EventEmitter,
   l: Logger,
   node: LibP2p,
   peers: PeersInterface,

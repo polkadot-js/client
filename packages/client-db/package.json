@@ -34,9 +34,9 @@
     "test": "echo \"Tests only available from root wrapper\""
   },
   "dependencies": {
-    "@babel/runtime": "^7.0.0-beta.51",
-    "@polkadot/trie-db": "^0.26.36",
-    "@polkadot/util": "^0.26.36",
+    "@babel/runtime": "^7.0.0-rc.1",
+    "@polkadot/trie-db": "^0.28.3",
+    "@polkadot/util": "^0.28.3",
     "@types/mkdirp": "^0.5.2",
     "leveldown": "^4.0.1",
     "medeadown": "^1.1.9",

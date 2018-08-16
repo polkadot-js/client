@@ -37,26 +37,26 @@
     "test": "echo \"Tests only available from root wrapper\""
   },
   "dependencies": {
-    "@babel/runtime": "^7.0.0-beta.51",
+    "@babel/runtime": "^7.0.0-rc.1",
     "@polkadot/client-chains": "^0.13.8",
     "@polkadot/client-db": "^0.13.8",
     "@polkadot/client-p2p": "^0.13.8",
     "@polkadot/client-rpc": "^0.13.8",
     "@polkadot/client-telemetry": "^0.13.8",
     "@polkadot/client-wasm": "^0.13.8",
-    "@polkadot/jsonrpc": "^0.26.36",
-    "@polkadot/primitives": "^0.26.36",
-    "@polkadot/util": "^0.26.36",
+    "@polkadot/jsonrpc": "^0.28.15",
+    "@polkadot/primitives": "^0.28.15",
+    "@polkadot/util": "^0.28.3",
     "@types/package-json": "^4.0.1",
     "@types/semver-compare": "^1.0.0",
-    "@types/yargs": "^11.0.0",
-    "package-json": "^4.0.1",
+    "@types/yargs": "^11.1.1",
+    "package-json": "^5.0.0",
     "semver-compare": "^1.0.0",
-    "yargs": "^11.0.0"
+    "yargs": "^12.0.1"
   },
   "devDependencies": {
-    "@babel/core": "^7.0.0-beta.51",
-    "@babel/register": "^7.0.0-beta.51",
+    "@babel/core": "^7.0.0-rc.1",
+    "@babel/register": "^7.0.0-rc.1",
     "babel-plugin-module-resolver": "^3.1.1"
   }
 }

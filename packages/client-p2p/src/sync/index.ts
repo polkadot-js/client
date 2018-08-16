@@ -10,10 +10,10 @@ import { PeerInterface, SyncStatus } from '../types';
 import { SyncInterface, SyncState$Request, SyncState$BlockRequests, SyncState$BlockQueue } from './types';
 
 import BN from 'bn.js';
-import E3 from 'eventemitter3';
+import EventEmitter from 'eventemitter3';
 import BlockRequest from '@polkadot/client-p2p-messages/BlockRequest';
 import BlockResponse from '@polkadot/client-p2p-messages/BlockResponse';
-import decodeBlock from '@polkadot/primitives/codec/block/decodeRaw';
+// import decodeBlock from '@polkadot/primitives/codec/block/decodeRaw';
 import isU8a from '@polkadot/util/is/u8a';
 import logger from '@polkadot/util/logger';
 // import u8aToHex from '@polkadot/util/u8a/toHex';
@@ -22,7 +22,7 @@ import defaults from '../defaults';
 
 type Requests = Array<SyncState$Request>;
 
-export default class Sync extends E3.EventEmitter implements SyncInterface {
+export default class Sync extends EventEmitter implements SyncInterface {
   private chain: ChainInterface;
   private l: Logger;
   private blockRequests: SyncState$BlockRequests = {};
@@ -37,9 +37,9 @@ export default class Sync extends E3.EventEmitter implements SyncInterface {
   }
 
   getBlockData (fields: Array<BlockAttr>, hash: Uint8Array): BlockResponseMessageBlock {
-    const { body, header } = decodeBlock(
-      this.chain.blocks.block.get(hash)
-    );
+    // const { body, header } = decodeBlock(
+    //   this.chain.blocks.block.get(hash)
+    // );
     const data: BlockResponseMessageBlock = {
       // hash
     } as BlockResponseMessageBlock;

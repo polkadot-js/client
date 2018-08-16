@@ -10,7 +10,7 @@ import { P2pInterface, PeerInterface, PeersInterface } from './types';
 
 import handlers from './handler';
 
-import E3 from 'eventemitter3';
+import EventEmitter from 'eventemitter3';
 // import handshake from 'pull-handshake';
 import PullPushable from 'pull-pushable';
 import pull from 'pull-stream';
@@ -32,7 +32,7 @@ type QueuedPeer = {
   isDialled: boolean
 };
 
-export default class P2p extends E3.EventEmitter implements P2pInterface {
+export default class P2p extends EventEmitter implements P2pInterface {
   readonly chain: ChainInterface;
   readonly config: Config;
   private dialQueue: Array<QueuedPeer> = [];
