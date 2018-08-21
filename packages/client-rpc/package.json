@@ -34,13 +34,13 @@
     "test": "echo \"Tests only available from root wrapper\""
   },
   "devDependencies": {
-    "@polkadot/api-provider": "^0.28.15",
+    "@polkadot/api-provider": "^0.28.19",
     "@polkadot/client": "^0.13.8"
   },
   "dependencies": {
     "@babel/runtime": "^7.0.0-rc.1",
     "@polkadot/client-rpc-handlers": "^0.13.8",
-    "@polkadot/util": "^0.28.3",
+    "@polkadot/util": "^0.28.4",
     "@types/co-body": "^0.0.3",
     "@types/koa": "^2.0.46",
     "@types/koa-route": "^3.2.4",
