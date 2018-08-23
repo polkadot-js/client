@@ -19,12 +19,17 @@ export default ({
   },
   'p2p-nodes': {
     default: [],
-    description: 'Bootnodes to make initial connections to',
+    description: 'Reserved nodes to make initial connections to',
     type: 'array'
   },
   'p2p-port': {
     default: defaults.PORT,
     description: 'Sets the peer-to-peer port, 0 for non-listening mode',
     type: 'number'
+  },
+  'p2p-no-bootnodes': {
+    default: false,
+    description: 'When specified, do not make connections to chain-specific bootnodes',
+    type: 'boolean'
   }
 } as { [index: string]: Options });

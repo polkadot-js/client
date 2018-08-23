@@ -34,6 +34,7 @@ export type P2pConfig = {
   clientId: string,
   maxPeers: number,
   nodes?: P2pNodes,
+  noBootnodes: boolean,
   port: number
 };
 

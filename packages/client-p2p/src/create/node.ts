@@ -22,10 +22,10 @@ const config = {
   }
 };
 
-export default async function createNode ({ p2p: { address, nodes = [], port } }: Config, { chain: { bootNodes = [] } }: ChainInterface, l: Logger): Promise<Libp2p> {
+export default async function createNode ({ p2p: { address, noBootnodes = false, nodes = [], port } }: Config, { chain: { bootNodes = [] } }: ChainInterface, l: Logger): Promise<Libp2p> {
   const peerBook = await createPeerBook([]);
   const peerInfo = await createListener(address, port);
-  const modules = createModules(peerInfo, bootNodes, nodes);
+  const modules = createModules(peerInfo, noBootnodes ? [] : bootNodes, nodes);
   const addrs = peerInfo.multiaddrs.toArray().map((addr) =>
     addr.toString()
   );
