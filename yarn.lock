@@ -1253,9 +1253,9 @@
     isomorphic-fetch "^2.2.1"
     websocket "^1.0.25"
 
-"@polkadot/dev@^0.20.17":
-  version "0.20.17"
-  resolved "https://registry.yarnpkg.com/@polkadot/dev/-/dev-0.20.17.tgz#30c89e0c2c03402eca3a4da8bb02e3d499849c96"
+"@polkadot/dev@^0.20.18":
+  version "0.20.18"
+  resolved "https://registry.yarnpkg.com/@polkadot/dev/-/dev-0.20.18.tgz#fb08df68a53f47cebdd0cea9366c0714b40879a6"
   dependencies:
     "@babel/cli" "^7.0.0-rc.1"
     "@babel/core" "^7.0.0-rc.1"

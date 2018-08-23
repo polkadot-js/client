@@ -1,6 +1,6 @@
 {
   "name": "@polkadot/client-db",
-  "version": "0.13.8",
+  "version": "0.15.0",
   "description": "Database interface layer for network client",
   "main": "index.js",
   "engines": {
@@ -44,7 +44,7 @@
     "rocksdb": "^3.0.1"
   },
   "devDependencies": {
-    "@polkadot/client": "^0.13.8",
+    "@polkadot/client": "^0.15.0",
     "rimraf": "^2.6.2"
   }
 }

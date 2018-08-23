@@ -1,6 +1,6 @@
 {
   "name": "@polkadot/client-p2p",
-  "version": "0.13.8",
+  "version": "0.15.0",
   "description": "Interfaces to P2P layers used in the Polkadot network",
   "main": "index.js",
   "keywords": [
@@ -35,7 +35,7 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.0.0-rc.1",
-    "@polkadot/client-p2p-messages": "^0.13.8",
+    "@polkadot/client-p2p-messages": "^0.15.0",
     "@polkadot/primitives": "^0.28.20",
     "@polkadot/util": "^0.28.4",
     "eventemitter3": "^3.1.0",
@@ -54,6 +54,6 @@
     "varint": "^5.0.0"
   },
   "devDependencies": {
-    "@polkadot/client": "^0.13.8"
+    "@polkadot/client": "^0.15.0"
   }
 }
