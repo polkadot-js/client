@@ -26,7 +26,9 @@ export default async function createNode ({ p2p: { address, nodes = [], port } }
   const peerBook = await createPeerBook([]);
   const peerInfo = await createListener(address, port);
   const modules = createModules(peerInfo, bootNodes, nodes);
-  const addrs = peerInfo.multiaddrs.toArray().map((addr) => addr.toString());
+  const addrs = peerInfo.multiaddrs.toArray().map((addr) =>
+    addr.toString()
+  );
 
   l.log(`creating Libp2p with ${addrs.join(', ')}`);
 

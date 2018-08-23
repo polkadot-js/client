@@ -1372,9 +1372,9 @@
     "@polkadot/util-crypto" "^0.28.4"
     "@polkadot/util-rlp" "^0.28.4"
 
-"@polkadot/ts@^0.1.13":
-  version "0.1.13"
-  resolved "https://registry.yarnpkg.com/@polkadot/ts/-/ts-0.1.13.tgz#31540153a5381f1442e3f24f615eefd7442dbeac"
+"@polkadot/ts@^0.1.14":
+  version "0.1.14"
+  resolved "https://registry.yarnpkg.com/@polkadot/ts/-/ts-0.1.14.tgz#6edc5a17a49ccddf939e26cfaa9da8eb831fbccd"
 
 "@polkadot/util-crypto@^0.28.4":
   version "0.28.4"
@@ -5840,6 +5840,17 @@ levn@^0.3.0, levn@~0.3.0:
     prelude-ls "~1.1.2"
     type-check "~0.3.2"
 
+libp2p-bootstrap@^0.9.3:
+  version "0.9.3"
+  resolved "https://registry.yarnpkg.com/libp2p-bootstrap/-/libp2p-bootstrap-0.9.3.tgz#90d68f890ebdc6aa54e14bb1f257173ad20575f9"
+  dependencies:
+    async "^2.6.1"
+    debug "^3.1.0"
+    mafmt "^6.0.0"
+    multiaddr "^5.0.0"
+    peer-id "~0.10.7"
+    peer-info "~0.14.1"
+
 libp2p-circuit@~0.2.0:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/libp2p-circuit/-/libp2p-circuit-0.2.0.tgz#b7f5bd92e1d8579d9c004abfd5ad762f9caa1bb1"
@@ -6015,17 +6026,6 @@ libp2p-ping@~0.8.0:
     libp2p-crypto "~0.13.0"
     pull-handshake "^1.1.4"
     pull-stream "^3.6.7"
-
-libp2p-railing@^0.9.2:
-  version "0.9.2"
-  resolved "https://registry.yarnpkg.com/libp2p-railing/-/libp2p-railing-0.9.2.tgz#a7c794da30fe6a1c76c468d89a0c461229b22fec"
-  dependencies:
-    async "^2.6.1"
-    debug "^3.1.0"
-    mafmt "^6.0.0"
-    multiaddr "^5.0.0"
-    peer-id "~0.10.7"
-    peer-info "~0.14.1"
 
 libp2p-record@~0.5.1:
   version "0.5.1"

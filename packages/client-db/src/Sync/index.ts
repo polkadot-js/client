@@ -142,7 +142,7 @@ export default class SyncDb implements TrieDb {
 
       // This _should_ never happen... but...
       default:
-        throw new Error(`Unknown worker state waiting for size, ${state[0]}`);
+        throw new Error(`Unknown worker state waiting for size, command=${state[0]}`);
     }
   }
 

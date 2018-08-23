@@ -2,6 +2,11 @@
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
 
+// HACK Under Node workers not all process functions are exposed. Since some are actually
+// needed for proper operation on the filesystem, we work around this and add the missing
+// operations so we can actually continue
+require('./hackEnv');
+
 // import { Message } from '../types';
 // import { FnMap } from './types;
 
@@ -19,9 +24,11 @@ const { parentPort, threadId, workerData } = require('worker_threads');
 const Trie = require('@polkadot/trie-db').default;
 const encoder = require('@polkadot/trie-db/encoder').default;
 const isFunction = require('@polkadot/util/is/function').default;
+const logger = require('@polkadot/util/logger').default;
 
 const { notifyOnDone, notifyOnValue } = require('./notify');
 
+const l = logger('db/sync/worker');
 const handlers = {};
 
 function initDb () {
@@ -83,15 +90,21 @@ function initHandlers () {
 
 // parentPort.on('message', (message: Message): void => {
 parentPort.on('message', (message) => {
-  if (!handlers[threadId]) {
-    handlers[threadId] = initHandlers();
-  }
+  try {
+    if (!handlers[threadId]) {
+      handlers[threadId] = initHandlers();
+    }
 
-  const fn = handlers[threadId][message.type];
+    const fn = handlers[threadId][message.type];
 
-  if (fn) {
-    fn(message);
-  } else {
+    if (fn) {
+      fn(message);
+    } else {
+      throw new Error(`Unable to find handler for type=${message.type}`);
+    }
+  } catch (error) {
+    l.error('Sync/worker.js:', error);
+
     notify(message.state, commands.ERROR);
   }
 });
