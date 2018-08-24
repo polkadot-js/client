@@ -30,9 +30,9 @@
   "homepage": "https://github.com/polkadot-js/client/tree/master/packages/client-db#readme",
   "dependencies": {
     "@babel/runtime": "^7.0.0-rc.1",
-    "@polkadot/db-diskdown": "^0.28.6",
-    "@polkadot/trie-db": "^0.28.6",
-    "@polkadot/util": "^0.28.6",
+    "@polkadot/db-diskdown": "^0.28.7",
+    "@polkadot/trie-db": "^0.28.7",
+    "@polkadot/util": "^0.28.7",
     "@types/mkdirp": "^0.5.2",
     "mkdirp": "^0.5.1"
   },

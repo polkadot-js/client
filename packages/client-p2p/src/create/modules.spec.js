@@ -2,7 +2,7 @@
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
 
-import Railing from 'libp2p-railing';
+import Bootstrap from 'libp2p-bootstrap';
 import PeerInfo from 'peer-info';
 
 import isInstanceOf from '@polkadot/util/is/instanceOf';
@@ -24,7 +24,7 @@ describe.skip('createModules', () => {
         createConfig(
           peerInfo, ['/ip4/127.0.0.1/tcp/6677']
         ).discovery[1],
-        Railing
+        Bootstrap
       )
     ).toEqual(true);
   });
