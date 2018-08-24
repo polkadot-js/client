@@ -69,7 +69,7 @@ export default class Chain implements ChainInterface {
     const bestHash = this.blocks.bestHash.get();
     const bestNumber = this.blocks.bestNumber.get();
 
-    l.log(`${this.chain.name}, best #${bestNumber.toString()} ${u8aToHex(bestHash)}`);
+    l.log(`${this.chain.name}, #${bestNumber.toString()}, ${u8aToHex(bestHash, 48)}`);
   }
 
   // TODO We should load chains from json files as well
