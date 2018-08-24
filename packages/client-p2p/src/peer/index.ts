@@ -55,10 +55,7 @@ export default class Peer extends EventEmitter implements PeerInterface {
     if (isWritable) {
       this.pushable = PullPushable();
 
-      pull(
-        this.pushable,
-        connection
-      );
+      pull(this.pushable, connection);
 
       this.send(
         new Status({
@@ -86,25 +83,22 @@ export default class Peer extends EventEmitter implements PeerInterface {
 
   _receive (connection: LibP2pConnection): boolean {
     try {
-      pull(
-        connection,
-        pull.drain(
-          (buffer: Buffer): void => {
-            // NOTE the actual incoming message has a varint prefixed length, strip this
-            const length = varint.decode(buffer);
-            const offset = varint.decode.bytes;
-            const u8a = bufferToU8a(buffer.slice(offset + 1));
+      pull(connection, pull.drain(
+        (buffer: Buffer): void => {
+          // NOTE the actual incoming message has a varint prefixed length, strip this
+          const length = varint.decode(buffer);
+          const offset = varint.decode.bytes;
+          const u8a = bufferToU8a(buffer.slice(offset + 1));
 
-            // TODO Do we keep this peer or drop it (like Rust does on invalid messages). Additionally, do we _really_ want to throw here?
-            assert(u8a.length === length - 1, 'Invalid buffer length received');
+          // TODO Do we keep this peer or drop it (like Rust does on invalid messages). Additionally, do we _really_ want to throw here?
+          assert(u8a.length === length - 1, 'Invalid buffer length received');
 
-            // this.l.debug(() => `received ${u8a.length} bytes, ${u8aToHex(u8a)}`);
+          // this.l.debug(() => `received ${u8a.length} bytes, ${u8aToHex(u8a)}`);
 
-            this.emit('message', decodeMessage(u8a));
-          },
-          () => false
-        )
-      );
+          this.emit('message', decodeMessage(u8a));
+        },
+        () => false
+      ));
     } catch (error) {
       this.l.error('receive error', error);
 

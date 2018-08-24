@@ -143,9 +143,7 @@ export default class Sync extends EventEmitter implements SyncInterface {
       const blockNumber = block.header.number.toString();
       const hasQueued = !!this.blockQueue[blockNumber];
 
-      if (hasImported && hasQueued) {
-        // we have it
-      } else {
+      if (!hasImported && !hasQueued) {
         this.blockQueue[blockNumber] = block;
 
         count++;

@@ -125,10 +125,7 @@ export default class Executor implements ExecutorInterface {
     );
     const block = encodeBlock({
       extrinsics,
-      header: {
-        ...header,
-        stateRoot
-      }
+      header: { ...header, stateRoot }
     });
 
     this.stateDb.db.revert();

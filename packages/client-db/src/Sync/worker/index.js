@@ -5,16 +5,12 @@
 // HACK Under Node workers not all process functions are exposed
 require('./hackEnv');
 
-// import { Message } from '../types';
-// import { FnMap } from './types;
-
 // FIXME Waiting on native lib support in workers -
 //    https://github.com/nodejs/node/issues/21481
 //    https://github.com/nodejs/node/issues/21783
 // const diskdown = require('leveldown');
 // const diskdown = require('rocksdb');
 const diskdown = require('@polkadot/db-diskdown').default;
-// const diskdown = undefined;
 
 const levelup = require('levelup');
 const memdown = require('memdown');
@@ -43,42 +39,27 @@ function initHandlers () {
   const db = initDb();
 
   return {
-    // checkpoint: ({ state }: Message) =>
     checkpoint: ({ state }) =>
       notifyOnDone(state, () =>
-        db.checkpoint()
-      ),
-    // commit: ({ state }: Message) =>
+        db.checkpoint()),
     commit: ({ state }) =>
       notifyOnDone(state, () =>
-        db.commit()
-      ),
-    // commit: ({ state }: Message) =>
+        db.commit()),
     del: ({ key, state }) =>
       notifyOnDone(state, () =>
-        db.del(key)
-      ),
-    // get: ({ buffer, key, state }: Message) =>
+        db.del(key)),
     get: ({ buffer, key, state }) =>
       notifyOnValue(state, buffer, () =>
-        db.get(key)
-      ),
-    // put: ({ key, state, value }: Message) =>
+        db.get(key)),
     put: ({ key, state, value }) =>
       notifyOnDone(state, () =>
-        db.put(key, value)
-      ),
-    // revert: ({ state }: Message) =>
+        db.put(key, value)),
     revert: ({ state }) =>
       notifyOnDone(state, () =>
-        db.revert()
-      ),
-    // getRoot ({ buffer, state }: Message) =>
+        db.revert()),
     getRoot: ({ buffer, state }) =>
       notifyOnValue(state, buffer, async () =>
-        db.root
-      ),
-    // setRoot: ({ state, value }: Message) =>
+        db.root),
     setRoot: ({ state, value }) =>
       notifyOnDone(state, async () => {
         db.root = value;
@@ -86,7 +67,6 @@ function initHandlers () {
   };
 }
 
-// parentPort.on('message', (message: Message): void => {
 parentPort.on('message', (message) => {
   try {
     if (!handlers[threadId]) {

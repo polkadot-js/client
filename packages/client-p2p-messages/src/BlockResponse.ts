@@ -60,16 +60,7 @@ export default class BlockResponse extends BaseMessage implements MessageInterfa
       const numExt = u8aToBn(u8a.subarray(offset, offset + 4), true).toNumber();
       const extrinsics: Array<Uint8Array> = [];
 
-      offset += 4;
-
-      for (let j = 0; j < numExt; j++) {
-        const length = u8aToBn(u8a.subarray(offset, offset + 4), true).toNumber();
-
-        extrinsics.push(u8a.slice(offset, offset + 4 + length));
-
-        offset += 4 + length;
-      }
-
+      offset = BlockResponse.decodeExtrinsics(u8a, offset + 4, numExt, extrinsics);
       offset += 3; // skip reciept, queue and justification
 
       blocks.push({
@@ -84,5 +75,17 @@ export default class BlockResponse extends BaseMessage implements MessageInterfa
       id,
       blocks
     });
+  }
+
+  private static decodeExtrinsics (u8a: Uint8Array, offset: number, count: number, extrinsics: Array<Uint8Array>): number {
+    for (let j = 0; j < count; j++) {
+      const length = u8aToBn(u8a.subarray(offset, offset + 4), true).toNumber();
+
+      extrinsics.push(u8a.slice(offset, offset + 4 + length));
+
+      offset += 4 + length;
+    }
+
+    return offset;
   }
 }

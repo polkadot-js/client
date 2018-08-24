@@ -174,29 +174,21 @@ export default class P2p extends EventEmitter implements P2pInterface {
       const connection = await promisify(
         this.node, this.node.dialProtocol, peer.peerInfo, '/ipfs/ping/1.0.0'
       );
-
       const pushable = PullPushable();
 
-      pull(
-        pushable,
-        connection
-      );
+      pull(pushable, connection);
 
       // FIXME Once uni-directional pings are available network-wide, properly ping,
-      // don't just pong
-      pull(
-        connection,
-        pull.drain(
-          (buffer: Buffer): void => {
-            this.l.debug(() => ['ping', peer.shortId]);
+      // don't just pong. (However the libp2p-ping floods the network as it stands)
+      pull(connection, pull.drain(
+        (buffer: Buffer): void => {
+          this.l.debug(() => ['ping', peer.shortId]);
 
-            pushable.push(buffer);
-          },
-          () => false
-        )
-      );
+          pushable.push(buffer);
+        },
+        () => false
+      ));
     } catch (error) {
-      // ignore
       return false;
     }
 

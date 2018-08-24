@@ -46,20 +46,23 @@ export default class BlockRequest extends BaseMessage implements MessageInterfac
   }
 
   encode (): Uint8Array {
+    const from = isBn(this.from)
+      ? bnToU8a(this.from, 64, true)
+      : this.from;
+    const to = isNull(this.to)
+      ? new Uint8Array([0])
+      : u8aConcat(
+        new Uint8Array([1]),
+        this.to
+      );
+
     return u8aConcat(
       super.encode(),
       bnToU8a(this.id, 64, true),
       bnToU8a(fromAttrs(this.fields), 8, true),
       new Uint8Array(isBn(this.from) ? [1] : [0]),
-      isBn(this.from)
-        ? bnToU8a(this.from, 64, true)
-        : this.from,
-      isNull(this.to)
-        ? new Uint8Array([0])
-        : u8aConcat(
-          new Uint8Array([1]),
-          this.to
-        ),
+      from,
+      to,
       new Uint8Array(this.direction === 'Ascending' ? [0] : [1]),
       new Uint8Array([1]),
       bnToU8a(this.max, 32, true)
