@@ -28,20 +28,13 @@
     "url": "https://github.com/polkadot-js/client/issues"
   },
   "homepage": "https://github.com/polkadot-js/client/tree/master/packages/client-db#readme",
-  "scripts": {
-    "build": "polkadot-dev-build-babel",
-    "check": "eslint src && flow check",
-    "test": "echo \"Tests only available from root wrapper\""
-  },
   "dependencies": {
     "@babel/runtime": "^7.0.0-rc.1",
-    "@polkadot/trie-db": "^0.28.4",
-    "@polkadot/util": "^0.28.4",
+    "@polkadot/db-diskdown": "^0.28.6",
+    "@polkadot/trie-db": "^0.28.6",
+    "@polkadot/util": "^0.28.6",
     "@types/mkdirp": "^0.5.2",
-    "leveldown": "^4.0.1",
-    "medeadown": "^1.1.9",
-    "mkdirp": "^0.5.1",
-    "rocksdb": "^3.0.1"
+    "mkdirp": "^0.5.1"
   },
   "devDependencies": {
     "@polkadot/client": "^0.15.0",

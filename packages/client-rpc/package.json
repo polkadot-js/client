@@ -28,11 +28,6 @@
     "url": "https://github.com/polkadot-js/client/issues"
   },
   "homepage": "https://github.com/polkadot-js/client/tree/master/packages/client-rpc#readme",
-  "scripts": {
-    "build": "polkadot-dev-build-babel",
-    "check": "eslint src && flow check",
-    "test": "echo \"Tests only available from root wrapper\""
-  },
   "devDependencies": {
     "@polkadot/api-provider": "^0.28.20",
     "@polkadot/client": "^0.15.0"
@@ -40,7 +35,7 @@
   "dependencies": {
     "@babel/runtime": "^7.0.0-rc.1",
     "@polkadot/client-rpc-handlers": "^0.15.0",
-    "@polkadot/util": "^0.28.4",
+    "@polkadot/util": "^0.28.6",
     "@types/co-body": "^0.0.3",
     "@types/koa": "^2.0.46",
     "@types/koa-route": "^3.2.4",

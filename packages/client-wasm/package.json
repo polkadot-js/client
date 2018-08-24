@@ -28,16 +28,11 @@
     "url": "https://github.com/polkadot-js/client/issues"
   },
   "homepage": "https://github.com/polkadot-js/client/tree/master/packages/client-wasm#readme",
-  "scripts": {
-    "build": "polkadot-dev-build-babel",
-    "check": "eslint src && flow check",
-    "test": "echo \"Tests only available from root wrapper\""
-  },
   "dependencies": {
     "@babel/runtime": "^7.0.0-rc.1",
     "@polkadot/client-runtime": "^0.15.0",
     "@polkadot/primitives": "^0.28.20",
-    "@polkadot/util": "^0.28.4",
+    "@polkadot/util": "^0.28.6",
     "@types/webassembly-js-api": "^0.0.1"
   }
 }

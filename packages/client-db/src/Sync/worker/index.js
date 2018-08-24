@@ -2,9 +2,7 @@
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
 
-// HACK Under Node workers not all process functions are exposed. Since some are actually
-// needed for proper operation on the filesystem, we work around this and add the missing
-// operations so we can actually continue
+// HACK Under Node workers not all process functions are exposed
 require('./hackEnv');
 
 // import { Message } from '../types';
@@ -13,10 +11,10 @@ require('./hackEnv');
 // FIXME Waiting on native lib support in workers -
 //    https://github.com/nodejs/node/issues/21481
 //    https://github.com/nodejs/node/issues/21783
-// const leveldb = require('leveldown');
-// const leveldb = require('rocksdb');
-const leveldb = require('medeadown');
-// const leveldb = undefined;
+// const diskdown = require('leveldown');
+// const diskdown = require('rocksdb');
+const diskdown = require('@polkadot/db-diskdown').default;
+// const diskdown = undefined;
 
 const levelup = require('levelup');
 const memdown = require('memdown');
@@ -28,12 +26,12 @@ const logger = require('@polkadot/util/logger').default;
 
 const { notifyOnDone, notifyOnValue } = require('./notify');
 
-const l = logger('db/sync/worker');
+const l = logger('sync/worker');
 const handlers = {};
 
 function initDb () {
-  const downdb = isFunction(leveldb) && workerData.type === 'disk'
-    ? leveldb(workerData.path)
+  const downdb = isFunction(diskdown) && workerData.type === 'disk'
+    ? diskdown(workerData.path)
     : memdown();
 
   return workerData.isTrie
