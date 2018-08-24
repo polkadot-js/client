@@ -2,7 +2,9 @@
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
 
+import { Header } from '@polkadot/primitives/header';
 import { Config } from '@polkadot/client/types';
+import { TrieDb } from '@polkadot/client-db/types';
 import { BlockDb, StateDb } from '@polkadot/client-db-chain/types';
 import { ExecutorInterface } from '@polkadot/client-wasm/types';
 import { ChainInterface, ChainGenesis, ChainJson } from './types';
@@ -17,6 +19,7 @@ import createStateDb from '@polkadot/client-db-chain/state';
 import createRuntime from '@polkadot/client-runtime/index';
 import Executor from '@polkadot/client-wasm/index';
 import createBlock from '@polkadot/primitives/create/block';
+import decodeBlock from '@polkadot/primitives/codec/block/decode';
 import encodeBlock from '@polkadot/primitives/codec/block/encode';
 import encodeHeader from '@polkadot/primitives/codec/header/encode';
 import storage from '@polkadot/storage';
@@ -28,6 +31,12 @@ import blake2Asu8a from '@polkadot/util-crypto/blake2/asU8a';
 import trieRoot from '@polkadot/trie-hash/root';
 
 import chains from './chains';
+
+type BlockResult = {
+  block: Uint8Array,
+  header: Header,
+  headerHash: Uint8Array
+};
 
 export default class Chain implements ChainInterface {
   readonly blocks: BlockDb;
@@ -51,7 +60,7 @@ export default class Chain implements ChainInterface {
 
     this.blocks = createBlockDb(blockDb);
     this.state = createStateDb(stateDb);
-    this.genesis = this.initGenesis();
+    this.genesis = this.initGenesis(stateDb);
     this.executor = new Executor(config, this.blocks, this.state, runtime);
   }
 
@@ -75,10 +84,63 @@ export default class Chain implements ChainInterface {
     );
   }
 
-  private initGenesis () {
-    this.initGenesisState();
+  private initGenesis (stateDb: TrieDb): ChainGenesis {
+    const bestHash = this.blocks.bestHash.get();
 
-    const genesis = this.initGenesisBlock();
+    if (!bestHash || !bestHash.length) {
+      return this.createGenesis();
+    }
+
+    const bestBlock = this.getBlock(bestHash);
+
+    stateDb.setRoot(bestBlock.header.stateRoot);
+
+    const genesisHash = this.state.system.blockHashAt.get(0);
+
+    if (!genesisHash || !genesisHash.length) {
+      throw new Error('Unable to retrieve genesis hash, aborting');
+    }
+
+    const genesisBlock = this.getBlock(genesisHash);
+
+    return {
+      ...genesisBlock,
+      code: this.getCode()
+    };
+  }
+
+  private getBlock (headerHash: Uint8Array): BlockResult {
+    const block = this.blocks.block.get(headerHash);
+
+    if (!block || !block.length) {
+      throw new Error(`Unable to retrieve block ${u8aToHex(headerHash)}`);
+    }
+
+    const decoded = decodeBlock(block);
+
+    return {
+      block,
+      header: decoded.header,
+      headerHash
+    };
+  }
+
+  private getCode (): Uint8Array {
+    const code = this.state.db.get(
+      key(storage.consensus.public.code)()
+    );
+
+    if (!code || !code.length) {
+      throw new Error('Unable to retrieve genesis code');
+    }
+
+    return code;
+  }
+
+  private createGenesis (): ChainGenesis {
+    this.createGenesisState();
+
+    const genesis = this.createGenesisBlock();
 
     this.blocks.bestHash.set(genesis.headerHash);
     this.blocks.bestNumber.set(0);
@@ -87,15 +149,7 @@ export default class Chain implements ChainInterface {
     return genesis;
   }
 
-  private initGenesisBlock () {
-    const code = this.state.db.get(
-      key(storage.consensus.public.code)()
-    );
-
-    if (code === null) {
-      throw new Error('Unable to retrieve genesis code');
-    }
-
+  private createGenesisBlock (): ChainGenesis {
     const block = createBlock({
       header: {
         stateRoot: this.state.db.getRoot(),
@@ -107,13 +161,13 @@ export default class Chain implements ChainInterface {
 
     return {
       block: encodeBlock(block),
-      code,
+      code: this.getCode(),
       header: block.header,
       headerHash
     };
   }
 
-  private initGenesisState () {
+  private createGenesisState (): void {
     const { genesis: { raw } } = this.chain;
 
     this.state.db.checkpoint();
