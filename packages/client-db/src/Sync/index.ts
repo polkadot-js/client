@@ -7,9 +7,10 @@ import { Message, MessageData, MessageType, MessageTypeRead, MessageTypeWrite } 
 
 import path from 'path';
 import { Worker } from 'worker_threads';
-// import promisify from '@polkadot/util/promisify';
 
 import commands from './worker/commands';
+import defaults from './worker/defaults';
+import atomics from './worker/atomics';
 
 const emptyBuffer = new Uint8Array();
 
@@ -83,18 +84,14 @@ export default class SyncDb implements TrieDb {
       type
     } as Message);
 
-    Atomics.wait(state, 0, commands.START, 5000);
+    atomics.wait(state, commands.START);
 
     return state;
   }
 
   // Notifies the worker that it should continue filling the result buffer
   private _waitOnRead (state: Int32Array): void {
-    state[0] = commands.FILL;
-
-    // @ts-ignore Node is a bit ahead, still to be renamed
-    Atomics.notify(state, 0, 1);
-    Atomics.wait(state, 0, commands.FILL, 5000);
+    atomics.notify(state, commands.FILL);
   }
 
   // Ok, this is not something that returns a value, just send the message and
@@ -110,7 +107,7 @@ export default class SyncDb implements TrieDb {
   // Sends a message to the worker, reading and returning the actual result
   private _executeRead (type: MessageTypeRead, key?: Uint8Array, value?: Uint8Array): Uint8Array | null {
     // The shared data buffer that will be used by the worker to send info back
-    const shared = new SharedArrayBuffer(4096);
+    const shared = new SharedArrayBuffer(defaults.SHARED_BUFFER_SIZE);
     const buffer = new Uint8Array(shared);
     const state = this._waitOnStart(type, {
       buffer,

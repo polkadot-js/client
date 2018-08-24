@@ -20,7 +20,7 @@ const encoder = require('@polkadot/trie-db/encoder').default;
 const isFunction = require('@polkadot/util/is/function').default;
 const logger = require('@polkadot/util/logger').default;
 
-const { notifyOnDone, notifyOnValue } = require('./notify');
+const { notifyOnDone, notifyOnValue } = require('./atomics');
 
 const l = logger('sync/worker');
 const handlers = {};
