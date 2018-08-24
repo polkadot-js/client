@@ -27,6 +27,7 @@ import key from '@polkadot/storage/key';
 import assert from '@polkadot/util/assert';
 import hexToU8a from '@polkadot/util/hex/toU8a';
 import u8aToHex from '@polkadot/util/u8a/toHex';
+import logger from '@polkadot/util/logger';
 import blake2Asu8a from '@polkadot/util-crypto/blake2/asU8a';
 import trieRoot from '@polkadot/trie-hash/root';
 
@@ -37,6 +38,8 @@ type BlockResult = {
   header: Header,
   headerHash: Uint8Array
 };
+
+const l = logger('chain');
 
 export default class Chain implements ChainInterface {
   readonly blocks: BlockDb;
@@ -62,6 +65,11 @@ export default class Chain implements ChainInterface {
     this.state = createStateDb(stateDb);
     this.genesis = this.initGenesis(stateDb);
     this.executor = new Executor(config, this.blocks, this.state, runtime);
+
+    const bestHash = this.blocks.bestHash.get();
+    const bestNumber = this.blocks.bestNumber.get();
+
+    l.log(`${this.chain.name}, best #${bestNumber.toString()} ${u8aToHex(bestHash)}`);
   }
 
   // TODO We should load chains from json files as well

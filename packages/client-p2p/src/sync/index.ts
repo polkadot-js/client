@@ -138,12 +138,11 @@ export default class Sync extends EventEmitter implements SyncInterface {
 
     for (let i = 0; i < blocks.length; i++) {
       const block = blocks[i];
-      const data = this.chain.blocks.block.get(block.hash);
-      const hasImported = data.length !== 0;
+      const dbBlock = this.chain.blocks.block.get(block.hash);
       const blockNumber = block.header.number.toString();
-      const hasQueued = !!this.blockQueue[blockNumber];
+      const canQueue = !dbBlock.length && !this.blockQueue[blockNumber];
 
-      if (!hasImported && !hasQueued) {
+      if (canQueue) {
         this.blockQueue[blockNumber] = block;
 
         count++;

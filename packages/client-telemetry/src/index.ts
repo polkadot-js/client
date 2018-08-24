@@ -88,8 +88,8 @@ export default class Telemetry implements TelemetryInterface {
     const bestHash = this.blocks.bestHash.get();
     const bestNumber = this.blocks.bestNumber.get();
 
-    this.send(new Connected(this.chain, this.name));
     this.send(new Started(bestHash, bestNumber));
+    this.send(new Connected(this.chain, this.name));
   }
 
   private send (message: Base): void {

@@ -85,20 +85,24 @@ export default class BlockRequest extends BaseMessage implements MessageInterfac
     const fromTo = u8a[FROM_DATA + fromLength] === 0 ? 0 : 32;
     const atDirection = FROM_DATA + fromLength + fromTo;
     const maxOff = atDirection + 1;
+    const from = fromLength === 16
+      ? u8aToBn(u8a.subarray(FROM_DATA, FROM_DATA + fromLength), true)
+      : u8a.slice(FROM_DATA, FROM_DATA + fromLength);
+    const to = fromTo === 0
+      ? null
+      : u8a.slice(FROM_DATA + fromLength, atDirection);
+    const direction = u8a[atDirection] === 0 ? 'Ascending' : 'Descending';
+    const max = u8a[maxOff] === 1
+      ? u8aToBn(u8a.subarray(maxOff + 1, maxOff + 1 + 32), true).toNumber()
+      : null;
 
     return new BlockRequest({
       id: u8aToBn(u8a.subarray(0, FIELD_OFF), true).toNumber(),
       fields: toAttrs(u8a[FIELD_OFF]),
-      from: fromLength === 16
-        ? u8aToBn(u8a.subarray(FROM_DATA, FROM_DATA + fromLength), true)
-        : u8a.slice(FROM_DATA, FROM_DATA + fromLength),
-      to: fromTo === 0
-        ? null
-        : u8a.slice(FROM_DATA + fromLength, atDirection),
-      direction: u8a[atDirection] === 0 ? 'Ascending' : 'Descending',
-      max: u8a[maxOff] === 1
-        ? u8aToBn(u8a.subarray(maxOff + 1, maxOff + 1 + 32), true).toNumber()
-        : null
+      from,
+      to,
+      direction,
+      max
     });
   }
 }
