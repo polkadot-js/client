@@ -40,26 +40,19 @@ function initHandlers () {
 
   return {
     checkpoint: ({ state }) =>
-      notifyOnDone(state, () =>
-        db.checkpoint()),
+      notifyOnDone(state, () => db.checkpoint()),
     commit: ({ state }) =>
-      notifyOnDone(state, () =>
-        db.commit()),
+      notifyOnDone(state, () => db.commit()),
     del: ({ key, state }) =>
-      notifyOnDone(state, () =>
-        db.del(key)),
+      notifyOnDone(state, () => db.del(key)),
     get: ({ buffer, key, state }) =>
-      notifyOnValue(state, buffer, () =>
-        db.get(key)),
+      notifyOnValue(state, buffer, () => db.get(key)),
     put: ({ key, state, value }) =>
-      notifyOnDone(state, () =>
-        db.put(key, value)),
+      notifyOnDone(state, () => db.put(key, value)),
     revert: ({ state }) =>
-      notifyOnDone(state, () =>
-        db.revert()),
+      notifyOnDone(state, () => db.revert()),
     getRoot: ({ buffer, state }) =>
-      notifyOnValue(state, buffer, async () =>
-        db.root),
+      notifyOnValue(state, buffer, async () => db.root),
     setRoot: ({ state, value }) =>
       notifyOnDone(state, async () => {
         db.root = value;
