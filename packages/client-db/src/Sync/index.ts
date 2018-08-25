@@ -2,25 +2,34 @@
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
 
-import { TrieDb } from '../types';
+import { TrieDb, DbConfig$Type } from '../types';
 import { Message, MessageData, MessageType, MessageTypeRead, MessageTypeWrite } from './types';
 
 import path from 'path';
 import { Worker } from 'worker_threads';
-import promisify from '@polkadot/util/promisify';
 
 import commands from './worker/commands';
+import defaults from './worker/defaults';
+import atomics from './worker/atomics';
 
 const emptyBuffer = new Uint8Array();
 
 export default class SyncDb implements TrieDb {
   private worker: WorkerThreads.Worker;
 
-  constructor () {
+  constructor (type: DbConfig$Type = 'memory', dbPath: string = '.', isTrie: boolean = true) {
     // NOTE Node 10.6 relative paths for Workers are broken - adding here tries to load
     // the worker from /client, not client-db.
-    // FIXME We should be passing the trie params info into construction
-    this.worker = new Worker(path.join(__dirname, './worker/index.js'));
+    this.worker = new Worker(
+      path.join(__dirname, './worker/index.js'),
+      {
+        workerData: {
+          isTrie,
+          path: dbPath,
+          type
+        }
+      }
+    );
   }
 
   checkpoint (): void {
@@ -47,14 +56,22 @@ export default class SyncDb implements TrieDb {
     this._executeWrite('put', key, value);
   }
 
-  trieRoot (): Uint8Array {
-    return this._executeRead('root') as Uint8Array;
+  getRoot (): Uint8Array {
+    return this._executeRead('getRoot') as Uint8Array;
+  }
+
+  setRoot (value: Uint8Array): void {
+    this._executeWrite('setRoot', undefined, value);
   }
 
   async terminate () {
+    this.worker.unref();
+
     // TODO We should cleanup the trie instance gracefully, so another message here
     // to cleanup and then the termination up next
-    return promisify(this.worker, this.worker.terminate);
+
+    // TODO We should be terminating the worker when no references
+    // return promisify(this.worker, this.worker.terminate);
   }
 
   // Sends a message to the worker, waiting until started
@@ -67,18 +84,14 @@ export default class SyncDb implements TrieDb {
       type
     } as Message);
 
-    Atomics.wait(state, 0, commands.START);
+    atomics.wait(state, commands.START);
 
     return state;
   }
 
   // Notifies the worker that it should continue filling the result buffer
   private _waitOnRead (state: Int32Array): void {
-    state[0] = commands.FILL;
-
-    // @ts-ignore Node is a bit ahead, still to be renamed
-    Atomics.notify(state, 0, 1);
-    Atomics.wait(state, 0, commands.FILL);
+    atomics.notify(state, commands.FILL);
   }
 
   // Ok, this is not something that returns a value, just send the message and
@@ -94,7 +107,7 @@ export default class SyncDb implements TrieDb {
   // Sends a message to the worker, reading and returning the actual result
   private _executeRead (type: MessageTypeRead, key?: Uint8Array, value?: Uint8Array): Uint8Array | null {
     // The shared data buffer that will be used by the worker to send info back
-    const shared = new SharedArrayBuffer(4096);
+    const shared = new SharedArrayBuffer(defaults.SHARED_BUFFER_SIZE);
     const buffer = new Uint8Array(shared);
     const state = this._waitOnStart(type, {
       buffer,
@@ -126,7 +139,7 @@ export default class SyncDb implements TrieDb {
 
       // This _should_ never happen... but...
       default:
-        throw new Error(`Unknown worker state waiting for size, ${state[0]}`);
+        throw new Error(`Unknown worker state waiting for size, command=${state[0]}`);
     }
   }
 

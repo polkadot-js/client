@@ -1,6 +1,6 @@
 {
   "name": "@polkadot/client-rpc",
-  "version": "0.13.8",
+  "version": "0.15.0",
   "description": "RPC server for a Polkadot client",
   "main": "index.js",
   "keywords": [
@@ -28,27 +28,22 @@
     "url": "https://github.com/polkadot-js/client/issues"
   },
   "homepage": "https://github.com/polkadot-js/client/tree/master/packages/client-rpc#readme",
-  "scripts": {
-    "build": "polkadot-dev-build-babel",
-    "check": "eslint src && flow check",
-    "test": "echo \"Tests only available from root wrapper\""
-  },
   "devDependencies": {
-    "@polkadot/api-provider": "^0.14.18",
-    "@polkadot/client": "^0.13.8"
+    "@polkadot/api-provider": "^0.28.22",
+    "@polkadot/client": "^0.15.0"
   },
   "dependencies": {
-    "@babel/runtime": "^7.0.0-beta.51",
-    "@polkadot/client-rpc-handlers": "^0.13.8",
-    "@polkadot/util": "^0.26.20",
+    "@babel/runtime": "^7.0.0-rc.1",
+    "@polkadot/client-rpc-handlers": "^0.15.0",
+    "@polkadot/util": "^0.28.7",
     "@types/co-body": "^0.0.3",
     "@types/koa": "^2.0.46",
     "@types/koa-route": "^3.2.4",
-    "@types/koa-websocket": "^5.0.0",
-    "co-body": "^5.1.1",
-    "eventemitter3": "^2.0.3",
-    "koa": "^2.4.1",
+    "@types/koa-websocket": "^5.0.2",
+    "co-body": "^6.0.0",
+    "eventemitter3": "^3.1.0",
+    "koa": "^2.5.2",
     "koa-route": "^3.2.0",
-    "koa-websocket": "^4.1.0"
+    "koa-websocket": "^5.0.1"
   }
 }

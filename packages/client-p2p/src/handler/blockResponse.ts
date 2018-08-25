@@ -8,9 +8,10 @@ import { Handler } from './types';
 import BlockResponse from '@polkadot/client-p2p-messages/BlockResponse';
 
 function handleBlockResponse (self: P2pInterface, peer: PeerInterface, message: BlockResponse): void {
-  self.l.debug(() => [peer.shortId, 'BlockResponse', JSON.stringify(message.encode())]);
+  self.l.debug(() => [peer.shortId, 'BlockResponse', JSON.stringify(message)]);
 
   self.sync.queueBlocks(peer, message);
+  self.sync.requestBlocks(peer);
 }
 
 (handleBlockResponse as Handler).type = BlockResponse.type;

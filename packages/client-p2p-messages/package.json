@@ -1,6 +1,6 @@
 {
   "name": "@polkadot/client-p2p-messages",
-  "version": "0.13.8",
+  "version": "0.15.0",
   "description": "Network message definitions",
   "main": "index.js",
   "engines": {
@@ -28,15 +28,10 @@
     "url": "https://github.com/polkadot-js/client/issues"
   },
   "homepage": "https://github.com/polkadot-js/client/tree/master/packages/client-p2p-messages#readme",
-  "scripts": {
-    "build": "polkadot-dev-build-babel",
-    "check": "eslint src && flow check",
-    "test": "echo \"Tests only available from root wrapper\""
-  },
   "dependencies": {
-    "@babel/runtime": "^7.0.0-beta.51",
-    "@polkadot/jsonrpc": "^0.26.20",
-    "@polkadot/primitives": "^0.26.20",
-    "@polkadot/util": "^0.26.20"
+    "@babel/runtime": "^7.0.0-rc.1",
+    "@polkadot/jsonrpc": "^0.28.22",
+    "@polkadot/primitives": "^0.28.22",
+    "@polkadot/util": "^0.28.7"
   }
 }

@@ -9,13 +9,13 @@ import { MessageInterface } from '@polkadot/client-p2p-messages/types';
 import { Logger } from '@polkadot/util/types';
 import { PeerInterface, PeersInterface, PeersInterface$Events } from '../types';
 
-import E3 from 'eventemitter3';
+import EventEmitter from 'eventemitter3';
 import PeerInfo from 'peer-info';
 import logger from '@polkadot/util/logger';
 
 import Peer from '../peer';
 
-export default class Peers extends E3.EventEmitter implements PeersInterface {
+export default class Peers extends EventEmitter implements PeersInterface {
   readonly chain: ChainInterface;
   readonly config: Config;
   readonly l: Logger;
@@ -54,8 +54,18 @@ export default class Peers extends E3.EventEmitter implements PeersInterface {
     return peer;
   }
 
+  countAll (): number {
+    return Object
+      .values(this.map)
+      .length;
+  }
+
   count (): number {
-    return Object.keys(this.map).length;
+    return Object
+      .values(this.map)
+      .filter((peer) =>
+        peer.isActive()
+      ).length;
   }
 
   log (event: PeersInterface$Events, peer: PeerInterface, withShort: boolean = true): void {

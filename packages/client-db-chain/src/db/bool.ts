@@ -17,8 +17,11 @@ export default function decodeBool <T> (db: BaseDb, key: SectionItem<T>): Storag
   return {
     del: (...keyParams: Array<Storage$Key$Value>): void =>
       base.del(createKey(keyParams)),
-    get: (...keyParams: Array<Storage$Key$Value>): boolean =>
-      base.get(createKey(keyParams))[0] === 1,
+    get: (...keyParams: Array<Storage$Key$Value>): boolean => {
+      const value = base.get(createKey(keyParams));
+
+      return value[0] === 1;
+    },
     set: (value: boolean, ...keyParams: Array<Storage$Key$Value>): void =>
       base.set(createKey(keyParams), value, new Uint8Array([value ? 1 : 0])),
     onUpdate: (updater: (value: boolean, raw: Uint8Array) => void): void =>

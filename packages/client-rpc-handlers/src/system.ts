@@ -8,9 +8,9 @@ import { Endpoint } from './types';
 
 import * as clientId from '@polkadot/client/clientId';
 
-const systemChain = ({ chain }: Config) =>
+const systemChain = ({ chain: { name } }: ChainInterface) =>
   async (): Promise<string> =>
-    chain;
+    name;
 
 const systemName = async (): Promise<string> =>
   clientId.name;
@@ -19,7 +19,7 @@ const systemVersion = async (): Promise<string> =>
   clientId.version;
 
 export default (config: Config, chain: ChainInterface): Endpoint => ({
-  'system_chain': systemChain(config),
+  'system_chain': systemChain(chain),
   'system_name': systemName,
   'system_version': systemVersion
 });

@@ -3,10 +3,18 @@
 // of the ISC license. See the LICENSE file for details.
 
 const commands = require('./commands');
+const defaults = require('./defaults');
 
 const exitCommands = [
   commands.END, commands.ERROR
 ];
+
+// waits on an value change
+function wait (state, command) {
+  if (!exitCommands.includes(command)) {
+    Atomics.wait(state, 0, command, defaults.WAIT_TIMEOUT);
+  }
+}
 
 // Sets the state and wakes any Atomics waiting on the current state to change.
 // If we are not done, assume that we will have to do something afterwards, so
@@ -17,9 +25,7 @@ function notify (state, command) {
 
   Atomics.notify(state, 0, 1);
 
-  if (!exitCommands.includes(command)) {
-    Atomics.wait(state, 0, command);
-  }
+  wait(state, command);
 }
 
 // Waits on a function (returning a promise) to complete. Notify either on end or
@@ -74,6 +80,8 @@ async function notifyOnValue (state, buffer, fn) {
 }
 
 module.exports = {
+  notify,
   notifyOnDone,
-  notifyOnValue
+  notifyOnValue,
+  wait
 };

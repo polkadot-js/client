@@ -11,7 +11,9 @@ import createPeerInfo from './peerInfo';
 export default async function createPeerBook (peers: P2pNodes = []): Promise<PeerBook> {
   const peerBook = new PeerBook();
   const peerInfos = await Promise.all(
-    peers.map((peer) => createPeerInfo([peer]))
+    peers.map((peer) =>
+      createPeerInfo([peer])
+    )
   );
 
   peerInfos.forEach((peerInfo) => {

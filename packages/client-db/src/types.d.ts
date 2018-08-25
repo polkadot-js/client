@@ -7,6 +7,7 @@ export type DbPathPrefix = 'database';
 export type DbConfig$Type = 'disk' | 'memory';
 
 export type DbConfig = {
+  isTrieDb: boolean,
   path: string,
   type: DbConfig$Type
 };
@@ -14,13 +15,14 @@ export type DbConfig = {
 export interface BaseDb {
   del: (key: Uint8Array) => void,
   get: (key: Uint8Array) => Uint8Array | null,
-  put: (key: Uint8Array, value: Uint8Array) => void
+  put: (key: Uint8Array, value: Uint8Array) => void,
+  terminate: () => Promise<any>
 }
 
 export interface TrieDb extends BaseDb {
   checkpoint: () => void,
   commit: () => void,
   revert: () => void,
-  trieRoot: () => Uint8Array,
-  terminate: () => Promise<any>
+  getRoot: () => Uint8Array,
+  setRoot: (value: Uint8Array) => void
 }

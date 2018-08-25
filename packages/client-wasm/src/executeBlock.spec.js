@@ -2,9 +2,6 @@
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
 
-import HashDb from '@polkadot/client-db/Hash';
-import MemoryDb from '@polkadot/client-db/Memory';
-
 import Chain from '@polkadot/client-chains';
 
 describe('executeBlock', () => {
@@ -16,16 +13,11 @@ describe('executeBlock', () => {
     wasm: {}
   };
 
-  const memory = new MemoryDb();
-  const chain = new Chain(config, memory, new HashDb());
+  const chain = new Chain(config);
 
   it('executes an actual block', () => {
     expect(
       chain.executor.executeBlock(TEST)
     ).toEqual(true);
-  });
-
-  it('terminates', () => {
-    return memory.terminate();
   });
 });

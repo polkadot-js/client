@@ -2,65 +2,80 @@
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
 
-// import { Message } from '../types';
-// import { FnMap } from './types;
+// HACK Under Node workers not all process functions are exposed
+require('./hackEnv');
 
-// import { parentPort } from 'worker_threads';
-const { parentPort } = require('worker_threads');
-// import Trie from '@polkadot/trie-db';
+// FIXME Waiting on native lib support in workers -
+//    https://github.com/nodejs/node/issues/21481
+//    https://github.com/nodejs/node/issues/21783
+// const diskdown = require('leveldown');
+// const diskdown = require('rocksdb');
+const diskdown = require('@polkadot/db-diskdown').default;
+
+const levelup = require('levelup');
+const memdown = require('memdown');
+const { parentPort, threadId, workerData } = require('worker_threads');
 const Trie = require('@polkadot/trie-db').default;
+const encoder = require('@polkadot/trie-db/encoder').default;
+const isFunction = require('@polkadot/util/is/function').default;
+const logger = require('@polkadot/util/logger').default;
 
-const { notifyOnDone, notifyOnValue } = require('./notify');
+const { notifyOnDone, notifyOnValue } = require('./atomics');
 
-// @ts-ignore Oops, we need the params here
-const trie = new Trie();
+const l = logger('sync/worker');
+const handlers = {};
 
-// const functions: FnMap = {
-const functions = {
-  // checkpoint: ({ state }: Message) =>
-  checkpoint: ({ state }) =>
-    notifyOnDone(state, () =>
-      trie.checkpoint()
-    ),
-  // commit: ({ state }: Message) =>
-  commit: ({ state }) =>
-    notifyOnDone(state, () =>
-      trie.commit()
-    ),
-  // commit: ({ state }: Message) =>
-  del: ({ key, state }) =>
-    notifyOnDone(state, () =>
-      trie.del(key)
-    ),
-  // get: async ({ buffer, key, state }: Message) =>
-  get: async ({ buffer, key, state }) =>
-    notifyOnValue(state, buffer, () =>
-      trie.get(key)
-    ),
-  // put: ({ key, state, value }: Message) =>
-  put: ({ key, state, value }) =>
-    notifyOnDone(state, () =>
-      trie.put(key, value)
-    ),
-  // revert: ({ state }: Message) =>
-  revert: ({ state }) =>
-    notifyOnDone(state, () =>
-      trie.revert()
-    ),
-  // root ({ buffer, state }: Message) =>
-  root: ({ buffer, state }) =>
-    notifyOnValue(state, buffer, async () =>
-      trie.root
-    )
-};
+function initDb () {
+  const downdb = isFunction(diskdown) && workerData.type === 'disk'
+    ? diskdown(workerData.path)
+    : memdown();
 
-// parentPort.on('message', (message: Message): void => {
+  return workerData.isTrie
+    ? new Trie(downdb)
+    : levelup(encoder(downdb));
+}
+
+function initHandlers () {
+  const db = initDb();
+
+  return {
+    checkpoint: ({ state }) =>
+      notifyOnDone(state, () => db.checkpoint()),
+    commit: ({ state }) =>
+      notifyOnDone(state, () => db.commit()),
+    del: ({ key, state }) =>
+      notifyOnDone(state, () => db.del(key)),
+    get: ({ buffer, key, state }) =>
+      notifyOnValue(state, buffer, () => db.get(key)),
+    put: ({ key, state, value }) =>
+      notifyOnDone(state, () => db.put(key, value)),
+    revert: ({ state }) =>
+      notifyOnDone(state, () => db.revert()),
+    getRoot: ({ buffer, state }) =>
+      notifyOnValue(state, buffer, async () => db.root),
+    setRoot: ({ state, value }) =>
+      notifyOnDone(state, async () => {
+        db.root = value;
+      })
+  };
+}
+
 parentPort.on('message', (message) => {
-  const fn = functions[message.type];
+  try {
+    if (!handlers[threadId]) {
+      handlers[threadId] = initHandlers();
+    }
 
-  if (fn) {
-    fn(message);
-  } else {
+    const fn = handlers[threadId][message.type];
+
+    if (fn) {
+      fn(message);
+    } else {
+      throw new Error(`Unable to find handler for type=${message.type}`);
+    }
+  } catch (error) {
+    l.error('Sync/worker.js:', error);
+
     notify(message.state, commands.ERROR);
   }
 });

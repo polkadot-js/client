@@ -1,6 +1,6 @@
 {
   "name": "@polkadot/client-p2p",
-  "version": "0.13.8",
+  "version": "0.15.0",
   "description": "Interfaces to P2P layers used in the Polkadot network",
   "main": "index.js",
   "keywords": [
@@ -28,25 +28,20 @@
     "url": "https://github.com/polkadot-js/client/issues"
   },
   "homepage": "https://github.com/polkadot-js/client/client/tree/master/packages/client-p2p#readme",
-  "scripts": {
-    "build": "polkadot-dev-build-babel",
-    "check": "eslint src && flow check",
-    "test": "echo \"Tests only available from root wrapper\""
-  },
   "dependencies": {
-    "@babel/runtime": "^7.0.0-beta.51",
-    "@polkadot/client-p2p-messages": "^0.13.8",
-    "@polkadot/primitives": "^0.26.20",
-    "@polkadot/util": "^0.26.20",
-    "eventemitter3": "^2.0.3",
-    "libp2p": "^0.22.0",
-    "libp2p-kad-dht": "^0.10.0",
-    "libp2p-mdns": "^0.11.0",
-    "libp2p-mplex": "^0.7.0",
-    "libp2p-railing": "^0.9.1",
+    "@babel/runtime": "^7.0.0-rc.1",
+    "@polkadot/client-p2p-messages": "^0.15.0",
+    "@polkadot/primitives": "^0.28.22",
+    "@polkadot/util": "^0.28.7",
+    "eventemitter3": "^3.1.0",
+    "libp2p": "^0.23.1",
+    "libp2p-bootstrap": "^0.9.3",
+    "libp2p-kad-dht": "^0.10.1",
+    "libp2p-mdns": "^0.12.0",
+    "libp2p-mplex": "^0.8.0",
     "libp2p-secio": "^0.10.0",
     "libp2p-spdy": "^0.12.1",
-    "libp2p-tcp": "^0.12.0",
+    "libp2p-tcp": "^0.12.1",
     "libp2p-websockets": "^0.12.0",
     "pull-pushable": "^2.2.0",
     "pull-stream": "^3.6.8",
@@ -54,6 +49,6 @@
     "varint": "^5.0.0"
   },
   "devDependencies": {
-    "@polkadot/client": "^0.13.8"
+    "@polkadot/client": "^0.15.0"
   }
 }

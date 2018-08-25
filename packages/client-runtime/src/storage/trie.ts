@@ -29,7 +29,7 @@ export default function storage ({ l, heap, db }: RuntimeEnv): RuntimeInterface$
       }),
     storage_root: (resultPtr: Pointer): void =>
       instrument('storage_root', (): void => {
-        const root = db.trieRoot();
+        const root = db.getRoot();
 
         l.debug(() => ['storage_root', [resultPtr], '->', u8aToHex(root)]);
 

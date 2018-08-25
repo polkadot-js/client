@@ -2,6 +2,7 @@
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
 
+import { ChainInterface } from '@polkadot/client-chains/types';
 import { Config } from '@polkadot/client/types';
 import { Logger } from '@polkadot/util/types';
 
@@ -21,11 +22,13 @@ const config = {
   }
 };
 
-export default async function createNode ({ p2p: { address, port, nodes = [] } }: Config, l: Logger): Promise<Libp2p> {
+export default async function createNode ({ p2p: { address, noBootnodes = false, nodes = [], port } }: Config, { chain: { bootNodes = [] } }: ChainInterface, l: Logger): Promise<Libp2p> {
   const peerBook = await createPeerBook([]);
   const peerInfo = await createListener(address, port);
-  const modules = createModules(peerInfo, nodes);
-  const addrs = peerInfo.multiaddrs.toArray().map((addr) => addr.toString());
+  const modules = createModules(peerInfo, noBootnodes ? [] : bootNodes, nodes);
+  const addrs = peerInfo.multiaddrs.toArray().map((addr) =>
+    addr.toString()
+  );
 
   l.log(`creating Libp2p with ${addrs.join(', ')}`);
 

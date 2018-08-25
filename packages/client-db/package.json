@@ -1,6 +1,6 @@
 {
   "name": "@polkadot/client-db",
-  "version": "0.13.8",
+  "version": "0.15.0",
   "description": "Database interface layer for network client",
   "main": "index.js",
   "engines": {
@@ -28,20 +28,16 @@
     "url": "https://github.com/polkadot-js/client/issues"
   },
   "homepage": "https://github.com/polkadot-js/client/tree/master/packages/client-db#readme",
-  "scripts": {
-    "build": "polkadot-dev-build-babel",
-    "check": "eslint src && flow check",
-    "test": "echo \"Tests only available from root wrapper\""
-  },
   "dependencies": {
-    "@babel/runtime": "^7.0.0-beta.51",
-    "@polkadot/trie-db": "^0.26.20",
-    "@polkadot/util": "^0.26.20",
+    "@babel/runtime": "^7.0.0-rc.1",
+    "@polkadot/db-diskdown": "^0.28.7",
+    "@polkadot/trie-db": "^0.28.7",
+    "@polkadot/util": "^0.28.7",
     "@types/mkdirp": "^0.5.2",
     "mkdirp": "^0.5.1"
   },
   "devDependencies": {
-    "@polkadot/client": "^0.13.8",
+    "@polkadot/client": "^0.15.0",
     "rimraf": "^2.6.2"
   }
 }

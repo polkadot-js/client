@@ -14,8 +14,6 @@ import './license';
 import Chain from '@polkadot/client-chains/index';
 import Telemetry from '@polkadot/client-telemetry/index';
 import logger from '@polkadot/util/logger';
-import HashDb from '@polkadot/client-db/Hash';
-import MemoryDb from '@polkadot/client-db/Memory';
 import Rpc from '@polkadot/client-rpc/index';
 import P2p from '@polkadot/client-p2p/index';
 import isUndefined from '@polkadot/util/is/undefined';
@@ -43,7 +41,7 @@ class Client {
     this.l.log(`Running version ${clientId.version} (${verStatus})`);
     this.l.log(`Initialising for roles=${config.roles.join(',')} on chain=${config.chain}`);
 
-    this.chain = new Chain(config, new MemoryDb(), new HashDb());
+    this.chain = new Chain(config);
     this.p2p = new P2p(config, this.chain);
     this.rpc = new Rpc(config, this.chain);
     this.telemetry = new Telemetry(config, this.chain);
@@ -84,7 +82,7 @@ class Client {
     this.informantId = undefined;
   }
 
-  private runInformant = (): void => {
+  private runInformant = () => {
     if (isUndefined(this.chain) || isUndefined(this.p2p) || isUndefined(this.rpc)) {
       this.stopInformant();
 

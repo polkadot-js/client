@@ -104,7 +104,8 @@ export default class Executor implements ExecutorInterface {
 
   generateBlock (utxs: Array<UncheckedRaw>, timestamp: number = Math.ceil(Date.now() / 1000)): Uint8Array {
     const start = Date.now();
-    const nextNumber = this.blockDb.bestNumber.get().addn(1);
+    const bestNumber = this.blockDb.bestNumber.get();
+    const nextNumber = bestNumber.addn(1);
 
     this.l.debug(() => `Generating block #${nextNumber.toString()}`);
     this.stateDb.db.checkpoint();
@@ -124,10 +125,7 @@ export default class Executor implements ExecutorInterface {
     );
     const block = encodeBlock({
       extrinsics,
-      header: {
-        ...header,
-        stateRoot
-      }
+      header: { ...header, stateRoot }
     });
 
     this.stateDb.db.revert();

@@ -19,13 +19,13 @@ import createU8a from '../db/u8a';
 const BALANCE_SIZE = 128;
 const BLOCKNUM_SIZE = 64;
 
-const consensus = (db: TrieDb, { public: { authorityAt, authorityCount, code } }: Section<Storages>) => ({
+const consensus = (db: TrieDb, { public: { authorityAt, authorityCount, code } }: Section<Storages, any, any>) => ({
   authorityAt: createAcc(db, authorityAt),
   authorityCount: createBn(db, authorityCount, 32),
   code: createU8a(db, code)
 });
 
-const council = (db: TrieDb, { public: { activeCouncil, candidacyBond, carryCount, desiredSeats, inactiveGracePeriod, presentationDuration, presentSlashPerVoter, termDuration, votingBond, votingPeriod } }: Section<Storages>) => ({
+const council = (db: TrieDb, { public: { activeCouncil, candidacyBond, carryCount, desiredSeats, inactiveGracePeriod, presentationDuration, presentSlashPerVoter, termDuration, votingBond, votingPeriod } }: Section<Storages, any, any>) => ({
   activeCouncil: createArrU8a(db, activeCouncil),
   candidacyBond: createBn(db, candidacyBond, BALANCE_SIZE),
   carryCount: createBn(db, carryCount, 32),
@@ -38,46 +38,43 @@ const council = (db: TrieDb, { public: { activeCouncil, candidacyBond, carryCoun
   votingPeriod: createBn(db, votingPeriod, BLOCKNUM_SIZE)
 });
 
-const councilVoting = (db: TrieDb, { public: { cooloffPeriod, votingPeriod } }: Section<Storages>) => ({
+const councilVoting = (db: TrieDb, { public: { cooloffPeriod, votingPeriod } }: Section<Storages, any, any>) => ({
   cooloffPeriod: createBn(db, cooloffPeriod, BLOCKNUM_SIZE),
   votingPeriod: createBn(db, votingPeriod, BLOCKNUM_SIZE)
 });
 
-const democracy = (db: TrieDb, { public: { launchPeriod, minimumDeposit, votingPeriod } }: Section<Storages>) => ({
+const democracy = (db: TrieDb, { public: { launchPeriod, minimumDeposit, votingPeriod } }: Section<Storages, any, any>) => ({
   launchPeriod: createBn(db, launchPeriod, BLOCKNUM_SIZE),
   minimumDeposit: createBn(db, minimumDeposit, BALANCE_SIZE),
   votingPeriod: createBn(db, votingPeriod, BLOCKNUM_SIZE)
 });
 
-const governance = (db: TrieDb, { public: { approvalsRatio } }: Section<Storages>) => ({
-  approvalsRatio: createBn(db, approvalsRatio, BLOCKNUM_SIZE)
-});
-
-const parachains = (db: TrieDb, { public: { didUpdate } }: Section<Storages>) => ({
+const parachains = (db: TrieDb, { public: { didUpdate } }: Section<Storages, any, any>) => ({
   didUpdate: createBool(db, didUpdate)
 });
 
-const session = (db: TrieDb, { public: { length, validators } }: Section<Storages>) => ({
+const session = (db: TrieDb, { public: { length, validators } }: Section<Storages, any, any>) => ({
   length: createBn(db, length, BLOCKNUM_SIZE),
   validators: createArrAcc(db, validators)
 });
 
-const staking = (db: TrieDb, { public: { bondingDuration, currentEra, freeBalanceOf, intentions, sessionsPerEra, transactionFee, validatorCount } }: Section<Storages>) => ({
+const staking = (db: TrieDb, { public: { bondingDuration, currentEra, freeBalanceOf, intentions, sessionsPerEra, transactionBaseFee, transactionByteFee, validatorCount } }: Section<Storages, any, any>) => ({
   bondingDuration: createBn(db, bondingDuration, BLOCKNUM_SIZE),
   currentEra: createBn(db, currentEra, BLOCKNUM_SIZE),
   freeBalanceOf: createBn(db, freeBalanceOf, BALANCE_SIZE),
   intentions: createArrAcc(db, intentions),
   sessionsPerEra: createBn(db, sessionsPerEra, BLOCKNUM_SIZE),
-  transactionFee: createBn(db, transactionFee, BALANCE_SIZE),
+  transactionBaseFee: createBn(db, transactionBaseFee, BALANCE_SIZE),
+  transactionByteFee: createBn(db, transactionByteFee, BALANCE_SIZE),
   validatorCount: createBn(db, validatorCount, 32)
 });
 
-const system = (db: TrieDb, { public: { accountIndexOf, blockHashAt } }: Section<Storages>) => ({
+const system = (db: TrieDb, { public: { accountIndexOf, blockHashAt } }: Section<Storages, any, any>) => ({
   accountIndexOf: createBn(db, accountIndexOf, 32),
   blockHashAt: createU8a(db, blockHashAt)
 });
 
-const timestamp = (db: TrieDb, { public: { didUpdate } }: Section<Storages>) => ({
+const timestamp = (db: TrieDb, { public: { didUpdate } }: Section<Storages, any, any>) => ({
   didUpdate: createBool(db, didUpdate)
 });
 
@@ -88,7 +85,6 @@ export default function createState (db: TrieDb): StateDb {
     council: council(db, storage.council),
     councilVoting: councilVoting(db, storage.councilVoting),
     democracy: democracy(db, storage.democracy),
-    governance: governance(db, storage.governance),
     parachains: parachains(db, storage.parachains),
     session: session(db, storage.session),
     staking: staking(db, storage.staking),

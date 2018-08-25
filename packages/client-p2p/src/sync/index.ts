@@ -4,25 +4,25 @@
 
 import { Config } from '@polkadot/client/types';
 import { ChainInterface } from '@polkadot/client-chains/types';
-import { BlockRequestMessageField, BlockResponseMessage, BlockResponseMessageBlock } from '@polkadot/client-p2p-messages/types';
+import { BlockAttr, BlockResponseMessage, BlockResponseMessageBlock } from '@polkadot/client-p2p-messages/types';
 import { Logger } from '@polkadot/util/types';
 import { PeerInterface, SyncStatus } from '../types';
 import { SyncInterface, SyncState$Request, SyncState$BlockRequests, SyncState$BlockQueue } from './types';
 
 import BN from 'bn.js';
-import E3 from 'eventemitter3';
+import EventEmitter from 'eventemitter3';
 import BlockRequest from '@polkadot/client-p2p-messages/BlockRequest';
 import BlockResponse from '@polkadot/client-p2p-messages/BlockResponse';
-import decodeBlock from '@polkadot/primitives/codec/block/decodeRaw';
+// import decodeBlock from '@polkadot/primitives/codec/block/decodeRaw';
 import isU8a from '@polkadot/util/is/u8a';
 import logger from '@polkadot/util/logger';
-import u8aToHex from '@polkadot/util/u8a/toHex';
+// import u8aToHex from '@polkadot/util/u8a/toHex';
 
 import defaults from '../defaults';
 
 type Requests = Array<SyncState$Request>;
 
-export default class Sync extends E3.EventEmitter implements SyncInterface {
+export default class Sync extends EventEmitter implements SyncInterface {
   private chain: ChainInterface;
   private l: Logger;
   private blockRequests: SyncState$BlockRequests = {};
@@ -36,10 +36,10 @@ export default class Sync extends E3.EventEmitter implements SyncInterface {
     this.l = logger('sync');
   }
 
-  getBlockData (fields: Array<BlockRequestMessageField>, hash: Uint8Array): BlockResponseMessageBlock {
-    const { body, header } = decodeBlock(
-      this.chain.blocks.block.get(hash)
-    );
+  getBlockData (fields: Array<BlockAttr>, hash: Uint8Array): BlockResponseMessageBlock {
+    // const { body, header } = decodeBlock(
+    //   this.chain.blocks.block.get(hash)
+    // );
     const data: BlockResponseMessageBlock = {
       // hash
     } as BlockResponseMessageBlock;
@@ -63,18 +63,19 @@ export default class Sync extends E3.EventEmitter implements SyncInterface {
     );
   }
 
-  processBlocks (): void {
+  processBlocks () {
     const start = Date.now();
-    const startNumber = this.chain.blocks.bestNumber.get().addn(1);
+    const bestNumber = this.chain.blocks.bestNumber.get();
+    const startNumber = bestNumber.addn(1);
     let nextNumber = startNumber;
     let count = 0;
 
     while (this.blockQueue[nextNumber.toString()]) {
-      const { hash, importable } = this.blockQueue[nextNumber.toString()];
+      const { encoded } = this.blockQueue[nextNumber.toString()];
 
-      this.l.debug(() => `Importing block #${nextNumber.toString()}, ${u8aToHex(hash)}`);
+      // this.l.debug(() => `Importing block #${nextNumber.toString()}`);
 
-      if (!this.chain.executor.importBlock(importable)) {
+      if (!this.chain.executor.importBlock(encoded)) {
         break;
       }
 
@@ -94,7 +95,7 @@ export default class Sync extends E3.EventEmitter implements SyncInterface {
       : 'Idle';
   }
 
-  provideBlocks (peer: PeerInterface, request: BlockRequest): void {
+  provideBlocks (peer: PeerInterface, request: BlockRequest) {
     const current = (request.from as BN);
     const best = this.chain.blocks.bestNumber.get();
     const blocks = [];
@@ -123,7 +124,7 @@ export default class Sync extends E3.EventEmitter implements SyncInterface {
     );
   }
 
-  queueBlocks (peer: PeerInterface, { blocks, id }: BlockResponseMessage): void {
+  queueBlocks (peer: PeerInterface, { blocks, id }: BlockResponseMessage) {
     const request = this.blockRequests[peer.id];
 
     delete this.blockRequests[peer.id];
@@ -133,40 +134,41 @@ export default class Sync extends E3.EventEmitter implements SyncInterface {
       return;
     }
 
-    const count = blocks.reduce((count: number, block) => {
-      const hasImported = this.chain.blocks.block.get(block.hash).length !== 0;
-      const hasQueued = !!this.blockQueue[block.number.toString()];
+    let count = 0;
 
-      if (hasImported && hasQueued) {
-        return count;
+    for (let i = 0; i < blocks.length; i++) {
+      const block = blocks[i];
+      const dbBlock = this.chain.blocks.block.get(block.hash);
+      const blockNumber = block.header.number.toString();
+      const canQueue = !dbBlock.length && !this.blockQueue[blockNumber];
+
+      if (canQueue) {
+        this.blockQueue[blockNumber] = block;
+
+        count++;
       }
-
-      this.blockQueue[block.number.toString()] = block;
-
-      return count + 1;
-    }, 0);
+    }
 
     this.l.log(`Queued ${count} blocks from ${peer.shortId}`);
 
     this.processBlocks();
   }
 
-  requestBlocks (peer: PeerInterface): void {
-    const from = this.chain.blocks.bestNumber.get().addn(1);
+  requestBlocks (peer: PeerInterface) {
+    const bestNumber = this.chain.blocks.bestNumber.get();
+    const from = bestNumber.addn(1);
 
     // TODO: This assumes no stale block downloading
     if (this.blockRequests[peer.id] || from.gt(peer.bestNumber)) {
       return;
     }
 
-    this.l.debug(() => `Requesting blocks from ${peer.shortId}, #${from.toString()} -`);
-
     const request = new BlockRequest({
-      direction: 'Ascending',
-      fields: ['Body', 'Header', 'Justification'],
       from,
       id: peer.getNextId()
     });
+
+    this.l.debug(() => `Requesting blocks from ${peer.shortId}, #${from.toString()} -`);
 
     this.blockRequests[peer.id] = {
       peer,

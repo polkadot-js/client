@@ -4,13 +4,15 @@
 
 import { Handler } from './types';
 
+import bft from './bft';
 import blockAnnounce from './blockAnnounce';
 import blockRequest from './blockRequest';
 import blockResponse from './blockResponse';
 import status from './status';
+import transactions from './transactions';
 
 const handlers: Array<Handler> = [
-  blockAnnounce, blockRequest, blockResponse, status
+  bft, blockAnnounce, blockRequest, blockResponse, status, transactions
 ];
 
 export default handlers;

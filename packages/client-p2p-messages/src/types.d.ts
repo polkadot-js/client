@@ -9,76 +9,52 @@ import { Header } from '@polkadot/primitives/header';
 import { JsonHeader } from '@polkadot/primitives/json/types';
 import { Role } from '@polkadot/primitives/role';
 
-export interface MessageEncoder <M> {
+export interface MessageInterface {
   readonly type: number;
 
-  encode (): M;
+  encode (): Uint8Array;
+  toJSON (): any;
 }
 
-export type MessageInterface = MessageEncoder<any>;
-
-export interface MessageDecoder <M, C> {
+export interface MessageDecoder <C> {
   readonly type: number;
 
-  decode (input: M): C;
+  decode (input: Uint8Array): C;
 }
 
-export type BlockAnnounceEncoded = {
-  BlockAnnounce: {
-    header: JsonHeader
-  }
-};
+export interface BftMessage {
+}
 
 export interface BlockAnnounceMessage {
   header: Header
 }
 
-export type BlockRequestEncoded = {
-  BlockRequest: {
-    direction: BlockRequestMessageDirection,
-    fields: Array<BlockRequestMessageField>,
-    from: string | number,
-    id: number,
-    max: number,
-    to?: string | number | null
-  }
+export type BlockAttrMap = {
+  header: number,
+  body: number,
+  receipt: number,
+  messageQueue: number,
+  justification: number
 };
 
-export type BlockRequestMessageField = 'Header' | 'Body' | 'Receipt' | 'MessageQueue' | 'Justification';
+export type BlockAttr = keyof BlockAttrMap;
 
 export type BlockRequestMessageDirection = 'Ascending' | 'Descending';
 
 export type BlockRequestMessage = {
-  direction: BlockRequestMessageDirection,
-  fields: Array<BlockRequestMessageField>,
+  direction?: BlockRequestMessageDirection,
+  fields?: Array<BlockAttr>,
   from: HeaderHash | BN,
   id: number,
   max?: number | null,
   to?: HeaderHash | null
 }
 
-export type BlockResponseEncodedBlock = {
-  hash: string,
-  header: Header,
-  body: Array<Array<number>>,
-  receipt: null,
-  messageQueue: null,
-  justification: Justification
-};
-
-export type BlockResponseEncoded = {
-  BlockResponse: {
-    id: number,
-    blocks: Array<BlockResponseEncodedBlock>
-  }
-};
-
 export type BlockResponseMessageBlock = {
   hash: Uint8Array,
   header: Header,
-  importable: Uint8Array,
-  justification: Justification,
-  number: BN
+  encoded: Uint8Array,
+  justification: Uint8Array // Justification
 }
 
 export type BlockResponseMessage = {
@@ -86,26 +62,14 @@ export type BlockResponseMessage = {
   blocks: Array<BlockResponseMessageBlock>,
 }
 
-export type StatusEncoded = {
-  Status: {
-    best_hash: string,
-    best_number: number,
-    genesis_hash: string,
-    parachain_id?: string | null,
-    roles: Array<string>,
-    validator_id?: string | null,
-    validator_signature?: string | null,
-    version: number
-  }
-};
-
 export interface StatusMessage {
   bestHash: HeaderHash,
   bestNumber: BlockNumber,
   genesisHash: HeaderHash,
-  parachainId?: ParaChainId | null,
   roles: Array<Role>,
-  validatorSignature?: Signature | null,
-  validatorId?: AccountId | null,
   version: number
+}
+
+export interface TransactionsMessage {
+  transactions: Array<Uint8Array>
 }

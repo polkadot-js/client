@@ -2,7 +2,7 @@
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
 
-import E3 from 'eventemitter3';
+import EventEmitter from 'eventemitter3';
 import * as http from 'http';
 import * as net from 'net';
 import * as Koa from 'koa';
@@ -71,7 +71,7 @@ export type SubInterface = (socket: WsContext$Socket | undefined, handler: Handl
 export type RpcState = {
   chain: ChainInterface,
   config: Config,
-  emitter: E3.EventEmitter,
+  emitter: EventEmitter,
   handlers: Handlers,
   l: Logger,
   servers: Array<net.Server>,

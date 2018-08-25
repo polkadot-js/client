@@ -2,7 +2,7 @@
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
 
-import E3 from 'eventemitter3';
+import EventEmitter from 'eventemitter3';
 import * as Koa from 'koa';
 import * as net from 'net';
 import { Config } from '@polkadot/client/types';
@@ -28,7 +28,7 @@ import { createError, createResponse } from './create';
 
 const SUBSCRIBE_REGEX = /^subscribe_/;
 
-export default class Rpc extends E3.EventEmitter implements RpcInterface {
+export default class Rpc extends EventEmitter implements RpcInterface {
   private l: Logger;
   private config: Config;
   private handlers: Handlers;

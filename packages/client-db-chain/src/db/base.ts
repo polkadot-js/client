@@ -19,8 +19,11 @@ export default function base <T> (db: BaseDb): Base<T> {
   return {
     del: (key: Uint8Array): void =>
       db.del(key),
-    get: (key: Uint8Array): Uint8Array =>
-      db.get(key) || new Uint8Array([]),
+    get: (key: Uint8Array): Uint8Array => {
+      const value = db.get(key);
+
+      return value || new Uint8Array([]);
+    },
     set: (key: Uint8Array, value: T, raw: Uint8Array): void => {
       db.put(key, raw);
       subscribers.forEach((subscriber) =>

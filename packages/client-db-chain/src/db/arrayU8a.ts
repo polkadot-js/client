@@ -26,7 +26,7 @@ export default function decodeArrayU8a <T> (db: BaseDb, key: SectionItem<T>): St
         return [];
       }
 
-      const length = u8aToBn(u8a.subarray(0, 4)).toNumber();
+      const length = u8aToBn(u8a.subarray(0, 4), true).toNumber();
       const result = [];
       let offset = 4;
 

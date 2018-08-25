@@ -7,17 +7,21 @@ import { P2pNodes } from '../types';
 import DHT from 'libp2p-kad-dht';
 import mplex from 'libp2p-mplex';
 // import Multicast from 'libp2p-mdns';
-import Railing from 'libp2p-railing';
-// import secio from 'libp2p-secio';
+import Bootstrap from 'libp2p-bootstrap';
+import secio from 'libp2p-secio';
 import spdy from 'libp2p-spdy';
 import TCP from 'libp2p-tcp';
 import PeerInfo from 'peer-info';
 // import WS from 'libp2p-websockets';
 
-export default function createModules (peerInfo: PeerInfo, bootNodes: P2pNodes): LibP2p.OptionsModules {
+export default function createModules (peerInfo: PeerInfo, bootNodes: P2pNodes, nodes: P2pNodes): LibP2p.OptionsModules {
+  const list = nodes.concat(bootNodes).map((node) =>
+    node.replace('/p2p/', '/ipfs/')
+  );
+
   return {
     connEncryption: [
-      // secio
+      secio
     ],
     streamMuxer: [
       mplex,
@@ -26,7 +30,7 @@ export default function createModules (peerInfo: PeerInfo, bootNodes: P2pNodes):
     dht: DHT,
     peerDiscovery: [
       // new Multicast(peerInfo),
-      new Railing({ list: bootNodes })
+      new Bootstrap({ list })
     ],
     transport: [
       new TCP()

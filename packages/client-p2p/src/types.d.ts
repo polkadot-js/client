@@ -5,7 +5,7 @@
 import BN from 'bn.js';
 // import { LibP2pConnection } from 'interface-connection';
 import LibP2p from 'libp2p';
-import E3 from 'eventemitter3';
+import EventEmitter from 'eventemitter3';
 import { Logger } from '@polkadot/util/types';
 import { Config } from '@polkadot/client/types';
 import { ChainInterface } from '@polkadot/client-chains/types';
@@ -34,6 +34,7 @@ export type P2pConfig = {
   clientId: string,
   maxPeers: number,
   nodes?: P2pNodes,
+  noBootnodes: boolean,
   port: number
 };
 
@@ -47,6 +48,7 @@ export interface PeerInterface {
   readonly shortId: string,
 
   addConnection: (connection: LibP2pConnection, isWritable: boolean) => void,
+  isActive: () => boolean,
   isWritable: () => boolean,
   getNextId: () => number,
   on (type: PeerInterface$Events, cb: (message: MessageInterface) => any): any,
@@ -71,7 +73,7 @@ export type P2pInterface = {
   readonly l: Logger;
   readonly sync: Sync;
 
-  _announceBlock: (hash: Uint8Array, header: Uint8Array, body: Uint8Array) => void,
+  // _announceBlock: (hash: Uint8Array, header: Uint8Array, body: Uint8Array) => void,
   isStarted: () => boolean,
   on: (type: P2pInterface$Events, cb: () => any) => any,
   getNumPeers: () => number,
@@ -82,7 +84,7 @@ export type P2pInterface = {
 export type P2pState = {
   chain: ChainInterface,
   config: Config,
-  emitter: E3.EventEmitter,
+  emitter: EventEmitter,
   l: Logger,
   node: LibP2p,
   peers: PeersInterface,

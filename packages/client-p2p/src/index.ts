@@ -10,9 +10,10 @@ import { P2pInterface, PeerInterface, PeersInterface } from './types';
 
 import handlers from './handler';
 
-import E3 from 'eventemitter3';
-import BlockAnnounce from '@polkadot/client-p2p-messages/BlockAnnounce';
-import decodeHeader from '@polkadot/primitives/codec/header/decode';
+import EventEmitter from 'eventemitter3';
+// import handshake from 'pull-handshake';
+import PullPushable from 'pull-pushable';
+import pull from 'pull-stream';
 import logger from '@polkadot/util/logger';
 import promisify from '@polkadot/util/promisify';
 
@@ -31,7 +32,7 @@ type QueuedPeer = {
   isDialled: boolean
 };
 
-export default class P2p extends E3.EventEmitter implements P2pInterface {
+export default class P2p extends EventEmitter implements P2pInterface {
   readonly chain: ChainInterface;
   readonly config: Config;
   private dialQueue: Array<QueuedPeer> = [];
@@ -62,7 +63,7 @@ export default class P2p extends E3.EventEmitter implements P2pInterface {
   async start (): Promise<boolean> {
     await this.stop();
 
-    this.node = await createNode(this.config, this.l);
+    this.node = await createNode(this.config, this.chain, this.l);
     this.peers = new Peers(this.config, this.chain, this.node);
 
     this._handleProtocol(this.node, this.peers);
@@ -95,22 +96,22 @@ export default class P2p extends E3.EventEmitter implements P2pInterface {
     return true;
   }
 
-  _announceBlock (hash: Uint8Array, _header: Uint8Array, body: Uint8Array): void {
-    if (!this.peers) {
-      return;
-    }
+  // _announceBlock (hash: Uint8Array, _header: Uint8Array, body: Uint8Array): void {
+  //   if (!this.peers) {
+  //     return;
+  //   }
 
-    const header = decodeHeader(_header);
-    const message = new BlockAnnounce({
-      header
-    });
+  //   const header = decodeHeader(_header);
+  //   const message = new BlockAnnounce({
+  //     header
+  //   });
 
-    this.peers.peers().forEach((peer) => {
-      if (header.number.gt(peer.bestNumber)) {
-        peer.send(message);
-      }
-    });
-  }
+  //   this.peers.peers().forEach((peer) => {
+  //     if (header.number.gt(peer.bestNumber)) {
+  //       peer.send(message);
+  //     }
+  //   });
+  // }
 
   private _onPeerDiscovery (node: LibP2p, peers: PeersInterface): void {
     node.on('start', () =>
@@ -146,6 +147,7 @@ export default class P2p extends E3.EventEmitter implements P2pInterface {
           const peer = peers.add(peerInfo);
 
           peers.log('protocol', peer);
+
           peer.addConnection(connection, false);
 
           if (!peer.isWritable()) {
@@ -155,12 +157,42 @@ export default class P2p extends E3.EventEmitter implements P2pInterface {
           this.l.error('protocol handling error', error);
         }
       }
-      , (protocol: string, requested: string, callback: (error: null, accept: boolean) => void): void => {
-        this.l.debug(() => `matching protocol ${requested}`);
+      // , (protocol: string, requested: string, callback: (error: null, accept: boolean) => void): void => {
+      //   this.l.debug(() => `matching protocol ${requested}`);
 
-        callback(null, requested.indexOf(defaults.PROTOCOL) === 0);
-      }
+      //   callback(null, requested.indexOf(defaults.PROTOCOL) === 0);
+      // }
     );
+  }
+
+  private async _pingPeer (peer: PeerInterface): Promise<boolean> {
+    if (!this.node) {
+      return false;
+    }
+
+    try {
+      const connection = await promisify(
+        this.node, this.node.dialProtocol, peer.peerInfo, '/ipfs/ping/1.0.0'
+      );
+      const pushable = PullPushable();
+
+      pull(pushable, connection);
+
+      // FIXME Once uni-directional pings are available network-wide, properly ping,
+      // don't just pong. (However the libp2p-ping floods the network as it stands)
+      pull(connection, pull.drain(
+        (buffer: Buffer): void => {
+          this.l.debug(() => ['ping', peer.shortId]);
+
+          pushable.push(buffer);
+        },
+        () => false
+      ));
+    } catch (error) {
+      return false;
+    }
+
+    return true;
   }
 
   private async _dialPeer (peer: PeerInterface): Promise<boolean> {
@@ -174,6 +206,8 @@ export default class P2p extends E3.EventEmitter implements P2pInterface {
       const connection = await promisify(
         this.node, this.node.dialProtocol, peer.peerInfo, defaults.PROTOCOL
       );
+
+      await this._pingPeer(peer);
 
       peer.addConnection(connection, true);
 
