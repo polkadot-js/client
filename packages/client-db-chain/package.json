@@ -1,6 +1,6 @@
 {
   "name": "@polkadot/client-db-chain",
-  "version": "0.15.0",
+  "version": "0.15.1",
   "description": "Wrapper databases for managing on-chain storage",
   "main": "index.js",
   "engines": {
@@ -29,7 +29,7 @@
   "homepage": "https://github.com/polkadot-js/client/tree/master/packages/client-db-chain#readme",
   "dependencies": {
     "@babel/runtime": "^7.0.0-rc.1",
-    "@polkadot/client-db": "^0.15.0",
+    "@polkadot/client-db": "^0.15.1",
     "@polkadot/storage": "^0.28.22",
     "@polkadot/trie-hash": "^0.28.7",
     "@polkadot/util": "^0.28.7",
