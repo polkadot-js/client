@@ -51,7 +51,7 @@ export default class Executor implements ExecutorInterface {
   private stateDb: StateDb;
 
   constructor (config: Config, blockDb: BlockDb, stateDb: StateDb, runtime: RuntimeInterface) {
-    this.l = logger('exceutor');
+    this.l = logger('executor');
     this.blockDb = blockDb;
     this.config = config;
     this.stateDb = stateDb;
