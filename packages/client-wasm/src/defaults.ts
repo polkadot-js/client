@@ -2,8 +2,8 @@
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
 
-// NOTE: Aligned with Rust implementation
-const HEAP_SIZE_KB = 8 * 64;
+// NOTE: Rust implementation starts with 8 pages, require lower with auto-grow in in-place
+const HEAP_SIZE_KB = 4 * 64;
 
 export default {
   HEAP_SIZE_KB
