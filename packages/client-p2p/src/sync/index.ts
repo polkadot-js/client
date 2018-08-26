@@ -75,6 +75,10 @@ export default class Sync extends EventEmitter implements SyncInterface {
 
       // this.l.debug(() => `Importing block #${nextNumber.toString()}`);
 
+      if (count && !(count % 8)) {
+        this.emit('imported');
+      }
+
       if (!this.chain.executor.importBlock(encoded)) {
         break;
       }
@@ -149,9 +153,11 @@ export default class Sync extends EventEmitter implements SyncInterface {
       }
     }
 
-    this.l.log(`Queued ${count} blocks from ${peer.shortId}`);
+    if (count) {
+      this.l.log(`Queued ${count} blocks from ${peer.shortId}`);
 
-    this.processBlocks();
+      this.processBlocks();
+    }
   }
 
   requestBlocks (peer: PeerInterface) {
