@@ -13,6 +13,14 @@ const U32_MAX = 2 ** 32 - 1;
 
 export default function data ({ l, heap, db }: RuntimeEnv): RuntimeInterface$Storage$Data {
   return {
+    clear_prefix: (prefixPtr: Pointer, prefixLength: number): void =>
+      instrument('clear_prefix', (): void => {
+        // const key = heap.get(prefixPtr, prefixLength);
+
+        // l.debug(() => ['clear_prefix', [prefixPtr, prefixLength], '<-', u8aToHex(key)]);
+
+        throw new Error('ext_clear_prefix has not been implemented');
+      }),
     clear_storage: (keyPtr: Pointer, keyLength: number): void =>
       instrument('clear_storage', (): void => {
         const key = heap.get(keyPtr, keyLength);

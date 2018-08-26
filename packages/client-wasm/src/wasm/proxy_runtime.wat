@@ -13,6 +13,11 @@
       (result i32)
     )
   )
+  (import "runtime" "clear_prefix"
+    (func $clear_prefix
+      (param i32 i32)
+    )
+  )
   (import "runtime" "clear_storage"
     (func $clear_storage
       (param i32 i32)
@@ -171,6 +176,7 @@
   )
 
   (export "ext_blake2_256" (func $blake2_256))
+  (export "ext_clear_prefix" (func $clear_prefix))
   (export "ext_clear_storage" (func $clear_storage))
   (export "ext_ed25519_verify" (func $ed25519_verify))
   (export "ext_enumerated_trie_root" (func $enumerated_trie_root))

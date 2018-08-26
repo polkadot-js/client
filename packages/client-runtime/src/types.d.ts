@@ -80,6 +80,7 @@ export type RuntimeInterface$Sandbox = {
 };
 
 export type RuntimeInterface$Storage$Data = {
+  clear_prefix: (prefixPtr: Pointer, prefixLength: number) => void,
   clear_storage: (keyPtr: Pointer, keyLength: number) => void,
   exists_storage: (keyPtr: Pointer, keyLength: number) => number,
   get_allocated_storage: (keyPtr: Pointer, keyLength: number, writtenPtr: Pointer) => Pointer,

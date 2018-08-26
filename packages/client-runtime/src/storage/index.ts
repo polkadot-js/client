@@ -9,10 +9,11 @@ import data from './data';
 import trie from './trie';
 
 export default function storage (env: RuntimeEnv): RuntimeInterface$Storage {
-  const { clear_storage, exists_storage, get_allocated_storage, get_storage_into, set_storage } = data(env);
+  const { clear_prefix, clear_storage, exists_storage, get_allocated_storage, get_storage_into, set_storage } = data(env);
   const { enumerated_trie_root, storage_root } = trie(env);
 
   return {
+    clear_prefix,
     clear_storage,
     exists_storage,
     get_allocated_storage,
