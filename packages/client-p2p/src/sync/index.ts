@@ -134,22 +134,26 @@ export default class Sync extends EventEmitter implements SyncInterface {
       return;
     }
 
+    const bestNumber = this.chain.blocks.bestNumber.get();
     let count = 0;
 
     for (let i = 0; i < blocks.length; i++) {
       const block = blocks[i];
       const dbBlock = this.chain.blocks.block.get(block.hash);
-      const blockNumber = block.header.number.toString();
-      const canQueue = !dbBlock.length && !this.blockQueue[blockNumber];
+      const queueNumber = block.header.number.toString();
+      const isImportable = !dbBlock.length || bestNumber.lt(block.header.number);
+      const canQueue = isImportable && !this.blockQueue[queueNumber];
 
       if (canQueue) {
-        this.blockQueue[blockNumber] = block;
+        this.blockQueue[queueNumber] = block;
 
         count++;
       }
     }
 
-    this.l.log(`Queued ${count} blocks from ${peer.shortId}`);
+    if (count) {
+      this.l.log(`Queued ${count} blocks from ${peer.shortId}`);
+    }
 
     this.processBlocks();
   }
@@ -163,12 +167,12 @@ export default class Sync extends EventEmitter implements SyncInterface {
       return;
     }
 
+    this.l.debug(() => `Requesting blocks from ${peer.shortId}, #${from.toString()} -`);
+
     const request = new BlockRequest({
       from,
       id: peer.getNextId()
     });
-
-    this.l.debug(() => `Requesting blocks from ${peer.shortId}, #${from.toString()} -`);
 
     this.blockRequests[peer.id] = {
       peer,

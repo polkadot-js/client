@@ -7,9 +7,15 @@ import { Memory, Memory$Buffer, SizeUsed } from './types';
 
 import ExtError from '@polkadot/util/ext/error';
 import isUndefined from '@polkadot/util/is/undefined';
+import logger from '@polkadot/util/logger';
+
+const PAGE_SIZE = 64 * 1024;
+
+const l = logger('runtime/heap');
 
 export default class Heap implements RuntimeEnv$Heap {
   private memory: Memory;
+  private wasmMemory?: WebAssembly.Memory;
 
   constructor () {
     this.memory = this.createMemory(new ArrayBuffer(0), 0);
@@ -60,8 +66,9 @@ export default class Heap implements RuntimeEnv$Heap {
     const ptr = this.findContaining(size);
 
     if (ptr === -1) {
-      console.warn(`allocate(${size}) failed, consider increasing the default runtime memory size`);
-      return 0;
+      l.warn(`allocate(${size}) failed, consider increasing the base runtime memory size`);
+
+      return this.growalloc(size);
     }
 
     // FIXME: We are being wasteful here, i.e. we should just un-free the requested size instead of everything (long-term fragmentation and loss)
@@ -69,6 +76,12 @@ export default class Heap implements RuntimeEnv$Heap {
     this.memory.allocated[ptr] = size;
 
     return ptr;
+  }
+
+  growalloc (size: number): Pointer {
+    return this.growMemory(Math.ceil(2 * size / PAGE_SIZE))
+      ? this.allocate(size)
+      : 0;
   }
 
   get (ptr: Pointer, len: number): Uint8Array {
@@ -91,7 +104,10 @@ export default class Heap implements RuntimeEnv$Heap {
     return ptr;
   }
 
-  setWasmMemory (wasmMemory: WebAssembly.Memory, offset: number = 256 * 1024): void {
+  setWasmMemory (wasmMemory: WebAssembly.Memory, pageOffset: number = 4): void {
+    const offset = pageOffset * PAGE_SIZE;
+
+    this.wasmMemory = wasmMemory;
     this.memory = this.createMemory(wasmMemory.buffer, offset);
   }
 
@@ -112,14 +128,32 @@ export default class Heap implements RuntimeEnv$Heap {
       .reduce((total, size) => total + (size), 0);
   }
 
+  private growMemory (pages: number): boolean {
+    if (!this.wasmMemory) {
+      return false;
+    }
+
+    l.debug(() => `Growing allocated memory by ${pages * 64}KB`);
+
+    this.wasmMemory.grow(pages);
+    this.memory.size = this.wasmMemory.buffer.byteLength;
+    this.memory.uint8 = new Uint8Array(this.wasmMemory.buffer);
+    this.memory.view = new DataView(this.memory.uint8.buffer);
+
+    return true;
+  }
+
   private createMemory (buffer: ArrayBuffer, offset: number = 256 * 1024): Memory {
+    const size = buffer.byteLength;
     const uint8 = new Uint8Array(buffer);
+
+    l.debug(() => `Creating WASM memory wrap, ${(size - offset) / 1024}KB`);
 
     return {
       allocated: {},
       deallocated: {},
       offset, // aligned with Rust (should have offset)
-      size: buffer.byteLength,
+      size,
       uint8,
       view: new DataView(uint8.buffer)
     };

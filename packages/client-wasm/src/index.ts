@@ -51,7 +51,7 @@ export default class Executor implements ExecutorInterface {
   private stateDb: StateDb;
 
   constructor (config: Config, blockDb: BlockDb, stateDb: StateDb, runtime: RuntimeInterface) {
-    this.l = logger('exceutor');
+    this.l = logger('executor');
     this.blockDb = blockDb;
     this.config = config;
     this.stateDb = stateDb;
@@ -137,17 +137,23 @@ export default class Executor implements ExecutorInterface {
   importBlock (block: Uint8Array): Executor$BlockImportResult {
     const start = Date.now();
 
-    this.l.debug(() => 'Importing block');
-
-    this.stateDb.db.checkpoint();
-
-    this.executeBlock(block);
-
-    this.stateDb.db.commit();
-
     // tslint:disable-next-line:variable-name
     const { body, extrinsics, header, number } = decodeRaw(block);
     const headerHash = blake2Asu8a(header, 256);
+
+    this.l.debug(() => `Importing block #${number.toString()}, ${u8aToHex(headerHash, 48)}`);
+
+    this.stateDb.db.checkpoint();
+
+    try {
+      this.executeBlock(block);
+    } catch (error) {
+      this.l.error(`Failed on block #${number.toString()}, ${u8aToHex(headerHash, 48)}`);
+
+      throw error;
+    }
+
+    this.stateDb.db.commit();
 
     this.blockDb.bestHash.set(headerHash);
     this.blockDb.bestNumber.set(number);

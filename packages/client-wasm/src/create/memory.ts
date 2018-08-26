@@ -6,13 +6,13 @@ import assert from '@polkadot/util/assert';
 
 import defaults from '../defaults';
 
-const PAGE_PER_KB = 16;
+const PAGE_PER_KB = 1024 / 64;
 
 export default function createMemory (initial: number = defaults.HEAP_SIZE_KB, maximum: number = defaults.HEAP_SIZE_KB): WebAssembly.Memory {
   assert(initial <= maximum, 'Expected initial size to be <= maximum');
 
   return new WebAssembly.Memory({
-    initial: (initial / PAGE_PER_KB) || 8,
-    maximum: (maximum / PAGE_PER_KB) || 8
+    initial: Math.ceil(initial / PAGE_PER_KB) || 8,
+    maximum: Math.ceil(maximum / PAGE_PER_KB) || 8
   });
 }
