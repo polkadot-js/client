@@ -9,7 +9,7 @@ import defaults from '@polkadot/client-wasm/defaults';
 export default ({
   'wasm-heap-size': {
     default: defaults.HEAP_SIZE_KB,
-    description: 'Initial size for the WASM runtime heap (kB)',
+    description: 'Initial size for the WASM runtime heap (KB)',
     type: 'number'
   }
 } as { [index: string]: Options });

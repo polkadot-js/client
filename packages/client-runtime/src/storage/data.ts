@@ -62,7 +62,7 @@ export default function data ({ l, heap, db }: RuntimeEnv): RuntimeInterface$Sto
         const key = heap.get(keyPtr, keyLength);
         const data = get(db, key, offset, dataLength);
 
-        l.debug(() => ['get_storage_into', [keyPtr, keyLength, dataPtr, dataLength, offset], '<-', u8aToHex(key), '->', data === null ? null : u8aToHex(data)]);
+        l.debug(() => ['get_storage_into', [keyPtr, keyLength, dataPtr, dataLength, offset], '<-', u8aToHex(key), '->', data === null ? null : u8aToHex(data), data ? data.length : 0]);
 
         if (data === null) {
           return U32_MAX;
