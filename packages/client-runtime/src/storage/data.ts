@@ -21,6 +21,16 @@ export default function data ({ l, heap, db }: RuntimeEnv): RuntimeInterface$Sto
 
         db.del(key);
       }),
+    exists_storage: (keyPtr: Pointer, keyLength: number): number =>
+      instrument('exists_storage', (): number => {
+        const key = heap.get(keyPtr, keyLength);
+        const data = get(db, key, 0, U32_MAX);
+        const isExistent = !!data;
+
+        l.debug(() => ['exists_storage', [keyPtr, keyLength], '<-', isExistent]);
+
+        return isExistent ? 1 : 0;
+      }),
     get_allocated_storage: (keyPtr: Pointer, keyLength: number, lenPtr: Pointer): Pointer =>
       instrument('get_allocated_storage', (): Pointer => {
         const key = heap.get(keyPtr, keyLength);

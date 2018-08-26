@@ -28,6 +28,11 @@
       (param i32 i32 i32 i32)
     )
   )
+  (import "runtime" "exists_storage"
+    (func $exists_storage
+      (param i32 i32) (result i32)
+    )
+  )
   (import "runtime" "free"
     (func $free
       (param i32)
@@ -169,6 +174,7 @@
   (export "ext_clear_storage" (func $clear_storage))
   (export "ext_ed25519_verify" (func $ed25519_verify))
   (export "ext_enumerated_trie_root" (func $enumerated_trie_root))
+  (export "ext_exists_storage" (func $exists_storage))
   (export "ext_free" (func $free))
   (export "ext_get_allocated_storage" (func $get_allocated_storage))
   (export "ext_get_storage_into" (func $get_storage_into))
