@@ -79,9 +79,9 @@ export default class Heap implements RuntimeEnv$Heap {
   }
 
   growalloc (size: number): Pointer {
-    this.growMemory(Math.ceil(2 * size / PAGE_SIZE));
-
-    return this.allocate(size);
+    return this.growMemory(Math.ceil(2 * size / PAGE_SIZE))
+      ? this.allocate(size)
+      : 0;
   }
 
   get (ptr: Pointer, len: number): Uint8Array {
@@ -128,9 +128,9 @@ export default class Heap implements RuntimeEnv$Heap {
       .reduce((total, size) => total + (size), 0);
   }
 
-  private growMemory (pages: number): void {
+  private growMemory (pages: number): boolean {
     if (!this.wasmMemory) {
-      throw new ExtError('Expected wasmMemory to be set');
+      return false;
     }
 
     l.debug(() => `Growing allocated memory by ${pages * 64}KB`);
@@ -139,6 +139,8 @@ export default class Heap implements RuntimeEnv$Heap {
     this.memory.size = this.wasmMemory.buffer.byteLength;
     this.memory.uint8 = new Uint8Array(this.wasmMemory.buffer);
     this.memory.view = new DataView(this.memory.uint8.buffer);
+
+    return true;
   }
 
   private createMemory (buffer: ArrayBuffer, offset: number = 256 * 1024): Memory {
