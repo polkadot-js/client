@@ -1,6 +1,6 @@
 {
   "name": "@polkadot/client-wasm",
-  "version": "0.15.2",
+  "version": "0.15.3",
   "description": "WASM compiler & call interface",
   "main": "index.js",
   "engines": {
@@ -30,7 +30,7 @@
   "homepage": "https://github.com/polkadot-js/client/tree/master/packages/client-wasm#readme",
   "dependencies": {
     "@babel/runtime": "^7.0.0-rc.1",
-    "@polkadot/client-runtime": "^0.15.2",
+    "@polkadot/client-runtime": "^0.15.3",
     "@polkadot/primitives": "^0.28.22",
     "@polkadot/util": "^0.28.7",
     "@types/webassembly-js-api": "^0.0.1"

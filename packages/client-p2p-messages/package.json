@@ -1,6 +1,6 @@
 {
   "name": "@polkadot/client-p2p-messages",
-  "version": "0.15.2",
+  "version": "0.15.3",
   "description": "Network message definitions",
   "main": "index.js",
   "engines": {
