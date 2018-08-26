@@ -4,29 +4,29 @@
 
 import { RuntimeInterface$Sandbox, RuntimeEnv, Pointer } from './types';
 
-import instrument from './instrument';
-
 // TODO Implement according to https://github.com/paritytech/polkadot/tree/master/substrate/runtime-sandbox
 
-export default function sandbox ({ l }: RuntimeEnv): RuntimeInterface$Sandbox {
-  l.warn('sandbox not implemented, only stubbed');
+const uninmplemented = (name: string): any => {
+  throw new Error(`sandbox: ${name} not implemented, only stubbed`);
+};
 
+export default function sandbox (env: RuntimeEnv): RuntimeInterface$Sandbox {
   return {
     sandbox_instantiate: (a: number, b: number, c: number, d: number, e: number, f: number): number =>
-      instrument('sandbox_instantiate', (): number => 0),
+      uninmplemented('sandbox_instantiate'),
     sandbox_instance_teardown: (instanceIdx: number): void =>
-      instrument('sandbox_instance_teardown', (): void => undefined),
+      uninmplemented('sandbox_instance_teardown'),
     sandbox_invoke: (instanceIdx: number, b: number, c: number, d: number): number =>
-      instrument('sandbox_invoke', (): number => 0),
+      uninmplemented('sandbox_invoke'),
     sandbox_invoke_poc2: (instanceIdx: number, exportPtr: Pointer, exportLen: number, argsPtr: Pointer, argsLen: number, returnValPtr: Pointer, returnValLen: number, state: number): number =>
-      instrument('sandbox_invoke_poc2', (): number => 0),
+      uninmplemented('sandbox_invoke_poc2'),
     sandbox_memory_get: (memoryIdx: number, offset: number, ptr: Pointer, len: number): number =>
-      instrument('sandbox_memory_get', (): number => 0),
+      uninmplemented('sandbox_memory_get'),
     sandbox_memory_new: (initial: number, maximum: number): number =>
-      instrument('sandbox_memory_new', (): number => 0),
+      uninmplemented('sandbox_memory_new'),
     sandbox_memory_set: (memoryIdx: number, offset: number, ptr: Pointer, len: number): number =>
-      instrument('sandbox_memory_set', (): number => 0),
+      uninmplemented('sandbox_memory_set'),
     sandbox_memory_teardown: (memoryIdx: number): void =>
-      instrument('sandbox_memory_teardown', (): void => undefined)
+      uninmplemented('sandbox_memory_teardown')
   };
 }

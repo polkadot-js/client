@@ -19,7 +19,7 @@ export default function data ({ l, heap, db }: RuntimeEnv): RuntimeInterface$Sto
 
         // l.debug(() => ['clear_prefix', [prefixPtr, prefixLength], '<-', u8aToHex(key)]);
 
-        throw new Error('ext_clear_prefix has not been implemented');
+        throw new Error('ext_clear_prefix has not been implemented, only stubbed');
       }),
     clear_storage: (keyPtr: Pointer, keyLength: number): void =>
       instrument('clear_storage', (): void => {
@@ -33,11 +33,11 @@ export default function data ({ l, heap, db }: RuntimeEnv): RuntimeInterface$Sto
       instrument('exists_storage', (): number => {
         const key = heap.get(keyPtr, keyLength);
         const data = get(db, key, 0, U32_MAX);
-        const isExistent = (data && data.length) ? 1 : 0;
+        const hasEntry = (data && data.length) ? 1 : 0;
 
-        l.debug(() => ['exists_storage', [keyPtr, keyLength], '<-', u8aToHex(key), '->', isExistent]);
+        l.debug(() => ['exists_storage', [keyPtr, keyLength], '<-', u8aToHex(key), '->', hasEntry]);
 
-        return isExistent;
+        return hasEntry;
       }),
     get_allocated_storage: (keyPtr: Pointer, keyLength: number, lenPtr: Pointer): Pointer =>
       instrument('get_allocated_storage', (): Pointer => {
@@ -62,7 +62,7 @@ export default function data ({ l, heap, db }: RuntimeEnv): RuntimeInterface$Sto
         const key = heap.get(keyPtr, keyLength);
         const data = get(db, key, offset, dataLength);
 
-        l.debug(() => ['get_storage_into', [keyPtr, keyLength, dataPtr, dataLength, offset], '<-', u8aToHex(key), '->', data === null ? null : u8aToHex(data), data ? data.length : 0]);
+        l.debug(() => ['get_storage_into', [keyPtr, keyLength, dataPtr, dataLength, offset], '<-', u8aToHex(key), '->', data === null ? null : u8aToHex(data)]);
 
         if (data === null) {
           return U32_MAX;
