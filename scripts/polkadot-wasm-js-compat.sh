@@ -6,9 +6,9 @@
 set -e
 
 BASEDIR=$(dirname "$0")
-PKG=$BASEDIR/../node_modules/@polkadot/wasm-bin/wasm32-unknown-unknown
 DST=$BASEDIR/../packages/client-wasm/src/wasm
-SRCWASM=( "polkadot_runtime.wasm" "polkadot_runtime.compact.wasm" )
+# PKG=$BASEDIR/../node_modules/@polkadot/wasm-bin/wasm32-unknown-unknown
+# SRCWASM=( "polkadot_runtime.wasm" "polkadot_runtime.compact.wasm" )
 SRCPROX=( "proxy_runtime.wat" "proxy_substrate.wat" )
 
 function wat2js () {
@@ -44,8 +44,8 @@ for SRC in "${SRCPROX[@]}"; do
   wat2js $DST $SRC
 done
 
-for SRC in "${SRCWASM[@]}"; do
-  wasm2js $PKG $SRC
-done
+# for SRC in "${SRCWASM[@]}"; do
+#   wasm2js $PKG $SRC
+# done
 
 exit 0
