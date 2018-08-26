@@ -33,11 +33,11 @@ export default function data ({ l, heap, db }: RuntimeEnv): RuntimeInterface$Sto
       instrument('exists_storage', (): number => {
         const key = heap.get(keyPtr, keyLength);
         const data = get(db, key, 0, U32_MAX);
-        const isExistent = !!data;
+        const isExistent = (data && data.length) ? 1 : 0;
 
-        l.debug(() => ['exists_storage', [keyPtr, keyLength], '<-', isExistent]);
+        l.debug(() => ['exists_storage', [keyPtr, keyLength], '<-', u8aToHex(key), '->', isExistent]);
 
-        return isExistent ? 1 : 0;
+        return isExistent;
       }),
     get_allocated_storage: (keyPtr: Pointer, keyLength: number, lenPtr: Pointer): Pointer =>
       instrument('get_allocated_storage', (): Pointer => {
@@ -47,7 +47,7 @@ export default function data ({ l, heap, db }: RuntimeEnv): RuntimeInterface$Sto
           ? data.length
           : U32_MAX;
 
-        l.debug(() => ['get_allocated_storage', [keyPtr, keyLength, lenPtr], '<-', u8aToHex(key), length]);
+        l.debug(() => ['get_allocated_storage', [keyPtr, keyLength, lenPtr], '<-', u8aToHex(key), '->', length]);
 
         heap.setU32(lenPtr, length);
 
