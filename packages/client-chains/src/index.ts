@@ -101,6 +101,12 @@ export default class Chain implements ChainInterface {
 
     const bestBlock = this.getBlock(bestHash);
 
+    // HACK (testing) rollback 1
+    // const nextBlock = this.getBlock(bestHash);
+    // const bestBlock = this.getBlock(nextBlock.header.parentHash);
+    // this.blocks.bestNumber.set(bestBlock.header.number);
+    // this.blocks.bestHash.set(nextBlock.header.parentHash);
+
     stateDb.setRoot(bestBlock.header.stateRoot);
 
     const genesisHash = this.state.system.blockHashAt.get(0);
