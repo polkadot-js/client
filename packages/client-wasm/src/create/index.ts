@@ -40,8 +40,8 @@ export default function wasm ({ config: { wasm: { heapSize = defaults.HEAP_SIZE_
   const isNewCode = chain !== prevChain;
 
   if (isNewCode) {
-    pageOffset = chain.memory.grow(Math.ceil(heapSize / 64));
     prevChain = chain;
+    pageOffset = chain.memory.grow(1 + Math.ceil(heapSize / 64));
   }
 
   const instance = instrument('proxy', elapsed, (): WasmInstanceExports =>

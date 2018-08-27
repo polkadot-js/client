@@ -79,7 +79,8 @@ export default class Heap implements RuntimeEnv$Heap {
   }
 
   growalloc (size: number): Pointer {
-    return this.growMemory(Math.ceil(2 * size / PAGE_SIZE))
+    // grow memory by 4 times the requested amount (rounded up)
+    return this.growMemory(1 + Math.ceil(4 * size / PAGE_SIZE))
       ? this.allocate(size)
       : 0;
   }
@@ -147,7 +148,7 @@ export default class Heap implements RuntimeEnv$Heap {
     const size = buffer.byteLength;
     const uint8 = new Uint8Array(buffer);
 
-    l.debug(() => `Creating WASM memory wrap, ${(size - offset) / 1024}KB`);
+    // l.debug(() => `Creating WASM memory wrap, ${(size - offset) / 1024}KB`);
 
     return {
       allocated: {},
