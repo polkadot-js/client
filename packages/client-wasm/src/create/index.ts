@@ -31,11 +31,12 @@ let pageOffset: number = 0;
 
 export default function wasm ({ config: { wasm: { heapSize = defaults.HEAP_SIZE_KB } }, l }: Options, runtime: RuntimeInterface, chainCode: Uint8Array, chainProxy: Uint8Array): WasmInstanceExports {
   const elapsed: string[] = [];
+  const isResized = runtime.environment.heap.wasResized();
   const env = instrument('runtime', elapsed, (): WasmInstanceExports =>
     createEnv(runtime, createMemory(0, 0))
   );
   const chain = instrument('chain', elapsed, (): WasmInstanceExports =>
-    createExports(chainCode, { env })
+    createExports(chainCode, { env }, null, isResized)
   );
   const isNewCode = chain !== prevChain;
 

@@ -33,7 +33,8 @@ export interface RuntimeEnv$Heap {
   setU32: (ptr: Pointer, value: number) => Pointer,
   setWasmMemory: (memory: WebAssembly.Memory, offset?: number) => void,
   size: () => number,
-  used: () => SizeUsed
+  used: () => SizeUsed,
+  wasResized: () => boolean
 }
 
 export type RuntimeEnv = {

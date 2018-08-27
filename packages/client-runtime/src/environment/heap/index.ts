@@ -21,6 +21,10 @@ export default class Heap implements RuntimeEnv$Heap {
     this.memory = this.createMemory(new ArrayBuffer(0), 0);
   }
 
+  wasResized (): boolean {
+    return this.memory.isResized;
+  }
+
   allocate (size: number): Pointer {
     if (size === 0) {
       return 0;
@@ -140,6 +144,7 @@ export default class Heap implements RuntimeEnv$Heap {
     this.memory.size = this.wasmMemory.buffer.byteLength;
     this.memory.uint8 = new Uint8Array(this.wasmMemory.buffer);
     this.memory.view = new DataView(this.memory.uint8.buffer);
+    this.memory.isResized = true;
 
     return true;
   }
@@ -153,6 +158,7 @@ export default class Heap implements RuntimeEnv$Heap {
     return {
       allocated: {},
       deallocated: {},
+      isResized: false,
       offset, // aligned with Rust (should have offset)
       size,
       uint8,
