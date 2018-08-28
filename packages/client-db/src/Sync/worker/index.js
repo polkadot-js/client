@@ -26,33 +26,28 @@ const commands = require('./commands');
 const l = logger('sync/worker');
 const handlers = {};
 
-function initDb ({ buffer, port, state }) {
+function initDb (port) {
   const isDiskdown = isFunction(diskdown) && workerData.type === 'disk';
   const down = isDiskdown
     ? diskdown(workerData.path)
     : memdown();
 
   if (isDiskdown && workerData.withCompact) {
-    down.compact((message) => {
-      port.postMessage({
-        isBusy: true,
-        message
-      });
-    });
-
-    port.postMessage({
-      isBusy: false
-    });
-    port.close();
+    down.compact((message) =>
+      port.postMessage({ message });
+    );
   }
+
+  port.postMessage({ isCompleted: true });
+  port.close();
 
   return workerData.isTrie
     ? new Trie(down)
     : levelup(encoder(down));
 }
 
-function initHandlers (message) {
-  const db = initDb(message);
+function initHandlers (port) {
+  const db = initDb(port);
 
   return {
     checkpoint: ({ state }) =>
@@ -79,7 +74,7 @@ function initHandlers (message) {
 parentPort.on('message', (message) => {
   try {
     if (message.type === '__init') {
-      handlers[threadId] = initHandlers(message);
+      handlers[threadId] = initHandlers(message.port);
       return;
     }
 

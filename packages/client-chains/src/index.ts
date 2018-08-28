@@ -42,13 +42,13 @@ type BlockResult = {
 const l = logger('chain');
 
 export default class Chain implements ChainInterface {
-  blocks: BlockDb;
-  chain: ChainJson;
-  executor: ExecutorInterface;
-  genesis: ChainGenesis;
-  state: StateDb;
+  readonly blocks: BlockDb;
+  readonly chain: ChainJson;
+  readonly executor: ExecutorInterface;
+  readonly genesis: ChainGenesis;
+  readonly state: StateDb;
 
-  async initialise (config: Config) {
+  constructor (config: Config) {
     this.chain = this.load(config.chain);
 
     const isDisk = config.db && config.db.type === 'disk';
@@ -64,13 +64,19 @@ export default class Chain implements ChainInterface {
       : new TrieMemoryDb();
     const runtime = createRuntime(stateDb);
 
-    await blockDb.initialise();
-    await stateDb.initialise();
-
     this.blocks = createBlockDb(blockDb);
     this.state = createStateDb(stateDb);
-    this.genesis = this.initGenesis(stateDb);
+    this.genesis = this.createGenesisBlock();
     this.executor = new Executor(config, this.blocks, this.state, runtime);
+  }
+
+  async initialise (): Promise<void> {
+    await this.blocks.db.initialise();
+    await this.state.db.initialise();
+
+    // @ts-ignore Yes, this is ugly... but we are happy to change it in here
+    // just not on external access
+    this.genesis = this.initGenesis();
 
     const bestHash = this.blocks.bestHash.get();
     const bestNumber = this.blocks.bestNumber.get();
@@ -98,7 +104,7 @@ export default class Chain implements ChainInterface {
     );
   }
 
-  private initGenesis (stateDb: TrieDb): ChainGenesis {
+  private initGenesis (): ChainGenesis {
     const bestHash = this.blocks.bestHash.get();
 
     if (!bestHash || !bestHash.length) {
@@ -107,11 +113,11 @@ export default class Chain implements ChainInterface {
 
     const bestBlock = this.getBlock(bestHash);
 
-    return this.initGenesisFromBest(stateDb, bestBlock.header);
+    return this.initGenesisFromBest(bestBlock.header);
   }
 
-  private initGenesisFromBest (stateDb: TrieDb, bestHeader: Header): ChainGenesis {
-    stateDb.setRoot(bestHeader.stateRoot);
+  private initGenesisFromBest (bestHeader: Header): ChainGenesis {
+    this.state.db.setRoot(bestHeader.stateRoot);
 
     const genesisHash = this.state.system.blockHashAt.get(0);
 
@@ -125,7 +131,7 @@ export default class Chain implements ChainInterface {
         this.blocks.bestHash.set(prevHash);
         this.blocks.bestNumber.set(prevNumber);
 
-        return this.initGenesisFromBest(stateDb, this.getBlock(prevHash).header);
+        return this.initGenesisFromBest(this.getBlock(prevHash).header);
       }
 
       throw new Error('Unable to retrieve genesis hash, aborting');

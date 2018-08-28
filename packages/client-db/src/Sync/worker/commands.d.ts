@@ -8,8 +8,6 @@ declare type Commands = {
   FILL: number,
   READ: number,
   END: number,
-  PING: number,
-  PONG: number,
   ERROR: number
 };
 

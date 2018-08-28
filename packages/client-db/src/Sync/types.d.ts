@@ -27,3 +27,8 @@ export type WorkerData = {
   path: string,
   type: DbConfig$Type
 };
+
+export type ProgressMessage = {
+  isCompleted: boolean,
+  message: string
+}

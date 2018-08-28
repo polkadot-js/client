@@ -31,13 +31,13 @@ export type ChainGenesis = {
 };
 
 export interface ChainInterface {
-  initialise (config: Config): Promise<void>;
+  initialise (): Promise<void>;
 
-  blocks: BlockDb,
-  chain: ChainJson,
-  executor: ExecutorInterface,
-  genesis: ChainGenesis,
-  state: StateDb
+  readonly blocks: BlockDb,
+  readonly chain: ChainJson,
+  readonly executor: ExecutorInterface,
+  readonly genesis: ChainGenesis,
+  readonly state: StateDb
 }
 
 export type ChainState = {
