@@ -9,8 +9,12 @@ import SyncDb from '../Sync';
 export default class HashBaseDb implements BaseDb {
   private wrapped: BaseDb;
 
-  constructor (type: DbConfig$Type = 'memory', path: string = '.') {
-    this.wrapped = new SyncDb(type, path, false);
+  constructor (type: DbConfig$Type = 'memory', path: string = '.', withCompact: boolean = false) {
+    this.wrapped = new SyncDb(type, path, false, withCompact);
+  }
+
+  initialise (): Promise<void> {
+    return this.wrapped.initialise();
   }
 
   del (key: Uint8Array): void {

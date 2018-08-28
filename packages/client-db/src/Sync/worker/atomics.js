@@ -10,9 +10,9 @@ const exitCommands = [
 ];
 
 // waits on an value change
-function wait (state, command) {
+function wait (state, command, timeout) {
   if (!exitCommands.includes(command)) {
-    Atomics.wait(state, 0, command, defaults.WAIT_TIMEOUT);
+    Atomics.wait(state, 0, command, timeout || defaults.WAIT_TIMEOUT);
   }
 }
 
@@ -20,12 +20,25 @@ function wait (state, command) {
 // If we are not done, assume that we will have to do something afterwards, so
 // enter a wait period.
 // function notify (state: Int32Array, command: number): void {
-function notify (state, command) {
+function notify (state, command, timeout) {
   state[0] = command;
 
   Atomics.notify(state, 0, 1);
 
-  wait(state, command);
+  wait(state, command, timeout);
+}
+
+function notifyPong (state, buffer, message) {
+  const view = new DataView(buffer.buffer);
+
+  view.setUint32(0, size);
+  buffer.set(message, 4);
+
+  notify(state, commands.PONG, Infinity);
+}
+
+function notifyPing (state) {
+  notify(state, commands.PING, Infinity);
 }
 
 // Waits on a function (returning a promise) to complete. Notify either on end or
@@ -83,5 +96,7 @@ module.exports = {
   notify,
   notifyOnDone,
   notifyOnValue,
+  notifyPing,
+  notifyPong,
   wait
 };

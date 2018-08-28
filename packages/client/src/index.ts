@@ -41,7 +41,10 @@ class Client {
     this.l.log(`Running version ${clientId.version} (${verStatus})`);
     this.l.log(`Initialising for roles=${config.roles.join(',')} on chain=${config.chain}`);
 
-    this.chain = new Chain(config);
+    this.chain = new Chain();
+
+    await this.chain.initialise(config);
+
     this.p2p = new P2p(config, this.chain);
     this.rpc = new Rpc(config, this.chain);
     this.telemetry = new Telemetry(config, this.chain);

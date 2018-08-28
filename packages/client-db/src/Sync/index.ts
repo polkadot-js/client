@@ -6,7 +6,7 @@ import { TrieDb, DbConfig$Type } from '../types';
 import { Message, MessageData, MessageType, MessageTypeRead, MessageTypeWrite } from './types';
 
 import path from 'path';
-import { Worker } from 'worker_threads';
+import { MessageChannel, Worker } from 'worker_threads';
 
 import commands from './worker/commands';
 import defaults from './worker/defaults';
@@ -17,7 +17,7 @@ const emptyBuffer = new Uint8Array();
 export default class SyncDb implements TrieDb {
   private worker: WorkerThreads.Worker;
 
-  constructor (type: DbConfig$Type = 'memory', dbPath: string = '.', isTrie: boolean = true) {
+  constructor (type: DbConfig$Type = 'memory', dbPath: string = '.', isTrie: boolean = true, withCompact: boolean = false) {
     // NOTE Node 10.6 relative paths for Workers are broken - adding here tries to load
     // the worker from /client, not client-db.
     this.worker = new Worker(
@@ -26,10 +26,32 @@ export default class SyncDb implements TrieDb {
         workerData: {
           isTrie,
           path: dbPath,
-          type
+          type,
+          withCompact
         }
       }
     );
+  }
+
+  initialise (): Promise<void> {
+    return new Promise((resolve) => {
+      const state = new Int32Array(new SharedArrayBuffer(8));
+      const channel = new MessageChannel();
+
+      channel.port2.on('message', ({ isBusy, message }: { isBusy: boolean, message: string }): void => {
+        if (isBusy) {
+          console.error(message);
+        } else {
+          resolve();
+        }
+      });
+
+      this.worker.postMessage({
+        port: channel.port1,
+        state,
+        type: '__init'
+      } as Message, [channel.port1]);
+    });
   }
 
   checkpoint (): void {
@@ -75,7 +97,7 @@ export default class SyncDb implements TrieDb {
   }
 
   // Sends a message to the worker, waiting until started
-  private _waitOnStart (type: MessageType, message: MessageData): Int32Array {
+  private _waitOnStart (type: MessageType, message: MessageData, timeout?: number): Int32Array {
     const state = new Int32Array(new SharedArrayBuffer(8));
 
     this.worker.postMessage({
@@ -84,7 +106,7 @@ export default class SyncDb implements TrieDb {
       type
     } as Message);
 
-    atomics.wait(state, commands.START);
+    atomics.wait(state, commands.START, timeout);
 
     return state;
   }
@@ -96,12 +118,13 @@ export default class SyncDb implements TrieDb {
 
   // Ok, this is not something that returns a value, just send the message and
   // return when we the call has been done
-  private _executeWrite (type: MessageTypeWrite, key?: Uint8Array, value?: Uint8Array): void {
+  private _executeWrite (type: MessageTypeWrite, key?: Uint8Array, value?: Uint8Array, timeout?: number): void {
     this._waitOnStart(type, {
       buffer: emptyBuffer,
       key,
       value
-    });
+    },
+    timeout);
   }
 
   // Sends a message to the worker, reading and returning the actual result

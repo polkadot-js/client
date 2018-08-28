@@ -20,23 +20,39 @@ const encoder = require('@polkadot/trie-db/encoder').default;
 const isFunction = require('@polkadot/util/is/function').default;
 const logger = require('@polkadot/util/logger').default;
 
-const { notifyOnDone, notifyOnValue } = require('./atomics');
+const { notify, notifyOnDone, notifyOnValue, notifyPong } = require('./atomics');
+const commands = require('./commands');
 
 const l = logger('sync/worker');
 const handlers = {};
 
-function initDb () {
-  const downdb = isFunction(diskdown) && workerData.type === 'disk'
+function initDb ({ buffer, port, state }) {
+  const isDiskdown = isFunction(diskdown) && workerData.type === 'disk';
+  const down = isDiskdown
     ? diskdown(workerData.path)
     : memdown();
 
+  if (isDiskdown && workerData.withCompact) {
+    down.compact((message) => {
+      port.postMessage({
+        isBusy: true,
+        message
+      });
+    });
+
+    port.postMessage({
+      isBusy: false
+    });
+    port.close();
+  }
+
   return workerData.isTrie
-    ? new Trie(downdb)
-    : levelup(encoder(downdb));
+    ? new Trie(down)
+    : levelup(encoder(down));
 }
 
-function initHandlers () {
-  const db = initDb();
+function initHandlers (message) {
+  const db = initDb(message);
 
   return {
     checkpoint: ({ state }) =>
@@ -62,8 +78,9 @@ function initHandlers () {
 
 parentPort.on('message', (message) => {
   try {
-    if (!handlers[threadId]) {
-      handlers[threadId] = initHandlers();
+    if (message.type === '__init') {
+      handlers[threadId] = initHandlers(message);
+      return;
     }
 
     const fn = handlers[threadId][message.type];

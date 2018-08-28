@@ -9,5 +9,7 @@ module.exports = {
   FILL: 0x02,
   READ: 0x03,
   END: 0x0f,
+  PING: 0x50,
+  PONG: 0x51,
   ERROR: 0xff
 };

@@ -11,14 +11,14 @@ import OverlayDb from './Overlay';
 export default class DiskDb extends OverlayDb {
   readonly hasAtStart: boolean;
 
-  constructor (path: string) {
+  constructor (path: string, withCompact: boolean = false) {
     const hasAtStart = fs.existsSync(path);
 
     if (!hasAtStart) {
       mkdirp.sync(path);
     }
 
-    super(new SyncDb('disk', path, true));
+    super(new SyncDb('disk', path, true, withCompact));
 
     this.hasAtStart = hasAtStart;
   }

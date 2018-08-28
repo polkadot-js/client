@@ -5,7 +5,7 @@
 import HashBaseDb from './Base';
 
 export default class HashDiskDb extends HashBaseDb {
-  constructor (path: string) {
-    super('disk', path);
+  constructor (path: string, withCompact: boolean = false) {
+    super('disk', path, withCompact);
   }
 }

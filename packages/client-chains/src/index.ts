@@ -42,24 +42,30 @@ type BlockResult = {
 const l = logger('chain');
 
 export default class Chain implements ChainInterface {
-  readonly blocks: BlockDb;
-  readonly chain: ChainJson;
-  readonly executor: ExecutorInterface;
-  readonly genesis: ChainGenesis;
-  readonly state: StateDb;
+  blocks: BlockDb;
+  chain: ChainJson;
+  executor: ExecutorInterface;
+  genesis: ChainGenesis;
+  state: StateDb;
 
-  constructor (config: Config) {
+  async initialise (config: Config) {
     this.chain = this.load(config.chain);
 
     const isDisk = config.db && config.db.type === 'disk';
+    const withCompact = config.db && config.db.compact;
     const genesisStateRoot = this.calcGenesisStateRoot();
-    const dbPath = isDisk
-      ? path.join(config.db.path, 'chains', `${this.chain.id}-${u8aToHex(genesisStateRoot)}`)
-      : '.';
+    const dbPath = path.join(config.db.path, 'chains', `${this.chain.id}-${u8aToHex(genesisStateRoot)}`);
 
-    const stateDb = isDisk ? new TrieDiskDb(path.join(dbPath, 'state')) : new TrieMemoryDb();
-    const blockDb = isDisk ? new HashDiskDb(path.join(dbPath, 'block')) : new HashMemoryDb();
+    const blockDb = isDisk
+      ? new HashDiskDb(path.join(dbPath, 'block'), withCompact)
+      : new HashMemoryDb();
+    const stateDb = isDisk
+      ? new TrieDiskDb(path.join(dbPath, 'state'), withCompact)
+      : new TrieMemoryDb();
     const runtime = createRuntime(stateDb);
+
+    await blockDb.initialise();
+    await stateDb.initialise();
 
     this.blocks = createBlockDb(blockDb);
     this.state = createStateDb(stateDb);
@@ -101,11 +107,27 @@ export default class Chain implements ChainInterface {
 
     const bestBlock = this.getBlock(bestHash);
 
-    stateDb.setRoot(bestBlock.header.stateRoot);
+    return this.initGenesisFromBest(stateDb, bestBlock.header);
+  }
+
+  private initGenesisFromBest (stateDb: TrieDb, bestHeader: Header): ChainGenesis {
+    stateDb.setRoot(bestHeader.stateRoot);
 
     const genesisHash = this.state.system.blockHashAt.get(0);
 
     if (!genesisHash || !genesisHash.length) {
+      const prevHash = bestHeader.parentHash;
+      const prevNumber = bestHeader.number.subn(1);
+
+      if (prevNumber.gtn(1)) {
+        l.log(`Unable to validate stateRoot, moving to block #${prevNumber.toString()}, ${u8aToHex(prevHash, 48)}`);
+
+        this.blocks.bestHash.set(prevHash);
+        this.blocks.bestNumber.set(prevNumber);
+
+        return this.initGenesisFromBest(stateDb, this.getBlock(prevHash).header);
+      }
+
       throw new Error('Unable to retrieve genesis hash, aborting');
     }
 

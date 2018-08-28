@@ -6,13 +6,14 @@ import { DbConfig$Type } from '../types';
 
 export type MessageTypeRead = 'get' | 'getRoot';
 
-export type MessageTypeWrite = 'checkpoint' | 'commit' | 'del' | 'put' | 'revert' | 'setRoot';
+export type MessageTypeWrite = '__init' | 'checkpoint' | 'commit' | 'del' | 'put' | 'revert' | 'setRoot';
 
 export type MessageType = MessageTypeRead | MessageTypeWrite;
 
 export type MessageData = {
   buffer: Uint8Array,
   key?: Uint8Array,
+  port?: WorkerThreads.MessagePort,
   value?: Uint8Array
 }
 

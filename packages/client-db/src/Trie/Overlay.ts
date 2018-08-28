@@ -23,6 +23,10 @@ export default class OverlayDb implements TrieDb {
     this.wrapped = wrapped;
   }
 
+  initialise (): Promise<void> {
+    return this.wrapped.initialise();
+  }
+
   checkpoint () {
     l.debug(() => ['checkpoint at', u8aToHex(this.getRoot())]);
 
