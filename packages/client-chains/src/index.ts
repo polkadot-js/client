@@ -4,7 +4,6 @@
 
 import { Header } from '@polkadot/primitives/header';
 import { Config } from '@polkadot/client/types';
-import { TrieDb } from '@polkadot/client-db/types';
 import { BlockDb, StateDb } from '@polkadot/client-db-chain/types';
 import { ExecutorInterface } from '@polkadot/client-wasm/types';
 import { ChainInterface, ChainGenesis, ChainJson } from './types';
@@ -45,6 +44,7 @@ export default class Chain implements ChainInterface {
   readonly blocks: BlockDb;
   readonly chain: ChainJson;
   readonly executor: ExecutorInterface;
+  // @ts-ignore Ummm....
   readonly genesis: ChainGenesis;
   readonly state: StateDb;
 
@@ -66,7 +66,7 @@ export default class Chain implements ChainInterface {
 
     this.blocks = createBlockDb(blockDb);
     this.state = createStateDb(stateDb);
-    this.genesis = this.createGenesisBlock();
+    // this.genesis = this.createGenesisBlock();
     this.executor = new Executor(config, this.blocks, this.state, runtime);
   }
 
@@ -116,7 +116,7 @@ export default class Chain implements ChainInterface {
     return this.initGenesisFromBest(bestBlock.header);
   }
 
-  private initGenesisFromBest (bestHeader: Header): ChainGenesis {
+  private initGenesisFromBest (bestHeader: Header, traverse: boolean = true): ChainGenesis {
     this.state.db.setRoot(bestHeader.stateRoot);
 
     const genesisHash = this.state.system.blockHashAt.get(0);
@@ -125,13 +125,13 @@ export default class Chain implements ChainInterface {
       const prevHash = bestHeader.parentHash;
       const prevNumber = bestHeader.number.subn(1);
 
-      if (prevNumber.gtn(1)) {
+      if (traverse && prevNumber.gtn(1)) {
         l.log(`Unable to validate stateRoot, moving to block #${prevNumber.toString()}, ${u8aToHex(prevHash, 48)}`);
 
         this.blocks.bestHash.set(prevHash);
         this.blocks.bestNumber.set(prevNumber);
 
-        return this.initGenesisFromBest(this.getBlock(prevHash).header);
+        return this.initGenesisFromBest(this.getBlock(prevHash).header, false);
       }
 
       throw new Error('Unable to retrieve genesis hash, aborting');

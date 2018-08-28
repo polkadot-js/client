@@ -11,7 +11,6 @@ import { MessageChannel, Worker } from 'worker_threads';
 import commands from './worker/commands';
 import defaults from './worker/defaults';
 import atomics from './worker/atomics';
-import { version } from '@polkadot/client/clientId';
 
 const INDICATORS = ['|', '/', '-', '\\'];
 

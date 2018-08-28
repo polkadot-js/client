@@ -34,7 +34,7 @@ function initDb (port) {
 
   if (isDiskdown && workerData.withCompact) {
     down.compact((message) =>
-      port.postMessage({ message });
+      port.postMessage({ message })
     );
   }
 
