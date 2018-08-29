@@ -22,7 +22,7 @@ export default class Base extends Cache {
   }
 
   del (key: Uint8Array): void {
-    this.putCache(key, null);
+    this.delCache(key);
 
     return this.wrapped.del(key);
   }
@@ -35,7 +35,12 @@ export default class Base extends Cache {
     }
 
     result = this.wrapped.get(key);
-    this.putCache(key, result);
+
+    if (result) {
+      this.putCache(key, result);
+    } else {
+      this.delCache(key);
+    }
 
     return result;
   }

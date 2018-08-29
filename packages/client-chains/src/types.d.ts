@@ -30,9 +30,18 @@ export type ChainGenesis = {
   headerHash: Uint8Array
 };
 
-export interface ChainInterface {
-  initialise (): Promise<void>;
+export interface ChainLoader {
+  readonly chain: ChainJson,
+  readonly id: string;
+  readonly genesisRoot: Uint8Array;
+}
 
+export interface ChainDbs {
+  readonly blocks: BlockDb,
+  readonly state: StateDb
+}
+
+export interface ChainInterface {
   readonly blocks: BlockDb,
   readonly chain: ChainJson,
   readonly executor: ExecutorInterface,

@@ -6,15 +6,8 @@ import { Header } from '@polkadot/primitives/header';
 import { Config } from '@polkadot/client/types';
 import { BlockDb, StateDb } from '@polkadot/client-db-chain/types';
 import { ExecutorInterface } from '@polkadot/client-wasm/types';
-import { ChainInterface, ChainGenesis, ChainJson } from './types';
+import { ChainDbs, ChainInterface, ChainLoader, ChainGenesis, ChainJson } from './types';
 
-import path from 'path';
-import HashDiskDb from '@polkadot/client-db/Hash/Disk';
-import HashMemoryDb from '@polkadot/client-db/Hash/Memory';
-import TrieDiskDb from '@polkadot/client-db/Trie/Disk';
-import TrieMemoryDb from '@polkadot/client-db/Trie/Memory';
-import createBlockDb from '@polkadot/client-db-chain/block';
-import createStateDb from '@polkadot/client-db-chain/state';
 import createRuntime from '@polkadot/client-runtime/index';
 import Executor from '@polkadot/client-wasm/index';
 import createBlock from '@polkadot/primitives/create/block';
@@ -23,14 +16,11 @@ import encodeBlock from '@polkadot/primitives/codec/block/encode';
 import encodeHeader from '@polkadot/primitives/codec/header/encode';
 import storage from '@polkadot/storage';
 import key from '@polkadot/storage/key';
-import assert from '@polkadot/util/assert';
 import hexToU8a from '@polkadot/util/hex/toU8a';
 import u8aToHex from '@polkadot/util/u8a/toHex';
 import logger from '@polkadot/util/logger';
 import blake2Asu8a from '@polkadot/util-crypto/blake2/asU8a';
 import trieRoot from '@polkadot/trie-hash/root';
-
-import chains from './chains';
 
 type BlockResult = {
   block: Uint8Array,
@@ -44,64 +34,22 @@ export default class Chain implements ChainInterface {
   readonly blocks: BlockDb;
   readonly chain: ChainJson;
   readonly executor: ExecutorInterface;
-  // @ts-ignore Ummm....
   readonly genesis: ChainGenesis;
   readonly state: StateDb;
 
-  constructor (config: Config) {
-    this.chain = this.load(config.chain);
+  constructor (config: Config, { chain }: ChainLoader, { blocks, state }: ChainDbs) {
+    const runtime = createRuntime(state.db);
 
-    const isDisk = config.db && config.db.type === 'disk';
-    const withCompact = config.db && config.db.compact;
-    const genesisStateRoot = this.calcGenesisStateRoot();
-    const dbPath = path.join(config.db.path, 'chains', `${this.chain.id}-${u8aToHex(genesisStateRoot)}`);
-
-    const blockDb = isDisk
-      ? new HashDiskDb(path.join(dbPath, 'block'), withCompact)
-      : new HashMemoryDb();
-    const stateDb = isDisk
-      ? new TrieDiskDb(path.join(dbPath, 'state'), withCompact)
-      : new TrieMemoryDb();
-    const runtime = createRuntime(stateDb);
-
-    this.blocks = createBlockDb(blockDb);
-    this.state = createStateDb(stateDb);
-    // this.genesis = this.createGenesisBlock();
-    this.executor = new Executor(config, this.blocks, this.state, runtime);
-  }
-
-  async initialise (): Promise<void> {
-    await this.blocks.db.initialise();
-    await this.state.db.initialise();
-
-    // @ts-ignore Yes, this is ugly... but we are happy to change it in here
-    // just not on external access
+    this.chain = chain;
+    this.blocks = blocks;
+    this.state = state;
+    this.executor = new Executor(config, blocks, state, runtime);
     this.genesis = this.initGenesis();
 
-    const bestHash = this.blocks.bestHash.get();
-    const bestNumber = this.blocks.bestNumber.get();
+    const bestHash = blocks.bestHash.get();
+    const bestNumber = blocks.bestNumber.get();
 
-    l.log(`${this.chain.name}, #${bestNumber.toString()}, ${u8aToHex(bestHash, 48)}`);
-  }
-
-  // TODO We should load chains from json files as well
-  private load (name: string): ChainJson {
-    const chain = chains[name];
-
-    assert(chain, `Unable to find builtin chain '${name}'`);
-
-    return chain;
-  }
-
-  private calcGenesisStateRoot (): Uint8Array {
-    const { genesis: { raw } } = this.chain;
-
-    return trieRoot(
-      Object.keys(raw).map((key) => ({
-        k: hexToU8a(key),
-        v: hexToU8a(raw[key])
-      }))
-    );
+    l.log(`${chain.name}, #${bestNumber.toString()}, ${u8aToHex(bestHash, 48)}`);
   }
 
   private initGenesis (): ChainGenesis {

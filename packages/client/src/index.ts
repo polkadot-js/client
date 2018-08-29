@@ -12,6 +12,8 @@ import { Logger } from '@polkadot/util/types';
 import './license';
 
 import Chain from '@polkadot/client-chains/index';
+import ChainDbs from '@polkadot/client-chains/dbs';
+import ChainLoader from '@polkadot/client-chains/loader';
 import Telemetry from '@polkadot/client-telemetry/index';
 import logger from '@polkadot/util/logger';
 import Rpc from '@polkadot/client-rpc/index';
@@ -41,10 +43,12 @@ class Client {
     this.l.log(`Running version ${clientId.version} (${verStatus})`);
     this.l.log(`Initialising for roles=${config.roles.join(',')} on chain=${config.chain}`);
 
-    this.chain = new Chain(config);
+    const chain = new ChainLoader(config);
+    const dbs = new ChainDbs(config, chain);
 
-    await this.chain.initialise();
+    await dbs.initialise();
 
+    this.chain = new Chain(config, chain, dbs);
     this.p2p = new P2p(config, this.chain);
     this.rpc = new Rpc(config, this.chain);
     this.telemetry = new Telemetry(config, this.chain);
