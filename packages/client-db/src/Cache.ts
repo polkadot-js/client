@@ -3,52 +3,49 @@
 // of the ISC license. See the LICENSE file for details.
 
 import { LRUMap } from 'lru_map';
-// import logger from '@polkadot/util/logger';
 
-type CacheObject = {
-  [index: string]: Uint8Array | null | undefined
+type DeletedCache = {
+  [index: string]: boolean
 };
 
-const LRU_SIZE = 2048;
-
-// const l = logger('db/cache');
+const LRU_SIZE = 128;
 
 export default class Cache {
-  // NOTE We are using 2 caches here -
-  //  - cache: only available for the current block (also has 'null' for deleted items)
-  //  - lru: longer-term accross cache that are used across blocks
-  private cache: CacheObject;
-  private lru: LRUMap<string, Uint8Array | null | undefined>;
+  // available for the current block in-progress deleted items
+  private nil: DeletedCache;
+  // onger-term limited LRU cache that are used across blocks
+  private lru: LRUMap<string, Uint8Array>;
 
   constructor () {
-    this.cache = {};
+    this.nil = {};
     this.lru = new LRUMap(LRU_SIZE);
   }
 
   protected clearCache (): void {
-    this.cache = {};
+    this.nil = {};
   }
 
   protected delCache (key: Uint8Array): void {
     const keyStr = key.toString();
 
     this.lru.delete(keyStr);
-    this.cache[keyStr] = null;
+    this.nil[keyStr] = true;
   }
 
   protected getCache (key: Uint8Array): Uint8Array | null | undefined {
     const keyStr = key.toString();
-    const result = this.lru.get(keyStr) || this.cache[keyStr];
 
-    this.cache[keyStr] = result;
+    if (this.nil[keyStr]) {
+      return null;
+    }
 
-    return result;
+    return this.lru.get(keyStr);
   }
 
   protected putCache (key: Uint8Array, value: Uint8Array): void {
     const keyStr = key.toString();
 
-    this.cache[keyStr] = value.slice();
-    this.lru.set(keyStr, this.cache[keyStr]);
+    delete this.nil[keyStr];
+    this.lru.set(keyStr, value.slice());
   }
 }
