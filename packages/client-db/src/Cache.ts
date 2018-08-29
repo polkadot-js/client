@@ -21,8 +21,12 @@ export default class Cache {
     this.lru = new LRUMap(LRU_SIZE);
   }
 
-  protected clearCache (): void {
+  protected clearCache (clearLru: boolean): void {
     this.nil = {};
+
+    if (clearLru) {
+      this.lru.clear();
+    }
   }
 
   protected delCache (key: Uint8Array): void {

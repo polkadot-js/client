@@ -23,14 +23,14 @@ export default class OverlayDb extends Base implements TrieDb {
   }
 
   commit () {
-    this.clearCache();
+    this.clearCache(false);
     this.wrapped.commit();
 
     l.debug(() => ['committed at', u8aToHex(this.getRoot())]);
   }
 
   revert () {
-    this.clearCache();
+    this.clearCache(true);
     this.wrapped.revert();
 
     l.debug(() => ['reverted to', u8aToHex(this.getRoot())]);
@@ -41,6 +41,8 @@ export default class OverlayDb extends Base implements TrieDb {
   }
 
   setRoot (value: Uint8Array): void {
+    this.clearCache(true);
+
     return this.wrapped.setRoot(value);
   }
 }

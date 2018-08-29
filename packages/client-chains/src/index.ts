@@ -16,6 +16,7 @@ import encodeBlock from '@polkadot/primitives/codec/block/encode';
 import encodeHeader from '@polkadot/primitives/codec/header/encode';
 import storage from '@polkadot/storage';
 import key from '@polkadot/storage/key';
+import assert from '@polkadot/util/assert';
 import hexToU8a from '@polkadot/util/hex/toU8a';
 import u8aToHex from '@polkadot/util/u8a/toHex';
 import logger from '@polkadot/util/logger';
@@ -65,7 +66,13 @@ export default class Chain implements ChainInterface {
   }
 
   private initGenesisFromBest (bestHeader: Header, rollback: boolean = true): ChainGenesis {
+    const hexState = u8aToHex(bestHeader.stateRoot, 48);
+
+    l.log(`Initialising from state ${hexState}`);
+
     this.state.db.setRoot(bestHeader.stateRoot);
+
+    assert(u8aToHex(this.state.db.getRoot(), 48) === hexState, `Unable to move state to ${hexState}`);
 
     const genesisHash = this.state.system.blockHashAt.get(0);
 
@@ -88,10 +95,12 @@ export default class Chain implements ChainInterface {
     if (rollback && prevNumber.gtn(1)) {
       l.log(`Unable to validate stateRoot, moving to block #${prevNumber.toString()}, ${u8aToHex(prevHash, 48)}`);
 
-      this.blocks.bestHash.set(prevHash);
-      this.blocks.bestNumber.set(prevNumber);
+      const prevBlock = this.getBlock(prevHash);
 
-      return this.initGenesisFromBest(this.getBlock(prevHash).header, false);
+      this.blocks.bestHash.set(prevHash);
+      this.blocks.bestNumber.set(prevBlock.header.number);
+
+      return this.initGenesisFromBest(prevBlock.header, false);
     }
 
     throw new Error('Unable to retrieve genesis hash, aborting');
