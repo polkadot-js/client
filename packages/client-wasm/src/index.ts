@@ -78,12 +78,12 @@ export default class Executor implements ExecutorInterface {
     );
   }
 
-  executeBlock (block: Uint8Array): boolean {
+  executeBlock (block: Uint8Array, forceNew: boolean = false): boolean {
     const start = Date.now();
 
     this.l.debug(() => 'Executing block');
 
-    const result = this.call('execute_block')(block);
+    const result = this.call('execute_block', forceNew)(block);
 
     this.l.debug(() => `Block execution completed (${Date.now() - start}ms)`);
 
@@ -141,34 +141,41 @@ export default class Executor implements ExecutorInterface {
     const { body, extrinsics, header, number } = decodeRaw(block);
     const headerHash = blake2Asu8a(header, 256);
 
-    this.l.debug(() => `Importing block #${number.toString()}, ${u8aToHex(headerHash, 48)}`);
+    const doImport = (forceNew: boolean): Executor$BlockImportResult => {
+      this.l.debug(() => `Importing block #${number.toString()}, ${u8aToHex(headerHash, 48)}`);
 
-    this.stateDb.db.checkpoint();
+      this.stateDb.db.checkpoint();
 
-    try {
-      this.executeBlock(block);
-    } catch (error) {
-      this.stateDb.db.revert();
+      try {
+        this.executeBlock(block, forceNew);
+      } catch (error) {
+        this.l.error(`Failed on block #${number.toString()}, ${u8aToHex(headerHash, 48)}`);
 
-      this.l.error(`Failed on block #${number.toString()}, ${u8aToHex(headerHash, 48)}`);
+        this.stateDb.db.revert();
 
-      throw error;
-    }
+        if (!forceNew) {
+          return doImport(true);
+        }
 
-    this.stateDb.db.commit();
+        throw error;
+      }
 
-    this.blockDb.bestHash.set(headerHash);
-    this.blockDb.bestNumber.set(number);
-    this.blockDb.block.set(block, headerHash);
+      this.stateDb.db.commit();
+      this.blockDb.bestHash.set(headerHash);
+      this.blockDb.bestNumber.set(number);
+      this.blockDb.block.set(block, headerHash);
 
-    this.l.debug(() => `Imported block #${number.toString()} (${Date.now() - start}ms)`);
+      this.l.debug(() => `Imported block #${number.toString()} (${Date.now() - start}ms)`);
 
-    return {
-      body,
-      extrinsics,
-      headerHash,
-      header
+      return {
+        body,
+        extrinsics,
+        headerHash,
+        header
+      };
     };
+
+    return doImport(false);
   }
 
   initialiseBlock (header: Uint8Array): boolean {
@@ -183,7 +190,7 @@ export default class Executor implements ExecutorInterface {
     return result.bool;
   }
 
-  private call (name: string): Call {
+  private call (name: string, forceNew: boolean = false): Call {
     const code = this.stateDb.db.get(CODE_KEY);
 
     assert(code, 'Expected to have code available in runtime');

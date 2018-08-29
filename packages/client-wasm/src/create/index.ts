@@ -29,24 +29,24 @@ function instrument <T> (name: string, elapsed: Array<string>, fn: () => T): T {
 let prevChain: WasmInstanceExports;
 let pageOffset: number = 0;
 
-export default function wasm ({ config: { wasm: { heapSize = defaults.HEAP_SIZE_KB } }, l }: Options, runtime: RuntimeInterface, chainCode: Uint8Array, chainProxy: Uint8Array): WasmInstanceExports {
+export default function wasm ({ config: { wasm: { heapSize = defaults.HEAP_SIZE_KB } }, l }: Options, runtime: RuntimeInterface, chainCode: Uint8Array, chainProxy: Uint8Array, forceNew: boolean = false): WasmInstanceExports {
   const elapsed: string[] = [];
   const isResized = runtime.environment.heap.wasResized();
   const env = instrument('runtime', elapsed, (): WasmInstanceExports =>
     createEnv(runtime, createMemory(0, 0))
   );
   const chain = instrument('chain', elapsed, (): WasmInstanceExports =>
-    createExports(chainCode, { env }, null, isResized)
+    createExports(chainCode, { env }, null, forceNew || isResized)
   );
   const isNewCode = chain !== prevChain;
 
-  if (isNewCode) {
+  if (forceNew || isNewCode) {
     prevChain = chain;
     pageOffset = chain.memory.grow(1 + Math.ceil(heapSize / 64));
   }
 
   const instance = instrument('proxy', elapsed, (): WasmInstanceExports =>
-    createExports(chainProxy, { proxy: chain }, createMemory(0, 0), isNewCode)
+    createExports(chainProxy, { proxy: chain }, createMemory(0, 0), forceNew || isNewCode)
   );
 
   runtime.environment.heap.setWasmMemory(chain.memory, pageOffset);
