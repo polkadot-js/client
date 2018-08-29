@@ -141,41 +141,30 @@ export default class Executor implements ExecutorInterface {
     const { body, extrinsics, header, number } = decodeRaw(block);
     const headerHash = blake2Asu8a(header, 256);
 
-    const doImport = (forceNew: boolean): Executor$BlockImportResult => {
-      this.l.debug(() => `Importing block #${number.toString()}, ${u8aToHex(headerHash, 48)}`);
+    this.l.debug(() => `Importing block #${number.toString()}, ${u8aToHex(headerHash, 48)}`);
 
-      this.stateDb.db.checkpoint();
+    try {
+      this.stateDb.db.transaction(() =>
+        this.executeBlock(block)
+      );
+    } catch (error) {
+      this.l.error(`Failed importing #${number.toString()}, ${u8aToHex(headerHash, 48)}`);
 
-      try {
-        this.executeBlock(block, forceNew);
-      } catch (error) {
-        this.l.error(`Failed on block #${number.toString()}, ${u8aToHex(headerHash, 48)}`);
+      throw error;
+    }
 
-        this.stateDb.db.revert();
+    this.blockDb.bestHash.set(headerHash);
+    this.blockDb.bestNumber.set(number);
+    this.blockDb.block.set(block, headerHash);
 
-        if (!forceNew) {
-          return doImport(true);
-        }
+    this.l.debug(() => `Imported block #${number.toString()} (${Date.now() - start}ms)`);
 
-        throw error;
-      }
-
-      this.stateDb.db.commit();
-      this.blockDb.bestHash.set(headerHash);
-      this.blockDb.bestNumber.set(number);
-      this.blockDb.block.set(block, headerHash);
-
-      this.l.debug(() => `Imported block #${number.toString()} (${Date.now() - start}ms)`);
-
-      return {
-        body,
-        extrinsics,
-        headerHash,
-        header
-      };
+    return {
+      body,
+      extrinsics,
+      headerHash,
+      header
     };
-
-    return doImport(false);
   }
 
   initialiseBlock (header: Uint8Array): boolean {
@@ -196,7 +185,7 @@ export default class Executor implements ExecutorInterface {
     assert(code, 'Expected to have code available in runtime');
 
     // @ts-ignore code check above
-    const instance = createWasm({ config: this.config, l: this.l }, this.runtime, code, proxy);
+    const instance = createWasm({ config: this.config, l: this.l }, this.runtime, code, proxy, forceNew);
     const { heap } = this.runtime.environment;
 
     return (...data: Array<Uint8Array>): CallResult => {

@@ -3,7 +3,7 @@
 // of the ISC license. See the LICENSE file for details.
 
 import BN from 'bn.js';
-import { BaseDb, TrieDb } from '@polkadot/client-db/types';
+import { BaseDb, TransactionTrieDb } from '@polkadot/client-db/types';
 import { Storage$Key$Value } from '@polkadot/storage/types';
 
 export type StorageMethod<P, R> = {
@@ -99,7 +99,7 @@ export type StateDb$Timestamp = {
 };
 
 export type StateDb = {
-  db: TrieDb,
+  db: TransactionTrieDb,
   consensus: StateDb$Consensus,
   council: StateDb$Council,
   councilVoting: StateDb$CouncilVoting,
@@ -110,3 +110,8 @@ export type StateDb = {
   system: StateDb$System,
   timestamp: StateDb$Timestamp
 };
+
+export interface ChainDbs {
+  readonly blocks: BlockDb,
+  readonly state: StateDb
+}

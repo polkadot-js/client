@@ -3,7 +3,7 @@
 // of the ISC license. See the LICENSE file for details.
 
 import { Config } from '@polkadot/client/types';
-import { BlockDb, StateDb } from '@polkadot/client-db-chain/types';
+import { BlockDb, StateDb, ChainDbs } from '@polkadot/client-db-chain/types';
 import { RuntimeInterface } from '@polkadot/client-runtime/types';
 import { ExecutorInterface } from '@polkadot/client-wasm/types';
 import { Header } from '@polkadot/primitives/header';
@@ -36,17 +36,10 @@ export interface ChainLoader {
   readonly genesisRoot: Uint8Array;
 }
 
-export interface ChainDbs {
-  readonly blocks: BlockDb,
-  readonly state: StateDb
-}
-
-export interface ChainInterface {
-  readonly blocks: BlockDb,
+export interface ChainInterface extends ChainDbs {
   readonly chain: ChainJson,
   readonly executor: ExecutorInterface,
-  readonly genesis: ChainGenesis,
-  readonly state: StateDb
+  readonly genesis: ChainGenesis
 }
 
 export type ChainState = {

@@ -8,16 +8,17 @@ import u8aToHex from '@polkadot/util/u8a/toHex';
 
 import instrument from '../instrument';
 import get from './get';
+import u8aToUtf8 from '@polkadot/util/u8a/toUtf8';
 
-const U32_MAX = 2 ** 32 - 1;
+const U32_MAX = (2 ** 32) - 1;
 
 export default function data ({ l, heap, db }: RuntimeEnv): RuntimeInterface$Storage$Data {
   return {
     clear_prefix: (prefixPtr: Pointer, prefixLength: number): void =>
       instrument('clear_prefix', (): void => {
-        // const key = heap.get(prefixPtr, prefixLength);
+        const key = heap.get(prefixPtr, prefixLength);
 
-        // l.debug(() => ['clear_prefix', [prefixPtr, prefixLength], '<-', u8aToHex(key)]);
+        l.log(() => ['clear_prefix', [prefixPtr, prefixLength], '<-', u8aToHex(key), u8aToUtf8(key)]);
 
         throw new Error('ext_clear_prefix has not been implemented, only stubbed');
       }),

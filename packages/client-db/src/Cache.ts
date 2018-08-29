@@ -4,25 +4,25 @@
 
 import { LRUMap } from 'lru_map';
 
-type DeletedCache = {
-  [index: string]: boolean
-};
+// type DeletedCache = {
+//   [index: string]: boolean
+// };
 
-const LRU_SIZE = 128;
+const LRU_SIZE = 256; // 128;
 
 export default class Cache {
   // available for the current block in-progress deleted items
-  private nil: DeletedCache;
-  // onger-term limited LRU cache that are used across blocks
+  // private nil: DeletedCache;
+  // longer-term limited LRU cache that are used across blocks
   private lru: LRUMap<string, Uint8Array>;
 
   constructor () {
-    this.nil = {};
+    // this.nil = {};
     this.lru = new LRUMap(LRU_SIZE);
   }
 
   protected clearCache (clearLru: boolean): void {
-    this.nil = {};
+    // this.nil = {};
 
     if (clearLru) {
       this.lru.clear();
@@ -33,15 +33,15 @@ export default class Cache {
     const keyStr = key.toString();
 
     this.lru.delete(keyStr);
-    this.nil[keyStr] = true;
+    // this.nil[keyStr] = true;
   }
 
   protected getCache (key: Uint8Array): Uint8Array | null | undefined {
     const keyStr = key.toString();
 
-    if (this.nil[keyStr]) {
-      return null;
-    }
+    // if (this.nil[keyStr]) {
+    //   return null;
+    // }
 
     return this.lru.get(keyStr);
   }
@@ -49,7 +49,7 @@ export default class Cache {
   protected putCache (key: Uint8Array, value: Uint8Array): void {
     const keyStr = key.toString();
 
-    delete this.nil[keyStr];
+    // delete this.nil[keyStr];
     this.lru.set(keyStr, value.slice());
   }
 }

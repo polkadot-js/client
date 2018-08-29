@@ -12,8 +12,8 @@ import { Logger } from '@polkadot/util/types';
 import './license';
 
 import Chain from '@polkadot/client-chains/index';
-import ChainDbs from '@polkadot/client-chains/dbs';
 import ChainLoader from '@polkadot/client-chains/loader';
+import ChainDbs from '@polkadot/client-db-chain/index';
 import Telemetry from '@polkadot/client-telemetry/index';
 import logger from '@polkadot/util/logger';
 import Rpc from '@polkadot/client-rpc/index';

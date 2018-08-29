@@ -28,3 +28,7 @@ export interface TrieDb extends BaseDb {
   getRoot: () => Uint8Array,
   setRoot: (value: Uint8Array) => void
 }
+
+export interface TransactionTrieDb extends TrieDb {
+  transaction: <T> (executor: () => T) => T
+}

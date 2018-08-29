@@ -3,17 +3,18 @@
 // of the ISC license. See the LICENSE file for details.
 
 import { Config } from '@polkadot/client/types';
-import { BlockDb, StateDb } from '@polkadot/client-db-chain/types';
-import { ChainDbs, ChainLoader } from './types';
+import { ChainLoader } from '@polkadot/client-chains/types';
+import { BlockDb, StateDb, ChainDbs } from './types';
 
 import path from 'path';
 import HashDiskDb from '@polkadot/client-db/Hash/Disk';
 import HashMemoryDb from '@polkadot/client-db/Hash/Memory';
 import TrieDiskDb from '@polkadot/client-db/Trie/Disk';
 import TrieMemoryDb from '@polkadot/client-db/Trie/Memory';
-import createBlockDb from '@polkadot/client-db-chain/block';
-import createStateDb from '@polkadot/client-db-chain/state';
 import u8aToHex from '@polkadot/util/u8a/toHex';
+
+import createBlockDb from './block';
+import createStateDb from './state';
 
 export default class Dbs implements ChainDbs {
   readonly blocks: BlockDb;

@@ -4,9 +4,9 @@
 
 import { Header } from '@polkadot/primitives/header';
 import { Config } from '@polkadot/client/types';
-import { BlockDb, StateDb } from '@polkadot/client-db-chain/types';
+import { BlockDb, StateDb, ChainDbs } from '@polkadot/client-db-chain/types';
 import { ExecutorInterface } from '@polkadot/client-wasm/types';
-import { ChainDbs, ChainInterface, ChainLoader, ChainGenesis, ChainJson } from './types';
+import { ChainInterface, ChainLoader, ChainGenesis, ChainJson } from './types';
 
 import createRuntime from '@polkadot/client-runtime/index';
 import Executor from '@polkadot/client-wasm/index';

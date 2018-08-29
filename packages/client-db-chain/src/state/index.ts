@@ -4,7 +4,7 @@
 
 import { Section } from '@polkadot/params/types';
 import { Storages } from '@polkadot/storage/types';
-import { TrieDb } from '@polkadot/client-db/types';
+import { TrieDb, TransactionTrieDb } from '@polkadot/client-db/types';
 import { StateDb } from '../types';
 
 import storage from '@polkadot/storage';
@@ -78,7 +78,7 @@ const timestamp = (db: TrieDb, { public: { didUpdate } }: Section<Storages, any,
   didUpdate: createBool(db, didUpdate)
 });
 
-export default function createState (db: TrieDb): StateDb {
+export default function createState (db: TransactionTrieDb): StateDb {
   return {
     db,
     consensus: consensus(db, storage.consensus),
