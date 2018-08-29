@@ -2,16 +2,16 @@
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
 
-import { BaseDb } from './types';
+import { TrieDb } from '../types';
 
 import isUndefined from '@polkadot/util/is/undefined';
 
-import Cache from './Cache';
+import Cache from '../Cache';
 
 export default class Base extends Cache {
-  protected wrapped: BaseDb;
+  protected wrapped: TrieDb;
 
-  constructor (wrapped: BaseDb) {
+  constructor (wrapped: TrieDb) {
     super();
 
     this.wrapped = wrapped;

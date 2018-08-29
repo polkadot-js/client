@@ -148,6 +148,8 @@ export default class Executor implements ExecutorInterface {
     try {
       this.executeBlock(block);
     } catch (error) {
+      this.stateDb.db.revert();
+
       this.l.error(`Failed on block #${number.toString()}, ${u8aToHex(headerHash, 48)}`);
 
       throw error;

@@ -33,8 +33,8 @@ function initDb (port) {
     : memdown();
 
   if (isDiskdown && workerData.withCompact) {
-    down.compact((message) =>
-      port.postMessage({ message })
+    down.compact((progress) =>
+      port.postMessage({ progress })
     );
   }
 

@@ -9,7 +9,7 @@ type CacheObject = {
   [index: string]: Uint8Array | null | undefined
 };
 
-const LRU_SIZE = 16384;
+const LRU_SIZE = 2048;
 
 // const l = logger('db/cache');
 

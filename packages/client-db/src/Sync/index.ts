@@ -12,7 +12,8 @@ import commands from './worker/commands';
 import defaults from './worker/defaults';
 import atomics from './worker/atomics';
 
-const INDICATORS = ['|', '/', '-', '\\'];
+const SPINNER = ['|', '/', '-', '\\'];
+const PREPEND = '                                     ';
 
 const emptyBuffer = new Uint8Array();
 
@@ -39,16 +40,24 @@ export default class SyncDb implements TrieDb {
     return new Promise((resolve) => {
       const state = new Int32Array(new SharedArrayBuffer(8));
       const channel = new MessageChannel();
-      let indicator = 0;
+      let spin = 0;
+      let lastUpdate = 0;
 
-      channel.port2.on('message', ({ isCompleted, message }: ProgressMessage): void => {
+      channel.port2.on('message', ({ isCompleted, progress }: ProgressMessage): void => {
         if (isCompleted) {
           return resolve();
         }
 
-        process.stdout.write(`${INDICATORS[indicator % INDICATORS.length]} ${message}\r`);
+        const now = Date.now();
 
-        indicator++;
+        if ((now - lastUpdate) > 200) {
+          const percent = `      ${progress.percent.toFixed(2)}`.slice(-6);
+
+          process.stdout.write(`${PREPEND}${SPINNER[spin % SPINNER.length]} ${percent}%, ${(progress.keys / 1000).toFixed(2)}k keys\r`);
+
+          lastUpdate = now;
+          spin++;
+        }
       });
 
       this.worker.postMessage({

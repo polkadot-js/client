@@ -64,25 +64,13 @@ export default class Chain implements ChainInterface {
     return this.initGenesisFromBest(bestBlock.header);
   }
 
-  private initGenesisFromBest (bestHeader: Header, traverse: boolean = true): ChainGenesis {
+  private initGenesisFromBest (bestHeader: Header, rollback: boolean = true): ChainGenesis {
     this.state.db.setRoot(bestHeader.stateRoot);
 
     const genesisHash = this.state.system.blockHashAt.get(0);
 
     if (!genesisHash || !genesisHash.length) {
-      const prevHash = bestHeader.parentHash;
-      const prevNumber = bestHeader.number.subn(1);
-
-      if (traverse && prevNumber.gtn(1)) {
-        l.log(`Unable to validate stateRoot, moving to block #${prevNumber.toString()}, ${u8aToHex(prevHash, 48)}`);
-
-        this.blocks.bestHash.set(prevHash);
-        this.blocks.bestNumber.set(prevNumber);
-
-        return this.initGenesisFromBest(this.getBlock(prevHash).header, false);
-      }
-
-      throw new Error('Unable to retrieve genesis hash, aborting');
+      return this.rollbackBlock(bestHeader, rollback);
     }
 
     const genesisBlock = this.getBlock(genesisHash);
@@ -91,6 +79,22 @@ export default class Chain implements ChainInterface {
       ...genesisBlock,
       code: this.getCode()
     };
+  }
+
+  private rollbackBlock (bestHeader: Header, rollback: boolean = true): ChainGenesis {
+    const prevHash = bestHeader.parentHash;
+    const prevNumber = bestHeader.number.subn(1);
+
+    if (rollback && prevNumber.gtn(1)) {
+      l.log(`Unable to validate stateRoot, moving to block #${prevNumber.toString()}, ${u8aToHex(prevHash, 48)}`);
+
+      this.blocks.bestHash.set(prevHash);
+      this.blocks.bestNumber.set(prevNumber);
+
+      return this.initGenesisFromBest(this.getBlock(prevHash).header, false);
+    }
+
+    throw new Error('Unable to retrieve genesis hash, aborting');
   }
 
   private getBlock (headerHash: Uint8Array): BlockResult {

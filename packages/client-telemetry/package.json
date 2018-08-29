@@ -30,7 +30,7 @@
   "homepage": "https://github.com/polkadot-js/client/tree/master/packages/client-telemetry#readme",
   "dependencies": {
     "@babel/runtime": "^7.0.0-rc.1",
-    "@polkadot/util": "^0.28.18",
+    "@polkadot/util": "^0.28.21",
     "websocket": "^1.0.26"
   }
 }

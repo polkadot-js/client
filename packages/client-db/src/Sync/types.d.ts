@@ -2,6 +2,7 @@
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
 
+import { ProgressValue } from '@polkadot/db-diskdown/types';
 import { DbConfig$Type } from '../types';
 
 export type MessageTypeRead = 'get' | 'getRoot';
@@ -30,5 +31,5 @@ export type WorkerData = {
 
 export type ProgressMessage = {
   isCompleted: boolean,
-  message: string
+  progress: ProgressValue
 }
