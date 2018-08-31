@@ -8,7 +8,7 @@ import { LRUMap } from 'lru_map';
 //   [index: string]: boolean
 // };
 
-const LRU_SIZE = 256; // 128;
+const LRU_SIZE = 1024; // 128;
 
 export default class Cache {
   // available for the current block in-progress deleted items

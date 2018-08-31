@@ -5,7 +5,7 @@
 import { ProgressValue } from '@polkadot/db-diskdown/types';
 import { DbConfig$Type } from '../types';
 
-export type MessageTypeRead = 'get' | 'getRoot';
+export type MessageTypeRead = 'get' | 'getRoot' | 'hasRoot';
 
 export type MessageTypeWrite = '__init' | 'checkpoint' | 'commit' | 'del' | 'put' | 'revert' | 'setRoot';
 

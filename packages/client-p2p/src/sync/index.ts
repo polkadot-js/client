@@ -34,6 +34,8 @@ export default class Sync extends EventEmitter implements SyncInterface {
 
     this.chain = chain;
     this.l = logger('sync');
+
+    this.processBlocks();
   }
 
   getBlockData (fields: Array<BlockAttr>, hash: Uint8Array): BlockResponseMessageBlock {
@@ -63,36 +65,43 @@ export default class Sync extends EventEmitter implements SyncInterface {
     );
   }
 
-  processBlocks () {
-    const start = Date.now();
-    const bestNumber = this.chain.blocks.bestNumber.get();
-    const startNumber = bestNumber.addn(1);
-    let nextNumber = startNumber;
-    let count = 0;
+  private processBlocks () {
+    const hasOne = this.processBlock();
 
-    while (this.blockQueue[nextNumber.toString()]) {
+    setTimeout(() => {
+      this.processBlocks();
+    }, hasOne ? 1 : 1000);
+  }
+
+  private processBlock (): boolean {
+    // const start = Date.now();
+    const bestNumber = this.chain.blocks.bestNumber.get();
+    const nextNumber = bestNumber.addn(1);
+    let hasImported = false;
+
+    if (this.blockQueue[nextNumber.toString()]) {
       const { encoded } = this.blockQueue[nextNumber.toString()];
 
-      // this.l.debug(() => `Importing block #${nextNumber.toString()}`);
+      this.l.debug(() => `Importing block #${nextNumber.toString()}`);
 
       if (!this.chain.executor.importBlock(encoded)) {
-        break;
+        return false;
       }
 
       delete this.blockQueue[nextNumber.toString()];
-
-      count++;
-      nextNumber = nextNumber.addn(1);
-    }
-
-    if (count) {
-      this.l.log(`#${startNumber.toString()}- ${count} imported (${Date.now() - start}ms)`);
       this.emit('imported');
+      hasImported = true;
     }
 
-    this.status = (count > 1)
+    this.status = Object.keys(this.blockQueue).length > 1
       ? 'Sync'
       : 'Idle';
+
+    return hasImported;
+
+    // if (count) {
+    //   this.l.log(`#${startNumber.toString()}- ${count} imported (${Date.now() - start}ms)`);
+    // }
   }
 
   provideBlocks (peer: PeerInterface, request: BlockRequest) {
@@ -154,8 +163,6 @@ export default class Sync extends EventEmitter implements SyncInterface {
     if (count) {
       this.l.log(`Queued ${count} blocks from ${peer.shortId}`);
     }
-
-    this.processBlocks();
   }
 
   requestBlocks (peer: PeerInterface) {

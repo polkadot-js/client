@@ -8,6 +8,7 @@ module.exports = {
   SIZE: 0x01,
   FILL: 0x02,
   READ: 0x03,
-  END: 0x0f,
+  NUMBER: 0xee,
+  END: 0xef,
   ERROR: 0xff
 };

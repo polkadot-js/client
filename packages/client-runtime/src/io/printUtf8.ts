@@ -7,7 +7,7 @@ import { Logger } from '@polkadot/util/types';
 import u8aToUtf8 from '@polkadot/util/u8a/toUtf8';
 
 export default function print (l: Logger, data: Uint8Array): void {
-  l.log(
+  l.warn(
     u8aToUtf8(data)
   );
 }

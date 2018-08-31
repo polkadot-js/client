@@ -96,8 +96,14 @@ export default class SyncDb implements TrieDb {
     return this._executeRead('getRoot') as Uint8Array;
   }
 
-  setRoot (value: Uint8Array): void {
-    this._executeWrite('setRoot', undefined, value);
+  hasRoot (root: Uint8Array): boolean {
+    const size = this._executeReadSize('hasRoot', root);
+
+    return size === 1;
+  }
+
+  setRoot (root: Uint8Array): void {
+    this._executeWrite('setRoot', root);
   }
 
   async terminate () {
@@ -140,6 +146,19 @@ export default class SyncDb implements TrieDb {
     });
   }
 
+  private _executeReadSize (type: MessageTypeRead, key?: Uint8Array, value?: Uint8Array): number {
+    // The shared data buffer that will be used by the worker to send info back
+    const shared = new SharedArrayBuffer(defaults.SHARED_BUFFER_SIZE);
+    const buffer = new Uint8Array(shared);
+    const state = this._waitOnStart(type, {
+      buffer,
+      key,
+      value
+    });
+
+    return this._readSize(state, shared);
+  }
+
   // Sends a message to the worker, reading and returning the actual result
   private _executeRead (type: MessageTypeRead, key?: Uint8Array, value?: Uint8Array): Uint8Array | null {
     // The shared data buffer that will be used by the worker to send info back
@@ -163,13 +182,14 @@ export default class SyncDb implements TrieDb {
   private _readSize (state: Int32Array, shared: SharedArrayBuffer): number {
     const view = new DataView(shared);
 
-    // expect to read SIZE, END/ERROR here
+    // expect to read SIZE/NUMBER, END/ERROR here
     switch (state[0]) {
       case commands.END:
       case commands.ERROR:
         return -1;
 
       // Read the size to detemine how big of a result buffer we need.
+      case commands.NUMBER:
       case commands.SIZE:
         return view.getUint32(0);
 

@@ -64,9 +64,11 @@ function initHandlers (port) {
       notifyOnDone(state, () => db.revert()),
     getRoot: ({ buffer, state }) =>
       notifyOnValue(state, buffer, async () => db.root),
-    setRoot: ({ state, value }) =>
+    hasRoot: ({ buffer, key, state }) =>
+      notifyOnNumber(state, buffer, () => db.checkRoot(key) ? 1 : 0),
+    setRoot: ({ key, state }) =>
       notifyOnDone(state, async () => {
-        db.root = value;
+        db.root = key;
       })
   };
 }

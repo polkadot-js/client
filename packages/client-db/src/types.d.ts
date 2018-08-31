@@ -26,7 +26,8 @@ export interface TrieDb extends BaseDb {
   commit: () => void,
   revert: () => void,
   getRoot: () => Uint8Array,
-  setRoot: (value: Uint8Array) => void
+  hasRoot: (root: Uint8Array) => boolean,
+  setRoot: (root: Uint8Array) => void
 }
 
 export interface TransactionTrieDb extends TrieDb {

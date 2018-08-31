@@ -153,6 +153,9 @@ export default class Heap implements RuntimeEnv$Heap {
     const size = buffer.byteLength;
     const uint8 = new Uint8Array(buffer);
 
+    // NOTE clear memory, it could be provided from a previous run
+    uint8.fill(0, offset, size);
+
     // l.debug(() => `Creating WASM memory wrap, ${(size - offset) / 1024}KB`);
 
     return {
