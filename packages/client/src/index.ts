@@ -11,6 +11,7 @@ import { Logger } from '@polkadot/util/types';
 
 import './license';
 
+import BN from 'bn.js';
 import Chain from '@polkadot/client-chains/index';
 import ChainLoader from '@polkadot/client-chains/loader';
 import ChainDbs from '@polkadot/client-db-chain/index';
@@ -25,23 +26,26 @@ import * as clientId from './clientId';
 import defaults from './defaults';
 import cli from './cli';
 
+const l = logger('client');
+
 class Client {
-  private l: Logger;
   private chain?: ChainInterface;
   private informantId?: NodeJS.Timer;
   private p2p?: P2pInterface;
   private rpc?: RpcInterface;
   private telemetry?: TelemetryInterface;
+  private prevBest?: BN;
+  private prevTime: number;
 
   constructor () {
-    this.l = logger('client');
+    this.prevTime = Date.now();
   }
 
   async start (config: Config) {
     const verStatus = await clientId.getNpmStatus();
 
-    this.l.log(`Running version ${clientId.version} (${verStatus})`);
-    this.l.log(`Initialising for roles=${config.roles.join(',')} on chain=${config.chain}`);
+    l.log(`Running version ${clientId.version} (${verStatus})`);
+    l.log(`Initialising for roles=${config.roles.join(',')} on chain=${config.chain}`);
 
     const chain = new ChainLoader(config);
     const dbs = new ChainDbs(config, chain);
@@ -96,12 +100,26 @@ class Client {
       return;
     }
 
+    const now = Date.now();
+    const elapsed = now - this.prevTime;
     const numPeers = this.p2p.getNumPeers();
     const bestHash = this.chain.blocks.bestHash.get();
     const bestNumber = this.chain.blocks.bestNumber.get();
     const status = this.p2p.sync.status;
+    const isSync = status === 'Sync';
+    const hasBlocks = this.prevBest && this.prevBest.lt(bestNumber);
+    const numBlocks = hasBlocks && this.prevBest ? bestNumber.sub(this.prevBest) : new BN(1);
+    const newSpeed = isSync
+      ? ` (${(elapsed / numBlocks.toNumber()).toFixed(0)} ms/block)`
+      : '';
+    const newBlocks = hasBlocks && this.prevBest
+      ? `, +${numBlocks.toString()} blocks${newSpeed}`
+      : '';
 
-    this.l.log(`${status} (${numPeers} peers), #${bestNumber.toNumber()}, ${u8aToHex(bestHash, 48)}`);
+    l.log(`${status} (${numPeers} peers), #${bestNumber.toNumber()}, ${u8aToHex(bestHash, 48)}${newBlocks}`);
+
+    this.prevBest = bestNumber;
+    this.prevTime = now;
 
     if (!isUndefined(this.telemetry)) {
       this.telemetry.intervalInfo(numPeers, status);

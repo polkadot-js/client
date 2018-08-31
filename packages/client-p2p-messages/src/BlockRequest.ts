@@ -41,7 +41,7 @@ export default class BlockRequest extends BaseMessage implements MessageInterfac
     this.fields = fields;
     this.from = from;
     this.id = id;
-    this.max = max || defaults.MAX_SYNC_BLOCKS;
+    this.max = max || defaults.MAX_REQUEST_BLOCKS;
     this.to = to;
   }
 

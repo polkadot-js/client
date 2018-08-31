@@ -28,8 +28,9 @@ import { createError, createResponse } from './create';
 
 const SUBSCRIBE_REGEX = /^subscribe_/;
 
+const l = logger('rpc');
+
 export default class Rpc extends EventEmitter implements RpcInterface {
-  private l: Logger;
   private config: Config;
   private handlers: Handlers;
   private servers: Array<net.Server>;
@@ -38,7 +39,6 @@ export default class Rpc extends EventEmitter implements RpcInterface {
   constructor (config: Config, chain: ChainInterface) {
     super();
 
-    this.l = logger('rpc');
     this.config = config;
     this.handlers = handlers(config, chain);
     this.servers = [];
@@ -63,7 +63,7 @@ export default class Rpc extends EventEmitter implements RpcInterface {
       const port = this.config.rpc.port + (11 * index);
       const server = app.listen(port);
 
-      this.l.log(`Server started on port=${port} for type=${this.config.rpc.types[index]}`);
+      l.log(`Server started on port=${port} for type=${this.config.rpc.types[index]}`);
 
       return server;
     });
@@ -85,7 +85,7 @@ export default class Rpc extends EventEmitter implements RpcInterface {
       server.close()
     );
 
-    this.l.log('Server stopped');
+    l.log('Server stopped');
     this.emit('stopped');
 
     return true;
@@ -109,7 +109,7 @@ export default class Rpc extends EventEmitter implements RpcInterface {
         ? await this.subscribe(socket, handler, params)
         : await handler(params);
 
-      this.l.debug(() => ['executed', method, params, '->', result]);
+      l.debug(() => ['executed', method, params, '->', result]);
 
       if (isError(result)) {
         throw result;

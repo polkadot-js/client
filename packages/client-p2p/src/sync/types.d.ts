@@ -10,7 +10,8 @@ import BlockRequest from '@polkadot/client-p2p-messages/BlockRequest';
 
 export type SyncState$Request = {
   peer: PeerInterface,
-  request: BlockRequest
+  request: BlockRequest,
+  timeout: number
 }
 
 export type SyncState$BlockRequests = {

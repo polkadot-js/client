@@ -19,8 +19,9 @@ import Connected from './messages/Connected';
 import Interval from './messages/Interval';
 import Started from './messages/Started';
 
+const l = logger('telemetry');
+
 export default class Telemetry implements TelemetryInterface {
-  private l: Logger;
   private blocks: BlockDb;
   private isActive: boolean = false;
   private chain: string;
@@ -31,7 +32,6 @@ export default class Telemetry implements TelemetryInterface {
   constructor ({ telemetry }: Config, { blocks, chain }: ChainInterface) {
     const name = telemetry.name ? telemetry.name.trim() : '';
 
-    this.l = logger('telemetry');
     this.blocks = blocks;
     this.isActive = !!name.length && !!telemetry.url.length;
     this.chain = chain.name;
@@ -48,12 +48,12 @@ export default class Telemetry implements TelemetryInterface {
   }
 
   private connect () {
-    this.l.log(`Connecting to telemetry, url=${this.url}, name=${this.name}`);
+    l.log(`Connecting to telemetry, url=${this.url}, name=${this.name}`);
 
     const websocket = new WebSocket(this.url);
 
     websocket.onclose = () => {
-      this.l.debug(() => 'Disconnected from telemetry');
+      l.debug(() => 'Disconnected from telemetry');
 
       this.websocket = null;
 
@@ -63,7 +63,7 @@ export default class Telemetry implements TelemetryInterface {
     };
 
     websocket.onopen = () => {
-      this.l.debug(() => 'Connected to telemetry');
+      l.debug(() => 'Connected to telemetry');
 
       this.websocket = websocket;
       this.sendInitial();
@@ -99,7 +99,7 @@ export default class Telemetry implements TelemetryInterface {
 
     const json = JSON.stringify(message);
 
-    this.l.debug(() => `Sending ${json}`);
+    l.debug(() => `Sending ${json}`);
     this.websocket.send(json);
   }
 }

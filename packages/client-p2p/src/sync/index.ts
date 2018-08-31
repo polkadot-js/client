@@ -5,7 +5,6 @@
 import { Config } from '@polkadot/client/types';
 import { ChainInterface } from '@polkadot/client-chains/types';
 import { BlockAttr, BlockResponseMessage, BlockResponseMessageBlock } from '@polkadot/client-p2p-messages/types';
-import { Logger } from '@polkadot/util/types';
 import { PeerInterface, SyncStatus } from '../types';
 import { SyncInterface, SyncState$Request, SyncState$BlockRequests, SyncState$BlockQueue } from './types';
 
@@ -22,18 +21,19 @@ import defaults from '../defaults';
 
 type Requests = Array<SyncState$Request>;
 
+const l = logger('sync');
+
 export default class Sync extends EventEmitter implements SyncInterface {
   private chain: ChainInterface;
-  private l: Logger;
   private blockRequests: SyncState$BlockRequests = {};
   private blockQueue: SyncState$BlockQueue = {};
+  private bestQueued: BN = new BN(0);
   status: SyncStatus = 'Idle';
 
   constructor (config: Config, chain: ChainInterface) {
     super();
 
     this.chain = chain;
-    this.l = logger('sync');
 
     this.processBlocks();
   }
@@ -70,7 +70,7 @@ export default class Sync extends EventEmitter implements SyncInterface {
 
     setTimeout(() => {
       this.processBlocks();
-    }, hasOne ? 1 : 1000);
+    }, hasOne ? 1 : 100);
   }
 
   private processBlock (): boolean {
@@ -82,7 +82,7 @@ export default class Sync extends EventEmitter implements SyncInterface {
     if (this.blockQueue[nextNumber.toString()]) {
       const { encoded } = this.blockQueue[nextNumber.toString()];
 
-      this.l.debug(() => `Importing block #${nextNumber.toString()}`);
+      l.debug(() => `Importing block #${nextNumber.toString()}`);
 
       if (!this.chain.executor.importBlock(encoded)) {
         return false;
@@ -100,7 +100,7 @@ export default class Sync extends EventEmitter implements SyncInterface {
     return hasImported;
 
     // if (count) {
-    //   this.l.log(`#${startNumber.toString()}- ${count} imported (${Date.now() - start}ms)`);
+    //   l.log(`#${startNumber.toString()}- ${count} imported (${Date.now() - start}ms)`);
     // }
   }
 
@@ -110,7 +110,7 @@ export default class Sync extends EventEmitter implements SyncInterface {
     const blocks = [];
 
     // FIXME: Also send blocks starting with hash
-    const max = Math.min(request.max || defaults.MAX_SYNC_BLOCKS, defaults.MAX_SYNC_BLOCKS);
+    const max = Math.min(request.max || defaults.MAX_REQUEST_BLOCKS, defaults.MAX_REQUEST_BLOCKS);
     let count = isU8a(request.from) ? max : 0;
     const increment = request.direction === 'Ascending' ? new BN(1) : new BN(-1);
 
@@ -138,12 +138,15 @@ export default class Sync extends EventEmitter implements SyncInterface {
 
     delete this.blockRequests[peer.id];
 
-    if (!request || request.request.id !== id) {
-      this.l.error(`Mismatched response from ${peer.shortId}`);
+    if (!request) {
+      l.warn(`Unrequested response from ${peer.shortId}`);
       return;
+    } else if (request.request.id !== id) {
+      // l.warn(`Mismatched response from ${peer.shortId}`);
     }
 
     const bestNumber = this.chain.blocks.bestNumber.get();
+    let firstNumber;
     let count = 0;
 
     for (let i = 0; i < blocks.length; i++) {
@@ -155,27 +158,41 @@ export default class Sync extends EventEmitter implements SyncInterface {
 
       if (canQueue) {
         this.blockQueue[queueNumber] = block;
+        firstNumber = firstNumber || block.header.number;
+
+        if (this.bestQueued.lt(block.header.number)) {
+          this.bestQueued = block.header.number;
+        }
 
         count++;
       }
     }
 
-    if (count) {
-      this.l.log(`Queued ${count} blocks from ${peer.shortId}`);
+    if (count && firstNumber) {
+      l.log(`Queued ${count} blocks from ${peer.shortId}, #${firstNumber.toString()}+`);
     }
   }
 
   requestBlocks (peer: PeerInterface) {
-    const bestNumber = this.chain.blocks.bestNumber.get();
-    const from = bestNumber.addn(1);
+    const nextNumber = this.chain.blocks.bestNumber.get().addn(1);
+    const from = this.bestQueued.lt(nextNumber)
+      ? nextNumber
+      : (
+        this.bestQueued.sub(nextNumber).ltn(defaults.MAX_QUEUED_BLOCKS / 2)
+          ? this.bestQueued.addn(1)
+          : null
+      );
+
+    this.timeoutRequests();
 
     // TODO: This assumes no stale block downloading
-    if (this.blockRequests[peer.id] || from.gt(peer.bestNumber)) {
+    if (this.blockRequests[peer.id] || !from || from.gt(peer.bestNumber)) {
       return;
     }
 
-    this.l.debug(() => `Requesting blocks from ${peer.shortId}, #${from.toString()} -`);
+    l.debug(() => `Requesting blocks from ${peer.shortId}, #${from.toString()} -`);
 
+    const timeout = Date.now() + 60000;
     const request = new BlockRequest({
       from,
       id: peer.getNextId()
@@ -183,9 +200,26 @@ export default class Sync extends EventEmitter implements SyncInterface {
 
     this.blockRequests[peer.id] = {
       peer,
-      request
+      request,
+      timeout
     };
 
     peer.send(request);
+  }
+
+  // TODO We can probably use a package with a timeout like an LRU
+  private timeoutRequests (): void {
+    const now = Date.now();
+
+    this.blockRequests = Object
+      .keys(this.blockRequests)
+      .filter((id) =>
+        this.blockRequests[id].timeout > now
+      )
+      .reduce((result, id) => {
+        result[id] = this.blockRequests[id];
+
+        return result;
+      }, {} as SyncState$BlockRequests);
   }
 }
