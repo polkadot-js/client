@@ -4,7 +4,7 @@
 
 /// <reference types="webassembly-js-api"/>
 
-import { TrieDb } from '@polkadot/client-db/types';
+import { TrieDb } from '@polkadot/trie-db/types';
 import { Logger } from '@polkadot/util/types';
 import { SizeUsed } from './environment/heap/types';
 

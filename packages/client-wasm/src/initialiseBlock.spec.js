@@ -4,8 +4,7 @@
 
 import createHeader from '@polkadot/primitives/create/header';
 import encodeHeader from '@polkadot/primitives/codec/header/encode';
-import HashDb from '@polkadot/client-db/Hash/Memory';
-import MemoryDb from '@polkadot/client-db/Trie/Memory';
+import TrieDb from '@polkadot/trie-db';
 
 import Chain from '@polkadot/client-chains';
 
@@ -14,7 +13,7 @@ describe('initialiseBlock', () => {
     chain: 'dev',
     wasm: {}
   };
-  const stateDb = new MemoryDb();
+  const stateDb = new TrieDb();
   const chain = new Chain(config);
 
   it('initialises a block', () => {

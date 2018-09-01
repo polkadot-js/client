@@ -3,7 +3,7 @@
 // of the ISC license. See the LICENSE file for details.
 
 import { Config } from '@polkadot/client/types';
-import { BlockDb, StateDb, ChainDbs } from '@polkadot/client-db-chain/types';
+import { BlockDb, StateDb, ChainDbs } from '@polkadot/client-db/types';
 import { RuntimeInterface } from '@polkadot/client-runtime/types';
 import { ExecutorInterface } from '@polkadot/client-wasm/types';
 import { Header } from '@polkadot/primitives/header';

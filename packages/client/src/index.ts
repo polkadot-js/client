@@ -7,14 +7,11 @@ import { ChainInterface } from '@polkadot/client-chains/types';
 import { P2pInterface } from '@polkadot/client-p2p/types';
 import { RpcInterface } from '@polkadot/client-rpc/types';
 import { TelemetryInterface } from '@polkadot/client-telemetry/types';
-import { Logger } from '@polkadot/util/types';
 
 import './license';
 
 import BN from 'bn.js';
 import Chain from '@polkadot/client-chains/index';
-import ChainLoader from '@polkadot/client-chains/loader';
-import ChainDbs from '@polkadot/client-db-chain/index';
 import Telemetry from '@polkadot/client-telemetry/index';
 import logger from '@polkadot/util/logger';
 import Rpc from '@polkadot/client-rpc/index';
@@ -47,12 +44,7 @@ class Client {
     l.log(`Running version ${clientId.version} (${verStatus})`);
     l.log(`Initialising for roles=${config.roles.join(',')} on chain=${config.chain}`);
 
-    const chain = new ChainLoader(config);
-    const dbs = new ChainDbs(config, chain);
-
-    await dbs.initialise();
-
-    this.chain = new Chain(config, chain, dbs);
+    this.chain = new Chain(config);
     this.p2p = new P2p(config, this.chain);
     this.rpc = new Rpc(config, this.chain);
     this.telemetry = new Telemetry(config, this.chain);

@@ -3,10 +3,9 @@
 // of the ISC license. See the LICENSE file for details.
 
 import { Config } from '@polkadot/client/types';
-import { BlockDb, StateDb } from '@polkadot/client-db-chain/types';
+import { BlockDb, StateDb } from '@polkadot/client-db/types';
 import { RuntimeInterface } from '@polkadot/client-runtime/types';
 import { UncheckedRaw } from '@polkadot/primitives/extrinsic';
-import { Logger } from '@polkadot/util/types';
 import { ExecutorInterface, Executor$BlockImportResult } from './types';
 
 import decodeRaw from '@polkadot/primitives/codec/block/decodeRaw';
@@ -50,6 +49,8 @@ export default class Executor implements ExecutorInterface {
   private config: Config;
   private runtime: RuntimeInterface;
   private stateDb: StateDb;
+
+  // 0xefbfbd2065efbfbdefbfbd33efbfbdefbfbdc6b21aefbfbd592157efbfbdefbfbdefbfbdefbfbd1defbfbdefbfbdefbfbd77efbfbdefbfbd4befbfbd0fefbfbd22efbfbd41346b63efbfbd1eefbfbd2011efbfbd25efbfbdddb9d2a51021
 
   constructor (config: Config, blockDb: BlockDb, stateDb: StateDb, runtime: RuntimeInterface) {
     this.blockDb = blockDb;
@@ -106,31 +107,33 @@ export default class Executor implements ExecutorInterface {
     const start = Date.now();
     const bestNumber = this.blockDb.bestNumber.get();
     const nextNumber = bestNumber.addn(1);
+    let block = new Uint8Array();
 
     l.debug(() => `Generating block #${nextNumber.toString()}`);
 
-    this.stateDb.db.checkpoint();
+    this.stateDb.db.transaction((): boolean => {
+      const extrinsics = this.withInherent(timestamp, utxs);
+      const header = createHeader({
+        number: nextNumber,
+        parentHash: this.blockDb.bestHash.get()
+      }, extrinsics);
+      const headerRaw = encodeHeader(header);
 
-    const extrinsics = this.withInherent(timestamp, utxs);
-    const header = createHeader({
-      number: nextNumber,
-      parentHash: this.blockDb.bestHash.get()
-    }, extrinsics);
-    const headerRaw = encodeHeader(header);
+      this.initialiseBlock(headerRaw);
+      this.applyExtrinsics(extrinsics);
 
-    this.initialiseBlock(headerRaw);
-    this.applyExtrinsics(extrinsics);
+      const { stateRoot } = decodeHeader(
+        this.finaliseBlock(headerRaw)
+      );
+      block = encodeBlock({
+        extrinsics,
+        header: { ...header, stateRoot }
+      });
 
-    const { stateRoot } = decodeHeader(
-      this.finaliseBlock(headerRaw)
-    );
-    const block = encodeBlock({
-      extrinsics,
-      header: { ...header, stateRoot }
+      l.log(() => `Block #${nextNumber.toString()} generated (${Date.now() - start}ms)`);
+
+      return false;
     });
-
-    this.stateDb.db.revert();
-    l.log(() => `Block #${nextNumber.toString()} generated (${Date.now() - start}ms)`);
 
     return block;
   }

@@ -4,10 +4,11 @@
 
 import { Header } from '@polkadot/primitives/header';
 import { Config } from '@polkadot/client/types';
-import { BlockDb, StateDb, ChainDbs } from '@polkadot/client-db-chain/types';
+import { BlockDb, StateDb } from '@polkadot/client-db/types';
 import { ExecutorInterface } from '@polkadot/client-wasm/types';
-import { ChainInterface, ChainLoader, ChainGenesis, ChainJson } from './types';
+import { ChainInterface, ChainGenesis, ChainJson } from './types';
 
+import ChainDbs from '@polkadot/client-db/index';
 import createRuntime from '@polkadot/client-runtime/index';
 import Executor from '@polkadot/client-wasm/index';
 import createBlock from '@polkadot/primitives/create/block';
@@ -22,6 +23,8 @@ import u8aToHex from '@polkadot/util/u8a/toHex';
 import logger from '@polkadot/util/logger';
 import blake2Asu8a from '@polkadot/util-crypto/blake2/asU8a';
 import trieRoot from '@polkadot/trie-hash/root';
+
+import Loader from './loader';
 
 type BlockResult = {
   block: Uint8Array,
@@ -38,19 +41,22 @@ export default class Chain implements ChainInterface {
   readonly genesis: ChainGenesis;
   readonly state: StateDb;
 
-  constructor (config: Config, { chain }: ChainLoader, { blocks, state }: ChainDbs) {
-    const runtime = createRuntime(state.db);
+  constructor (config: Config) {
+    const chain = new Loader(config);
+    const dbs = new ChainDbs(config, chain);
 
-    this.chain = chain;
-    this.blocks = blocks;
-    this.state = state;
-    this.executor = new Executor(config, blocks, state, runtime);
+    const runtime = createRuntime(dbs.state.db);
+
+    this.chain = chain.chain;
+    this.blocks = dbs.blocks;
+    this.state = dbs.state;
+    this.executor = new Executor(config, dbs.blocks, dbs.state, runtime);
     this.genesis = this.initGenesis();
 
-    const bestHash = blocks.bestHash.get();
-    const bestNumber = blocks.bestNumber.get();
+    const bestHash = dbs.blocks.bestHash.get();
+    const bestNumber = dbs.blocks.bestNumber.get();
 
-    l.log(`${chain.name}, #${bestNumber.toString()}, ${u8aToHex(bestHash, 48)}`);
+    l.log(`${this.chain.name}, #${bestNumber.toString()}, ${u8aToHex(bestHash, 48)}`);
   }
 
   private initGenesis (): ChainGenesis {
@@ -167,15 +173,17 @@ export default class Chain implements ChainInterface {
   private createGenesisState (): void {
     const { genesis: { raw } } = this.chain;
 
-    this.state.db.checkpoint();
+    this.state.db.transaction((): boolean => {
+      Object
+        .keys(raw)
+        .forEach((key) =>
+          this.state.db.put(
+            hexToU8a(key),
+            hexToU8a(raw[key])
+          )
+        );
 
-    Object.keys(raw).forEach((key) =>
-      this.state.db.put(
-        hexToU8a(key),
-        hexToU8a(raw[key])
-      )
-    );
-
-    this.state.db.commit();
+      return true;
+    });
   }
 }

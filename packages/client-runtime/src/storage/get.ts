@@ -2,9 +2,9 @@
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
 
-import { TrieDb } from '@polkadot/client-db/types';
+import { TxDb } from '@polkadot/db/types';
 
-export default function get (db: TrieDb, key: Uint8Array, offset: number, maxLength: number): Uint8Array | null {
+export default function get (db: TxDb, key: Uint8Array, offset: number, maxLength: number): Uint8Array | null {
   const data = db.get(key);
 
   if (data === null) {

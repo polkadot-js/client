@@ -4,7 +4,7 @@
 
 import { Config } from '@polkadot/client/types';
 import { ChainGenesis } from '@polkadot/client-chains/types';
-import { BlockDb, StateDb } from '@polkadot/client-db-chain/types';
+import { BlockDb, StateDb } from '@polkadot/client-db/types';
 import { RuntimeInterface } from '@polkadot/client-runtime/types';
 import { UncheckedRaw } from '@polkadot/primitives/extrinsic';
 
