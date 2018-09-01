@@ -21,6 +21,8 @@ import defaults from '../defaults';
 
 type Requests = Array<SyncState$Request>;
 
+const REPORT_COUNT = new BN(5);
+
 const l = logger('sync');
 
 export default class Sync extends EventEmitter implements SyncInterface {
@@ -89,7 +91,11 @@ export default class Sync extends EventEmitter implements SyncInterface {
       }
 
       delete this.blockQueue[nextNumber.toString()];
-      this.emit('imported');
+
+      if (nextNumber.mod(REPORT_COUNT).isZero() || (Object.keys(this.blockQueue).length < 10)) {
+        this.emit('imported');
+      }
+
       hasImported = true;
     }
 
