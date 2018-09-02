@@ -1292,17 +1292,18 @@
     isomorphic-fetch "^2.2.1"
     websocket "^1.0.25"
 
-"@polkadot/db@^0.29.9":
-  version "0.29.9"
-  resolved "https://registry.yarnpkg.com/@polkadot/db/-/db-0.29.9.tgz#203420defe612dd8821caa18c8fb683946cd52a4"
+"@polkadot/db@^0.29.10":
+  version "0.29.10"
+  resolved "https://registry.yarnpkg.com/@polkadot/db/-/db-0.29.10.tgz#a156c56e11f6816ff9d088c8ad2c79837ae44ca9"
   dependencies:
     "@babel/runtime" "^7.0.0-rc.1"
-    "@polkadot/util" "^0.29.9"
+    "@polkadot/util" "^0.29.10"
     "@types/mkdirp" "^0.5.2"
     "@types/snappy" "^6.0.0"
     lru_map "^0.3.3"
     mkdirp "^0.5.1"
     nosql-leveldb "^3.0.1"
+    rocksdb-node jacogr/rocksdb-node#00ebfdbf0462ee615f4f48f1db403fd4df8471ea
     snappy "^6.0.4"
 
 "@polkadot/dev@^0.20.18":
@@ -1397,15 +1398,15 @@
     "@polkadot/util-crypto" "^0.28.21"
     "@polkadot/util-keyring" "^0.28.21"
 
-"@polkadot/trie-db@^0.29.9":
-  version "0.29.9"
-  resolved "https://registry.yarnpkg.com/@polkadot/trie-db/-/trie-db-0.29.9.tgz#acad0633b11fab0200f39be913f1d4acb050a1e7"
+"@polkadot/trie-db@^0.29.10":
+  version "0.29.10"
+  resolved "https://registry.yarnpkg.com/@polkadot/trie-db/-/trie-db-0.29.10.tgz#398c4fd6a9c4dcc3f8e4541ecbfb44bbd7d8257f"
   dependencies:
     "@babel/runtime" "^7.0.0-rc.1"
-    "@polkadot/trie-hash" "^0.29.9"
-    "@polkadot/util" "^0.29.9"
-    "@polkadot/util-crypto" "^0.29.9"
-    "@polkadot/util-rlp" "^0.29.9"
+    "@polkadot/trie-hash" "^0.29.10"
+    "@polkadot/util" "^0.29.10"
+    "@polkadot/util-crypto" "^0.29.10"
+    "@polkadot/util-rlp" "^0.29.10"
 
 "@polkadot/trie-hash@^0.28.21":
   version "0.28.21"
@@ -1416,18 +1417,18 @@
     "@polkadot/util-crypto" "^0.28.21"
     "@polkadot/util-rlp" "^0.28.21"
 
-"@polkadot/trie-hash@^0.29.9":
-  version "0.29.9"
-  resolved "https://registry.yarnpkg.com/@polkadot/trie-hash/-/trie-hash-0.29.9.tgz#95053ae484c0757729f278f1fffd9c7f9359e51f"
+"@polkadot/trie-hash@^0.29.10":
+  version "0.29.10"
+  resolved "https://registry.yarnpkg.com/@polkadot/trie-hash/-/trie-hash-0.29.10.tgz#98a7a5912a5d43748f1959af6e5149cf4fefa534"
   dependencies:
     "@babel/runtime" "^7.0.0-rc.1"
-    "@polkadot/util" "^0.29.9"
-    "@polkadot/util-crypto" "^0.29.9"
-    "@polkadot/util-rlp" "^0.29.9"
+    "@polkadot/util" "^0.29.10"
+    "@polkadot/util-crypto" "^0.29.10"
+    "@polkadot/util-rlp" "^0.29.10"
 
-"@polkadot/ts@^0.1.21":
-  version "0.1.21"
-  resolved "https://registry.yarnpkg.com/@polkadot/ts/-/ts-0.1.21.tgz#8941ae51a6ab74281c0d782c7346f9b2fd1b0dd0"
+"@polkadot/ts@^0.1.22":
+  version "0.1.22"
+  resolved "https://registry.yarnpkg.com/@polkadot/ts/-/ts-0.1.22.tgz#8f89d87257ea515bfc79685f5fda70b531a3107b"
 
 "@polkadot/util-crypto@^0.28.21":
   version "0.28.21"
@@ -1440,12 +1441,12 @@
     tweetnacl "^1.0.0"
     xxhashjs "^0.2.2"
 
-"@polkadot/util-crypto@^0.29.9":
-  version "0.29.9"
-  resolved "https://registry.yarnpkg.com/@polkadot/util-crypto/-/util-crypto-0.29.9.tgz#93e61e6e444b118bc2f3a41812168a64d1fb902d"
+"@polkadot/util-crypto@^0.29.10":
+  version "0.29.10"
+  resolved "https://registry.yarnpkg.com/@polkadot/util-crypto/-/util-crypto-0.29.10.tgz#51243b32098f0d6d621cb7600f80c2d32f46b2b5"
   dependencies:
     "@babel/runtime" "^7.0.0-rc.1"
-    "@polkadot/util" "^0.29.9"
+    "@polkadot/util" "^0.29.10"
     blakejs "^1.1.0"
     js-sha3 "^0.8.0"
     tweetnacl "^1.0.0"
@@ -1461,13 +1462,13 @@
     "@types/bs58" "^3.0.30"
     bs58 "^4.0.1"
 
-"@polkadot/util-keyring@^0.29.9":
-  version "0.29.9"
-  resolved "https://registry.yarnpkg.com/@polkadot/util-keyring/-/util-keyring-0.29.9.tgz#d42c279b98506a77287dbc3658633314c79a9484"
+"@polkadot/util-keyring@^0.29.10":
+  version "0.29.10"
+  resolved "https://registry.yarnpkg.com/@polkadot/util-keyring/-/util-keyring-0.29.10.tgz#1c87331ddf98127d543bc325ca88573e9fc68ec3"
   dependencies:
     "@babel/runtime" "^7.0.0-rc.1"
-    "@polkadot/util" "^0.29.9"
-    "@polkadot/util-crypto" "^0.29.9"
+    "@polkadot/util" "^0.29.10"
+    "@polkadot/util-crypto" "^0.29.10"
     "@types/bs58" "^3.0.30"
     bs58 "^4.0.1"
 
@@ -1478,12 +1479,12 @@
     "@babel/runtime" "^7.0.0-rc.1"
     "@polkadot/util" "^0.28.21"
 
-"@polkadot/util-rlp@^0.29.9":
-  version "0.29.9"
-  resolved "https://registry.yarnpkg.com/@polkadot/util-rlp/-/util-rlp-0.29.9.tgz#e844f6e3ee39368844ca5bfd4e58a955771f8448"
+"@polkadot/util-rlp@^0.29.10":
+  version "0.29.10"
+  resolved "https://registry.yarnpkg.com/@polkadot/util-rlp/-/util-rlp-0.29.10.tgz#a0757cc33c7dbcd6640a15ea1df4343d78959b7a"
   dependencies:
     "@babel/runtime" "^7.0.0-rc.1"
-    "@polkadot/util" "^0.29.9"
+    "@polkadot/util" "^0.29.10"
 
 "@polkadot/util@^0.28.21":
   version "0.28.21"
@@ -1500,9 +1501,9 @@
     ip-regex "^3.0.0"
     moment "^2.22.2"
 
-"@polkadot/util@^0.29.9":
-  version "0.29.9"
-  resolved "https://registry.yarnpkg.com/@polkadot/util/-/util-0.29.9.tgz#351d4dcc9d3f74abf172166d33073e70014196ba"
+"@polkadot/util@^0.29.10":
+  version "0.29.10"
+  resolved "https://registry.yarnpkg.com/@polkadot/util/-/util-0.29.10.tgz#a86b427596a5fde0fba46a2ac0c7b8c63aecc478"
   dependencies:
     "@babel/runtime" "^7.0.0-rc.1"
     "@types/bn.js" "^4.11.1"
@@ -6982,13 +6983,13 @@ mute-stream@0.0.7, mute-stream@~0.0.4:
   version "0.0.7"
   resolved "https://registry.yarnpkg.com/mute-stream/-/mute-stream-0.0.7.tgz#3075ce93bc21b8fab43e1bc4da7e8115ed1e7bab"
 
+nan@2.11.0, nan@^2.10.0:
+  version "2.11.0"
+  resolved "https://registry.yarnpkg.com/nan/-/nan-2.11.0.tgz#574e360e4d954ab16966ec102c0c049fd961a099"
+
 nan@^2.0.7, nan@^2.2.1, nan@^2.3.0, nan@^2.3.3:
   version "2.8.0"
   resolved "https://registry.yarnpkg.com/nan/-/nan-2.8.0.tgz#ed715f3fe9de02b57a5e6252d90a96675e1f085a"
-
-nan@^2.10.0:
-  version "2.11.0"
-  resolved "https://registry.yarnpkg.com/nan/-/nan-2.11.0.tgz#574e360e4d954ab16966ec102c0c049fd961a099"
 
 nan@^2.9.2:
   version "2.10.0"
@@ -8666,6 +8667,12 @@ ripemd160@^2.0.0:
   dependencies:
     hash-base "^2.0.0"
     inherits "^2.0.1"
+
+rocksdb-node@jacogr/rocksdb-node#00ebfdbf0462ee615f4f48f1db403fd4df8471ea:
+  version "1.7.2"
+  resolved "https://codeload.github.com/jacogr/rocksdb-node/tar.gz/00ebfdbf0462ee615f4f48f1db403fd4df8471ea"
+  dependencies:
+    nan "2.11.0"
 
 rsa-pem-to-jwk@^1.1.3:
   version "1.1.3"

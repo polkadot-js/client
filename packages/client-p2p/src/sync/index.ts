@@ -30,6 +30,7 @@ export default class Sync extends EventEmitter implements SyncInterface {
   private blockRequests: SyncState$BlockRequests = {};
   private blockQueue: SyncState$BlockQueue = {};
   private bestQueued: BN = new BN(0);
+  private lastPeer: PeerInterface | null = null;
   bestSeen: BN = new BN(0);
   status: SyncStatus = 'Idle';
 
@@ -83,7 +84,7 @@ export default class Sync extends EventEmitter implements SyncInterface {
     let hasImported = false;
 
     if (this.blockQueue[nextNumber.toString()]) {
-      const { encoded } = this.blockQueue[nextNumber.toString()];
+      const { block: { encoded }, peer } = this.blockQueue[nextNumber.toString()];
 
       l.debug(() => `Importing block #${nextNumber.toString()}`);
 
@@ -98,6 +99,14 @@ export default class Sync extends EventEmitter implements SyncInterface {
       }
 
       hasImported = true;
+
+      if (this.lastPeer !== peer) {
+        if (this.lastPeer !== null) {
+          this.requestBlocks(peer);
+        }
+
+        this.lastPeer = peer;
+      }
     }
 
     this.status = Object.keys(this.blockQueue).length > 1
@@ -164,7 +173,10 @@ export default class Sync extends EventEmitter implements SyncInterface {
       const canQueue = isImportable && !this.blockQueue[queueNumber];
 
       if (canQueue) {
-        this.blockQueue[queueNumber] = block;
+        this.blockQueue[queueNumber] = {
+          block,
+          peer
+        };
         firstNumber = firstNumber || block.header.number;
 
         if (this.bestQueued.lt(block.header.number)) {

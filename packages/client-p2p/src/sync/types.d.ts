@@ -19,7 +19,10 @@ export type SyncState$BlockRequests = {
 };
 
 export type SyncState$BlockQueue = {
-  [index: string]: BlockResponseMessageBlock
+  [index: string]: {
+    block: BlockResponseMessageBlock,
+    peer: PeerInterface
+  }
 };
 
 export type SyncState = {

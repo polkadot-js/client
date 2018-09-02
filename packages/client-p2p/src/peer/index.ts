@@ -26,16 +26,17 @@ import u8aToHex from '@polkadot/util/u8a/toHex';
 
 import defaults from '../defaults';
 
+const l = logger('p2p/peer');
+
 export default class Peer extends EventEmitter implements PeerInterface {
   bestHash: Uint8Array = new Uint8Array([]);
   bestNumber: BN = new BN(0);
   readonly chain: ChainInterface;
   readonly config: Config;
   readonly id: string;
-  readonly l: Logger;
   private nextId: number = 0;
   readonly peerInfo: PeerInfo;
-  private pushable: Pushable | null = null;
+  private pushable: Pushable;
   readonly shortId: string;
 
   constructor (config: Config, chain: ChainInterface, peerInfo: PeerInfo) {
@@ -44,17 +45,15 @@ export default class Peer extends EventEmitter implements PeerInterface {
     this.chain = chain;
     this.config = config;
     this.id = peerInfo.id.toB58String();
-    this.l = logger('p2p/peer');
     this.peerInfo = peerInfo;
     this.shortId = stringShorten(this.id);
+    this.pushable = PullPushable();
   }
 
   addConnection (connection: LibP2pConnection, isWritable: boolean): void {
     this._receive(connection);
 
     if (isWritable) {
-      this.pushable = PullPushable();
-
       pull(this.pushable, connection);
 
       this.send(
@@ -93,14 +92,14 @@ export default class Peer extends EventEmitter implements PeerInterface {
           // TODO Do we keep this peer or drop it (like Rust does on invalid messages). Additionally, do we _really_ want to throw here?
           assert(u8a.length === length - 1, 'Invalid buffer length received');
 
-          // this.l.debug(() => `received ${u8a.length} bytes, ${u8aToHex(u8a)}`);
+          // l.debug(() => `received ${u8a.length} bytes, ${u8aToHex(u8a)}`);
 
           this.emit('message', decodeMessage(u8a));
         },
         () => false
       ));
     } catch (error) {
-      this.l.error('receive error', error);
+      l.error('receive error', error);
 
       return false;
     }
@@ -109,15 +108,11 @@ export default class Peer extends EventEmitter implements PeerInterface {
   }
 
   send (message: MessageInterface): boolean {
-    if (!this.pushable) {
-      return false;
-    }
-
     try {
       const encoded = message.encode();
       const length = varint.encode(encoded.length + 1);
 
-      this.l.debug(() => `sending ${u8aToHex(encoded)}`);
+      l.debug(() => `sending ${this.shortId} -> ${u8aToHex(encoded)}`);
 
       this.pushable.push(
         u8aToBuffer(
@@ -129,7 +124,7 @@ export default class Peer extends EventEmitter implements PeerInterface {
         )
       );
     } catch (error) {
-      this.l.error('send error', error);
+      l.error('send error', error);
       return false;
     }
 
