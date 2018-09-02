@@ -107,8 +107,11 @@ class Client {
     const newBlocks = hasBlocks && this.prevBest
       ? `, +${numBlocks.toString()} blocks${newSpeed}`
       : '';
+    const target = isSync
+      ? `, target #${this.p2p.sync.bestSeen.toString()}`
+      : '';
 
-    l.log(`${status} (${numPeers} peers), #${bestNumber.toNumber()}, ${u8aToHex(bestHash, 48)}${newBlocks}`);
+    l.log(`${status} (${numPeers} peers)${target}, current #${bestNumber.toNumber()}, ${u8aToHex(bestHash, 48)}${newBlocks}`);
 
     this.prevBest = bestNumber;
     this.prevTime = now;

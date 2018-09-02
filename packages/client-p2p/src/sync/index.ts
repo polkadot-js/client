@@ -30,6 +30,7 @@ export default class Sync extends EventEmitter implements SyncInterface {
   private blockRequests: SyncState$BlockRequests = {};
   private blockQueue: SyncState$BlockQueue = {};
   private bestQueued: BN = new BN(0);
+  bestSeen: BN = new BN(0);
   status: SyncStatus = 'Idle';
 
   constructor (config: Config, chain: ChainInterface) {
@@ -188,6 +189,10 @@ export default class Sync extends EventEmitter implements SyncInterface {
           ? this.bestQueued.addn(1)
           : null
       );
+
+    if (peer.bestNumber.gt(this.bestSeen)) {
+      this.bestSeen = peer.bestNumber;
+    }
 
     this.timeoutRequests();
 
