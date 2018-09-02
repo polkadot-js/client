@@ -6,7 +6,6 @@ import { Config } from '@polkadot/client/types';
 import { ChainLoader } from '@polkadot/client-chains/types';
 import { BlockDb, StateDb, ChainDbs } from './types';
 
-import mkdirp from 'mkdirp';
 import path from 'path';
 import DiskDb from '@polkadot/db/Disk';
 import MemoryDb from '@polkadot/db/Memory';
@@ -20,8 +19,9 @@ export default class Dbs implements ChainDbs {
   readonly blocks: BlockDb;
   readonly state: StateDb;
 
-  constructor (config: Config, chain: ChainLoader) {
-    const { isDisk, dbPath } = this.createPaths(config, chain);
+  constructor ({ db }: Config, chain: ChainLoader) {
+    const isDisk = db.type === 'disk';
+    const dbPath = path.join(db.path, 'chains', chain.id, u8aToHex(chain.genesisRoot));
 
     this.blocks = createBlockDb(
       isDisk
@@ -38,19 +38,5 @@ export default class Dbs implements ChainDbs {
 
     this.blocks.db.open();
     this.state.db.open();
-  }
-
-  private createPaths ({ db }: Config, chain: ChainLoader): { isDisk: boolean, dbPath: string } {
-    const isDisk = db.type === 'disk';
-    const dbPath = path.join(db.path, 'chains', chain.id, u8aToHex(chain.genesisRoot));
-
-    if (isDisk) {
-      mkdirp.sync(dbPath);
-    }
-
-    return {
-      isDisk,
-      dbPath
-    };
   }
 }
