@@ -75,6 +75,8 @@ export default class P2p extends EventEmitter implements P2pInterface {
     this.l.log(`Started on address=${this.config.p2p.address}, port=${this.config.p2p.port}`);
     this.emit('started');
 
+    this._requestAny();
+
     return true;
   }
 
@@ -240,5 +242,17 @@ export default class P2p extends EventEmitter implements P2pInterface {
         item.isDialled = await this._dialPeer(item.peer);
       }
     );
+  }
+
+  private _requestAny (): void {
+    if (this.peers) {
+      this.peers.peers().forEach((peer) =>
+        this.sync.requestBlocks(peer)
+      );
+    }
+
+    setTimeout(() => {
+      this._requestAny();
+    }, 15000);
   }
 }

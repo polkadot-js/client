@@ -6,7 +6,6 @@ import PeerInfo from 'peer-info';
 import { Config } from '@polkadot/client/types';
 import { ChainInterface } from '@polkadot/client-chains/types';
 import { MessageInterface } from '@polkadot/client-p2p-messages/types';
-import { Logger } from '@polkadot/util/types';
 import { PeerInterface } from '../types';
 
 import BN from 'bn.js';
@@ -36,7 +35,7 @@ export default class Peer extends EventEmitter implements PeerInterface {
   readonly id: string;
   private nextId: number = 0;
   readonly peerInfo: PeerInfo;
-  private pushable: Pushable;
+  private pushable: Pushable | null = null;
   readonly shortId: string;
 
   constructor (config: Config, chain: ChainInterface, peerInfo: PeerInfo) {
@@ -47,13 +46,14 @@ export default class Peer extends EventEmitter implements PeerInterface {
     this.id = peerInfo.id.toB58String();
     this.peerInfo = peerInfo;
     this.shortId = stringShorten(this.id);
-    this.pushable = PullPushable();
   }
 
   addConnection (connection: LibP2pConnection, isWritable: boolean): void {
     this._receive(connection);
 
     if (isWritable) {
+      this.pushable = PullPushable();
+
       pull(this.pushable, connection);
 
       this.send(
@@ -108,6 +108,10 @@ export default class Peer extends EventEmitter implements PeerInterface {
   }
 
   send (message: MessageInterface): boolean {
+    if (!this.pushable) {
+      return false;
+    }
+
     try {
       const encoded = message.encode();
       const length = varint.encode(encoded.length + 1);

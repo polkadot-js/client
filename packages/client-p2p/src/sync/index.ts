@@ -30,7 +30,7 @@ export default class Sync extends EventEmitter implements SyncInterface {
   private blockRequests: SyncState$BlockRequests = {};
   private blockQueue: SyncState$BlockQueue = {};
   private bestQueued: BN = new BN(0);
-  private lastPeer: PeerInterface | null = null;
+  // private lastPeer: PeerInterface | null = null;
   bestSeen: BN = new BN(0);
   status: SyncStatus = 'Idle';
 
@@ -82,9 +82,10 @@ export default class Sync extends EventEmitter implements SyncInterface {
     const bestNumber = this.chain.blocks.bestNumber.get();
     const nextNumber = bestNumber.addn(1);
     let hasImported = false;
+    let queueLength = Object.keys(this.blockQueue).length;
 
     if (this.blockQueue[nextNumber.toString()]) {
-      const { block: { encoded }, peer } = this.blockQueue[nextNumber.toString()];
+      const { block: { encoded } } = this.blockQueue[nextNumber.toString()];
 
       l.debug(() => `Importing block #${nextNumber.toString()}`);
 
@@ -99,17 +100,18 @@ export default class Sync extends EventEmitter implements SyncInterface {
       }
 
       hasImported = true;
+      queueLength--;
 
-      if (this.lastPeer !== peer) {
-        if (this.lastPeer !== null) {
-          this.requestBlocks(peer);
-        }
+      // if (this.lastPeer !== peer || !queueLength) {
+      //   if (this.lastPeer !== null || !queueLength) {
+      //     this.requestBlocks(peer);
+      //   }
 
-        this.lastPeer = peer;
-      }
+      //   this.lastPeer = peer;
+      // }
     }
 
-    this.status = Object.keys(this.blockQueue).length > 1
+    this.status = queueLength > 1
       ? 'Sync'
       : 'Idle';
 
@@ -215,7 +217,7 @@ export default class Sync extends EventEmitter implements SyncInterface {
 
     l.debug(() => `Requesting blocks from ${peer.shortId}, #${from.toString()} -`);
 
-    const timeout = Date.now() + 60000;
+    const timeout = Date.now() + 30000;
     const request = new BlockRequest({
       from,
       id: peer.getNextId()

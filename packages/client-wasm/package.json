@@ -32,7 +32,7 @@
     "@babel/runtime": "^7.0.0-rc.1",
     "@polkadot/client-runtime": "^0.15.3",
     "@polkadot/primitives": "^0.28.24",
-    "@polkadot/util": "^0.29.10",
+    "@polkadot/util": "^0.29.12",
     "@types/webassembly-js-api": "^0.0.1"
   }
 }

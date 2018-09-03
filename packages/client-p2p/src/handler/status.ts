@@ -14,7 +14,7 @@ function handleStatus (self: P2pInterface, peer: PeerInterface, message: Status)
   const { bestHash, bestNumber } = message;
 
   peer.setBest(bestNumber, bestHash);
-  self.sync.requestBlocks(peer);
+  // self.sync.requestBlocks(peer);
 }
 
 (handleStatus as Handler).type = Status.type;
