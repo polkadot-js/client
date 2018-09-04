@@ -14,7 +14,8 @@ const ROLE: Role = 'full';
 const PROTOCOL_BASE = '/substrate';
 const PROTOCOL_TYPE = '/dot';
 const PROTOCOL_VERSION = 1;
-const PROTOCOL = `${PROTOCOL_BASE}${PROTOCOL_TYPE}/${PROTOCOL_VERSION}`;
+const PROTOCOL_DOT = `${PROTOCOL_BASE}${PROTOCOL_TYPE}/${PROTOCOL_VERSION}`;
+const PROTOCOL_PING = '/ipfs/ping/1.0.0';
 
 export default {
   ADDRESS,
@@ -23,7 +24,8 @@ export default {
   MAX_QUEUED_BLOCKS,
   MAX_REQUEST_BLOCKS,
   PORT,
-  PROTOCOL,
+  PROTOCOL_PING,
+  PROTOCOL_DOT,
   PROTOCOL_BASE,
   PROTOCOL_TYPE,
   PROTOCOL_VERSION,

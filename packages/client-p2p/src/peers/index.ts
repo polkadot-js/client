@@ -7,7 +7,7 @@ import { Config } from '@polkadot/client/types';
 import { ChainInterface } from '@polkadot/client-chains/types';
 import { MessageInterface } from '@polkadot/client-p2p-messages/types';
 import { Logger } from '@polkadot/util/types';
-import { PeerInterface, PeersInterface, PeersInterface$Events } from '../types';
+import { KnownPeer, PeerInterface, PeersInterface, PeersInterface$Events } from '../types';
 
 import EventEmitter from 'eventemitter3';
 import PeerInfo from 'peer-info';
@@ -20,7 +20,7 @@ export default class Peers extends EventEmitter implements PeersInterface {
   readonly config: Config;
   readonly l: Logger;
   private map: {
-    [index: string]: PeerInterface
+    [index: string]: KnownPeer
   };
 
   constructor (config: Config, chain: ChainInterface, node: LibP2p) {
@@ -38,18 +38,33 @@ export default class Peers extends EventEmitter implements PeersInterface {
 
   add (peerInfo: PeerInfo): PeerInterface {
     const id = peerInfo.id.toB58String();
-    let peer = this.map[id];
+    const info = this.map[id];
 
-    if (!peer) {
-      this.map[id] = peer = new Peer(this.config, this.chain, peerInfo);
-
-      peer.on('message', (message: MessageInterface): void => {
-        this.emit('message', {
-          message,
-          peer
-        });
-      });
+    if (info) {
+      return info.peer;
     }
+
+    const peer = new Peer(this.config, this.chain, peerInfo);
+    this.map[id] = {
+      peer,
+      isConnected: false
+    };
+
+    peer.on('disconnected', () => {
+      if (!this.map[id].isConnected) {
+        return;
+      }
+
+      this.map[id].isConnected = false;
+      this.log('disconnected', peer);
+    });
+
+    peer.on('message', (message: MessageInterface): void => {
+      this.emit('message', {
+        message,
+        peer
+      });
+    });
 
     return peer;
   }
@@ -63,7 +78,7 @@ export default class Peers extends EventEmitter implements PeersInterface {
   count (): number {
     return Object
       .values(this.map)
-      .filter((peer) =>
+      .filter(({ peer }) =>
         peer.isActive()
       ).length;
   }
@@ -74,7 +89,7 @@ export default class Peers extends EventEmitter implements PeersInterface {
     this.emit(event, peer);
   }
 
-  get (peerInfo: PeerInfo): PeerInterface | undefined {
+  get (peerInfo: PeerInfo): KnownPeer | undefined {
     const id = peerInfo.id.toB58String();
 
     return this.map[id];
@@ -82,7 +97,7 @@ export default class Peers extends EventEmitter implements PeersInterface {
 
   peers (): Array<PeerInterface> {
     return Object.keys(this.map).map((id) =>
-      this.map[id]
+      this.map[id].peer
     );
   }
 
@@ -92,13 +107,14 @@ export default class Peers extends EventEmitter implements PeersInterface {
         return false;
       }
 
-      const peer = this.get(peerInfo);
+      const info = this.get(peerInfo);
 
-      if (!peer) {
+      if (!info || info.isConnected) {
         return false;
       }
 
-      this.log('connected', peer);
+      info.isConnected = true;
+      this.log('connected', info.peer);
 
       return true;
     });
@@ -110,15 +126,14 @@ export default class Peers extends EventEmitter implements PeersInterface {
         return false;
       }
 
-      const peer = this.get(peerInfo);
+      const info = this.get(peerInfo);
 
-      if (!peer) {
+      if (!info || !info.isConnected) {
         return false;
       }
 
-      delete this.map[peer.id];
-
-      this.log('disconnected', peer);
+      info.isConnected = false;
+      this.log('disconnected', info.peer);
 
       return true;
     });
@@ -130,13 +145,13 @@ export default class Peers extends EventEmitter implements PeersInterface {
         return false;
       }
 
-      let peer = this.get(peerInfo);
+      const info = this.get(peerInfo);
 
-      if (peer) {
+      if (info) {
         return false;
       }
 
-      peer = this.add(peerInfo);
+      const peer = this.add(peerInfo);
 
       this.log('discovered', peer, false);
 

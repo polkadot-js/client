@@ -38,7 +38,7 @@ export type P2pConfig = {
   port: number
 };
 
-export type PeerInterface$Events = 'message';
+export type PeerInterface$Events = 'message' | 'disconnected';
 
 export interface PeerInterface {
   readonly bestHash: Uint8Array;
@@ -58,10 +58,15 @@ export interface PeerInterface {
 
 export type PeersInterface$Events = 'connected' | 'disconnected' | 'discovered' | 'message' | 'protocol';
 
+export type KnownPeer = {
+  peer: PeerInterface,
+  isConnected: boolean
+};
+
 export type PeersInterface = {
   add: (peerInfo: PeerInfo) => PeerInterface,
   count: () => number,
-  get: (peerInfo: PeerInfo) => PeerInterface | undefined,
+  get: (peerInfo: PeerInfo) => KnownPeer | undefined,
   log: (event: PeersInterface$Events, peer: PeerInterface) => void,
   on: (type: PeersInterface$Events, cb: (peer: any) => any) => any,
   peers: () => Array<PeerInterface>

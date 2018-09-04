@@ -22,6 +22,7 @@ import defaults from '../defaults';
 type Requests = Array<SyncState$Request>;
 
 const REPORT_COUNT = new BN(5);
+const REQUEST_TIMEOUT = 60000;
 
 const l = logger('sync');
 
@@ -87,7 +88,7 @@ export default class Sync extends EventEmitter implements SyncInterface {
     if (this.blockQueue[nextNumber.toString()]) {
       const { block: { encoded } } = this.blockQueue[nextNumber.toString()];
 
-      l.debug(() => `Importing block #${nextNumber.toString()}`);
+      // l.debug(() => `Importing block #${nextNumber.toString()}`);
 
       if (!this.chain.executor.importBlock(encoded)) {
         return false;
@@ -217,7 +218,7 @@ export default class Sync extends EventEmitter implements SyncInterface {
 
     l.debug(() => `Requesting blocks from ${peer.shortId}, #${from.toString()} -`);
 
-    const timeout = Date.now() + 30000;
+    const timeout = Date.now() + REQUEST_TIMEOUT;
     const request = new BlockRequest({
       from,
       id: peer.getNextId()
