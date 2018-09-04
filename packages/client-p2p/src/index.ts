@@ -34,6 +34,8 @@ type QueuedPeer = {
 };
 
 const DIAL_BACKOFF = 60000;
+const DIAL_INTERVAL = 15000;
+const REQUEST_INTERVAL = 15000;
 
 const l = logger('p2p');
 
@@ -44,6 +46,7 @@ export default class P2p extends EventEmitter implements P2pInterface {
   private dialQueue: { [index: string]: QueuedPeer };
   private node: LibP2p | undefined;
   private peers: PeersInterface | undefined;
+  private dialTimer: NodeJS.Timer | null;
   readonly sync: Sync;
 
   constructor (config: Config, chain: ChainInterface) {
@@ -54,6 +57,7 @@ export default class P2p extends EventEmitter implements P2pInterface {
     this.l = l;
     this.sync = new Sync(config, chain);
     this.dialQueue = {};
+    this.dialTimer = null;
   }
 
   isStarted (): boolean {
@@ -90,6 +94,11 @@ export default class P2p extends EventEmitter implements P2pInterface {
   async stop (): Promise<boolean> {
     if (!this.node) {
       return false;
+    }
+
+    if (this.dialTimer !== null) {
+      clearTimeout(this.dialTimer);
+      this.dialTimer = null;
     }
 
     const node = this.node;
@@ -207,7 +216,7 @@ export default class P2p extends EventEmitter implements P2pInterface {
     }
 
     try {
-      // NOTE Onl;y dial here, however the handling of ping are done in the _handlePing function
+      // NOTE Only dial here, however the handling of ping are done in the _handlePing function
       // const connection =
       await promisify(
         this.node, this.node.dialProtocol, peer.peerInfo, defaults.PROTOCOL_PING
@@ -266,6 +275,15 @@ export default class P2p extends EventEmitter implements P2pInterface {
   }
 
   private _dialPeers (peer?: PeerInterface): void {
+    if (!this.node || !this.node.isStarted()) {
+      return;
+    }
+
+    if (this.dialTimer !== null) {
+      clearTimeout(this.dialTimer);
+      this.dialTimer = null;
+    }
+
     const now = Date.now();
 
     if (peer && !this.dialQueue[peer.id]) {
@@ -274,10 +292,6 @@ export default class P2p extends EventEmitter implements P2pInterface {
         nextDial: now,
         peer
       };
-    }
-
-    if (!this.node || !this.node.isStarted()) {
-      return;
     }
 
     Object.values(this.dialQueue).forEach(
@@ -290,6 +304,10 @@ export default class P2p extends EventEmitter implements P2pInterface {
         item.nextDial = now + DIAL_BACKOFF;
       }
     );
+
+    this.dialTimer = setTimeout(() => {
+      this._dialPeers();
+    }, DIAL_INTERVAL);
   }
 
   private _requestAny (): void {
@@ -301,6 +319,6 @@ export default class P2p extends EventEmitter implements P2pInterface {
 
     setTimeout(() => {
       this._requestAny();
-    }, 15000);
+    }, REQUEST_INTERVAL);
   }
 }
