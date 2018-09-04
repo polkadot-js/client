@@ -29,8 +29,11 @@ type OnMessage = {
 
 type QueuedPeer = {
   peer: PeerInterface,
-  isDialled: boolean
+  isDialled: boolean,
+  nextDial: number
 };
+
+const DIAL_BACKOFF = 60000;
 
 const l = logger('p2p');
 
@@ -38,7 +41,7 @@ export default class P2p extends EventEmitter implements P2pInterface {
   readonly chain: ChainInterface;
   readonly config: Config;
   readonly l: Logger;
-  private dialQueue: Array<QueuedPeer> = [];
+  private dialQueue: { [index: string]: QueuedPeer };
   private node: LibP2p | undefined;
   private peers: PeersInterface | undefined;
   readonly sync: Sync;
@@ -50,6 +53,7 @@ export default class P2p extends EventEmitter implements P2pInterface {
     this.chain = chain;
     this.l = l;
     this.sync = new Sync(config, chain);
+    this.dialQueue = {};
   }
 
   isStarted (): boolean {
@@ -175,7 +179,7 @@ export default class P2p extends EventEmitter implements P2pInterface {
       async (protocol: string, connection: LibP2pConnection): Promise<void> => {
         try {
           const pushable = PullPushable((error) => {
-            console.error('handlePing', error);
+            l.debug(() => ['ping error', error]);
           });
 
           pull(pushable, connection);
@@ -236,7 +240,7 @@ export default class P2p extends EventEmitter implements P2pInterface {
     return true;
   }
 
-  private async _dialPeer (peer: PeerInterface): Promise<boolean> {
+  private async _dialPeer (peer: PeerInterface, peers: PeersInterface): Promise<boolean> {
     if (!this.node) {
       return false;
     }
@@ -251,6 +255,7 @@ export default class P2p extends EventEmitter implements P2pInterface {
       await this._pingPeer(peer);
 
       peer.addConnection(connection, true);
+      peers.log('dialled', peer);
 
       return true;
     } catch (error) {
@@ -261,24 +266,28 @@ export default class P2p extends EventEmitter implements P2pInterface {
   }
 
   private _dialPeers (peer?: PeerInterface): void {
-    if (peer !== undefined) {
-      this.dialQueue.push({
+    const now = Date.now();
+
+    if (peer && !this.dialQueue[peer.id]) {
+      this.dialQueue[peer.id] = {
         isDialled: false,
+        nextDial: now,
         peer
-      });
+      };
     }
 
     if (!this.node || !this.node.isStarted()) {
       return;
     }
 
-    this.dialQueue.forEach(
+    Object.values(this.dialQueue).forEach(
       async (item: QueuedPeer): Promise<void> => {
-        if (item.isDialled) {
+        if (item.isDialled || !this.peers || item.nextDial < now) {
           return;
         }
 
-        item.isDialled = await this._dialPeer(item.peer);
+        item.isDialled = await this._dialPeer(item.peer, this.peers);
+        item.nextDial = now + DIAL_BACKOFF;
       }
     );
   }

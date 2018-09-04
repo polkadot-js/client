@@ -6,7 +6,6 @@ import LibP2p from 'libp2p';
 import { Config } from '@polkadot/client/types';
 import { ChainInterface } from '@polkadot/client-chains/types';
 import { MessageInterface } from '@polkadot/client-p2p-messages/types';
-import { Logger } from '@polkadot/util/types';
 import { KnownPeer, PeerInterface, PeersInterface, PeersInterface$Events } from '../types';
 
 import EventEmitter from 'eventemitter3';
@@ -15,10 +14,11 @@ import logger from '@polkadot/util/logger';
 
 import Peer from '../peer';
 
+const l = logger('p2p/peers');
+
 export default class Peers extends EventEmitter implements PeersInterface {
   readonly chain: ChainInterface;
   readonly config: Config;
-  readonly l: Logger;
   private map: {
     [index: string]: KnownPeer
   };
@@ -28,7 +28,6 @@ export default class Peers extends EventEmitter implements PeersInterface {
 
     this.chain = chain;
     this.config = config;
-    this.l = logger('p2p/peers');
     this.map = {};
 
     this._onConnect(node);
@@ -49,6 +48,10 @@ export default class Peers extends EventEmitter implements PeersInterface {
       peer,
       isConnected: false
     };
+
+    peer.on('active', () => {
+      this.log('active', peer, false);
+    });
 
     peer.on('disconnected', () => {
       if (!this.map[id].isConnected) {
@@ -83,8 +86,8 @@ export default class Peers extends EventEmitter implements PeersInterface {
       ).length;
   }
 
-  log (event: PeersInterface$Events, peer: PeerInterface, withShort: boolean = true): void {
-    this.l.log(withShort ? peer.shortId : peer.id, event);
+  log (event: PeersInterface$Events, peer: PeerInterface, withDebug: boolean = true, withShort: boolean = true): void {
+    l[withDebug ? 'debug' : 'log'](() => [withShort ? peer.shortId : peer.id, event]);
 
     this.emit(event, peer);
   }
@@ -153,7 +156,7 @@ export default class Peers extends EventEmitter implements PeersInterface {
 
       const peer = this.add(peerInfo);
 
-      this.log('discovered', peer, false);
+      this.log('discovered', peer, false, false);
 
       return true;
     });

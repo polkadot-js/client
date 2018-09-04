@@ -113,7 +113,7 @@ export default class Peer extends EventEmitter implements PeerInterface {
   }
 
   isWritable (): boolean {
-    return this.pushables.length !== 0;
+    return this.pushables().length !== 0;
   }
 
   getNextId (): number {
@@ -138,6 +138,10 @@ export default class Peer extends EventEmitter implements PeerInterface {
           l.debug(() => [this.shortId, 'received', message]);
 
           this.emit('message', message);
+
+          if (message.type === 0) {
+            this.emit('active');
+          }
         },
         () => false
       ));

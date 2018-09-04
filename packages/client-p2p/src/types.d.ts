@@ -38,7 +38,7 @@ export type P2pConfig = {
   port: number
 };
 
-export type PeerInterface$Events = 'message' | 'disconnected';
+export type PeerInterface$Events = 'active' | 'message' | 'disconnected';
 
 export interface PeerInterface {
   readonly bestHash: Uint8Array;
@@ -56,7 +56,7 @@ export interface PeerInterface {
   setBest: (number: BN, hash: Uint8Array) => void
 }
 
-export type PeersInterface$Events = 'connected' | 'disconnected' | 'discovered' | 'message' | 'protocol';
+export type PeersInterface$Events = 'active' | 'connected' | 'dialled' | 'disconnected' | 'discovered' | 'message' | 'protocol';
 
 export type KnownPeer = {
   peer: PeerInterface,
