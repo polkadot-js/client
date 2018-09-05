@@ -35,9 +35,15 @@ export default function wasm ({ config: { wasm: { heapSize = defaults.HEAP_SIZE_
   const env = instrument('runtime', elapsed, (): WasmInstanceExports =>
     createEnv(runtime, createMemory(0, 0))
   );
-  const chain = instrument('chain', elapsed, (): WasmInstanceExports =>
-    createExports(chainCode, { env }, null, forceNew || isResized)
-  );
+  const chain = instrument('chain', elapsed, (): WasmInstanceExports => {
+    const { codeHash, exports, isNewHash } = createExports(chainCode, { env }, null, forceNew || isResized);
+
+    if (isNewHash) {
+      l.warn(`Using new on-chain WASM code, header ${codeHash}`);
+    }
+
+    return exports;
+  });
   const isNewCode = chain !== prevChain;
 
   if (forceNew || isNewCode) {
@@ -46,7 +52,7 @@ export default function wasm ({ config: { wasm: { heapSize = defaults.HEAP_SIZE_
   }
 
   const instance = instrument('proxy', elapsed, (): WasmInstanceExports =>
-    createExports(chainProxy, { proxy: chain }, createMemory(0, 0), forceNew || isNewCode)
+    createExports(chainProxy, { proxy: chain }, createMemory(0, 0), forceNew || isNewCode).exports
   );
 
   runtime.environment.heap.setWasmMemory(chain.memory, pageOffset);

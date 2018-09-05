@@ -18,7 +18,7 @@ export default function data ({ l, heap, db }: RuntimeEnv): RuntimeInterface$Sto
         const key = heap.get(prefixPtr, prefixLength);
 
         l.warn('clear_prefix has not been implemented, only stubbed');
-        l.warn(() => ['clear_prefix', [prefixPtr, prefixLength], '<-', u8aToHex(key)]);
+        l.debug(() => ['clear_prefix', [prefixPtr, prefixLength], '<-', u8aToHex(key)]);
       }),
     clear_storage: (keyPtr: Pointer, keyLength: number): void =>
       instrument('clear_storage', (): void => {
