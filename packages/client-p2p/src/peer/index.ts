@@ -6,7 +6,6 @@ import PeerInfo from 'peer-info';
 import { Config } from '@polkadot/client/types';
 import { ChainInterface } from '@polkadot/client-chains/types';
 import { MessageInterface } from '@polkadot/client-p2p-messages/types';
-import { Logger } from '@polkadot/util/types';
 import { PeerInterface } from '../types';
 
 import BN from 'bn.js';
@@ -26,16 +25,23 @@ import u8aToHex from '@polkadot/util/u8a/toHex';
 
 import defaults from '../defaults';
 
+type Connection = {
+  connection: LibP2pConnection,
+  pushable: Pushable | null
+};
+
+const l = logger('p2p/peer');
+
 export default class Peer extends EventEmitter implements PeerInterface {
   bestHash: Uint8Array = new Uint8Array([]);
   bestNumber: BN = new BN(0);
   readonly chain: ChainInterface;
   readonly config: Config;
   readonly id: string;
-  readonly l: Logger;
+  private connections: { [index: number]: Connection };
   private nextId: number = 0;
+  private nextConnId: number = 0;
   readonly peerInfo: PeerInfo;
-  private pushable: Pushable | null = null;
   readonly shortId: string;
 
   constructor (config: Config, chain: ChainInterface, peerInfo: PeerInfo) {
@@ -43,19 +49,39 @@ export default class Peer extends EventEmitter implements PeerInterface {
 
     this.chain = chain;
     this.config = config;
+    this.connections = {};
     this.id = peerInfo.id.toB58String();
-    this.l = logger('p2p/peer');
     this.peerInfo = peerInfo;
     this.shortId = stringShorten(this.id);
   }
 
+  private clearConnection (connId: number): void {
+    delete this.connections[connId];
+
+    if (Object.values(this.connections).length === 0) {
+      this.emit('disconnected');
+    }
+  }
+
   addConnection (connection: LibP2pConnection, isWritable: boolean): void {
-    this._receive(connection);
+    const connId = this.nextConnId++;
+    let pushable = isWritable
+      ? PullPushable((error) => {
+        l.debug(() => [`${this.shortId} pushable error`, error]);
+
+        this.clearConnection(connId);
+      })
+      : null;
+
+    this.connections[connId] = {
+      connection,
+      pushable
+    };
+
+    this._receive(connection, connId);
 
     if (isWritable) {
-      this.pushable = PullPushable();
-
-      pull(this.pushable, connection);
+      pull(pushable, connection);
 
       this.send(
         new Status({
@@ -70,18 +96,31 @@ export default class Peer extends EventEmitter implements PeerInterface {
   }
 
   isActive (): boolean {
-    return this.bestHash.length !== 0;
+    return this.bestHash.length !== 0 &&
+      Object.keys(this.connections).length !== 0;
+  }
+
+  private pushables (): Array<Pushable> {
+    // @ts-ignore yeap, we are filtering them right out at the end
+    return Object
+      .values(this.connections)
+      .map(({ pushable }) =>
+        pushable
+      )
+      .filter((pushable) =>
+        pushable
+      );
   }
 
   isWritable (): boolean {
-    return !!this.pushable;
+    return this.pushables().length !== 0;
   }
 
   getNextId (): number {
     return ++this.nextId;
   }
 
-  _receive (connection: LibP2pConnection): boolean {
+  _receive (connection: LibP2pConnection, connId: number): boolean {
     try {
       pull(connection, pull.drain(
         (buffer: Buffer): void => {
@@ -93,14 +132,23 @@ export default class Peer extends EventEmitter implements PeerInterface {
           // TODO Do we keep this peer or drop it (like Rust does on invalid messages). Additionally, do we _really_ want to throw here?
           assert(u8a.length === length - 1, 'Invalid buffer length received');
 
-          // this.l.debug(() => `received ${u8a.length} bytes, ${u8aToHex(u8a)}`);
+          const message = decodeMessage(u8a);
 
-          this.emit('message', decodeMessage(u8a));
+          // l.debug(() => `${this.shortId} received ${u8a.length} bytes, ${u8aToHex(u8a)}`);
+          l.debug(() => [this.shortId, 'received', message]);
+
+          this.emit('message', message);
+
+          if (message.type === 0) {
+            this.emit('active');
+          }
         },
         () => false
       ));
     } catch (error) {
-      this.l.error('receive error', error);
+      l.debug(() => [`${this.shortId} receive error`, error]);
+
+      this.clearConnection(connId);
 
       return false;
     }
@@ -109,27 +157,25 @@ export default class Peer extends EventEmitter implements PeerInterface {
   }
 
   send (message: MessageInterface): boolean {
-    if (!this.pushable) {
-      return false;
-    }
-
     try {
       const encoded = message.encode();
       const length = varint.encode(encoded.length + 1);
 
-      this.l.debug(() => `sending ${u8aToHex(encoded)}`);
+      l.debug(() => [`sending ${this.shortId} -> ${u8aToHex(encoded)}`, message]);
 
-      this.pushable.push(
-        u8aToBuffer(
-          u8aConcat(
-            bufferToU8a(length),
-            new Uint8Array([0]),
-            encoded
+      this.pushables().forEach((pushable) =>
+        pushable.push(
+          u8aToBuffer(
+            u8aConcat(
+              bufferToU8a(length),
+              new Uint8Array([0]),
+              encoded
+            )
           )
         )
       );
     } catch (error) {
-      this.l.error('send error', error);
+      l.error(`${this.shortId} send error`, error);
       return false;
     }
 

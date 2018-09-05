@@ -2,22 +2,25 @@
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
 
-import { TrieDb, DbConfig$Type } from '../types';
-import { Message, MessageData, MessageType, MessageTypeRead, MessageTypeWrite } from './types';
+import { DbConfig$Type } from '../types';
+import { Message, MessageData, MessageType, MessageTypeRead, MessageTypeWrite, ProgressMessage } from './types';
 
 import path from 'path';
-import { Worker } from 'worker_threads';
+import { MessageChannel, Worker } from 'worker_threads';
 
 import commands from './worker/commands';
 import defaults from './worker/defaults';
 import atomics from './worker/atomics';
 
+const SPINNER = ['|', '/', '-', '\\'];
+const PREPEND = '                                     ';
+
 const emptyBuffer = new Uint8Array();
 
-export default class SyncDb implements TrieDb {
+export default class SyncDb {
   private worker: WorkerThreads.Worker;
 
-  constructor (type: DbConfig$Type = 'memory', dbPath: string = '.', isTrie: boolean = true) {
+  constructor (type: DbConfig$Type = 'memory', dbPath: string = '.', isTrie: boolean = true, withCompact: boolean = false) {
     // NOTE Node 10.6 relative paths for Workers are broken - adding here tries to load
     // the worker from /client, not client-db.
     this.worker = new Worker(
@@ -26,10 +29,43 @@ export default class SyncDb implements TrieDb {
         workerData: {
           isTrie,
           path: dbPath,
-          type
+          type,
+          withCompact
         }
       }
     );
+  }
+
+  initialise (): Promise<void> {
+    return new Promise((resolve) => {
+      const state = new Int32Array(new SharedArrayBuffer(8));
+      const channel = new MessageChannel();
+      let spin = 0;
+      let lastUpdate = 0;
+
+      channel.port2.on('message', ({ isCompleted, progress }: ProgressMessage): void => {
+        if (isCompleted) {
+          return resolve();
+        }
+
+        const now = Date.now();
+
+        if ((now - lastUpdate) > 200) {
+          const percent = `      ${progress.percent.toFixed(2)}`.slice(-6);
+
+          process.stdout.write(`${PREPEND}${SPINNER[spin % SPINNER.length]} ${percent}%, ${(progress.keys / 1000).toFixed(2)}k keys\r`);
+
+          lastUpdate = now;
+          spin++;
+        }
+      });
+
+      this.worker.postMessage({
+        port: channel.port1,
+        state,
+        type: '__init'
+      } as Message, [channel.port1]);
+    });
   }
 
   checkpoint (): void {
@@ -60,8 +96,14 @@ export default class SyncDb implements TrieDb {
     return this._executeRead('getRoot') as Uint8Array;
   }
 
-  setRoot (value: Uint8Array): void {
-    this._executeWrite('setRoot', undefined, value);
+  hasRoot (root: Uint8Array): boolean {
+    const size = this._executeReadSize('hasRoot', root);
+
+    return size === 1;
+  }
+
+  setRoot (root: Uint8Array): void {
+    this._executeWrite('setRoot', root);
   }
 
   async terminate () {
@@ -104,6 +146,19 @@ export default class SyncDb implements TrieDb {
     });
   }
 
+  private _executeReadSize (type: MessageTypeRead, key?: Uint8Array, value?: Uint8Array): number {
+    // The shared data buffer that will be used by the worker to send info back
+    const shared = new SharedArrayBuffer(defaults.SHARED_BUFFER_SIZE);
+    const buffer = new Uint8Array(shared);
+    const state = this._waitOnStart(type, {
+      buffer,
+      key,
+      value
+    });
+
+    return this._readSize(state, shared);
+  }
+
   // Sends a message to the worker, reading and returning the actual result
   private _executeRead (type: MessageTypeRead, key?: Uint8Array, value?: Uint8Array): Uint8Array | null {
     // The shared data buffer that will be used by the worker to send info back
@@ -127,13 +182,14 @@ export default class SyncDb implements TrieDb {
   private _readSize (state: Int32Array, shared: SharedArrayBuffer): number {
     const view = new DataView(shared);
 
-    // expect to read SIZE, END/ERROR here
+    // expect to read SIZE/NUMBER, END/ERROR here
     switch (state[0]) {
       case commands.END:
       case commands.ERROR:
         return -1;
 
       // Read the size to detemine how big of a result buffer we need.
+      case commands.NUMBER:
       case commands.SIZE:
         return view.getUint32(0);
 

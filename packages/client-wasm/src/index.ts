@@ -3,10 +3,9 @@
 // of the ISC license. See the LICENSE file for details.
 
 import { Config } from '@polkadot/client/types';
-import { BlockDb, StateDb } from '@polkadot/client-db-chain/types';
+import { BlockDb, StateDb } from '@polkadot/client-db/types';
 import { RuntimeInterface } from '@polkadot/client-runtime/types';
 import { UncheckedRaw } from '@polkadot/primitives/extrinsic';
-import { Logger } from '@polkadot/util/types';
 import { ExecutorInterface, Executor$BlockImportResult } from './types';
 
 import decodeRaw from '@polkadot/primitives/codec/block/decodeRaw';
@@ -43,15 +42,17 @@ const keyring = testingKeypairs();
 const timestampSet = extrinsics.timestamp.public.set;
 const parachainsSet = extrinsics.parachains.public.setHeads;
 
+const l = logger('executor');
+
 export default class Executor implements ExecutorInterface {
   private blockDb: BlockDb;
-  private l: Logger;
   private config: Config;
   private runtime: RuntimeInterface;
   private stateDb: StateDb;
 
+  // 0xefbfbd2065efbfbdefbfbd33efbfbdefbfbdc6b21aefbfbd592157efbfbdefbfbdefbfbdefbfbd1defbfbdefbfbdefbfbd77efbfbdefbfbd4befbfbd0fefbfbd22efbfbd41346b63efbfbd1eefbfbd2011efbfbd25efbfbdddb9d2a51021
+
   constructor (config: Config, blockDb: BlockDb, stateDb: StateDb, runtime: RuntimeInterface) {
-    this.l = logger('executor');
     this.blockDb = blockDb;
     this.config = config;
     this.stateDb = stateDb;
@@ -61,13 +62,13 @@ export default class Executor implements ExecutorInterface {
   applyExtrinsic (extrinsic: UncheckedRaw): boolean {
     const start = Date.now();
 
-    this.l.debug(() => 'Apply extrinsic');
+    l.debug(() => 'Apply extrinsic');
 
     const result = this.call('apply_extrinsic')(
       encodeLength(extrinsic)
     );
 
-    this.l.debug(() => `Apply extrinsic completed (${Date.now() - start}ms)`);
+    l.debug(() => `Apply extrinsic completed (${Date.now() - start}ms)`);
 
     return result.bool;
   }
@@ -78,14 +79,14 @@ export default class Executor implements ExecutorInterface {
     );
   }
 
-  executeBlock (block: Uint8Array): boolean {
+  executeBlock (block: Uint8Array, forceNew: boolean = false): boolean {
     const start = Date.now();
 
-    this.l.debug(() => 'Executing block');
+    l.debug(() => 'Executing block');
 
-    const result = this.call('execute_block')(block);
+    const result = this.call('execute_block', forceNew)(block);
 
-    this.l.debug(() => `Block execution completed (${Date.now() - start}ms)`);
+    l.debug(() => `Block execution completed (${Date.now() - start}ms)`);
 
     return result.bool;
   }
@@ -93,11 +94,11 @@ export default class Executor implements ExecutorInterface {
   finaliseBlock (header: Uint8Array): Uint8Array {
     const start = Date.now();
 
-    this.l.debug(() => 'Finalising block');
+    l.debug(() => 'Finalising block');
 
     const result = this.callAsU8a('finalise_block')(header);
 
-    this.l.debug(() => `Block finalised (${Date.now() - start}ms)`);
+    l.debug(() => `Block finalised (${Date.now() - start}ms)`);
 
     return result;
   }
@@ -106,30 +107,33 @@ export default class Executor implements ExecutorInterface {
     const start = Date.now();
     const bestNumber = this.blockDb.bestNumber.get();
     const nextNumber = bestNumber.addn(1);
+    let block = new Uint8Array();
 
-    this.l.debug(() => `Generating block #${nextNumber.toString()}`);
-    this.stateDb.db.checkpoint();
+    l.debug(() => `Generating block #${nextNumber.toString()}`);
 
-    const extrinsics = this.withInherent(timestamp, utxs);
-    const header = createHeader({
-      number: nextNumber,
-      parentHash: this.blockDb.bestHash.get()
-    }, extrinsics);
-    const headerRaw = encodeHeader(header);
+    this.stateDb.db.transaction((): boolean => {
+      const extrinsics = this.withInherent(timestamp, utxs);
+      const header = createHeader({
+        number: nextNumber,
+        parentHash: this.blockDb.bestHash.get()
+      }, extrinsics);
+      const headerRaw = encodeHeader(header);
 
-    this.initialiseBlock(headerRaw);
-    this.applyExtrinsics(extrinsics);
+      this.initialiseBlock(headerRaw);
+      this.applyExtrinsics(extrinsics);
 
-    const { stateRoot } = decodeHeader(
-      this.finaliseBlock(headerRaw)
-    );
-    const block = encodeBlock({
-      extrinsics,
-      header: { ...header, stateRoot }
+      const { stateRoot } = decodeHeader(
+        this.finaliseBlock(headerRaw)
+      );
+      block = encodeBlock({
+        extrinsics,
+        header: { ...header, stateRoot }
+      });
+
+      l.log(() => `Block #${nextNumber.toString()} generated (${Date.now() - start}ms)`);
+
+      return false;
     });
-
-    this.stateDb.db.revert();
-    this.l.log(() => `Block #${nextNumber.toString()} generated (${Date.now() - start}ms)`);
 
     return block;
   }
@@ -141,25 +145,23 @@ export default class Executor implements ExecutorInterface {
     const { body, extrinsics, header, number } = decodeRaw(block);
     const headerHash = blake2Asu8a(header, 256);
 
-    this.l.debug(() => `Importing block #${number.toString()}, ${u8aToHex(headerHash, 48)}`);
-
-    this.stateDb.db.checkpoint();
+    l.debug(() => `Importing block #${number.toString()}, ${u8aToHex(headerHash, 48)}`);
 
     try {
-      this.executeBlock(block);
+      this.stateDb.db.transaction(() =>
+        this.executeBlock(block)
+      );
     } catch (error) {
-      this.l.error(`Failed on block #${number.toString()}, ${u8aToHex(headerHash, 48)}`);
+      l.error(`Failed importing #${number.toString()}, ${u8aToHex(headerHash, 48)}`);
 
       throw error;
     }
-
-    this.stateDb.db.commit();
 
     this.blockDb.bestHash.set(headerHash);
     this.blockDb.bestNumber.set(number);
     this.blockDb.block.set(block, headerHash);
 
-    this.l.debug(() => `Imported block #${number.toString()} (${Date.now() - start}ms)`);
+    l.debug(() => `Imported block #${number.toString()} (${Date.now() - start}ms)`);
 
     return {
       body,
@@ -172,32 +174,32 @@ export default class Executor implements ExecutorInterface {
   initialiseBlock (header: Uint8Array): boolean {
     const start = Date.now();
 
-    this.l.debug(() => 'Initialising block');
+    l.debug(() => 'Initialising block');
 
     const result = this.call('initialise_block')(header);
 
-    this.l.debug(() => `Block initialised (${Date.now() - start}ms)`);
+    l.debug(() => `Block initialised (${Date.now() - start}ms)`);
 
     return result.bool;
   }
 
-  private call (name: string): Call {
+  private call (name: string, forceNew: boolean = false): Call {
     const code = this.stateDb.db.get(CODE_KEY);
 
     assert(code, 'Expected to have code available in runtime');
 
     // @ts-ignore code check above
-    const instance = createWasm({ config: this.config, l: this.l }, this.runtime, code, proxy);
+    const instance = createWasm({ config: this.config, l }, this.runtime, code, proxy, forceNew);
     const { heap } = this.runtime.environment;
 
     return (...data: Array<Uint8Array>): CallResult => {
       const start = Date.now();
 
-      this.l.debug(() => ['preparing', name]);
+      l.debug(() => ['preparing', name]);
       // runtime.instrument.start();
 
       const params = data.reduce((params, data) => {
-        this.l.debug(() => ['storing', u8aToHex(data)]);
+        l.debug(() => ['storing', u8aToHex(data)]);
 
         params.push(heap.set(heap.allocate(data.length), data));
         params.push(data.length);
@@ -205,13 +207,13 @@ export default class Executor implements ExecutorInterface {
         return params;
       }, ([] as number[]));
 
-      this.l.debug(() => ['executing', name, params]);
+      l.debug(() => ['executing', name, params]);
 
       const lo: number = instance[name].apply(null, params);
       const hi: number = instance['get_result_hi']();
 
       // l.debug(() => runtime.instrument.stop());
-      this.l.debug(() => [name, 'returned', [lo, hi], `(${Date.now() - start}ms)`]);
+      l.debug(() => [name, 'returned', [lo, hi], `(${Date.now() - start}ms)`]);
 
       return {
         bool: hi === 0 && lo === 1,
@@ -229,7 +231,7 @@ export default class Executor implements ExecutorInterface {
       const { hi, lo } = fn.apply(null, data);
       const result = heap.get(lo, hi).slice();
 
-      this.l.debug(() => ['received', u8aToHex(result)]);
+      l.debug(() => ['received', u8aToHex(result)]);
 
       return result;
     };

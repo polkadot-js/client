@@ -7,7 +7,7 @@ import { Logger } from '@polkadot/util/types';
 import u8aToHex from '@polkadot/util/u8a/toHex';
 
 export default function print (l: Logger, data: Uint8Array): void {
-  l.log(
+  l.warn(
     u8aToHex(data)
   );
 }

@@ -1,11 +1,11 @@
-// Copyright 2017-2018 @polkadot/client-db-chain authors & contributors
+// Copyright 2017-2018 @polkadot/client-db authors & contributors
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
 
 import BN from 'bn.js';
 import { SectionItem } from '@polkadot/params/types';
 import { Storage$Key$Value } from '@polkadot/storage/types';
-import { BaseDb } from '@polkadot/client-db/types';
+import { BaseDb } from '@polkadot/db/types';
 import { StorageMethod$Bn } from '../types';
 
 import bnToU8a from '@polkadot/util/bn/toU8a';

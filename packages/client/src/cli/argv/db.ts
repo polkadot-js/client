@@ -7,6 +7,11 @@ import { Options } from 'yargs';
 import defaults from '@polkadot/client-db/defaults';
 
 export default ({
+  'db-compact': {
+    default: false,
+    description: 'Compact existing databases',
+    type: 'boolean'
+  },
   'db-path': {
     default: defaults.PATH,
     description: 'Sets the path for all storage operations',

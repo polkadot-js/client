@@ -19,7 +19,7 @@ describe('print_hex', () => {
 
     l = {
       debug: jest.fn((cb) => cb()),
-      log: jest.fn(() => void 0)
+      warn: jest.fn(() => void 0)
     };
     print_hex = index({ l, heap }).print_hex;
   });
@@ -28,7 +28,7 @@ describe('print_hex', () => {
     print_hex(0, 5);
 
     expect(
-      l.log
+      l.warn
     ).toHaveBeenCalledWith('0x0103050799');
   });
 });

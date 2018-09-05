@@ -13,7 +13,7 @@ describe('exports', () => {
       expect(
         createExports(
           require('../../test/wasm/addTwo_wasm')
-        )
+        ).exports
       ).toBeDefined();
     });
   });
@@ -24,7 +24,7 @@ describe('exports', () => {
         require('../../test/wasm/addTwo_wasm'),
         {},
         createMemory(0, 0)
-      );
+      ).exports;
     });
 
     it('allows calls into the module', () => {
@@ -44,7 +44,7 @@ describe('exports', () => {
         require('../../test/wasm/import_wasm'),
         { js: { callback } },
         createMemory(0, 0)
-      );
+      ).exports;
     });
 
     it('allows imports to be called', () => {
@@ -63,7 +63,7 @@ describe('exports', () => {
         require('../../test/wasm/start_wasm'),
         { js: { callback } },
         createMemory(0, 0)
-      );
+      ).exports;
     });
 
     it('allows imports to be called', () => {

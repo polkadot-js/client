@@ -10,22 +10,4 @@
 
 # @polkadot/client-db
 
-An interface to the database layer
-
-## Usage
-
-Installation -
-
-```
-npm install --save @polkadot/client-db
-```
-
-Usage -
-
-```js
-const DB = require('@polkadot/client-db');
-
-const db = new DB({ path: '/tmp' }, 'my-awesome-db');
-
-db.put('some-key', '12345');
-```
+An interface to the database layer with chain-specific helpers

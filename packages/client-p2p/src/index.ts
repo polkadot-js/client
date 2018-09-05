@@ -29,25 +29,35 @@ type OnMessage = {
 
 type QueuedPeer = {
   peer: PeerInterface,
-  isDialled: boolean
+  isDialled: boolean,
+  nextDial: number
 };
+
+const DIAL_BACKOFF = 60000;
+const DIAL_INTERVAL = 15000;
+const REQUEST_INTERVAL = 15000;
+
+const l = logger('p2p');
 
 export default class P2p extends EventEmitter implements P2pInterface {
   readonly chain: ChainInterface;
   readonly config: Config;
-  private dialQueue: Array<QueuedPeer> = [];
   readonly l: Logger;
+  private dialQueue: { [index: string]: QueuedPeer };
   private node: LibP2p | undefined;
   private peers: PeersInterface | undefined;
+  private dialTimer: NodeJS.Timer | null;
   readonly sync: Sync;
 
   constructor (config: Config, chain: ChainInterface) {
     super();
 
-    this.l = logger('p2p');
     this.config = config;
     this.chain = chain;
+    this.l = l;
     this.sync = new Sync(config, chain);
+    this.dialQueue = {};
+    this.dialTimer = null;
   }
 
   isStarted (): boolean {
@@ -63,17 +73,20 @@ export default class P2p extends EventEmitter implements P2pInterface {
   async start (): Promise<boolean> {
     await this.stop();
 
-    this.node = await createNode(this.config, this.chain, this.l);
+    this.node = await createNode(this.config, this.chain, l);
     this.peers = new Peers(this.config, this.chain, this.node);
 
     this._handleProtocol(this.node, this.peers);
+    this._handlePing(this.node);
     this._onPeerDiscovery(this.node, this.peers);
     this._onPeerMessage(this.node, this.peers);
 
     await promisify(this.node, this.node.start);
 
-    this.l.log(`Started on address=${this.config.p2p.address}, port=${this.config.p2p.port}`);
+    l.log(`Started on address=${this.config.p2p.address}, port=${this.config.p2p.port}`);
     this.emit('started');
+
+    this._requestAny();
 
     return true;
   }
@@ -83,6 +96,11 @@ export default class P2p extends EventEmitter implements P2pInterface {
       return false;
     }
 
+    if (this.dialTimer !== null) {
+      clearTimeout(this.dialTimer);
+      this.dialTimer = null;
+    }
+
     const node = this.node;
 
     delete this.node;
@@ -90,7 +108,7 @@ export default class P2p extends EventEmitter implements P2pInterface {
 
     await promisify(node, node.stop);
 
-    this.l.log('Server stopped');
+    l.log('Server stopped');
     this.emit('stopped');
 
     return true;
@@ -130,7 +148,7 @@ export default class P2p extends EventEmitter implements P2pInterface {
       );
 
       if (!handler) {
-        this.l.error(`Unhandled message type=${message.type}`);
+        l.error(`Unhandled message type=${message.type}`);
         return;
       }
 
@@ -140,28 +158,55 @@ export default class P2p extends EventEmitter implements P2pInterface {
 
   private _handleProtocol (node: LibP2p, peers: PeersInterface): void {
     node.handle(
-      defaults.PROTOCOL,
+      defaults.PROTOCOL_DOT,
       async (protocol: string, connection: LibP2pConnection): Promise<void> => {
         try {
           const peerInfo = await promisify(connection, connection.getPeerInfo);
           const peer = peers.add(peerInfo);
 
           peers.log('protocol', peer);
-
-          peer.addConnection(connection, false);
+          peer.addConnection(connection, true);
 
           if (!peer.isWritable()) {
             this._dialPeers(peer);
           }
         } catch (error) {
-          this.l.error('protocol handling error', error);
+          l.error('protocol handling error', error);
         }
       }
       // , (protocol: string, requested: string, callback: (error: null, accept: boolean) => void): void => {
-      //   this.l.debug(() => `matching protocol ${requested}`);
+      //   l.debug(() => `matching protocol ${requested}`);
 
       //   callback(null, requested.indexOf(defaults.PROTOCOL) === 0);
       // }
+    );
+  }
+
+  private _handlePing (node: LibP2p): void {
+    node.handle(
+      defaults.PROTOCOL_PING,
+      async (protocol: string, connection: LibP2pConnection): Promise<void> => {
+        try {
+          const pushable = PullPushable((error) => {
+            l.debug(() => ['ping error', error]);
+          });
+
+          pull(pushable, connection);
+          pull(
+            connection,
+            pull.drain(
+              (buffer: Buffer): void => {
+                l.debug(() => ['ping (protocol)']);
+
+                pushable.push(buffer);
+              },
+              () => false
+            )
+          );
+        } catch (error) {
+          l.error('ping handling error', error);
+        }
+      }
     );
   }
 
@@ -171,45 +216,55 @@ export default class P2p extends EventEmitter implements P2pInterface {
     }
 
     try {
-      const connection = await promisify(
-        this.node, this.node.dialProtocol, peer.peerInfo, '/ipfs/ping/1.0.0'
+      // NOTE Only dial here, however the handling of ping are done in the _handlePing function
+      // const connection =
+      await promisify(
+        this.node, this.node.dialProtocol, peer.peerInfo, defaults.PROTOCOL_PING
       );
-      const pushable = PullPushable();
+      // const pushable = PullPushable((error) => {
+      //   console.error('pingPeer', error);
+      // });
 
-      pull(pushable, connection);
+      // pull(pushable, connection);
 
-      // FIXME Once uni-directional pings are available network-wide, properly ping,
-      // don't just pong. (However the libp2p-ping floods the network as it stands)
-      pull(connection, pull.drain(
-        (buffer: Buffer): void => {
-          this.l.debug(() => ['ping', peer.shortId]);
+      // // FIXME Once uni-directional pings are available network-wide, properly ping,
+      // // don't just pong. (However the libp2p-ping floods the network as it stands)
+      // pull(
+      //   connection,
+      //   pull.drain(
+      //     (buffer: Buffer): void => {
+      //       l.log(() => ['ping', peer.shortId]);
 
-          pushable.push(buffer);
-        },
-        () => false
-      ));
+      //       pushable.push(buffer);
+      //     },
+      //     () => false
+      //   )
+      // );
     } catch (error) {
+      l.error(`error opening ping with ${peer.shortId}`, error);
+
       return false;
     }
 
     return true;
   }
 
-  private async _dialPeer (peer: PeerInterface): Promise<boolean> {
+  private async _dialPeer (peer: PeerInterface, peers: PeersInterface): Promise<boolean> {
     if (!this.node) {
       return false;
     }
 
-    this.l.debug(() => `dialing ${peer.shortId}`);
+    l.debug(() => `dialing ${peer.shortId}`);
 
     try {
       const connection = await promisify(
-        this.node, this.node.dialProtocol, peer.peerInfo, defaults.PROTOCOL
+        this.node, this.node.dialProtocol, peer.peerInfo, defaults.PROTOCOL_DOT
       );
 
       await this._pingPeer(peer);
 
       peer.addConnection(connection, true);
+      peers.log('dialled', peer);
 
       return true;
     } catch (error) {
@@ -220,25 +275,50 @@ export default class P2p extends EventEmitter implements P2pInterface {
   }
 
   private _dialPeers (peer?: PeerInterface): void {
-    if (peer !== undefined) {
-      this.dialQueue.push({
-        isDialled: false,
-        peer
-      });
-    }
-
     if (!this.node || !this.node.isStarted()) {
       return;
     }
 
-    this.dialQueue.forEach(
+    if (this.dialTimer !== null) {
+      clearTimeout(this.dialTimer);
+      this.dialTimer = null;
+    }
+
+    const now = Date.now();
+
+    if (peer && !this.dialQueue[peer.id]) {
+      this.dialQueue[peer.id] = {
+        isDialled: false,
+        nextDial: now,
+        peer
+      };
+    }
+
+    Object.values(this.dialQueue).forEach(
       async (item: QueuedPeer): Promise<void> => {
-        if (item.isDialled) {
+        if (item.isDialled || !this.peers || item.nextDial < now) {
           return;
         }
 
-        item.isDialled = await this._dialPeer(item.peer);
+        item.isDialled = await this._dialPeer(item.peer, this.peers);
+        item.nextDial = now + DIAL_BACKOFF;
       }
     );
+
+    this.dialTimer = setTimeout(() => {
+      this._dialPeers();
+    }, DIAL_INTERVAL);
+  }
+
+  private _requestAny (): void {
+    if (this.peers) {
+      this.peers.peers().forEach((peer) =>
+        this.sync.requestBlocks(peer)
+      );
+    }
+
+    setTimeout(() => {
+      this._requestAny();
+    }, REQUEST_INTERVAL);
   }
 }

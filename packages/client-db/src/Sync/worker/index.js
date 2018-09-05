@@ -20,23 +20,34 @@ const encoder = require('@polkadot/trie-db/encoder').default;
 const isFunction = require('@polkadot/util/is/function').default;
 const logger = require('@polkadot/util/logger').default;
 
-const { notifyOnDone, notifyOnValue } = require('./atomics');
+const { notify, notifyOnDone, notifyOnValue, notifyPong } = require('./atomics');
+const commands = require('./commands');
 
 const l = logger('sync/worker');
 const handlers = {};
 
-function initDb () {
-  const downdb = isFunction(diskdown) && workerData.type === 'disk'
+function initDb (port) {
+  const isDiskdown = isFunction(diskdown) && workerData.type === 'disk';
+  const down = isDiskdown
     ? diskdown(workerData.path)
     : memdown();
 
+  if (isDiskdown && workerData.withCompact) {
+    down.compact((progress) =>
+      port.postMessage({ progress })
+    );
+  }
+
+  port.postMessage({ isCompleted: true });
+  port.close();
+
   return workerData.isTrie
-    ? new Trie(downdb)
-    : levelup(encoder(downdb));
+    ? new Trie(down)
+    : levelup(encoder(down));
 }
 
-function initHandlers () {
-  const db = initDb();
+function initHandlers (port) {
+  const db = initDb(port);
 
   return {
     checkpoint: ({ state }) =>
@@ -53,17 +64,20 @@ function initHandlers () {
       notifyOnDone(state, () => db.revert()),
     getRoot: ({ buffer, state }) =>
       notifyOnValue(state, buffer, async () => db.root),
-    setRoot: ({ state, value }) =>
+    hasRoot: ({ buffer, key, state }) =>
+      notifyOnNumber(state, buffer, () => db.checkRoot(key) ? 1 : 0),
+    setRoot: ({ key, state }) =>
       notifyOnDone(state, async () => {
-        db.root = value;
+        db.root = key;
       })
   };
 }
 
 parentPort.on('message', (message) => {
   try {
-    if (!handlers[threadId]) {
-      handlers[threadId] = initHandlers();
+    if (message.type === '__init') {
+      handlers[threadId] = initHandlers(message.port);
+      return;
     }
 
     const fn = handlers[threadId][message.type];

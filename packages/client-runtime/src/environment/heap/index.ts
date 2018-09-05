@@ -21,6 +21,10 @@ export default class Heap implements RuntimeEnv$Heap {
     this.memory = this.createMemory(new ArrayBuffer(0), 0);
   }
 
+  wasResized (): boolean {
+    return this.memory.isResized;
+  }
+
   allocate (size: number): Pointer {
     if (size === 0) {
       return 0;
@@ -79,7 +83,8 @@ export default class Heap implements RuntimeEnv$Heap {
   }
 
   growalloc (size: number): Pointer {
-    return this.growMemory(Math.ceil(2 * size / PAGE_SIZE))
+    // grow memory by 4 times the requested amount (rounded up)
+    return this.growMemory(1 + Math.ceil(4 * size / PAGE_SIZE))
       ? this.allocate(size)
       : 0;
   }
@@ -139,6 +144,7 @@ export default class Heap implements RuntimeEnv$Heap {
     this.memory.size = this.wasmMemory.buffer.byteLength;
     this.memory.uint8 = new Uint8Array(this.wasmMemory.buffer);
     this.memory.view = new DataView(this.memory.uint8.buffer);
+    this.memory.isResized = true;
 
     return true;
   }
@@ -147,11 +153,15 @@ export default class Heap implements RuntimeEnv$Heap {
     const size = buffer.byteLength;
     const uint8 = new Uint8Array(buffer);
 
-    l.debug(() => `Creating WASM memory wrap, ${(size - offset) / 1024}KB`);
+    // NOTE clear memory, it could be provided from a previous run
+    uint8.fill(0, offset, size);
+
+    // l.debug(() => `Creating WASM memory wrap, ${(size - offset) / 1024}KB`);
 
     return {
       allocated: {},
       deallocated: {},
+      isResized: false,
       offset, // aligned with Rust (should have offset)
       size,
       uint8,

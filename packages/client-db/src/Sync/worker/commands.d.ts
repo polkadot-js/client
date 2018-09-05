@@ -6,6 +6,7 @@ declare type Commands = {
   START: number,
   SIZE: number,
   FILL: number,
+  NUMBER: number,
   READ: number,
   END: number,
   ERROR: number

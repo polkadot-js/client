@@ -5,8 +5,14 @@
 /// <reference types="node"/>
 
 declare namespace WorkerThreads {
-  interface ParentPort {
+  class MessageChannel {
+    port1: MessagePort;
+    port2: MessagePort;
+  }
+
+  class MessagePort {
     on (type: 'message', db: (message: any) => any): void
+    postMessage (message: any, transferList?: Array<any>): void;
   }
 
   type WorkerOptions = {
@@ -17,13 +23,12 @@ declare namespace WorkerThreads {
     workerData?: any
   }
 
-  class Worker {
+  class Worker extends MessagePort {
     readonly threadId: number;
 
     constructor (path: string, options?: WorkerOptions);
 
     on (type: 'error' | 'exit' | 'online' | 'message', cb?: (...params: any[]) => any): void;
-    postMessage (message: any): void;
     ref (): void;
     unref (): void;
     terminate (cb?: (error: Error | null) => any): void;
@@ -31,10 +36,14 @@ declare namespace WorkerThreads {
 }
 
 declare module 'worker_threads' {
+  const MessageChannel: typeof WorkerThreads.MessageChannel;
+  const MessagePort: typeof WorkerThreads.MessagePort;
   const Worker: typeof WorkerThreads.Worker;
-  const parentPort: WorkerThreads.ParentPort;
+  const parentPort: WorkerThreads.MessagePort;
 
   export {
+    MessageChannel,
+    MessagePort,
     Worker,
     parentPort
   };

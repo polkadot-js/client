@@ -3,7 +3,7 @@
 // of the ISC license. See the LICENSE file for details.
 /* eslint camelcase: 0 */
 
-import MemoryDb from '@polkadot/client-db/Trie/Memory';
+import TrieDb from '@polkadot/trie-db';
 import logger from '@polkadot/util/logger';
 import hexToU8a from '@polkadot/util/hex/toU8a';
 import u8aFromString from '@polkadot/util/u8a/fromString';
@@ -22,7 +22,7 @@ describe('storage_root', () => {
       set: jest.fn()
     };
 
-    db = new MemoryDb();
+    db = new TrieDb();
 
     storage_root = index({ l, heap, db }).storage_root;
   });

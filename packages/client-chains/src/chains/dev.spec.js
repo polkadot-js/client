@@ -7,7 +7,7 @@ import toU8a from '@polkadot/util/u8a/toU8a';
 import Chain from '../index';
 
 describe('genesis', () => {
-  const genesis = new Chain({ chain: 'dev' }).genesis;
+  const genesis = new Chain({ chain: 'dev', db: { type: 'memory' } }).genesis;
 
   it('creates a correct genesis block (stateRoot)', () => {
     expect(

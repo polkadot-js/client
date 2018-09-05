@@ -4,18 +4,11 @@
 
 import { Header } from '@polkadot/primitives/header';
 import { Config } from '@polkadot/client/types';
-import { TrieDb } from '@polkadot/client-db/types';
-import { BlockDb, StateDb } from '@polkadot/client-db-chain/types';
+import { BlockDb, StateDb } from '@polkadot/client-db/types';
 import { ExecutorInterface } from '@polkadot/client-wasm/types';
 import { ChainInterface, ChainGenesis, ChainJson } from './types';
 
-import path from 'path';
-import HashDiskDb from '@polkadot/client-db/Hash/Disk';
-import HashMemoryDb from '@polkadot/client-db/Hash/Memory';
-import TrieDiskDb from '@polkadot/client-db/Trie/Disk';
-import TrieMemoryDb from '@polkadot/client-db/Trie/Memory';
-import createBlockDb from '@polkadot/client-db-chain/block';
-import createStateDb from '@polkadot/client-db-chain/state';
+import ChainDbs from '@polkadot/client-db/index';
 import createRuntime from '@polkadot/client-runtime/index';
 import Executor from '@polkadot/client-wasm/index';
 import createBlock from '@polkadot/primitives/create/block';
@@ -31,7 +24,7 @@ import logger from '@polkadot/util/logger';
 import blake2Asu8a from '@polkadot/util-crypto/blake2/asU8a';
 import trieRoot from '@polkadot/trie-hash/root';
 
-import chains from './chains';
+import Loader from './loader';
 
 type BlockResult = {
   block: Uint8Array,
@@ -49,50 +42,24 @@ export default class Chain implements ChainInterface {
   readonly state: StateDb;
 
   constructor (config: Config) {
-    this.chain = this.load(config.chain);
+    const chain = new Loader(config);
+    const dbs = new ChainDbs(config, chain);
 
-    const isDisk = config.db && config.db.type === 'disk';
-    const genesisStateRoot = this.calcGenesisStateRoot();
-    const dbPath = isDisk
-      ? path.join(config.db.path, 'chains', `${this.chain.id}-${u8aToHex(genesisStateRoot)}`)
-      : '.';
+    const runtime = createRuntime(dbs.state.db);
 
-    const stateDb = isDisk ? new TrieDiskDb(path.join(dbPath, 'state')) : new TrieMemoryDb();
-    const blockDb = isDisk ? new HashDiskDb(path.join(dbPath, 'block')) : new HashMemoryDb();
-    const runtime = createRuntime(stateDb);
+    this.chain = chain.chain;
+    this.blocks = dbs.blocks;
+    this.state = dbs.state;
+    this.executor = new Executor(config, dbs.blocks, dbs.state, runtime);
+    this.genesis = this.initGenesis();
 
-    this.blocks = createBlockDb(blockDb);
-    this.state = createStateDb(stateDb);
-    this.genesis = this.initGenesis(stateDb);
-    this.executor = new Executor(config, this.blocks, this.state, runtime);
-
-    const bestHash = this.blocks.bestHash.get();
-    const bestNumber = this.blocks.bestNumber.get();
+    const bestHash = dbs.blocks.bestHash.get();
+    const bestNumber = dbs.blocks.bestNumber.get();
 
     l.log(`${this.chain.name}, #${bestNumber.toString()}, ${u8aToHex(bestHash, 48)}`);
   }
 
-  // TODO We should load chains from json files as well
-  private load (name: string): ChainJson {
-    const chain = chains[name];
-
-    assert(chain, `Unable to find builtin chain '${name}'`);
-
-    return chain;
-  }
-
-  private calcGenesisStateRoot (): Uint8Array {
-    const { genesis: { raw } } = this.chain;
-
-    return trieRoot(
-      Object.keys(raw).map((key) => ({
-        k: hexToU8a(key),
-        v: hexToU8a(raw[key])
-      }))
-    );
-  }
-
-  private initGenesis (stateDb: TrieDb): ChainGenesis {
+  private initGenesis (): ChainGenesis {
     const bestHash = this.blocks.bestHash.get();
 
     if (!bestHash || !bestHash.length) {
@@ -101,18 +68,22 @@ export default class Chain implements ChainInterface {
 
     const bestBlock = this.getBlock(bestHash);
 
-    // HACK (testing) rollback 1
-    // const nextBlock = this.getBlock(bestHash);
-    // const bestBlock = this.getBlock(nextBlock.header.parentHash);
-    // this.blocks.bestNumber.set(bestBlock.header.number);
-    // this.blocks.bestHash.set(nextBlock.header.parentHash);
+    return this.initGenesisFromBest(bestBlock.header);
+  }
 
-    stateDb.setRoot(bestBlock.header.stateRoot);
+  private initGenesisFromBest (bestHeader: Header, rollback: boolean = true): ChainGenesis {
+    const hexState = u8aToHex(bestHeader.stateRoot, 48);
+
+    l.debug(`Initialising from state ${hexState}`);
+
+    this.state.db.setRoot(bestHeader.stateRoot);
+
+    assert(u8aToHex(this.state.db.getRoot(), 48) === hexState, `Unable to move state to ${hexState}`);
 
     const genesisHash = this.state.system.blockHashAt.get(0);
 
     if (!genesisHash || !genesisHash.length) {
-      throw new Error('Unable to retrieve genesis hash, aborting');
+      return this.rollbackBlock(bestHeader, rollback);
     }
 
     const genesisBlock = this.getBlock(genesisHash);
@@ -121,6 +92,24 @@ export default class Chain implements ChainInterface {
       ...genesisBlock,
       code: this.getCode()
     };
+  }
+
+  private rollbackBlock (bestHeader: Header, rollback: boolean = true): ChainGenesis {
+    const prevHash = bestHeader.parentHash;
+    const prevNumber = bestHeader.number.subn(1);
+
+    if (rollback && prevNumber.gtn(1)) {
+      l.warn(`Unable to validate root, moving to block #${prevNumber.toString()}, ${u8aToHex(prevHash, 48)}`);
+
+      const prevBlock = this.getBlock(prevHash);
+
+      this.blocks.bestHash.set(prevHash);
+      this.blocks.bestNumber.set(prevBlock.header.number);
+
+      return this.initGenesisFromBest(prevBlock.header, false);
+    }
+
+    throw new Error('Unable to retrieve genesis hash, aborting');
   }
 
   private getBlock (headerHash: Uint8Array): BlockResult {
@@ -184,15 +173,17 @@ export default class Chain implements ChainInterface {
   private createGenesisState (): void {
     const { genesis: { raw } } = this.chain;
 
-    this.state.db.checkpoint();
+    this.state.db.transaction((): boolean => {
+      Object
+        .keys(raw)
+        .forEach((key) =>
+          this.state.db.put(
+            hexToU8a(key),
+            hexToU8a(raw[key])
+          )
+        );
 
-    Object.keys(raw).forEach((key) =>
-      this.state.db.put(
-        hexToU8a(key),
-        hexToU8a(raw[key])
-      )
-    );
-
-    this.state.db.commit();
+      return true;
+    });
   }
 }

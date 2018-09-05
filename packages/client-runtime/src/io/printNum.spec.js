@@ -11,7 +11,7 @@ describe('printNum', () => {
   beforeEach(() => {
     l = {
       debug: jest.fn((cb) => cb()),
-      log: jest.fn(() => void 0)
+      warn: jest.fn(() => void 0)
     };
     printNum = index({ l }).print_num;
   });
@@ -20,7 +20,7 @@ describe('printNum', () => {
     printNum(0, 12345);
 
     expect(
-      l.log
+      l.warn
     ).toHaveBeenCalledWith('12345');
   });
 });

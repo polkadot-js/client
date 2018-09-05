@@ -4,17 +4,17 @@
 
 import createHeader from '@polkadot/primitives/create/header';
 import encodeHeader from '@polkadot/primitives/codec/header/encode';
-import HashDb from '@polkadot/client-db/Hash/Memory';
-import MemoryDb from '@polkadot/client-db/Trie/Memory';
+import TrieDb from '@polkadot/trie-db';
 
 import Chain from '@polkadot/client-chains';
 
 describe('initialiseBlock', () => {
   const config = {
     chain: 'dev',
+    db: { type: 'memory' },
     wasm: {}
   };
-  const stateDb = new MemoryDb();
+  const stateDb = new TrieDb();
   const chain = new Chain(config);
 
   it('initialises a block', () => {
@@ -28,9 +28,5 @@ describe('initialiseBlock', () => {
         )
       )
     ).toEqual(true);
-  });
-
-  it('terminates', () => {
-    return stateDb.terminate();
   });
 });

@@ -7,7 +7,7 @@ import { Logger } from '@polkadot/util/types';
 import BN from 'bn.js';
 
 export default function printNum (l: Logger, hi: number, lo: number): void {
-  l.log(
+  l.warn(
     new BN(hi)
       .iushln(32)
       .iaddn(lo)

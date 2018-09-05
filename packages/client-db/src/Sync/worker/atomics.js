@@ -6,7 +6,7 @@ const commands = require('./commands');
 const defaults = require('./defaults');
 
 const exitCommands = [
-  commands.END, commands.ERROR
+  commands.END, commands.ERROR, commands.NUMBER
 ];
 
 // waits on an value change
@@ -35,6 +35,21 @@ async function notifyOnDone (state, fn) {
   try {
     await fn();
     notify(state, commands.END);
+  } catch (error) {
+    notify(state, commands.ERROR);
+  }
+}
+
+// Waits on a function, only returning the actual number
+async function notifyOnNumber (state, buffer, fn) {
+  const view = new DataView(buffer.buffer);
+
+  try {
+    const value = await fn();
+
+    view.setUint32(0, value);
+
+    notify(state, commands.NUMBER);
   } catch (error) {
     notify(state, commands.ERROR);
   }
@@ -82,6 +97,7 @@ async function notifyOnValue (state, buffer, fn) {
 module.exports = {
   notify,
   notifyOnDone,
+  notifyOnNumber,
   notifyOnValue,
   wait
 };

@@ -11,7 +11,7 @@ import runtimeProxy from '../wasm/proxy_runtime_wasm';
 import createExports from './exports';
 
 export default function createEnv (runtime: RuntimeInterface, memory: WebAssembly.Memory): WasmInstanceExports {
-  const proxy = createExports(runtimeProxy, { runtime: runtime.exports }, memory);
+  const proxy = createExports(runtimeProxy, { runtime: runtime.exports }, memory).exports;
 
   return Object.keys(runtime.exports).reduce((result, name) => {
     const extName = `ext_${name}`;

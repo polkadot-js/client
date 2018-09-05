@@ -1,10 +1,10 @@
 {
   "name": "@polkadot/client-db",
   "version": "0.15.3",
-  "description": "Database interface layer for network client",
+  "description": "Wrapper databases for managing on-chain storage",
   "main": "index.js",
   "engines": {
-    "node": ">=10.6"
+    "node": ">=8.0"
   },
   "publishConfig": {
     "access": "public",
@@ -15,8 +15,7 @@
     "url": "git+https://github.com/polkadot-js/client.git"
   },
   "keywords": [
-    "Polkadot",
-    "Merkel Patricia Tree"
+    "Polkadot"
   ],
   "author": "Jaco Greeff <jacogr@gmail.com>",
   "maintainers": [
@@ -30,14 +29,16 @@
   "homepage": "https://github.com/polkadot-js/client/tree/master/packages/client-db#readme",
   "dependencies": {
     "@babel/runtime": "^7.0.0-rc.1",
-    "@polkadot/db-diskdown": "^0.28.7",
-    "@polkadot/trie-db": "^0.28.7",
-    "@polkadot/util": "^0.28.7",
+    "@polkadot/db": "^0.29.21",
+    "@polkadot/storage": "^0.28.25",
+    "@polkadot/trie-db": "^0.29.21",
+    "@polkadot/trie-hash": "^0.29.21",
+    "@polkadot/util": "^0.29.21",
+    "@polkadot/util-crypto": "^0.29.21",
     "@types/mkdirp": "^0.5.2",
     "mkdirp": "^0.5.1"
   },
   "devDependencies": {
-    "@polkadot/client": "^0.15.3",
-    "rimraf": "^2.6.2"
+    "@polkadot/storage": "^0.28.25"
   }
 }

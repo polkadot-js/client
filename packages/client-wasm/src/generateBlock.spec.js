@@ -32,6 +32,7 @@ const PARACHAIN = new Uint8Array([
 describe('generateBlock', () => {
   const config = {
     chain: 'dev',
+    db: { type: 'memory' },
     wasm: {}
   };
 
