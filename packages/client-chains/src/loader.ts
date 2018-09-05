@@ -19,7 +19,7 @@ export default class Loader implements ChainLoader {
   constructor ({ chain }: Config) {
     this.chain = chains[chain];
 
-    assert(chain, `Unable to find builtin chain '${chain}'`);
+    assert(this.chain, `Unable to find builtin chain '${chain}'`);
 
     this.genesisRoot = this.calculateGenesisRoot();
     this.id = this.chain.id;

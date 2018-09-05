@@ -11,6 +11,7 @@ import Chain from '@polkadot/client-chains';
 describe('initialiseBlock', () => {
   const config = {
     chain: 'dev',
+    db: { type: 'memory' },
     wasm: {}
   };
   const stateDb = new TrieDb();
@@ -27,9 +28,5 @@ describe('initialiseBlock', () => {
         )
       )
     ).toEqual(true);
-  });
-
-  it('terminates', () => {
-    return stateDb.terminate();
   });
 });

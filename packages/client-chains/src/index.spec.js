@@ -6,7 +6,8 @@ import Chain from './index';
 
 describe('client-chains', () => {
   const config = {
-    chain: 'dev'
+    chain: 'dev',
+    db: { type: 'memory' }
   };
 
   it('instantiates a known chain', () => {

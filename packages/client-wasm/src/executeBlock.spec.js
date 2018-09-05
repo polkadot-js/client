@@ -10,6 +10,7 @@ describe('executeBlock', () => {
   ]);
   const config = {
     chain: 'dev',
+    db: { type: 'memory' },
     wasm: {}
   };
 

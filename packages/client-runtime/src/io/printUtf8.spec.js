@@ -22,7 +22,7 @@ describe('print_utf8', () => {
 
     l = {
       debug: jest.fn((cb) => cb()),
-      log: jest.fn(() => void 0)
+      warn: jest.fn(() => void 0)
     };
     print_utf8 = index({ l, heap }).print_utf8;
   });
@@ -31,7 +31,7 @@ describe('print_utf8', () => {
     print_utf8(0, heap.size());
 
     expect(
-      l.log
+      l.warn
     ).toHaveBeenCalledWith(TEST);
   });
 });

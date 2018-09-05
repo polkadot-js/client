@@ -28,7 +28,9 @@ export default class Dbs implements ChainDbs {
 
   constructor ({ db }: Config, chain: ChainLoader) {
     const isDisk = db.type === 'disk';
-    const dbPath = path.join(db.path, 'chains', chain.id, u8aToHex(chain.genesisRoot));
+    const dbPath = isDisk
+      ? path.join(db.path, 'chains', chain.id, u8aToHex(chain.genesisRoot))
+      : '';
 
     this.blocks = createBlockDb(
       isDisk
