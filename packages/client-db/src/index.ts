@@ -16,9 +16,7 @@ import u8aToHex from '@polkadot/util/u8a/toHex';
 
 import createBlockDb from './block';
 import createStateDb from './state';
-
-const SPINNER = ['|', '/', '-', '\\'];
-const PREPEND = '                                     ';
+import createProgress from './progress';
 
 const l = logger('db');
 
@@ -59,21 +57,6 @@ export default class Dbs implements ChainDbs {
   private maintain (name: string, db: BaseDb): void {
     l.log(`compacting ${name} database`);
 
-    let spin = 0;
-    let lastUpdate = 0;
-
-    db.maintain((progress) => {
-      const now = Date.now();
-
-      if ((now - lastUpdate) > 200) {
-        const percent = `      ${progress.percent.toFixed(2)}`.slice(-6);
-        const keys = (progress.keys / 1000).toFixed(2);
-
-        process.stdout.write(`${PREPEND}${SPINNER[spin % SPINNER.length]} ${percent}%, ${keys}k keys\r`);
-
-        lastUpdate = now;
-        spin++;
-      }
-    });
+    db.maintain(createProgress());
   }
 }

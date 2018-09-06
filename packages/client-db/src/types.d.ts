@@ -15,6 +15,7 @@ export type DbConfig = {
   compact: boolean,
   isTrieDb: boolean,
   path: string,
+  snapshot: boolean,
   type: DbConfig$Type
 };
 

@@ -9,6 +9,7 @@ import { ExecutorInterface } from '@polkadot/client-wasm/types';
 import { ChainInterface, ChainGenesis, ChainJson } from './types';
 
 import ChainDbs from '@polkadot/client-db/index';
+import createProgress from '@polkadot/client-db/progress';
 import createRuntime from '@polkadot/client-runtime/index';
 import Executor from '@polkadot/client-wasm/index';
 import createBlock from '@polkadot/primitives/create/block';
@@ -57,6 +58,13 @@ export default class Chain implements ChainInterface {
     const bestNumber = dbs.blocks.bestNumber.get();
 
     l.log(`${this.chain.name}, #${bestNumber.toString()}, ${u8aToHex(bestHash, 48)}`);
+
+    if (config.db.snapshot) {
+      const snapshot = dbs.state.db.createSnapshot(createProgress());
+
+      dbs.state.db.empty();
+      dbs.state.db.restoreSnapshot(snapshot, createProgress());
+    }
   }
 
   private initGenesis (): ChainGenesis {
