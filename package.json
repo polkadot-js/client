@@ -10,6 +10,7 @@
   ],
   "resolutions": {
     "babel-core": "^7.0.0-bridge.0",
+    "multistream-select": "^0.14.3",
     "typescript": "^3.0.1"
   },
   "scripts": {
@@ -24,7 +25,7 @@
   },
   "devDependencies": {
     "@polkadot/dev": "^0.20.19",
-    "@polkadot/ts": "^0.1.25",
+    "@polkadot/ts": "^0.1.26",
     "pm2": "^3.0.4"
   }
 }
