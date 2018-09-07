@@ -25,9 +25,9 @@
   },
   "homepage": "https://github.com/polkadot-js/client/tree/master/packages/client-rpc-handlers#readme",
   "dependencies": {
-    "@babel/runtime": "^7.0.0-rc.1",
+    "@babel/runtime": "^7.0.0",
     "@polkadot/jsonrpc": "^0.28.27",
     "@polkadot/primitives": "^0.28.27",
-    "@polkadot/util": "^0.29.22"
+    "@polkadot/util": "^0.29.31"
   }
 }

@@ -126,5 +126,7 @@ export type StateDb = {
 
 export interface ChainDbs {
   readonly blocks: BlockDb,
-  readonly state: StateDb
+  readonly state: StateDb,
+
+  snapshotState (): void;
 }
