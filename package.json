@@ -10,7 +10,6 @@
   ],
   "resolutions": {
     "babel-core": "^7.0.0-bridge.0",
-    "fsevents": "^1.2.4",
     "typescript": "^3.0.1"
   },
   "scripts": {
