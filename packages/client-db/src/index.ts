@@ -2,10 +2,10 @@
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
 
-import { BaseDb, ProgressCb, ProgressValue } from '@polkadot/db/types';
+import { BaseDb, ProgressCb, ProgressValue, TxDb } from '@polkadot/db/types';
 import { Config } from '@polkadot/client/types';
 import { ChainLoader } from '@polkadot/client-chains/types';
-import { BlockDb, StateDb, ChainDbs } from './types';
+import { BlockDb, StateDb, ChainDbs, DbConfig } from './types';
 
 import path from 'path';
 import DiskDb from '@polkadot/db/Disk';
@@ -16,7 +16,6 @@ import u8aToHex from '@polkadot/util/u8a/toHex';
 
 import createBlockDb from './block';
 import createStateDb from './state';
-import createProgress from './progress';
 
 const SPINNER = ['|', '/', '-', '\\'];
 const PREPEND = '                                     ';
@@ -30,31 +29,24 @@ export default class Dbs implements ChainDbs {
   private basePath: string;
 
   constructor ({ db }: Config, chain: ChainLoader) {
-    const isDisk = db.type === 'disk';
-    this.basePath = isDisk
+    this.basePath = db.type === 'disk'
       ? path.join(db.path, 'chains', chain.id, u8aToHex(chain.genesisRoot))
       : '';
 
+    // NOTE blocks compress very well
     this.blocks = createBlockDb(
-      isDisk
-        // NOTE blocks compress very well
-        ? new DiskDb(this.basePath, 'block.db', { isCompressed: true })
-        : new MemoryDb()
+      this.createBackingDb(db, 'block.db', true)
     );
+    // NOTE state RLP does not compress well here
     this.state = createStateDb(
       new TrieDb(
-        isDisk
-          // NOTE state RLP does not compress well here
-          ? new DiskDb(this.basePath, 'state.db', { isCompressed: false })
-          : new MemoryDb()
+        this.createBackingDb(db, 'state.db', false)
       )
     );
     this.stateBackup = db.snapshot
         ? createStateDb(
           new TrieDb(
-            isDisk
-              ? new DiskDb(this.basePath, 'state.db.snapshot', { isCompressed: false })
-              : new MemoryDb()
+            this.createBackingDb(db, 'state.db.snapshot', false)
           )
         )
         : null;
@@ -66,6 +58,12 @@ export default class Dbs implements ChainDbs {
 
     this.blocks.db.open();
     this.state.db.open();
+  }
+
+  private createBackingDb ({ type }: DbConfig, name: string, isCompressed: boolean): TxDb {
+    return type === 'disk'
+      ? new DiskDb(this.basePath, name, { isCompressed })
+      : new MemoryDb();
   }
 
   private maintain (name: string, db: BaseDb): void {
