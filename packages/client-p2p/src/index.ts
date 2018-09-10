@@ -298,7 +298,11 @@ export default class P2p extends EventEmitter implements P2pInterface {
 
     Object.values(this.dialQueue).forEach(
       async (item: QueuedPeer): Promise<void> => {
-        if (item.isDialled || !this.peers || item.nextDial < now) {
+        if (!this.peers) {
+          return;
+        } else if (item.nextDial > now && !item.peer.isActive()) {
+          item.isDialled = false;
+        } else if (item.isDialled || item.nextDial < now) {
           return;
         }
 

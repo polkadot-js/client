@@ -57,7 +57,9 @@ export default class Peer extends EventEmitter implements PeerInterface {
   private clearConnection (connId: number): void {
     delete this.connections[connId];
 
-    if (Object.values(this.connections).length === 0) {
+    l.debug(() => ['clearConnection', connId, this.shortId, this.isWritable()]);
+
+    if (!this.isWritable()) {
       this.emit('disconnected');
     }
   }
@@ -95,8 +97,7 @@ export default class Peer extends EventEmitter implements PeerInterface {
   }
 
   isActive (): boolean {
-    return this.bestHash.length !== 0 &&
-      Object.keys(this.connections).length !== 0;
+    return this.bestHash.length !== 0 && this.isWritable();
   }
 
   private pushables (): Array<Pushable> {
@@ -157,7 +158,13 @@ export default class Peer extends EventEmitter implements PeerInterface {
             data = null;
           }
         },
-        () => false
+        (error) => {
+          l.debug(() => [`${this.shortId} receive error`, error]);
+
+          this.clearConnection(connId);
+
+          return false;
+        }
       ));
     } catch (error) {
       l.debug(() => [`${this.shortId} receive error`, error]);
