@@ -181,19 +181,18 @@ export default class Peer extends EventEmitter implements PeerInterface {
     try {
       const encoded = message.encode();
       const length = varint.encode(encoded.length + 1);
+      const buffer = u8aToBuffer(
+        u8aConcat(
+          bufferToU8a(length),
+          new Uint8Array([0]),
+          encoded
+        )
+      );
 
       l.debug(() => [`sending ${this.shortId} -> ${u8aToHex(encoded)}`, message]);
 
       this.pushables().forEach((pushable) =>
-        pushable.push(
-          u8aToBuffer(
-            u8aConcat(
-              bufferToU8a(length),
-              new Uint8Array([0]),
-              encoded
-            )
-          )
-        )
+        pushable.push(buffer)
       );
     } catch (error) {
       l.error(`${this.shortId} send error`, error);
