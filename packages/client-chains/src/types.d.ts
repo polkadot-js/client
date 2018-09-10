@@ -36,7 +36,9 @@ export interface ChainLoader {
   readonly genesisRoot: Uint8Array;
 }
 
-export interface ChainInterface extends ChainDbs {
+export interface ChainInterface {
+  readonly blocks: BlockDb,
+  readonly state: StateDb,
   readonly chain: ChainJson,
   readonly executor: ExecutorInterface,
   readonly genesis: ChainGenesis

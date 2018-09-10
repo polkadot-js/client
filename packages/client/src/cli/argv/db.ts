@@ -17,6 +17,11 @@ export default ({
     description: 'Sets the path for all storage operations',
     type: 'string'
   },
+  'db-snapshot': {
+    default: false,
+    description: 'Create trie snapshot, drop & restore database from this',
+    type: 'boolean'
+  },
   'db-type': {
     choices: ['disk', 'memory'],
     default: defaults.TYPE,

@@ -29,9 +29,9 @@
   },
   "homepage": "https://github.com/polkadot-js/client/tree/master/packages/client-p2p-messages#readme",
   "dependencies": {
-    "@babel/runtime": "^7.0.0-rc.1",
-    "@polkadot/jsonrpc": "^0.28.25",
-    "@polkadot/primitives": "^0.28.25",
-    "@polkadot/util": "^0.29.21"
+    "@babel/runtime": "^7.0.0",
+    "@polkadot/jsonrpc": "^0.28.29",
+    "@polkadot/primitives": "^0.28.29",
+    "@polkadot/util": "^0.29.33"
   }
 }

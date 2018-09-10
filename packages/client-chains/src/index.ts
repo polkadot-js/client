@@ -57,6 +57,8 @@ export default class Chain implements ChainInterface {
     const bestNumber = dbs.blocks.bestNumber.get();
 
     l.log(`${this.chain.name}, #${bestNumber.toString()}, ${u8aToHex(bestHash, 48)}`);
+
+    dbs.snapshotState();
   }
 
   private initGenesis (): ChainGenesis {

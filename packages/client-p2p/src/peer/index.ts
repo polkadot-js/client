@@ -15,7 +15,6 @@ import pull from 'pull-stream';
 import varint from 'varint';
 import decodeMessage from '@polkadot/client-p2p-messages/index';
 import Status from '@polkadot/client-p2p-messages/Status';
-import assert from '@polkadot/util/assert';
 import bufferToU8a from '@polkadot/util/buffer/toU8a';
 import logger from '@polkadot/util/logger';
 import stringShorten from '@polkadot/util/string/shorten';
@@ -58,7 +57,9 @@ export default class Peer extends EventEmitter implements PeerInterface {
   private clearConnection (connId: number): void {
     delete this.connections[connId];
 
-    if (Object.values(this.connections).length === 0) {
+    l.debug(() => ['clearConnection', connId, this.shortId, this.isWritable()]);
+
+    if (!this.isWritable()) {
       this.emit('disconnected');
     }
   }
@@ -96,8 +97,7 @@ export default class Peer extends EventEmitter implements PeerInterface {
   }
 
   isActive (): boolean {
-    return this.bestHash.length !== 0 &&
-      Object.keys(this.connections).length !== 0;
+    return this.bestHash.length !== 0 && this.isWritable();
   }
 
   private pushables (): Array<Pushable> {
@@ -121,29 +121,50 @@ export default class Peer extends EventEmitter implements PeerInterface {
   }
 
   _receive (connection: LibP2pConnection, connId: number): boolean {
+    let data: Uint8Array | null = null;
+    let received: number;
+    let length: number = 0;
+
     try {
       pull(connection, pull.drain(
         (buffer: Buffer): void => {
-          // NOTE the actual incoming message has a varint prefixed length, strip this
-          const length = varint.decode(buffer);
-          const offset = varint.decode.bytes;
-          const u8a = bufferToU8a(buffer.slice(offset + 1));
+          if (data === null) {
+            // NOTE the actual incoming message has a varint prefixed length, strip this
+            length = varint.decode(buffer);
 
-          // TODO Do we keep this peer or drop it (like Rust does on invalid messages). Additionally, do we _really_ want to throw here?
-          assert(u8a.length === length - 1, 'Invalid buffer length received');
+            const offset = varint.decode.bytes;
 
-          const message = decodeMessage(u8a);
+            received = buffer.length - offset;
+            data = new Uint8Array(length);
+            data.set(bufferToU8a(buffer).subarray(offset), 0);
+          } else {
+            const u8a = bufferToU8a(buffer);
 
-          // l.debug(() => `${this.shortId} received ${u8a.length} bytes, ${u8aToHex(u8a)}`);
-          l.debug(() => [this.shortId, 'received', message]);
+            data.set(u8a, received);
+            received += u8a.length;
+          }
 
-          this.emit('message', message);
+          if (received === length) {
+            const message = decodeMessage(data.subarray(1));
 
-          if (message.type === 0) {
-            this.emit('active');
+            l.debug(() => [this.shortId, 'received', { message }]);
+
+            this.emit('message', message);
+
+            if (message.type === 0) {
+              this.emit('active');
+            }
+
+            data = null;
           }
         },
-        () => false
+        (error) => {
+          l.debug(() => [`${this.shortId} receive error`, error]);
+
+          this.clearConnection(connId);
+
+          return false;
+        }
       ));
     } catch (error) {
       l.debug(() => [`${this.shortId} receive error`, error]);
@@ -160,19 +181,18 @@ export default class Peer extends EventEmitter implements PeerInterface {
     try {
       const encoded = message.encode();
       const length = varint.encode(encoded.length + 1);
+      const buffer = u8aToBuffer(
+        u8aConcat(
+          bufferToU8a(length),
+          new Uint8Array([0]),
+          encoded
+        )
+      );
 
       l.debug(() => [`sending ${this.shortId} -> ${u8aToHex(encoded)}`, message]);
 
       this.pushables().forEach((pushable) =>
-        pushable.push(
-          u8aToBuffer(
-            u8aConcat(
-              bufferToU8a(length),
-              new Uint8Array([0]),
-              encoded
-            )
-          )
-        )
+        pushable.push(buffer)
       );
     } catch (error) {
       l.error(`${this.shortId} send error`, error);

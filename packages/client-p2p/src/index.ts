@@ -86,6 +86,7 @@ export default class P2p extends EventEmitter implements P2pInterface {
     l.log(`Started on address=${this.config.p2p.address}, port=${this.config.p2p.port}`);
     this.emit('started');
 
+    this.node._dht.randomWalk.start();
     this._requestAny();
 
     return true;
@@ -106,6 +107,7 @@ export default class P2p extends EventEmitter implements P2pInterface {
     delete this.node;
     delete this.peers;
 
+    node._dht.randomWalk.stop();
     await promisify(node, node.stop);
 
     l.log('Server stopped');
@@ -296,7 +298,11 @@ export default class P2p extends EventEmitter implements P2pInterface {
 
     Object.values(this.dialQueue).forEach(
       async (item: QueuedPeer): Promise<void> => {
-        if (item.isDialled || !this.peers || item.nextDial < now) {
+        if (!this.peers) {
+          return;
+        } else if (item.nextDial > now && !item.peer.isActive()) {
+          item.isDialled = false;
+        } else if (item.isDialled || item.nextDial < now) {
           return;
         }
 

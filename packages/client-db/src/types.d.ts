@@ -15,6 +15,7 @@ export type DbConfig = {
   compact: boolean,
   isTrieDb: boolean,
   path: string,
+  snapshot: boolean,
   type: DbConfig$Type
 };
 
@@ -125,5 +126,7 @@ export type StateDb = {
 
 export interface ChainDbs {
   readonly blocks: BlockDb,
-  readonly state: StateDb
+  readonly state: StateDb,
+
+  snapshotState (): void;
 }
