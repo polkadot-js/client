@@ -6,9 +6,9 @@ import { ChainInterface } from '@polkadot/client-chains/types';
 import { Config } from '@polkadot/client/types';
 import { Endpoint } from './types';
 
-const newHead = async (): Promise<string> =>
+const subscribeNewHead = async (): Promise<string> =>
   'chain_newHead';
 
 export default (config: Config, chain: ChainInterface): Endpoint => ({
-  'subscribe_newHead': newHead
+  'chain_subscribeNewHead': subscribeNewHead
 });

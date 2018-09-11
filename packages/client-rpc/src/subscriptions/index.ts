@@ -15,14 +15,13 @@ import update from './update';
 const sockets: Sockets = {};
 const subscriptions: Subscriptions = {};
 
-let nextSubId = -1;
+let nextSubId = 0;
 
 export default function subscriber (chain: ChainInterface): SubInterface {
   update(chain, subscriptions, sockets);
 
   return async (socket: WsContext$Socket | undefined, handler: Handler, params: Array<any>): Promise<number> => {
     const method = await handler(params);
-
     const subId = nextSubId++;
 
     if (!isUndefined(socket)) {
