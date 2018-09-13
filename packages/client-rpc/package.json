@@ -29,13 +29,13 @@
   },
   "homepage": "https://github.com/polkadot-js/client/tree/master/packages/client-rpc#readme",
   "devDependencies": {
-    "@polkadot/api-provider": "^0.28.29",
+    "@polkadot/api-provider": "^0.28.34",
     "@polkadot/client": "^0.16.1"
   },
   "dependencies": {
     "@babel/runtime": "^7.0.0",
     "@polkadot/client-rpc-handlers": "^0.16.1",
-    "@polkadot/util": "^0.29.33",
+    "@polkadot/util": "^0.30.2",
     "@types/co-body": "^0.0.3",
     "@types/koa": "^2.0.46",
     "@types/koa-route": "^3.2.4",

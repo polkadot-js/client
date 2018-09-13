@@ -8,6 +8,7 @@ import { Justification } from '@polkadot/primitives/bft';
 import { Header } from '@polkadot/primitives/header';
 import { JsonHeader } from '@polkadot/primitives/json/types';
 import { Role } from '@polkadot/primitives/role';
+import bufferToU8a from '@polkadot/util/buffer/toU8a';
 
 export interface MessageInterface {
   readonly type: number;
@@ -54,7 +55,7 @@ export type BlockResponseMessageBlock = {
   hash: Uint8Array,
   header: Header,
   encoded: Uint8Array,
-  justification: Uint8Array // Justification
+  justification: Uint8Array | null // Justification
 }
 
 export type BlockResponseMessage = {

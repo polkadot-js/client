@@ -33,8 +33,13 @@ export default class BlockRequest extends BaseMessage implements MessageInterfac
   max: number;
   to: HeaderHash | null;
 
-  // TODO: Re-add 'justification' in here, with proper decoding in BlockResponse
-  constructor ({ direction = 'Ascending', fields = ['header', 'body'], from, id, max, to = null }: BlockRequestMessage) {
+  // FIXME This is a horror, when adding 'justification' flag in here, mplex breaks. Something in the message
+  // does not seem to align with the sensibilities of the mplex chunker and it tries to allocate an ungodly
+  // large buffer. Not sure how message content can break the message, but it happens.
+  //   0x01010000000000000013016c4514000000000000000180000000
+  //   vs
+  //   0x01010000000000000003016c4514000000000000000180000000
+  constructor ({ direction = 'Ascending', fields = ['header', 'body' /*, 'justification' */], from, id, max, to = null }: BlockRequestMessage) {
     super(BlockRequest.type);
 
     this.direction = direction;

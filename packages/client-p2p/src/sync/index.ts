@@ -97,9 +97,7 @@ export default class Sync extends EventEmitter implements SyncInterface {
       delete this.blockQueue[nextNumber.toString()];
 
       if (nextNumber.mod(REPORT_COUNT).isZero() || (Object.keys(this.blockQueue).length < 10)) {
-        const { header } = decodeBlock(encoded);
-
-        this.emit('imported', header);
+        this.emit('imported');
       }
 
       hasImported = true;

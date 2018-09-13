@@ -189,7 +189,7 @@ export default class Peer extends EventEmitter implements PeerInterface {
         )
       );
 
-      l.debug(() => [`sending ${this.shortId} -> ${u8aToHex(encoded)}`, message]);
+      l.debug(() => [`sending ${this.shortId} -> ${u8aToHex(encoded)}`]);
 
       this.pushables().forEach((pushable) =>
         pushable.push(buffer)
