@@ -11,11 +11,13 @@ import { P2pInterface, PeerInterface, PeersInterface } from './types';
 import handlers from './handler';
 
 import EventEmitter from 'eventemitter3';
-// import handshake from 'pull-handshake';
+import handshake from 'pull-handshake';
 import PullPushable from 'pull-pushable';
 import pull from 'pull-stream';
 import logger from '@polkadot/util/logger';
 import promisify from '@polkadot/util/promisify';
+import u8aToBuffer from '@polkadot/util/u8a/toBuffer';
+import randomU8a from '@polkadot/util-crypto/random/asU8a';
 
 import createNode from './create/node';
 import defaults from './defaults';
@@ -29,13 +31,14 @@ type OnMessage = {
 
 type QueuedPeer = {
   peer: PeerInterface,
-  isDialled: boolean,
   nextDial: number
 };
 
-const DIAL_BACKOFF = 60000;
+const DIAL_BACKOFF = 5 * 60000;
 const DIAL_INTERVAL = 15000;
 const REQUEST_INTERVAL = 15000;
+const PING_INTERVAL = 30000;
+const PING_TIMEOUT = 5000;
 
 const l = logger('p2p');
 
@@ -217,31 +220,60 @@ export default class P2p extends EventEmitter implements P2pInterface {
       return false;
     }
 
+    l.debug(() => `Starting ping with ${peer.shortId}`);
+
     try {
-      // NOTE Only dial here, however the handling of ping are done in the _handlePing function
-      // const connection =
-      await promisify(
+      const connection = await promisify(
         this.node, this.node.dialProtocol, peer.peerInfo, defaults.PROTOCOL_PING
       );
-      // const pushable = PullPushable((error) => {
-      //   console.error('pingPeer', error);
-      // });
 
-      // pull(pushable, connection);
+      const stream = handshake({ timeout: 60000 }, (error) => {
+        if (error) {
+          l.warn(() => ['ping disconnected', peer.shortId, error]);
+          peer.disconnect();
+        }
+      });
+      const shake = stream.handshake;
 
-      // // FIXME Once uni-directional pings are available network-wide, properly ping,
-      // // don't just pong. (However the libp2p-ping floods the network as it stands)
-      // pull(
-      //   connection,
-      //   pull.drain(
-      //     (buffer: Buffer): void => {
-      //       l.log(() => ['ping', peer.shortId]);
+      pull(
+        stream,
+        connection,
+        stream
+      );
 
-      //       pushable.push(buffer);
-      //     },
-      //     () => false
-      //   )
-      // );
+      const doPing = () => {
+        const start = Date.now();
+        const request = u8aToBuffer(randomU8a());
+        const timerId = setTimeout(() => {
+          l.warn(() => `ping timeout from ${peer.shortId}, disconnecting`);
+          peer.disconnect();
+          shake.abort();
+        }, PING_TIMEOUT);
+
+        shake.write(request);
+        shake.read(32, (error, response) => {
+          clearTimeout(timerId);
+
+          if (!error && request.equals(response)) {
+            const elapsed = Date.now() - start;
+
+            l.debug(`Ping from ${peer.shortId} ${elapsed}ms`);
+            setTimeout(doPing, PING_INTERVAL);
+            return;
+          }
+
+          if (error) {
+            l.warn(() => [`error on reading ping from ${peer.shortId}, disconnecting`, error]);
+          } else {
+            l.warn(() => `wrong ping received from ${peer.shortId}, disconnecting`);
+          }
+
+          peer.disconnect();
+          shake.abort();
+        });
+      };
+
+      doPing();
     } catch (error) {
       l.error(`error opening ping with ${peer.shortId}`, error);
 
@@ -290,24 +322,22 @@ export default class P2p extends EventEmitter implements P2pInterface {
 
     if (peer && !this.dialQueue[peer.id]) {
       this.dialQueue[peer.id] = {
-        isDialled: false,
         nextDial: now,
         peer
       };
     }
 
-    Object.values(this.dialQueue).forEach(
-      async (item: QueuedPeer): Promise<void> => {
-        if (!this.peers) {
-          return;
-        } else if (item.nextDial > now && !item.peer.isActive()) {
-          item.isDialled = false;
-        } else if (item.isDialled || item.nextDial < now) {
+    Object.keys(this.dialQueue).forEach(
+      async (id: string): Promise<void> => {
+        const item = this.dialQueue[id];
+
+        if (!this.peers || item.nextDial > now || item.peer.isActive()) {
           return;
         }
 
-        item.isDialled = await this._dialPeer(item.peer, this.peers);
         item.nextDial = now + DIAL_BACKOFF;
+
+        await this._dialPeer(item.peer, this.peers);
       }
     );
 

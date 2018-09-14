@@ -64,7 +64,7 @@ export default class Peer extends EventEmitter implements PeerInterface {
     }
   }
 
-  addConnection (connection: LibP2pConnection, isWritable: boolean): void {
+  addConnection (connection: LibP2pConnection, isWritable: boolean): number {
     const connId = this.nextConnId++;
     let pushable = isWritable
       ? PullPushable((error) => {
@@ -94,6 +94,13 @@ export default class Peer extends EventEmitter implements PeerInterface {
         })
       );
     }
+
+    return connId;
+  }
+
+  disconnect (): void {
+    this.connections = {};
+    this.emit('disconnected');
   }
 
   isActive (): boolean {
