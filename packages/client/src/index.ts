@@ -122,8 +122,11 @@ class Client {
   }
 }
 
-// catch the uncaught errors that weren't wrapped in a domain or try catch statement
-// do not use this in modules, but only in applications, as otherwise we could have multiple of these bound
+// FIXME Catch the uncaught errors that weren't wrapped in a domain or try catch statement
+// This was added due to exceptions from p2p streams, for which no pass-through handler exists
+// and none can be added. As it stands, not a bad idea since it shows where stuff breaks
+// instead of just exiting, however we should _never_ have these - and we have a couple that
+// puts the app into an unknown state
 process.on('uncaughtException', (err: Error) => {
   l.error('Uncaught exception', err);
 });
@@ -132,4 +135,6 @@ new Client()
   .start(cli())
   .catch((error) => {
     console.error('Failed to start client', error);
+
+    process.exit(-1);
   });

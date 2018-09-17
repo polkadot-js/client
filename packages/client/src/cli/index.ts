@@ -2,7 +2,7 @@
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
 
-import { Config } from '../types';
+import { Config, ConfigKeys } from '../types';
 
 import getArgv from './argv';
 import keyToCamel from './keyToCamel';
@@ -14,15 +14,14 @@ export default function cli (params?: string): Config {
     .keys(argv)
     .reduce((config, key) => {
       if (/^(db|dev|p2p|rpc|telemetry|wasm)-/.test(key)) {
-        const section = key.substr(0, key.indexOf('-'));
+        const section = key.substr(0, key.indexOf('-')) as ConfigKeys;
         const name = keyToCamel(key, 1);
 
-        // @ts-ignore ummm... no index, not Map-ing this one
         config[section] = config[section] || {};
         // @ts-ignore ummm... no index, not Map-ing this one
         config[section][name] = argv[key];
       } else if (!/^(db|dev|p2p|rpc|telemetry|wasm)[A-Z]/.test(key)) {
-        const name = keyToCamel(key);
+        const name = keyToCamel(key) as ConfigKeys;
 
         // @ts-ignore ummm... no index, not Map-ing this one
         config[name] = argv[key];

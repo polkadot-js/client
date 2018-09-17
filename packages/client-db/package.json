@@ -30,7 +30,7 @@
   "dependencies": {
     "@babel/runtime": "^7.0.0",
     "@polkadot/db": "^0.30.3",
-    "@polkadot/storage": "^0.28.35",
+    "@polkadot/storage": "^0.29.4",
     "@polkadot/trie-db": "^0.30.3",
     "@polkadot/trie-hash": "^0.30.3",
     "@polkadot/util": "^0.30.3",
@@ -39,6 +39,6 @@
     "mkdirp": "^0.5.1"
   },
   "devDependencies": {
-    "@polkadot/storage": "^0.28.35"
+    "@polkadot/storage": "^0.29.4"
   }
 }
