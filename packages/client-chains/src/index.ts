@@ -45,20 +45,22 @@ export default class Chain implements ChainInterface {
     const chain = new Loader(config);
     const dbs = new ChainDbs(config, chain);
 
-    const runtime = createRuntime(dbs.state.db);
-
     this.chain = chain.chain;
     this.blocks = dbs.blocks;
     this.state = dbs.state;
-    this.executor = new Executor(config, dbs.blocks, dbs.state, runtime);
     this.genesis = this.initGenesis();
 
-    const bestHash = dbs.blocks.bestHash.get();
-    const bestNumber = dbs.blocks.bestNumber.get();
+    const bestHash = this.blocks.bestHash.get();
+    const bestNumber = this.blocks.bestNumber.get();
 
     l.log(`${this.chain.name}, #${bestNumber.toString()}, ${u8aToHex(bestHash, 48)}`);
 
-    dbs.snapshotState();
+    // NOTE Snapshot _before_ we attach the runtime since it ties directly to the backing DBs
+    dbs.snapshot();
+
+    const runtime = createRuntime(this.state.db);
+
+    this.executor = new Executor(config, this.blocks, this.state, runtime);
   }
 
   private initGenesis (): ChainGenesis {

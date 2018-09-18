@@ -39,7 +39,7 @@ export default class BlockRequest extends BaseMessage implements MessageInterfac
   //   0x01010000000000000013016c4514000000000000000180000000
   //   vs
   //   0x01010000000000000003016c4514000000000000000180000000
-  constructor ({ direction = 'Ascending', fields = ['header', 'body' /*, 'justification' */], from, id, max, to = null }: BlockRequestMessage) {
+  constructor ({ direction = 'Ascending', fields = ['header', 'body', 'justification'], from, id, max, to = null }: BlockRequestMessage) {
     super(BlockRequest.type);
 
     this.direction = direction;

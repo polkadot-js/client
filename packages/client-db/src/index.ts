@@ -25,69 +25,56 @@ const l = logger('db');
 export default class Dbs implements ChainDbs {
   readonly blocks: BlockDb;
   readonly state: StateDb;
-  private stateBackup: StateDb | null;
   private basePath: string;
+  private config: DbConfig;
 
   constructor ({ db }: Config, chain: ChainLoader) {
+    this.config = db;
     this.basePath = db.type === 'disk'
       ? path.join(db.path, 'chains', chain.id, u8aToHex(chain.genesisRoot))
       : '';
 
     // NOTE blocks compress very well
     this.blocks = createBlockDb(
-      this.createBackingDb(db, 'block.db', true)
+      this.createBackingDb('block.db', true)
     );
     // NOTE state RLP does not compress well here
     this.state = createStateDb(
       new TrieDb(
-        this.createBackingDb(db, 'state.db', false)
+        this.createBackingDb('state.db', false)
       )
     );
-    this.stateBackup = db.snapshot
-        ? createStateDb(
-          new TrieDb(
-            this.createBackingDb(db, 'state.db.snapshot', false)
-          )
-        )
-        : null;
-
-    if (db.compact) {
-      this.maintain('block', this.blocks.db);
-      this.maintain('state', this.state.db);
-    }
 
     this.blocks.db.open();
     this.state.db.open();
   }
 
-  private createBackingDb ({ type }: DbConfig, name: string, isCompressed: boolean): TxDb {
-    return type === 'disk'
+  private createBackingDb (name: string, isCompressed: boolean): TxDb {
+    return this.config.type === 'disk'
       ? new DiskDb(this.basePath, name, { isCompressed })
       : new MemoryDb();
   }
 
-  private maintain (name: string, db: BaseDb): void {
-    l.log(`compacting ${name} database`);
-
-    db.maintain(this.createProgress());
-  }
-
-  snapshotState (): void {
-    if (!this.stateBackup) {
+  snapshot (): void {
+    if (!this.config.snapshot) {
       return;
     }
 
-    this.stateBackup.db.open();
-    this.state.db.snapshot(this.stateBackup.db, this.createProgress());
+    const newDb = new TrieDb(
+      this.createBackingDb('state.db.snapshot', false)
+    );
 
+    newDb.open();
+
+    this.state.db.snapshot(newDb, this.createProgress());
     this.state.db.close();
     this.state.db.rename(this.basePath, `state.db.backup-${Date.now()}`);
 
-    this.stateBackup.db.close();
-    this.stateBackup.db.rename(this.basePath, 'state.db');
-    this.stateBackup.db.open();
+    newDb.close();
+    newDb.rename(this.basePath, 'state.db');
+    newDb.open();
 
-    this.state.db = this.stateBackup.db;
+    this.state.db = newDb;
   }
 
   private createProgress (): ProgressCb {

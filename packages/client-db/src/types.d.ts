@@ -128,5 +128,5 @@ export interface ChainDbs {
   readonly blocks: BlockDb,
   readonly state: StateDb,
 
-  snapshotState (): void;
+  snapshot (): void;
 }
