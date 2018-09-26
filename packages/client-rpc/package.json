@@ -1,6 +1,6 @@
 {
   "name": "@polkadot/client-rpc",
-  "version": "0.16.2",
+  "version": "0.16.3",
   "description": "RPC server for a Polkadot client",
   "main": "index.js",
   "keywords": [
@@ -30,11 +30,11 @@
   "homepage": "https://github.com/polkadot-js/client/tree/master/packages/client-rpc#readme",
   "devDependencies": {
     "@polkadot/api-provider": "^0.28.29",
-    "@polkadot/client": "^0.16.2"
+    "@polkadot/client": "^0.16.3"
   },
   "dependencies": {
     "@babel/runtime": "^7.0.0",
-    "@polkadot/client-rpc-handlers": "^0.16.2",
+    "@polkadot/client-rpc-handlers": "^0.16.3",
     "@polkadot/util": "^0.29.33",
     "@types/co-body": "^0.0.3",
     "@types/koa": "^2.0.46",
