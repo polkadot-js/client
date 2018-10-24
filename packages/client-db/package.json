@@ -39,6 +39,7 @@
     "mkdirp": "^0.5.1"
   },
   "devDependencies": {
+    "@polkadot/keyring": "^0.32.5",
     "@polkadot/storage": "0.29.4"
   }
 }
