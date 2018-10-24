@@ -4,9 +4,7 @@
 
 import PeerInfo from 'peer-info';
 
-import assert from '@polkadot/util/assert';
-import promisify from '@polkadot/util/promisify';
-import isIp from '@polkadot/util/is/ip';
+import { assert, isIp, promisify } from '@polkadot/util';
 
 import defaults from '../defaults';
 

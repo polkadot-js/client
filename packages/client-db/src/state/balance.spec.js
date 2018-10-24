@@ -2,9 +2,8 @@
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
 
-import hexToU8a from '@polkadot/util/hex/toU8a';
-import u8aToHex from '@polkadot/util/u8a/toHex';
-import testingPairs from '@polkadot/util-keyring/testingPairs';
+import { hexToU8a, u8aToHex } from '@polkadot/util';
+import testingPairs from '@polkadot/keyring/testingPairs';
 
 import db from './index';
 
@@ -16,12 +15,13 @@ describe('balance', () => {
   describe('get', () => {
     beforeEach(() => {
       staking = db({
+
         get: (key) => {
           switch (u8aToHex(key)) {
-            case '0xb51ac18fd0242fd7fd033de43fd2940f':
+            case '0x93b3a06afc9ac6777adff1f6ad2cd5d9':
               return hexToU8a('0x4500000000000000');
 
-            case '0xd1ab535c242e3418ab4da2cb5aaa80a6':
+            case '0x8e4b46d94b25bb2f5c9fa65f60263160':
               return hexToU8a('0x2a00000000000000');
 
             default:
@@ -33,17 +33,17 @@ describe('balance', () => {
 
     it('returns balances', () => {
       expect(
-        staking.freeBalanceOf.get(keyring.one.publicKey()).toNumber()
+        staking.freeBalanceOf.get(keyring.alice.publicKey()).toNumber()
       ).toEqual(42);
 
       expect(
-        staking.freeBalanceOf.get(keyring.two.publicKey()).toNumber()
+        staking.freeBalanceOf.get(keyring.bob.publicKey()).toNumber()
       ).toEqual(69);
     });
 
     it('returns zero balances', () => {
       expect(
-        staking.freeBalanceOf.get(keyring.alice.publicKey()).toNumber()
+        staking.freeBalanceOf.get(keyring.charlie.publicKey()).toNumber()
       ).toEqual(0);
     });
   });
@@ -61,10 +61,10 @@ describe('balance', () => {
     });
 
     it('sets balances', () => {
-      staking.freeBalanceOf.set(123, keyring.one.publicKey());
+      staking.freeBalanceOf.set(123, keyring.alice.publicKey());
 
       expect(
-        staking.freeBalanceOf.get(keyring.one.publicKey()).toNumber()
+        staking.freeBalanceOf.get(keyring.alice.publicKey()).toNumber()
       ).toEqual(123);
     });
   });

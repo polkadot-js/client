@@ -7,9 +7,7 @@ import { MessageInterface, BlockAnnounceMessage } from './types';
 
 import headerDecode from '@polkadot/primitives/codec/header/decode';
 import headerEncode from '@polkadot/primitives/codec/header/encode';
-import u8aConcat from '@polkadot/util/u8a/concat';
-import u8aToHex from '@polkadot/util/u8a/toHex';
-import bnToHex from '@polkadot/util/bn/toHex';
+import { bnToHex, u8aConcat, u8aToHex } from '@polkadot/util';
 
 import BaseMessage from './BaseMessage';
 

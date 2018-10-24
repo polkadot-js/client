@@ -4,6 +4,6 @@
 
 // Generated with polkadot-wasm-wasm2js (53 bytes)
 
-const hexToU8a = require('@polkadot/util/hex/toU8a').default;
+const { hexToU8a } = require('@polkadot/util');
 
 module.exports = hexToU8a('0x0061736d0100000001080260017f00600000020f01026a730863616c6c6261636b0000030201010801010a0901070041b90a10000b');

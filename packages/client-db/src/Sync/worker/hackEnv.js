@@ -6,7 +6,7 @@
 // needed for proper operation on some modules, we work around this and add the missing
 // operations so we can actually continue
 
-const isFunction = require('@polkadot/util/is/function').default;
+const { isFunction } = require('@polkadot/util');
 
 // process.umask is used by mkdirp to set the correct permissions
 if (!isFunction(process.umask)) {

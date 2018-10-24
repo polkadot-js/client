@@ -16,13 +16,11 @@ import encodeHeader from '@polkadot/primitives/codec/header/encode';
 import encodeLength from '@polkadot/extrinsics/codec/encode/length';
 import extrinsics from '@polkadot/extrinsics';
 import encodeUnchecked from '@polkadot/extrinsics/codec/encode/unchecked';
+import testingKeypairs from '@polkadot/keyring/testingPairs';
 import storage from '@polkadot/storage';
 import key from '@polkadot/storage/key';
-import assert from '@polkadot/util/assert';
-import u8aToHex from '@polkadot/util/u8a/toHex';
-import logger from '@polkadot/util/logger';
-import testingKeypairs from '@polkadot/util-keyring/testingPairs';
-import blake2Asu8a from '@polkadot/util-crypto/blake2/asU8a';
+import { assert, logger, u8aToHex } from '@polkadot/util';
+import { blake2AsU8a } from '@polkadot/util-crypto';
 
 import createWasm from './create';
 import proxy from './wasm/proxy_substrate_wasm';
@@ -143,7 +141,7 @@ export default class Executor implements ExecutorInterface {
 
     // tslint:disable-next-line:variable-name
     const { body, extrinsics, header, number } = decodeRaw(block);
-    const headerHash = blake2Asu8a(header, 256);
+    const headerHash = blake2AsU8a(header, 256);
 
     l.debug(() => `Importing block #${number.toString()}, ${u8aToHex(headerHash, 48)}`);
 
@@ -239,12 +237,8 @@ export default class Executor implements ExecutorInterface {
 
   private withInherent (timestamp: number, _extrinsics: Array<UncheckedRaw>): Array<UncheckedRaw> {
     return [
-      encodeUnchecked(keyring.nobody, 0)(
-        timestampSet,[timestamp]
-      ),
-      encodeUnchecked(keyring.nobody, 0)(
-        parachainsSet, [[]]
-      )
+      encodeUnchecked(keyring.nobody, 0, timestampSet,[timestamp]),
+      encodeUnchecked(keyring.nobody, 0, parachainsSet, [[]])
     ].concat(_extrinsics);
   }
 }

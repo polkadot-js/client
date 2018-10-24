@@ -10,7 +10,7 @@ import { KnownPeer, PeerInterface, PeersInterface, PeersInterface$Events } from 
 
 import EventEmitter from 'eventemitter3';
 import PeerInfo from 'peer-info';
-import logger from '@polkadot/util/logger';
+import { logger } from '@polkadot/util';
 
 import Peer from '../peer';
 

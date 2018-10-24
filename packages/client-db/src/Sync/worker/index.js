@@ -17,8 +17,7 @@ const memdown = require('memdown');
 const { parentPort, threadId, workerData } = require('worker_threads');
 const Trie = require('@polkadot/trie-db').default;
 const encoder = require('@polkadot/trie-db/encoder').default;
-const isFunction = require('@polkadot/util/is/function').default;
-const logger = require('@polkadot/util/logger').default;
+const { isFunction, logger } = require('@polkadot/util');
 
 const { notify, notifyOnDone, notifyOnValue, notifyPong } = require('./atomics');
 const commands = require('./commands');

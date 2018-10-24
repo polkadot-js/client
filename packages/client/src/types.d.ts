@@ -24,3 +24,5 @@ export type Config = {
   telemetry: TelemetryConfig,
   wasm: WasmConfig
 };
+
+export type ConfigKeys = keyof Config;

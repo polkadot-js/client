@@ -5,7 +5,7 @@
 import { TrieDb } from '@polkadot/trie-db/types';
 import { RuntimeEnv } from '../types';
 
-import logger from '@polkadot/util/logger';
+import { logger } from '@polkadot/util';
 
 import Heap from './heap';
 

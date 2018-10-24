@@ -4,7 +4,7 @@
 
 import { WasmExtraImports, WasmInstanceExports } from '../types';
 
-import xxhash from '@polkadot/util-crypto/xxhash/xxhash64/asHex';
+import { xxhashAsHex } from '@polkadot/util-crypto';
 
 import createImports from './imports';
 
@@ -21,7 +21,7 @@ const cache: Cache = {};
 
 export default function createExports (bytecode: Uint8Array, imports?: WasmExtraImports, memory?: WebAssembly.Memory | null, forceCreate: boolean = false): { codeHash: string, exports: WasmInstanceExports, isNewHash: boolean } {
   // FIXME This should be the full hash, however it takes 35-65ms - this is a danger area
-  const codeHash = xxhash(bytecode.subarray(0, 2048), 0);
+  const codeHash = xxhashAsHex(bytecode.subarray(0, 2048), 0);
   const lookup = `${codeHash}_${bytecode.length}`;
   const isNewHash = !cache[lookup];
 

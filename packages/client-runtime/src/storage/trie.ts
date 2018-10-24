@@ -5,7 +5,7 @@
 import { RuntimeEnv, RuntimeInterface$Storage$Trie, Pointer } from '../types';
 
 import trieRootOrdered from '@polkadot/trie-hash/rootOrdered';
-import u8aToHex from '@polkadot/util/u8a/toHex';
+import { u8aToHex } from '@polkadot/util';
 
 import instrument from '../instrument';
 

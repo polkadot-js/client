@@ -13,11 +13,9 @@ import './license';
 import BN from 'bn.js';
 import Chain from '@polkadot/client-chains/index';
 import Telemetry from '@polkadot/client-telemetry/index';
-import logger from '@polkadot/util/logger';
 import Rpc from '@polkadot/client-rpc/index';
 import P2p from '@polkadot/client-p2p/index';
-import isUndefined from '@polkadot/util/is/undefined';
-import u8aToHex from '@polkadot/util/u8a/toHex';
+import { logger, isUndefined, u8aToHex } from '@polkadot/util';
 
 import * as clientId from './clientId';
 import defaults from './defaults';
@@ -122,8 +120,19 @@ class Client {
   }
 }
 
+// FIXME Catch the uncaught errors that weren't wrapped in a domain or try catch statement
+// This was added due to exceptions from p2p streams, for which no pass-through handler exists
+// and none can be added. As it stands, not a bad idea since it shows where stuff breaks
+// instead of just exiting, however we should _never_ have these - and we have a couple that
+// puts the app into an unknown state
+process.on('uncaughtException', (err: Error) => {
+  l.error('Uncaught exception', err);
+});
+
 new Client()
   .start(cli())
   .catch((error) => {
     console.error('Failed to start client', error);
+
+    process.exit(-1);
   });

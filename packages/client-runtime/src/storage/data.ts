@@ -4,7 +4,7 @@
 
 import { RuntimeEnv, RuntimeInterface$Storage$Data, Pointer } from '../types';
 
-import u8aToHex from '@polkadot/util/u8a/toHex';
+import { u8aToHex } from '@polkadot/util';
 
 import instrument from '../instrument';
 import get from './get';

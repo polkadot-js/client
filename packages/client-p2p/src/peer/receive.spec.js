@@ -4,7 +4,7 @@
 
 import pull from 'pull-stream';
 import pushable from 'pull-pushable';
-import logger from '@polkadot/util/logger';
+import { logger } from '@polkadot/util';
 
 import Peer from './index';
 

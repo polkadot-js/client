@@ -6,8 +6,7 @@ import { ChainInterface } from '@polkadot/client-chains/types';
 import { Config } from '@polkadot/client/types';
 import { Endpoint } from './types';
 
-import u8aToHex from '@polkadot/util/u8a/toHex';
-import u8aToU8a from '@polkadot/util/u8a/toU8a';
+import { u8aToHex, u8aToU8a } from '@polkadot/util';
 
 const getStorage = ({ state: { db } }: ChainInterface): (params: Array<string>) => Promise<string> =>
   async ([key]: Array<string>): Promise<string> =>

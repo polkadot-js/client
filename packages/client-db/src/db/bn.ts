@@ -8,8 +8,7 @@ import { Storage$Key$Value } from '@polkadot/storage/types';
 import { BaseDb } from '@polkadot/db/types';
 import { StorageMethod$Bn } from '../types';
 
-import bnToU8a from '@polkadot/util/bn/toU8a';
-import u8aToBn from '@polkadot/util/u8a/toBn';
+import { bnToU8a, u8aToBn } from '@polkadot/util';
 
 import createBase from './base';
 import creator from '../key';

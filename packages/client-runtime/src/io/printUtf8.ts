@@ -4,10 +4,10 @@
 
 import { Logger } from '@polkadot/util/types';
 
-import u8aToUtf8 from '@polkadot/util/u8a/toUtf8';
+import { u8aToString } from '@polkadot/util';
 
 export default function print (l: Logger, data: Uint8Array): void {
   l.warn(
-    u8aToUtf8(data)
+    u8aToString(data)
   );
 }

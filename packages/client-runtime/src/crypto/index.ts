@@ -4,10 +4,8 @@
 
 import { RuntimeEnv, RuntimeInterface$Crypto, Pointer } from '../types';
 
-import u8aToHex from '@polkadot/util/u8a/toHex';
-import blake2AsU8a from '@polkadot/util-crypto/blake2/asU8a';
-import naclVerify from '@polkadot/util-crypto/nacl/verify';
-import xxhashAsU8a from '@polkadot/util-crypto/xxhash/asU8a';
+import { u8aToHex } from '@polkadot/util';
+import { blake2AsU8a, naclVerify, xxhashAsU8a } from '@polkadot/util-crypto';
 
 import instrument from '../instrument';
 

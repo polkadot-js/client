@@ -4,11 +4,9 @@
 
 import { MessageInterface, BlockResponseMessage, BlockResponseMessageBlock } from './types';
 
-import u8aConcat from '@polkadot/util/u8a/concat';
 import decodeHeaderRaw from '@polkadot/primitives/codec/header/decodeRaw';
 import decodeHeader from '@polkadot/primitives/codec/header/decode';
-import u8aToBn from '@polkadot/util/u8a/toBn';
-import bnToU8a from '@polkadot/util/bn/toU8a';
+import { assert, bnToU8a, u8aConcat, u8aToBn } from '@polkadot/util';
 
 import BaseMessage from './BaseMessage';
 
@@ -61,15 +59,30 @@ export default class BlockResponse extends BaseMessage implements MessageInterfa
       const extrinsics: Array<Uint8Array> = [];
 
       offset = BlockResponse.decodeExtrinsics(u8a, offset + 4, numExt, extrinsics);
-      offset += 3; // skip reciept, queue and justification
+      offset += 3; // skip reciept, queue and justification indicator
+
+      let justification: Uint8Array | null = null;
+
+      if (u8a[offset - 1] === 1) {
+        let justLength = 4 + 32; // round length + hash length
+        const numSigs = u8aToBn(u8a.subarray(offset + justLength, offset + justLength + 4), true).toNumber();
+
+        justLength += 4 + (numSigs * (32 + 64));
+
+        justification = u8a.subarray(offset, offset + justLength);
+
+        offset += justLength;
+      }
 
       blocks.push({
         hash,
         header,
         encoded: u8aConcat.apply(null, [headerRaw, bnToU8a(numExt, 32, true)].concat(extrinsics)),
-        justification: new Uint8Array([])
+        justification
       });
     }
+
+    assert(offset === u8a.length, `Expected to exhaust data, calculated ${offset}, received ${u8a.length}`);
 
     return new BlockResponse({
       id,

@@ -8,11 +8,7 @@ import { MessageInterface, StatusMessage } from './types';
 
 import rolesToId from '@polkadot/primitives/role/toId';
 import rolesFromId from '@polkadot/primitives/role/fromId';
-import u8aConcat from '@polkadot/util/u8a/concat';
-import u8aToBn from '@polkadot/util/u8a/toBn';
-import bnToU8a from '@polkadot/util/bn/toU8a';
-import bnToHex from '@polkadot/util/bn/toHex';
-import u8aToHex from '@polkadot/util/u8a/toHex';
+import { bnToHex, bnToU8a, u8aConcat, u8aToBn, u8aToHex } from '@polkadot/util';
 
 import BaseMessage from './BaseMessage';
 

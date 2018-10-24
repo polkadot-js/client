@@ -7,7 +7,7 @@ import { Sockets, Subscriptions } from './types';
 
 import decodeHeader from '@polkadot/primitives/codec/header/decode';
 import jsonHeader from '@polkadot/primitives/json/header/encode';
-import isUndefined from '@polkadot/util/is/undefined';
+import { isUndefined } from '@polkadot/util';
 
 import send from './send';
 

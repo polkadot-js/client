@@ -7,7 +7,7 @@ import { Handler } from '@polkadot/client-rpc-handlers/types';
 import { WsContext$Socket, SubInterface } from '../types';
 import { Sockets, Subscriptions } from './types';
 
-import isUndefined from '@polkadot/util/is/undefined';
+import { isUndefined } from '@polkadot/util';
 
 import send from './send';
 import update from './update';
@@ -15,14 +15,13 @@ import update from './update';
 const sockets: Sockets = {};
 const subscriptions: Subscriptions = {};
 
-let nextSubId = -1;
+let nextSubId = 0;
 
 export default function subscriber (chain: ChainInterface): SubInterface {
   update(chain, subscriptions, sockets);
 
   return async (socket: WsContext$Socket | undefined, handler: Handler, params: Array<any>): Promise<number> => {
     const method = await handler(params);
-
     const subId = nextSubId++;
 
     if (!isUndefined(socket)) {

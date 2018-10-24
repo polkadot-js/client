@@ -4,8 +4,8 @@
 
 import methods from '@polkadot/extrinsics';
 import encodeUnchecked from '@polkadot/extrinsics/codec/encode/unchecked';
-import u8aConcat from '@polkadot/util/u8a/concat';
-import testingPairs from '@polkadot/util-keyring/testingPairs';
+import { u8aConcat } from '@polkadot/util';
+import testingPairs from '@polkadot/keyring/testingPairs';
 
 import Chain from '@polkadot/client-chains';
 
@@ -60,7 +60,7 @@ describe('generateBlock', () => {
   it('generates a basic block (with real externals)', async () => {
     expect(
       await chain.executor.generateBlock([
-        encodeUnchecked(keyring.alice, 0)(
+        encodeUnchecked(keyring.alice, 0,
           methods.staking.public.transfer,
           [keyring.bob.publicKey(), 69]
         )

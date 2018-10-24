@@ -5,10 +5,10 @@
 import { BlockAttrMap } from '../types';
 
 const all: BlockAttrMap = {
-  header: 0b00000001,
-  body: 0b00000010,
-  receipt: 0b00000100,
-  messageQueue: 0b00001000,
+  header:        0b00000001,
+  body:          0b00000010,
+  receipt:       0b00000100,
+  messageQueue:  0b00001000,
   justification: 0b00010000
 };
 

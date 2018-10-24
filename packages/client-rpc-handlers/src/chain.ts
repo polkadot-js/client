@@ -6,9 +6,21 @@ import { ChainInterface } from '@polkadot/client-chains/types';
 import { Config } from '@polkadot/client/types';
 import { Endpoint } from './types';
 
-const newHead = async (): Promise<string> =>
+import { hexToU8a, u8aToHex } from '@polkadot/util';
+
+const subscribeNewHead = async (): Promise<string> =>
   'chain_newHead';
 
+const getBlock = ({ blocks }: ChainInterface): (params: Array<string>) => Promise<string> =>
+  async ([hash]: Array<string>): Promise<string> => {
+    return u8aToHex(
+      blocks.block.get(
+        hexToU8a(hash)
+      )
+    );
+  };
+
 export default (config: Config, chain: ChainInterface): Endpoint => ({
-  'subscribe_newHead': newHead
+  'chain_subscribeNewHead': subscribeNewHead,
+  'chain_getBlock': getBlock(chain)
 });

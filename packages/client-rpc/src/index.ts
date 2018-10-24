@@ -8,16 +8,10 @@ import * as net from 'net';
 import { Config } from '@polkadot/client/types';
 import { ChainInterface } from '@polkadot/client-chains/types';
 import { Handlers } from '@polkadot/client-rpc-handlers/types';
-import { Logger } from '@polkadot/util/types';
 import { JsonRpcError, JsonRpcRequest, JsonRpcResponse, RpcInterface, SubInterface, WsContext, WsContext$Socket } from './types';
 
 import coBody from 'co-body';
-import assert from '@polkadot/util/assert';
-import ExtError from '@polkadot/util/ext/error';
-import isError from '@polkadot/util/is/error';
-import isFunction from '@polkadot/util/is/function';
-import isUndefined from '@polkadot/util/is/undefined';
-import logger from '@polkadot/util/logger';
+import { ExtError, assert, isError, isFunction, isUndefined, logger } from '@polkadot/util';
 import handlers from '@polkadot/client-rpc-handlers/index';
 
 import validateConfig from './validate/config';
@@ -26,7 +20,7 @@ import subscriptions from './subscriptions';
 import createKoa from './create/koa';
 import { createError, createResponse } from './create';
 
-const SUBSCRIBE_REGEX = /^subscribe_/;
+const SUBSCRIBE_REGEX = /_subscribe/;
 
 const l = logger('rpc');
 

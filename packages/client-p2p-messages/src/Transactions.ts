@@ -4,12 +4,9 @@
 
 import { MessageInterface, TransactionsMessage } from './types';
 
-import u8aConcat from '@polkadot/util/u8a/concat';
+import { bnToU8a, u8aConcat, u8aToBn, u8aToHex } from '@polkadot/util';
 
 import BaseMessage from './BaseMessage';
-import bnToU8a from '@polkadot/util/bn/toU8a';
-import u8aToBn from '@polkadot/util/u8a/toBn';
-import u8aToHex from '@polkadot/util/u8a/toHex';
 
 export default class Transactions extends BaseMessage implements MessageInterface, TransactionsMessage {
   static type = 4;

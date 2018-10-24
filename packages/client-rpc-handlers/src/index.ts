@@ -6,14 +6,14 @@ import { ChainInterface } from '@polkadot/client-chains/types';
 import { Config } from '@polkadot/client/types';
 import { Handlers } from './types';
 
-import state from './state';
-import subscribe from './subscribe';
-import system from './system';
+import handleChain from './chain';
+import handleState from './state';
+import handleSystem from './system';
 
 export default function handlers (config: Config, chain: ChainInterface): Handlers {
   return {
-    ...state(config, chain),
-    ...subscribe(config, chain),
-    ...system(config, chain)
+    ...handleChain(config, chain),
+    ...handleState(config, chain),
+    ...handleSystem(config, chain)
   };
 }

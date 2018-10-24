@@ -5,9 +5,7 @@
 import { RuntimeEnv$Heap, Pointer } from '../../types';
 import { Memory, Memory$Buffer, SizeUsed } from './types';
 
-import ExtError from '@polkadot/util/ext/error';
-import isUndefined from '@polkadot/util/is/undefined';
-import logger from '@polkadot/util/logger';
+import { ExtError, isUndefined, logger } from '@polkadot/util';
 
 const PAGE_SIZE = 64 * 1024;
 

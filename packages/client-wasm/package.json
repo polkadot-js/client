@@ -29,10 +29,11 @@
   },
   "homepage": "https://github.com/polkadot-js/client/tree/master/packages/client-wasm#readme",
   "dependencies": {
-    "@babel/runtime": "^7.0.0",
+    "@babel/runtime": "^7.1.2",
     "@polkadot/client-runtime": "^0.16.3",
-    "@polkadot/primitives": "^0.28.29",
-    "@polkadot/util": "^0.29.33",
+    "@polkadot/keyring": "^0.32.9",
+    "@polkadot/primitives": "0.29.4",
+    "@polkadot/util": "^0.32.9",
     "@types/webassembly-js-api": "^0.0.1"
   }
 }

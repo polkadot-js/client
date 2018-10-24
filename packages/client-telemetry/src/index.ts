@@ -6,12 +6,11 @@ import { Config } from '@polkadot/client/types';
 import { ChainInterface } from '@polkadot/client-chains/types';
 import { BlockDb } from '@polkadot/client-db/types';
 import { SyncStatus } from '@polkadot/client-p2p/types';
-import { Logger } from '@polkadot/util/types';
 import { TelemetryInterface } from './types';
 
 import './polyfill';
 
-import logger from '@polkadot/util/logger';
+import { logger } from '@polkadot/util';
 
 import Base from './messages/Base';
 import BlockImport from './messages/BlockImport';

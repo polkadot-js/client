@@ -17,11 +17,8 @@ import encodeBlock from '@polkadot/primitives/codec/block/encode';
 import encodeHeader from '@polkadot/primitives/codec/header/encode';
 import storage from '@polkadot/storage';
 import key from '@polkadot/storage/key';
-import assert from '@polkadot/util/assert';
-import hexToU8a from '@polkadot/util/hex/toU8a';
-import u8aToHex from '@polkadot/util/u8a/toHex';
-import logger from '@polkadot/util/logger';
-import blake2Asu8a from '@polkadot/util-crypto/blake2/asU8a';
+import { assert, hexToU8a, logger, u8aToHex } from '@polkadot/util';
+import { blake2AsU8a } from '@polkadot/util-crypto';
 import trieRoot from '@polkadot/trie-hash/root';
 
 import Loader from './loader';
@@ -45,20 +42,22 @@ export default class Chain implements ChainInterface {
     const chain = new Loader(config);
     const dbs = new ChainDbs(config, chain);
 
-    const runtime = createRuntime(dbs.state.db);
-
     this.chain = chain.chain;
     this.blocks = dbs.blocks;
     this.state = dbs.state;
-    this.executor = new Executor(config, dbs.blocks, dbs.state, runtime);
     this.genesis = this.initGenesis();
 
-    const bestHash = dbs.blocks.bestHash.get();
-    const bestNumber = dbs.blocks.bestNumber.get();
+    const bestHash = this.blocks.bestHash.get();
+    const bestNumber = this.blocks.bestNumber.get();
 
     l.log(`${this.chain.name}, #${bestNumber.toString()}, ${u8aToHex(bestHash, 48)}`);
 
-    dbs.snapshotState();
+    // NOTE Snapshot _before_ we attach the runtime since it ties directly to the backing DBs
+    dbs.snapshot();
+
+    const runtime = createRuntime(this.state.db);
+
+    this.executor = new Executor(config, this.blocks, this.state, runtime);
   }
 
   private initGenesis (): ChainGenesis {
@@ -162,7 +161,7 @@ export default class Chain implements ChainInterface {
       }
     });
     const header = encodeHeader(block.header);
-    const headerHash = blake2Asu8a(header, 256);
+    const headerHash = blake2AsU8a(header, 256);
 
     return {
       block: encodeBlock(block),
