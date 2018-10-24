@@ -1265,16 +1265,6 @@
     "@polkadot/params" "^0.29.4"
     babel-runtime "^6.26.0"
 
-"@polkadot/keyring@^0.32.5":
-  version "0.32.6"
-  resolved "https://registry.yarnpkg.com/@polkadot/keyring/-/keyring-0.32.6.tgz#f760a5f0e08851dde7aeaeeb141fda95ec5640ab"
-  dependencies:
-    "@babel/runtime" "^7.0.0"
-    "@polkadot/util" "^0.32.6"
-    "@polkadot/util-crypto" "^0.32.6"
-    "@types/bs58" "^3.0.30"
-    bs58 "^4.0.1"
-
 "@polkadot/params@^0.29.13", "@polkadot/params@^0.29.4":
   version "0.29.13"
   resolved "https://registry.yarnpkg.com/@polkadot/params/-/params-0.29.13.tgz#eafe0d451bf6ed702e90434ea5436d5720c08b6f"
