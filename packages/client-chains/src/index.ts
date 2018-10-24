@@ -17,11 +17,8 @@ import encodeBlock from '@polkadot/primitives/codec/block/encode';
 import encodeHeader from '@polkadot/primitives/codec/header/encode';
 import storage from '@polkadot/storage';
 import key from '@polkadot/storage/key';
-import assert from '@polkadot/util/assert';
-import hexToU8a from '@polkadot/util/hex/toU8a';
-import u8aToHex from '@polkadot/util/u8a/toHex';
-import logger from '@polkadot/util/logger';
-import blake2Asu8a from '@polkadot/util-crypto/blake2/asU8a';
+import { assert, hexToU8a, logger, u8aToHex } from '@polkadot/util';
+import { blake2AsU8a } from '@polkadot/util-crypto';
 import trieRoot from '@polkadot/trie-hash/root';
 
 import Loader from './loader';
@@ -164,7 +161,7 @@ export default class Chain implements ChainInterface {
       }
     });
     const header = encodeHeader(block.header);
-    const headerHash = blake2Asu8a(header, 256);
+    const headerHash = blake2AsU8a(header, 256);
 
     return {
       block: encodeBlock(block),

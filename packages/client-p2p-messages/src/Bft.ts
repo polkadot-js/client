@@ -4,7 +4,7 @@
 
 import { MessageInterface, BftMessage } from './types';
 
-import u8aConcat from '@polkadot/util/u8a/concat';
+import { u8aConcat } from '@polkadot/util';
 
 import BaseMessage from './BaseMessage';
 

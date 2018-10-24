@@ -3,9 +3,7 @@
 // of the ISC license. See the LICENSE file for details.
 /* eslint camelcase: 0 */
 
-import logger from '@polkadot/util/logger';
-import hexToU8a from '@polkadot/util/hex/toU8a';
-import u8aFromString from '@polkadot/util/u8a/fromString';
+import { hexToU8a, logger, stringToU8a } from '@polkadot/util';
 
 import Heap from '../environment/heap';
 import index from './index';
@@ -43,8 +41,8 @@ describe('enumerated_trie_root', () => {
   it('calculates a basic ennumerated root', () => {
     expect(
       enumerated([
-        u8aFromString('doe'),
-        u8aFromString('reindeer')
+        stringToU8a('doe'),
+        stringToU8a('reindeer')
       ])
     ).toEqual(
       hexToU8a(

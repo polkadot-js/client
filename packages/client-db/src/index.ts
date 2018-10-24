@@ -11,7 +11,7 @@ import path from 'path';
 import DiskDb from '@polkadot/db/Disk';
 import MemoryDb from '@polkadot/db/Memory';
 import TrieDb from '@polkadot/trie-db';
-import u8aToHex from '@polkadot/util/u8a/toHex';
+import { u8aToHex } from '@polkadot/util';
 
 import createBlockDb from './block';
 import createStateDb from './state';

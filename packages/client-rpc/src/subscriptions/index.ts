@@ -7,7 +7,7 @@ import { Handler } from '@polkadot/client-rpc-handlers/types';
 import { WsContext$Socket, SubInterface } from '../types';
 import { Sockets, Subscriptions } from './types';
 
-import isUndefined from '@polkadot/util/is/undefined';
+import { isUndefined } from '@polkadot/util';
 
 import send from './send';
 import update from './update';

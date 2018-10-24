@@ -3,8 +3,8 @@
 // of the ISC license. See the LICENSE file for details.
 
 import BN from 'bn.js';
-import logger from '@polkadot/util/logger';
 import Status from '@polkadot/client-p2p-messages/Status';
+import { logger } from '@polkadot/util';
 
 import Peer from './index';
 

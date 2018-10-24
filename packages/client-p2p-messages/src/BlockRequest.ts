@@ -7,13 +7,7 @@ import { HeaderHash } from '@polkadot/primitives/base';
 import { BlockAttr, MessageInterface, BlockRequestMessage, BlockRequestMessageDirection } from './types';
 
 import defaults from '@polkadot/client-p2p/defaults';
-import u8aConcat from '@polkadot/util/u8a/concat';
-import u8aToBn from '@polkadot/util/u8a/toBn';
-import bnToU8a from '@polkadot/util/bn/toU8a';
-import isBn from '@polkadot/util/is/bn';
-import isNull from '@polkadot/util/is/null';
-import bnToHex from '@polkadot/util/bn/toHex';
-import u8aToHex from '@polkadot/util/u8a/toHex';
+import { bnToHex, bnToU8a, isBn, isNull, u8aConcat, u8aToBn, u8aToHex } from '@polkadot/util';
 
 import fromAttrs from './attrs/fromAttrs';
 import toAttrs from './attrs/toAttrs';

@@ -6,8 +6,7 @@ import { Config } from '@polkadot/client/types';
 import { ChainJson, ChainLoader } from './types';
 
 import trieRoot from '@polkadot/trie-hash/root';
-import assert from '@polkadot/util/assert';
-import hexToU8a from '@polkadot/util/hex/toU8a';
+import { assert, hexToU8a } from '@polkadot/util';
 
 import chains from './chains';
 

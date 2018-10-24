@@ -11,12 +11,7 @@ import { Handlers } from '@polkadot/client-rpc-handlers/types';
 import { JsonRpcError, JsonRpcRequest, JsonRpcResponse, RpcInterface, SubInterface, WsContext, WsContext$Socket } from './types';
 
 import coBody from 'co-body';
-import assert from '@polkadot/util/assert';
-import ExtError from '@polkadot/util/ext/error';
-import isError from '@polkadot/util/is/error';
-import isFunction from '@polkadot/util/is/function';
-import isUndefined from '@polkadot/util/is/undefined';
-import logger from '@polkadot/util/logger';
+import { ExtError, assert, isError, isFunction, isUndefined, logger } from '@polkadot/util';
 import handlers from '@polkadot/client-rpc-handlers/index';
 
 import validateConfig from './validate/config';

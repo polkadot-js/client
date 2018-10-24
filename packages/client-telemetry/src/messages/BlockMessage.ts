@@ -5,7 +5,7 @@
 import { Message, BlockJson } from './types';
 
 import BN from 'bn.js';
-import u8aToHex from '@polkadot/util/u8a/toHex';
+import { u8aToHex } from '@polkadot/util';
 
 import Base from './Base';
 

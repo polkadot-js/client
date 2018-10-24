@@ -4,9 +4,7 @@
 
 import { MessageDecoder, MessageInterface } from './types';
 
-import assert from '@polkadot/util/assert';
-import isUndefined from '@polkadot/util/is/undefined';
-import u8aToHex from '@polkadot/util/u8a/toHex';
+import { assert, isUndefined, u8aToHex } from '@polkadot/util';
 
 import Bft from './Bft';
 import BlockAnnounce from './BlockAnnounce';

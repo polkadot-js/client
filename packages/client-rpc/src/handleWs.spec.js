@@ -6,7 +6,7 @@ jest.mock('@polkadot/client-rpc-handlers/index', () => () => ({
   test: jest.fn(() => Promise.resolve('test'))
 }));
 
-import isFunction from '@polkadot/util/is/function';
+import { isFunction } from '@polkadot/util';
 
 import Rpc from './index';
 

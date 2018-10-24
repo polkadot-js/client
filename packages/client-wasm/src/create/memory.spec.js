@@ -2,7 +2,7 @@
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
 
-import isInstanceOf from '@polkadot/util/is/instanceOf';
+import { isInstanceOf } from '@polkadot/util';
 
 import defaults from '../defaults';
 import createMemory from './memory';

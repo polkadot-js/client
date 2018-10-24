@@ -4,9 +4,7 @@
 /* eslint camelcase: 0 */
 
 import TrieDb from '@polkadot/trie-db';
-import logger from '@polkadot/util/logger';
-import hexToU8a from '@polkadot/util/hex/toU8a';
-import u8aFromString from '@polkadot/util/u8a/fromString';
+import { hexToU8a, logger, stringToU8a } from '@polkadot/util';
 
 import index from './index';
 
@@ -28,9 +26,9 @@ describe('storage_root', () => {
   });
 
   it('creates a basic storage root', () => {
-    db.put(u8aFromString('doe'), u8aFromString('reindeer'));
-    db.put(u8aFromString('dog'), u8aFromString('puppy'));
-    db.put(u8aFromString('dogglesworth'), u8aFromString('cat'));
+    db.put(stringToU8a('doe'), stringToU8a('reindeer'));
+    db.put(stringToU8a('dog'), stringToU8a('puppy'));
+    db.put(stringToU8a('dogglesworth'), stringToU8a('cat'));
 
     storage_root(5);
 

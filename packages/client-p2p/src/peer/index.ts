@@ -15,12 +15,7 @@ import pull from 'pull-stream';
 import varint from 'varint';
 import decodeMessage from '@polkadot/client-p2p-messages/index';
 import Status from '@polkadot/client-p2p-messages/Status';
-import bufferToU8a from '@polkadot/util/buffer/toU8a';
-import logger from '@polkadot/util/logger';
-import stringShorten from '@polkadot/util/string/shorten';
-import u8aConcat from '@polkadot/util/u8a/concat';
-import u8aToBuffer from '@polkadot/util/u8a/toBuffer';
-import u8aToHex from '@polkadot/util/u8a/toHex';
+import { bufferToU8a, logger, stringShorten, u8aConcat, u8aToBuffer, u8aToHex } from '@polkadot/util';
 
 import defaults from '../defaults';
 

@@ -8,7 +8,7 @@ import { Justification } from '@polkadot/primitives/bft';
 import { Header } from '@polkadot/primitives/header';
 import { JsonHeader } from '@polkadot/primitives/json/types';
 import { Role } from '@polkadot/primitives/role';
-import bufferToU8a from '@polkadot/util/buffer/toU8a';
+import { bufferToU8a } from '@polkadot/util';
 
 export interface MessageInterface {
   readonly type: number;

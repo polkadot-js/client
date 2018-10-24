@@ -3,7 +3,7 @@
 // of the ISC license. See the LICENSE file for details.
 /* eslint camelcase: 0 */
 
-import logger from '@polkadot/util/logger';
+import { logger } from '@polkadot/util';
 
 import index from './index';
 

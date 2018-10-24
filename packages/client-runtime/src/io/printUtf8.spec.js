@@ -3,7 +3,7 @@
 // of the ISC license. See the LICENSE file for details.
 /* eslint camelcase: 0 */
 
-import u8aFromUtf8 from '@polkadot/util/u8a/fromUtf8';
+import { stringToU8a } from '@polkadot/util';
 
 import env from '../environment';
 import index from './index';
@@ -18,7 +18,7 @@ describe('print_utf8', () => {
     const runtime = env();
 
     heap = runtime.heap;
-    heap.setWasmMemory({ buffer: u8aFromUtf8(TEST) });
+    heap.setWasmMemory({ buffer: stringToU8a(TEST) });
 
     l = {
       debug: jest.fn((cb) => cb()),

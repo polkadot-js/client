@@ -2,9 +2,7 @@
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
 
-import assert from '@polkadot/util/assert';
-import ExtError from '@polkadot/util/ext/error';
-import isNumber from '@polkadot/util/is/number';
+import { ExtError, assert, isNumber } from '@polkadot/util';
 
 export default function validateRequest (id: number, jsonrpc: string): void {
   assert(jsonrpc === '2.0', `Invalid jsonrpc field, expected '2.0'`, ExtError.CODES.INVALID_JSONRPC);

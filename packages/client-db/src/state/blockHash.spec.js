@@ -2,8 +2,7 @@
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
 
-import hexToU8a from '@polkadot/util/hex/toU8a';
-import u8aToHex from '@polkadot/util/u8a/toHex';
+import { hexToU8a, u8aToHex } from '@polkadot/util';
 
 import db from './index';
 

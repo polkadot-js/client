@@ -6,8 +6,7 @@ import { ChainInterface } from '@polkadot/client-chains/types';
 import { Config } from '@polkadot/client/types';
 import { Endpoint } from './types';
 
-import hexToU8a from '@polkadot/util/hex/toU8a';
-import u8aToHex from '@polkadot/util/u8a/toHex';
+import { hexToU8a, u8aToHex } from '@polkadot/util';
 
 const subscribeNewHead = async (): Promise<string> =>
   'chain_newHead';

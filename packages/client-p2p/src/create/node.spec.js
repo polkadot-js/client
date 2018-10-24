@@ -6,8 +6,7 @@ import LibP2P from 'libp2p';
 import PeerId from 'peer-id';
 import PeerInfo from 'peer-info';
 
-import isInstanceOf from '@polkadot/util/is/instanceOf';
-import logger from '@polkadot/util/logger';
+import { isInstanceOf, logger } from '@polkadot/util';
 
 import createNode from './node';
 

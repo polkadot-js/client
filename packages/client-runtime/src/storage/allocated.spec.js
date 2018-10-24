@@ -4,8 +4,7 @@
 /* eslint camelcase: 0 */
 
 import MemoryDb from '@polkadot/db/Memory';
-import logger from '@polkadot/util/logger';
-import u8aFromString from '@polkadot/util/u8a/fromString';
+import { logger, stringToU8a } from '@polkadot/util';
 
 import Heap from '../environment/heap';
 import index from './index';
@@ -27,8 +26,8 @@ describe('get_allocated_storage', () => {
   });
 
   it('retrieves allocated storage for a key', () => {
-    const key = u8aFromString('key');
-    const value = u8aFromString('some value');
+    const key = stringToU8a('key');
+    const value = stringToU8a('some value');
 
     db.put(key, value);
 
@@ -47,7 +46,7 @@ describe('get_allocated_storage', () => {
   });
 
   it('returns 0, setting MAX_U32 when non-existent', () => {
-    const key = u8aFromString('key');
+    const key = stringToU8a('key');
     const keyPtr = heap.allocate(key.length);
     const lenPtr = heap.allocate(4);
 

@@ -13,11 +13,9 @@ import './license';
 import BN from 'bn.js';
 import Chain from '@polkadot/client-chains/index';
 import Telemetry from '@polkadot/client-telemetry/index';
-import logger from '@polkadot/util/logger';
 import Rpc from '@polkadot/client-rpc/index';
 import P2p from '@polkadot/client-p2p/index';
-import isUndefined from '@polkadot/util/is/undefined';
-import u8aToHex from '@polkadot/util/u8a/toHex';
+import { logger, isUndefined, u8aToHex } from '@polkadot/util';
 
 import * as clientId from './clientId';
 import defaults from './defaults';

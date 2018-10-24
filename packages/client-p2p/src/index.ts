@@ -14,10 +14,8 @@ import EventEmitter from 'eventemitter3';
 import handshake from 'pull-handshake';
 import PullPushable from 'pull-pushable';
 import pull from 'pull-stream';
-import logger from '@polkadot/util/logger';
-import promisify from '@polkadot/util/promisify';
-import u8aToBuffer from '@polkadot/util/u8a/toBuffer';
-import randomU8a from '@polkadot/util-crypto/random/asU8a';
+import { logger, promisify, u8aToBuffer } from '@polkadot/util';
+import { randomAsU8a } from '@polkadot/util-crypto';
 
 import createNode from './create/node';
 import defaults from './defaults';
@@ -243,7 +241,7 @@ export default class P2p extends EventEmitter implements P2pInterface {
 
       const doPing = () => {
         const start = Date.now();
-        const request = u8aToBuffer(randomU8a());
+        const request = u8aToBuffer(randomAsU8a());
         // const timerId = setTimeout(() => {
         //   l.warn(() => `ping timeout from ${peer.shortId}, disconnecting`);
         //   peer.disconnect();

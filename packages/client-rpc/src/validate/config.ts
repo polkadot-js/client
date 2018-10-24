@@ -4,7 +4,7 @@
 
 import { RpcConfig } from '../types';
 
-import assert from '@polkadot/util/assert';
+import { assert } from '@polkadot/util';
 
 import defaults from '../defaults';
 

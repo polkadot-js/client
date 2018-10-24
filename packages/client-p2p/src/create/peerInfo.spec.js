@@ -4,8 +4,7 @@
 
 import PeerId from 'peer-id';
 import PeerInfo from 'peer-info';
-
-import isInstanceOf from '@polkadot/util/is/instanceOf';
+import { isInstanceOf } from '@polkadot/util';
 
 import createPeerInfo from './peerInfo';
 

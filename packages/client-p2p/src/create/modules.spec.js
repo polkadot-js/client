@@ -5,8 +5,7 @@
 import Bootstrap from 'libp2p-bootstrap';
 import PeerInfo from 'peer-info';
 
-import isInstanceOf from '@polkadot/util/is/instanceOf';
-import promisify from '@polkadot/util/promisify';
+import { isInstanceOf, promisify } from '@polkadot/util';
 
 import createConfig from './modules';
 

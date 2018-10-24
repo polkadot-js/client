@@ -4,14 +4,11 @@
 
 import { MessageInterface, BlockResponseMessage, BlockResponseMessageBlock } from './types';
 
-import u8aConcat from '@polkadot/util/u8a/concat';
 import decodeHeaderRaw from '@polkadot/primitives/codec/header/decodeRaw';
 import decodeHeader from '@polkadot/primitives/codec/header/decode';
-import u8aToBn from '@polkadot/util/u8a/toBn';
-import bnToU8a from '@polkadot/util/bn/toU8a';
+import { assert, bnToU8a, u8aConcat, u8aToBn } from '@polkadot/util';
 
 import BaseMessage from './BaseMessage';
-import assert from '@polkadot/util/assert';
 
 const COUNT_OFF = 8;
 const BLOCK_OFF = COUNT_OFF + 4;

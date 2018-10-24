@@ -4,7 +4,7 @@
 
 import { JsonRpcError } from '../types';
 
-import ExtError from '@polkadot/util/ext/error';
+import { ExtError } from '@polkadot/util';
 
 import createJson from './json';
 
