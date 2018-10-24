@@ -32,6 +32,6 @@
     "@babel/runtime": "^7.0.0",
     "@polkadot/jsonrpc": "0.29.4",
     "@polkadot/primitives": "0.29.4",
-    "@polkadot/util": "^0.32.5"
+    "@polkadot/util": "^0.32.7"
   }
 }

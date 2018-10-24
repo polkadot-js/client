@@ -35,7 +35,7 @@
   "dependencies": {
     "@babel/runtime": "^7.0.0",
     "@polkadot/client-rpc-handlers": "^0.16.3",
-    "@polkadot/util": "^0.32.5",
+    "@polkadot/util": "^0.32.7",
     "@types/co-body": "^0.0.3",
     "@types/koa": "^2.0.46",
     "@types/koa-route": "^3.2.4",
