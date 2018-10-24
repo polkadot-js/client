@@ -239,12 +239,8 @@ export default class Executor implements ExecutorInterface {
 
   private withInherent (timestamp: number, _extrinsics: Array<UncheckedRaw>): Array<UncheckedRaw> {
     return [
-      encodeUnchecked(keyring.nobody, 0)(
-        timestampSet,[timestamp]
-      ),
-      encodeUnchecked(keyring.nobody, 0)(
-        parachainsSet, [[]]
-      )
+      encodeUnchecked(keyring.nobody, 0, timestampSet,[timestamp]),
+      encodeUnchecked(keyring.nobody, 0, parachainsSet, [[]])
     ].concat(_extrinsics);
   }
 }

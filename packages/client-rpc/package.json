@@ -29,7 +29,7 @@
   },
   "homepage": "https://github.com/polkadot-js/client/tree/master/packages/client-rpc#readme",
   "devDependencies": {
-    "@polkadot/api-provider": "^0.29.4",
+    "@polkadot/api-provider": "0.29.4",
     "@polkadot/client": "^0.16.1"
   },
   "dependencies": {

@@ -12,7 +12,7 @@ import BN from 'bn.js';
 import EventEmitter from 'eventemitter3';
 import BlockRequest from '@polkadot/client-p2p-messages/BlockRequest';
 import BlockResponse from '@polkadot/client-p2p-messages/BlockResponse';
-import decodeBlock from '@polkadot/primitives/codec/block/decodeRaw';
+// import decodeBlock from '@polkadot/primitives/codec/block/decodeRaw';
 import isU8a from '@polkadot/util/is/u8a';
 import logger from '@polkadot/util/logger';
 // import u8aToHex from '@polkadot/util/u8a/toHex';

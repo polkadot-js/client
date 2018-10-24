@@ -38,7 +38,7 @@ const DIAL_BACKOFF = 5 * 60000;
 const DIAL_INTERVAL = 15000;
 const REQUEST_INTERVAL = 15000;
 const PING_INTERVAL = 30000;
-const PING_TIMEOUT = 5000;
+// const PING_TIMEOUT = 5000;
 
 const l = logger('p2p');
 

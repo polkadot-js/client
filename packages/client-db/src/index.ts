@@ -2,7 +2,7 @@
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
 
-import { BaseDb, ProgressCb, ProgressValue, TxDb } from '@polkadot/db/types';
+import { ProgressCb, ProgressValue, TxDb } from '@polkadot/db/types';
 import { Config } from '@polkadot/client/types';
 import { ChainLoader } from '@polkadot/client-chains/types';
 import { BlockDb, StateDb, ChainDbs, DbConfig } from './types';
@@ -11,7 +11,6 @@ import path from 'path';
 import DiskDb from '@polkadot/db/Disk';
 import MemoryDb from '@polkadot/db/Memory';
 import TrieDb from '@polkadot/trie-db';
-import logger from '@polkadot/util/logger';
 import u8aToHex from '@polkadot/util/u8a/toHex';
 
 import createBlockDb from './block';
@@ -19,8 +18,6 @@ import createStateDb from './state';
 
 const SPINNER = ['|', '/', '-', '\\'];
 const PREPEND = '                                     ';
-
-const l = logger('db');
 
 export default class Dbs implements ChainDbs {
   readonly blocks: BlockDb;
