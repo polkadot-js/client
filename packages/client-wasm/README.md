@@ -10,7 +10,7 @@
 
 # @polkadot/client-wasm
 
-A wrapper around WebAssembly applications, creating an instance from the input and providing a consistent class with the methods exposed on top of it. It is non-specific to the Polkadot usage, rather is is a extended utility provider around the base WebAssembly interfaces, reducing boilerplate.
+A wrapper around WebAssembly applications, creating an instance from the input and providing a consistent class with the methods exposed on top of it. It is non-specific to the Polkadot usage, rather is a extended utility provider around the base WebAssembly interfaces, reducing boilerplate.
 
 ## Updating the WASM proxies
 
