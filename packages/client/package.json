@@ -41,7 +41,7 @@
     "@polkadot/client-wasm": "^0.16.3",
     "@polkadot/jsonrpc": "0.29.4",
     "@polkadot/primitives": "0.29.4",
-    "@polkadot/util": "^0.32.8",
+    "@polkadot/util": "^0.32.9",
     "@types/package-json": "^4.0.1",
     "@types/semver-compare": "^1.0.0",
     "@types/yargs": "^12.0.1",

@@ -32,7 +32,7 @@
     "@babel/runtime": "^7.1.2",
     "@polkadot/client-p2p-messages": "^0.16.3",
     "@polkadot/primitives": "0.29.4",
-    "@polkadot/util": "^0.32.8",
+    "@polkadot/util": "^0.32.9",
     "eventemitter3": "^3.1.0",
     "libp2p": "^0.23.1",
     "libp2p-bootstrap": "^0.9.3",
