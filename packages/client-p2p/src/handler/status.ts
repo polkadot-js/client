@@ -5,7 +5,7 @@
 import { P2pInterface, PeerInterface } from '../types';
 import { Handler } from './types';
 
-import Status from '@polkadot/client-p2p-messages/Status';
+import { Status } from '@polkadot/client-types/messages';
 
 // TODO: We should check the genesisHash here and act appropriately
 function handleStatus (self: P2pInterface, peer: PeerInterface, message: Status): void {

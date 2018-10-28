@@ -1,14 +1,14 @@
-// Copyright 2017-2018 @polkadot/client-p2p-messages authors & contributors
+// Copyright 2017-2018 @polkadot/client-types authors & contributors
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
 
 import { BlockNumber, HeaderHash } from '@polkadot/primitives/base';
-import { Role } from '@polkadot/client-types/role/types';
+import { Role } from '../role/types';
 import { MessageInterface, StatusMessage } from './types';
 
-import { roleFromId, roleToId } from '@polkadot/client-types/role';
 import { bnToHex, bnToU8a, u8aConcat, u8aToBn, u8aToHex } from '@polkadot/util';
 
+import { roleFromId, roleToId } from '../role';
 import BaseMessage from './BaseMessage';
 
 const ROLES_OFF = 4;

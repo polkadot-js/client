@@ -5,7 +5,7 @@
 import PeerInfo from 'peer-info';
 import { Config } from '@polkadot/client/types';
 import { ChainInterface } from '@polkadot/client-chains/types';
-import { MessageInterface } from '@polkadot/client-p2p-messages/types';
+import { MessageInterface } from '@polkadot/client-types/messages/types';
 import { PeerInterface } from '../types';
 
 import BN from 'bn.js';
@@ -13,8 +13,7 @@ import EventEmitter from 'eventemitter3';
 import PullPushable, { Pushable } from 'pull-pushable';
 import pull from 'pull-stream';
 import varint from 'varint';
-import decodeMessage from '@polkadot/client-p2p-messages/index';
-import Status from '@polkadot/client-p2p-messages/Status';
+import decodeMessage, { Status } from '@polkadot/client-types/messages/index';
 import { bufferToU8a, logger, stringShorten, u8aConcat, u8aToBuffer, u8aToHex } from '@polkadot/util';
 
 import defaults from '../defaults';

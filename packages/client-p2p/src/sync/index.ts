@@ -4,14 +4,13 @@
 
 import { Config } from '@polkadot/client/types';
 import { ChainInterface } from '@polkadot/client-chains/types';
-import { BlockAttr, BlockResponseMessage, BlockResponseMessageBlock } from '@polkadot/client-p2p-messages/types';
+import { BlockAttr, BlockResponseMessage, BlockResponseMessageBlock } from '@polkadot/client-types/messages/types';
 import { PeerInterface, SyncStatus } from '../types';
 import { SyncInterface, SyncState$Request, SyncState$BlockRequests, SyncState$BlockQueue } from './types';
 
 import BN from 'bn.js';
 import EventEmitter from 'eventemitter3';
-import BlockRequest from '@polkadot/client-p2p-messages/BlockRequest';
-import BlockResponse from '@polkadot/client-p2p-messages/BlockResponse';
+import { BlockRequest, BlockResponse } from '@polkadot/client-types/messages';
 // import decodeBlock from '@polkadot/primitives/codec/block/decodeRaw';
 import { isU8a, logger } from '@polkadot/util';
 // import u8aToHex from '@polkadot/util/u8a/toHex';

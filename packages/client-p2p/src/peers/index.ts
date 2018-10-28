@@ -5,7 +5,7 @@
 import LibP2p from 'libp2p';
 import { Config } from '@polkadot/client/types';
 import { ChainInterface } from '@polkadot/client-chains/types';
-import { MessageInterface } from '@polkadot/client-p2p-messages/types';
+import { MessageInterface } from '@polkadot/client-types/messages/types';
 import { KnownPeer, PeerInterface, PeersInterface, PeersInterface$Events } from '../types';
 
 import EventEmitter from 'eventemitter3';

@@ -4,7 +4,7 @@
 
 import { Config } from '@polkadot/client/types';
 import { ChainInterface } from '@polkadot/client-chains/types';
-import { MessageInterface } from '@polkadot/client-p2p-messages/types';
+import { MessageInterface } from '@polkadot/client-types/messages/types';
 import { Logger } from '@polkadot/util/types';
 import { P2pInterface, PeerInterface, PeersInterface } from './types';
 
