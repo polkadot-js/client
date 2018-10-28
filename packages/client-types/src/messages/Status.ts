@@ -1,15 +1,14 @@
-// Copyright 2017-2018 @polkadot/client-p2p-messages authors & contributors
+// Copyright 2017-2018 @polkadot/client-types authors & contributors
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
 
 import { BlockNumber, HeaderHash } from '@polkadot/primitives/base';
-import { Role } from '@polkadot/primitives/role';
+import { Role } from '../role/types';
 import { MessageInterface, StatusMessage } from './types';
 
-import rolesToId from '@polkadot/primitives/role/toId';
-import rolesFromId from '@polkadot/primitives/role/fromId';
 import { bnToHex, bnToU8a, u8aConcat, u8aToBn, u8aToHex } from '@polkadot/util';
 
+import { roleFromId, roleToId } from '../role';
 import BaseMessage from './BaseMessage';
 
 const ROLES_OFF = 4;
@@ -43,7 +42,7 @@ export default class Status extends BaseMessage implements MessageInterface, Sta
     return u8aConcat(
       super.encode(),
       bnToU8a(this.version, 32, true),
-      bnToU8a(rolesToId(this.roles), 8, true),
+      bnToU8a(roleToId(this.roles), 8, true),
       bnToU8a(this.bestNumber, 64, true),
       this.bestHash,
       this.genesisHash,
@@ -64,7 +63,7 @@ export default class Status extends BaseMessage implements MessageInterface, Sta
   static decode (u8a: Uint8Array): Status {
     return new Status({
       version: u8aToBn(u8a.subarray(0, ROLES_OFF), true).toNumber(),
-      roles: rolesFromId(u8a[ROLES_OFF]),
+      roles: roleFromId(u8a[ROLES_OFF]),
       bestNumber: u8aToBn(u8a.subarray(BEST_OFF, HASH_OFF), true),
       bestHash: u8a.slice(HASH_OFF, GEN_OFF),
       genesisHash: u8a.slice(GEN_OFF, CHAIN_OFF)

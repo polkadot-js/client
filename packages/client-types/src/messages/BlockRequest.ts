@@ -1,21 +1,44 @@
-// Copyright 2017-2018 @polkadot/client-p2p-messages authors & contributors
+// Copyright 2017-2018 @polkadot/client-types authors & contributors
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
 
 import BN from 'bn.js';
 import { HeaderHash } from '@polkadot/primitives/base';
-import { BlockAttr, MessageInterface, BlockRequestMessage, BlockRequestMessageDirection } from './types';
+import { BlockAttr, BlockAttrMap, MessageInterface, BlockRequestMessage, BlockRequestMessageDirection } from './types';
 
 import defaults from '@polkadot/client-p2p/defaults';
 import { bnToHex, bnToU8a, isBn, isNull, u8aConcat, u8aToBn, u8aToHex } from '@polkadot/util';
 
-import fromAttrs from './attrs/fromAttrs';
-import toAttrs from './attrs/toAttrs';
 import BaseMessage from './BaseMessage';
+
+const allAttrs: BlockAttrMap = {
+  header:        0b00000001,
+  body:          0b00000010,
+  receipt:       0b00000100,
+  messageQueue:  0b00001000,
+  justification: 0b00010000
+};
 
 const FIELD_OFF = 8;
 const FROM_OFF = FIELD_OFF + 1;
 const FROM_DATA = FROM_OFF + 1;
+
+function fromAttrs (attrs: Array<BlockAttr>): number {
+  return attrs.reduce((result, attr) => {
+    return result | allAttrs[attr];
+  }, 0);
+}
+
+function toAttrs (encoded: number): Array<BlockAttr> {
+  return Object
+    .keys(allAttrs)
+    .map((key) =>
+      key as BlockAttr
+    )
+    .filter((attr) =>
+      (encoded & allAttrs[attr]) === allAttrs[attr]
+    );
+}
 
 export default class BlockRequest extends BaseMessage implements MessageInterface, BlockRequestMessage {
   static type = 1;

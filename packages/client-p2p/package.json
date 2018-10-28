@@ -30,7 +30,7 @@
   "homepage": "https://github.com/polkadot-js/client/client/tree/master/packages/client-p2p#readme",
   "dependencies": {
     "@babel/runtime": "^7.1.2",
-    "@polkadot/client-p2p-messages": "^0.16.5",
+    "@polkadot/client-types": "^0.16.5",
     "@polkadot/primitives": "0.29.4",
     "@polkadot/util": "^0.32.9",
     "eventemitter3": "^3.1.0",

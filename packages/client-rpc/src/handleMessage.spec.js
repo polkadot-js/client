@@ -22,7 +22,7 @@ const mockHandlers = ({
   echo: (...params) => Promise.resolve(`echo: ${params.join(', ')}`)
 });
 
-jest.mock('@polkadot/client-rpc-handlers/index', () => () => mockHandlers);
+jest.mock('./handlers/index', () => () => mockHandlers);
 
 import Rpc from './index';
 

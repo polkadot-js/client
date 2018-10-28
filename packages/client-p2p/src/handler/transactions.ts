@@ -5,7 +5,7 @@
 import { P2pInterface, PeerInterface } from '../types';
 import { Handler } from './types';
 
-import Transactions from '@polkadot/client-p2p-messages/Transactions';
+import { Transactions } from '@polkadot/client-types/messages';
 
 // TODO Propagate
 function handleTransactions (self: P2pInterface, peer: PeerInterface, message: Transactions): void {

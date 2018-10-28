@@ -5,7 +5,7 @@
 import { P2pInterface, PeerInterface } from '../types';
 import { Handler } from './types';
 
-import BlockAnnounce from '@polkadot/client-p2p-messages/BlockAnnounce';
+import { BlockAnnounce } from '@polkadot/client-types/messages';
 import encodeHeader from '@polkadot/primitives/codec/header/encode';
 import { blake2AsU8a } from '@polkadot/util-crypto';
 

@@ -5,7 +5,7 @@
 import { P2pInterface, PeerInterface } from '../types';
 import { Handler } from './types';
 
-import BlockResponse from '@polkadot/client-p2p-messages/BlockResponse';
+import { BlockResponse } from '@polkadot/client-types/messages';
 
 function handleBlockResponse (self: P2pInterface, peer: PeerInterface, message: BlockResponse): void {
   self.l.debug(() => [peer.shortId, 'BlockResponse', JSON.stringify(message)]);

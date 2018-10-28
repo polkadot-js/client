@@ -1,7 +1,7 @@
 {
-  "name": "@polkadot/client-rpc-handlers",
+  "name": "@polkadot/client-types",
   "version": "0.16.5",
-  "description": "Handlers for RPC messages",
+  "description": "Types specific to the client implementation",
   "main": "index.js",
   "engines": {
     "node": ">=8.0"
@@ -14,6 +14,7 @@
     "type": "git",
     "url": "git+https://github.com/polkadot-js/client.git"
   },
+  "keywords": [],
   "author": "Jaco Greeff <jacogr@gmail.com>",
   "maintainers": [
     "Jaco Greeff <jacogr@gmail.com>"
@@ -23,11 +24,9 @@
   "bugs": {
     "url": "https://github.com/polkadot-js/client/issues"
   },
-  "homepage": "https://github.com/polkadot-js/client/tree/master/packages/client-rpc-handlers#readme",
+  "homepage": "https://github.com/polkadot-js/client/tree/master/packages/client-types#readme",
   "dependencies": {
     "@babel/runtime": "^7.1.2",
-    "@polkadot/jsonrpc": "0.29.4",
-    "@polkadot/primitives": "0.29.4",
     "@polkadot/util": "^0.32.9"
   }
 }

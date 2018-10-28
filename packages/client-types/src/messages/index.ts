@@ -1,4 +1,4 @@
-// Copyright 2017-2018 @polkadot/client-p2p-messages authors & contributors
+// Copyright 2017-2018 @polkadot/client-types authors & contributors
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
 
@@ -34,3 +34,12 @@ export default function decodeMessage (encoded: Uint8Array): MessageInterface {
 
   return Decoder.decode(encoded.subarray(1));
 }
+
+export {
+  Bft,
+  BlockAnnounce,
+  BlockRequest,
+  BlockResponse,
+  Status,
+  Transactions
+};

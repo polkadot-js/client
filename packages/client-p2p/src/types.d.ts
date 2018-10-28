@@ -9,7 +9,7 @@ import EventEmitter from 'eventemitter3';
 import { Logger } from '@polkadot/util/types';
 import { Config } from '@polkadot/client/types';
 import { ChainInterface } from '@polkadot/client-chains/types';
-import { MessageInterface } from '@polkadot/client-p2p-messages/types';
+import { MessageInterface } from '@polkadot/client-types/messages/types';
 import { SyncState } from './sync/types';
 import Sync from './sync';
 
