@@ -7,15 +7,14 @@ import * as Koa from 'koa';
 import * as net from 'net';
 import { Config } from '@polkadot/client/types';
 import { ChainInterface } from '@polkadot/client-chains/types';
-import { Handlers } from '@polkadot/client-rpc-handlers/types';
+import { Handlers } from './handlers/types';
 import { JsonRpcError, JsonRpcRequest, JsonRpcResponse, RpcInterface, SubInterface, WsContext, WsContext$Socket } from './types';
 
 import coBody from 'co-body';
 import { ExtError, assert, isError, isFunction, isUndefined, logger } from '@polkadot/util';
-import handlers from '@polkadot/client-rpc-handlers/index';
 
-import validateConfig from './validate/config';
-import validateRequest from './validate/request';
+import handlers from './handlers';
+import { validateConfig, validateRequest } from './validate';
 import subscriptions from './subscriptions';
 import createKoa from './create/koa';
 import { createError, createResponse } from './create';

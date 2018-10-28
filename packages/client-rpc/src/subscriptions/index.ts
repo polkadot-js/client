@@ -3,7 +3,7 @@
 // of the ISC license. See the LICENSE file for details.
 
 import { ChainInterface } from '@polkadot/client-chains/types';
-import { Handler } from '@polkadot/client-rpc-handlers/types';
+import { Handler } from '../handlers/types';
 import { WsContext$Socket, SubInterface } from '../types';
 import { Sockets, Subscriptions } from './types';
 

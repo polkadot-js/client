@@ -2,7 +2,7 @@
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
 
-jest.mock('@polkadot/client-rpc-handlers/index', () => () => ({
+jest.mock('./handlers/index', () => () => ({
   test: jest.fn(() => Promise.resolve('test'))
 }));
 

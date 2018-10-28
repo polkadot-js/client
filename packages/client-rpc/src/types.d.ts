@@ -8,8 +8,8 @@ import * as net from 'net';
 import * as Koa from 'koa';
 import { Config } from '@polkadot/client/types';
 import { ChainInterface } from '@polkadot/client-chains/types';
-import { Handler, Handlers } from '@polkadot/client-rpc-handlers/types';
 import { Logger } from '@polkadot/util/types';
+import { Handler, Handlers } from './handlers/types';
 
 export type JsonRpcBase = {
   id: number,

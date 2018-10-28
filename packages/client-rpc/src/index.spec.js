@@ -6,7 +6,7 @@ import { ExtError } from '@polkadot/util';
 
 const mockExtError = ExtError;
 
-jest.mock('@polkadot/client-rpc-handlers/index', () => () => ({
+jest.mock('./handlers/index', () => () => ({
   errorThrow: () => {
     throw new Error('errorThrow');
   },
