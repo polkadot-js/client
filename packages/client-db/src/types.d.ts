@@ -48,80 +48,10 @@ export type BlockDb = {
   header: StorageMethod$U8a
 };
 
-export type StateDb$Consensus = {
-  authorityAt: StorageMethod$Account,
-  authorityCount: StorageMethod$Bn,
-  code: StorageMethod$U8a
-};
-
-export type StateDb$Council = {
-  activeCouncil: StorageMethod$ArrayU8a,
-  candidacyBond: StorageMethod$Bn,
-  carryCount: StorageMethod$Bn,
-  desiredSeats: StorageMethod$Bn,
-  inactiveGracePeriod: StorageMethod$Bn,
-  presentationDuration: StorageMethod$Bn,
-  presentSlashPerVoter: StorageMethod$Bn,
-  termDuration: StorageMethod$Bn,
-  votingBond: StorageMethod$Bn,
-  votingPeriod: StorageMethod$Bn
-};
-
-export type StateDb$CouncilVoting = {
-  cooloffPeriod: StorageMethod$Bn,
-  votingPeriod: StorageMethod$Bn
-};
-
-export type StateDb$Democracy = {
-  launchPeriod: StorageMethod$Bn,
-  minimumDeposit: StorageMethod$Bn,
-  votingPeriod: StorageMethod$Bn
-};
-
-export type StateDb$Governance = {
-  approvalsRatio: StorageMethod$Bn
-};
-
-export type StateDb$Parachains = {
-  didUpdate: StorageMethod$Bool
-};
-
-export type StateDb$Session = {
-  length: StorageMethod$Bn,
-  validators: StorageMethod$ArrayAccount
-};
-
-export type StateDb$Staking = {
-  bondingDuration: StorageMethod$Bn,
-  currentEra: StorageMethod$Bn,
-  freeBalanceOf: StorageMethod$Bn,
-  intentions: StorageMethod$ArrayAccount,
-  sessionsPerEra: StorageMethod$Bn,
-  transactionBaseFee: StorageMethod$Bn,
-  transactionByteFee: StorageMethod$Bn,
-  validatorCount: StorageMethod$Bn
-};
-
-export type StateDb$System = {
-  accountIndexOf: StorageMethod$Bn,
-  blockHashAt: StorageMethod$U8a
-};
-
-export type StateDb$Timestamp = {
-  didUpdate: StorageMethod$Bool
-};
-
 export type StateDb = {
   db: TrieDb,
-  consensus: StateDb$Consensus,
-  council: StateDb$Council,
-  councilVoting: StateDb$CouncilVoting,
-  democracy: StateDb$Democracy,
-  parachains: StateDb$Parachains,
-  session: StateDb$Session,
-  staking: StateDb$Staking,
-  system: StateDb$System,
-  timestamp: StateDb$Timestamp
+  blockHashAt: StorageMethod$U8a,
+  code: StorageMethod$U8a
 };
 
 export interface ChainDbs {

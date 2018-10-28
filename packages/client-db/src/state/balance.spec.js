@@ -9,7 +9,7 @@ import db from './index';
 
 const keyring = testingPairs();
 
-describe('balance', () => {
+describe.skip('balance', () => {
   let staking;
 
   describe('get', () => {

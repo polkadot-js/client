@@ -48,8 +48,6 @@ export default class Executor implements ExecutorInterface {
   private runtime: RuntimeInterface;
   private stateDb: StateDb;
 
-  // 0xefbfbd2065efbfbdefbfbd33efbfbdefbfbdc6b21aefbfbd592157efbfbdefbfbdefbfbdefbfbd1defbfbdefbfbdefbfbd77efbfbdefbfbd4befbfbd0fefbfbd22efbfbd41346b63efbfbd1eefbfbd2011efbfbd25efbfbdddb9d2a51021
-
   constructor (config: Config, blockDb: BlockDb, stateDb: StateDb, runtime: RuntimeInterface) {
     this.blockDb = blockDb;
     this.config = config;

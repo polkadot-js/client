@@ -133,7 +133,7 @@ export default class Sync extends EventEmitter implements SyncInterface {
     const increment = request.direction === 'Ascending' ? new BN(1) : new BN(-1);
 
     while (count < max && current.lte(best) && !current.isNeg()) {
-      const hash = this.chain.state.system.blockHashAt.get(current);
+      const hash = this.chain.state.blockHashAt.get(current);
 
       blocks.push(
         this.getBlockData(request.fields, hash)

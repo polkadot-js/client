@@ -9,7 +9,7 @@ import db from './index';
 
 const keyring = testingPairs();
 
-describe('accountIndexOf', () => {
+describe.skip('accountIndexOf', () => {
   let system;
 
   beforeEach(() => {
