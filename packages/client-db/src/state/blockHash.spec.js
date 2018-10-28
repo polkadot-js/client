@@ -28,7 +28,7 @@ describe('blockHash', () => {
 
           store[u8aToHex(key)] = value;
         }
-      }).system;
+      });
     });
 
     it('returns hash as set', () => {
@@ -47,7 +47,7 @@ describe('blockHash', () => {
         put: (key, value) => {
           store[u8aToHex(key)] = value;
         }
-      }).system;
+      });
     });
 
     it('sets hashes', () => {
