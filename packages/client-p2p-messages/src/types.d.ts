@@ -7,7 +7,7 @@ import { AccountId, BlockNumber, HeaderHash, ParaChainId, Signature } from '@pol
 import { Justification } from '@polkadot/primitives/bft';
 import { Header } from '@polkadot/primitives/header';
 import { JsonHeader } from '@polkadot/primitives/json/types';
-import { Role } from '@polkadot/primitives/role';
+import { Role } from '@polkadot/client-types/role/types';
 import { bufferToU8a } from '@polkadot/util';
 
 export interface MessageInterface {

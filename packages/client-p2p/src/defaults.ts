@@ -2,7 +2,7 @@
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
 
-import { Role } from '@polkadot/primitives/role';
+import { Role } from '@polkadot/client-types/role/types';
 
 const ADDRESS = '127.0.0.1';
 const CLIENT_ID = 'polkadot-js/0.0.0';

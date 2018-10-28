@@ -11,6 +11,7 @@
       "@polkadot/client-rpc/*": [ "packages/client-rpc/src/*" ],
       "@polkadot/client-runtime/*": [ "packages/client-runtime/src/*" ],
       "@polkadot/client-telemetry/*": [ "packages/client-telemetry/src/*" ],
+      "@polkadot/client-types/*": [ "packages/client-types/src/*" ],
       "@polkadot/client-wasm/*": [ "packages/client-wasm/src/*" ],
       "@polkadot/client/*": [ "packages/client/src/*" ]
     },
