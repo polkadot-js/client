@@ -5,7 +5,6 @@
 import BN from 'bn.js';
 import { BaseDb, TxDb } from '@polkadot/db/types';
 import { TrieDb } from '@polkadot/trie-db/types';
-import { Storage$Key$Value } from '@polkadot/storage/types';
 
 export type DbPathPrefix = 'database';
 
@@ -20,9 +19,9 @@ export type DbConfig = {
 };
 
 export type StorageMethod<P, R> = {
-  del: (...params: Array<Storage$Key$Value>) => void,
-  get: (...params: Array<Storage$Key$Value>) => R,
-  set: (value: P, ...params: Array<Storage$Key$Value>) => void,
+  del: (...params: Array<any>) => void,
+  get: (...params: Array<any>) => R,
+  set: (value: P, ...params: Array<any>) => void,
   onUpdate: (callback: (value: P) => void) => void
 }
 

@@ -2,49 +2,51 @@
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
 
-import { CreateItems, Section } from '@polkadot/params/types';
+import { StorageFunctionMetadata, StorageFunctionModifier, StorageFunctionType } from '@polkadot/types/Metadata';
+import Text from '@polkadot/types/Text';
+import Vector from '@polkadot/types/codec/Vector';
 
-import param from '@polkadot/params/param';
-import createSection from '@polkadot/params/section';
+import createFunction from '@polkadot/storage/utils/createFunction';
 
-type Blocks = {
-  block: Section<Blocks, any, any>
-};
+interface SubstrateMetadata {
+  documentation: string;
+  isMap?: boolean;
+  type: string | { key: string, value: string };
+}
 
-const name: keyof Blocks = 'block';
-
-export default (createSection(name)(
-  (createMethod: CreateItems<Blocks>) => ({
-    description: 'Block storage (internal)',
-    public: {
-      bestHash: createMethod('bestHash')({
-        description: 'Best hash',
-        key: 'bst:hsh',
-        params: [],
-        type: 'Hash'
-      }),
-      bestNumber: createMethod('bestNumber')({
-        description: 'Best block',
-        key: 'bst:num',
-        params: [],
-        type: 'BlockNumber'
-      }),
-      blockByHash: createMethod('blockByHash')({
-        description: 'Retrieve block by hash',
-        params: [
-          param('hash', 'Hash')
-        ],
-        key: 'blk:hsh:',
-        type: 'Bytes'
-      }),
-      headerByHash: createMethod('headerByHash')({
-        description: 'Retrieve header by hash',
-        params: [
-          param('hash', 'Hash')
-        ],
-        key: 'hdr:hsh:',
-        type: 'Bytes'
-      })
+// Small helper function to factorize code on this page.
+const createMethod = (method: string, key: string, { documentation, isMap, type }: SubstrateMetadata) =>
+  createFunction(
+    new Text('Block'),
+    new Text(key),
+    {
+      documentation: new Vector(Text, [documentation]),
+      modifier: new StorageFunctionModifier(0),
+      type: new StorageFunctionType(type, isMap ? 1 : 0),
+      toJSON: (): any =>
+        key
+    } as StorageFunctionMetadata,
+    {
+      isUnhashed: false,
+      method
     }
+  );
+
+export default {
+  bestHash: createMethod('bestHash', 'bst:hsh', {
+    documentation: 'Best hash',
+    type: 'Hash'
+  }),
+  bestNumber: createMethod('bestNumber', 'bst:num', {
+    documentation: 'Best block',
+    type: 'BlockNumber'
+  }),
+  blockByHash: createMethod('blockByHash', 'blk:hsh:', {
+    documentation: 'Retrieve block by hash',
+    type: { key: 'Hask', value: 'Bytes' }
+  }),
+  headerByHash: createMethod('headerByHash', 'hdr:hsh:', {
+    documentation: 'Retrieve header by hash',
+    type: { key: 'Hask', value: 'Bytes' }
   })
-) as Section<Blocks, any, any>);
+};

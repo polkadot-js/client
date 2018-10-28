@@ -12,9 +12,9 @@ import keys from './keys';
 export default function blockDb (db: BaseDb): BlockDb {
   return {
     db,
-    bestHash: createU8a(db, keys.public.bestHash),
-    bestNumber: createBn(db, keys.public.bestNumber, 64),
-    block: createU8a(db, keys.public.blockByHash),
-    header: createU8a(db, keys.public.headerByHash)
+    bestHash: createU8a(db, keys.bestHash),
+    bestNumber: createBn(db, keys.bestNumber, 64),
+    block: createU8a(db, keys.blockByHash),
+    header: createU8a(db, keys.headerByHash)
   };
 }

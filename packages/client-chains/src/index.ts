@@ -2,7 +2,6 @@
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
 
-import { Header } from '@polkadot/primitives/header';
 import { Config } from '@polkadot/client/types';
 import { BlockDb, StateDb } from '@polkadot/client-db/types';
 import { ExecutorInterface } from '@polkadot/client-wasm/types';
@@ -11,12 +10,8 @@ import { ChainInterface, ChainGenesis, ChainJson } from './types';
 import ChainDbs from '@polkadot/client-db/index';
 import createRuntime from '@polkadot/client-runtime/index';
 import Executor from '@polkadot/client-wasm/index';
-import createBlock from '@polkadot/primitives/create/block';
-import decodeBlock from '@polkadot/primitives/codec/block/decode';
-import encodeBlock from '@polkadot/primitives/codec/block/encode';
-import encodeHeader from '@polkadot/primitives/codec/header/encode';
-import storage from '@polkadot/storage';
-import key from '@polkadot/storage/key';
+import { Block, Header } from '@polkadot/types';
+import storage from '@polkadot/storage/static';
 import { assert, hexToU8a, logger, u8aToHex } from '@polkadot/util';
 import { blake2AsU8a } from '@polkadot/util-crypto';
 import trieRoot from '@polkadot/trie-hash/root';
@@ -73,11 +68,11 @@ export default class Chain implements ChainInterface {
   }
 
   private initGenesisFromBest (bestHeader: Header, rollback: boolean = true): ChainGenesis {
-    const hexState = u8aToHex(bestHeader.stateRoot, 48);
+    const hexState = u8aToHex(bestHeader.stateRoot.toU8a(), 48);
 
     l.debug(`Initialising from state ${hexState}`);
 
-    this.state.db.setRoot(bestHeader.stateRoot);
+    this.state.db.setRoot(bestHeader.stateRoot.toU8a());
 
     assert(u8aToHex(this.state.db.getRoot(), 48) === hexState, `Unable to move state to ${hexState}`);
 
@@ -97,15 +92,15 @@ export default class Chain implements ChainInterface {
 
   private rollbackBlock (bestHeader: Header, rollback: boolean = true): ChainGenesis {
     const prevHash = bestHeader.parentHash;
-    const prevNumber = bestHeader.number.subn(1);
+    const prevNumber = bestHeader.blockNumber.sub(1);
 
     if (rollback && prevNumber.gtn(1)) {
-      l.warn(`Unable to validate root, moving to block #${prevNumber.toString()}, ${u8aToHex(prevHash, 48)}`);
+      l.warn(`Unable to validate root, moving to block #${prevNumber.toString()}, ${u8aToHex(prevHash.toU8a(), 48)}`);
 
-      const prevBlock = this.getBlock(prevHash);
+      const prevBlock = this.getBlock(prevHash.toU8a());
 
-      this.blocks.bestHash.set(prevHash);
-      this.blocks.bestNumber.set(prevBlock.header.number);
+      this.blocks.bestHash.set(prevHash.toU8a());
+      this.blocks.bestNumber.set(prevBlock.header.blockNumber.toBn());
 
       return this.initGenesisFromBest(prevBlock.header, false);
     }
@@ -120,18 +115,16 @@ export default class Chain implements ChainInterface {
       throw new Error(`Unable to retrieve block ${u8aToHex(headerHash)}`);
     }
 
-    const decoded = decodeBlock(block);
-
     return {
       block,
-      header: decoded.header,
+      header: new Block(block).header,
       headerHash
     };
   }
 
   private getCode (): Uint8Array {
     const code = this.state.db.get(
-      key(storage.consensus.public.code)()
+      storage.substrate.code()
     );
 
     if (!code || !code.length) {
@@ -154,17 +147,17 @@ export default class Chain implements ChainInterface {
   }
 
   private createGenesisBlock (): ChainGenesis {
-    const block = createBlock({
+    const block = new Block({
       header: {
         stateRoot: this.state.db.getRoot(),
         extrinsicsRoot: trieRoot([])
       }
     });
-    const header = encodeHeader(block.header);
+    const header = block.header.toU8a();
     const headerHash = blake2AsU8a(header, 256);
 
     return {
-      block: encodeBlock(block),
+      block: block.toU8a(),
       code: this.getCode(),
       header: block.header,
       headerHash

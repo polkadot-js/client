@@ -31,7 +31,8 @@
   "dependencies": {
     "@babel/runtime": "^7.1.2",
     "@polkadot/client-types": "^0.16.6",
-    "@polkadot/primitives": "0.29.4",
+    "@polkadot/extrinsics": "^0.31.82",
+    "@polkadot/types": "^0.31.82",
     "@polkadot/util": "^0.32.9",
     "eventemitter3": "^3.1.0",
     "libp2p": "^0.23.1",

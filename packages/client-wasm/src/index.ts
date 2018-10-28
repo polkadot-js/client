@@ -5,20 +5,10 @@
 import { Config } from '@polkadot/client/types';
 import { BlockDb, StateDb } from '@polkadot/client-db/types';
 import { RuntimeInterface } from '@polkadot/client-runtime/types';
-import { UncheckedRaw } from '@polkadot/primitives/extrinsic';
 import { ExecutorInterface, Executor$BlockImportResult } from './types';
 
 import decodeRaw from '@polkadot/primitives/codec/block/decodeRaw';
-import createHeader from '@polkadot/primitives/create/header';
-import decodeHeader from '@polkadot/primitives/codec/header/decode';
-import encodeBlock from '@polkadot/primitives/codec/block/encode';
-import encodeHeader from '@polkadot/primitives/codec/header/encode';
-import encodeLength from '@polkadot/extrinsics/codec/encode/length';
-import extrinsics from '@polkadot/extrinsics';
-import encodeUnchecked from '@polkadot/extrinsics/codec/encode/unchecked';
-import testingKeypairs from '@polkadot/keyring/testingPairs';
-import storage from '@polkadot/storage';
-import key from '@polkadot/storage/key';
+import storage from '@polkadot/storage/static';
 import { assert, logger, u8aToHex } from '@polkadot/util';
 import { blake2AsU8a } from '@polkadot/util-crypto';
 
@@ -33,12 +23,9 @@ type CallResult = {
 
 type Call = (...data: Array<Uint8Array>) => CallResult;
 
-type CallU8a = (...data: Array<Uint8Array>) => Uint8Array;
+// type CallU8a = (...data: Array<Uint8Array>) => Uint8Array;
 
-const CODE_KEY = key(storage.consensus.public.code)();
-const keyring = testingKeypairs();
-const timestampSet = extrinsics.timestamp.public.set;
-const parachainsSet = extrinsics.parachains.public.setHeads;
+const CODE_KEY = storage.substrate.code();
 
 const l = logger('executor');
 
@@ -55,26 +42,6 @@ export default class Executor implements ExecutorInterface {
     this.runtime = runtime;
   }
 
-  applyExtrinsic (extrinsic: UncheckedRaw): boolean {
-    const start = Date.now();
-
-    l.debug(() => 'Apply extrinsic');
-
-    const result = this.call('apply_extrinsic')(
-      encodeLength(extrinsic)
-    );
-
-    l.debug(() => `Apply extrinsic completed (${Date.now() - start}ms)`);
-
-    return result.bool;
-  }
-
-  applyExtrinsics (extrinsics: Array<UncheckedRaw>): void {
-    extrinsics.forEach((extrinsic) =>
-      this.applyExtrinsic(extrinsic)
-    );
-  }
-
   executeBlock (block: Uint8Array, forceNew: boolean = false): boolean {
     const start = Date.now();
 
@@ -85,53 +52,6 @@ export default class Executor implements ExecutorInterface {
     l.debug(() => `Block execution completed (${Date.now() - start}ms)`);
 
     return result.bool;
-  }
-
-  finaliseBlock (header: Uint8Array): Uint8Array {
-    const start = Date.now();
-
-    l.debug(() => 'Finalising block');
-
-    const result = this.callAsU8a('finalise_block')(header);
-
-    l.debug(() => `Block finalised (${Date.now() - start}ms)`);
-
-    return result;
-  }
-
-  generateBlock (utxs: Array<UncheckedRaw>, timestamp: number = Math.ceil(Date.now() / 1000)): Uint8Array {
-    const start = Date.now();
-    const bestNumber = this.blockDb.bestNumber.get();
-    const nextNumber = bestNumber.addn(1);
-    let block = new Uint8Array();
-
-    l.debug(() => `Generating block #${nextNumber.toString()}`);
-
-    this.stateDb.db.transaction((): boolean => {
-      const extrinsics = this.withInherent(timestamp, utxs);
-      const header = createHeader({
-        number: nextNumber,
-        parentHash: this.blockDb.bestHash.get()
-      }, extrinsics);
-      const headerRaw = encodeHeader(header);
-
-      this.initialiseBlock(headerRaw);
-      this.applyExtrinsics(extrinsics);
-
-      const { stateRoot } = decodeHeader(
-        this.finaliseBlock(headerRaw)
-      );
-      block = encodeBlock({
-        extrinsics,
-        header: { ...header, stateRoot }
-      });
-
-      l.log(() => `Block #${nextNumber.toString()} generated (${Date.now() - start}ms)`);
-
-      return false;
-    });
-
-    return block;
   }
 
   importBlock (block: Uint8Array): Executor$BlockImportResult {
@@ -165,18 +85,6 @@ export default class Executor implements ExecutorInterface {
       headerHash,
       header
     };
-  }
-
-  initialiseBlock (header: Uint8Array): boolean {
-    const start = Date.now();
-
-    l.debug(() => 'Initialising block');
-
-    const result = this.call('initialise_block')(header);
-
-    l.debug(() => `Block initialised (${Date.now() - start}ms)`);
-
-    return result.bool;
   }
 
   private call (name: string, forceNew: boolean = false): Call {
@@ -219,24 +127,17 @@ export default class Executor implements ExecutorInterface {
     };
   }
 
-  private callAsU8a (name: string): CallU8a {
-    const fn = this.call(name);
-    const { heap } = this.runtime.environment;
+  // private callAsU8a (name: string): CallU8a {
+  //   const fn = this.call(name);
+  //   const { heap } = this.runtime.environment;
 
-    return (...data: Array<Uint8Array>): Uint8Array => {
-      const { hi, lo } = fn.apply(null, data);
-      const result = heap.get(lo, hi).slice();
+  //   return (...data: Array<Uint8Array>): Uint8Array => {
+  //     const { hi, lo } = fn.apply(null, data);
+  //     const result = heap.get(lo, hi).slice();
 
-      l.debug(() => ['received', u8aToHex(result)]);
+  //     l.debug(() => ['received', u8aToHex(result)]);
 
-      return result;
-    };
-  }
-
-  private withInherent (timestamp: number, _extrinsics: Array<UncheckedRaw>): Array<UncheckedRaw> {
-    return [
-      encodeUnchecked(keyring.nobody, 0, timestampSet,[timestamp]),
-      encodeUnchecked(keyring.nobody, 0, parachainsSet, [[]])
-    ].concat(_extrinsics);
-  }
+  //     return result;
+  //   };
+  // }
 }

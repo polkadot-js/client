@@ -5,14 +5,14 @@
 import { TrieDb } from '@polkadot/trie-db/types';
 import { StateDb } from '../types';
 
-import storage from '@polkadot/storage';
+import storage from '@polkadot/storage/static';
 
 import createU8a from '../db/u8a';
 
 export default function createState (db: TrieDb): StateDb {
   return {
     db,
-    blockHashAt: createU8a(db, storage.system.public.blockHashAt),
-    code: createU8a(db, storage.consensus.public.code)
+    blockHashAt: createU8a(db, storage.system.blockHashAt),
+    code: createU8a(db, storage.substrate.code)
   };
 }

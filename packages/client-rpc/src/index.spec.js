@@ -23,8 +23,8 @@ jest.mock('./handlers/index', () => () => ({
   echo: (...params) => Promise.resolve(`echo: ${params.join(', ')}`)
 }));
 
-import HttpProvider from '@polkadot/api-provider/http';
-import WsProvider from '@polkadot/api-provider/ws';
+import HttpProvider from '@polkadot/rpc-provider/http';
+import WsProvider from '@polkadot/rpc-provider/ws';
 
 import Rpc from './index';
 

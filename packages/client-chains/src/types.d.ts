@@ -6,7 +6,7 @@ import { Config } from '@polkadot/client/types';
 import { BlockDb, StateDb, ChainDbs } from '@polkadot/client-db/types';
 import { RuntimeInterface } from '@polkadot/client-runtime/types';
 import { ExecutorInterface } from '@polkadot/client-wasm/types';
-import { Header } from '@polkadot/primitives/header';
+import { Header } from '@polkadot/types';
 import { Logger } from '@polkadot/util/types';
 
 export type ChainName = 'dev';
