@@ -32,7 +32,7 @@ export default function decodeMessage (encoded: Uint8Array): MessageInterface {
 
   assert(!isUndefined(Decoder), `Unknown message received, id=${id}, ${u8aToHex(encoded)}`);
 
-  return Decoder.decode(encoded.subarray(1));
+  return new Decoder(encoded.subarray(1));
 }
 
 export {

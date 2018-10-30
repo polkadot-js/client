@@ -2,52 +2,35 @@
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
 
-import { MessageInterface, TransactionsMessage } from './types';
+import { MessageInterface } from './types';
 
-import { bnToU8a, u8aConcat, u8aToBn, u8aToHex } from '@polkadot/util';
+import { Struct, Vector } from '@polkadot/types/codec';
+import { Bytes } from '@polkadot/types';
 
 import BaseMessage from './BaseMessage';
 
-export default class Transactions extends BaseMessage implements MessageInterface, TransactionsMessage {
+class TransactionsMessage extends Struct {
+  constructor (value?: any) {
+    super({
+      transactions: Vector.with(Bytes)
+    }, value);
+  }
+}
+
+export default class Transactions extends BaseMessage implements MessageInterface {
   static type = 4;
 
-  transactions: Array<Uint8Array>;
-
-  constructor (transactions: Array<Uint8Array>) {
-    super(Transactions.type);
-
-    this.transactions = transactions;
+  constructor (message: TransactionsMessage) {
+    super(Transactions.type, message);
   }
 
-  encode (): Uint8Array {
-    return u8aConcat.apply(
-      null,
-      [
-        super.encode(),
-        bnToU8a(this.transactions.length, 32, true)
-      ].concat(this.transactions));
-  }
-
-  toJSON (): any {
-    return {
-      transactions: this.transactions.map((transaction) =>
-        u8aToHex(transaction, 128)
-      )
-    };
+  get transactions (): Vector<Bytes> {
+    return this.message.get('transactions') as Vector<Bytes>;
   }
 
   static decode (u8a: Uint8Array): Transactions {
-    const count = u8aToBn(u8a.subarray(0, 4), true).toNumber();
-    const transactions: Array<Uint8Array> = [];
-    let offset = 4;
-
-    for (let i = 0; i < count; i++) {
-      const length = u8aToBn(u8a.subarray(offset, offset + 4), true).toNumber();
-
-      transactions.push(u8a.subarray(offset, offset + 4 + length));
-      offset += 4 + length;
-    }
-
-    return new Transactions(transactions);
+    return new Transactions(
+      new TransactionsMessage(u8a)
+    );
   }
 }

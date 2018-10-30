@@ -30,10 +30,10 @@
   "dependencies": {
     "@babel/runtime": "^7.1.2",
     "@polkadot/db": "^0.32.10",
-    "@polkadot/storage": "^0.31.90",
+    "@polkadot/storage": "^0.31.91",
     "@polkadot/trie-db": "^0.32.10",
     "@polkadot/trie-hash": "^0.32.10",
-    "@polkadot/types": "^0.31.90",
+    "@polkadot/types": "^0.31.91",
     "@polkadot/util": "^0.32.10",
     "@polkadot/util-crypto": "^0.32.10",
     "@types/mkdirp": "^0.5.2",
