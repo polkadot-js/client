@@ -6,7 +6,7 @@ import { Config } from '@polkadot/client/types';
 import { ChainGenesis } from '@polkadot/client-chains/types';
 import { BlockDb, StateDb } from '@polkadot/client-db/types';
 import { RuntimeInterface } from '@polkadot/client-runtime/types';
-import { UncheckedRaw } from '@polkadot/primitives/extrinsic';
+import { Block } from '@polkadot/types';
 
 export type WasmInstanceExports = {
   [index: string]: any
@@ -30,10 +30,8 @@ export type ExecutorInstance = {
 };
 
 export type Executor$BlockImportResult = {
-  body: Uint8Array,
-  extrinsics: Array<UncheckedRaw>,
-  headerHash: Uint8Array,
-  header: Uint8Array
+  u8a: Uint8Array,
+  block: Block
 };
 
 export type ExecutorInterface = {

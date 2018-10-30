@@ -31,8 +31,8 @@
   "dependencies": {
     "@babel/runtime": "^7.1.2",
     "@polkadot/client-runtime": "^0.16.6",
-    "@polkadot/types": "^0.31.82",
-    "@polkadot/util": "^0.32.9",
+    "@polkadot/types": "^0.31.90",
+    "@polkadot/util": "^0.32.10",
     "@types/webassembly-js-api": "^0.0.1"
   }
 }

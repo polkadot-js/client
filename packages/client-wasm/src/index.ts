@@ -7,7 +7,7 @@ import { BlockDb, StateDb } from '@polkadot/client-db/types';
 import { RuntimeInterface } from '@polkadot/client-runtime/types';
 import { ExecutorInterface, Executor$BlockImportResult } from './types';
 
-import decodeRaw from '@polkadot/primitives/codec/block/decodeRaw';
+import { Block } from '@polkadot/types';
 import storage from '@polkadot/storage/static';
 import { assert, logger, u8aToHex } from '@polkadot/util';
 import { blake2AsU8a } from '@polkadot/util-crypto';
@@ -54,36 +54,32 @@ export default class Executor implements ExecutorInterface {
     return result.bool;
   }
 
-  importBlock (block: Uint8Array): Executor$BlockImportResult {
+  importBlock (u8a: Uint8Array): Executor$BlockImportResult {
     const start = Date.now();
+    const block = new Block(u8a);
+    const headerHash = block.header.hash.toU8a();
 
-    // tslint:disable-next-line:variable-name
-    const { body, extrinsics, header, number } = decodeRaw(block);
-    const headerHash = blake2AsU8a(header, 256);
-
-    l.debug(() => `Importing block #${number.toString()}, ${u8aToHex(headerHash, 48)}`);
+    l.debug(() => `Importing block #${block.header.blockNumber}, ${u8aToHex(headerHash, 48)}`);
 
     try {
       this.stateDb.db.transaction(() =>
-        this.executeBlock(block)
+        this.executeBlock(u8a)
       );
     } catch (error) {
-      l.error(`Failed importing #${number.toString()}, ${u8aToHex(headerHash, 48)}`);
+      l.error(`Failed importing #${block.header.blockNumber.toString()}, ${u8aToHex(headerHash, 48)}`);
 
       throw error;
     }
 
     this.blockDb.bestHash.set(headerHash);
-    this.blockDb.bestNumber.set(number);
-    this.blockDb.block.set(block, headerHash);
+    this.blockDb.bestNumber.set(block.header.blockNumber.toBn());
+    this.blockDb.block.set(u8a, headerHash);
 
-    l.debug(() => `Imported block #${number.toString()} (${Date.now() - start}ms)`);
+    l.debug(() => `Imported block #${block.header.blockNumber} (${Date.now() - start}ms)`);
 
     return {
-      body,
-      extrinsics,
-      headerHash,
-      header
+      block,
+      u8a
     };
   }
 
