@@ -3,11 +3,11 @@
 // of the ISC license. See the LICENSE file for details.
 
 import BN from 'bn.js';
-import { HeaderHash } from '@polkadot/primitives/base';
+import { Hash } from '@polkadot/types';
 import { BlockAttr, BlockAttrMap, MessageInterface, BlockRequestMessage, BlockRequestMessageDirection } from './types';
 
 import defaults from '@polkadot/client-p2p/defaults';
-import { bnToHex, bnToU8a, isBn, isNull, u8aConcat, u8aToBn, u8aToHex } from '@polkadot/util';
+import { bnToHex, bnToU8a, isBn, isNull, u8aConcat, u8aToBn } from '@polkadot/util';
 
 import BaseMessage from './BaseMessage';
 
@@ -45,10 +45,10 @@ export default class BlockRequest extends BaseMessage implements MessageInterfac
 
   direction: BlockRequestMessageDirection;
   fields: Array<BlockAttr>;
-  from: HeaderHash | BN;
+  from: Hash | BN;
   id: number;
   max: number;
-  to: HeaderHash | null;
+  to: Hash | null;
 
   // FIXME This is a horror, when adding 'justification' flag in here, mplex breaks. Something in the message
   // does not seem to align with the sensibilities of the mplex chunker and it tries to allocate an ungodly
@@ -70,12 +70,12 @@ export default class BlockRequest extends BaseMessage implements MessageInterfac
   encode (): Uint8Array {
     const from = isBn(this.from)
       ? bnToU8a(this.from, 64, true)
-      : this.from;
+      : this.from.toU8a();
     const to = isNull(this.to)
       ? new Uint8Array([0])
       : u8aConcat(
         new Uint8Array([1]),
-        this.to
+        this.to.toU8a()
       );
 
     return u8aConcat(
@@ -97,7 +97,7 @@ export default class BlockRequest extends BaseMessage implements MessageInterfac
       direction: this.direction,
       from: isBn(this.from)
         ? bnToHex(this.from)
-        : u8aToHex(this.from),
+        : this.from.toHex(),
       max: this.max
     };
   }
@@ -121,8 +121,12 @@ export default class BlockRequest extends BaseMessage implements MessageInterfac
     return new BlockRequest({
       id: u8aToBn(u8a.subarray(0, FIELD_OFF), true).toNumber(),
       fields: toAttrs(u8a[FIELD_OFF]),
-      from,
-      to,
+      from: isBn(from)
+        ? from
+        : new Hash(from),
+      to: to
+        ? new Hash(to)
+        : null,
       direction,
       max
     });

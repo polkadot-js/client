@@ -2,12 +2,10 @@
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
 
-import { Header } from '@polkadot/primitives/header';
 import { MessageInterface, BlockAnnounceMessage } from './types';
 
-import headerDecode from '@polkadot/primitives/codec/header/decode';
-import headerEncode from '@polkadot/primitives/codec/header/encode';
-import { bnToHex, u8aConcat, u8aToHex } from '@polkadot/util';
+import { Header } from '@polkadot/types';
+import { u8aConcat } from '@polkadot/util';
 
 import BaseMessage from './BaseMessage';
 
@@ -25,25 +23,17 @@ export default class BlockAnnounce extends BaseMessage implements MessageInterfa
   encode (): Uint8Array {
     return u8aConcat(
       super.encode(),
-      headerEncode(this.header)
+      this.header.toU8a()
     );
   }
 
   toJSON (): any {
-    const { digest, extrinsicsRoot, parentHash, stateRoot } = this.header;
-
-    return {
-      number: bnToHex(this.header.number),
-      extrinsicsRoot: u8aToHex(extrinsicsRoot),
-      parentHash: u8aToHex(parentHash),
-      stateRoot: u8aToHex(stateRoot),
-      digest
-    };
+    return this.header.toJSON();
   }
 
   static decode (u8a: Uint8Array): BlockAnnounce {
     return new BlockAnnounce({
-      header: headerDecode(u8a)
+      header: new Header(u8a)
     });
   }
 }

@@ -6,8 +6,7 @@ import { P2pInterface, PeerInterface } from '../types';
 import { Handler } from './types';
 
 import { BlockAnnounce } from '@polkadot/client-types/messages';
-import encodeHeader from '@polkadot/primitives/codec/header/encode';
-import { blake2AsU8a } from '@polkadot/util-crypto';
+import { Header } from '@polkadot/types';
 
 function handleBlockAnnounce (self: P2pInterface, peer: PeerInterface, message: BlockAnnounce): void {
   self.l.debug(() => [peer.shortId, 'BlockAnnounce', JSON.stringify(message)]);
@@ -15,10 +14,7 @@ function handleBlockAnnounce (self: P2pInterface, peer: PeerInterface, message: 
   const header = message.header;
 
   if (peer.bestNumber.lt(header.number)) {
-    peer.setBest(header.number, blake2AsU8a(
-      encodeHeader(header),
-      256
-    ));
+    peer.setBest(header.number, (new Header(header)).hash.toU8a());
   }
 
   self.sync.requestBlocks(peer);

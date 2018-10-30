@@ -3,10 +3,8 @@
 // of the ISC license. See the LICENSE file for details.
 
 import BN from 'bn.js';
-import { AccountId, BlockNumber, HeaderHash, ParaChainId, Signature } from '@polkadot/primitives/base';
-import { Justification } from '@polkadot/primitives/bft';
-import { Header } from '@polkadot/primitives/header';
-import { JsonHeader } from '@polkadot/primitives/json/types';
+import { AccountId, BlockNumber, Header, Hash, ParachainId, Signature } from '@polkadot/types';
+import { Justification } from '@polkadot/types/Bft';
 import { Role } from '@polkadot/client-types/role/types';
 import { bufferToU8a } from '@polkadot/util';
 
@@ -45,10 +43,10 @@ export type BlockRequestMessageDirection = 'Ascending' | 'Descending';
 export type BlockRequestMessage = {
   direction?: BlockRequestMessageDirection,
   fields?: Array<BlockAttr>,
-  from: HeaderHash | BN,
+  from: Hash | BN,
   id: number,
   max?: number | null,
-  to?: HeaderHash | null
+  to?: Hash | null
 }
 
 export type BlockResponseMessageBlock = {
@@ -64,9 +62,9 @@ export type BlockResponseMessage = {
 }
 
 export interface StatusMessage {
-  bestHash: HeaderHash,
+  bestHash: Hash,
   bestNumber: BlockNumber,
-  genesisHash: HeaderHash,
+  genesisHash: Hash,
   roles: Array<Role>,
   version: number
 }

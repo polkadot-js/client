@@ -11,9 +11,7 @@ import { SyncInterface, SyncState$Request, SyncState$BlockRequests, SyncState$Bl
 import BN from 'bn.js';
 import EventEmitter from 'eventemitter3';
 import { BlockRequest, BlockResponse } from '@polkadot/client-types/messages';
-// import decodeBlock from '@polkadot/primitives/codec/block/decodeRaw';
 import { isU8a, logger } from '@polkadot/util';
-// import u8aToHex from '@polkadot/util/u8a/toHex';
 
 import defaults from '../defaults';
 

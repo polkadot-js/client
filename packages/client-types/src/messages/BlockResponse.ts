@@ -4,8 +4,7 @@
 
 import { MessageInterface, BlockResponseMessage, BlockResponseMessageBlock } from './types';
 
-import decodeHeaderRaw from '@polkadot/primitives/codec/header/decodeRaw';
-import decodeHeader from '@polkadot/primitives/codec/header/decode';
+import { Header } from '@polkadot/types';
 import { assert, bnToU8a, u8aConcat, u8aToBn } from '@polkadot/util';
 
 import BaseMessage from './BaseMessage';
@@ -50,10 +49,9 @@ export default class BlockResponse extends BaseMessage implements MessageInterfa
 
     for (let i = 0; i < numBlocks; i++) {
       const hash = u8a.slice(offset, offset + I_HDRP_OFF);
-      const headerRaw = decodeHeaderRaw(u8a.subarray(offset + I_HDRD_OFF)).header.slice();
-      const header = decodeHeader(headerRaw);
+      const header = new Header(u8a.subarray(offset + I_HDRD_OFF));
 
-      offset += I_HDRD_OFF + headerRaw.length + 1; // skip 00/01
+      offset += I_HDRD_OFF + header.encodedLength + 1; // skip 00/01
 
       const numExt = u8aToBn(u8a.subarray(offset, offset + 4), true).toNumber();
       const extrinsics: Array<Uint8Array> = [];
@@ -77,7 +75,7 @@ export default class BlockResponse extends BaseMessage implements MessageInterfa
       blocks.push({
         hash,
         header,
-        encoded: u8aConcat.apply(null, [headerRaw, bnToU8a(numExt, 32, true)].concat(extrinsics)),
+        encoded: u8aConcat.apply(null, [header.toU8a(), bnToU8a(numExt, 32, true)].concat(extrinsics)),
         justification
       });
     }

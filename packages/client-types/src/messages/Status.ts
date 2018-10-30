@@ -2,11 +2,11 @@
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
 
-import { BlockNumber, HeaderHash } from '@polkadot/primitives/base';
 import { Role } from '../role/types';
 import { MessageInterface, StatusMessage } from './types';
 
-import { bnToHex, bnToU8a, u8aConcat, u8aToBn, u8aToHex } from '@polkadot/util';
+import { BlockNumber, Hash } from '@polkadot/types';
+import { bnToU8a, u8aConcat, u8aToBn } from '@polkadot/util';
 
 import { roleFromId, roleToId } from '../role';
 import BaseMessage from './BaseMessage';
@@ -20,10 +20,10 @@ const CHAIN_OFF = GEN_OFF + 32;
 export default class Status extends BaseMessage implements MessageInterface, StatusMessage {
   static type = 0;
 
-  bestHash: HeaderHash;
+  bestHash: Hash;
   bestNumber: BlockNumber;
   chainStatus: Uint8Array;
-  genesisHash: HeaderHash;
+  genesisHash: Hash;
   roles: Array<Role>;
   version: number;
 
@@ -43,9 +43,9 @@ export default class Status extends BaseMessage implements MessageInterface, Sta
       super.encode(),
       bnToU8a(this.version, 32, true),
       bnToU8a(roleToId(this.roles), 8, true),
-      bnToU8a(this.bestNumber, 64, true),
-      this.bestHash,
-      this.genesisHash,
+      bnToU8a(this.bestNumber.toBn(), 64, true),
+      this.bestHash.toU8a(),
+      this.genesisHash.toU8a(),
       bnToU8a(this.chainStatus.length, 32, true),
       this.chainStatus
     );
@@ -53,9 +53,9 @@ export default class Status extends BaseMessage implements MessageInterface, Sta
 
   toJSON (): any {
     return {
-      bestNumber: bnToHex(this.bestNumber),
-      bestHash: u8aToHex(this.bestHash),
-      genesisHash: u8aToHex(this.genesisHash),
+      bestNumber: this.bestNumber.toHex(),
+      bestHash: this.bestHash.toHex(),
+      genesisHash: this.genesisHash.toHex(),
       roles: this.roles
     };
   }
@@ -64,9 +64,9 @@ export default class Status extends BaseMessage implements MessageInterface, Sta
     return new Status({
       version: u8aToBn(u8a.subarray(0, ROLES_OFF), true).toNumber(),
       roles: roleFromId(u8a[ROLES_OFF]),
-      bestNumber: u8aToBn(u8a.subarray(BEST_OFF, HASH_OFF), true),
-      bestHash: u8a.slice(HASH_OFF, GEN_OFF),
-      genesisHash: u8a.slice(GEN_OFF, CHAIN_OFF)
+      bestNumber: new BlockNumber(u8a.subarray(BEST_OFF, HASH_OFF)),
+      bestHash: new Hash(u8a.slice(HASH_OFF, GEN_OFF)),
+      genesisHash: new Hash(u8a.slice(GEN_OFF, CHAIN_OFF))
       // ignoring chainStatus for now
     });
   }
