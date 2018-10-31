@@ -9,7 +9,7 @@ import { Null } from '@polkadot/types';
 
 import BaseMessage from './BaseMessage';
 
-class BftMessage extends Struct {
+export class BftMessage extends Struct {
   constructor (value?: any) {
     super({
       bft: Null

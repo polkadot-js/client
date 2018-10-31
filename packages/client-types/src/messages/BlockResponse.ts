@@ -9,16 +9,24 @@ import { Bytes, Header, Hash, Signature, u64 as U64 } from '@polkadot/types';
 
 import BaseMessage from './BaseMessage';
 
-class BlockResponseMessage$Block$Justification extends Struct {
+export class BlockResponseMessage$Block$Justification extends Struct {
   constructor (value?: any) {
     super({
       hash: Hash,
       signature: Signature
     }, value);
   }
+
+  get hash (): Hash {
+    return this.get('hash') as Hash;
+  }
+
+  get signature (): Signature {
+    return this.get('signature') as Signature;
+  }
 }
 
-class BlockResponseMessage$Block extends Struct {
+export class BlockResponseMessage$Block extends Struct {
   constructor (value?: any) {
     super({
       hash: Hash,
@@ -27,14 +35,38 @@ class BlockResponseMessage$Block extends Struct {
       justification: Vector.with(BlockResponseMessage$Block$Justification)
     }, value);
   }
+
+  get extrinsics (): Vector<Bytes> {
+    return this.get('extrinsics') as Vector<Bytes>;
+  }
+
+  get hash (): Hash {
+    return this.get('hash') as Hash;
+  }
+
+  get header (): Header {
+    return this.get('header') as Header;
+  }
+
+  get justification (): Vector<BlockResponseMessage$Block$Justification> {
+    return this.get('justification') as Vector<BlockResponseMessage$Block$Justification>;
+  }
 }
 
-class BlockResponseMessage extends Struct {
+export class BlockResponseMessage extends Struct {
   constructor (value?: any) {
     super({
       id: U64,
       blocks: Vector.with(BlockResponseMessage$Block)
     }, value);
+  }
+
+  get blocks (): Vector<BlockResponseMessage$Block> {
+    return this.get('blocks') as Vector<BlockResponseMessage$Block>;
+  }
+
+  get id (): U64 {
+    return this.get('id') as U64;
   }
 }
 
@@ -43,5 +75,13 @@ export default class BlockResponse extends BaseMessage implements MessageInterfa
 
   constructor (value?: any) {
     super(BlockResponse.type, new BlockResponseMessage(value));
+  }
+
+  get blocks (): Vector<BlockResponseMessage$Block> {
+    return this.message.get('blocks') as Vector<BlockResponseMessage$Block>;
+  }
+
+  get id (): U64 {
+    return this.message.get('id') as U64;
   }
 }

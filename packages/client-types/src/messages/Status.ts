@@ -9,7 +9,7 @@ import { BlockNumber, Hash, u32 as U32 } from '@polkadot/types';
 
 import BaseMessage from './BaseMessage';
 
-class StatusMessage$Roles extends Set {
+export class StatusMessage$Roles extends Set {
   constructor (value?: any) {
     super({
       none:      0b00000000,
@@ -20,7 +20,7 @@ class StatusMessage$Roles extends Set {
   }
 }
 
-class StatusMessage extends Struct {
+export class StatusMessage extends Struct {
   constructor (value: any) {
     super({
       version: U32,

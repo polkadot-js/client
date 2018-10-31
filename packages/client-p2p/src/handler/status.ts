@@ -13,7 +13,7 @@ function handleStatus (self: P2pInterface, peer: PeerInterface, message: Status)
 
   const { bestHash, bestNumber } = message;
 
-  peer.setBest(bestNumber, bestHash);
+  peer.setBest(bestNumber.toBn(), bestHash.toU8a());
   // self.sync.requestBlocks(peer);
 }
 

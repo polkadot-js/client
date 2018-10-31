@@ -16,16 +16,6 @@ export interface MessageInterface {
 
 export interface MessageDecoder <C> {
   readonly type: number;
-}
 
-export type BlockResponseMessageBlock = {
-  hash: Uint8Array,
-  header: Header,
-  encoded: Uint8Array,
-  justification: Uint8Array | null // Justification
-}
-
-export type BlockResponseMessage = {
-  id: number,
-  blocks: Array<BlockResponseMessageBlock>,
+  new (value: any): MessageInterface;
 }

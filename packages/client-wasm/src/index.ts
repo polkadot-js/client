@@ -10,7 +10,6 @@ import { ExecutorInterface, Executor$BlockImportResult } from './types';
 import { Block } from '@polkadot/types';
 import storage from '@polkadot/storage/static';
 import { assert, logger, u8aToHex } from '@polkadot/util';
-import { blake2AsU8a } from '@polkadot/util-crypto';
 
 import createWasm from './create';
 import proxy from './wasm/proxy_substrate_wasm';

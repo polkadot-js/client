@@ -8,7 +8,6 @@ import { P2pConfig } from '@polkadot/client-p2p/types';
 import { RpcConfig } from '@polkadot/client-rpc/types';
 import { TelemetryConfig } from '@polkadot/client-telemetry/types';
 import { WasmConfig } from '@polkadot/client-wasm/types';
-import { Role } from '@polkadot/client-types/role/types';
 
 export type DevConfig = {
   genBlocks: boolean
@@ -20,7 +19,7 @@ export type Config = {
   dev: DevConfig,
   p2p: P2pConfig,
   rpc: RpcConfig,
-  roles: Array<Role>,
+  roles: Array<string>,
   telemetry: TelemetryConfig,
   wasm: WasmConfig
 };

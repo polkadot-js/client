@@ -9,7 +9,7 @@ import { Header } from '@polkadot/types';
 
 import BaseMessage from './BaseMessage';
 
-class BlockAnnounceMessage extends Struct {
+export class BlockAnnounceMessage extends Struct {
   constructor (value?: any) {
     super({
       header: Header

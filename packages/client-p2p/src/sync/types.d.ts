@@ -3,7 +3,7 @@
 // of the ISC license. See the LICENSE file for details.
 
 import BN from 'bn.js';
-import { BlockResponseMessageBlock } from '@polkadot/client-types/messages/types';
+import { BlockResponseMessage$Block } from '@polkadot/client-types/messages/BlockResponse';
 import { PeerInterface, SyncStatus } from '../types';
 
 import { BlockRequest } from '@polkadot/client-types/messages';
@@ -20,7 +20,7 @@ export type SyncState$BlockRequests = {
 
 export type SyncState$BlockQueue = {
   [index: string]: {
-    block: BlockResponseMessageBlock,
+    block: BlockResponseMessage$Block,
     peer: PeerInterface
   }
 };

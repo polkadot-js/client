@@ -9,7 +9,7 @@ import { Bytes } from '@polkadot/types';
 
 import BaseMessage from './BaseMessage';
 
-class TransactionsMessage extends Struct {
+export class TransactionsMessage extends Struct {
   constructor (value?: any) {
     super({
       transactions: Vector.with(Bytes)
