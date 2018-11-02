@@ -3,9 +3,6 @@
   "version": "0.16.6",
   "description": "WASM compiler & call interface",
   "main": "index.js",
-  "engines": {
-    "node": ">=8.0"
-  },
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org"
@@ -31,8 +28,8 @@
   "dependencies": {
     "@babel/runtime": "^7.1.2",
     "@polkadot/client-runtime": "^0.16.6",
-    "@polkadot/types": "^0.31.91",
-    "@polkadot/util": "^0.32.10",
+    "@polkadot/types": "^0.31.97",
+    "@polkadot/util": "^0.32.12",
     "@types/webassembly-js-api": "^0.0.1"
   }
 }

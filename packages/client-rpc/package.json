@@ -13,9 +13,6 @@
   ],
   "contributors": [],
   "license": "ISC",
-  "engines": {
-    "node": ">=6.4"
-  },
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org"
@@ -30,11 +27,11 @@
   "homepage": "https://github.com/polkadot-js/client/tree/master/packages/client-rpc#readme",
   "devDependencies": {
     "@polkadot/client": "^0.16.6",
-    "@polkadot/rpc-provider": "^0.31.91"
+    "@polkadot/rpc-provider": "^0.31.97"
   },
   "dependencies": {
     "@babel/runtime": "^7.1.2",
-    "@polkadot/util": "^0.32.10",
+    "@polkadot/util": "^0.32.12",
     "@types/co-body": "^0.0.3",
     "@types/koa": "^2.0.46",
     "@types/koa-route": "^3.2.4",

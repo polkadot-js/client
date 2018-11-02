@@ -3,9 +3,6 @@
   "version": "0.16.6",
   "description": "Types specific to the client implementation",
   "main": "index.js",
-  "engines": {
-    "node": ">=8.0"
-  },
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org"
@@ -27,7 +24,7 @@
   "homepage": "https://github.com/polkadot-js/client/tree/master/packages/client-types#readme",
   "dependencies": {
     "@babel/runtime": "^7.1.2",
-    "@polkadot/types": "^0.31.91",
-    "@polkadot/util": "^0.32.10"
+    "@polkadot/types": "^0.31.97",
+    "@polkadot/util": "^0.32.12"
   }
 }

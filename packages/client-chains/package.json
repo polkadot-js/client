@@ -12,9 +12,6 @@
   ],
   "contributors": [],
   "license": "ISC",
-  "engines": {
-    "node": ">=6.4"
-  },
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org"
@@ -32,10 +29,10 @@
     "@polkadot/client-db": "^0.16.6",
     "@polkadot/client-runtime": "^0.16.6",
     "@polkadot/client-wasm": "^0.16.6",
-    "@polkadot/storage": "^0.31.91",
-    "@polkadot/types": "^0.31.91"
+    "@polkadot/storage": "^0.31.97",
+    "@polkadot/types": "^0.31.97"
   },
   "devDependencies": {
-    "@polkadot/extrinsics": "^0.31.91"
+    "@polkadot/extrinsics": "^0.31.97"
   }
 }

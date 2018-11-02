@@ -3,9 +3,6 @@
   "version": "0.16.6",
   "description": "Telementry client",
   "main": "index.js",
-  "engines": {
-    "node": ">=8.0"
-  },
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org"
@@ -30,7 +27,7 @@
   "homepage": "https://github.com/polkadot-js/client/tree/master/packages/client-telemetry#readme",
   "dependencies": {
     "@babel/runtime": "^7.1.2",
-    "@polkadot/util": "^0.32.10",
+    "@polkadot/util": "^0.32.12",
     "websocket": "^1.0.28"
   }
 }
