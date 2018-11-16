@@ -92,7 +92,7 @@ export default class Chain implements ChainInterface {
 
   private rollbackBlock (bestHeader: Header, rollback: boolean = true): ChainGenesis {
     const prevHash = bestHeader.parentHash;
-    const prevNumber = bestHeader.blockNumber.sub(1);
+    const prevNumber = bestHeader.blockNumber.subn(1);
 
     if (rollback && prevNumber.gtn(1)) {
       l.warn(`Unable to validate root, moving to block #${prevNumber.toString()}, ${u8aToHex(prevHash.toU8a(), 48)}`);
@@ -100,7 +100,7 @@ export default class Chain implements ChainInterface {
       const prevBlock = this.getBlock(prevHash.toU8a());
 
       this.blocks.bestHash.set(prevHash.toU8a());
-      this.blocks.bestNumber.set(prevBlock.header.blockNumber.toBn());
+      this.blocks.bestNumber.set(prevBlock.header.blockNumber);
 
       return this.initGenesisFromBest(prevBlock.header, false);
     }

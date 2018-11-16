@@ -24,7 +24,7 @@
   "homepage": "https://github.com/polkadot-js/client/tree/master/packages/client-types#readme",
   "dependencies": {
     "@babel/runtime": "^7.1.2",
-    "@polkadot/types": "^0.31.110",
-    "@polkadot/util": "^0.32.15"
+    "@polkadot/types": "^0.31.119",
+    "@polkadot/util": "^0.32.21"
   }
 }

@@ -121,7 +121,7 @@ export default class Sync extends EventEmitter implements SyncInterface {
   }
 
   provideBlocks (peer: PeerInterface, request: BlockRequest) {
-    const current = (request.from.value.raw as BlockNumber).toBn();
+    const current = request.from.value.raw as BlockNumber;
     const best = this.chain.blocks.bestNumber.get();
     const blocks: Array<any> = [];
 
@@ -169,7 +169,7 @@ export default class Sync extends EventEmitter implements SyncInterface {
       const block = blocks.get(i);
       const dbBlock = this.chain.blocks.block.get(block.hash);
       const queueNumber = block.header.blockNumber.toString();
-      const isImportable = !dbBlock.length || bestNumber.lt(block.header.blockNumber.toBn());
+      const isImportable = !dbBlock.length || bestNumber.lt(block.header.blockNumber);
       const canQueue = isImportable && !this.blockQueue[queueNumber];
 
       if (canQueue) {
@@ -179,8 +179,8 @@ export default class Sync extends EventEmitter implements SyncInterface {
         };
         firstNumber = firstNumber || block.header.blockNumber;
 
-        if (this.bestQueued.lt(block.header.blockNumber.toBn())) {
-          this.bestQueued = block.header.blockNumber.toBn();
+        if (this.bestQueued.lt(block.header.blockNumber)) {
+          this.bestQueued = block.header.blockNumber;
         }
 
         count++;
