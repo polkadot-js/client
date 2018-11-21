@@ -19,7 +19,7 @@
     "Jaco Greeff <jacogr@gmail.com>"
   ],
   "contributors": [],
-  "license": "ISC",
+  "license": "Apache-2.0",
   "bugs": {
     "url": "https://github.com/polkadot-js/client/issues"
   },
@@ -27,10 +27,10 @@
   "dependencies": {
     "@babel/runtime": "^7.1.2",
     "@polkadot/db": "^0.32.21",
-    "@polkadot/storage": "^0.31.119",
+    "@polkadot/storage": "^0.31.123",
     "@polkadot/trie-db": "^0.32.21",
     "@polkadot/trie-hash": "^0.32.21",
-    "@polkadot/types": "^0.31.119",
+    "@polkadot/types": "^0.31.123",
     "@polkadot/util": "^0.32.21",
     "@polkadot/util-crypto": "^0.32.21",
     "@types/mkdirp": "^0.5.2",
