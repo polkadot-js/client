@@ -14,7 +14,7 @@ function handleBlockAnnounce (self: P2pInterface, peer: PeerInterface, message: 
   const header = message.header;
 
   if (peer.bestNumber.lt(header.blockNumber)) {
-    peer.setBest(header.blockNumber, (new Header(header)).hash.toU8a());
+    peer.setBest(header.blockNumber, (new Header(header)).hash);
   }
 
   self.sync.requestBlocks(peer);

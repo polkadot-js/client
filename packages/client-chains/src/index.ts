@@ -68,11 +68,11 @@ export default class Chain implements ChainInterface {
   }
 
   private initGenesisFromBest (bestHeader: Header, rollback: boolean = true): ChainGenesis {
-    const hexState = u8aToHex(bestHeader.stateRoot.toU8a(), 48);
+    const hexState = u8aToHex(bestHeader.stateRoot, 48);
 
     l.debug(`Initialising from state ${hexState}`);
 
-    this.state.db.setRoot(bestHeader.stateRoot.toU8a());
+    this.state.db.setRoot(bestHeader.stateRoot);
 
     assert(u8aToHex(this.state.db.getRoot(), 48) === hexState, `Unable to move state to ${hexState}`);
 
@@ -95,11 +95,11 @@ export default class Chain implements ChainInterface {
     const prevNumber = bestHeader.blockNumber.subn(1);
 
     if (rollback && prevNumber.gtn(1)) {
-      l.warn(`Unable to validate root, moving to block #${prevNumber.toString()}, ${u8aToHex(prevHash.toU8a(), 48)}`);
+      l.warn(`Unable to validate root, moving to block #${prevNumber.toString()}, ${u8aToHex(prevHash, 48)}`);
 
-      const prevBlock = this.getBlock(prevHash.toU8a());
+      const prevBlock = this.getBlock(prevHash);
 
-      this.blocks.bestHash.set(prevHash.toU8a());
+      this.blocks.bestHash.set(prevHash);
       this.blocks.bestNumber.set(prevBlock.header.blockNumber);
 
       return this.initGenesisFromBest(prevBlock.header, false);

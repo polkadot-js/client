@@ -56,7 +56,7 @@ export default class Executor implements ExecutorInterface {
   importBlock (u8a: Uint8Array): Executor$BlockImportResult {
     const start = Date.now();
     const block = new Block(u8a);
-    const headerHash = block.header.hash.toU8a();
+    const headerHash = block.header.hash;
 
     l.debug(() => `Importing block #${block.header.blockNumber}, ${u8aToHex(headerHash, 48)}`);
 
