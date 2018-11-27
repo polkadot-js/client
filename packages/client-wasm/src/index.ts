@@ -9,7 +9,7 @@ import { ExecutorInterface, Executor$BlockImportResult } from './types';
 
 import { Block } from '@polkadot/types';
 import storage from '@polkadot/storage/static';
-import { assert, logger, u8aToHex } from '@polkadot/util';
+import { assert, compactStripLength, logger, u8aToHex } from '@polkadot/util';
 
 import createWasm from './create';
 import proxy from './wasm/proxy_substrate_wasm';
@@ -24,7 +24,7 @@ type Call = (...data: Array<Uint8Array>) => CallResult;
 
 // type CallU8a = (...data: Array<Uint8Array>) => Uint8Array;
 
-const CODE_KEY = storage.substrate.code();
+const [, CODE_KEY] = compactStripLength(storage.substrate.code());
 
 const l = logger('executor');
 

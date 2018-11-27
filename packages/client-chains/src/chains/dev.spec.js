@@ -11,7 +11,7 @@ describe('genesis', () => {
 
   it('creates a correct genesis block (parentHash)', () => {
     expect(
-      u8aToHex(genesis.header.parentHash)
+      genesis.header.parentHash.toHex()
     ).toEqual(
       '0x0000000000000000000000000000000000000000000000000000000000000000'
     );
@@ -19,7 +19,7 @@ describe('genesis', () => {
 
   it('creates a correct genesis block (stateRoot)', () => {
     expect(
-      u8aToHex(genesis.header.stateRoot)
+      genesis.header.stateRoot.toHex()
     ).toEqual(
       '0x8f10ee30db42045fc46968597094b5ff22e5051b573b77c9e4f9be7450445342'
     );
@@ -27,7 +27,7 @@ describe('genesis', () => {
 
   it('creates a correct genesis block (extrinsicsRoot)', () => {
     expect(
-      u8aToHex(genesis.header.extrinsicsRoot)
+      genesis.header.extrinsicsRoot.toHex()
     ).toEqual(
       '0x03170a2e7597b7b7e3d84c05391d139a62b157e78786d8c082f29dcf4c111314'
     );

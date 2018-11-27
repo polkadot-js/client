@@ -12,8 +12,7 @@ import createRuntime from '@polkadot/client-runtime/index';
 import Executor from '@polkadot/client-wasm/index';
 import { Block, Header } from '@polkadot/types';
 import storage from '@polkadot/storage/static';
-import { assert, hexToU8a, logger, u8aToHex } from '@polkadot/util';
-import { blake2AsU8a } from '@polkadot/util-crypto';
+import { assert, compactStripLength, hexToU8a, logger, u8aToHex } from '@polkadot/util';
 import { trieRoot } from '@polkadot/trie-hash';
 
 import Loader from './loader';
@@ -124,7 +123,7 @@ export default class Chain implements ChainInterface {
 
   private getCode (): Uint8Array {
     const code = this.state.db.get(
-      storage.substrate.code()
+      compactStripLength(storage.substrate.code())[1]
     );
 
     if (!code || !code.length) {
@@ -150,11 +149,11 @@ export default class Chain implements ChainInterface {
     const block = new Block({
       header: {
         stateRoot: this.state.db.getRoot(),
-        extrinsicsRoot: trieRoot([])
+        extrinsicsRoot: trieRoot([]),
+        parentHash: new Uint8Array(32)
       }
     });
-    const header = block.header.toU8a();
-    const headerHash = blake2AsU8a(header, 256);
+    const headerHash = block.header.hash;
 
     return {
       block: block.toU8a(),

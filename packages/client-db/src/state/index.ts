@@ -12,7 +12,7 @@ import createU8a from '../db/u8a';
 export default function createState (db: TrieDb): StateDb {
   return {
     db,
-    blockHashAt: createU8a(db, storage.system.blockHashAt),
+    blockHashAt: createU8a(db, storage.system.blockHash),
     code: createU8a(db, storage.substrate.code)
   };
 }

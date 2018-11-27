@@ -3,7 +3,7 @@
 // of the Apache-2.0 license. See the LICENSE file for details.
 /* eslint camelcase: 0 */
 
-import { hexToU8a, logger, stringToU8a } from '@polkadot/util';
+import { logger, stringToU8a } from '@polkadot/util';
 
 import Heap from '../environment/heap';
 import index from './index';
@@ -45,9 +45,9 @@ describe('enumerated_trie_root', () => {
         stringToU8a('reindeer')
       ])
     ).toEqual(
-      hexToU8a(
-        '0xe766d5d51b89dc39d981b41bda63248d7abce4f0225eefd023792a540bcffee3'
-      )
+      new Uint8Array([
+        185, 177, 187, 7, 228, 129, 240, 57, 62, 21, 243, 47, 52, 171, 214, 101, 247, 166, 152, 120, 106, 126, 201, 254, 179, 27, 46, 137, 39, 173, 95, 134
+      ])
     );
   });
 });
