@@ -1,8 +1,7 @@
 // Copyright 2017-2018 @polkadot/client-chains authors & contributors
 // This software may be modified and distributed under the terms
-// of the ISC license. See the LICENSE file for details.
+// of the Apache-2.0 license. See the LICENSE file for details.
 
-import { Header } from '@polkadot/primitives/header';
 import { Config } from '@polkadot/client/types';
 import { BlockDb, StateDb } from '@polkadot/client-db/types';
 import { ExecutorInterface } from '@polkadot/client-wasm/types';
@@ -11,15 +10,10 @@ import { ChainInterface, ChainGenesis, ChainJson } from './types';
 import ChainDbs from '@polkadot/client-db/index';
 import createRuntime from '@polkadot/client-runtime/index';
 import Executor from '@polkadot/client-wasm/index';
-import createBlock from '@polkadot/primitives/create/block';
-import decodeBlock from '@polkadot/primitives/codec/block/decode';
-import encodeBlock from '@polkadot/primitives/codec/block/encode';
-import encodeHeader from '@polkadot/primitives/codec/header/encode';
-import storage from '@polkadot/storage';
-import key from '@polkadot/storage/key';
-import { assert, hexToU8a, logger, u8aToHex } from '@polkadot/util';
-import { blake2AsU8a } from '@polkadot/util-crypto';
-import trieRoot from '@polkadot/trie-hash/root';
+import { Block, Header } from '@polkadot/types';
+import storage from '@polkadot/storage/static';
+import { assert, compactStripLength, hexToU8a, logger, u8aToHex } from '@polkadot/util';
+import { trieRoot } from '@polkadot/trie-hash';
 
 import Loader from './loader';
 
@@ -97,7 +91,7 @@ export default class Chain implements ChainInterface {
 
   private rollbackBlock (bestHeader: Header, rollback: boolean = true): ChainGenesis {
     const prevHash = bestHeader.parentHash;
-    const prevNumber = bestHeader.number.subn(1);
+    const prevNumber = bestHeader.blockNumber.subn(1);
 
     if (rollback && prevNumber.gtn(1)) {
       l.warn(`Unable to validate root, moving to block #${prevNumber.toString()}, ${u8aToHex(prevHash, 48)}`);
@@ -105,7 +99,7 @@ export default class Chain implements ChainInterface {
       const prevBlock = this.getBlock(prevHash);
 
       this.blocks.bestHash.set(prevHash);
-      this.blocks.bestNumber.set(prevBlock.header.number);
+      this.blocks.bestNumber.set(prevBlock.header.blockNumber);
 
       return this.initGenesisFromBest(prevBlock.header, false);
     }
@@ -120,18 +114,16 @@ export default class Chain implements ChainInterface {
       throw new Error(`Unable to retrieve block ${u8aToHex(headerHash)}`);
     }
 
-    const decoded = decodeBlock(block);
-
     return {
       block,
-      header: decoded.header,
+      header: new Block(block).header,
       headerHash
     };
   }
 
   private getCode (): Uint8Array {
     const code = this.state.db.get(
-      key(storage.consensus.public.code)()
+      compactStripLength(storage.substrate.code())[1]
     );
 
     if (!code || !code.length) {
@@ -154,17 +146,17 @@ export default class Chain implements ChainInterface {
   }
 
   private createGenesisBlock (): ChainGenesis {
-    const block = createBlock({
+    const block = new Block({
       header: {
         stateRoot: this.state.db.getRoot(),
-        extrinsicsRoot: trieRoot([])
+        extrinsicsRoot: trieRoot([]),
+        parentHash: new Uint8Array(32)
       }
     });
-    const header = encodeHeader(block.header);
-    const headerHash = blake2AsU8a(header, 256);
+    const headerHash = block.header.hash;
 
     return {
-      block: encodeBlock(block),
+      block: block.toU8a(),
       code: this.getCode(),
       header: block.header,
       headerHash

@@ -1,6 +1,6 @@
 {
   "name": "@polkadot/client-chains",
-  "version": "0.16.6",
+  "version": "0.17.0",
   "description": "Node configuration definitions for specific chains",
   "main": "index.js",
   "keywords": [
@@ -11,10 +11,7 @@
     "Jaco Greeff <jacogr@gmail.com>"
   ],
   "contributors": [],
-  "license": "ISC",
-  "engines": {
-    "node": ">=6.4"
-  },
+  "license": "Apache-2.0",
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org"
@@ -29,14 +26,13 @@
   "homepage": "https://github.com/polkadot-js/client/client/tree/master/packages/client-chains#readme",
   "dependencies": {
     "@babel/runtime": "^7.1.2",
-    "@polkadot/client-db": "^0.16.6",
-    "@polkadot/client-runtime": "^0.16.6",
-    "@polkadot/client-wasm": "^0.16.6",
-    "@polkadot/storage": "0.29.4"
+    "@polkadot/client-db": "^0.17.0",
+    "@polkadot/client-runtime": "^0.17.0",
+    "@polkadot/client-wasm": "^0.17.0",
+    "@polkadot/storage": "^0.32.7",
+    "@polkadot/types": "^0.32.7"
   },
   "devDependencies": {
-    "@polkadot/extrinsics": "0.29.4",
-    "@polkadot/primitives": "0.29.4",
-    "@polkadot/storage": "0.29.4"
+    "@polkadot/extrinsics": "^0.32.7"
   }
 }

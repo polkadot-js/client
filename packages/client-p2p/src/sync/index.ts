@@ -1,19 +1,17 @@
 // Copyright 2017-2018 @polkadot/client-p2p authors & contributors
 // This software may be modified and distributed under the terms
-// of the ISC license. See the LICENSE file for details.
+// of the Apache-2.0 license. See the LICENSE file for details.
 
 import { Config } from '@polkadot/client/types';
 import { ChainInterface } from '@polkadot/client-chains/types';
-import { BlockAttr, BlockResponseMessage, BlockResponseMessageBlock } from '@polkadot/client-types/messages/types';
 import { PeerInterface, SyncStatus } from '../types';
 import { SyncInterface, SyncState$Request, SyncState$BlockRequests, SyncState$BlockQueue } from './types';
 
 import BN from 'bn.js';
 import EventEmitter from 'eventemitter3';
 import { BlockRequest, BlockResponse } from '@polkadot/client-types/messages';
-// import decodeBlock from '@polkadot/primitives/codec/block/decodeRaw';
+import { BlockNumber } from '@polkadot/types';
 import { isU8a, logger } from '@polkadot/util';
-// import u8aToHex from '@polkadot/util/u8a/toHex';
 
 import defaults from '../defaults';
 
@@ -41,24 +39,24 @@ export default class Sync extends EventEmitter implements SyncInterface {
     this.processBlocks();
   }
 
-  getBlockData (fields: Array<BlockAttr>, hash: Uint8Array): BlockResponseMessageBlock {
-    // const { body, header } = decodeBlock(
-    //   this.chain.blocks.block.get(hash)
-    // );
-    const data: BlockResponseMessageBlock = {
-      // hash
-    } as BlockResponseMessageBlock;
+  // getBlockData (fields: Array<string>, hash: Uint8Array): BlockResponseMessage$Block {
+  //   // const { body, header } = decodeBlock(
+  //   //   this.chain.blocks.block.get(hash)
+  //   // );
+  //   const data: BlockResponseMessageBlock = {
+  //     // hash
+  //   } as BlockResponseMessageBlock;
 
-    // if (fields.includes('Body')) {
-    //   data.body = body;
-    // }
+  //   // if (fields.includes('Body')) {
+  //   //   data.body = body;
+  //   // }
 
-    // if (fields.includes('Header')) {
-    //   data.header = header;
-    // }
+  //   // if (fields.includes('Header')) {
+  //   //   data.header = header;
+  //   // }
 
-    return data;
-  }
+  //   return data;
+  // }
 
   peerRequests (peer: PeerInterface): Requests {
     const requests: Requests = Object.values(this.blockRequests);
@@ -84,11 +82,11 @@ export default class Sync extends EventEmitter implements SyncInterface {
     let queueLength = Object.keys(this.blockQueue).length;
 
     if (this.blockQueue[nextNumber.toString()]) {
-      const { block: { encoded } } = this.blockQueue[nextNumber.toString()];
+      const { block } = this.blockQueue[nextNumber.toString()];
 
       // l.debug(() => `Importing block #${nextNumber.toString()}`);
 
-      if (!this.chain.executor.importBlock(encoded)) {
+      if (!this.chain.executor.importBlock(block.toU8a())) {
         return false;
       }
 
@@ -122,21 +120,21 @@ export default class Sync extends EventEmitter implements SyncInterface {
   }
 
   provideBlocks (peer: PeerInterface, request: BlockRequest) {
-    const current = (request.from as BN);
+    const current = request.from.value as BlockNumber;
     const best = this.chain.blocks.bestNumber.get();
-    const blocks = [];
+    const blocks: Array<any> = [];
 
     // FIXME: Also send blocks starting with hash
-    const max = Math.min(request.max || defaults.MAX_REQUEST_BLOCKS, defaults.MAX_REQUEST_BLOCKS);
+    const max = Math.min(request.max.toNumber() || defaults.MAX_REQUEST_BLOCKS, defaults.MAX_REQUEST_BLOCKS);
     let count = isU8a(request.from) ? max : 0;
-    const increment = request.direction === 'Ascending' ? new BN(1) : new BN(-1);
+    const increment = request.direction.toString() === 'Ascending' ? new BN(1) : new BN(-1);
 
     while (count < max && current.lte(best) && !current.isNeg()) {
-      const hash = this.chain.state.blockHashAt.get(current);
-
-      blocks.push(
-        this.getBlockData(request.fields, hash)
-      );
+      // const hash = this.chain.state.blockHashAt.get(current);
+      //
+      // blocks.push(
+      //   this.getBlockData(request.fields.values, hash)
+      // );
 
       count++;
       current.iadd(increment);
@@ -150,7 +148,7 @@ export default class Sync extends EventEmitter implements SyncInterface {
     );
   }
 
-  queueBlocks (peer: PeerInterface, { blocks, id }: BlockResponseMessage) {
+  queueBlocks (peer: PeerInterface, { blocks, id }: BlockResponse) {
     const request = this.blockRequests[peer.id];
 
     delete this.blockRequests[peer.id];
@@ -158,7 +156,7 @@ export default class Sync extends EventEmitter implements SyncInterface {
     if (!request) {
       l.warn(`Unrequested response from ${peer.shortId}`);
       return;
-    } else if (request.request.id !== id) {
+    } else if (!id.eq(request.request.id)) {
       // l.warn(`Mismatched response from ${peer.shortId}`);
     }
 
@@ -169,8 +167,8 @@ export default class Sync extends EventEmitter implements SyncInterface {
     for (let i = 0; i < blocks.length; i++) {
       const block = blocks[i];
       const dbBlock = this.chain.blocks.block.get(block.hash);
-      const queueNumber = block.header.number.toString();
-      const isImportable = !dbBlock.length || bestNumber.lt(block.header.number);
+      const queueNumber = block.header.blockNumber.toString();
+      const isImportable = !dbBlock.length || bestNumber.lt(block.header.blockNumber);
       const canQueue = isImportable && !this.blockQueue[queueNumber];
 
       if (canQueue) {
@@ -178,10 +176,10 @@ export default class Sync extends EventEmitter implements SyncInterface {
           block,
           peer
         };
-        firstNumber = firstNumber || block.header.number;
+        firstNumber = firstNumber || block.header.blockNumber;
 
-        if (this.bestQueued.lt(block.header.number)) {
-          this.bestQueued = block.header.number;
+        if (this.bestQueued.lt(block.header.blockNumber)) {
+          this.bestQueued = block.header.blockNumber;
         }
 
         count++;

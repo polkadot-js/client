@@ -1,6 +1,6 @@
 // Copyright 2017-2018 @polkadot/client-db authors & contributors
 // This software may be modified and distributed under the terms
-// of the ISC license. See the LICENSE file for details.
+// of the Apache-2.0 license. See the LICENSE file for details.
 
 import { BaseDb } from '@polkadot/db/types';
 import { BlockDb } from '../types';
@@ -12,9 +12,9 @@ import keys from './keys';
 export default function blockDb (db: BaseDb): BlockDb {
   return {
     db,
-    bestHash: createU8a(db, keys.public.bestHash),
-    bestNumber: createBn(db, keys.public.bestNumber, 64),
-    block: createU8a(db, keys.public.blockByHash),
-    header: createU8a(db, keys.public.headerByHash)
+    bestHash: createU8a(db, keys.bestHash),
+    bestNumber: createBn(db, keys.bestNumber, 64),
+    block: createU8a(db, keys.blockByHash),
+    header: createU8a(db, keys.headerByHash)
   };
 }

@@ -1,6 +1,6 @@
 // Copyright 2017-2018 @polkadot/client-p2p authors & contributors
 // This software may be modified and distributed under the terms
-// of the ISC license. See the LICENSE file for details.
+// of the Apache-2.0 license. See the LICENSE file for details.
 
 import PeerInfo from 'peer-info';
 import { Config } from '@polkadot/client/types';
@@ -146,7 +146,7 @@ export default class Peer extends EventEmitter implements PeerInterface {
           }
 
           if (received === length) {
-            const message = decodeMessage(data.subarray(1));
+            const message = decodeMessage(data/*.subarray(1)*/);
 
             l.debug(() => [this.shortId, 'received', { message }]);
 
@@ -185,7 +185,7 @@ export default class Peer extends EventEmitter implements PeerInterface {
       const buffer = u8aToBuffer(
         u8aConcat(
           bufferToU8a(length),
-          new Uint8Array([0]),
+          // new Uint8Array([0]),
           encoded
         )
       );

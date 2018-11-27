@@ -1,11 +1,8 @@
 {
   "name": "@polkadot/client-wasm",
-  "version": "0.16.6",
+  "version": "0.17.0",
   "description": "WASM compiler & call interface",
   "main": "index.js",
-  "engines": {
-    "node": ">=8.0"
-  },
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org"
@@ -23,17 +20,16 @@
     "Jaco Greeff <jacogr@gmail.com>"
   ],
   "contributors": [],
-  "license": "ISC",
+  "license": "Apache-2.0",
   "bugs": {
     "url": "https://github.com/polkadot-js/client/issues"
   },
   "homepage": "https://github.com/polkadot-js/client/tree/master/packages/client-wasm#readme",
   "dependencies": {
     "@babel/runtime": "^7.1.2",
-    "@polkadot/client-runtime": "^0.16.6",
-    "@polkadot/keyring": "^0.32.9",
-    "@polkadot/primitives": "0.29.4",
-    "@polkadot/util": "^0.32.9",
+    "@polkadot/client-runtime": "^0.17.0",
+    "@polkadot/types": "^0.32.7",
+    "@polkadot/util": "^0.33.2",
     "@types/webassembly-js-api": "^0.0.1"
   }
 }

@@ -1,10 +1,10 @@
 // Copyright 2017-2018 @polkadot/client-runtime authors & contributors
 // This software may be modified and distributed under the terms
-// of the ISC license. See the LICENSE file for details.
+// of the Apache-2.0 license. See the LICENSE file for details.
 /* eslint camelcase: 0 */
 
 import TrieDb from '@polkadot/trie-db';
-import { hexToU8a, logger, stringToU8a } from '@polkadot/util';
+import { logger, stringToU8a } from '@polkadot/util';
 
 import index from './index';
 
@@ -36,9 +36,9 @@ describe('storage_root', () => {
       heap.set
     ).toHaveBeenCalledWith(
       5,
-      hexToU8a(
-        '0x8aad789dff2f538bca5d8ea56e8abe10f4c7ba3a5dea95fea4cd6e7c3a1168d3'
-      )
+      new Uint8Array([
+        11, 65, 228, 136, 204, 203, 214, 125, 31, 16, 137, 89, 44, 44, 35, 95, 92, 83, 153, 176, 83, 247, 254, 145, 82, 221, 75, 95, 39, 153, 20, 205
+      ])
     );
   });
 });

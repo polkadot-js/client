@@ -1,9 +1,9 @@
 // Copyright 2017-2018 @polkadot/client-p2p authors & contributors
 // This software may be modified and distributed under the terms
-// of the ISC license. See the LICENSE file for details.
+// of the Apache-2.0 license. See the LICENSE file for details.
 
 import BN from 'bn.js';
-import { BlockResponseMessageBlock } from '@polkadot/client-types/messages/types';
+import { BlockResponseMessage$Block } from '@polkadot/client-types/messages/BlockResponse';
 import { PeerInterface, SyncStatus } from '../types';
 
 import { BlockRequest } from '@polkadot/client-types/messages';
@@ -20,7 +20,7 @@ export type SyncState$BlockRequests = {
 
 export type SyncState$BlockQueue = {
   [index: string]: {
-    block: BlockResponseMessageBlock,
+    block: BlockResponseMessage$Block,
     peer: PeerInterface
   }
 };

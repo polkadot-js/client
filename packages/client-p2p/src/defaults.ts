@@ -1,8 +1,6 @@
 // Copyright 2017-2018 @polkadot/client-p2p authors & contributors
 // This software may be modified and distributed under the terms
-// of the ISC license. See the LICENSE file for details.
-
-import { Role } from '@polkadot/client-types/role/types';
+// of the Apache-2.0 license. See the LICENSE file for details.
 
 const ADDRESS = '127.0.0.1';
 const CLIENT_ID = 'polkadot-js/0.0.0';
@@ -10,7 +8,7 @@ const MAX_PEERS = 25;
 const MAX_REQUEST_BLOCKS = 64;
 const MAX_QUEUED_BLOCKS = MAX_REQUEST_BLOCKS * 4; // 2048 in the Rust client
 const PORT = 31333;
-const ROLE: Role = 'full';
+const ROLE = 'full';
 const PROTOCOL_BASE = '/substrate';
 const PROTOCOL_TYPE = '/dot';
 const PROTOCOL_VERSION = 1;

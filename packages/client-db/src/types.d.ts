@@ -1,11 +1,10 @@
 // Copyright 2017-2018 @polkadot/client-db authors & contributors
 // This software may be modified and distributed under the terms
-// of the ISC license. See the LICENSE file for details.
+// of the Apache-2.0 license. See the LICENSE file for details.
 
 import BN from 'bn.js';
 import { BaseDb, TxDb } from '@polkadot/db/types';
 import { TrieDb } from '@polkadot/trie-db/types';
-import { Storage$Key$Value } from '@polkadot/storage/types';
 
 export type DbPathPrefix = 'database';
 
@@ -20,9 +19,9 @@ export type DbConfig = {
 };
 
 export type StorageMethod<P, R> = {
-  del: (...params: Array<Storage$Key$Value>) => void,
-  get: (...params: Array<Storage$Key$Value>) => R,
-  set: (value: P, ...params: Array<Storage$Key$Value>) => void,
+  del: (...params: Array<any>) => void,
+  get: (...params: Array<any>) => R,
+  set: (value: P, ...params: Array<any>) => void,
   onUpdate: (callback: (value: P) => void) => void
 }
 

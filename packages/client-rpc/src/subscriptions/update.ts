@@ -1,12 +1,11 @@
 // Copyright 2017-2018 @polkadot/client-rpc authors & contributors
 // This software may be modified and distributed under the terms
-// of the ISC license. See the LICENSE file for details.
+// of the Apache-2.0 license. See the LICENSE file for details.
 
 import { ChainInterface } from '@polkadot/client-chains/types';
 import { Sockets, Subscriptions } from './types';
 
-import decodeHeader from '@polkadot/primitives/codec/header/decode';
-import jsonHeader from '@polkadot/primitives/json/header/encode';
+import { Header } from '@polkadot/types';
 import { isUndefined } from '@polkadot/util';
 
 import send from './send';
@@ -36,6 +35,6 @@ export default function update ({ blocks }: ChainInterface, subscriptions: Subsc
   }
 
   blocks.block.onUpdate((header: Uint8Array): void =>
-    updateAll(subscriptions, sockets, 'chain_newHead', jsonHeader(decodeHeader(header)))
+    updateAll(subscriptions, sockets, 'chain_newHead', (new Header(header)).toJSON())
   );
 }

@@ -1,6 +1,6 @@
 {
   "name": "@polkadot/client",
-  "version": "0.16.6",
+  "version": "0.17.0",
   "description": "A JavaScript client node for the polkadot network",
   "main": "polkadot.js",
   "bin": {
@@ -15,9 +15,9 @@
     "Jaco Greeff <jacogr@gmail.com>"
   ],
   "contributors": [],
-  "license": "ISC",
+  "license": "Apache-2.0",
   "engines": {
-    "node": ">=8.0"
+    "node": "^10.13.0"
   },
   "publishConfig": {
     "access": "public",
@@ -33,15 +33,13 @@
   "homepage": "https://github.com/polkadot-js/client/tree/master/packages/client#readme",
   "dependencies": {
     "@babel/runtime": "^7.1.2",
-    "@polkadot/client-chains": "^0.16.6",
-    "@polkadot/client-db": "^0.16.6",
-    "@polkadot/client-p2p": "^0.16.6",
-    "@polkadot/client-rpc": "^0.16.6",
-    "@polkadot/client-telemetry": "^0.16.6",
-    "@polkadot/client-wasm": "^0.16.6",
-    "@polkadot/jsonrpc": "0.29.4",
-    "@polkadot/primitives": "0.29.4",
-    "@polkadot/util": "^0.32.9",
+    "@polkadot/client-chains": "^0.17.0",
+    "@polkadot/client-db": "^0.17.0",
+    "@polkadot/client-p2p": "^0.17.0",
+    "@polkadot/client-rpc": "^0.17.0",
+    "@polkadot/client-telemetry": "^0.17.0",
+    "@polkadot/client-wasm": "^0.17.0",
+    "@polkadot/util": "^0.33.2",
     "@types/package-json": "^4.0.1",
     "@types/semver-compare": "^1.0.0",
     "@types/yargs": "^12.0.1",

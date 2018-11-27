@@ -1,6 +1,6 @@
 // Copyright 2017-2018 @polkadot/client-db authors & contributors
 // This software may be modified and distributed under the terms
-// of the ISC license. See the LICENSE file for details.
+// of the Apache-2.0 license. See the LICENSE file for details.
 
 import { hexToU8a, u8aToHex } from '@polkadot/util';
 
@@ -8,13 +8,13 @@ import db from './index';
 
 const TEST_HASH = hexToU8a('0x1025e5db74fdaf4d2818822dccf0e1604ae9ccc62f26cecfde23448ff0248abf');
 
-describe('blockHash', () => {
+describe('blockHashAt', () => {
   let system;
 
   describe('get', () => {
     beforeEach(() => {
       const store = {
-        '0xfe7a071d703c0bb0ba5ccba2cef1b8aa': TEST_HASH
+        '0x409f029eb7b3c4795f8d3c81e1b15d81a3': TEST_HASH
       };
 
       system = db({

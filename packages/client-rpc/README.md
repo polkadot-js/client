@@ -11,7 +11,7 @@ npm install --save @polkadot/client-rpc
 The by using the library -
 
 ```js
-const Provider = require('@polkadot/api-provider/http');
+const Provider = require('@polkadot/rpc-provider/http');
 const Server = require('@polkadot/client-rpc');
 
 const server = new Server({ port: 9901 }, {

@@ -1,104 +1,87 @@
 // Copyright 2017-2018 @polkadot/client-types authors & contributors
 // This software may be modified and distributed under the terms
-// of the ISC license. See the LICENSE file for details.
+// of the Apache-2.0 license. See the LICENSE file for details.
 
-import { MessageInterface, BlockResponseMessage, BlockResponseMessageBlock } from './types';
+import { MessageInterface } from './types';
 
-import decodeHeaderRaw from '@polkadot/primitives/codec/header/decodeRaw';
-import decodeHeader from '@polkadot/primitives/codec/header/decode';
-import { assert, bnToU8a, u8aConcat, u8aToBn } from '@polkadot/util';
+import { Struct, Vector } from '@polkadot/types/codec';
+import { Bytes, Header, Hash, Signature, u64 as U64 } from '@polkadot/types';
 
 import BaseMessage from './BaseMessage';
 
-const COUNT_OFF = 8;
-const BLOCK_OFF = COUNT_OFF + 4;
+export class BlockResponseMessage$Block$Justification extends Struct {
+  constructor (value?: any) {
+    super({
+      hash: Hash,
+      signature: Signature
+    }, value);
+  }
 
-const I_HDRP_OFF = 32;
-const I_HDRD_OFF = I_HDRP_OFF + 1;
+  get hash (): Hash {
+    return this.get('hash') as Hash;
+  }
 
-export default class BlockResponse extends BaseMessage implements MessageInterface, BlockResponseMessage {
+  get signature (): Signature {
+    return this.get('signature') as Signature;
+  }
+}
+
+export class BlockResponseMessage$Block extends Struct {
+  constructor (value?: any) {
+    super({
+      hash: Hash,
+      header: Header,
+      extrinsics: Vector.with(Bytes),
+      justification: Vector.with(BlockResponseMessage$Block$Justification)
+    }, value);
+  }
+
+  get extrinsics (): Vector<Bytes> {
+    return this.get('extrinsics') as Vector<Bytes>;
+  }
+
+  get hash (): Hash {
+    return this.get('hash') as Hash;
+  }
+
+  get header (): Header {
+    return this.get('header') as Header;
+  }
+
+  get justification (): Vector<BlockResponseMessage$Block$Justification> {
+    return this.get('justification') as Vector<BlockResponseMessage$Block$Justification>;
+  }
+}
+
+export class BlockResponseMessage extends Struct {
+  constructor (value?: any) {
+    super({
+      id: U64,
+      blocks: Vector.with(BlockResponseMessage$Block)
+    }, value);
+  }
+
+  get blocks (): Vector<BlockResponseMessage$Block> {
+    return this.get('blocks') as Vector<BlockResponseMessage$Block>;
+  }
+
+  get id (): U64 {
+    return this.get('id') as U64;
+  }
+}
+
+export default class BlockResponse extends BaseMessage implements MessageInterface {
   static type = 2;
 
-  id: number;
-  blocks: Array<BlockResponseMessageBlock>;
-
-  constructor ({ blocks, id }: BlockResponseMessage) {
-    super(BlockResponse.type);
-
-    this.blocks = blocks;
-    this.id = id;
+  constructor (value?: any) {
+    super(BlockResponse.type, new BlockResponseMessage(value));
   }
 
-  encode (): Uint8Array {
-    return u8aConcat(
-      super.encode()
-    );
+  get blocks (): Vector<BlockResponseMessage$Block> {
+    return this.message.get('blocks') as Vector<BlockResponseMessage$Block>;
   }
 
-  toJSON (): any {
-    return {
-      id: this.id
-    };
-  }
-
-  // NOTE: This assumes that we are getting back everything we requested as specified in BlockRequest
-  static decode (u8a: Uint8Array): BlockResponse {
-    const id = u8aToBn(u8a.subarray(0, COUNT_OFF), true).toNumber();
-    const numBlocks = u8aToBn(u8a.subarray(COUNT_OFF, BLOCK_OFF), true).toNumber();
-    const blocks: Array<BlockResponseMessageBlock> = [];
-    let offset = BLOCK_OFF;
-
-    for (let i = 0; i < numBlocks; i++) {
-      const hash = u8a.slice(offset, offset + I_HDRP_OFF);
-      const headerRaw = decodeHeaderRaw(u8a.subarray(offset + I_HDRD_OFF)).header.slice();
-      const header = decodeHeader(headerRaw);
-
-      offset += I_HDRD_OFF + headerRaw.length + 1; // skip 00/01
-
-      const numExt = u8aToBn(u8a.subarray(offset, offset + 4), true).toNumber();
-      const extrinsics: Array<Uint8Array> = [];
-
-      offset = BlockResponse.decodeExtrinsics(u8a, offset + 4, numExt, extrinsics);
-      offset += 3; // skip reciept, queue and justification indicator
-
-      let justification: Uint8Array | null = null;
-
-      if (u8a[offset - 1] === 1) {
-        let justLength = 4 + 32; // round length + hash length
-        const numSigs = u8aToBn(u8a.subarray(offset + justLength, offset + justLength + 4), true).toNumber();
-
-        justLength += 4 + (numSigs * (32 + 64));
-
-        justification = u8a.subarray(offset, offset + justLength);
-
-        offset += justLength;
-      }
-
-      blocks.push({
-        hash,
-        header,
-        encoded: u8aConcat.apply(null, [headerRaw, bnToU8a(numExt, 32, true)].concat(extrinsics)),
-        justification
-      });
-    }
-
-    assert(offset === u8a.length, `Expected to exhaust data, calculated ${offset}, received ${u8a.length}`);
-
-    return new BlockResponse({
-      id,
-      blocks
-    });
-  }
-
-  private static decodeExtrinsics (u8a: Uint8Array, offset: number, count: number, extrinsics: Array<Uint8Array>): number {
-    for (let j = 0; j < count; j++) {
-      const length = u8aToBn(u8a.subarray(offset, offset + 4), true).toNumber();
-
-      extrinsics.push(u8a.slice(offset, offset + 4 + length));
-
-      offset += 4 + length;
-    }
-
-    return offset;
+  get id (): U64 {
+    return this.message.get('id') as U64;
   }
 }
