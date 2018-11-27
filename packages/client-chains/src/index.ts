@@ -14,7 +14,7 @@ import { Block, Header } from '@polkadot/types';
 import storage from '@polkadot/storage/static';
 import { assert, hexToU8a, logger, u8aToHex } from '@polkadot/util';
 import { blake2AsU8a } from '@polkadot/util-crypto';
-import trieRoot from '@polkadot/trie-hash/root';
+import { trieRoot } from '@polkadot/trie-hash';
 
 import Loader from './loader';
 

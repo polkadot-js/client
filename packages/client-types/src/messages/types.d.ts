@@ -2,11 +2,6 @@
 // This software may be modified and distributed under the terms
 // of the Apache-2.0 license. See the LICENSE file for details.
 
-import BN from 'bn.js';
-import { AccountId, BlockNumber, Header, Hash, ParachainId, Signature } from '@polkadot/types';
-import { Justification } from '@polkadot/types/Bft';
-import { bufferToU8a } from '@polkadot/util';
-
 export interface MessageInterface {
   readonly type: number;
 

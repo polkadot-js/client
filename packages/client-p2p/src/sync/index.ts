@@ -10,7 +10,6 @@ import { SyncInterface, SyncState$Request, SyncState$BlockRequests, SyncState$Bl
 import BN from 'bn.js';
 import EventEmitter from 'eventemitter3';
 import { BlockRequest, BlockResponse } from '@polkadot/client-types/messages';
-import { BlockResponseMessage$Block } from '@polkadot/client-types/messages/BlockResponse';
 import { BlockNumber } from '@polkadot/types';
 import { isU8a, logger } from '@polkadot/util';
 
@@ -121,7 +120,7 @@ export default class Sync extends EventEmitter implements SyncInterface {
   }
 
   provideBlocks (peer: PeerInterface, request: BlockRequest) {
-    const current = request.from.value.raw as BlockNumber;
+    const current = request.from.value as BlockNumber;
     const best = this.chain.blocks.bestNumber.get();
     const blocks: Array<any> = [];
 
@@ -166,7 +165,7 @@ export default class Sync extends EventEmitter implements SyncInterface {
     let count = 0;
 
     for (let i = 0; i < blocks.length; i++) {
-      const block = blocks.get(i);
+      const block = blocks[i];
       const dbBlock = this.chain.blocks.block.get(block.hash);
       const queueNumber = block.header.blockNumber.toString();
       const isImportable = !dbBlock.length || bestNumber.lt(block.header.blockNumber);
