@@ -20,21 +20,21 @@ export type RuntimeStats = {
 export type RuntimeInstrument = {
   start: () => void,
   stop: () => RuntimeStats
-}
+};
 
 export interface RuntimeEnv$Heap {
-  allocate: (size: number) => Pointer,
-  deallocate: (ptr: Pointer) => number,
-  dup: (ptr: Pointer, length: number) => Uint8Array,
-  fill: (ptr: Pointer, value: number, len: number) => Uint8Array,
-  get: (ptr: Pointer, length: number) => Uint8Array,
-  getU32: (ptr: Pointer) => number,
-  set: (ptr: Pointer, data: Uint8Array) => Pointer,
-  setU32: (ptr: Pointer, value: number) => Pointer,
-  setWasmMemory: (memory: WebAssembly.Memory, offset?: number) => void,
-  size: () => number,
-  used: () => SizeUsed,
-  wasResized: () => boolean
+  allocate: (size: number) => Pointer;
+  deallocate: (ptr: Pointer) => number;
+  dup: (ptr: Pointer, length: number) => Uint8Array;
+  fill: (ptr: Pointer, value: number, len: number) => Uint8Array;
+  get: (ptr: Pointer, length: number) => Uint8Array;
+  getU32: (ptr: Pointer) => number;
+  set: (ptr: Pointer, data: Uint8Array) => Pointer;
+  setU32: (ptr: Pointer, value: number) => Pointer;
+  setWasmMemory: (memory: WebAssembly.Memory, offset?: number) => void;
+  size: () => number;
+  used: () => SizeUsed;
+  wasResized: () => boolean;
 }
 
 export type RuntimeEnv = {
@@ -45,20 +45,20 @@ export type RuntimeEnv = {
 
 export type RuntimeInterface$Chain = {
   chain_id: () => number
-}
+};
 
 export type RuntimeInterface$Crypto = {
   blake2_256: (data: Pointer, len: number, out: Pointer) => void,
   ed25519_verify: (msgPtr: Pointer, msgLen: number, sigPtr: Pointer, pubkeyPtr: Pointer) => number,
   twox_128: (data: Pointer, len: number, out: Pointer) => void,
   twox_256: (data: Pointer, len: number, out: Pointer) => void
-}
+};
 
 export type RuntimeInterface$Io = {
   print_hex: (ptr: Pointer, len: number) => void,
   print_utf8: (ptr: Pointer, len: number) => void,
   print_num: (hi: number, lo: number) => void
-}
+};
 
 export type RuntimeInterface$Memory = {
   free: (ptr: Pointer) => void,
@@ -87,12 +87,12 @@ export type RuntimeInterface$Storage$Data = {
   get_allocated_storage: (keyPtr: Pointer, keyLength: number, writtenPtr: Pointer) => Pointer,
   get_storage_into: (keyPtr: Pointer, keyLength: number, dataPtr: Pointer, dataLength: number, offset: number) => number,
   set_storage: (keyPtr: Pointer, keyLength: number, dataPtr: Pointer, dataLength: number) => void
-}
+};
 
 export type RuntimeInterface$Storage$Trie = {
   enumerated_trie_root: (valuesPtr: Pointer, lensPtr: Pointer, lensLen: number, resultPtr: Pointer) => void,
   storage_root: (resultPtr: Pointer) => void
-}
+};
 
 export type RuntimeInterface$Storage = RuntimeInterface$Storage$Data & RuntimeInterface$Storage$Trie;
 

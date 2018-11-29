@@ -16,12 +16,12 @@ export type MessageData = {
   key?: Uint8Array,
   port?: WorkerThreads.MessagePort,
   value?: Uint8Array
-}
+};
 
 export type Message = MessageData & {
   state: Int32Array,
   type: MessageType
-}
+};
 
 export type WorkerData = {
   isTrie: boolean,
@@ -32,4 +32,4 @@ export type WorkerData = {
 export type ProgressMessage = {
   isCompleted: boolean,
   progress: ProgressValue
-}
+};

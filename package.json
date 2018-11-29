@@ -15,7 +15,7 @@
   },
   "scripts": {
     "build": "polkadot-dev-build-ts && cp -r packages/client/scripts build",
-    "check": "tslint --project . && tsc --version && tsc --noEmit",
+    "check": "tslint --project . && tsc --version && tsc --noEmit --pretty",
     "clean": "polkadot-dev-clean-build",
     "postinstall": "polkadot-dev-yarn-only",
     "test": "NODE_OPTIONS=--experimental-worker jest --coverage",
@@ -25,7 +25,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.1.2",
-    "@polkadot/dev": "^0.22.2",
+    "@polkadot/dev": "^0.22.5",
     "@polkadot/ts": "^0.1.39"
   }
 }

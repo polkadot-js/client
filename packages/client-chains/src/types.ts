@@ -3,7 +3,7 @@
 // of the Apache-2.0 license. See the LICENSE file for details.
 
 import { Config } from '@polkadot/client/types';
-import { BlockDb, StateDb, ChainDbs } from '@polkadot/client-db/types';
+import { BlockDb, StateDb } from '@polkadot/client-db/types';
 import { RuntimeInterface } from '@polkadot/client-runtime/types';
 import { ExecutorInterface } from '@polkadot/client-wasm/types';
 import { Header } from '@polkadot/types';
@@ -31,17 +31,17 @@ export type ChainGenesis = {
 };
 
 export interface ChainLoader {
-  readonly chain: ChainJson,
+  readonly chain: ChainJson;
   readonly id: string;
   readonly genesisRoot: Uint8Array;
 }
 
 export interface ChainInterface {
-  readonly blocks: BlockDb,
-  readonly state: StateDb,
-  readonly chain: ChainJson,
-  readonly executor: ExecutorInterface,
-  readonly genesis: ChainGenesis
+  readonly blocks: BlockDb;
+  readonly state: StateDb;
+  readonly chain: ChainJson;
+  readonly executor: ExecutorInterface;
+  readonly genesis: ChainGenesis;
 }
 
 export type ChainState = {

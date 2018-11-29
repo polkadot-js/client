@@ -3,7 +3,6 @@
 // of the Apache-2.0 license. See the LICENSE file for details.
 
 import EventEmitter from 'eventemitter3';
-import * as http from 'http';
 import * as net from 'net';
 import * as Koa from 'koa';
 import { Config } from '@polkadot/client/types';
@@ -61,9 +60,9 @@ export type WsContext = Koa.Context & {
 };
 
 export interface RpcInterface {
-  on (type: RpcInterface$Events, cb: () => any): any,
-  start (): Promise<boolean>,
-  stop (): Promise<boolean>
+  on (type: RpcInterface$Events, cb: () => any): any;
+  start (): Promise<boolean>;
+  stop (): Promise<boolean>;
 }
 
 export type SubInterface = (socket: WsContext$Socket | undefined, handler: Handler, params: Array<any>) => Promise<number>;

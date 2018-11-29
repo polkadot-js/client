@@ -3,7 +3,7 @@
 // of the Apache-2.0 license. See the LICENSE file for details.
 
 import BN from 'bn.js';
-import { BaseDb, TxDb } from '@polkadot/db/types';
+import { BaseDb } from '@polkadot/db/types';
 import { TrieDb } from '@polkadot/trie-db/types';
 
 export type DbPathPrefix = 'database';
@@ -23,7 +23,7 @@ export type StorageMethod<P, R> = {
   get: (...params: Array<any>) => R,
   set: (value: P, ...params: Array<any>) => void,
   onUpdate: (callback: (value: P) => void) => void
-}
+};
 
 export type StorageMethod$Account = StorageMethod<Uint8Array, Uint8Array>;
 
@@ -54,8 +54,8 @@ export type StateDb = {
 };
 
 export interface ChainDbs {
-  readonly blocks: BlockDb,
-  readonly state: StateDb,
+  readonly blocks: BlockDb;
+  readonly state: StateDb;
 
   snapshot (): void;
 }
