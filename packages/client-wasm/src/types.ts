@@ -2,15 +2,12 @@
 // This software may be modified and distributed under the terms
 // of the Apache-2.0 license. See the LICENSE file for details.
 
-import { Config } from '@polkadot/client/types';
-import { ChainGenesis } from '@polkadot/client-chains/types';
-import { BlockDb, StateDb } from '@polkadot/client-db/types';
 import { RuntimeInterface } from '@polkadot/client-runtime/types';
 import { Block } from '@polkadot/types';
 
 export type WasmInstanceExports = {
   [index: string]: any
-}
+};
 
 export type WasmExports = {
   env: Object
@@ -35,6 +32,6 @@ export type Executor$BlockImportResult = {
 };
 
 export type ExecutorInterface = {
-  executeBlock (block: Uint8Array): boolean,
-  importBlock (block: Uint8Array): Executor$BlockImportResult,
+  executeBlock (block: Uint8Array): boolean;
+  importBlock (block: Uint8Array): Executor$BlockImportResult;
 };

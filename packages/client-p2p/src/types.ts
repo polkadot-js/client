@@ -43,18 +43,18 @@ export type PeerInterface$Events = 'active' | 'message' | 'disconnected';
 export interface PeerInterface {
   readonly bestHash: Uint8Array;
   readonly bestNumber: BN;
-  readonly id: string,
-  readonly peerInfo: PeerInfo,
-  readonly shortId: string,
+  readonly id: string;
+  readonly peerInfo: PeerInfo;
+  readonly shortId: string;
 
-  addConnection: (connection: LibP2pConnection, isWritable: boolean) => number,
-  disconnect (): void,
-  isActive: () => boolean,
-  isWritable: () => boolean,
-  getNextId: () => number,
-  on (type: PeerInterface$Events, cb: (message: MessageInterface) => any): any,
-  send: (message: MessageInterface) => boolean,
-  setBest: (number: BN, hash: Uint8Array) => void
+  addConnection: (connection: LibP2pConnection, isWritable: boolean) => number;
+  disconnect (): void;
+  isActive: () => boolean;
+  isWritable: () => boolean;
+  getNextId: () => number;
+  on (type: PeerInterface$Events, cb: (message: MessageInterface) => any): any;
+  send: (message: MessageInterface) => boolean;
+  setBest: (blockNumber: BN, hash: Uint8Array) => void;
 }
 
 export type PeersInterface$Events = 'active' | 'connected' | 'dialled' | 'disconnected' | 'discovered' | 'message' | 'protocol';
@@ -71,7 +71,7 @@ export type PeersInterface = {
   log: (event: PeersInterface$Events, peer: PeerInterface) => void,
   on: (type: PeersInterface$Events, cb: (peer: any) => any) => any,
   peers: () => Array<PeerInterface>
-}
+};
 
 export type P2pInterface$Events = 'started' | 'stopped';
 
@@ -85,7 +85,7 @@ export type P2pInterface = {
   getNumPeers: () => number,
   start: () => Promise<boolean>,
   stop: () => Promise<boolean>
-}
+};
 
 export type P2pState = {
   chain: ChainInterface,

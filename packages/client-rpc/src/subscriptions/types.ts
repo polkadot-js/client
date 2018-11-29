@@ -8,10 +8,9 @@ export type Sockets = {
   [index: number]: WsContext$Socket
 };
 
-// method -> Array<subIds>
 export type Subscriptions = {
   [index: string]: {
     subscriptions: Array<number>,
     value: any
   }
-}
+};

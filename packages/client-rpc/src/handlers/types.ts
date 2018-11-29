@@ -11,7 +11,7 @@ export type Handlers = {
   [index: string]: Handler
 };
 
-export type HandlersFactory = (config: Config, chain: ChainInterface) => Handlers
+export type HandlersFactory = (config: Config, chain: ChainInterface) => Handlers;
 
 export type Endpoint = {
   [index: string]: Handler

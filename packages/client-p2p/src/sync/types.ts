@@ -2,7 +2,6 @@
 // This software may be modified and distributed under the terms
 // of the Apache-2.0 license. See the LICENSE file for details.
 
-import BN from 'bn.js';
 import { BlockResponseMessage$Block } from '@polkadot/client-types/messages/BlockResponse';
 import { PeerInterface, SyncStatus } from '../types';
 
@@ -12,7 +11,7 @@ export type SyncState$Request = {
   peer: PeerInterface,
   request: BlockRequest,
   timeout: number
-}
+};
 
 export type SyncState$BlockRequests = {
   [index: string]: SyncState$Request
@@ -34,5 +33,5 @@ export type SyncState = {
 export type SyncInterface$Events = 'imported';
 
 export interface SyncInterface {
-  on: (type: SyncInterface$Events, cb: () => any) => any,
+  on: (type: SyncInterface$Events, cb: () => any) => any;
 }
