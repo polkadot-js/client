@@ -13,7 +13,7 @@ export default function storage ({ l, heap, db }: RuntimeEnv): RuntimeInterface$
   return {
     enumerated_trie_root: (valuesPtr: Pointer, lenPtr: Pointer, count: number, resultPtr: Pointer): void =>
       instrument('enumerated_trie_root', (): void => {
-        const pairs = Array.apply(null, { length: count }).map((_: any, index: number) => {
+        const pairs = [...Array(count).keys()].map((index: number) => {
           const length = heap.getU32(lenPtr + (index * 4));
           const data = heap.get(valuesPtr, length);
 
