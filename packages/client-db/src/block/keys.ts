@@ -3,7 +3,7 @@
 // of the Apache-2.0 license. See the LICENSE file for details.
 
 import createFunction from '@polkadot/storage/utils/createFunction';
-import { StorageFunctionMetadata, StorageFunctionModifier, StorageFunctionType } from '@polkadot/types/Metadata';
+import { StorageFunctionMetadata, StorageFunctionModifier, StorageFunctionType } from '@polkadot/types/Metadata/Modules';
 import Text from '@polkadot/types/Text';
 import Vector from '@polkadot/types/codec/Vector';
 
