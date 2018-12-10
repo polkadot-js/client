@@ -8,6 +8,6 @@ describe('loadChain', () => {
   it('fails when builtin not found', () => {
     expect(
       () => new Chain({ config: 'not-a-chain' })
-    ).toThrow(/Unable to find builtin/);
+    ).toThrow(/Expected \.json extension/);
   });
 });
