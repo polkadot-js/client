@@ -47,6 +47,13 @@ export default {
       value: 'Bytes'
     }
   }),
+  hashByNumber: createMethod('hashByNumber', 'hsh:num:', {
+    documentation: ['Retrieve hash by number'],
+    type: {
+      key: 'U256',
+      value: 'Hash'
+    }
+  }),
   headerByHash: createMethod('headerByHash', 'hdr:hsh:', {
     documentation: ['Retrieve header by hash'],
     type: {

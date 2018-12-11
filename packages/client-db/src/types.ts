@@ -44,12 +44,12 @@ export type BlockDb = {
   bestHash: StorageMethod$U8a,
   bestNumber: StorageMethod$Bn,
   block: StorageMethod$U8a,
+  hash: StorageMethod$U8a,
   header: StorageMethod$U8a
 };
 
 export type StateDb = {
   db: TrieDb,
-  blockHashAt: StorageMethod$U8a,
   code: StorageMethod$U8a
 };
 

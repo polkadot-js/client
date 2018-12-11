@@ -105,12 +105,8 @@ export default class Peer extends EventEmitter implements PeerInterface {
     // @ts-ignore yeap, we are filtering them right out at the end
     return Object
       .values(this.connections)
-      .map(({ pushable }) =>
-        pushable
-      )
-      .filter((pushable) =>
-        pushable
-      );
+      .map(({ pushable }) => pushable)
+      .filter((pushable) => pushable);
   }
 
   isWritable (): boolean {
@@ -148,7 +144,7 @@ export default class Peer extends EventEmitter implements PeerInterface {
           if (received === length) {
             const message = decodeMessage(data/*.subarray(1)*/);
 
-            l.debug(() => [this.shortId, 'received', { message }]);
+            l.debug(() => [this.shortId, 'received', { data, message: message.toJSON() }]);
 
             this.emit('message', message);
 
@@ -181,7 +177,7 @@ export default class Peer extends EventEmitter implements PeerInterface {
   send (message: MessageInterface): boolean {
     try {
       const encoded = message.encode();
-      const length = varint.encode(encoded.length + 1);
+      const length = varint.encode(encoded.length);
       const buffer = u8aToBuffer(
         u8aConcat(
           bufferToU8a(length),

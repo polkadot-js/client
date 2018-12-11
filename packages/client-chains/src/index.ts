@@ -75,7 +75,7 @@ export default class Chain implements ChainInterface {
 
     assert(u8aToHex(this.state.db.getRoot(), 48) === hexState, `Unable to move state to ${hexState}`);
 
-    const genesisHash = this.state.blockHashAt.get(0);
+    const genesisHash = this.blocks.hash.get(0);
 
     if (!genesisHash || !genesisHash.length) {
       return this.rollbackBlock(bestHeader, rollback);
@@ -141,6 +141,7 @@ export default class Chain implements ChainInterface {
     this.blocks.bestHash.set(genesis.headerHash);
     this.blocks.bestNumber.set(0);
     this.blocks.block.set(genesis.block, genesis.headerHash);
+    this.blocks.hash.set(genesis.headerHash, 0);
 
     return genesis;
   }

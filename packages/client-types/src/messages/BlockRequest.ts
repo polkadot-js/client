@@ -11,7 +11,7 @@ import Null from '@polkadot/types/Null';
 import BaseMessage from './BaseMessage';
 
 export class BlockRequestMessage$Fields extends Set {
-  constructor (value?: any) {
+  constructor (value: any = ['header', 'body', 'justification']) {
     super({
       header:        0b00000001,
       body:          0b00000010,
@@ -22,19 +22,8 @@ export class BlockRequestMessage$Fields extends Set {
   }
 }
 
-// id: u8aToBn(u8a.subarray(0, FIELD_OFF), true).toNumber(),
-//       fields: toAttrs(u8a[FIELD_OFF]),
-//       from: isBn(from)
-//         ? from
-//         : new Hash(from),
-//       to: to
-//         ? new Hash(to)
-//         : null,
-//       direction,
-//       max
-
 export class BlockRequestMessage$Direction extends Enum {
-  constructor (value?: any) {
+  constructor (value: any = 'Ascending') {
     super([
       'Ascending',
       'Descending'
@@ -45,9 +34,9 @@ export class BlockRequestMessage$Direction extends Enum {
 export class BlockRequestMessage$From extends EnumType<BlockNumber | Hash> {
   constructor (value?: any) {
     super([
-      BlockNumber,
-      Hash
-    ], value);
+      Hash,
+      BlockNumber
+    ], value, 1);
   }
 }
 
@@ -56,7 +45,7 @@ export class BlockRequestMessage$To extends EnumType<Hash | Null> {
     super([
       Null,
       Hash
-    ], value);
+    ], value, 0);
   }
 }
 
@@ -76,15 +65,7 @@ export class BlockRequestMessage extends Struct {
 export default class BlockRequest extends BaseMessage implements MessageInterface {
   static type = 1;
 
-  // FIXME This is a horror, when adding 'justification' flag in here, mplex breaks. Something in the message
-  // does not seem to align with the sensibilities of the mplex chunker and it tries to allocate an ungodly
-  // large buffer. Not sure how message content can break the message, but it happens.
-  //   0x01010000000000000013016c4514000000000000000180000000
-  //   vs
-  //   0x01010000000000000003016c4514000000000000000180000000
-  constructor (
-    // { direction = 'Ascending', fields = ['header', 'body', 'justification'], from, id, max, to = null }: BlockRequestMessage) {
-      value: any) {
+  constructor (value: any) {
     super(BlockRequest.type, new BlockRequestMessage(value));
   }
 

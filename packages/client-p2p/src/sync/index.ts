@@ -221,7 +221,8 @@ export default class Sync extends EventEmitter implements SyncInterface {
     const timeout = Date.now() + REQUEST_TIMEOUT;
     const request = new BlockRequest({
       from,
-      id: peer.getNextId()
+      id: peer.getNextId(),
+      max: defaults.MAX_REQUEST_BLOCKS
     });
 
     this.blockRequests[peer.id] = {

@@ -73,6 +73,7 @@ export default class Executor implements ExecutorInterface {
     this.blockDb.bestHash.set(headerHash);
     this.blockDb.bestNumber.set(block.header.blockNumber);
     this.blockDb.block.set(u8a, headerHash);
+    this.blockDb.hash.set(headerHash, block.header.blockNumber);
 
     l.debug(() => `Imported block #${block.header.blockNumber} (${Date.now() - start}ms)`);
 
