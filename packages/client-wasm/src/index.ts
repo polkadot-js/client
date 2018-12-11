@@ -7,7 +7,8 @@ import { BlockDb, StateDb } from '@polkadot/client-db/types';
 import { RuntimeInterface } from '@polkadot/client-runtime/types';
 import { ExecutorInterface, Executor$BlockImportResult } from './types';
 
-import { Block } from '@polkadot/types';
+import { Struct, Vector } from '@polkadot/types/codec';
+import { Bytes, Hash, Header } from '@polkadot/types';
 import storage from '@polkadot/storage/static';
 import { assert, compactStripLength, logger, u8aToHex } from '@polkadot/util';
 
@@ -27,6 +28,19 @@ type Call = (...data: Array<Uint8Array>) => CallResult;
 const [, CODE_KEY] = compactStripLength(storage.substrate.code());
 
 const l = logger('executor');
+
+class Block extends Struct {
+  constructor (value?: Uint8Array) {
+    super({
+      header: Header,
+      extrinsics: Vector.with(Bytes)
+    }, value);
+  }
+
+  get header (): Header {
+    return this.get('header') as Header;
+  }
+}
 
 export default class Executor implements ExecutorInterface {
   private blockDb: BlockDb;
@@ -53,10 +67,9 @@ export default class Executor implements ExecutorInterface {
     return result.bool;
   }
 
-  importBlock (u8a: Uint8Array): Executor$BlockImportResult {
+  importBlock (headerHash: Hash, u8a: Uint8Array): boolean {
     const start = Date.now();
     const block = new Block(u8a);
-    const headerHash = block.header.hash;
 
     l.debug(() => `Importing block #${block.header.blockNumber}, ${u8aToHex(headerHash, 48)}`);
 
@@ -77,10 +90,7 @@ export default class Executor implements ExecutorInterface {
 
     l.debug(() => `Imported block #${block.header.blockNumber} (${Date.now() - start}ms)`);
 
-    return {
-      block,
-      u8a
-    };
+    return false;
   }
 
   private call (name: string, forceNew: boolean = false): Call {

@@ -142,9 +142,11 @@ export default class Peer extends EventEmitter implements PeerInterface {
           }
 
           if (received === length) {
-            const message = decodeMessage(data/*.subarray(1)*/);
+            l.debug(() => [this.shortId, 'received', { data }]);
 
-            l.debug(() => [this.shortId, 'received', { data, message: message.toJSON() }]);
+            const message = decodeMessage(data);
+
+            l.debug(() => [this.shortId, 'decoded', { message }]);
 
             this.emit('message', message);
 
@@ -181,7 +183,6 @@ export default class Peer extends EventEmitter implements PeerInterface {
       const buffer = u8aToBuffer(
         u8aConcat(
           bufferToU8a(length),
-          // new Uint8Array([0]),
           encoded
         )
       );

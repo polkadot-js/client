@@ -5,7 +5,7 @@
 const ADDRESS = '127.0.0.1';
 const CLIENT_ID = 'polkadot-js/0.0.0';
 const MAX_PEERS = 25;
-const MAX_REQUEST_BLOCKS = 64;
+const MAX_REQUEST_BLOCKS = 1;
 const MAX_QUEUED_BLOCKS = MAX_REQUEST_BLOCKS * 4; // 2048 in the Rust client
 const PORT = 31333;
 const ROLE = 'full';

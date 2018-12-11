@@ -2,7 +2,7 @@
 // This software may be modified and distributed under the terms
 // of the Apache-2.0 license. See the LICENSE file for details.
 
-import { BlockResponseMessage$Block } from '@polkadot/client-types/messages/BlockResponse';
+import { BlockResponseMessage$Data } from '@polkadot/client-types/messages/BlockResponse';
 import { PeerInterface, SyncStatus } from '../types';
 
 import { BlockRequest } from '@polkadot/client-types/messages';
@@ -19,7 +19,7 @@ export type SyncState$BlockRequests = {
 
 export type SyncState$BlockQueue = {
   [index: string]: {
-    block: BlockResponseMessage$Block,
+    block: BlockResponseMessage$Data,
     peer: PeerInterface
   }
 };
