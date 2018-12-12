@@ -3,34 +3,29 @@
 ;; of the Apache-2.0 license. See the LICENSE file for details.
 
 (module
-  ;; imports, compliant as per spec
-  (import "proxy" "apply_extrinsic"
-    (func $apply_extrinsic
-      (param i32 i32) (result i64)
-    )
-  )
-  (import "proxy" "execute_block"
-    (func $execute_block
-      (param i32 i32) (result i64)
-    )
-  )
-  (import "proxy" "finalise_block"
-    (func $finalise_block
-      (param i32 i32) (result i64)
-    )
-  )
-  (import "proxy" "initialise_block"
-    (func $initialise_block
-      (param i32 i32) (result i64)
-    )
-  )
+  ;; Core_version
+  ;; Core_authorities
+  ;; Core_execute_block
+  ;; Core_initialise_block
+  ;; Metadata_metadata
+  ;; BlockBuilder_apply_extrinsic
+  ;; BlockBuilder_finalise_block
+  ;; BlockBuilder_inherent_extrinsics
+  ;; BlockBuilder_check_inherents
+  ;; BlockBuilder_random_seed
+  ;; TaggedTransactionQueue_validate_transaction
+  ;; GrandpaApi_grandpa_pending_change
+  ;; GrandpaApi_grandpa_authorities
+
+  ;; imports, with all signatures are the same, Vec<u8> -> Vec<u8>
+  (import "proxy" "Core_execute_block" (func $Core_execute_block (param i32 i32) (result i64)))
 
   ;; storage for the return values
   (global $result_hi (mut i32) (i32.const 0))
   (global $result_lo (mut i32) (i32.const 0))
 
   ;; takes the i64 value, splitting into hi & lo
-  (func $result_wrap
+  (func $wrap
     (param $result i64) (result i32)
 
     (set_global $result_hi
@@ -51,54 +46,6 @@
     (get_global $result_lo)
   )
 
-  ;; proxied apply_extrinsic exported
-  (func (export "apply_extrinsic")
-    (param i32 i32) (result i32)
-
-    (call $result_wrap
-      (call $apply_extrinsic
-        (get_local 0)
-        (get_local 1)
-      )
-    )
-  )
-
-  ;; proxied execute_block exported
-  (func (export "execute_block")
-    (param i32 i32) (result i32)
-
-    (call $result_wrap
-      (call $execute_block
-        (get_local 0)
-        (get_local 1)
-      )
-    )
-  )
-
-  ;; proxied finalise_block exported
-  (func (export "finalise_block")
-    (param i32 i32) (result i32)
-
-    (call $result_wrap
-      (call $finalise_block
-        (get_local 0)
-        (get_local 1)
-      )
-    )
-  )
-
-  ;; proxied execute_block exported
-  (func (export "initialise_block")
-    (param i32 i32) (result i32)
-
-    (call $result_wrap
-      (call $initialise_block
-        (get_local 0)
-        (get_local 1)
-      )
-    )
-  )
-
   ;; returns the hi part of the i64
   (func (export "get_result_hi")
     (result i32)
@@ -111,5 +58,17 @@
     (result i32)
 
     (get_global $result_lo)
+  )
+
+  ;; proxied exported functions with i32 returns
+  (func (export "Core_execute_block")
+    (param i32 i32) (result i32)
+
+    (call $wrap
+      (call $Core_execute_block
+        (get_local 0)
+        (get_local 1)
+      )
+    )
   )
 )

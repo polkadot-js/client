@@ -8,6 +8,7 @@ import { trieRootOrdered } from '@polkadot/trie-hash';
 import { u8aToHex } from '@polkadot/util';
 
 import instrument from '../instrument';
+import unimplemented from '../unimplemented';
 
 export default function storage ({ l, heap, db }: RuntimeEnv): RuntimeInterface$Storage$Trie {
   return {
@@ -26,6 +27,12 @@ export default function storage ({ l, heap, db }: RuntimeEnv): RuntimeInterface$
         l.debug(() => ['enumerated_trie_root', [valuesPtr, lenPtr, count, resultPtr], '<-', pairs.length, '->', u8aToHex(root)]);
 
         heap.set(resultPtr, root);
+      }),
+    storage_changes_root: (parentHashData: Pointer, parentHashLen: number, parentNumHi: number, parentNumLo: number, result: Pointer): number =>
+      instrument('storage_changes_root', (): number => {
+        unimplemented('storage_changes_root');
+
+        return 0;
       }),
     storage_root: (resultPtr: Pointer): void =>
       instrument('storage_root', (): void => {

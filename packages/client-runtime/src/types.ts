@@ -72,8 +72,7 @@ export type RuntimeInterface$Memory = {
 export type RuntimeInterface$Sandbox = {
   sandbox_instantiate: (a: number, b: number, c: number, d: number, e: number, f: number) => number,
   sandbox_instance_teardown: (instanceIdx: number) => void,
-  sandbox_invoke: (instanceIdx: number, b: number, c: number, d: number) => number,
-  sandbox_invoke_poc2: (instanceIdx: number, exportPtr: Pointer, exportLen: number, argsPtr: Pointer, argsLen: number, returnValPtr: Pointer, returnValLen: number, state: number) => number,
+  sandbox_invoke: (instanceIdx: number, exportPtr: Pointer, exportLen: number, argsPtr: Pointer, argsLen: number, returnValPtr: Pointer, returnValLen: number, state: number) => number,
   sandbox_memory_get: (memoryIdx: number, offset: number, ptr: Pointer, len: number) => number,
   sandbox_memory_new: (initial: number, maximum: number) => number,
   sandbox_memory_set: (memoryIdx: number, offset: number, ptr: Pointer, len: number) => number,
@@ -91,6 +90,7 @@ export type RuntimeInterface$Storage$Data = {
 
 export type RuntimeInterface$Storage$Trie = {
   blake2_256_enumerated_trie_root: (valuesPtr: Pointer, lensPtr: Pointer, lensLen: number, resultPtr: Pointer) => void,
+  storage_changes_root: (parentHashData: Pointer, parentHashLen: number, parentNumHi: number, parentNumLo: number, result: Pointer) => number,
   storage_root: (resultPtr: Pointer) => void
 };
 

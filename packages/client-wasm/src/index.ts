@@ -60,7 +60,7 @@ export default class Executor implements ExecutorInterface {
 
     l.debug(() => 'Executing block');
 
-    const result = this.call('execute_block', forceNew)(block);
+    const result = this.call('Core_execute_block', forceNew)(block);
 
     l.debug(() => `Block execution completed (${Date.now() - start}ms)`);
 
