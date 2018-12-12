@@ -84,8 +84,6 @@ export default class Sync extends EventEmitter implements SyncInterface {
     if (this.blockQueue[nextNumber.toString()]) {
       const { block } = this.blockQueue[nextNumber.toString()];
 
-      console.error('block', block);
-
       l.debug(() => `Importing block #${nextNumber.toString()}`);
 
       if (!this.chain.executor.importBlock(block.hash, block.importable)) {

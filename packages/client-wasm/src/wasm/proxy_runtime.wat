@@ -8,6 +8,11 @@
       (param i32 i32 i32)
     )
   )
+  (import "runtime" "blake2_256_enumerated_trie_root"
+    (func $blake2_256_enumerated_trie_root
+      (param i32 i32 i32 i32)
+    )
+  )
   (import "runtime" "chain_id"
     (func $chain_id
       (result i32)
@@ -26,11 +31,6 @@
   (import "runtime" "ed25519_verify"
     (func $ed25519_verify
       (param i32 i32 i32 i32) (result i32)
-    )
-  )
-  (import "runtime" "enumerated_trie_root"
-    (func $enumerated_trie_root
-      (param i32 i32 i32 i32)
     )
   )
   (import "runtime" "exists_storage"
@@ -176,10 +176,10 @@
   )
 
   (export "ext_blake2_256" (func $blake2_256))
+  (export "ext_blake2_256_enumerated_trie_root" (func $blake2_256_enumerated_trie_root))
   (export "ext_clear_prefix" (func $clear_prefix))
   (export "ext_clear_storage" (func $clear_storage))
   (export "ext_ed25519_verify" (func $ed25519_verify))
-  (export "ext_enumerated_trie_root" (func $enumerated_trie_root))
   (export "ext_exists_storage" (func $exists_storage))
   (export "ext_free" (func $free))
   (export "ext_get_allocated_storage" (func $get_allocated_storage))

@@ -11,7 +11,7 @@ import instrument from '../instrument';
 
 export default function storage ({ l, heap, db }: RuntimeEnv): RuntimeInterface$Storage$Trie {
   return {
-    enumerated_trie_root: (valuesPtr: Pointer, lenPtr: Pointer, count: number, resultPtr: Pointer): void =>
+    blake2_256_enumerated_trie_root: (valuesPtr: Pointer, lenPtr: Pointer, count: number, resultPtr: Pointer): void =>
       instrument('enumerated_trie_root', (): void => {
         const pairs = [...Array(count).keys()].map((index: number) => {
           const length = heap.getU32(lenPtr + (index * 4));

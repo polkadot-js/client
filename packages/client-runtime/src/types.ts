@@ -90,7 +90,7 @@ export type RuntimeInterface$Storage$Data = {
 };
 
 export type RuntimeInterface$Storage$Trie = {
-  enumerated_trie_root: (valuesPtr: Pointer, lensPtr: Pointer, lensLen: number, resultPtr: Pointer) => void,
+  blake2_256_enumerated_trie_root: (valuesPtr: Pointer, lensPtr: Pointer, lensLen: number, resultPtr: Pointer) => void,
   storage_root: (resultPtr: Pointer) => void
 };
 

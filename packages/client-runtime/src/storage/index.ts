@@ -1,7 +1,6 @@
 // Copyright 2017-2018 @polkadot/client-runtime authors & contributors
 // This software may be modified and distributed under the terms
 // of the Apache-2.0 license. See the LICENSE file for details.
-/* eslint camelcase: 0 */
 
 import { RuntimeEnv, RuntimeInterface$Storage } from '../types';
 
@@ -9,17 +8,8 @@ import data from './data';
 import trie from './trie';
 
 export default function storage (env: RuntimeEnv): RuntimeInterface$Storage {
-  const { clear_prefix, clear_storage, exists_storage, get_allocated_storage, get_storage_into, set_storage } = data(env);
-  const { enumerated_trie_root, storage_root } = trie(env);
-
   return {
-    clear_prefix,
-    clear_storage,
-    exists_storage,
-    get_allocated_storage,
-    get_storage_into,
-    set_storage,
-    enumerated_trie_root,
-    storage_root
+    ...data(env),
+    ...trie(env)
   };
 }
