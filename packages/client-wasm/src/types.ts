@@ -3,7 +3,7 @@
 // of the Apache-2.0 license. See the LICENSE file for details.
 
 import { RuntimeInterface } from '@polkadot/client-runtime/types';
-import { Block, Hash } from '@polkadot/types';
+import { BlockData } from '@polkadot/client-types/index';
 
 export type WasmInstanceExports = {
   [index: string]: any
@@ -26,12 +26,6 @@ export type ExecutorInstance = {
   runtime: RuntimeInterface
 };
 
-export type Executor$BlockImportResult = {
-  u8a: Uint8Array,
-  block: Block
-};
-
 export type ExecutorInterface = {
-  executeBlock (block: Uint8Array): boolean;
-  importBlock (headerHash: Hash, block: Uint8Array): boolean;
+  importBlock (block: BlockData): boolean;
 };
