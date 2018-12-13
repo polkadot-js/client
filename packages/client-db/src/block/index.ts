@@ -14,7 +14,8 @@ export default function blockDb (db: BaseDb): BlockDb {
     db,
     bestHash: createU8a(db, keys.bestHash),
     bestNumber: createBn(db, keys.bestNumber, 64),
-    block: createU8a(db, keys.blockByHash),
-    header: createU8a(db, keys.headerByHash)
+    blockData: createU8a(db, keys.blockByHash),
+    header: createU8a(db, keys.headerByHash),
+    hash: createU8a(db, keys.hashByNumber)
   };
 }

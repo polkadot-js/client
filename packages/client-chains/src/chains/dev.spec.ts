@@ -7,11 +7,11 @@ import { u8aToHex } from '@polkadot/util';
 import Chain from '../index';
 
 describe('genesis', () => {
-  const genesis = new Chain({ chain: 'dev', db: { type: 'memory' } }).genesis;
+  const genesis = new Chain({ chain: 'dev', db: { type: 'memory' } } as any).genesis;
 
   it('creates a correct genesis block (parentHash)', () => {
     expect(
-      genesis.header.parentHash.toHex()
+      genesis.block.header.parentHash.toHex()
     ).toEqual(
       '0x0000000000000000000000000000000000000000000000000000000000000000'
     );
@@ -19,15 +19,15 @@ describe('genesis', () => {
 
   it('creates a correct genesis block (stateRoot)', () => {
     expect(
-      genesis.header.stateRoot.toHex()
+      genesis.block.header.stateRoot.toHex()
     ).toEqual(
-      '0x8f10ee30db42045fc46968597094b5ff22e5051b573b77c9e4f9be7450445342'
+      '0xf51fa1968b1f74ae72b91c8e4a73658633b6f663a30d7f4f1c2e4436c717d4e8'
     );
   });
 
   it('creates a correct genesis block (extrinsicsRoot)', () => {
     expect(
-      genesis.header.extrinsicsRoot.toHex()
+      genesis.block.header.extrinsicsRoot.toHex()
     ).toEqual(
       '0x03170a2e7597b7b7e3d84c05391d139a62b157e78786d8c082f29dcf4c111314'
     );
@@ -35,9 +35,9 @@ describe('genesis', () => {
 
   it('creates a correct block hash', () => {
     expect(
-      u8aToHex(genesis.headerHash)
+      u8aToHex(genesis.block.hash)
     ).toEqual(
-      '0xc29af88235602927480cc1feada648a9e658090caf1dbc87352e4b706978cf71'
+      '0x3e66d3b17a316ecf9bf3fc35e4131500d1dbb41de3ee210f7a680a2c5327b490'
     );
   });
 });

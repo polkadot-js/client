@@ -21,6 +21,6 @@ describe('client-chains', () => {
 
     expect(
       () => new Chain(config)
-    ).toThrow(/Unable to find builtin chain/);
+    ).toThrow(/Expected \.json extension/);
   });
 });

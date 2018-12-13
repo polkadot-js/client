@@ -13,7 +13,7 @@ describe('createImports', () => {
 
   it('sets the memoryBase & tableBase', () => {
     expect(
-      createImports({}, {}, {}).env
+      createImports({} as any, {} as any, {}).env
     ).toMatchObject({
       memoryBase: 0,
       tableBase: 0
@@ -21,20 +21,20 @@ describe('createImports', () => {
   });
 
   it('uses supplied memory', () => {
-    const memory = { 'some': { 'memory': { 'object': true } } };
+    const memory: any = { 'some': { 'memory': { 'object': true } } };
 
     expect(
-      createImports(memory, {}, {}).env
+      createImports(memory, {} as any, {}).env
     ).toMatchObject({
       memory
     });
   });
 
   it('uses supplied table', () => {
-    const table = { 'some': { 'table': { 'object': true } } };
+    const table = { 'some': { 'table': { 'object': true } } } as any;
 
     expect(
-      createImports({}, table, {}).env
+      createImports({} as any, table, {}).env
     ).toMatchObject({
       table
     });
@@ -42,7 +42,7 @@ describe('createImports', () => {
 
   it('exposes the runtime imports', () => {
     expect(
-      createImports({}, {}, { test: { foo: 'bar', baz: 'biz' } })
+      createImports({} as any, {} as any, { test: { foo: 'bar', baz: 'biz' } })
     ).toMatchObject({
       test: {
         'foo': 'bar',
@@ -53,7 +53,7 @@ describe('createImports', () => {
 
   it('exposes the runtime imports (env)', () => {
     expect(
-      createImports({}, {}, { env: { foo: 'bar', baz: 'biz' } }).env
+      createImports({} as any, {} as any, { env: { foo: 'bar', baz: 'biz' } }).env
     ).toMatchObject({
       'foo': 'bar',
       'baz': 'biz'

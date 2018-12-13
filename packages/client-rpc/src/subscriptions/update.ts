@@ -5,7 +5,7 @@
 import { ChainInterface } from '@polkadot/client-chains/types';
 import { Sockets, Subscriptions } from './types';
 
-import { Header } from '@polkadot/types';
+import { BlockData } from '@polkadot/client-types/index';
 import { isUndefined } from '@polkadot/util';
 
 import send from './send';
@@ -34,7 +34,7 @@ export default function update ({ blocks }: ChainInterface, subscriptions: Subsc
     return;
   }
 
-  blocks.block.onUpdate((header: Uint8Array): void =>
-    updateAll(subscriptions, sockets, 'chain_newHead', (new Header(header)).toJSON())
+  blocks.blockData.onUpdate((data: Uint8Array): void =>
+    updateAll(subscriptions, sockets, 'chain_newHead', new BlockData(data).header.toJSON())
   );
 }

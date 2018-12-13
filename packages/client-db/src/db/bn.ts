@@ -15,14 +15,14 @@ export default function decodeBn (db: BaseDb, createKey: StorageFunction, bitLen
   const base = createBase<BN | number>(db);
 
   return {
-    del: (...keyParams: Array<any>): void =>
-      base.del(createKey(keyParams)),
-    get: (...keyParams: Array<any>): BN =>
+    del: (keyParam: any): void =>
+      base.del(createKey(keyParam)),
+    get: (keyParam: any): BN =>
       u8aToBn(
-        base.get(createKey(keyParams)), true
+        base.get(createKey(keyParam)), true
       ),
-    set: (value: BN | number, ...keyParams: Array<any>): void =>
-      base.set(createKey(keyParams), value, bnToU8a(value, bitLength, true)),
+    set: (value: BN | number, keyParam: any): void =>
+      base.set(createKey(keyParam), value, bnToU8a(value, bitLength, true)),
     onUpdate: (updater: (value: BN | number, raw: Uint8Array) => void): void =>
       base.onUpdate(updater)
   };

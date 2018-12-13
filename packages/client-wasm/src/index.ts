@@ -5,9 +5,9 @@
 import { Config } from '@polkadot/client/types';
 import { BlockDb, StateDb } from '@polkadot/client-db/types';
 import { RuntimeInterface } from '@polkadot/client-runtime/types';
-import { ExecutorInterface, Executor$BlockImportResult } from './types';
+import { ExecutorInterface } from './types';
 
-import { Block } from '@polkadot/types';
+import { BlockData, ImportBlock } from '@polkadot/client-types/index';
 import storage from '@polkadot/storage/static';
 import { assert, compactStripLength, logger, u8aToHex } from '@polkadot/util';
 
@@ -21,7 +21,6 @@ type CallResult = {
 };
 
 type Call = (...data: Array<Uint8Array>) => CallResult;
-
 // type CallU8a = (...data: Array<Uint8Array>) => Uint8Array;
 
 const [, CODE_KEY] = compactStripLength(storage.substrate.code());
@@ -41,45 +40,44 @@ export default class Executor implements ExecutorInterface {
     this.runtime = runtime;
   }
 
-  executeBlock (block: Uint8Array, forceNew: boolean = false): boolean {
+  private executeBlock (blockData: BlockData, forceNew: boolean = false): boolean {
     const start = Date.now();
 
     l.debug(() => 'Executing block');
 
-    const result = this.call('execute_block', forceNew)(block);
+    const u8a = new ImportBlock(blockData).toU8a();
+    const result = this.call('Core_execute_block', forceNew)(u8a);
 
     l.debug(() => `Block execution completed (${Date.now() - start}ms)`);
 
     return result.bool;
   }
 
-  importBlock (u8a: Uint8Array): Executor$BlockImportResult {
+  importBlock (blockData: BlockData): boolean {
     const start = Date.now();
-    const block = new Block(u8a);
-    const headerHash = block.header.hash;
+    const { blockNumber, hash } = blockData.header;
+    const shortHash = u8aToHex(hash, 48);
 
-    l.debug(() => `Importing block #${block.header.blockNumber}, ${u8aToHex(headerHash, 48)}`);
+    l.debug(() => `Importing block #${blockNumber}, ${shortHash}`);
 
     try {
       this.stateDb.db.transaction(() =>
-        this.executeBlock(u8a)
+        this.executeBlock(blockData)
       );
     } catch (error) {
-      l.error(`Failed importing #${block.header.blockNumber.toString()}, ${u8aToHex(headerHash, 48)}`);
+      l.error(`Failed importing #${blockNumber}, ${shortHash}`);
 
       throw error;
     }
 
-    this.blockDb.bestHash.set(headerHash);
-    this.blockDb.bestNumber.set(block.header.blockNumber);
-    this.blockDb.block.set(u8a, headerHash);
+    this.blockDb.bestHash.set(hash);
+    this.blockDb.bestNumber.set(blockNumber);
+    this.blockDb.blockData.set(blockData.toU8a(), hash);
+    this.blockDb.hash.set(hash, blockNumber);
 
-    l.debug(() => `Imported block #${block.header.blockNumber} (${Date.now() - start}ms)`);
+    l.debug(() => `Imported block #${blockNumber} (${Date.now() - start}ms)`);
 
-    return {
-      block,
-      u8a
-    };
+    return false;
   }
 
   private call (name: string, forceNew: boolean = false): Call {

@@ -32,6 +32,7 @@ export default function decodeMessage (encoded: Uint8Array): MessageInterface {
 
   assert(!isUndefined(Decoder), `Unknown message received, id=${id}, ${u8aToHex(encoded)}`);
 
+  // FIXME This should be an EnumType (No need to manually carry type id around)
   return new Decoder(encoded.subarray(1));
 }
 

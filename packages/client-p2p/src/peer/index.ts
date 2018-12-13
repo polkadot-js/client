@@ -83,7 +83,7 @@ export default class Peer extends EventEmitter implements PeerInterface {
           roles: this.config.roles,
           bestNumber: this.chain.blocks.bestNumber.get(),
           bestHash: this.chain.blocks.bestHash.get(),
-          genesisHash: this.chain.genesis.headerHash,
+          genesisHash: this.chain.genesis.block.hash,
           version: defaults.PROTOCOL_VERSION
         })
       );
@@ -105,12 +105,8 @@ export default class Peer extends EventEmitter implements PeerInterface {
     // @ts-ignore yeap, we are filtering them right out at the end
     return Object
       .values(this.connections)
-      .map(({ pushable }) =>
-        pushable
-      )
-      .filter((pushable) =>
-        pushable
-      );
+      .map(({ pushable }) => pushable)
+      .filter((pushable) => pushable);
   }
 
   isWritable (): boolean {
@@ -146,9 +142,9 @@ export default class Peer extends EventEmitter implements PeerInterface {
           }
 
           if (received === length) {
-            const message = decodeMessage(data/*.subarray(1)*/);
+            const message = decodeMessage(data);
 
-            l.debug(() => [this.shortId, 'received', { message }]);
+            l.debug(() => [this.shortId, 'decoded', { message }]);
 
             this.emit('message', message);
 
@@ -181,11 +177,10 @@ export default class Peer extends EventEmitter implements PeerInterface {
   send (message: MessageInterface): boolean {
     try {
       const encoded = message.encode();
-      const length = varint.encode(encoded.length + 1);
+      const length = varint.encode(encoded.length);
       const buffer = u8aToBuffer(
         u8aConcat(
           bufferToU8a(length),
-          // new Uint8Array([0]),
           encoded
         )
       );

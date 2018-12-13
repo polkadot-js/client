@@ -5,6 +5,7 @@
 import { Config } from '@polkadot/client/types';
 import { ChainJson, ChainLoader } from './types';
 
+import fs from 'fs';
 import { trieRoot } from '@polkadot/trie-hash';
 import { assert, hexToU8a } from '@polkadot/util';
 
@@ -16,12 +17,19 @@ export default class Loader implements ChainLoader {
   readonly genesisRoot: Uint8Array;
 
   constructor ({ chain }: Config) {
-    this.chain = chains[chain];
-
-    assert(this.chain, `Unable to find builtin chain '${chain}'`);
+    this.chain = chains[chain] || this.loadJson(chain);
 
     this.genesisRoot = this.calculateGenesisRoot();
     this.id = this.chain.id;
+  }
+
+  private loadJson (chain: string): ChainJson {
+    assert(/\.json$/.test(chain), `Expected .json extension on custom non built-in chain`);
+    assert(fs.existsSync(chain), `Unable to find custom ${chain}`);
+
+    return JSON.parse(
+      fs.readFileSync(chain, { encoding: 'utf-8' })
+    );
   }
 
   private calculateGenesisRoot (): Uint8Array {

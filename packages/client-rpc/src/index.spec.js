@@ -38,7 +38,7 @@ describe('server', () => {
   beforeEach(() => {
     chain = {
       blocks: {
-        block: {
+        blockData: {
           onUpdate: () => {}
         }
       },

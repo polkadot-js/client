@@ -32,7 +32,7 @@ describe('enumerated_trie_root', () => {
         offset += item.length;
       });
 
-      index({ l, heap }).enumerated_trie_root(ptrVal, ptrLen, arr.length, ptrRes);
+      index({ l, heap }).blake2_256_enumerated_trie_root(ptrVal, ptrLen, arr.length, ptrRes);
 
       return heap.get(ptrRes, 32);
     };

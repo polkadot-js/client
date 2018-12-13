@@ -9,19 +9,14 @@ import { ChainInterface, ChainGenesis, ChainJson } from './types';
 
 import ChainDbs from '@polkadot/client-db/index';
 import createRuntime from '@polkadot/client-runtime/index';
+import { BlockData } from '@polkadot/client-types/index';
 import Executor from '@polkadot/client-wasm/index';
-import { Block, Header } from '@polkadot/types';
+import { Header } from '@polkadot/types';
 import storage from '@polkadot/storage/static';
 import { assert, compactStripLength, hexToU8a, logger, u8aToHex } from '@polkadot/util';
 import { trieRoot } from '@polkadot/trie-hash';
 
 import Loader from './loader';
-
-type BlockResult = {
-  block: Uint8Array,
-  header: Header,
-  headerHash: Uint8Array
-};
 
 const l = logger('chain');
 
@@ -43,8 +38,11 @@ export default class Chain implements ChainInterface {
 
     const bestHash = this.blocks.bestHash.get();
     const bestNumber = this.blocks.bestNumber.get();
+    const logGenesis = bestNumber.isZero()
+      ? ''
+      : `(genesis ${u8aToHex(this.genesis.block.hash, 48)})`;
 
-    l.log(`${this.chain.name}, #${bestNumber.toString()}, ${u8aToHex(bestHash, 48)}`);
+    l.log(`${this.chain.name}, #${bestNumber.toString()}, ${u8aToHex(bestHash, 48)} ${logGenesis}`);
 
     // NOTE Snapshot _before_ we attach the runtime since it ties directly to the backing DBs
     dbs.snapshot();
@@ -75,7 +73,7 @@ export default class Chain implements ChainInterface {
 
     assert(u8aToHex(this.state.db.getRoot(), 48) === hexState, `Unable to move state to ${hexState}`);
 
-    const genesisHash = this.state.blockHashAt.get(0);
+    const genesisHash = this.blocks.hash.get(0);
 
     if (!genesisHash || !genesisHash.length) {
       return this.rollbackBlock(bestHeader, rollback);
@@ -84,7 +82,7 @@ export default class Chain implements ChainInterface {
     const genesisBlock = this.getBlock(genesisHash);
 
     return {
-      ...genesisBlock,
+      block: genesisBlock,
       code: this.getCode()
     };
   }
@@ -107,18 +105,14 @@ export default class Chain implements ChainInterface {
     throw new Error('Unable to retrieve genesis hash, aborting');
   }
 
-  private getBlock (headerHash: Uint8Array): BlockResult {
-    const block = this.blocks.block.get(headerHash);
+  private getBlock (headerHash: Uint8Array): BlockData {
+    const data = this.blocks.blockData.get(headerHash);
 
-    if (!block || !block.length) {
+    if (!data || !data.length) {
       throw new Error(`Unable to retrieve block ${u8aToHex(headerHash)}`);
     }
 
-    return {
-      block,
-      header: new Block(block).header,
-      headerHash
-    };
+    return new BlockData(data);
   }
 
   private getCode (): Uint8Array {
@@ -138,28 +132,28 @@ export default class Chain implements ChainInterface {
 
     const genesis = this.createGenesisBlock();
 
-    this.blocks.bestHash.set(genesis.headerHash);
+    this.blocks.bestHash.set(genesis.block.hash);
     this.blocks.bestNumber.set(0);
-    this.blocks.block.set(genesis.block, genesis.headerHash);
+    this.blocks.blockData.set(genesis.block.toU8a(), genesis.block.hash);
+    this.blocks.hash.set(genesis.block.hash, 0);
 
     return genesis;
   }
 
   private createGenesisBlock (): ChainGenesis {
-    const block = new Block({
-      header: {
-        stateRoot: this.state.db.getRoot(),
-        extrinsicsRoot: trieRoot([]),
-        parentHash: new Uint8Array(32)
-      }
+    const header = new Header({
+      stateRoot: this.state.db.getRoot(),
+      extrinsicsRoot: trieRoot([]),
+      parentHash: new Uint8Array(32)
     });
-    const headerHash = block.header.hash;
+    const block = new BlockData({
+      hash: header.hash,
+      header
+    });
 
     return {
-      block: block.toU8a(),
-      code: this.getCode(),
-      header: block.header,
-      headerHash
+      block,
+      code: this.getCode()
     };
   }
 

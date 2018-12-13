@@ -5,64 +5,21 @@
 import { MessageInterface } from './types';
 
 import { Struct, Vector } from '@polkadot/types/codec';
-import { Bytes, Header, Hash, Signature, u64 as U64 } from '@polkadot/types';
+import { u64 as U64 } from '@polkadot/types';
 
+import BlockData from '../BlockData';
 import BaseMessage from './BaseMessage';
-
-export class BlockResponseMessage$Block$Justification extends Struct {
-  constructor (value?: any) {
-    super({
-      hash: Hash,
-      signature: Signature
-    }, value);
-  }
-
-  get hash (): Hash {
-    return this.get('hash') as Hash;
-  }
-
-  get signature (): Signature {
-    return this.get('signature') as Signature;
-  }
-}
-
-export class BlockResponseMessage$Block extends Struct {
-  constructor (value?: any) {
-    super({
-      hash: Hash,
-      header: Header,
-      extrinsics: Vector.with(Bytes),
-      justification: Vector.with(BlockResponseMessage$Block$Justification)
-    }, value);
-  }
-
-  get extrinsics (): Vector<Bytes> {
-    return this.get('extrinsics') as Vector<Bytes>;
-  }
-
-  get hash (): Hash {
-    return this.get('hash') as Hash;
-  }
-
-  get header (): Header {
-    return this.get('header') as Header;
-  }
-
-  get justification (): Vector<BlockResponseMessage$Block$Justification> {
-    return this.get('justification') as Vector<BlockResponseMessage$Block$Justification>;
-  }
-}
 
 export class BlockResponseMessage extends Struct {
   constructor (value?: any) {
     super({
       id: U64,
-      blocks: Vector.with(BlockResponseMessage$Block)
+      blocks: Vector.with(BlockData)
     }, value);
   }
 
-  get blocks (): Vector<BlockResponseMessage$Block> {
-    return this.get('blocks') as Vector<BlockResponseMessage$Block>;
+  get blocks (): Vector<BlockData> {
+    return this.get('blocks') as Vector<BlockData>;
   }
 
   get id (): U64 {
@@ -77,8 +34,8 @@ export default class BlockResponse extends BaseMessage implements MessageInterfa
     super(BlockResponse.type, new BlockResponseMessage(value));
   }
 
-  get blocks (): Vector<BlockResponseMessage$Block> {
-    return this.message.get('blocks') as Vector<BlockResponseMessage$Block>;
+  get blocks (): Vector<BlockData> {
+    return this.message.get('blocks') as Vector<BlockData>;
   }
 
   get id (): U64 {

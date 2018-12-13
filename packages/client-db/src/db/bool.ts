@@ -12,15 +12,15 @@ export default function decodeBool (db: BaseDb, createKey: StorageFunction): Sto
   const base = createBase<boolean>(db);
 
   return {
-    del: (...keyParams: Array<any>): void =>
-      base.del(createKey(keyParams)),
-    get: (...keyParams: Array<any>): boolean => {
-      const value = base.get(createKey(keyParams));
+    del: (keyParam: any): void =>
+      base.del(createKey(keyParam)),
+    get: (keyParam: any): boolean => {
+      const value = base.get(createKey(keyParam));
 
       return value[0] === 1;
     },
-    set: (value: boolean, ...keyParams: Array<any>): void =>
-      base.set(createKey(keyParams), value, new Uint8Array([value ? 1 : 0])),
+    set: (value: boolean, keyParam: any): void =>
+      base.set(createKey(keyParam), value, new Uint8Array([value ? 1 : 0])),
     onUpdate: (updater: (value: boolean, raw: Uint8Array) => void): void =>
       base.onUpdate(updater)
   };

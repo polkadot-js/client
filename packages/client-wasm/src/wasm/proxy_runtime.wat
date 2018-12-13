@@ -8,6 +8,11 @@
       (param i32 i32 i32)
     )
   )
+  (import "runtime" "blake2_256_enumerated_trie_root"
+    (func $blake2_256_enumerated_trie_root
+      (param i32 i32 i32 i32)
+    )
+  )
   (import "runtime" "chain_id"
     (func $chain_id
       (result i32)
@@ -26,11 +31,6 @@
   (import "runtime" "ed25519_verify"
     (func $ed25519_verify
       (param i32 i32 i32 i32) (result i32)
-    )
-  )
-  (import "runtime" "enumerated_trie_root"
-    (func $enumerated_trie_root
-      (param i32 i32 i32 i32)
     )
   )
   (import "runtime" "exists_storage"
@@ -105,11 +105,6 @@
   )
   (import "runtime" "sandbox_invoke"
     (func $sandbox_invoke
-      (param i32 i32 i32 i32) (result i32)
-    )
-  )
-  (import "runtime" "sandbox_invoke_poc2"
-    (func $sandbox_invoke_poc2
       (param i32 i32 i32 i32 i32 i32 i32 i32) (result i32)
     )
   )
@@ -138,6 +133,11 @@
       (param i32 i32 i32 i32)
     )
   )
+  (import "runtime" "storage_changes_root"
+    (func $storage_changes_root
+      (param i32 i32 i32 i32 i32) (result i32)
+    )
+  )
   (import "runtime" "storage_root"
     (func $storage_root
       (param i32)
@@ -149,20 +149,34 @@
     )
   )
 
+  ;; takes the i64 value, returning the hi part
+  (func $get_hi
+    (param i64) (result i32)
+
+    (i32.wrap/i64
+      (i64.shr_u
+        (get_local 0)
+        (i64.const 32)
+      )
+    )
+  )
+
+  ;; takes the i64 value, returning the lo part
+  (func $get_lo
+    (param i64) (result i32)
+
+    (i32.wrap/i64
+      (get_local 0)
+    )
+  )
+
   ;; spec compliant print_num
   (func (export "ext_print_num")
-    (param $num i64)
+    (param i64)
 
     (call $print_num
-      (i32.wrap/i64
-        (i64.shr_u
-          (get_local $num)
-          (i64.const 32)
-        )
-      )
-      (i32.wrap/i64
-        (get_local $num)
-      )
+      (call $get_hi (get_local 0))
+      (call $get_lo (get_local 0))
     )
   )
 
@@ -175,11 +189,24 @@
     )
   )
 
+  ;; spec compliant storage_changes_root
+  (func (export "ext_storage_changes_root")
+    (param i32 i32 i64 i32) (result i32)
+
+    (call $storage_changes_root
+      (get_local 0)
+      (get_local 1)
+      (call $get_hi (get_local 2))
+      (call $get_lo (get_local 2))
+      (get_local 3)
+    )
+  )
+
   (export "ext_blake2_256" (func $blake2_256))
+  (export "ext_blake2_256_enumerated_trie_root" (func $blake2_256_enumerated_trie_root))
   (export "ext_clear_prefix" (func $clear_prefix))
   (export "ext_clear_storage" (func $clear_storage))
   (export "ext_ed25519_verify" (func $ed25519_verify))
-  (export "ext_enumerated_trie_root" (func $enumerated_trie_root))
   (export "ext_exists_storage" (func $exists_storage))
   (export "ext_free" (func $free))
   (export "ext_get_allocated_storage" (func $get_allocated_storage))
@@ -192,7 +219,6 @@
   (export "ext_print_hex" (func $print_hex))
   (export "ext_print_utf8" (func $print_utf8))
   (export "ext_sandbox_invoke" (func $sandbox_invoke))
-  (export "ext_sandbox_invoke_poc2" (func $sandbox_invoke_poc2))
   (export "ext_sandbox_instance_teardown" (func $sandbox_instance_teardown))
   (export "ext_sandbox_instantiate" (func $sandbox_instantiate))
   (export "ext_sandbox_memory_get" (func $sandbox_memory_get))

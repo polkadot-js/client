@@ -13,8 +13,9 @@ const subscribeNewHead = async (): Promise<string> =>
 
 const getBlock = ({ blocks }: ChainInterface): (params: Array<string>) => Promise<string> =>
   async ([hash]: Array<string>): Promise<string> => {
+    // FIXME This is BlockData, not SignedBlock as it should be
     return u8aToHex(
-      blocks.block.get(
+      blocks.blockData.get(
         hexToU8a(hash)
       )
     );

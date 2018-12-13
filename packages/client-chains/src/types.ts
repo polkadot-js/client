@@ -5,8 +5,8 @@
 import { Config } from '@polkadot/client/types';
 import { BlockDb, StateDb } from '@polkadot/client-db/types';
 import { RuntimeInterface } from '@polkadot/client-runtime/types';
+import { BlockData } from '@polkadot/client-types/index';
 import { ExecutorInterface } from '@polkadot/client-wasm/types';
-import { Header } from '@polkadot/types';
 import { Logger } from '@polkadot/util/types';
 
 export type ChainName = 'dev';
@@ -24,10 +24,8 @@ export type ChainJson = {
 };
 
 export type ChainGenesis = {
-  block: Uint8Array,
-  code: Uint8Array,
-  header: Header,
-  headerHash: Uint8Array
+  block: BlockData,
+  code: Uint8Array
 };
 
 export interface ChainLoader {

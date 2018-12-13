@@ -5,7 +5,7 @@
 import { MessageInterface } from './types';
 
 import { Set, Struct } from '@polkadot/types/codec';
-import { BlockNumber, Hash, u32 as U32 } from '@polkadot/types';
+import { BlockNumber, Bytes, Hash, u32 as U32 } from '@polkadot/types';
 
 import BaseMessage from './BaseMessage';
 
@@ -27,7 +27,8 @@ export class StatusMessage extends Struct {
       roles: StatusMessage$Roles,
       bestNumber: BlockNumber,
       bestHash: Hash,
-      genesisHash: Hash
+      genesisHash: Hash,
+      chainStatus: Bytes
     }, value);
   }
 }
@@ -45,6 +46,10 @@ export default class Status extends BaseMessage implements MessageInterface {
 
   get bestNumber (): BlockNumber {
     return this.message.get('bestNumber') as BlockNumber;
+  }
+
+  get chainStatus (): Bytes {
+    return this.message.get('chainStatus') as Bytes;
   }
 
   get genesisHash (): Hash {
