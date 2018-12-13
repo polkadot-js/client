@@ -6,22 +6,22 @@ import createFunction from '@polkadot/storage/utils/createFunction';
 import { StorageFunctionMetadata, StorageFunctionModifier, StorageFunctionType } from '@polkadot/types/Metadata/Modules';
 import Text from '@polkadot/types/Text';
 import Vector from '@polkadot/types/codec/Vector';
+import { isString } from '@polkadot/util';
 
 interface SubstrateMetadata {
   documentation: Array<string>;
-  isMap?: boolean;
   type: string | { key: string, value: string };
 }
 
 // Small helper function to factorize code on this page.
-const createMethod = (method: string, key: string, { documentation, isMap, type }: SubstrateMetadata) =>
+const createMethod = (method: string, key: string, { documentation, type }: SubstrateMetadata) =>
   createFunction(
     new Text('Block'),
     new Text(key),
     {
       documentation: new Vector(Text, documentation),
       modifier: new StorageFunctionModifier(0),
-      type: new StorageFunctionType(type, isMap ? 1 : 0),
+      type: new StorageFunctionType(type, isString(type) ? 0 : 1),
       toJSON: (): any =>
         key
     } as StorageFunctionMetadata,
@@ -50,7 +50,7 @@ export default {
   hashByNumber: createMethod('hashByNumber', 'hsh:num:', {
     documentation: ['Retrieve hash by number'],
     type: {
-      key: 'U256',
+      key: 'u256',
       value: 'Hash'
     }
   }),

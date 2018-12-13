@@ -74,12 +74,19 @@ export default class Sync extends EventEmitter implements SyncInterface {
     }, hasOne ? 1 : 100);
   }
 
+  private setStatus (): void {
+    this.status = Object.keys(this.blockQueue).length > defaults.MIN_IDLE_BLOCKS
+      ? 'Sync'
+      : 'Idle';
+  }
+
   private processBlock (): boolean {
     // const start = Date.now();
     const bestNumber = this.chain.blocks.bestNumber.get();
     const nextNumber = bestNumber.addn(1);
     let hasImported = false;
-    let queueLength = Object.keys(this.blockQueue).length;
+
+    this.setStatus();
 
     if (this.blockQueue[nextNumber.toString()]) {
       const { block } = this.blockQueue[nextNumber.toString()];
@@ -97,7 +104,6 @@ export default class Sync extends EventEmitter implements SyncInterface {
       }
 
       hasImported = true;
-      queueLength--;
 
       // if (this.lastPeer !== peer || !queueLength) {
       //   if (this.lastPeer !== null || !queueLength) {
@@ -107,10 +113,6 @@ export default class Sync extends EventEmitter implements SyncInterface {
       //   this.lastPeer = peer;
       // }
     }
-
-    this.status = queueLength > 1
-      ? 'Sync'
-      : 'Idle';
 
     return hasImported;
 
@@ -166,8 +168,8 @@ export default class Sync extends EventEmitter implements SyncInterface {
 
     for (let i = 0; i < blocks.length; i++) {
       const block = blocks[i];
-      const dbBlock = this.chain.blocks.block.get(block.hash);
-      const header = block.header.unwrap();
+      const dbBlock = this.chain.blocks.blockData.get(block.hash);
+      const header = block.header;
       const queueNumber = header.blockNumber.toString();
       const isImportable = !dbBlock.length || bestNumber.lt(header.blockNumber);
       const canQueue = isImportable && !this.blockQueue[queueNumber];

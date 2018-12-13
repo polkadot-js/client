@@ -8,9 +8,7 @@ import { Bytes, Header } from '@polkadot/types';
 import BlockData from './BlockData';
 
 export default class ImportBlock extends Struct {
-  constructor ({ body, header }: BlockData) {
-    const { blockNumber, extrinsicsRoot, parentHash, stateRoot } = header.unwrap();
-
+  constructor ({ body, header: { blockNumber, extrinsicsRoot, parentHash, stateRoot } }: BlockData) {
     super({
       header: Header,
       body: Vector.with(Bytes)
@@ -21,7 +19,7 @@ export default class ImportBlock extends Struct {
         parentHash,
         stateRoot
       },
-      body: body.unwrap()
+      body
     });
   }
 }

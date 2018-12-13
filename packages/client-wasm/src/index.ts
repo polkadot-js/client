@@ -21,7 +21,6 @@ type CallResult = {
 };
 
 type Call = (...data: Array<Uint8Array>) => CallResult;
-
 // type CallU8a = (...data: Array<Uint8Array>) => Uint8Array;
 
 const [, CODE_KEY] = compactStripLength(storage.substrate.code());
@@ -41,13 +40,12 @@ export default class Executor implements ExecutorInterface {
     this.runtime = runtime;
   }
 
-  private executeBlock (block: BlockData, forceNew: boolean = false): boolean {
+  private executeBlock (blockData: BlockData, forceNew: boolean = false): boolean {
     const start = Date.now();
 
     l.debug(() => 'Executing block');
 
-    const u8a = new ImportBlock(block).toU8a();
-    console.error(u8a.toString());
+    const u8a = new ImportBlock(blockData).toU8a();
     const result = this.call('Core_execute_block', forceNew)(u8a);
 
     l.debug(() => `Block execution completed (${Date.now() - start}ms)`);
@@ -55,41 +53,29 @@ export default class Executor implements ExecutorInterface {
     return result.bool;
   }
 
-  importBlock (block: BlockData): boolean {
+  importBlock (blockData: BlockData): boolean {
     const start = Date.now();
-    const header = block.header.unwrap();
-    const headerHash = header.hash;
+    const { blockNumber, hash } = blockData.header;
+    const shortHash = u8aToHex(hash, 48);
 
-    // 62, 102, 211, 177, 122, 49, 110, 207, 155, 243, 252, 53, 228, 19, 21, 0, 209, 219, 180, 29, 227, 238, 33,
-    // 15, 122, 104, 10, 44, 83, 39, 180, 144, 4, 165, 63, 182, 242, 46, 83, 94, 129, 193, 104, 207, 169, 10, 100,
-    // 172, 224, 158, 32, 158, 94, 145, 170, 162, 212, 1, 223, 219, 57, 41, 170, 83, 176, 73, 36, 49, 74, 96, 216,
-    // 240, 182, 215, 11, 21, 75, 127, 86, 119, 167, 216, 199, 44, 6, 116, 85, 172, 34, 28, 26, 55, 87, 167, 146,
-    // 207, 165, 4, 3, 14, 138, 4,23,0,0,0,0,114,164,0,172,94,244,36,192,63,73,22,78,186,48,145,235,233,95,192,50,123,230,169,4,56,56,145,169,54,14,26,42,114,51,58,135,52,206,47,54,8,172,46,84,133,221,173,36,217,249,83,229,21,195,54,139,122,12,231,239,58,77,40,14,4,32,1,0,0,3,56,40,18,92
-
-    // 62, 102, 211, 177, 122, 49, 110, 207, 155, 243, 252, 53, 228, 19, 21, 0, 209, 219, 180, 29, 227, 238, 33,
-    // 15, 122, 104, 10, 44, 83, 39, 180, 144, 4, 165, 63, 182, 242, 46, 83, 94, 129, 193, 104, 207, 169, 10, 100,
-    // 172, 224, 158, 32, 158, 94, 145, 170, 162, 212, 1, 223, 219, 57, 41, 170, 83, 176, 73, 36, 49, 74, 96, 216,
-    // 240, 182, 215, 11, 21, 75, 127, 86, 119, 167, 216, 199, 44, 6, 116, 85, 172, 34, 28, 26, 55, 87, 167, 146,
-    // 207, 165, 0, 4, 32, 1, 0, 0, 3, 56, 40, 18, 92]
-
-    l.debug(() => `Importing block #${header.blockNumber}, ${u8aToHex(headerHash, 48)}`);
+    l.debug(() => `Importing block #${blockNumber}, ${shortHash}`);
 
     try {
       this.stateDb.db.transaction(() =>
-        this.executeBlock(block)
+        this.executeBlock(blockData)
       );
     } catch (error) {
-      l.error(`Failed importing #${header.blockNumber.toString()}, ${u8aToHex(headerHash, 48)}`);
+      l.error(`Failed importing #${blockNumber}, ${shortHash}`);
 
       throw error;
     }
 
-    this.blockDb.bestHash.set(headerHash);
-    this.blockDb.bestNumber.set(header.blockNumber);
-    this.blockDb.block.set(block.toU8a(), headerHash);
-    this.blockDb.hash.set(headerHash, header.blockNumber);
+    this.blockDb.bestHash.set(hash);
+    this.blockDb.bestNumber.set(blockNumber);
+    this.blockDb.blockData.set(blockData.toU8a(), hash);
+    this.blockDb.hash.set(hash, blockNumber);
 
-    l.debug(() => `Imported block #${header.blockNumber} (${Date.now() - start}ms)`);
+    l.debug(() => `Imported block #${blockNumber} (${Date.now() - start}ms)`);
 
     return false;
   }

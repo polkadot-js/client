@@ -10,10 +10,10 @@ import { bnToU8a, u8aConcat, u8aToBn } from '@polkadot/util';
 
 export default function decodeArrayU8a (db: BaseDb, createKey: StorageFunction): StorageMethod$ArrayU8a {
   return {
-    del: (...keyParams: Array<any>): void =>
-      db.del(createKey(keyParams)),
-    get: (...keyParams: Array<any>): Array<Uint8Array> => {
-      const u8a = db.get(createKey(keyParams));
+    del: (keyParam: any): void =>
+      db.del(createKey(keyParam)),
+    get: (keyParam: any): Array<Uint8Array> => {
+      const u8a = db.get(createKey(keyParam));
 
       if (u8a === null) {
         return [];
@@ -29,8 +29,8 @@ export default function decodeArrayU8a (db: BaseDb, createKey: StorageFunction):
 
       return result;
     },
-    set: (value: Array<Uint8Array>, ...keyParams: Array<any>): void =>
-      db.put(createKey(keyParams), u8aConcat(
+    set: (value: Array<Uint8Array>, keyParam: any): void =>
+      db.put(createKey(keyParam), u8aConcat(
         bnToU8a(value.length, 32, true),
         u8aConcat.apply(null, value))
       ),

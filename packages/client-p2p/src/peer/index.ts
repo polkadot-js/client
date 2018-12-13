@@ -83,7 +83,7 @@ export default class Peer extends EventEmitter implements PeerInterface {
           roles: this.config.roles,
           bestNumber: this.chain.blocks.bestNumber.get(),
           bestHash: this.chain.blocks.bestHash.get(),
-          genesisHash: this.chain.genesis.headerHash,
+          genesisHash: this.chain.genesis.block.hash,
           version: defaults.PROTOCOL_VERSION
         })
       );
@@ -142,8 +142,6 @@ export default class Peer extends EventEmitter implements PeerInterface {
           }
 
           if (received === length) {
-            l.debug(() => [this.shortId, 'received', { data }]);
-
             const message = decodeMessage(data);
 
             l.debug(() => [this.shortId, 'decoded', { message }]);

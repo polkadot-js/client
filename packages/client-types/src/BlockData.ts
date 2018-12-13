@@ -17,16 +17,16 @@ export default class BlockData extends Struct {
     }, value);
   }
 
-  get body (): Option<Vector<Bytes>> {
-    return this.get('body') as Option<Vector<Bytes>>;
+  get body (): Vector<Bytes> {
+    return (this.get('body') as Option<Vector<Bytes>>).unwrap();
   }
 
   get hash (): Hash {
     return this.get('hash') as Hash;
   }
 
-  get header (): Option<Header> {
-    return this.get('header') as Option<Header>;
+  get header (): Header {
+    return (this.get('header') as Option<Header>).unwrap();
   }
 
   get justification (): Option<Bytes> {

@@ -125,9 +125,9 @@ class Client {
 // and none can be added. As it stands, not a bad idea since it shows where stuff breaks
 // instead of just exiting, however we should _never_ have these - and we have a couple that
 // puts the app into an unknown state
-process.on('uncaughtException', (err: Error) => {
-  l.error('Uncaught exception', err);
-});
+// process.on('uncaughtException', (err: Error) => {
+//   l.error('Uncaught exception', err);
+// });
 
 new Client()
   .start(cli())

@@ -12,12 +12,12 @@ export default function decodeU8a (db: BaseDb, createKey: StorageFunction): Stor
   const base = createBase<Uint8Array>(db);
 
   return {
-    del: (...keyParams: Array<any>): void =>
-      base.del(createKey(keyParams)),
-    get: (...keyParams: Array<any>): Uint8Array =>
-      base.get(createKey(keyParams)),
-    set: (value: Uint8Array, ...keyParams: Array<any>): void =>
-      base.set(createKey(keyParams), value, value),
+    del: (keyParam: any): void =>
+      base.del(createKey(keyParam)),
+    get: (keyParam: any): Uint8Array =>
+      base.get(createKey(keyParam)),
+    set: (value: Uint8Array, keyParam: any): void =>
+      base.set(createKey(keyParam), value, value),
     onUpdate: (updater: (value: Uint8Array, raw: Uint8Array) => void): void =>
       base.onUpdate(updater)
   };

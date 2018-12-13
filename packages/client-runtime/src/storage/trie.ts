@@ -8,7 +8,7 @@ import { trieRootOrdered } from '@polkadot/trie-hash';
 import { u8aToHex } from '@polkadot/util';
 
 import instrument from '../instrument';
-import unimplemented from '../unimplemented';
+// import unimplemented from '../unimplemented';
 
 export default function storage ({ l, heap, db }: RuntimeEnv): RuntimeInterface$Storage$Trie {
   return {
@@ -30,7 +30,15 @@ export default function storage ({ l, heap, db }: RuntimeEnv): RuntimeInterface$
       }),
     storage_changes_root: (parentHashData: Pointer, parentHashLen: number, parentNumHi: number, parentNumLo: number, result: Pointer): number =>
       instrument('storage_changes_root', (): number => {
-        unimplemented('storage_changes_root');
+        // Stubbed, always assuming no changes
+        // assert(parentHashLen === 32, `Expected hash length of 32, found ${parentHashLen}`);
+
+        // const parentHash = heap.get(parentHashData, parentHashLen);
+        // const root = db.getRoot();
+
+        // console.error(parentHashData, parentHashLen, parentNumHi, parentNumLo, result, u8aToHex(parentHash), root.toString());
+
+        // unimplemented('storage_changes_root');
 
         return 0;
       }),
