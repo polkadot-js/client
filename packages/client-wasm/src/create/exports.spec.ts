@@ -2,32 +2,30 @@
 // This software may be modified and distributed under the terms
 // of the Apache-2.0 license. See the LICENSE file for details.
 
+import wasmAddTwo from '../../test/wasm/addTwo_wasm';
+import wasmImport from '../../test/wasm/import_wasm';
+import wasmStart from '../../test/wasm/start_wasm';
+
 import createExports from './exports';
 import createMemory from './memory';
 
 describe('exports', () => {
-  let instance;
-
   describe('valid modules, defaults', () => {
     it('creates instance with defaults', () => {
       expect(
-        createExports(
-          require('../../test/wasm/addTwo_wasm')
-        ).exports
+        createExports(wasmAddTwo).exports
       ).toBeDefined();
     });
   });
 
   describe('valid modules, with memory', () => {
-    beforeEach(() => {
-      instance = createExports(
-        require('../../test/wasm/addTwo_wasm'),
+    it('allows calls into the module', () => {
+      const instance = createExports(
+        wasmAddTwo,
         {},
         createMemory(0, 0)
       ).exports;
-    });
 
-    it('allows calls into the module', () => {
       expect(
         instance.addTwo(22, 33)
       ).toEqual(55);
@@ -35,19 +33,14 @@ describe('exports', () => {
   });
 
   describe('imports', () => {
-    let callback;
-    let instance;
-
-    beforeEach(() => {
-      callback = jest.fn();
-      instance = createExports(
-        require('../../test/wasm/import_wasm'),
+    it('allows imports to be called', () => {
+      const callback = jest.fn();
+      const instance = createExports(
+        wasmImport,
         { js: { callback } },
         createMemory(0, 0)
       ).exports;
-    });
 
-    it('allows imports to be called', () => {
       instance.go(123);
 
       expect(callback).toHaveBeenCalledWith(123);
@@ -55,18 +48,15 @@ describe('exports', () => {
   });
 
   describe('start', () => {
-    let callback;
+    it('allows imports to be called', () => {
+      const callback = jest.fn();
 
-    beforeEach(() => {
-      callback = jest.fn();
-      instance = createExports(
-        require('../../test/wasm/start_wasm'),
+      createExports(
+        wasmStart,
         { js: { callback } },
         createMemory(0, 0)
-      ).exports;
-    });
+      );
 
-    it('allows imports to be called', () => {
       expect(callback).toHaveBeenCalledWith(1337);
     });
   });

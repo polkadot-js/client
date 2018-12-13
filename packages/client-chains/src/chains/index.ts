@@ -5,10 +5,7 @@
 import { ChainJson } from '../types';
 
 const dev = (require('./dev.json') as ChainJson);
-const krummelanke = (require('./krummelanke.json') as ChainJson);
 
 export default ({
-  dev,
-  krummelanke,
-  test: krummelanke
+  dev
 } as { [index: string]: ChainJson });

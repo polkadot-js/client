@@ -8,16 +8,16 @@ import defaults from '../defaults';
 import createMemory from './memory';
 
 describe('createMemory', () => {
-  let globalWasm;
-  let constructInstanceSpy;
+  let globalWasm: any;
+  let constructInstanceSpy: Function;
 
   beforeEach(() => {
-    globalWasm = global.WebAssembly;
+    globalWasm = (global as any).WebAssembly;
     constructInstanceSpy = jest.fn();
 
-    global.WebAssembly = class {
+    (global as any).WebAssembly = class {
       static Memory = class {
-        constructor (defaults) {
+        constructor (defaults: any) {
           constructInstanceSpy(defaults);
         }
       };
@@ -25,7 +25,7 @@ describe('createMemory', () => {
   });
 
   afterEach(() => {
-    global.WebAssembly = globalWasm;
+    (global as any).WebAssembly = globalWasm;
   });
 
   it('expects initial <= maximum', () => {
