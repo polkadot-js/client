@@ -28,8 +28,8 @@
   "dependencies": {
     "@babel/runtime": "^7.2.0",
     "@polkadot/client-runtime": "^0.18.1",
-    "@polkadot/types": "^0.33.14",
-    "@polkadot/util": "^0.33.13",
+    "@polkadot/types": "^0.34.8",
+    "@polkadot/util": "^0.33.21",
     "@types/webassembly-js-api": "^0.0.2"
   }
 }
