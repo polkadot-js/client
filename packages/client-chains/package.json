@@ -29,10 +29,10 @@
     "@polkadot/client-db": "^0.18.1",
     "@polkadot/client-runtime": "^0.18.1",
     "@polkadot/client-wasm": "^0.18.1",
-    "@polkadot/storage": "^0.33.14",
-    "@polkadot/types": "^0.33.14"
+    "@polkadot/storage": "^0.34.8",
+    "@polkadot/types": "^0.34.8"
   },
   "devDependencies": {
-    "@polkadot/extrinsics": "^0.33.14"
+    "@polkadot/extrinsics": "^0.34.8"
   }
 }
