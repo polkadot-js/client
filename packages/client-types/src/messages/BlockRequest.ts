@@ -33,19 +33,19 @@ export class BlockRequestMessage$Direction extends Enum {
 
 export class BlockRequestMessage$From extends EnumType<BlockNumber | Hash> {
   constructor (value?: any) {
-    super([
+    super({
       Hash,
       BlockNumber
-    ], value, 1);
+    }, value, 1);
   }
 }
 
 export class BlockRequestMessage$To extends EnumType<Hash | Null> {
   constructor (value?: any) {
-    super([
+    super({
       Null,
       Hash
-    ], value, 0);
+    }, value, 0);
   }
 }
 

@@ -17,7 +17,7 @@ interface SubstrateMetadata {
 const createMethod = (method: string, key: string, { documentation, type }: SubstrateMetadata) =>
   createFunction(
     new Text('Block'),
-    new Text(key),
+    new Text(method),
     {
       documentation: new Vector(Text, documentation),
       modifier: new StorageFunctionModifier(0),
@@ -27,7 +27,7 @@ const createMethod = (method: string, key: string, { documentation, type }: Subs
     } as StorageFunctionMetadata,
     {
       isUnhashed: false,
-      method
+      key
     }
   );
 

@@ -26,26 +26,6 @@
   dependencies:
     "@babel/highlight" "^7.0.0"
 
-"@babel/core@^7.2.0":
-  version "7.2.0"
-  resolved "https://registry.yarnpkg.com/@babel/core/-/core-7.2.0.tgz#a4dd3814901998e93340f0086e9867fefa163ada"
-  integrity sha512-7pvAdC4B+iKjFFp9Ztj0QgBndJ++qaMeonT185wAqUnhipw8idm9Rv1UMyBuKtYjfl6ORNkgEgcsYLfHX/GpLw==
-  dependencies:
-    "@babel/code-frame" "^7.0.0"
-    "@babel/generator" "^7.2.0"
-    "@babel/helpers" "^7.2.0"
-    "@babel/parser" "^7.2.0"
-    "@babel/template" "^7.1.2"
-    "@babel/traverse" "^7.1.6"
-    "@babel/types" "^7.2.0"
-    convert-source-map "^1.1.0"
-    debug "^4.1.0"
-    json5 "^2.1.0"
-    lodash "^4.17.10"
-    resolve "^1.3.2"
-    semver "^5.4.1"
-    source-map "^0.5.0"
-
 "@babel/core@^7.2.2":
   version "7.2.2"
   resolved "https://registry.yarnpkg.com/@babel/core/-/core-7.2.2.tgz#07adba6dde27bb5ad8d8672f15fde3e08184a687"
@@ -66,7 +46,7 @@
     semver "^5.4.1"
     source-map "^0.5.0"
 
-"@babel/generator@^7.1.6", "@babel/generator@^7.2.0":
+"@babel/generator@^7.1.6":
   version "7.2.0"
   resolved "https://registry.yarnpkg.com/@babel/generator/-/generator-7.2.0.tgz#eaf3821fa0301d9d4aef88e63d4bcc19b73ba16c"
   integrity sha512-BA75MVfRlFQG2EZgFYIwyT1r6xSkwfP2bdkY/kLZusEYWiJs4xCowab/alaEaT0wSvmVuXGqiefeBlP+7V1yKg==
@@ -283,7 +263,7 @@
     esutils "^2.0.2"
     js-tokens "^4.0.0"
 
-"@babel/parser@^7.1.2", "@babel/parser@^7.1.6", "@babel/parser@^7.2.0":
+"@babel/parser@^7.1.2", "@babel/parser@^7.1.6":
   version "7.2.0"
   resolved "https://registry.yarnpkg.com/@babel/parser/-/parser-7.2.0.tgz#02d01dbc330b6cbf36b76ac93c50752c69027065"
   integrity sha512-M74+GvK4hn1eejD9lZ7967qAwvqTZayQa3g10ag4s9uewgR7TKjeaT0YMyoq+gVfKYABiWZ4MQD701/t5e1Jhg==
@@ -720,7 +700,7 @@
     "@babel/parser" "^7.2.2"
     "@babel/types" "^7.2.2"
 
-"@babel/traverse@^7.1.0", "@babel/traverse@^7.1.5", "@babel/traverse@^7.1.6":
+"@babel/traverse@^7.1.0", "@babel/traverse@^7.1.5":
   version "7.1.6"
   resolved "https://registry.yarnpkg.com/@babel/traverse/-/traverse-7.1.6.tgz#c8db9963ab4ce5b894222435482bd8ea854b7b5c"
   integrity sha512-CXedit6GpISz3sC2k2FsGCUpOhUqKdyL0lqNrImQojagnUMXf8hex4AxYFRuMkNGcvJX5QAFGzB5WJQmSv8SiQ==
@@ -1892,10 +1872,10 @@
   resolved "https://registry.yarnpkg.com/@types/xxhashjs/-/xxhashjs-0.1.1.tgz#980709096c7138713b7777f49dccd4b8f93908e5"
   integrity sha512-6mHo5kJME0Ydtms1ZW8qIV34xs4QryS6O8e8xQ5d3kXZgFOtdfV3h1HXhb11EhYSTO94fEj95xa+08VFZB5ZBQ==
 
-"@types/yargs@^12.0.1":
-  version "12.0.1"
-  resolved "https://registry.yarnpkg.com/@types/yargs/-/yargs-12.0.1.tgz#c5ce4ad64499010ae4dc2acd9b14d49749a44233"
-  integrity sha512-UVjo2oH79aRNcsDlFlnQ/iJ67Jd7j6uSg7jUJP/RZ/nUjAh5ElmnwlD5K/6eGgETJUgCHkiWn91B8JjXQ6ubAw==
+"@types/yargs@^12.0.2":
+  version "12.0.2"
+  resolved "https://registry.yarnpkg.com/@types/yargs/-/yargs-12.0.2.tgz#7569157b2601d49d4442023c0d22f81d23f62d1e"
+  integrity sha512-NUyxaQW48vjeDHybmhy7CFx/6of1+PoaEGPMI+0PzBVr5s3BTELT7gV4lNaxUsKllNS1YAjkeTEhBtzIDWs2WQ==
 
 JSONStream@^1.0.4, JSONStream@^1.3.4, JSONStream@~1.3.1:
   version "1.3.5"
