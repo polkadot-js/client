@@ -28,7 +28,7 @@
   "dependencies": {
     "@babel/runtime": "^7.2.0",
     "@polkadot/client-db": "^0.18.2",
-    "@polkadot/util": "^0.33.21",
-    "@polkadot/util-crypto": "^0.33.21"
+    "@polkadot/util": "^0.34.4",
+    "@polkadot/util-crypto": "^0.34.4"
   }
 }

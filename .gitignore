@@ -9,6 +9,7 @@ test.sh
 .env.development.local
 .env.test.local
 .env.production.local
+.npmrc
 lerna-debug.log*
 package-lock.json
 npm-debug.log*
