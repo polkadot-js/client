@@ -27,7 +27,7 @@
   "homepage": "https://github.com/polkadot-js/client/tree/master/packages/client-telemetry#readme",
   "dependencies": {
     "@babel/runtime": "^7.2.0",
-    "@polkadot/util": "^0.34.28",
+    "@polkadot/util": "^0.34.29",
     "websocket": "^1.0.28"
   }
 }

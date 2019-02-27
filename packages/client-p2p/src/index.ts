@@ -60,7 +60,7 @@ export default class P2p extends EventEmitter implements P2pInterface {
     this.sync = new Sync(config, chain);
     this.dialQueue = {};
     this.dialTimer = null;
-    this.protocol = defaults.getProtocol(chain.chain.protocolId)
+    this.protocol = defaults.getProtocol(chain.chain.protocolId);
   }
 
   isStarted (): boolean {

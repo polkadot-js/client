@@ -8,7 +8,6 @@ export default {
   'name': 'Development',
   'id': 'development',
   'bootNodes': [],
-  'telemetryUrl': null,
   'protocolId': null,
   'consensusEngine': null,
   'properties': null,

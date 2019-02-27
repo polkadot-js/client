@@ -31,7 +31,7 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.2.0",
-    "@polkadot/util": "^0.34.28",
+    "@polkadot/util": "^0.34.29",
     "@types/co-body": "^0.0.3",
     "@types/koa": "^2.0.47",
     "@types/koa-compose": "^3.2.2",
