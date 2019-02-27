@@ -10,7 +10,6 @@
   ],
   "resolutions": {
     "babel-core": "^7.0.0-bridge.0",
-    "multistream-select": "^0.14.3",
     "typescript": "^3.3.3333"
   },
   "scripts": {
@@ -24,7 +23,7 @@
     "start-rust": "NODE_OPTIONS=--experimental-worker node packages/client/scripts/polkadot.js --db-path ./tmp/start-rust --p2p-nodes /ip4/127.0.0.1/tcp/30333/ipfs/QmXBQmmjNsBLobf5Xx8Kqz7rvUrGgiBLTYm2EmQvcZyrKR --p2p-port 39935 --rpc-port 9935"
   },
   "devDependencies": {
-    "@babel/core": "^7.2.2",
+    "@babel/core": "^7.3.4",
     "@polkadot/dev": "^0.25.6",
     "@polkadot/ts": "^0.1.53"
   }

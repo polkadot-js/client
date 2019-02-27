@@ -32,7 +32,7 @@
   },
   "homepage": "https://github.com/polkadot-js/client/tree/master/packages/client#readme",
   "dependencies": {
-    "@babel/runtime": "^7.2.0",
+    "@babel/runtime": "^7.3.4",
     "@polkadot/client-chains": "^0.19.0",
     "@polkadot/client-db": "^0.19.0",
     "@polkadot/client-p2p": "^0.19.0",
@@ -40,16 +40,16 @@
     "@polkadot/client-telemetry": "^0.19.0",
     "@polkadot/client-wasm": "^0.19.0",
     "@polkadot/util": "^0.34.31",
-    "@types/package-json": "^4.0.1",
+    "@types/package-json": "^5.0.0",
     "@types/semver-compare": "^1.0.0",
-    "@types/yargs": "^12.0.2",
-    "package-json": "^5.0.0",
+    "@types/yargs": "^12.0.9",
+    "package-json": "^6.0.0",
     "semver-compare": "^1.0.0",
-    "yargs": "^12.0.5"
+    "yargs": "^13.2.1"
   },
   "devDependencies": {
-    "@babel/core": "^7.2.2",
+    "@babel/core": "^7.3.4",
     "@babel/register": "^7.0.0",
-    "babel-plugin-module-resolver": "^3.1.1"
+    "babel-plugin-module-resolver": "^3.2.0"
   }
 }

@@ -25,7 +25,6 @@
   },
   "homepage": "https://github.com/polkadot-js/client/tree/master/packages/client-db#readme",
   "dependencies": {
-    "@babel/runtime": "^7.2.0",
     "@polkadot/db": "^0.34.31",
     "@polkadot/storage": "^0.45.17",
     "@polkadot/trie-db": "^0.34.31",
