@@ -2,10 +2,11 @@
 // This software may be modified and distributed under the terms
 // of the Apache-2.0 license. See the LICENSE file for details.
 
+import { Chainspec } from '@polkadot/chainspec/types';
 import { Config } from '@polkadot/client/types';
 import { BlockDb, StateDb } from '@polkadot/client-db/types';
 import { ExecutorInterface } from '@polkadot/client-wasm/types';
-import { ChainInterface, ChainGenesis, ChainJson } from './types';
+import { ChainInterface, ChainGenesis } from './types';
 
 import ChainDbs from '@polkadot/client-db/index';
 import createRuntime from '@polkadot/client-runtime/index';
@@ -22,7 +23,7 @@ const l = logger('chain');
 
 export default class Chain implements ChainInterface {
   readonly blocks: BlockDb;
-  readonly chain: ChainJson;
+  readonly chain: Chainspec;
   readonly executor: ExecutorInterface;
   readonly genesis: ChainGenesis;
   readonly state: StateDb;
