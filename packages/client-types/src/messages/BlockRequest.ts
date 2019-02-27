@@ -5,8 +5,7 @@
 import { MessageInterface } from './types';
 
 import { Enum, EnumType, Option, Set, Struct } from '@polkadot/types/codec';
-import { BlockNumber, Hash, u32 as U32, u64 as U64 } from '@polkadot/types';
-import Null from '@polkadot/types/Null';
+import { BlockNumber, Hash, Null, u32 as U32, u64 as U64 } from '@polkadot/types';
 
 import BaseMessage from './BaseMessage';
 

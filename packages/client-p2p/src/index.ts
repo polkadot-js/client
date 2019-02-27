@@ -47,6 +47,7 @@ export default class P2p extends EventEmitter implements P2pInterface {
   private dialQueue: { [index: string]: QueuedPeer };
   private node: LibP2p | undefined;
   private peers: PeersInterface | undefined;
+  private protocol: string;
   private dialTimer: NodeJS.Timer | null;
   readonly sync: Sync;
 
@@ -59,6 +60,7 @@ export default class P2p extends EventEmitter implements P2pInterface {
     this.sync = new Sync(config, chain);
     this.dialQueue = {};
     this.dialTimer = null;
+    this.protocol = defaults.getProtocol(chain.chain.protocolId)
   }
 
   isStarted (): boolean {
@@ -161,7 +163,7 @@ export default class P2p extends EventEmitter implements P2pInterface {
 
   private _handleProtocol (node: LibP2p, peers: PeersInterface): void {
     node.handle(
-      defaults.PROTOCOL_DOT,
+      this.protocol,
       async (protocol: string, connection: LibP2pConnection): Promise<void> => {
         try {
           const peerInfo = await promisify(connection, connection.getPeerInfo);
@@ -290,7 +292,7 @@ export default class P2p extends EventEmitter implements P2pInterface {
 
     try {
       const connection = await promisify(
-        this.node, this.node.dialProtocol, peer.peerInfo, defaults.PROTOCOL_DOT
+        this.node, this.node.dialProtocol, peer.peerInfo, this.protocol
       );
 
       await this._pingPeer(peer);

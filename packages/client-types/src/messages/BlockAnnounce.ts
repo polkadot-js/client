@@ -4,8 +4,7 @@
 
 import { MessageInterface } from './types';
 
-import { Struct } from '@polkadot/types/codec';
-import { Header } from '@polkadot/types';
+import { Header, Struct } from '@polkadot/types';
 
 import BaseMessage from './BaseMessage';
 

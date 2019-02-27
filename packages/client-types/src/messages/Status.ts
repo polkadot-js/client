@@ -24,6 +24,7 @@ export class StatusMessage extends Struct {
   constructor (value: any) {
     super({
       version: U32,
+      minSupportedVersion: U32,
       roles: StatusMessage$Roles,
       bestNumber: BlockNumber,
       bestHash: Hash,
@@ -54,6 +55,10 @@ export default class Status extends BaseMessage implements MessageInterface {
 
   get genesisHash (): Hash {
     return this.message.get('genesisHash') as Hash;
+  }
+
+  get minSupportedVersion (): U32 {
+    return this.message.get('minSupportedVersion') as U32;
   }
 
   get roles (): StatusMessage$Roles {

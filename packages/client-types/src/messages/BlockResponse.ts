@@ -4,8 +4,7 @@
 
 import { MessageInterface } from './types';
 
-import { Struct, Vector } from '@polkadot/types/codec';
-import { u64 as U64 } from '@polkadot/types';
+import { Struct, Vector, u64 as U64 } from '@polkadot/types';
 
 import BlockData from '../BlockData';
 import BaseMessage from './BaseMessage';

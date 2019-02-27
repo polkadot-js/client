@@ -1758,6 +1758,14 @@
     universal-user-agent "^2.0.0"
     url-template "^2.0.8"
 
+"@polkadot/chainspec@^0.34.28":
+  version "0.34.28"
+  resolved "https://registry.yarnpkg.com/@polkadot/chainspec/-/chainspec-0.34.28.tgz#0caa95c965fb57653ab386b8d3886d8f95ae6ac6"
+  integrity sha512-ET6HD+44A2ceEOJAtlINEifuriwYYglMIfxNz4JYwawr0C0kdI8hOcu1c4EBAL7te2kLfQ3Lyx+sUcgQ9uCRtA==
+  dependencies:
+    "@babel/runtime" "^7.3.1"
+    "@polkadot/util" "^0.34.28"
+
 "@polkadot/db@^0.34.28":
   version "0.34.28"
   resolved "https://registry.yarnpkg.com/@polkadot/db/-/db-0.34.28.tgz#6887e801a9c24b48fa80c259fedcf359dad1efec"
@@ -12960,10 +12968,10 @@ typedoc@^0.14.2:
     typedoc-default-themes "^0.5.0"
     typescript "3.2.x"
 
-typescript@3.2.x, typescript@^3.2.2, typescript@^3.3.3333:
-  version "3.2.2"
-  resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.2.2.tgz#fe8101c46aa123f8353523ebdcf5730c2ae493e5"
-  integrity sha512-VCj5UiSyHBjwfYacmDuc/NOk4QQixbE+Wn7MFJuS0nRuPQbof132Pw4u53dm264O8LPc2MVsc7RJNml5szurkg==
+typescript@3.2.x, typescript@^3.3.3333:
+  version "3.3.3333"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.3.3333.tgz#171b2c5af66c59e9431199117a3bcadc66fdcfd6"
+  integrity sha512-JjSKsAfuHBE/fB2oZ8NxtRTk5iGcg6hkYXMnZ3Wc+b2RSqejEqTaem11mHASMnFilHrax3sLK0GDzcJrekZYLw==
 
 uc.micro@^1.0.1, uc.micro@^1.0.5:
   version "1.0.6"

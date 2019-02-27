@@ -4,8 +4,13 @@
 
 const MAX_REQUEST_BLOCKS = 64;
 const PROTOCOL_BASE = '/substrate';
-const PROTOCOL_TYPE = '/sup';
-const PROTOCOL_VERSION = 1;
+const PROTOCOL_TYPE = 'sup';
+const PROTOCOL_VERSION = 2;
+const MIN_PROTOCOL_VERSION = 2;
+
+function getProtocol (type?: string | null): string {
+  return `${PROTOCOL_BASE}/${type || PROTOCOL_TYPE}/${PROTOCOL_VERSION}`;
+}
 
 export default {
   ADDRESS: '127.0.0.1',
@@ -17,8 +22,8 @@ export default {
   PORT: 31333,
   ROLE: 'full',
   PROTOCOL_BASE,
-  PROTOCOL_TYPE,
   PROTOCOL_VERSION,
-  PROTOCOL_DOT: `${PROTOCOL_BASE}${PROTOCOL_TYPE}/${PROTOCOL_VERSION}`,
-  PROTOCOL_PING: '/ipfs/ping/1.0.0'
+  MIN_PROTOCOL_VERSION,
+  PROTOCOL_PING: '/ipfs/ping/1.0.0',
+  getProtocol
 };

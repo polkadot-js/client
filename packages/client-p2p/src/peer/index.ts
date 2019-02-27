@@ -84,6 +84,7 @@ export default class Peer extends EventEmitter implements PeerInterface {
           bestNumber: this.chain.blocks.bestNumber.get(),
           bestHash: this.chain.blocks.bestHash.get(),
           genesisHash: this.chain.genesis.block.hash,
+          minSupportedVersion: defaults.MIN_PROTOCOL_VERSION,
           version: defaults.PROTOCOL_VERSION
         })
       );

@@ -4,7 +4,7 @@
 
 import BN from 'bn.js';
 import { BaseDb } from '@polkadot/db/types';
-import { StorageFunction } from '@polkadot/types/StorageKey';
+import { StorageFunction } from '@polkadot/types/primitive/StorageKey';
 import { StorageMethod$Bn } from '../types';
 
 import { bnToU8a, u8aToBn } from '@polkadot/util';

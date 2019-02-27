@@ -3,6 +3,7 @@
 // of the Apache-2.0 license. See the LICENSE file for details.
 
 // TODO: It may make sense to move this to @polkadot/util
+// (it has `stringCamelCase` available, however start...)
 export default function keyToCamel (key: string, startIndex: number = 0): string {
   return key
     .split('-')
