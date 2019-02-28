@@ -3,18 +3,17 @@
 // of the Apache-2.0 license. See the LICENSE file for details.
 
 const MAX_REQUEST_BLOCKS = 64;
-const PROTOCOL_BASE = '/substrate';
+const PROTOCOL_BASE = 'substrate';
 const PROTOCOL_TYPE = 'sup';
 const PROTOCOL_VERSION = 2;
 const MIN_PROTOCOL_VERSION = 2;
 
 function getProtocol (type?: string | null): string {
-  return `${PROTOCOL_BASE}/${type || PROTOCOL_TYPE}/${PROTOCOL_VERSION}`;
+  return `/${PROTOCOL_BASE}/${type || PROTOCOL_TYPE}/${PROTOCOL_VERSION}`;
 }
 
 export default {
   ADDRESS: '127.0.0.1',
-  CLIENT_ID: 'polkadot-js/0.0.0',
   MAX_PEERS: 25,
   MAX_REQUEST_BLOCKS,
   MAX_QUEUED_BLOCKS: MAX_REQUEST_BLOCKS * 8,

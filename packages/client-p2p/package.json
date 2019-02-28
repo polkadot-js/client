@@ -26,8 +26,9 @@
   },
   "homepage": "https://github.com/polkadot-js/client/client/tree/master/packages/client-p2p#readme",
   "dependencies": {
+    "@babel/runtime": "^7.3.4",
     "@polkadot/client-types": "^0.19.0",
-    "@polkadot/util": "^0.34.31",
+    "@polkadot/util": "^0.34.33",
     "@types/varint": "^5.0.0",
     "eventemitter3": "^3.1.0",
     "libp2p": "^0.24.4",

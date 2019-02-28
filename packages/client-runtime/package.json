@@ -26,8 +26,9 @@
   },
   "homepage": "https://github.com/polkadot-js/client/tree/master/packages/client-runtime#readme",
   "dependencies": {
+    "@babel/runtime": "^7.3.4",
     "@polkadot/client-db": "^0.19.0",
-    "@polkadot/util": "^0.34.31",
-    "@polkadot/util-crypto": "^0.34.31"
+    "@polkadot/util": "^0.34.33",
+    "@polkadot/util-crypto": "^0.34.33"
   }
 }

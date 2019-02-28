@@ -302,21 +302,21 @@ export default class P2p extends EventEmitter implements P2pInterface {
 
       return true;
     } catch (error) {
-      // l.error('dial error', error);
+      l.error('dial error', error);
     }
 
     return false;
   }
 
   private _dialPeers (peer?: PeerInterface): void {
-    if (!this.node || !this.node.isStarted()) {
-      return;
-    }
-
     if (this.dialTimer !== null) {
       clearTimeout(this.dialTimer);
       this.dialTimer = null;
     }
+
+    this.dialTimer = setTimeout(() => {
+      this._dialPeers();
+    }, DIAL_INTERVAL);
 
     const now = Date.now();
 
@@ -325,6 +325,10 @@ export default class P2p extends EventEmitter implements P2pInterface {
         nextDial: now,
         peer
       };
+    }
+
+    if (!this.node || !this.node.isStarted()) {
+      return;
     }
 
     Object.keys(this.dialQueue).forEach(
@@ -340,10 +344,6 @@ export default class P2p extends EventEmitter implements P2pInterface {
         await this._dialPeer(item.peer, this.peers);
       }
     );
-
-    this.dialTimer = setTimeout(() => {
-      this._dialPeers();
-    }, DIAL_INTERVAL);
   }
 
   private _requestAny (): void {

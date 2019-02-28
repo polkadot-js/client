@@ -25,7 +25,7 @@ export const name = 'polkadot-js';
 export const stability = _stability;
 export const version = pkgJson.version;
 export const isDevelopment = stability === DEVELOPMENT;
-export const clientId = `${name}/${version}-${stability}`;
+export const clientId = `${name}/${version}`;
 
 export async function getNpmVersion (): Promise<string> {
   return npmQuery(pkgJson.name)
