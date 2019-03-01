@@ -22,6 +22,10 @@ export default class BaseMessage {
   }
 
   toJSON (): any {
-    this.message.toJSON();
+    return this.message.toJSON();
+  }
+
+  toString () {
+    return JSON.stringify(this.toJSON());
   }
 }
