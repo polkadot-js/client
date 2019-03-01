@@ -6,7 +6,7 @@ import Chain from './index';
 
 describe('client-chains', () => {
   const config = {
-    chain: 'dev',
+    chain: 'alexander',
     db: { type: 'memory' }
   };
 

@@ -12,7 +12,7 @@ type PackageJson = {
 
 const DEVELOPMENT = 'development';
 let pkgJson: PackageJson;
-let _stability = 'release';
+let _stability = 'alpha'; // 'release'
 
 try {
   pkgJson = require('./package.json');
@@ -25,7 +25,7 @@ export const name = 'polkadot-js';
 export const stability = _stability;
 export const version = pkgJson.version;
 export const isDevelopment = stability === DEVELOPMENT;
-export const clientId = `${name}/${version}`;
+export const clientId = `${name}/${version}-${stability}`;
 
 export async function getNpmVersion (): Promise<string> {
   return npmQuery(pkgJson.name)
