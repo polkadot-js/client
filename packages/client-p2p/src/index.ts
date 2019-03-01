@@ -254,7 +254,7 @@ export default class P2p extends EventEmitter implements P2pInterface {
             // setTimeout(doPing, PING_INTERVAL);
             // return;
           } else if (error) {
-            l.warn(() => [`error on reading ping from ${peer.shortId}`]);
+            l.debug(() => [`error on reading ping from ${peer.shortId}`]);
           } else {
             l.warn(() => `wrong ping received from ${peer.shortId}`);
           }
