@@ -2,7 +2,7 @@
 // This software may be modified and distributed under the terms
 // of the Apache-2.0 license. See the LICENSE file for details.
 
-const MAX_REQUEST_BLOCKS = 64;
+const MAX_REQUEST_BLOCKS = 128;
 const PROTOCOL_BASE = 'substrate';
 const PROTOCOL_TYPE = 'sup';
 const PROTOCOL_VERSION = 2;

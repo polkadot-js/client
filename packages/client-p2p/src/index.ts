@@ -244,32 +244,26 @@ export default class P2p extends EventEmitter implements P2pInterface {
       const doPing = () => {
         const start = Date.now();
         const request = u8aToBuffer(randomAsU8a());
-        // const timerId = setTimeout(() => {
-        //   l.warn(() => `ping timeout from ${peer.shortId}, disconnecting`);
-        //   peer.disconnect();
-        //   shake.abort();
-        // }, PING_TIMEOUT);
 
         shake.write(request);
         shake.read(32, (error, response) => {
-          // clearTimeout(timerId);
-
           if (!error && request.equals(response)) {
             const elapsed = Date.now() - start;
 
             l.debug(`Ping from ${peer.shortId} ${elapsed}ms`);
-            setTimeout(doPing, PING_INTERVAL);
-            return;
-          }
-
-          if (error) {
-            l.warn(() => [`error on reading ping from ${peer.shortId}, disconnecting`, error]);
+            // setTimeout(doPing, PING_INTERVAL);
+            // return;
+          } else if (error) {
+            l.warn(() => [`error on reading ping from ${peer.shortId}`]);
           } else {
-            l.warn(() => `wrong ping received from ${peer.shortId}, disconnecting`);
+            l.warn(() => `wrong ping received from ${peer.shortId}`);
           }
 
-          peer.disconnect();
-          shake.abort();
+          setTimeout(doPing, PING_INTERVAL);
+          return;
+
+          // peer.disconnect();
+          // shake.abort();
         });
       };
 

@@ -28,7 +28,7 @@
   "dependencies": {
     "@babel/runtime": "^7.3.4",
     "@polkadot/client-types": "^0.19.0",
-    "@polkadot/util": "^0.34.36",
+    "@polkadot/util": "^0.34.37",
     "@types/varint": "^5.0.0",
     "eventemitter3": "^3.1.0",
     "libp2p": "^0.24.4",
@@ -40,6 +40,7 @@
     "libp2p-spdy": "^0.13.1",
     "libp2p-tcp": "^0.13.0",
     "libp2p-websockets": "^0.12.2",
+    "pull-mplex": "^0.1.1",
     "pull-pushable": "^2.2.0",
     "pull-stream": "^3.6.9",
     "pump": "^3.0.0",

@@ -121,39 +121,50 @@ export default class Peer extends EventEmitter implements PeerInterface {
   _receive (connection: LibP2pConnection, connId: number): boolean {
     let data: Uint8Array | null = null;
     let received: number;
-    let length: number = 0;
+    let remaining: number = 0;
 
     try {
       pull(connection, pull.drain(
         (buffer: Buffer): void => {
-          if (data === null) {
-            // NOTE the actual incoming message has a varint prefixed length, strip this
-            length = varint.decode(buffer);
+          // NOTE We can receive multiple messages (complete or incomplete in a single packet)
+          // loop through and slice to the next as we go along
+          while (buffer.length) {
+            let handleSize;
 
-            const offset = varint.decode.bytes;
+            if (data === null) {
+              // NOTE the actual incoming message has a varint prefixed length, strip this
+              remaining = varint.decode(buffer);
+              received = 0;
 
-            received = buffer.length - offset;
-            data = new Uint8Array(length);
-            data.set(bufferToU8a(buffer).subarray(offset), 0);
-          } else {
-            const u8a = bufferToU8a(buffer);
+              const offset = varint.decode.bytes;
 
-            data.set(u8a, received);
-            received += u8a.length;
-          }
-
-          if (received === length) {
-            const message = decodeMessage(data);
-
-            l.debug(() => [this.shortId, 'decoded', { message }]);
-
-            this.emit('message', message);
-
-            if (message.type === 0) {
-              this.emit('active');
+              handleSize = Math.min(remaining, buffer.length - offset);
+              data = new Uint8Array(remaining);
+              buffer = buffer.slice(offset);
+            } else {
+              handleSize = Math.min(remaining, buffer.length);
             }
 
-            data = null;
+            data.set(bufferToU8a(buffer.slice(0, handleSize)), received);
+
+            received += handleSize;
+            remaining -= handleSize;
+
+            buffer = buffer.slice(handleSize);
+
+            if (remaining === 0) {
+              const message = decodeMessage(data);
+
+              l.debug(() => [this.shortId, 'decoded', { message }]);
+
+              this.emit('message', message);
+
+              if (message.type === 0) {
+                this.emit('active');
+              }
+
+              data = null;
+            }
           }
         },
         (error) => {

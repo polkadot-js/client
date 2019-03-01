@@ -5,7 +5,7 @@
 import { P2pNodes } from '../types';
 
 import DHT from 'libp2p-kad-dht';
-import mplex from 'libp2p-mplex';
+// import mplex from 'libp2p-mplex';
 // import Multicast from 'libp2p-mdns';
 import Bootstrap from 'libp2p-bootstrap';
 import secio from 'libp2p-secio';
@@ -13,6 +13,7 @@ import spdy from 'libp2p-spdy';
 import TCP from 'libp2p-tcp';
 import PeerInfo from 'peer-info';
 // import WS from 'libp2p-websockets';
+import mplex from 'pull-mplex';
 
 export default function createModules (peerInfo: PeerInfo, bootNodes: P2pNodes, nodes: P2pNodes): LibP2p.OptionsModules {
   const list = nodes.concat(bootNodes).map((node) =>
