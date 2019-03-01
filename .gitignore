@@ -3,6 +3,7 @@ coverage/
 node_modules/
 tmp/
 packages/client-wasm/test/wasm-bin
+dev.json
 test.sh
 .DS_Store
 .env.local

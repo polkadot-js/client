@@ -2,12 +2,11 @@
 // This software may be modified and distributed under the terms
 // of the Apache-2.0 license. See the LICENSE file for details.
 
-import { ChainName } from './types';
+import { Chainspec } from '@polkadot/chainspec/types';
 
-const MAIN: ChainName = 'dev';
-const TEST: ChainName = 'dev';
+import { alexander, drieddanta } from '@polkadot/chainspec';
 
-export default {
-  MAIN,
-  TEST
-};
+export default ({
+  alexander,
+  drieddanta
+} as { [index: string]: Chainspec });

@@ -5,7 +5,6 @@
 import { Options } from 'yargs';
 
 import chains from '@polkadot/client-chains/chains';
-import chainDefaults from '@polkadot/client-chains/defaults';
 
 import { clientId } from '../../clientId';
 
@@ -13,8 +12,8 @@ const allChains = Object.keys(chains).map((chain) => `'${chain}'`);
 
 export default ({
   'chain': {
-    default: chainDefaults.MAIN,
     description: `Use the chain specified, one of ${allChains.join(', ')} or custom '<chain>.json'`,
+    required: true,
     type: 'string'
   },
   'client-id': {
