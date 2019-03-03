@@ -62,6 +62,8 @@ class Client {
   }
 
   private startInformant () {
+    let lastImport = 0;
+
     this.informantId = setInterval(this.runInformant, defaults.INFORMANT_DELAY);
 
     if (isUndefined(this.p2p)) {
@@ -70,7 +72,12 @@ class Client {
 
     this.p2p.sync.on('imported', () => {
       if (!isUndefined(this.telemetry)) {
-        this.telemetry.blockImported();
+        const now = Date.now();
+
+        if ((now - lastImport) >= defaults.IMPORT_INTERVAL) {
+          lastImport = now;
+          this.telemetry.blockImported();
+        }
       }
     });
   }
