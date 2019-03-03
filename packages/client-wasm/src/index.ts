@@ -77,7 +77,7 @@ export default class Executor implements ExecutorInterface {
 
     l.debug(() => `Imported block #${blockNumber} (${Date.now() - start}ms)`);
 
-    return false;
+    return true;
   }
 
   private call (name: string, forceNew: boolean = false): Call {

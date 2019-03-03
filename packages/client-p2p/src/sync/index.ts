@@ -17,7 +17,7 @@ import defaults from '../defaults';
 
 type Requests = Array<SyncState$Request>;
 
-const REPORT_COUNT = new BN(5);
+const REPORT_COUNT = new BN(10);
 const REQUEST_TIMEOUT = 60000;
 
 const l = logger('sync');
