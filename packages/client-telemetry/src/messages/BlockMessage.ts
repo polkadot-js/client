@@ -23,8 +23,7 @@ export default class BlockMessage extends Base {
   toJSON (): BlockJson {
     return {
       ...super.toJSON(),
-      // NOTE the endpoint expects non-prefixed values, as much as I hate doing it...
-      best: u8aToHex(this.bestHash).slice(2),
+      best: u8aToHex(this.bestHash),
       height: this.bestNumber.toNumber()
     };
   }
