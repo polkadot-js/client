@@ -97,8 +97,12 @@ export default class Chain implements ChainInterface {
 
       const prevBlock = this.getBlock(prevHash);
 
-      this.blocks.bestHash.set(prevHash);
-      this.blocks.bestNumber.set(prevBlock.header.blockNumber);
+      this.blocks.db.transaction(() => {
+        this.blocks.bestHash.set(prevHash);
+        this.blocks.bestNumber.set(prevBlock.header.blockNumber);
+
+        return true;
+      });
 
       return this.initGenesisFromBest(prevBlock.header, false);
     }
@@ -133,10 +137,14 @@ export default class Chain implements ChainInterface {
 
     const genesis = this.createGenesisBlock();
 
-    this.blocks.bestHash.set(genesis.block.hash);
-    this.blocks.bestNumber.set(0);
-    this.blocks.blockData.set(genesis.block.toU8a(), genesis.block.hash);
-    this.blocks.hash.set(genesis.block.hash, 0);
+    this.blocks.db.transaction(() => {
+      this.blocks.bestHash.set(genesis.block.hash);
+      this.blocks.bestNumber.set(0);
+      this.blocks.blockData.set(genesis.block.toU8a(), genesis.block.hash);
+      this.blocks.hash.set(genesis.block.hash, 0);
+
+      return true;
+    });
 
     return genesis;
   }

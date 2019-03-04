@@ -70,14 +70,16 @@ export default class Executor implements ExecutorInterface {
       throw error;
     }
 
-    this.blockDb.bestHash.set(hash);
-    this.blockDb.bestNumber.set(blockNumber);
-    this.blockDb.blockData.set(blockData.toU8a(), hash);
-    this.blockDb.hash.set(hash, blockNumber);
+    return this.blockDb.db.transaction(() => {
+      this.blockDb.bestHash.set(hash);
+      this.blockDb.bestNumber.set(blockNumber);
+      this.blockDb.blockData.set(blockData.toU8a(), hash);
+      this.blockDb.hash.set(hash, blockNumber);
 
-    l.debug(() => `Imported block #${blockNumber} (${Date.now() - start}ms)`);
+      l.debug(() => `Imported block #${blockNumber} (${Date.now() - start}ms)`);
 
-    return true;
+      return true;
+    });
   }
 
   private call (name: string, forceNew: boolean = false): Call {

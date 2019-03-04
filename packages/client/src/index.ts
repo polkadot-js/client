@@ -30,11 +30,8 @@ class Client {
   private rpc?: RpcInterface;
   private telemetry?: TelemetryInterface;
   private prevBest?: BN;
-  private prevTime: number;
-
-  constructor () {
-    this.prevTime = Date.now();
-  }
+  private prevTime: number = Date.now();
+  private prevImport: number = 0;
 
   async start (config: Config) {
     const verStatus = await clientId.getNpmStatus();
@@ -62,8 +59,6 @@ class Client {
   }
 
   private startInformant () {
-    let lastImport = 0;
-
     this.informantId = setInterval(this.runInformant, defaults.INFORMANT_DELAY);
 
     if (isUndefined(this.p2p)) {
@@ -74,8 +69,8 @@ class Client {
       if (!isUndefined(this.telemetry)) {
         const now = Date.now();
 
-        if ((now - lastImport) >= defaults.IMPORT_INTERVAL) {
-          lastImport = now;
+        if ((now - this.prevImport) >= defaults.IMPORT_INTERVAL) {
+          this.prevImport = now;
           this.telemetry.blockImported();
         }
       }
@@ -107,7 +102,7 @@ class Client {
     const hasBlocks = this.prevBest && this.prevBest.lt(bestNumber);
     const numBlocks = hasBlocks && this.prevBest ? bestNumber.sub(this.prevBest) : new BN(1);
     const newSpeed = isSync
-      ? ` (${(elapsed / numBlocks.toNumber()).toFixed(0)} ms/block)`
+      ? ` (${(elapsed / numBlocks.toNumber()).toFixed(0)} ms/block, ${Math.ceil(1000 * numBlocks.toNumber() / elapsed)} bps)`
       : '';
     const newBlocks = hasBlocks && this.prevBest
       ? `, +${numBlocks.toString()} blocks${newSpeed}`
@@ -120,6 +115,7 @@ class Client {
 
     this.prevBest = bestNumber;
     this.prevTime = now;
+    this.prevImport = now;
 
     if (!isUndefined(this.telemetry)) {
       this.telemetry.intervalInfo(numPeers, status);

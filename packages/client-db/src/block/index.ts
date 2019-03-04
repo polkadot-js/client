@@ -2,14 +2,14 @@
 // This software may be modified and distributed under the terms
 // of the Apache-2.0 license. See the LICENSE file for details.
 
-import { BaseDb } from '@polkadot/db/types';
+import { TxDb } from '@polkadot/db/types';
 import { BlockDb } from '../types';
 
 import createBn from '../db/bn';
 import createU8a from '../db/u8a';
 import keys from './keys';
 
-export default function blockDb (db: BaseDb): BlockDb {
+export default function blockDb (db: TxDb): BlockDb {
   return {
     db,
     bestHash: createU8a(db, keys.bestHash),

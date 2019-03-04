@@ -3,7 +3,7 @@
 // of the Apache-2.0 license. See the LICENSE file for details.
 
 import BN from 'bn.js';
-import { BaseDb } from '@polkadot/db/types';
+import { TxDb } from '@polkadot/db/types';
 import { TrieDb } from '@polkadot/trie-db/types';
 
 export type DbPathPrefix = 'database';
@@ -40,7 +40,7 @@ export type StorageMethod$ArrayU8a = StorageMethod<Array<Uint8Array>, Array<Uint
 export type StorageMethods = StorageMethod$Account | StorageMethod$Bn | StorageMethod$Bool | StorageMethod$U8a | StorageMethod$ArrayU8a | StorageMethod$ArrayAccount;
 
 export type BlockDb = {
-  db: BaseDb,
+  db: TxDb,
   bestHash: StorageMethod$U8a,
   bestNumber: StorageMethod$Bn,
   blockData: StorageMethod$U8a,
