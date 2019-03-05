@@ -10,8 +10,8 @@ import { SyncInterface, SyncState$Request, SyncState$BlockRequests, SyncState$Bl
 import BN from 'bn.js';
 import EventEmitter from 'eventemitter3';
 import { BlockRequest, BlockResponse } from '@polkadot/client-types/messages';
-import { BlockNumber } from '@polkadot/types';
-import { isU8a, logger } from '@polkadot/util';
+import { Hash } from '@polkadot/types';
+import { logger } from '@polkadot/util';
 
 import defaults from '../defaults';
 
@@ -106,20 +106,34 @@ export default class Sync extends EventEmitter implements SyncInterface {
     return hasImported;
   }
 
-  provideBlocks (peer: PeerInterface, request: BlockRequest) {
-    const current = request.from.value as BlockNumber;
+  private blocksFromHash (count: number, from: Hash, to: Hash | null, increment: BN): Array<any> {
+    return [];
+  }
+
+  private blocksFromNumber (count: number, from: BN, increment: BN): Array<any> {
+    let current = from;
     const best = this.chain.blocks.bestNumber.get();
     const blocks: Array<any> = [];
 
-    // FIXME: Also send blocks starting with hash
-    const max = Math.min(request.max.toNumber() || defaults.MAX_REQUEST_BLOCKS, defaults.MAX_REQUEST_BLOCKS);
-    let count = isU8a(request.from) ? max : 0;
-    const increment = request.direction.toString() === 'Ascending' ? new BN(1) : new BN(-1);
+    while (count && current.lte(best) && !current.isZero()) {
+      count--;
+      current = current.add(increment);
 
-    while (count < max && current.lte(best) && !current.isNeg()) {
-      count++;
-      current.iadd(increment);
+      const block = this.chain.blocks.header.get();
     }
+
+    return blocks;
+  }
+
+  provideBlocks (peer: PeerInterface, request: BlockRequest) {
+    const increment = request.direction.toString() === 'Ascending' ? new BN(1) : new BN(-1);
+    const count = Math.min(request.max.toNumber() || defaults.MAX_REQUEST_BLOCKS, defaults.MAX_REQUEST_BLOCKS);
+    const to = request.to.isNull
+      ? null
+      : request.to.asHash();
+    const blocks = request.from.isHash
+      ? this.blocksFromHash(count, request.from.asHash(), to, increment)
+      : this.blocksFromNumber(count, request.from.asBlockNumber(), increment);
 
     peer.send(
       new BlockResponse({
