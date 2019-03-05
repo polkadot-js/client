@@ -28,6 +28,10 @@ export class BlockRequest$Direction extends Enum {
       'Descending'
     ], value);
   }
+
+  get isAscending (): boolean {
+    return this.toNumber() === 0;
+  }
 }
 
 export class BlockRequest$From extends EnumType<BlockNumber | Hash> {

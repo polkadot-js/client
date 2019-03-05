@@ -9,6 +9,7 @@ import { SyncInterface, SyncState$Request, SyncState$BlockRequests, SyncState$Bl
 
 import BN from 'bn.js';
 import EventEmitter from 'eventemitter3';
+import { BlockData } from '@polkadot/client-types/index';
 import { BlockRequest, BlockResponse } from '@polkadot/client-types/messages';
 import { Hash } from '@polkadot/types';
 import { logger } from '@polkadot/util';
@@ -107,34 +108,64 @@ export default class Sync extends EventEmitter implements SyncInterface {
     return hasImported;
   }
 
-  private blocksFromHash (count: number, from: Hash, to: Hash | null, increment: BN): Array<any> {
-    return [];
+  private blocksFromHash (count: number, from: Hash, to: Hash | null, increment: BN): Array<Uint8Array> {
+    const data = new BlockData(this.chain.blocks.blockData.get(from));
+
+    // nothing here, just get out gracefully
+    if (data.isEmpty) {
+      return [];
+    }
+
+    return this.blocksFromNumber(count, data.header.blockNumber, to, increment);
   }
 
-  private blocksFromNumber (count: number, from: BN, increment: BN): Array<any> {
-    let current = from;
+  private blocksFromNumber (count: number, from: BN, to: Hash | null, increment: BN): Array<Uint8Array> {
     const best = this.chain.blocks.bestNumber.get();
-    const blocks: Array<any> = [];
+    const blocks: Array<Uint8Array> = [];
+    let current = from;
 
+    // get the requested number of blocks, either while not the best or not zero
+    // (for ascending and decending respectively)
     while (count && current.lte(best) && !current.isZero()) {
+      const hash = this.chain.blocks.hash.get(current);
+
+      // make sure we have a valid hash
+      if (!hash.length) {
+        break;
+      }
+
+      const block = this.chain.blocks.blockData.get(hash);
+
+      // we should have an actual block
+      if (block.length) {
+        break;
+      }
+
+      blocks.push(block);
+
+      // continue the loop if we have not reached out target
+      // (below is the catch all for the various ifs, exiting)
+      if (to && to.eq(hash)) {
+        break;
+      }
+
+      // we have one more, add the increment for the next block
       count--;
       current = current.add(increment);
-
-      const block = this.chain.blocks.header.get();
     }
 
     return blocks;
   }
 
-  provideBlocks (peer: PeerInterface, request: BlockRequest) {
-    const increment = request.direction.toString() === 'Ascending' ? new BN(1) : new BN(-1);
+  provideBlocks (peer: PeerInterface, request: BlockRequest): void {
+    const increment = request.direction.isAscending ? new BN(1) : new BN(-1);
     const count = Math.min(request.max.unwrapOr(MAX_REQUEST_BN).toNumber(), defaults.MAX_REQUEST_BLOCKS);
     const to = request.to.isNull
       ? null
       : request.to.asHash();
     const blocks = request.from.isHash
       ? this.blocksFromHash(count, request.from.asHash(), to, increment)
-      : this.blocksFromNumber(count, request.from.asBlockNumber(), increment);
+      : this.blocksFromNumber(count, request.from.asBlockNumber(), to, increment);
 
     peer.send(
       new BlockResponse({
@@ -144,7 +175,7 @@ export default class Sync extends EventEmitter implements SyncInterface {
     );
   }
 
-  queueBlocks (peer: PeerInterface, { blocks, id }: BlockResponse) {
+  queueBlocks (peer: PeerInterface, { blocks, id }: BlockResponse): void {
     const request = this.blockRequests[peer.id];
 
     delete this.blockRequests[peer.id];
