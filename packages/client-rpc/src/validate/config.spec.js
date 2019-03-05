@@ -11,12 +11,6 @@ describe('validateConfig', () => {
     ).toThrow(/valid path/);
   });
 
-  it('throws when type is an empty array', () => {
-    expect(
-      () => validateConfig({ path: '/', types: [] })
-    ).toThrow(/non-empty type/);
-  });
-
   it('throws when unknown type is found', () => {
     expect(
       () => validateConfig({ path: '/', types: ['unknown', 'http', 'ws', 'none'] })

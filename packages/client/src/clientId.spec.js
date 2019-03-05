@@ -47,7 +47,7 @@ describe('clientId', () => {
       });
 
       return clientId.getNpmStatus().then((version) => {
-        expect(version).toEqual('cannot retrieve from npmjs.org');
+        expect(version).toEqual(null);
       });
     });
 
