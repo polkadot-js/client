@@ -12,13 +12,13 @@ import secio from 'libp2p-secio';
 import spdy from 'libp2p-spdy';
 import TCP from 'libp2p-tcp';
 import PeerInfo from 'peer-info';
-// import WS from 'libp2p-websockets';
+import WS from 'libp2p-websockets';
 import mplex from 'pull-mplex';
 
-export default function createModules (peerInfo: PeerInfo, bootNodes: P2pNodes, nodes: P2pNodes): LibP2p.OptionsModules {
-  const list = nodes.concat(bootNodes).map((node) =>
-    node.replace('/p2p/', '/ipfs/')
-  );
+export default function createModules (peerInfo: PeerInfo, list: P2pNodes, nodes: P2pNodes): LibP2p.OptionsModules {
+  // const list = nodes.concat(bootNodes).map((node) =>
+  //   node.replace('/p2p/', '/ipfs/')
+  // );
 
   return {
     connEncryption: [
@@ -34,8 +34,8 @@ export default function createModules (peerInfo: PeerInfo, bootNodes: P2pNodes, 
       new Bootstrap({ list })
     ],
     transport: [
-      new TCP()
-      // new WS()
+      new TCP(),
+      new WS()
     ]
   };
 }

@@ -4,6 +4,7 @@
 
 import npmQuery from 'package-json';
 import semcmp from 'semver-compare';
+import { isFunction } from '@polkadot/util';
 
 type PackageJson = {
   name: string,
@@ -11,10 +12,13 @@ type PackageJson = {
 };
 
 const DEVELOPMENT = 'development';
+const RELEASE = 'alpha'; // 'release'
+
 let pkgJson: PackageJson;
-let _stability = 'alpha'; // 'release'
+let _stability = RELEASE;
 
 try {
+  _stability = RELEASE;
   pkgJson = require('./package.json');
 } catch (error) {
   _stability = DEVELOPMENT;
@@ -28,18 +32,20 @@ export const isDevelopment = stability === DEVELOPMENT;
 export const clientId = `${name}/${version}-${stability}`;
 
 export async function getNpmVersion (): Promise<string> {
-  return npmQuery(pkgJson.name)
-    .then((npmJson) =>
-      (npmJson as PackageJson).version
-    )
-    .catch(() => 'unknown');
+  return isFunction(npmQuery)
+    ? npmQuery(pkgJson.name)
+      .then((npmJson) =>
+        (npmJson as PackageJson).version
+      )
+      .catch(() => 'unknown')
+    : 'unknown';
 }
 
-export async function getNpmStatus (): Promise<string> {
+export async function getNpmStatus (): Promise<string | null> {
   const verNpm = await getNpmVersion();
 
   if (verNpm === 'unknown') {
-    return 'cannot retrieve from npmjs.org';
+    return null;
   }
 
   switch (semcmp(pkgJson.version, verNpm)) {

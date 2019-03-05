@@ -46,7 +46,14 @@ function createWebpack ({ alias = {}, context, name = 'index' }) {
       path: path.join(context, 'build')
     },
     resolve: {
-      alias,
+      alias: {
+        ...alias,
+        'koa': 'empty',
+        'koa-websocket': 'empty',
+        'node-lmdb': 'empty',
+        'package-json': 'empty',
+        'snappy': 'empty'
+      },
       extensions: ['.js', '.jsx', '.ts', '.tsx']
     },
     module: {

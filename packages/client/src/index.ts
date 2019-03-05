@@ -34,8 +34,11 @@ export default class Client {
 
   async start (config: Config) {
     const verStatus = await clientId.getNpmStatus();
+    const status = verStatus
+      ? `(${verStatus})`
+      : '';
 
-    l.log(`Running version ${clientId.version} (${verStatus})`);
+    l.log(`Running version ${clientId.version} ${status}`);
     l.log(`Initialising for roles=${config.roles.join(',')} on chain=${config.chain}`);
 
     this.chain = new Chain(config);

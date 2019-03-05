@@ -18,7 +18,7 @@ function cli (params?: string): Config {
         const section = key.substr(0, key.indexOf('-')) as ConfigKeys;
         const name = keyToCamel(key, 1);
 
-        config[section] = config[section] || {};
+        (config as any)[section] = config[section] || {};
         // @ts-ignore ummm... no index, not Map-ing this one
         config[section][name] = argv[key];
       } else if (!/^(db|dev|p2p|rpc|telemetry|wasm)[A-Z]/.test(key)) {

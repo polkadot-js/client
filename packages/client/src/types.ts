@@ -9,14 +9,9 @@ import { RpcConfig } from '@polkadot/client-rpc/types';
 import { TelemetryConfig } from '@polkadot/client-telemetry/types';
 import { WasmConfig } from '@polkadot/client-wasm/types';
 
-export type DevConfig = {
-  genBlocks: boolean
-};
-
 export type Config = {
   chain: ChainName,
   db: DbConfig,
-  dev: DevConfig,
   p2p: P2pConfig,
   rpc: RpcConfig,
   roles: Array<string>,

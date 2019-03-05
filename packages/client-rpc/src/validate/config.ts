@@ -10,7 +10,6 @@ import defaults from '../defaults';
 
 export default function validateConfig ({ path, types }: RpcConfig): void {
   assert(/^\//.test(path), 'Expected valid path');
-  assert(types.length !== 0, 'Expected non-empty type Array');
 
   const invalid = types
     .filter((_type) => !defaults.TYPES.includes(_type))
