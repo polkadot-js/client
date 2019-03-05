@@ -18,6 +18,7 @@ import defaults from '../defaults';
 type Requests = Array<SyncState$Request>;
 
 const REQUEST_TIMEOUT = 60000;
+const MAX_REQUEST_BN = new BN(defaults.MAX_REQUEST_BLOCKS);
 
 const l = logger('sync');
 
@@ -127,7 +128,7 @@ export default class Sync extends EventEmitter implements SyncInterface {
 
   provideBlocks (peer: PeerInterface, request: BlockRequest) {
     const increment = request.direction.toString() === 'Ascending' ? new BN(1) : new BN(-1);
-    const count = Math.min(request.max.toNumber() || defaults.MAX_REQUEST_BLOCKS, defaults.MAX_REQUEST_BLOCKS);
+    const count = Math.min(request.max.unwrapOr(MAX_REQUEST_BN).toNumber(), defaults.MAX_REQUEST_BLOCKS);
     const to = request.to.isNull
       ? null
       : request.to.asHash();

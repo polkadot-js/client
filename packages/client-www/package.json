@@ -1,7 +1,7 @@
 {
-  "name": "@polkadot/client-types",
+  "name": "@polkadot/client-www",
   "version": "0.19.2",
-  "description": "Types specific to the client implementation",
+  "description": "A simple POC browser wrapper for the client",
   "main": "index.js",
   "publishConfig": {
     "access": "public",
@@ -11,7 +11,10 @@
     "type": "git",
     "url": "git+https://github.com/polkadot-js/client.git"
   },
-  "keywords": [],
+  "keywords": [
+    "Polkadot",
+    "wasm"
+  ],
   "author": "Jaco Greeff <jacogr@gmail.com>",
   "maintainers": [
     "Jaco Greeff <jacogr@gmail.com>"
@@ -21,10 +24,9 @@
   "bugs": {
     "url": "https://github.com/polkadot-js/client/issues"
   },
-  "homepage": "https://github.com/polkadot-js/client/tree/master/packages/client-types#readme",
+  "homepage": "https://github.com/polkadot-js/client/tree/master/packages/client-www#readme",
   "dependencies": {
     "@babel/runtime": "^7.3.4",
-    "@polkadot/types": "^0.46.4",
-    "@polkadot/util": "^0.35.4"
+    "@polkadot/client": "^0.19.2"
   }
 }

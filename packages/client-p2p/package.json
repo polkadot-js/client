@@ -1,6 +1,6 @@
 {
   "name": "@polkadot/client-p2p",
-  "version": "0.19.1",
+  "version": "0.19.2",
   "description": "Interfaces to P2P layers used in the Polkadot network",
   "main": "index.js",
   "keywords": [
@@ -27,8 +27,8 @@
   "homepage": "https://github.com/polkadot-js/client/client/tree/master/packages/client-p2p#readme",
   "dependencies": {
     "@babel/runtime": "^7.3.4",
-    "@polkadot/client-types": "^0.19.1",
-    "@polkadot/util": "^0.35.3",
+    "@polkadot/client-types": "^0.19.2",
+    "@polkadot/util": "^0.35.4",
     "@types/varint": "^5.0.0",
     "eventemitter3": "^3.1.0",
     "libp2p": "^0.24.4",
@@ -39,6 +39,8 @@
     "libp2p-secio": "^0.11.1",
     "libp2p-spdy": "^0.13.1",
     "libp2p-tcp": "^0.13.0",
+    "libp2p-webrtc-star": "^0.15.8",
+    "libp2p-websocket-star": "^0.10.2",
     "libp2p-websockets": "^0.12.2",
     "pull-mplex": "^0.1.1",
     "pull-pushable": "^2.2.0",
@@ -47,6 +49,6 @@
     "varint": "^5.0.0"
   },
   "devDependencies": {
-    "@polkadot/client": "^0.19.1"
+    "@polkadot/client": "^0.19.2"
   }
 }

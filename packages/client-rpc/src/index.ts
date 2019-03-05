@@ -43,6 +43,12 @@ export default class Rpc extends EventEmitter implements RpcInterface {
   async start (): Promise<boolean> {
     await this.stop();
 
+    if (this.config.rpc.types.length === 0) {
+      l.log('RPC types not configured, skipping initialisation');
+
+      return true;
+    }
+
     const apps = createKoa({
       handlers: {
         http: this.handlePost,
