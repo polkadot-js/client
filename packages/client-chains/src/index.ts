@@ -1,11 +1,12 @@
-// Copyright 2017-2018 @polkadot/client-chains authors & contributors
+// Copyright 2017-2019 @polkadot/client-chains authors & contributors
 // This software may be modified and distributed under the terms
 // of the Apache-2.0 license. See the LICENSE file for details.
 
+import { Chainspec } from '@polkadot/chainspec/types';
 import { Config } from '@polkadot/client/types';
 import { BlockDb, StateDb } from '@polkadot/client-db/types';
 import { ExecutorInterface } from '@polkadot/client-wasm/types';
-import { ChainInterface, ChainGenesis, ChainJson } from './types';
+import { ChainInterface, ChainGenesis } from './types';
 
 import ChainDbs from '@polkadot/client-db/index';
 import createRuntime from '@polkadot/client-runtime/index';
@@ -22,7 +23,7 @@ const l = logger('chain');
 
 export default class Chain implements ChainInterface {
   readonly blocks: BlockDb;
-  readonly chain: ChainJson;
+  readonly chain: Chainspec;
   readonly executor: ExecutorInterface;
   readonly genesis: ChainGenesis;
   readonly state: StateDb;
@@ -96,8 +97,12 @@ export default class Chain implements ChainInterface {
 
       const prevBlock = this.getBlock(prevHash);
 
-      this.blocks.bestHash.set(prevHash);
-      this.blocks.bestNumber.set(prevBlock.header.blockNumber);
+      this.blocks.db.transaction(() => {
+        this.blocks.bestHash.set(prevHash);
+        this.blocks.bestNumber.set(prevBlock.header.blockNumber);
+
+        return true;
+      });
 
       return this.initGenesisFromBest(prevBlock.header, false);
     }
@@ -132,10 +137,14 @@ export default class Chain implements ChainInterface {
 
     const genesis = this.createGenesisBlock();
 
-    this.blocks.bestHash.set(genesis.block.hash);
-    this.blocks.bestNumber.set(0);
-    this.blocks.blockData.set(genesis.block.toU8a(), genesis.block.hash);
-    this.blocks.hash.set(genesis.block.hash, 0);
+    this.blocks.db.transaction(() => {
+      this.blocks.bestHash.set(genesis.block.hash);
+      this.blocks.bestNumber.set(0);
+      this.blocks.blockData.set(genesis.block.toU8a(), genesis.block.hash);
+      this.blocks.hash.set(genesis.block.hash, 0);
+
+      return true;
+    });
 
     return genesis;
   }

@@ -1,4 +1,4 @@
-// Copyright 2017-2018 @polkadot/client-p2p authors & contributors
+// Copyright 2017-2019 @polkadot/client-p2p authors & contributors
 // This software may be modified and distributed under the terms
 // of the Apache-2.0 license. See the LICENSE file for details.
 
@@ -17,7 +17,6 @@ import defaults from '../defaults';
 
 type Requests = Array<SyncState$Request>;
 
-const REPORT_COUNT = new BN(5);
 const REQUEST_TIMEOUT = 60000;
 
 const l = logger('sync');
@@ -99,26 +98,12 @@ export default class Sync extends EventEmitter implements SyncInterface {
 
       delete this.blockQueue[nextNumber.toString()];
 
-      if (nextNumber.mod(REPORT_COUNT).isZero() || (Object.keys(this.blockQueue).length < 10)) {
-        this.emit('imported');
-      }
+      this.emit('imported');
 
       hasImported = true;
-
-      // if (this.lastPeer !== peer || !queueLength) {
-      //   if (this.lastPeer !== null || !queueLength) {
-      //     this.requestBlocks(peer);
-      //   }
-
-      //   this.lastPeer = peer;
-      // }
     }
 
     return hasImported;
-
-    // if (count) {
-    //   l.log(`#${startNumber.toString()}- ${count} imported (${Date.now() - start}ms)`);
-    // }
   }
 
   provideBlocks (peer: PeerInterface, request: BlockRequest) {
@@ -132,12 +117,6 @@ export default class Sync extends EventEmitter implements SyncInterface {
     const increment = request.direction.toString() === 'Ascending' ? new BN(1) : new BN(-1);
 
     while (count < max && current.lte(best) && !current.isNeg()) {
-      // const hash = this.chain.state.blockHashAt.get(current);
-      //
-      // blocks.push(
-      //   this.getBlockData(request.fields.values, hash)
-      // );
-
       count++;
       current.iadd(increment);
     }

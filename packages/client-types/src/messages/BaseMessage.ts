@@ -1,8 +1,8 @@
-// Copyright 2017-2018 @polkadot/client-types authors & contributors
+// Copyright 2017-2019 @polkadot/client-types authors & contributors
 // This software may be modified and distributed under the terms
 // of the Apache-2.0 license. See the LICENSE file for details.
 
-import { Struct } from '@polkadot/types/codec';
+import { Struct } from '@polkadot/types';
 import { bnToU8a, u8aConcat } from '@polkadot/util';
 
 export default class BaseMessage {
@@ -22,6 +22,10 @@ export default class BaseMessage {
   }
 
   toJSON (): any {
-    this.message.toJSON();
+    return this.message.toJSON();
+  }
+
+  toString () {
+    return JSON.stringify(this.toJSON());
   }
 }

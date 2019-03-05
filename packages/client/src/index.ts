@@ -1,4 +1,4 @@
-// Copyright 2017-2018 @polkadot/client authors & contributors
+// Copyright 2017-2019 @polkadot/client authors & contributors
 // This software may be modified and distributed under the terms
 // of the Apache-2.0 license. See the LICENSE file for details.
 
@@ -30,11 +30,8 @@ class Client {
   private rpc?: RpcInterface;
   private telemetry?: TelemetryInterface;
   private prevBest?: BN;
-  private prevTime: number;
-
-  constructor () {
-    this.prevTime = Date.now();
-  }
+  private prevTime: number = Date.now();
+  private prevImport: number = 0;
 
   async start (config: Config) {
     const verStatus = await clientId.getNpmStatus();
@@ -70,7 +67,12 @@ class Client {
 
     this.p2p.sync.on('imported', () => {
       if (!isUndefined(this.telemetry)) {
-        this.telemetry.blockImported();
+        const now = Date.now();
+
+        if ((now - this.prevImport) >= defaults.IMPORT_INTERVAL) {
+          this.prevImport = now;
+          this.telemetry.blockImported();
+        }
       }
     });
   }
@@ -113,6 +115,7 @@ class Client {
 
     this.prevBest = bestNumber;
     this.prevTime = now;
+    this.prevImport = now;
 
     if (!isUndefined(this.telemetry)) {
       this.telemetry.intervalInfo(numPeers, status);

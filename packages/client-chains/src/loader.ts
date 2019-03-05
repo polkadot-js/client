@@ -1,9 +1,10 @@
-// Copyright 2017-2018 @polkadot/client-chains authors & contributors
+// Copyright 2017-2019 @polkadot/client-chains authors & contributors
 // This software may be modified and distributed under the terms
 // of the Apache-2.0 license. See the LICENSE file for details.
 
+import { Chainspec } from '@polkadot/chainspec/types';
 import { Config } from '@polkadot/client/types';
-import { ChainJson, ChainLoader } from './types';
+import { ChainLoader } from './types';
 
 import fs from 'fs';
 import { trieRoot } from '@polkadot/trie-hash';
@@ -12,7 +13,7 @@ import { assert, hexToU8a } from '@polkadot/util';
 import chains from './chains';
 
 export default class Loader implements ChainLoader {
-  readonly chain: ChainJson;
+  readonly chain: Chainspec;
   readonly id: string;
   readonly genesisRoot: Uint8Array;
 
@@ -23,7 +24,7 @@ export default class Loader implements ChainLoader {
     this.id = this.chain.id;
   }
 
-  private loadJson (chain: string): ChainJson {
+  private loadJson (chain: string): Chainspec {
     assert(/\.json$/.test(chain), `Expected .json extension on custom non built-in chain`);
     assert(fs.existsSync(chain), `Unable to find custom ${chain}`);
 

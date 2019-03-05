@@ -1,4 +1,4 @@
-// Copyright 2017-2018 @polkadot/client-p2p authors & contributors
+// Copyright 2017-2019 @polkadot/client-p2p authors & contributors
 // This software may be modified and distributed under the terms
 // of the Apache-2.0 license. See the LICENSE file for details.
 
@@ -47,6 +47,7 @@ export default class P2p extends EventEmitter implements P2pInterface {
   private dialQueue: { [index: string]: QueuedPeer };
   private node: LibP2p | undefined;
   private peers: PeersInterface | undefined;
+  private protocol: string;
   private dialTimer: NodeJS.Timer | null;
   readonly sync: Sync;
 
@@ -59,6 +60,7 @@ export default class P2p extends EventEmitter implements P2pInterface {
     this.sync = new Sync(config, chain);
     this.dialQueue = {};
     this.dialTimer = null;
+    this.protocol = defaults.getProtocol(chain.chain.protocolId);
   }
 
   isStarted (): boolean {
@@ -161,7 +163,7 @@ export default class P2p extends EventEmitter implements P2pInterface {
 
   private _handleProtocol (node: LibP2p, peers: PeersInterface): void {
     node.handle(
-      defaults.PROTOCOL_DOT,
+      this.protocol,
       async (protocol: string, connection: LibP2pConnection): Promise<void> => {
         try {
           const peerInfo = await promisify(connection, connection.getPeerInfo);
@@ -242,32 +244,26 @@ export default class P2p extends EventEmitter implements P2pInterface {
       const doPing = () => {
         const start = Date.now();
         const request = u8aToBuffer(randomAsU8a());
-        // const timerId = setTimeout(() => {
-        //   l.warn(() => `ping timeout from ${peer.shortId}, disconnecting`);
-        //   peer.disconnect();
-        //   shake.abort();
-        // }, PING_TIMEOUT);
 
         shake.write(request);
         shake.read(32, (error, response) => {
-          // clearTimeout(timerId);
-
           if (!error && request.equals(response)) {
             const elapsed = Date.now() - start;
 
             l.debug(`Ping from ${peer.shortId} ${elapsed}ms`);
-            setTimeout(doPing, PING_INTERVAL);
-            return;
-          }
-
-          if (error) {
-            l.warn(() => [`error on reading ping from ${peer.shortId}, disconnecting`, error]);
+            // setTimeout(doPing, PING_INTERVAL);
+            // return;
+          } else if (error) {
+            l.debug(() => [`error on reading ping from ${peer.shortId}`]);
           } else {
-            l.warn(() => `wrong ping received from ${peer.shortId}, disconnecting`);
+            l.warn(() => `wrong ping received from ${peer.shortId}`);
           }
 
-          peer.disconnect();
-          shake.abort();
+          setTimeout(doPing, PING_INTERVAL);
+          return;
+
+          // peer.disconnect();
+          // shake.abort();
         });
       };
 
@@ -290,7 +286,7 @@ export default class P2p extends EventEmitter implements P2pInterface {
 
     try {
       const connection = await promisify(
-        this.node, this.node.dialProtocol, peer.peerInfo, defaults.PROTOCOL_DOT
+        this.node, this.node.dialProtocol, peer.peerInfo, this.protocol
       );
 
       await this._pingPeer(peer);
@@ -300,21 +296,21 @@ export default class P2p extends EventEmitter implements P2pInterface {
 
       return true;
     } catch (error) {
-      // l.error('dial error', error);
+      l.error('dial error', error);
     }
 
     return false;
   }
 
   private _dialPeers (peer?: PeerInterface): void {
-    if (!this.node || !this.node.isStarted()) {
-      return;
-    }
-
     if (this.dialTimer !== null) {
       clearTimeout(this.dialTimer);
       this.dialTimer = null;
     }
+
+    this.dialTimer = setTimeout(() => {
+      this._dialPeers();
+    }, DIAL_INTERVAL);
 
     const now = Date.now();
 
@@ -323,6 +319,10 @@ export default class P2p extends EventEmitter implements P2pInterface {
         nextDial: now,
         peer
       };
+    }
+
+    if (!this.node || !this.node.isStarted()) {
+      return;
     }
 
     Object.keys(this.dialQueue).forEach(
@@ -338,10 +338,6 @@ export default class P2p extends EventEmitter implements P2pInterface {
         await this._dialPeer(item.peer, this.peers);
       }
     );
-
-    this.dialTimer = setTimeout(() => {
-      this._dialPeers();
-    }, DIAL_INTERVAL);
   }
 
   private _requestAny (): void {

@@ -1,12 +1,11 @@
-// Copyright 2017-2018 @polkadot/client-types authors & contributors
+// Copyright 2017-2019 @polkadot/client-types authors & contributors
 // This software may be modified and distributed under the terms
 // of the Apache-2.0 license. See the LICENSE file for details.
 
 import { MessageInterface } from './types';
 
 import { Enum, EnumType, Option, Set, Struct } from '@polkadot/types/codec';
-import { BlockNumber, Hash, u32 as U32, u64 as U64 } from '@polkadot/types';
-import Null from '@polkadot/types/Null';
+import { BlockNumber, Hash, Null, u32 as U32, u64 as U64 } from '@polkadot/types';
 
 import BaseMessage from './BaseMessage';
 

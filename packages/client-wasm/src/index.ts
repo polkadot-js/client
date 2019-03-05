@@ -1,4 +1,4 @@
-// Copyright 2017-2018 @polkadot/client-wasm authors & contributors
+// Copyright 2017-2019 @polkadot/client-wasm authors & contributors
 // This software may be modified and distributed under the terms
 // of the Apache-2.0 license. See the LICENSE file for details.
 
@@ -70,14 +70,16 @@ export default class Executor implements ExecutorInterface {
       throw error;
     }
 
-    this.blockDb.bestHash.set(hash);
-    this.blockDb.bestNumber.set(blockNumber);
-    this.blockDb.blockData.set(blockData.toU8a(), hash);
-    this.blockDb.hash.set(hash, blockNumber);
+    return this.blockDb.db.transaction(() => {
+      this.blockDb.bestHash.set(hash);
+      this.blockDb.bestNumber.set(blockNumber);
+      this.blockDb.blockData.set(blockData.toU8a(), hash);
+      this.blockDb.hash.set(hash, blockNumber);
 
-    l.debug(() => `Imported block #${blockNumber} (${Date.now() - start}ms)`);
+      l.debug(() => `Imported block #${blockNumber} (${Date.now() - start}ms)`);
 
-    return false;
+      return true;
+    });
   }
 
   private call (name: string, forceNew: boolean = false): Call {

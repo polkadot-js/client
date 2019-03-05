@@ -1,4 +1,4 @@
-// Copyright 2017-2018 @polkadot/client-telemetry authors & contributors
+// Copyright 2017-2019 @polkadot/client-telemetry authors & contributors
 // This software may be modified and distributed under the terms
 // of the Apache-2.0 license. See the LICENSE file for details.
 
@@ -28,6 +28,8 @@ export type ConnectedJson = BaseJson & {
 };
 
 export type IntervalJson = BlockJson & {
+  cpu?: number,
+  memory?: number,
   peers: number,
   status: SyncStatus,
   txcount: number

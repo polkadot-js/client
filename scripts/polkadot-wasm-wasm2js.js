@@ -17,4 +17,13 @@ if (!fs.existsSync(input)) {
 }
 
 const buffer = fs.readFileSync(input);
-fs.writeFileSync(output, `// Copyright 2017-2018 @polkadot/client-wasm authors & contributors\n// This software may be modified and distributed under the terms\n// of the Apache-2.0 license. See the LICENSE file for details.\n\n// Generated with polkadot-wasm-wasm2js (${buffer.length} bytes)\n\nimport { hexToU8a } from '@polkadot/util';\n\nexport default hexToU8a('0x${buffer.toString('hex')}');\n`);
+const base64 = buffer.toString('base64');
+
+fs.writeFileSync(output, `// Copyright 2017-2019 @polkadot/client-wasm authors & contributors
+// This software may be modified and distributed under the terms
+// of the Apache-2.0 license. See the LICENSE file for details.
+
+// Generated with polkadot-wasm-wasm2js (input: ${buffer.length} bytes, encoded: ${base64.length} bytes)
+
+export default Buffer.from('${base64}', 'base64');
+`);

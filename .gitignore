@@ -3,12 +3,14 @@ coverage/
 node_modules/
 tmp/
 packages/client-wasm/test/wasm-bin
+dev.json
 test.sh
 .DS_Store
 .env.local
 .env.development.local
 .env.test.local
 .env.production.local
+.npmrc
 lerna-debug.log*
 package-lock.json
 npm-debug.log*
