@@ -167,6 +167,8 @@ export default class Sync extends EventEmitter implements SyncInterface {
       ? this.blocksFromHash(count, request.from.asHash(), to, increment)
       : this.blocksFromNumber(count, request.from.asBlockNumber(), to, increment);
 
+    l.debug(() => `Providing ${blocks.length} blocks to ${peer.shortId}`);
+
     peer.send(
       new BlockResponse({
         blocks,
