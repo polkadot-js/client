@@ -28,6 +28,8 @@ export type ConnectedJson = BaseJson & {
 };
 
 export type IntervalJson = BlockJson & {
+  cpu?: number,
+  memory?: number,
   peers: number,
   status: SyncStatus,
   txcount: number

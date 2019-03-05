@@ -4,9 +4,14 @@
 
 import { Chainspec } from '@polkadot/chainspec/types';
 
-import { alexander, drieddanta } from '@polkadot/chainspec';
+import * as specs from '@polkadot/chainspec';
 
-export default ({
-  alexander,
-  drieddanta
-} as { [index: string]: Chainspec });
+const chains = Object.keys(specs).reduce((chains, key) => {
+  const chain = (specs as any)[key];
+
+  chains[chain.id] = chain;
+
+  return chains;
+}, {} as { [index: string]: Chainspec });
+
+export default chains;

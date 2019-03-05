@@ -23,6 +23,7 @@ export default class Interval extends BlockMessage {
   toJSON (): IntervalJson {
     return {
       ...super.toJSON(),
+      memory: process.memoryUsage().heapTotal,
       peers: this.peers,
       status: this.status,
       txcount: this.txcount

@@ -102,7 +102,7 @@ class Client {
     const hasBlocks = this.prevBest && this.prevBest.lt(bestNumber);
     const numBlocks = hasBlocks && this.prevBest ? bestNumber.sub(this.prevBest) : new BN(1);
     const newSpeed = isSync
-      ? ` (${(elapsed / numBlocks.toNumber()).toFixed(0)} ms/block, ${Math.ceil(1000 * numBlocks.toNumber() / elapsed)} bps)`
+      ? ` (${(elapsed / numBlocks.toNumber()).toFixed(0)} ms/block)`
       : '';
     const newBlocks = hasBlocks && this.prevBest
       ? `, +${numBlocks.toString()} blocks${newSpeed}`

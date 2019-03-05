@@ -11,7 +11,18 @@
 
 # @polkadot/client
 
-A very early, WIP and POC JavaScript version of a simplified Polkadot network client. It is incomplete and may not evolve to be a full-featured client.
+A JavaScript version of a Polkadot/Substrate network client. It allows operation in full and light nodes fullfilling all functions of chain operation, however does not include the ability to author blocks (i.e. run as a validator on the network).
+
+## Current status
+
+As of 0.19.1, this is the current status of the client -
+
+- It can sync and operate on Polkadot POC-3 networks, and has been tested against Alexander (Polkadot) and Dried Danta (Substrate)
+- It currently does not include much (if any) of the RPC interfaces - so it is not (currently) able to support eg. the apps UI connecting to it
+- It does not (currently) do any state and trie pruning, so the resulting backing database growth is not controlled
+- As of 0.19.1 the backing database has been swapped to LmDB, this interface is much faster than the previous implementation, however uses more disk space (follow-up from the previous point). Investigations are still ongoing as to the best fit for the backend DB engine.
+
+## Development overview
 
 It is split up into a number of internal packages -
 
@@ -21,19 +32,13 @@ It is split up into a number of internal packages -
 - [client-p2p](packages/client-p2p/) Peer-to-peer server
 - [client-rpc](packages/client-rpc/) RPC server
 - [client-runtime](packages/client-runtime/) Basic Wasm runtime wrapper
+- [client-telemetry](packages/client-telemetry/) Substrate telemetry interface
+- [client-types](packages/client-types/) Specific codec types for client interfaces
 - [client-wasm](packages/client-wasm/) Wasm interface wrapper
 
 ## Local development node
 
-Start the node with `yarn run start <options>`. User `--help` to get a list of available options.
-
-It is possible to start 2 servers (testing connections between), by opening 2 terminals, starting normally in the first and in the second running `yarn run start2`.
-
-The above is (currently) equivalent to offsetting the ports by 1 and adding the first as a peer. The equivalent command would be -
-
-```
-$ yarn run start --p2p-peers=/ip4/127.0.0.1/tcp/39933 --p2p-port=39934 --rpc-port=9934 --db-path=./tmp
-```
+Start the node with `yarn run start <options>`, e.g. `yarn run start --chain dried-danta`. You can use `--help` to get a list of the available options.
 
 ## Contributing
 
