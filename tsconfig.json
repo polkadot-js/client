@@ -4,6 +4,7 @@
     "baseUrl": ".",
     "paths": {
       "@polkadot/client-chains/*": [ "packages/client-chains/src/*" ],
+      "@polkadot/client-cli/*": [ "packages/client-cli/src/*" ],
       "@polkadot/client-db/*": [ "packages/client-db/src/*" ],
       "@polkadot/client-p2p/*": [ "packages/client-p2p/src/*" ],
       "@polkadot/client-rpc/*": [ "packages/client-rpc/src/*" ],
@@ -11,6 +12,7 @@
       "@polkadot/client-telemetry/*": [ "packages/client-telemetry/src/*" ],
       "@polkadot/client-types/*": [ "packages/client-types/src/*" ],
       "@polkadot/client-wasm/*": [ "packages/client-wasm/src/*" ],
+      "@polkadot/client-www/*": [ "packages/client-www/src/*" ],
       "@polkadot/client/*": [ "packages/client/src/*" ]
     },
     "typeRoots": [

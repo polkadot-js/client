@@ -10,7 +10,7 @@ import { BlockData } from '@polkadot/client-types/index';
 import { ExecutorInterface } from '@polkadot/client-wasm/types';
 import { Logger } from '@polkadot/util/types';
 
-export type ChainName = 'dev';
+export type ChainName = string;
 export type ChainType = 'polkadot' | 'substrate';
 
 export type ChainGenesis = {

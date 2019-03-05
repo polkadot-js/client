@@ -1,10 +1,14 @@
 {
-  "name": "@polkadot/client-chains",
+  "name": "@polkadot/client-cli",
   "version": "0.19.1",
-  "description": "Node configuration definitions for specific chains",
-  "main": "index.js",
+  "description": "A JavaScript client node for the polkadot network",
+  "main": "polkadot.js",
+  "bin": {
+    "polkadot-js": "./scripts/polkadot.js"
+  },
   "keywords": [
-    "Polkadot"
+    "Polkadot",
+    "JsonRPC"
   ],
   "author": "Jaco Greeff <jacogr@gmail.com>",
   "maintainers": [
@@ -12,6 +16,9 @@
   ],
   "contributors": [],
   "license": "Apache-2.0",
+  "engines": {
+    "node": "^10.13.0"
+  },
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org"
@@ -23,17 +30,16 @@
   "bugs": {
     "url": "https://github.com/polkadot-js/client/issues"
   },
-  "homepage": "https://github.com/polkadot-js/client/client/tree/master/packages/client-chains#readme",
+  "homepage": "https://github.com/polkadot-js/client/tree/master/packages/client#readme",
   "dependencies": {
     "@babel/runtime": "^7.3.4",
-    "@polkadot/chainspec": "^0.35.4",
-    "@polkadot/client-db": "^0.19.1",
-    "@polkadot/client-runtime": "^0.19.1",
-    "@polkadot/client-wasm": "^0.19.1",
-    "@polkadot/storage": "^0.46.4",
-    "@polkadot/types": "^0.46.4"
+    "@polkadot/client": "^0.19.1",
+    "@types/yargs": "^12.0.9",
+    "yargs": "^13.2.1"
   },
   "devDependencies": {
-    "@polkadot/extrinsics": "^0.46.4"
+    "@babel/core": "^7.3.4",
+    "@babel/register": "^7.0.0",
+    "babel-plugin-module-resolver": "^3.2.0"
   }
 }

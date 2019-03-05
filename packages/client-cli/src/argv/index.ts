@@ -1,8 +1,8 @@
-// Copyright 2017-2019 @polkadot/client authors & contributors
+// Copyright 2017-2019 @polkadot/client-cli authors & contributors
 // This software may be modified and distributed under the terms
 // of the Apache-2.0 license. See the LICENSE file for details.
 
-import { Config } from '../../types';
+import { Config } from '@polkadot/client/types';
 
 import yargs from 'yargs';
 

@@ -31,13 +31,13 @@ describe('createListener', () => {
   });
 
   it('validates the IP address', () => {
-    return createListener('no.ip.is.here').catch((error) => {
+    return createListener('nodejs', 'no.ip.is.here').catch((error) => {
       expect(error.message).toMatch(/IP address/);
     });
   });
 
   it('creates using defaults', async () => {
-    await createListener();
+    await createListener('nodejs');
 
     expect(
       PeerInfo.create
@@ -45,7 +45,7 @@ describe('createListener', () => {
   });
 
   it('returns the created PeerInfo instance', async () => {
-    const peerInfo = await createListener();
+    const peerInfo = await createListener('nodejs');
 
     expect(
       peerInfo
@@ -55,32 +55,32 @@ describe('createListener', () => {
   it('fails when PeerInfo.create fails', () => {
     PeerInfo.create = (cb) => cb(new Error('test create failure'));
 
-    return createListener('127.0.0.1', 999).catch((error) => {
+    return createListener('nodejs', '127.0.0.1', 999).catch((error) => {
       expect(error.message).toMatch(/test create failure/);
     });
   });
 
   describe('IPv4', () => {
     beforeEach(async () => {
-      await createListener('10.12.34.67', 7788);
+      await createListener('nodejs', '10.12.34.67', 7788);
     });
 
     it('adds tcp entry', () => {
       expect(
         peerInfoMock.multiaddrs.add
-      ).toHaveBeenCalledWith('/ip4/10.12.34.67/tcp/7788/ipfs/<someid>');
+      ).toHaveBeenCalledWith('/ip4/10.12.34.67/tcp/7788/p2p/<someid>');
     });
   });
 
   describe('IPv6', () => {
     beforeEach(async () => {
-      await createListener('2:3:4:5:6:7:8:9', 6677);
+      await createListener('nodejs', '2:3:4:5:6:7:8:9', 6677);
     });
 
     it('adds tcp entry', () => {
       expect(
         peerInfoMock.multiaddrs.add
-      ).toHaveBeenCalledWith('/ip6/2:3:4:5:6:7:8:9/tcp/6677/ipfs/<someid>');
+      ).toHaveBeenCalledWith('/ip6/2:3:4:5:6:7:8:9/tcp/6677/p2p/<someid>');
     });
   });
 });

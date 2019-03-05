@@ -22,18 +22,32 @@ const config = {
   }
 };
 
-export default async function createNode ({ p2p: { address, noBootnodes = false, nodes = [], port } }: Config, { chain: { bootNodes = [] } }: ChainInterface, l: Logger): Promise<Libp2p> {
+export default async function createNode ({ p2p: { address, noBootnodes = false, nodes = [], port, type } }: Config, { chain: { bootNodes = [] } }: ChainInterface, l: Logger): Promise<Libp2p> {
+  const envType = type || 'nodejs';
+  const isBrowser = envType === 'browser';
   const peerBook = await createPeerBook([]);
-  const peerInfo = await createListener(address, port);
-  const modules = createModules(peerInfo, noBootnodes ? [] : bootNodes, nodes);
+  const peerInfo = await createListener(envType, address, port);
+  const modules = createModules(envType, peerInfo, noBootnodes ? [] : bootNodes, nodes);
   const addrs = peerInfo.multiaddrs.toArray().map((addr) =>
     addr.toString()
   );
 
-  l.log(`creating Libp2p with ${addrs.join(', ')}`);
+  l.log(`creating Libp2p with addresses: (${addrs.length})`);
+
+  addrs.forEach((addr) => l.log(`    ${addr}`));
 
   return new Libp2p({
-    config,
+    config: {
+      ...config,
+      peerDiscovery: {
+        webRTCStar: {
+          enabled: isBrowser
+        },
+        websocketStar: {
+          enabled: isBrowser
+        }
+      }
+    },
     modules,
     peerBook,
     peerInfo

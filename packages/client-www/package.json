@@ -1,7 +1,7 @@
 {
-  "name": "@polkadot/client-runtime",
+  "name": "@polkadot/client-www",
   "version": "0.19.1",
-  "description": "Basic execution wrapper interface for WASM programs",
+  "description": "A simple POC browser wrapper for the client",
   "main": "index.js",
   "publishConfig": {
     "access": "public",
@@ -24,11 +24,9 @@
   "bugs": {
     "url": "https://github.com/polkadot-js/client/issues"
   },
-  "homepage": "https://github.com/polkadot-js/client/tree/master/packages/client-runtime#readme",
+  "homepage": "https://github.com/polkadot-js/client/tree/master/packages/client-www#readme",
   "dependencies": {
     "@babel/runtime": "^7.3.4",
-    "@polkadot/client-db": "^0.19.1",
-    "@polkadot/util": "^0.35.4",
-    "@polkadot/util-crypto": "^0.35.4"
+    "@polkadot/client": "^0.19.1"
   }
 }

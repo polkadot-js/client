@@ -13,6 +13,8 @@ import { MessageInterface } from '@polkadot/client-types/messages/types';
 import { SyncState } from './sync/types';
 import Sync from './sync';
 
+export type EnvType = 'browser' | 'nodejs';
+
 export type SyncStatus = 'Idle' | 'Sync';
 
 export type P2pNodes = Array<string>;
@@ -31,11 +33,11 @@ export type P2pNode = {
 
 export type P2pConfig = {
   address: string,
-  clientId: string,
   maxPeers: number,
   nodes?: P2pNodes,
-  noBootnodes: boolean,
-  port: number
+  noBootnodes?: boolean,
+  port: number,
+  type?: EnvType
 };
 
 export type PeerInterface$Events = 'active' | 'message' | 'disconnected';

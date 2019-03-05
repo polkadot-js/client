@@ -19,11 +19,10 @@ import { logger, isUndefined, u8aToHex } from '@polkadot/util';
 
 import * as clientId from './clientId';
 import defaults from './defaults';
-import cli from './cli';
 
 const l = logger('client');
 
-class Client {
+export default class Client {
   private chain?: ChainInterface;
   private informantId?: NodeJS.Timer;
   private p2p?: P2pInterface;
@@ -35,8 +34,11 @@ class Client {
 
   async start (config: Config) {
     const verStatus = await clientId.getNpmStatus();
+    const status = verStatus
+      ? `(${verStatus})`
+      : '';
 
-    l.log(`Running version ${clientId.version} (${verStatus})`);
+    l.log(`Running version ${clientId.version} ${status}`);
     l.log(`Initialising for roles=${config.roles.join(',')} on chain=${config.chain}`);
 
     this.chain = new Chain(config);
@@ -122,20 +124,3 @@ class Client {
     }
   }
 }
-
-// FIXME Catch the uncaught errors that weren't wrapped in a domain or try catch statement
-// This was added due to exceptions from p2p streams, for which no pass-through handler exists
-// and none can be added. As it stands, not a bad idea since it shows where stuff breaks
-// instead of just exiting, however we should _never_ have these - and we have a couple that
-// puts the app into an unknown state
-// process.on('uncaughtException', (err: Error) => {
-//   l.error('Uncaught exception', err);
-// });
-
-new Client()
-  .start(cli())
-  .catch((error) => {
-    console.error('Failed to start client', error);
-
-    process.exit(-1);
-  });

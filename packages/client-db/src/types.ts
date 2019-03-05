@@ -12,7 +12,6 @@ export type DbConfig$Type = 'disk' | 'memory';
 
 export type DbConfig = {
   compact: boolean,
-  isTrieDb: boolean,
   path: string,
   snapshot: boolean,
   type: DbConfig$Type

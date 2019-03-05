@@ -84,8 +84,8 @@ export default class BlockRequest extends BaseMessage implements MessageInterfac
     return this.message.get('id') as U64;
   }
 
-  get max (): U32 {
-    return this.message.get('max') as U32;
+  get max (): Option<U32> {
+    return this.message.get('max') as Option<U32>;
   }
 
   get to (): EnumType<Hash | Null> {
