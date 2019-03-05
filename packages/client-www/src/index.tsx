@@ -8,7 +8,20 @@ import Client from '@polkadot/client/index';
 
 import config from './config';
 
-export default class App extends React.PureComponent {
+type Props = {};
+
+export default class App extends React.PureComponent<Props> {
+  private client: Client;
+
+  constructor (props: Props) {
+    super(props);
+
+    this.client = new Client();
+    this.client.start(config).catch((error) => {
+      console.error('Failed to start client', error);
+    });
+  }
+
   render () {
     return (
       <div>hello</div>
@@ -23,9 +36,3 @@ if (!rootElement) {
 }
 
 ReactDOM.render(<App />, rootElement);
-
-new Client()
-  .start(config)
-  .catch((error) => {
-    console.error('Failed to start client', error);
-  });

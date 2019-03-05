@@ -10,7 +10,7 @@ import { assert, isIp, promisify } from '@polkadot/util';
 
 import defaults from '../defaults';
 
-export default async function createListener (ip: string = defaults.ADDRESS, port: number = defaults.PORT, envType: EnvType = 'nodejs'): Promise<PeerInfo> {
+export default async function createListener (envType: EnvType, ip: string = defaults.ADDRESS, port: number = defaults.PORT): Promise<PeerInfo> {
   assert(isIp(ip), `Expected a valid IP address`);
 
   const type = isIp(ip, 'v4') ? 'ip4' : 'ip6';
