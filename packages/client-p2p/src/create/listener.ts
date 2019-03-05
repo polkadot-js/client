@@ -16,9 +16,6 @@ export default async function createListener (envType: EnvType, ip: string = def
   const peerInfo = await promisify(null, PeerInfo.create);
   const peerIdStr = peerInfo.id.toB58String();
   const isCli = envType !== 'browser';
-  const starPort = isCli
-    ? (port + 10)
-    : 443;
 
   if (isCli) {
     const type = isIp(ip, 'v4') ? 'ip4' : 'ip6';
@@ -26,7 +23,13 @@ export default async function createListener (envType: EnvType, ip: string = def
     peerInfo.multiaddrs.add(`/${type}/${ip}/tcp/${port}/p2p/${peerIdStr}`);
   }
 
-  peerInfo.multiaddrs.add(`/${defaults.SIGNAL_BASE}/${starPort}/wss/p2p-webrtc-star/p2p/${peerIdStr}`);
+  if (defaults.RTC_SIGNAL_BASE) {
+    peerInfo.multiaddrs.add(`${defaults.RTC_SIGNAL_BASE}/${peerIdStr}`);
+  }
+
+  if (defaults.WSS_SIGNAL_BASE) {
+    peerInfo.multiaddrs.add(`${defaults.WSS_SIGNAL_BASE}/${peerIdStr}`);
+  }
 
   return peerInfo;
 }

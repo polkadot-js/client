@@ -2,12 +2,19 @@
 // This software may be modified and distributed under the terms
 // of the Apache-2.0 license. See the LICENSE file for details.
 
+// https://github.com/libp2p/js-libp2p-webrtc-star
+// /dns4/star-signal.cloud.ipfs.team/wss/p2p-webrtc-star/ipfs/<your-peer-id>
+const RTC_SIGNAL_BASE = '/dns4/star-signal.cloud.ipfs.team/tcp/443/wss/p2p-webrtc-star/p2p';
+
+// https://github.com/libp2p/js-libp2p-websocket-star
+// /dns4/ws-star.discovery.libp2p.io/tcp/443/wss/p2p-websocket-star/ipfs/<your-peer-id>
+const WSS_SIGNAL_BASE = '/dns4/ws-star.discovery.libp2p.io/tcp/443/wss/p2p-websocket-star/p2p';
+
 const MAX_REQUEST_BLOCKS = 128;
 const PROTOCOL_BASE = 'substrate';
 const PROTOCOL_TYPE = 'sup';
 const PROTOCOL_VERSION = 2;
 const MIN_PROTOCOL_VERSION = 2;
-const SIGNAL_BASE = 'dns4/star-signal.cloud.ipfs.team/tcp';
 
 function getProtocol (type?: string | null): string {
   return `/${PROTOCOL_BASE}/${type || PROTOCOL_TYPE}/${PROTOCOL_VERSION}`;
@@ -25,6 +32,7 @@ export default {
   PROTOCOL_VERSION,
   MIN_PROTOCOL_VERSION,
   PROTOCOL_PING: '/ipfs/ping/1.0.0',
-  SIGNAL_BASE,
+  RTC_SIGNAL_BASE,
+  WSS_SIGNAL_BASE,
   getProtocol
 };

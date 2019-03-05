@@ -32,7 +32,9 @@ export default async function createNode ({ p2p: { address, noBootnodes = false,
     addr.toString()
   );
 
-  l.log(`creating Libp2p with ${addrs.join(', ')}`);
+  l.log(`creating Libp2p with addresses: (${addrs.length})`);
+
+  addrs.forEach((addr) => l.log(`    ${addr}`));
 
   return new Libp2p({
     config: {

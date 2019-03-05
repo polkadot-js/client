@@ -18,6 +18,7 @@ import defaults from '../defaults';
 type Requests = Array<SyncState$Request>;
 
 const REQUEST_TIMEOUT = 60000;
+const MAX_REQUEST_BN = new BN(defaults.MAX_REQUEST_BLOCKS);
 
 const l = logger('sync');
 
@@ -112,7 +113,7 @@ export default class Sync extends EventEmitter implements SyncInterface {
     const blocks: Array<any> = [];
 
     // FIXME: Also send blocks starting with hash
-    const max = Math.min(request.max.toNumber() || defaults.MAX_REQUEST_BLOCKS, defaults.MAX_REQUEST_BLOCKS);
+    const max = Math.min(request.max.unwrapOr(MAX_REQUEST_BN).toNumber(), defaults.MAX_REQUEST_BLOCKS);
     let count = isU8a(request.from) ? max : 0;
     const increment = request.direction.toString() === 'Ascending' ? new BN(1) : new BN(-1);
 
