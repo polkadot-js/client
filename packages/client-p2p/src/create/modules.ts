@@ -18,13 +18,14 @@ import WS from 'libp2p-websockets';
 import mplex from 'pull-mplex';
 
 export default function createModules (envType: EnvType, peerInfo: PeerInfo, bootNodes: P2pNodes, nodes: P2pNodes): LibP2p.OptionsModules {
-  const isBrowser = envType === 'browser';
-  const transport = isBrowser
-    ? [new WebRTCStar({ id: peerInfo.id }), new WebSocketStar({ id: peerInfo.id })]
-    : [new TCP()];
-  const peerDiscovery = isBrowser
-    ? transport.map((transport) => (transport as WebRTCStar).discovery)
-    : [];
+  const isCli = envType !== 'browser';
+  const starTransports = [new WebRTCStar({ id: peerInfo.id }), new WebSocketStar({ id: peerInfo.id })];
+  const transport = isCli
+    ? [new WS(), new TCP()]
+    : [new WS()].concat(starTransports);
+  const peerDiscovery = isCli
+    ? [new Bootstrap({ list: bootNodes })]
+    : starTransports.map((transport) => transport.discovery);
 
   return {
     connEncryption: [
@@ -35,14 +36,7 @@ export default function createModules (envType: EnvType, peerInfo: PeerInfo, boo
       spdy
     ],
     dht: DHT,
-    peerDiscovery: peerDiscovery.concat([
-      // new Multicast(peerInfo),
-      new Bootstrap({
-        list: bootNodes
-      })
-    ]),
-    transport: transport.concat([
-      new WS()
-    ])
+    peerDiscovery,
+    transport
   };
 }

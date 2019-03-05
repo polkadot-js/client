@@ -13,15 +13,20 @@ import defaults from '../defaults';
 export default async function createListener (envType: EnvType, ip: string = defaults.ADDRESS, port: number = defaults.PORT): Promise<PeerInfo> {
   assert(isIp(ip), `Expected a valid IP address`);
 
-  const type = isIp(ip, 'v4') ? 'ip4' : 'ip6';
   const peerInfo = await promisify(null, PeerInfo.create);
   const peerIdStr = peerInfo.id.toB58String();
+  const isCli = envType !== 'browser';
+  const starPort = isCli
+    ? (port + 10)
+    : 443;
 
-  peerInfo.multiaddrs.add(
-    envType === 'browser'
-      ? `/dns4/star-signal.cloud.ipfs.team/tcp/443/wss/p2p-webrtc-star/p2p/${peerIdStr}`
-      : `/${type}/${ip}/tcp/${port}/p2p/${peerIdStr}`
-    );
+  if (isCli) {
+    const type = isIp(ip, 'v4') ? 'ip4' : 'ip6';
+
+    peerInfo.multiaddrs.add(`/${type}/${ip}/tcp/${port}/p2p/${peerIdStr}`);
+  }
+
+  peerInfo.multiaddrs.add(`/${defaults.SIGNAL_BASE}/${starPort}/wss/p2p-webrtc-star/p2p/${peerIdStr}`);
 
   return peerInfo;
 }

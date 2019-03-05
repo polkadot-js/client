@@ -7,6 +7,7 @@ const PROTOCOL_BASE = 'substrate';
 const PROTOCOL_TYPE = 'sup';
 const PROTOCOL_VERSION = 2;
 const MIN_PROTOCOL_VERSION = 2;
+const SIGNAL_BASE = 'dns4/star-signal.cloud.ipfs.team/tcp';
 
 function getProtocol (type?: string | null): string {
   return `/${PROTOCOL_BASE}/${type || PROTOCOL_TYPE}/${PROTOCOL_VERSION}`;
@@ -24,5 +25,6 @@ export default {
   PROTOCOL_VERSION,
   MIN_PROTOCOL_VERSION,
   PROTOCOL_PING: '/ipfs/ping/1.0.0',
+  SIGNAL_BASE,
   getProtocol
 };
