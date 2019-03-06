@@ -6,7 +6,23 @@ import { SyncStatus } from '@polkadot/client-p2p/types';
 import { IntervalJson } from './types';
 
 import BN from 'bn.js';
+import os from 'os';
 import BlockMessage from './BlockMessage';
+
+let prevUsage = process.cpuUsage();
+let prevTime = Date.now();
+
+function cpuAverage () {
+  const now = Date.now();
+  const usage = process.cpuUsage(prevUsage);
+  const total = Object.values(usage).reduce((total, value) => total + (value / 1000), 0);
+  const calculated = 100 * ((total / (now - prevTime)) / os.cpus().length);
+
+  prevTime = now;
+  prevUsage = usage;
+
+  return calculated;
+}
 
 export default class Interval extends BlockMessage {
   readonly peers: number;
@@ -23,7 +39,8 @@ export default class Interval extends BlockMessage {
   toJSON (): IntervalJson {
     return {
       ...super.toJSON(),
-      memory: process.memoryUsage().heapTotal,
+      cpu: cpuAverage(),
+      memory: Math.ceil(process.memoryUsage().heapTotal / 1024),
       peers: this.peers,
       status: this.status,
       txcount: this.txcount
