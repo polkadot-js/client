@@ -28,7 +28,7 @@ function cpuUsage () {
 function memoryUsage () {
   const usage = process.memoryUsage();
 
-  return Math.ceil((usage.heapTotal + usage.external) / 1024);
+  return Math.ceil((usage.heapTotal) / 1024);
 }
 
 export default class Interval extends BlockMessage {
