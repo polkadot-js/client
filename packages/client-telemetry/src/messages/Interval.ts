@@ -11,7 +11,7 @@ import BlockMessage from './BlockMessage';
 let prevUsage = process.cpuUsage();
 let prevTime = Date.now();
 
-function cpuAverage () {
+function cpuUsage () {
   const now = Date.now();
   const usage = process.cpuUsage(prevUsage);
   const total = Object.values(usage).reduce((total, value) => total + (value / 1000), 0);
@@ -23,6 +23,12 @@ function cpuAverage () {
   prevUsage = usage;
 
   return calculated;
+}
+
+function memoryUsage () {
+  const usage = process.memoryUsage();
+
+  return Math.ceil((usage.heapTotal + usage.external) / 1024);
 }
 
 export default class Interval extends BlockMessage {
@@ -40,8 +46,8 @@ export default class Interval extends BlockMessage {
   toJSON (): IntervalJson {
     return {
       ...super.toJSON(),
-      cpu: cpuAverage(),
-      memory: Math.ceil(process.memoryUsage().heapTotal / 1024),
+      cpu: cpuUsage(),
+      memory: memoryUsage(),
       peers: this.peers,
       status: this.status,
       txcount: this.txcount
