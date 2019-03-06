@@ -5,11 +5,11 @@
 import { MessageInterface } from './types';
 
 import { Enum, EnumType, Option, Set, Struct } from '@polkadot/types/codec';
-import { BlockNumber, Hash, Null, u32 as U32, u64 as U64 } from '@polkadot/types';
+import { BlockNumber, Hash, u32 as U32, u64 as U64 } from '@polkadot/types';
 
 import BaseMessage from './BaseMessage';
 
-export class BlockRequestMessage$Fields extends Set {
+export class BlockRequest$Fields extends Set {
   constructor (value: any = ['header', 'body', 'justification']) {
     super({
       header:        0b00000001,
@@ -21,30 +21,37 @@ export class BlockRequestMessage$Fields extends Set {
   }
 }
 
-export class BlockRequestMessage$Direction extends Enum {
+export class BlockRequest$Direction extends Enum {
   constructor (value: any = 'Ascending') {
     super([
       'Ascending',
       'Descending'
     ], value);
   }
-}
 
-export class BlockRequestMessage$From extends EnumType<BlockNumber | Hash> {
-  constructor (value?: any) {
-    super({
-      Hash,
-      BlockNumber
-    }, value, 1);
+  get isAscending (): boolean {
+    return this.toNumber() === 0;
   }
 }
 
-export class BlockRequestMessage$To extends EnumType<Hash | Null> {
-  constructor (value?: any) {
+export class BlockRequest$From extends EnumType<BlockNumber | Hash> {
+  constructor (value?: any, index?: number) {
     super({
-      Null,
-      Hash
-    }, value, 0);
+      Hash,
+      BlockNumber
+    }, value, index);
+  }
+
+  get isHash (): boolean {
+    return this.index === 0;
+  }
+
+  asBlockNumber (): BlockNumber {
+    return this.value as BlockNumber;
+  }
+
+  asHash (): Hash {
+    return this.value as Hash;
   }
 }
 
@@ -52,10 +59,10 @@ export class BlockRequestMessage extends Struct {
   constructor (value?: any) {
     super({
       id: U64,
-      fields: BlockRequestMessage$Fields,
-      from: BlockRequestMessage$From,
-      to: BlockRequestMessage$To,
-      direction: BlockRequestMessage$Direction,
+      fields: BlockRequest$Fields,
+      from: BlockRequest$From,
+      to: Option.with(Hash),
+      direction: BlockRequest$Direction,
       max: Option.with(U32)
     }, value);
   }
@@ -68,16 +75,16 @@ export default class BlockRequest extends BaseMessage implements MessageInterfac
     super(BlockRequest.type, new BlockRequestMessage(value));
   }
 
-  get direction (): BlockRequestMessage$Direction {
-    return this.message.get('direction') as BlockRequestMessage$Direction;
+  get direction (): BlockRequest$Direction {
+    return this.message.get('direction') as BlockRequest$Direction;
   }
 
-  get fields (): BlockRequestMessage$Fields {
-    return this.message.get('fields') as BlockRequestMessage$Fields;
+  get fields (): BlockRequest$Fields {
+    return this.message.get('fields') as BlockRequest$Fields;
   }
 
-  get from (): EnumType<Hash | BlockNumber> {
-    return this.message.get('from') as EnumType<Hash | BlockNumber>;
+  get from (): BlockRequest$From {
+    return this.message.get('from') as BlockRequest$From;
   }
 
   get id (): U64 {
@@ -88,7 +95,7 @@ export default class BlockRequest extends BaseMessage implements MessageInterfac
     return this.message.get('max') as Option<U32>;
   }
 
-  get to (): EnumType<Hash | Null> {
-    return this.message.get('to') as EnumType<Hash | Null>;
+  get to (): Option<Hash> {
+    return this.message.get('to') as Option<Hash>;
   }
 }

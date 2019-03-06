@@ -23,13 +23,9 @@ export default async function createListener (envType: EnvType, ip: string = def
     peerInfo.multiaddrs.add(`/${type}/${ip}/tcp/${port}/p2p/${peerIdStr}`);
   }
 
-  if (defaults.RTC_SIGNAL_BASE) {
-    peerInfo.multiaddrs.add(`${defaults.RTC_SIGNAL_BASE}/${peerIdStr}`);
-  }
-
-  if (defaults.WSS_SIGNAL_BASE) {
-    peerInfo.multiaddrs.add(`${defaults.WSS_SIGNAL_BASE}/${peerIdStr}`);
-  }
+  defaults.SIGNALLING.forEach((addr) =>
+    peerInfo.multiaddrs.add(`${addr}/${peerIdStr}`)
+  );
 
   return peerInfo;
 }

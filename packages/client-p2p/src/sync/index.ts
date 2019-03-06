@@ -9,9 +9,11 @@ import { SyncInterface, SyncState$Request, SyncState$BlockRequests, SyncState$Bl
 
 import BN from 'bn.js';
 import EventEmitter from 'eventemitter3';
+import { BlockData } from '@polkadot/client-types/index';
 import { BlockRequest, BlockResponse } from '@polkadot/client-types/messages';
-import { BlockNumber } from '@polkadot/types';
-import { isU8a, logger } from '@polkadot/util';
+import { BlockRequest$From } from '@polkadot/client-types/messages/BlockRequest';
+import { Hash } from '@polkadot/types';
+import { logger } from '@polkadot/util';
 
 import defaults from '../defaults';
 
@@ -27,7 +29,6 @@ export default class Sync extends EventEmitter implements SyncInterface {
   private blockRequests: SyncState$BlockRequests = {};
   private blockQueue: SyncState$BlockQueue = {};
   private bestQueued: BN = new BN(0);
-  // private lastPeer: PeerInterface | null = null;
   bestSeen: BN = new BN(0);
   status: SyncStatus = 'Idle';
 
@@ -38,25 +39,6 @@ export default class Sync extends EventEmitter implements SyncInterface {
 
     this.processBlocks();
   }
-
-  // getBlockData (fields: Array<string>, hash: Uint8Array): BlockResponseMessage$Block {
-  //   // const { body, header } = decodeBlock(
-  //   //   this.chain.blocks.block.get(hash)
-  //   // );
-  //   const data: BlockResponseMessageBlock = {
-  //     // hash
-  //   } as BlockResponseMessageBlock;
-
-  //   // if (fields.includes('Body')) {
-  //   //   data.body = body;
-  //   // }
-
-  //   // if (fields.includes('Header')) {
-  //   //   data.header = header;
-  //   // }
-
-  //   return data;
-  // }
 
   peerRequests (peer: PeerInterface): Requests {
     const requests: Requests = Object.values(this.blockRequests);
@@ -107,20 +89,66 @@ export default class Sync extends EventEmitter implements SyncInterface {
     return hasImported;
   }
 
-  provideBlocks (peer: PeerInterface, request: BlockRequest) {
-    const current = request.from.value as BlockNumber;
-    const best = this.chain.blocks.bestNumber.get();
-    const blocks: Array<any> = [];
+  private blocksFromHash (count: number, from: Hash, to: Hash | null, increment: BN): Array<Uint8Array> {
+    const data = new BlockData(this.chain.blocks.blockData.get(from));
 
-    // FIXME: Also send blocks starting with hash
-    const max = Math.min(request.max.unwrapOr(MAX_REQUEST_BN).toNumber(), defaults.MAX_REQUEST_BLOCKS);
-    let count = isU8a(request.from) ? max : 0;
-    const increment = request.direction.toString() === 'Ascending' ? new BN(1) : new BN(-1);
-
-    while (count < max && current.lte(best) && !current.isNeg()) {
-      count++;
-      current.iadd(increment);
+    // nothing here, just get out gracefully
+    if (data.isEmpty) {
+      return [];
     }
+
+    return this.blocksFromNumber(count, data.header.blockNumber, to, increment);
+  }
+
+  private blocksFromNumber (count: number, from: BN, to: Hash | null, increment: BN): Array<Uint8Array> {
+    const best = this.chain.blocks.bestNumber.get();
+    const blocks: Array<Uint8Array> = [];
+    let current = from;
+
+    // l.debug(() => `Reading ${count} blocks from #${from} -> ${to}, ${increment} (best #${best})`);
+
+    // get the requested number of blocks, either while not the best or not zero
+    // (for ascending and decending respectively)
+    while (count && current.lte(best) && !current.isZero()) {
+      const hash = this.chain.blocks.hash.get(current);
+
+      // make sure we have a valid hash
+      if (!hash.length) {
+        break;
+      }
+
+      const block = this.chain.blocks.blockData.get(hash);
+
+      // we should have an actual block
+      if (!block.length) {
+        break;
+      }
+
+      blocks.push(block);
+
+      // continue the loop if we have not reached out target
+      // (below is the catch all for the various ifs, exiting)
+      if (to && to.eq(hash)) {
+        break;
+      }
+
+      // we have one more, add the increment for the next block
+      count--;
+      current = current.add(increment);
+    }
+
+    return blocks;
+  }
+
+  provideBlocks (peer: PeerInterface, request: BlockRequest): void {
+    const increment = request.direction.isAscending ? new BN(1) : new BN(-1);
+    const count = Math.min(request.max.unwrapOr(MAX_REQUEST_BN).toNumber(), defaults.MAX_REQUEST_BLOCKS);
+    const to = request.to.unwrapOr(null);
+    const blocks = request.from.isHash
+      ? this.blocksFromHash(count, request.from.asHash(), to, increment)
+      : this.blocksFromNumber(count, request.from.asBlockNumber(), to, increment);
+
+    l.debug(() => `Providing ${blocks.length} blocks to ${peer.shortId}, ${request.from.toString()}+`);
 
     peer.send(
       new BlockResponse({
@@ -130,7 +158,7 @@ export default class Sync extends EventEmitter implements SyncInterface {
     );
   }
 
-  queueBlocks (peer: PeerInterface, { blocks, id }: BlockResponse) {
+  queueBlocks (peer: PeerInterface, { blocks, id }: BlockResponse): void {
     const request = this.blockRequests[peer.id];
 
     delete this.blockRequests[peer.id];
@@ -199,11 +227,11 @@ export default class Sync extends EventEmitter implements SyncInterface {
       return;
     }
 
-    l.debug(() => `Requesting blocks from ${peer.shortId}, #${from.toString()} -`);
+    // l.debug(() => `Requesting blocks from ${peer.shortId}, #${from.toString()} -`);
 
     const timeout = Date.now() + REQUEST_TIMEOUT;
     const request = new BlockRequest({
-      from,
+      from: new BlockRequest$From(from, 1),
       id: peer.getNextId(),
       max: defaults.MAX_REQUEST_BLOCKS
     });
