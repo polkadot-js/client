@@ -8,6 +8,29 @@ import { IntervalJson } from './types';
 import BN from 'bn.js';
 import BlockMessage from './BlockMessage';
 
+// let prevUsage = process.cpuUsage();
+// let prevTime = Date.now();
+
+// function cpuUsage () {
+//   const now = Date.now();
+//   const usage = process.cpuUsage(prevUsage);
+//   const total = Object.values(usage).reduce((total, value) => total + (value / 1000), 0);
+
+//   // Not sure why the factor is 10 vs 100 (but aligns with what is in OSX monitor)
+//   const calculated = 10 * (total / (now - prevTime)); // / os.cpus().length;
+
+//   prevTime = now;
+//   prevUsage = usage;
+
+//   return calculated;
+// }
+
+function memoryUsage () {
+  const usage = process.memoryUsage();
+
+  return Math.ceil((usage.heapTotal) / 1024);
+}
+
 export default class Interval extends BlockMessage {
   readonly peers: number;
   readonly status: SyncStatus;
@@ -23,7 +46,8 @@ export default class Interval extends BlockMessage {
   toJSON (): IntervalJson {
     return {
       ...super.toJSON(),
-      memory: process.memoryUsage().heapTotal,
+      cpu: 1, // cpuUsage(), // this grows and grows and grows
+      memory: memoryUsage(),
       peers: this.peers,
       status: this.status,
       txcount: this.txcount
