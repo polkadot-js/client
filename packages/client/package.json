@@ -1,6 +1,6 @@
 {
   "name": "@polkadot/client",
-  "version": "0.19.3",
+  "version": "0.19.4",
   "description": "A JavaScript client node for the polkadot network",
   "keywords": [
     "Polkadot",
@@ -29,12 +29,12 @@
   "homepage": "https://github.com/polkadot-js/client/tree/master/packages/client#readme",
   "dependencies": {
     "@babel/runtime": "^7.3.4",
-    "@polkadot/client-chains": "^0.19.3",
-    "@polkadot/client-db": "^0.19.3",
-    "@polkadot/client-p2p": "^0.19.3",
-    "@polkadot/client-rpc": "^0.19.3",
-    "@polkadot/client-telemetry": "^0.19.3",
-    "@polkadot/client-wasm": "^0.19.3",
+    "@polkadot/client-chains": "^0.19.4",
+    "@polkadot/client-db": "^0.19.4",
+    "@polkadot/client-p2p": "^0.19.4",
+    "@polkadot/client-rpc": "^0.19.4",
+    "@polkadot/client-telemetry": "^0.19.4",
+    "@polkadot/client-wasm": "^0.19.4",
     "@polkadot/util": "^0.35.4",
     "@types/package-json": "^5.0.0",
     "@types/semver-compare": "^1.0.0",
