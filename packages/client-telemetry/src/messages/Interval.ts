@@ -11,19 +11,19 @@ import BlockMessage from './BlockMessage';
 let prevUsage = process.cpuUsage();
 let prevTime = Date.now();
 
-function cpuUsage () {
-  const now = Date.now();
-  const usage = process.cpuUsage(prevUsage);
-  const total = Object.values(usage).reduce((total, value) => total + (value / 1000), 0);
+// function cpuUsage () {
+//   const now = Date.now();
+//   const usage = process.cpuUsage(prevUsage);
+//   const total = Object.values(usage).reduce((total, value) => total + (value / 1000), 0);
 
-  // Not sure why the factor is 10 vs 100 (but aligns with what is in OSX monitor)
-  const calculated = 10 * (total / (now - prevTime)); // / os.cpus().length;
+//   // Not sure why the factor is 10 vs 100 (but aligns with what is in OSX monitor)
+//   const calculated = 10 * (total / (now - prevTime)); // / os.cpus().length;
 
-  prevTime = now;
-  prevUsage = usage;
+//   prevTime = now;
+//   prevUsage = usage;
 
-  return calculated;
-}
+//   return calculated;
+// }
 
 function memoryUsage () {
   const usage = process.memoryUsage();
@@ -46,7 +46,7 @@ export default class Interval extends BlockMessage {
   toJSON (): IntervalJson {
     return {
       ...super.toJSON(),
-      cpu: cpuUsage(),
+      cpu: 1, // cpuUsage(), // this grows and grows and grows
       memory: memoryUsage(),
       peers: this.peers,
       status: this.status,
