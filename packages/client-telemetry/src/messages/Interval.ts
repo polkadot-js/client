@@ -8,8 +8,8 @@ import { IntervalJson } from './types';
 import BN from 'bn.js';
 import BlockMessage from './BlockMessage';
 
-let prevUsage = process.cpuUsage();
-let prevTime = Date.now();
+// let prevUsage = process.cpuUsage();
+// let prevTime = Date.now();
 
 // function cpuUsage () {
 //   const now = Date.now();
