@@ -16,6 +16,7 @@ import wasm from './wasm';
 export default function argv (cli?: string): Config {
   const parser = yargs
     .version(operation['client-id'].default)
+    .strict()
     .options({
       ...operation, ...db, ...p2p, ...rpc, ...telemetry, ...wasm
     })
@@ -27,8 +28,7 @@ export default function argv (cli?: string): Config {
     .group(Object.keys(p2p), 'Peer-to-peer')
     .group(Object.keys(rpc), 'RPC server')
     .group(Object.keys(telemetry), 'Telemetry client')
-    .group(Object.keys(wasm), 'Wasm Runtime')
-    .strict();
+    .group(Object.keys(wasm), 'Wasm Runtime');
 
   const parsed = cli
     ? parser.parse(cli).argv

@@ -5,7 +5,7 @@
 import { MessageInterface } from './types';
 
 import { Enum, EnumType, Option, Set, Struct } from '@polkadot/types/codec';
-import { BlockNumber, Hash, Null, u32 as U32, u64 as U64 } from '@polkadot/types';
+import { BlockNumber, Hash, u32 as U32, u64 as U64 } from '@polkadot/types';
 
 import BaseMessage from './BaseMessage';
 
@@ -35,36 +35,19 @@ export class BlockRequest$Direction extends Enum {
 }
 
 export class BlockRequest$From extends EnumType<BlockNumber | Hash> {
-  constructor (value?: any) {
+  constructor (value?: any, index?: number) {
     super({
       Hash,
       BlockNumber
-    }, value, 1);
+    }, value, index);
   }
 
-  isHash (): boolean {
+  get isHash (): boolean {
     return this.index === 0;
   }
 
   asBlockNumber (): BlockNumber {
     return this.value as BlockNumber;
-  }
-
-  asHash (): Hash {
-    return this.value as Hash;
-  }
-}
-
-export class BlockRequest$To extends EnumType<Hash | Null> {
-  constructor (value?: any) {
-    super({
-      Null,
-      Hash
-    }, value, 0);
-  }
-
-  get isNull (): boolean {
-    return this.index === 0;
   }
 
   asHash (): Hash {
@@ -78,7 +61,7 @@ export class BlockRequestMessage extends Struct {
       id: U64,
       fields: BlockRequest$Fields,
       from: BlockRequest$From,
-      to: BlockRequest$To,
+      to: Option.with(Hash),
       direction: BlockRequest$Direction,
       max: Option.with(U32)
     }, value);
@@ -112,7 +95,7 @@ export default class BlockRequest extends BaseMessage implements MessageInterfac
     return this.message.get('max') as Option<U32>;
   }
 
-  get to (): BlockRequest$To {
-    return this.message.get('to') as BlockRequest$To;
+  get to (): Option<Hash> {
+    return this.message.get('to') as Option<Hash>;
   }
 }

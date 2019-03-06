@@ -11,6 +11,7 @@ import BN from 'bn.js';
 import EventEmitter from 'eventemitter3';
 import { BlockData } from '@polkadot/client-types/index';
 import { BlockRequest, BlockResponse } from '@polkadot/client-types/messages';
+import { BlockRequest$From } from '@polkadot/client-types/messages/BlockRequest';
 import { Hash } from '@polkadot/types';
 import { logger } from '@polkadot/util';
 
@@ -28,7 +29,6 @@ export default class Sync extends EventEmitter implements SyncInterface {
   private blockRequests: SyncState$BlockRequests = {};
   private blockQueue: SyncState$BlockQueue = {};
   private bestQueued: BN = new BN(0);
-  // private lastPeer: PeerInterface | null = null;
   bestSeen: BN = new BN(0);
   status: SyncStatus = 'Idle';
 
@@ -39,25 +39,6 @@ export default class Sync extends EventEmitter implements SyncInterface {
 
     this.processBlocks();
   }
-
-  // getBlockData (fields: Array<string>, hash: Uint8Array): BlockResponseMessage$Block {
-  //   // const { body, header } = decodeBlock(
-  //   //   this.chain.blocks.block.get(hash)
-  //   // );
-  //   const data: BlockResponseMessageBlock = {
-  //     // hash
-  //   } as BlockResponseMessageBlock;
-
-  //   // if (fields.includes('Body')) {
-  //   //   data.body = body;
-  //   // }
-
-  //   // if (fields.includes('Header')) {
-  //   //   data.header = header;
-  //   // }
-
-  //   return data;
-  // }
 
   peerRequests (peer: PeerInterface): Requests {
     const requests: Requests = Object.values(this.blockRequests);
@@ -124,6 +105,8 @@ export default class Sync extends EventEmitter implements SyncInterface {
     const blocks: Array<Uint8Array> = [];
     let current = from;
 
+    // l.debug(() => `Reading ${count} blocks from #${from} -> ${to}, ${increment} (best #${best})`);
+
     // get the requested number of blocks, either while not the best or not zero
     // (for ascending and decending respectively)
     while (count && current.lte(best) && !current.isZero()) {
@@ -137,7 +120,7 @@ export default class Sync extends EventEmitter implements SyncInterface {
       const block = this.chain.blocks.blockData.get(hash);
 
       // we should have an actual block
-      if (block.length) {
+      if (!block.length) {
         break;
       }
 
@@ -160,14 +143,12 @@ export default class Sync extends EventEmitter implements SyncInterface {
   provideBlocks (peer: PeerInterface, request: BlockRequest): void {
     const increment = request.direction.isAscending ? new BN(1) : new BN(-1);
     const count = Math.min(request.max.unwrapOr(MAX_REQUEST_BN).toNumber(), defaults.MAX_REQUEST_BLOCKS);
-    const to = request.to.isNull
-      ? null
-      : request.to.asHash();
+    const to = request.to.unwrapOr(null);
     const blocks = request.from.isHash
       ? this.blocksFromHash(count, request.from.asHash(), to, increment)
       : this.blocksFromNumber(count, request.from.asBlockNumber(), to, increment);
 
-    l.debug(() => `Providing ${blocks.length} blocks to ${peer.shortId}`);
+    l.debug(() => `Providing ${blocks.length} blocks to ${peer.shortId}, ${request.from.toString()}+`);
 
     peer.send(
       new BlockResponse({
@@ -246,11 +227,11 @@ export default class Sync extends EventEmitter implements SyncInterface {
       return;
     }
 
-    l.debug(() => `Requesting blocks from ${peer.shortId}, #${from.toString()} -`);
+    // l.debug(() => `Requesting blocks from ${peer.shortId}, #${from.toString()} -`);
 
     const timeout = Date.now() + REQUEST_TIMEOUT;
     const request = new BlockRequest({
-      from,
+      from: new BlockRequest$From(from, 1),
       id: peer.getNextId(),
       max: defaults.MAX_REQUEST_BLOCKS
     });

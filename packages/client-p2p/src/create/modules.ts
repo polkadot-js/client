@@ -24,7 +24,7 @@ export default function createModules (envType: EnvType, peerInfo: PeerInfo, boo
     ? [new WS(), new TCP()]
     : [new WS()].concat(starTransports);
   const peerDiscovery = isCli
-    ? [new Bootstrap({ list: bootNodes })]
+    ? [new Bootstrap({ list: bootNodes.concat(nodes) })]
     : starTransports.map((transport) => transport.discovery);
 
   return {
