@@ -55,12 +55,18 @@ export default class Executor implements ExecutorInterface {
 
   importBlock (blockData: BlockData): boolean {
     const start = Date.now();
-    const { blockNumber, hash } = blockData.header;
+    const { blockNumber, hash, parentHash } = blockData.header;
     const shortHash = u8aToHex(hash, 48);
 
     l.debug(() => `Importing block #${blockNumber}, ${shortHash}`);
 
     try {
+      // get the parent block, set the root accordingly
+      const { header: { stateRoot } } = new BlockData(this.blockDb.blockData.get(parentHash));
+
+      this.stateDb.db.setRoot(stateRoot);
+
+      // execute the block against this root
       this.stateDb.db.transaction(() =>
         this.executeBlock(blockData)
       );
