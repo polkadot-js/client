@@ -241,7 +241,7 @@ export default class Sync extends EventEmitter implements SyncInterface {
 
   private requestFromPeer (peer: PeerInterface, from: BN | null, isStale: boolean) {
     // TODO: This assumes no stale block downloading
-    if (this.blockRequests[peer.id] || !from || from.gt(peer.bestNumber)) {
+    if (this.blockRequests[peer.id] || !peer.isActive() || !from || from.gt(peer.bestNumber)) {
       return;
     }
 
@@ -266,10 +266,6 @@ export default class Sync extends EventEmitter implements SyncInterface {
   requestBlocks (peer: PeerInterface) {
     this.timeoutRequests();
 
-    if (!peer.isActive()) {
-      return;
-    }
-
     const nextNumber = this.chain.blocks.bestNumber.get().addn(1);
     const from = this.bestQueued.lt(nextNumber)
       ? nextNumber
@@ -289,7 +285,6 @@ export default class Sync extends EventEmitter implements SyncInterface {
   private requestOther () {
     const allData = Object.values(this.blockQueue);
 
-    // if we don't have data, just do what we have been doing
     if (allData.length === 0) {
       return;
     }
@@ -299,11 +294,6 @@ export default class Sync extends EventEmitter implements SyncInterface {
         ? current
         : first;
     }, allData[0]);
-
-    // don't clobber peer with requests, wait patiently
-    if (this.blockRequests[peer.id]) {
-      return;
-    }
 
     const from = block.header.blockNumber.subn(defaults.MAX_REQUEST_BLOCKS);
 
