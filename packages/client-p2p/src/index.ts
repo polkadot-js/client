@@ -13,8 +13,7 @@ import handlers from './handler';
 import EventEmitter from 'eventemitter3';
 import handshake from 'pull-handshake';
 import pull from 'pull-stream';
-import { logger, promisify, u8aToBuffer } from '@polkadot/util';
-import { randomAsU8a } from '@polkadot/util-crypto';
+import { logger, promisify } from '@polkadot/util';
 
 import createNode from './create/node';
 import defaults from './defaults';
@@ -34,7 +33,7 @@ type QueuedPeer = {
 const DIAL_BACKOFF = 1 * 60 * 1000;
 const DIAL_INTERVAL = 15000;
 const REQUEST_INTERVAL = 15000;
-const PING_INTERVAL = 30000;
+// const PING_INTERVAL = 30000;
 const PING_TIMEOUT = 60000;
 const PING_LENGTH = 32;
 
