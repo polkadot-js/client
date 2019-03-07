@@ -13,7 +13,7 @@ import { BlockData } from '@polkadot/client-types/index';
 import { BlockRequest, BlockResponse } from '@polkadot/client-types/messages';
 import { BlockRequest$From } from '@polkadot/client-types/messages/BlockRequest';
 import { Hash } from '@polkadot/types';
-import { logger, u8aToHex } from '@polkadot/util';
+import { logger } from '@polkadot/util';
 
 import defaults from '../defaults';
 
