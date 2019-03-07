@@ -19,4 +19,14 @@ export type Config = {
   wasm: WasmConfig
 };
 
+export type ConfigPartial = {
+  chain: ChainName,
+  db: DbConfig,
+  p2p: P2pConfig,
+  rpc: RpcConfig | null,
+  roles: Array<string>,
+  telemetry: TelemetryConfig | null,
+  wasm: WasmConfig
+};
+
 export type ConfigKeys = keyof Config;

@@ -12,7 +12,6 @@ import handlers from './handler';
 
 import EventEmitter from 'eventemitter3';
 import handshake from 'pull-handshake';
-import PullPushable from 'pull-pushable';
 import pull from 'pull-stream';
 import { logger, promisify, u8aToBuffer } from '@polkadot/util';
 import { randomAsU8a } from '@polkadot/util-crypto';

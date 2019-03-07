@@ -2,7 +2,7 @@
 // This software may be modified and distributed under the terms
 // of the Apache-2.0 license. See the LICENSE file for details.
 
-import { Config } from './types';
+import { Config, ConfigPartial } from './types';
 import { ChainInterface } from '@polkadot/client-chains/types';
 import { P2pInterface } from '@polkadot/client-p2p/types';
 import { RpcInterface } from '@polkadot/client-rpc/types';
@@ -32,7 +32,7 @@ export default class Client {
   private prevTime: number = Date.now();
   private prevImport: number = 0;
 
-  async start (config: Config) {
+  async start (config: ConfigPartial) {
     const verStatus = await clientId.getNpmStatus();
     const status = verStatus
       ? `(${verStatus})`
@@ -41,14 +41,32 @@ export default class Client {
     l.log(`Running version ${clientId.version} ${status}`);
     l.log(`Initialising for roles=${config.roles.join(',')} on chain=${config.chain}`);
 
-    this.chain = new Chain(config);
-    this.p2p = new P2p(config, this.chain);
-    this.rpc = new Rpc(config, this.chain);
-    this.telemetry = new Telemetry(config, this.chain);
+    this.chain = new Chain(config as Config);
+    this.p2p = new P2p(config as Config, this.chain);
 
-    await this.p2p.start();
-    await this.rpc.start();
-    await this.telemetry.start();
+    if (config.rpc) {
+      this.rpc = new Rpc(config as Config, this.chain);
+    }
+
+    if (config.telemetry) {
+      this.telemetry = new Telemetry(config as Config, this.chain);
+    }
+
+    await this.startServices();
+  }
+
+  private async startServices () {
+    if (this.p2p) {
+      await this.p2p.start();
+    }
+
+    if (this.rpc) {
+      await this.rpc.start();
+    }
+
+    if (this.telemetry) {
+      await this.telemetry.start();
+    }
 
     this.startInformant();
   }
