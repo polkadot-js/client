@@ -13,7 +13,7 @@ import { BlockData } from '@polkadot/client-types/index';
 import { BlockRequest, BlockResponse } from '@polkadot/client-types/messages';
 import { BlockRequest$From } from '@polkadot/client-types/messages/BlockRequest';
 import { Hash } from '@polkadot/types';
-import { logger } from '@polkadot/util';
+import { isU8a, logger, u8aToHex } from '@polkadot/util';
 
 import defaults from '../defaults';
 
@@ -73,6 +73,12 @@ export default class Sync extends EventEmitter implements SyncInterface {
     const nextNumber = bestNumber.addn(1);
     const nextId = Object
       .keys(this.blockQueue)
+      // .sort((a: string, b: string): number => {
+      //   const aData = this.blockQueue[a];
+      //   const bData = this.blockQueue[b];
+
+      //    return aData.block.header.blockNumber.cmp(bData.block.header.blockNumber);
+      // })
       .find((nextId) => {
         const { block: { header } } = this.blockQueue[nextId];
 
@@ -88,7 +94,9 @@ export default class Sync extends EventEmitter implements SyncInterface {
           if (this.hasBlockData(header.parentHash)) {
             return true;
           }
-        } else if (nextNumber.eq(header.blockNumber)) {
+        }
+
+        if (nextNumber.eq(header.blockNumber)) {
           return this.hasBlockData(header.parentHash);
         }
 
@@ -197,6 +205,7 @@ export default class Sync extends EventEmitter implements SyncInterface {
 
   queueBlocks (peer: PeerInterface, { blocks, id }: BlockResponse): void {
     const request = this.blockRequests[peer.id];
+    const bestNumber = this.chain.blocks.bestNumber.get();
 
     delete this.blockRequests[peer.id];
 
@@ -207,31 +216,30 @@ export default class Sync extends EventEmitter implements SyncInterface {
       // l.warn(`Mismatched response from ${peer.shortId}`);
     }
 
-    const bestNumber = this.chain.blocks.bestNumber.get();
     let firstNumber;
     let count = 0;
 
     for (let i = 0; i < blocks.length; i++) {
       const block = blocks[i];
       const dbBlock = this.chain.blocks.blockData.get(block.hash);
-      const header = block.header;
-      const queueNumber = header.blockNumber.toString();
-      const isImportable = !dbBlock.length || bestNumber.lt(header.blockNumber);
-      const canQueue = isImportable && !this.blockQueue[queueNumber];
+      const { header: { blockNumber } } = block;
+      const queueNumber = blockNumber.toString();
 
-      if (canQueue) {
-        this.blockQueue[queueNumber] = {
-          block,
-          peer
-        };
-        firstNumber = firstNumber || header.blockNumber;
-
-        if (this.bestQueued.lt(header.blockNumber)) {
-          this.bestQueued = header.blockNumber;
-        }
-
-        count++;
+      if ((dbBlock.length && blockNumber.lte(bestNumber)) || this.blockQueue[queueNumber]) {
+        continue;
       }
+
+      this.blockQueue[queueNumber] = {
+        block,
+        peer
+      };
+      firstNumber = firstNumber || blockNumber;
+
+      if (this.bestQueued.lt(blockNumber)) {
+        this.bestQueued = blockNumber;
+      }
+
+      count++;
     }
 
     if (count && firstNumber) {
@@ -241,15 +249,18 @@ export default class Sync extends EventEmitter implements SyncInterface {
 
   private requestFromPeer (peer: PeerInterface, from: BN | null, isStale: boolean) {
     // TODO: This assumes no stale block downloading
-    if (this.blockRequests[peer.id] || !from || from.gt(peer.bestNumber)) {
+    if (this.blockRequests[peer.id] || !peer.isActive() || !from || from.gt(peer.bestNumber)) {
       return;
     }
 
-    l.debug(() => `Requesting blocks from ${peer.shortId}, #${from.toString()} ${isStale ? '(older)' : '-'}`);
+    const fromStr = isU8a(from)
+      ? u8aToHex(from, 48)
+      : `#${from.toString()}`;
 
-    const timeout = Date.now() + REQUEST_TIMEOUT;
+    l.debug(() => `Requesting blocks from ${peer.shortId}, ${fromStr} ${isStale ? '(older)' : '-'}`);
+
     const request = new BlockRequest({
-      from: new BlockRequest$From(from, 1),
+      from: new BlockRequest$From(from, isU8a(from) ? 0 : 1),
       id: peer.getNextId(),
       max: defaults.MAX_REQUEST_BLOCKS
     });
@@ -257,7 +268,7 @@ export default class Sync extends EventEmitter implements SyncInterface {
     this.blockRequests[peer.id] = {
       peer,
       request,
-      timeout
+      timeout: Date.now() + REQUEST_TIMEOUT
     };
 
     peer.send(request);
@@ -265,10 +276,6 @@ export default class Sync extends EventEmitter implements SyncInterface {
 
   requestBlocks (peer: PeerInterface) {
     this.timeoutRequests();
-
-    if (!peer.isActive()) {
-      return;
-    }
 
     const nextNumber = this.chain.blocks.bestNumber.get().addn(1);
     const from = this.bestQueued.lt(nextNumber)
@@ -289,25 +296,17 @@ export default class Sync extends EventEmitter implements SyncInterface {
   private requestOther () {
     const allData = Object.values(this.blockQueue);
 
-    // if we don't have data, just do what we have been doing
     if (allData.length === 0) {
       return;
     }
 
     const { block, peer } = allData.reduce((first, current) => {
-      return current.peer.isActive && current.block.header.blockNumber.lt(first.block.header.blockNumber)
+      return current.block.header.blockNumber.lt(first.block.header.blockNumber)
         ? current
         : first;
     }, allData[0]);
 
-    // don't clobber peer with requests, wait patiently
-    if (this.blockRequests[peer.id]) {
-      return;
-    }
-
-    const from = block.header.blockNumber.subn(defaults.MAX_REQUEST_BLOCKS);
-
-    this.requestFromPeer(peer, from, true);
+    this.requestFromPeer(peer, block.header.blockNumber.subn(defaults.MAX_REQUEST_BLOCKS), true);
   }
 
   // TODO We can probably use a package with a timeout like an LRU
