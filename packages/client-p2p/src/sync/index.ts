@@ -73,19 +73,12 @@ export default class Sync extends EventEmitter implements SyncInterface {
     const nextNumber = bestNumber.addn(1);
     const nextId = Object
       .keys(this.blockQueue)
-      .sort((a: string, b: string): number => {
-        const aData = this.blockQueue[a];
-        const bData = this.blockQueue[b];
-
-        return aData.block.header.blockNumber.cmp(bData.block.header.blockNumber);
-      })
       .find((nextId) => {
         const { block: { header } } = this.blockQueue[nextId];
-        const hash = header.hash;
 
         if (header.blockNumber.lt(bestNumber)) {
           // if we already have this one, remove it from the queue
-          if (this.hasBlockData(hash)) {
+          if (this.hasBlockData(header.hash)) {
             delete this.blockQueue[nextId];
 
             return false;
@@ -293,22 +286,6 @@ export default class Sync extends EventEmitter implements SyncInterface {
     this.requestFromPeer(peer, from, false);
   }
 
-  // TODO We can probably use a package with a timeout like an LRU
-  private timeoutRequests (): void {
-    const now = Date.now();
-
-    this.blockRequests = Object
-      .keys(this.blockRequests)
-      .filter((id) =>
-        this.blockRequests[id].timeout > now
-      )
-      .reduce((result, id) => {
-        result[id] = this.blockRequests[id];
-
-        return result;
-      }, {} as SyncState$BlockRequests);
-  }
-
   private requestOther () {
     const allData = Object.values(this.blockQueue);
 
@@ -331,5 +308,21 @@ export default class Sync extends EventEmitter implements SyncInterface {
     const from = block.header.blockNumber.subn(defaults.MAX_REQUEST_BLOCKS);
 
     this.requestFromPeer(peer, from, true);
+  }
+
+  // TODO We can probably use a package with a timeout like an LRU
+  private timeoutRequests (): void {
+    const now = Date.now();
+
+    this.blockRequests = Object
+      .keys(this.blockRequests)
+      .filter((id) =>
+        this.blockRequests[id].timeout > now
+      )
+      .reduce((result, id) => {
+        result[id] = this.blockRequests[id];
+
+        return result;
+      }, {} as SyncState$BlockRequests);
   }
 }
