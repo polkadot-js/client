@@ -29,7 +29,6 @@ export default class Sync extends EventEmitter implements SyncInterface {
   private blockRequests: SyncState$BlockRequests = {};
   private blockQueue: SyncState$BlockQueue = {};
   private bestQueued: BN = new BN(0);
-  private worstQueued: BN = new BN(Number.MAX_SAFE_INTEGER);
   bestSeen: BN = new BN(0);
   status: SyncStatus = 'Idle';
 
@@ -74,20 +73,18 @@ export default class Sync extends EventEmitter implements SyncInterface {
     const nextNumber = bestNumber.addn(1);
     const nextId = Object
       .keys(this.blockQueue)
-      .sort((a: string, b: string): number => {
-        const aData = this.blockQueue[a];
-        const bData = this.blockQueue[b];
+      // .sort((a: string, b: string): number => {
+      //   const aData = this.blockQueue[a];
+      //   const bData = this.blockQueue[b];
 
-         return aData.block.header.blockNumber.cmp(bData.block.header.blockNumber);
-      })
+      //    return aData.block.header.blockNumber.cmp(bData.block.header.blockNumber);
+      // })
       .find((nextId) => {
         const { block: { header } } = this.blockQueue[nextId];
 
         if (header.blockNumber.lt(bestNumber)) {
           // if we already have this one, remove it from the queue
           if (this.hasBlockData(header.hash)) {
-            console.log('Already have', header.blockNumber);
-
             delete this.blockQueue[nextId];
 
             return false;
@@ -95,9 +92,6 @@ export default class Sync extends EventEmitter implements SyncInterface {
 
           // see if it is importable, i.e. we have the parent
           if (this.hasBlockData(header.parentHash)) {
-
-            console.log('have parent for', header.blockNumber);
-
             return true;
           }
         }
@@ -243,10 +237,6 @@ export default class Sync extends EventEmitter implements SyncInterface {
 
       if (this.bestQueued.lt(blockNumber)) {
         this.bestQueued = blockNumber;
-      }
-
-      if (this.worstQueued.gt(blockNumber)) {
-        this.worstQueued = blockNumber;
       }
 
       count++;
