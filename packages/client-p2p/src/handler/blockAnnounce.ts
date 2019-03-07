@@ -9,7 +9,7 @@ import { BlockAnnounce } from '@polkadot/client-types/messages';
 import { Header } from '@polkadot/types';
 
 function handleBlockAnnounce (self: P2pInterface, peer: PeerInterface, message: BlockAnnounce): void {
-  self.l.debug(() => [peer.shortId, 'BlockAnnounce', JSON.stringify(message)]);
+  // self.l.debug(() => [peer.shortId, 'BlockAnnounce', JSON.stringify(message)]);
 
   const header = message.header;
 

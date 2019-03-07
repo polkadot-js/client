@@ -8,7 +8,7 @@ import { Handler } from './types';
 import { BlockRequest } from '@polkadot/client-types/messages';
 
 function handleBlockRequest (self: P2pInterface, peer: PeerInterface, message: BlockRequest): void {
-  self.l.debug(() => [peer.shortId, 'BlockRequest', JSON.stringify(message)]);
+  // self.l.debug(() => [peer.shortId, 'BlockRequest', JSON.stringify(message)]);
 
   self.sync.provideBlocks(peer, message);
 }
