@@ -211,6 +211,7 @@ export default class Sync extends EventEmitter implements SyncInterface {
 
   queueBlocks (peer: PeerInterface, { blocks, id }: BlockResponse): void {
     const request = this.blockRequests[peer.id];
+    const bestNumber = this.chain.blocks.bestNumber.get();
 
     delete this.blockRequests[peer.id];
 
@@ -230,7 +231,7 @@ export default class Sync extends EventEmitter implements SyncInterface {
       const { header: { blockNumber } } = block;
       const queueNumber = blockNumber.toString();
 
-      if (dbBlock.length || this.blockQueue[queueNumber]) {
+      if ((dbBlock.length && blockNumber.lte(bestNumber)) || this.blockQueue[queueNumber]) {
         continue;
       }
 

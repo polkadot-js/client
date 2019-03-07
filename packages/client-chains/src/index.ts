@@ -61,10 +61,9 @@ export default class Chain implements ChainInterface {
     }
 
     const bestBlock = this.getBlock(bestHash);
-    // const parentBlock = this.getBlock(bestBlock.header.parentHash);
 
-    // return this.initGenesisFromBest(bestBlock.header);
-    return this.rollbackBlock(bestBlock.header, true, false);
+    return this.initGenesisFromBest(bestBlock.header);
+    // return this.rollbackBlock(bestBlock.header, true, false);
   }
 
   private initGenesisFromBest (bestHeader: Header, rollback: boolean = true): ChainGenesis {
