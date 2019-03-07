@@ -2,11 +2,9 @@
 // This software may be modified and distributed under the terms
 // of the Apache-2.0 license. See the LICENSE file for details.
 
-import { Config } from '@polkadot/client/types';
+import { ConfigPartial } from '@polkadot/client/types';
 
 import defaultsP2p from '@polkadot/client-p2p/defaults';
-import defaultsRpc from '@polkadot/client-rpc/defaults';
-import defaultsTelemetry from '@polkadot/client-telemetry/defaults';
 import defaultsWasm from '@polkadot/client-wasm/defaults';
 
 export default ({
@@ -25,16 +23,9 @@ export default ({
     type: 'browser'
   },
   roles: ['full'],
-  rpc: {
-    path: defaultsRpc.PATH,
-    port: defaultsRpc.PORT,
-    types: []
-  },
-  telemetry: {
-    name: '',
-    url: defaultsTelemetry.URL
-  },
+  rpc: null,
+  telemetry: null,
   wasm: {
     heapSize: defaultsWasm.HEAP_SIZE_KB
   }
-} as Config);
+} as ConfigPartial);

@@ -8,22 +8,30 @@ import { IntervalJson } from './types';
 import BN from 'bn.js';
 import BlockMessage from './BlockMessage';
 
-// let prevUsage = process.cpuUsage();
-// let prevTime = Date.now();
+let prevTime = process.hrtime();
+let prevTotal = calcCpuTotal(process.cpuUsage());
 
-// function cpuUsage () {
-//   const now = Date.now();
-//   const usage = process.cpuUsage(prevUsage);
-//   const total = Object.values(usage).reduce((total, value) => total + (value / 1000), 0);
+function calcCpuTotal (usage: NodeJS.CpuUsage): number {
+  return Object.values(usage).reduce((total, value) => total + value, 0);
+}
 
-//   // Not sure why the factor is 10 vs 100 (but aligns with what is in OSX monitor)
-//   const calculated = 10 * (total / (now - prevTime)); // / os.cpus().length;
+function ns2ms ([s, ns]: [number, number]): number {
+  return (s * 1000) + (ns / 1000000);
+}
 
-//   prevTime = now;
-//   prevUsage = usage;
+function cpuUsage () {
+  const now = process.hrtime();
+  const elapsed = ns2ms(now) - ns2ms(prevTime);
+  const total = calcCpuTotal(process.cpuUsage());
 
-//   return calculated;
-// }
+  // Not sure why the factor is 10 here...
+  const calculated = ((total - prevTotal) / elapsed) / 10;
+
+  prevTime = now;
+  prevTotal = total;
+
+  return calculated;
+}
 
 function memoryUsage () {
   const usage = process.memoryUsage();
@@ -46,7 +54,7 @@ export default class Interval extends BlockMessage {
   toJSON (): IntervalJson {
     return {
       ...super.toJSON(),
-      cpu: 1, // cpuUsage(), // this grows and grows and grows
+      cpu: cpuUsage(),
       memory: memoryUsage(),
       peers: this.peers,
       status: this.status,

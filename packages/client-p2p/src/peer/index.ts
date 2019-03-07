@@ -155,7 +155,7 @@ export default class Peer extends EventEmitter implements PeerInterface {
             if (remaining === 0) {
               const message = decodeMessage(data);
 
-              l.debug(() => [this.shortId, 'decoded', { message }]);
+              // l.debug(() => [this.shortId, 'decoded', { message }]);
 
               this.emit('message', message);
 

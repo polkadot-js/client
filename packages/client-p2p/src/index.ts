@@ -12,7 +12,6 @@ import handlers from './handler';
 
 import EventEmitter from 'eventemitter3';
 import handshake from 'pull-handshake';
-import PullPushable from 'pull-pushable';
 import pull from 'pull-stream';
 import { logger, promisify, u8aToBuffer } from '@polkadot/util';
 import { randomAsU8a } from '@polkadot/util-crypto';
@@ -32,11 +31,12 @@ type QueuedPeer = {
   nextDial: number
 };
 
-const DIAL_BACKOFF = 5 * 60000;
+const DIAL_BACKOFF = 1 * 60 * 1000;
 const DIAL_INTERVAL = 15000;
 const REQUEST_INTERVAL = 15000;
 const PING_INTERVAL = 30000;
-// const PING_TIMEOUT = 5000;
+const PING_TIMEOUT = 60000;
+const PING_LENGTH = 32;
 
 const l = logger('p2p');
 
@@ -192,22 +192,24 @@ export default class P2p extends EventEmitter implements P2pInterface {
       defaults.PROTOCOL_PING,
       async (protocol: string, connection: LibP2pConnection): Promise<void> => {
         try {
-          const pushable = PullPushable((error) => {
-            l.debug(() => ['ping error', error]);
-          });
+          const stream = handshake({ timeout: PING_TIMEOUT });
+          const shake = stream.handshake;
+          const next = () => {
+            shake.read(PING_LENGTH, (error, buffer) => {
+              if (error) {
+                // l.debug(() => ['ping error', error]);
+                return;
+              }
 
-          pull(pushable, connection);
-          pull(
-            connection,
-            pull.drain(
-              (buffer: Buffer): void => {
-                l.debug(() => ['ping (protocol)']);
+              // l.debug(() => ['ping (protocol)']);
+              shake.write(buffer);
 
-                pushable.push(buffer);
-              },
-              () => false
-            )
-          );
+              next();
+            });
+          };
+
+          pull(connection, stream, connection);
+          next();
         } catch (error) {
           l.error('ping handling error', error);
         }
@@ -227,26 +229,19 @@ export default class P2p extends EventEmitter implements P2pInterface {
         this.node, this.node.dialProtocol, peer.peerInfo, defaults.PROTOCOL_PING
       );
 
-      const stream = handshake({ timeout: 60000 }, (error) => {
+      const stream = handshake({ timeout: PING_TIMEOUT }, (error) => {
         if (error) {
           l.warn(() => ['ping disconnected', peer.shortId, error]);
           peer.disconnect();
         }
       });
       const shake = stream.handshake;
-
-      pull(
-        stream,
-        connection,
-        stream
-      );
-
-      const doPing = () => {
+      const next = () => {
         const start = Date.now();
         const request = u8aToBuffer(randomAsU8a());
 
         shake.write(request);
-        shake.read(32, (error, response) => {
+        shake.read(PING_LENGTH, (error, response) => {
           if (!error && request.equals(response)) {
             const elapsed = Date.now() - start;
 
@@ -254,12 +249,12 @@ export default class P2p extends EventEmitter implements P2pInterface {
             // setTimeout(doPing, PING_INTERVAL);
             // return;
           } else if (error) {
-            l.debug(() => [`error on reading ping from ${peer.shortId}`]);
+            // l.warn(() => `error on reading ping from ${peer.shortId}`);
           } else {
-            l.warn(() => `wrong ping received from ${peer.shortId}`);
+            // l.warn(() => `wrong ping received from ${peer.shortId}`);
           }
 
-          setTimeout(doPing, PING_INTERVAL);
+          setTimeout(next, PING_INTERVAL);
           return;
 
           // peer.disconnect();
@@ -267,7 +262,8 @@ export default class P2p extends EventEmitter implements P2pInterface {
         });
       };
 
-      doPing();
+      pull(stream, connection, stream);
+      next();
     } catch (error) {
       l.error(`error opening ping with ${peer.shortId}`, error);
 
@@ -296,7 +292,7 @@ export default class P2p extends EventEmitter implements P2pInterface {
 
       return true;
     } catch (error) {
-      l.error('dial error', error);
+      l.debug(() => `dial error ${error.message}`);
     }
 
     return false;

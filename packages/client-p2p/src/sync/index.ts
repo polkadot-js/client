@@ -62,31 +62,68 @@ export default class Sync extends EventEmitter implements SyncInterface {
       : 'Idle';
   }
 
-  private processBlock (): boolean {
-    // const start = Date.now();
+  private hasBlockData (hash: Uint8Array): boolean {
+    const data = this.chain.blocks.blockData.get(hash);
+
+    return !!data && !!data.length;
+  }
+
+  private getNextBlock (): [string, BlockData] | null {
     const bestNumber = this.chain.blocks.bestNumber.get();
     const nextNumber = bestNumber.addn(1);
-    let hasImported = false;
+    const nextId = Object
+      .keys(this.blockQueue)
+      .find((nextId) => {
+        const { block: { header } } = this.blockQueue[nextId];
 
+        if (header.blockNumber.lt(bestNumber)) {
+          // if we already have this one, remove it from the queue
+          if (this.hasBlockData(header.hash)) {
+            delete this.blockQueue[nextId];
+
+            return false;
+          }
+
+          // see if it is importable, i.e. we have the parent
+          if (this.hasBlockData(header.parentHash)) {
+            return true;
+          }
+        } else if (nextNumber.eq(header.blockNumber)) {
+          return this.hasBlockData(header.parentHash);
+        }
+
+        return false;
+      });
+
+    return nextId
+      ? [nextId, this.blockQueue[nextId].block]
+      : null;
+  }
+
+  private processBlock (): boolean {
     this.setStatus();
 
-    if (this.blockQueue[nextNumber.toString()]) {
-      const { block } = this.blockQueue[nextNumber.toString()];
+    const nextImportable = this.getNextBlock();
 
-      l.debug(() => `Importing block #${nextNumber.toString()}`);
+    if (!nextImportable) {
+      this.requestOther();
 
-      if (!this.chain.executor.importBlock(block)) {
-        return false;
-      }
-
-      delete this.blockQueue[nextNumber.toString()];
-
-      this.emit('imported');
-
-      hasImported = true;
+      return false;
     }
 
-    return hasImported;
+    const [blockId, block] = nextImportable;
+
+    // l.debug(() => `Importing block #${blockId}`);
+
+    if (!this.chain.executor.importBlock(block)) {
+      return false;
+    }
+
+    delete this.blockQueue[blockId];
+
+    this.emit('imported');
+
+    return true;
   }
 
   private blocksFromHash (count: number, from: Hash, to: Hash | null, increment: BN): Array<Uint8Array> {
@@ -202,6 +239,30 @@ export default class Sync extends EventEmitter implements SyncInterface {
     }
   }
 
+  private requestFromPeer (peer: PeerInterface, from: BN | null, isStale: boolean) {
+    // TODO: This assumes no stale block downloading
+    if (this.blockRequests[peer.id] || !from || from.gt(peer.bestNumber)) {
+      return;
+    }
+
+    l.debug(() => `Requesting blocks from ${peer.shortId}, #${from.toString()} ${isStale ? '(older)' : '-'}`);
+
+    const timeout = Date.now() + REQUEST_TIMEOUT;
+    const request = new BlockRequest({
+      from: new BlockRequest$From(from, 1),
+      id: peer.getNextId(),
+      max: defaults.MAX_REQUEST_BLOCKS
+    });
+
+    this.blockRequests[peer.id] = {
+      peer,
+      request,
+      timeout
+    };
+
+    peer.send(request);
+  }
+
   requestBlocks (peer: PeerInterface) {
     this.timeoutRequests();
 
@@ -222,27 +283,31 @@ export default class Sync extends EventEmitter implements SyncInterface {
       this.bestSeen = peer.bestNumber;
     }
 
-    // TODO: This assumes no stale block downloading
-    if (this.blockRequests[peer.id] || !from || from.gt(peer.bestNumber)) {
+    this.requestFromPeer(peer, from, false);
+  }
+
+  private requestOther () {
+    const allData = Object.values(this.blockQueue);
+
+    // if we don't have data, just do what we have been doing
+    if (allData.length === 0) {
       return;
     }
 
-    // l.debug(() => `Requesting blocks from ${peer.shortId}, #${from.toString()} -`);
+    const { block, peer } = allData.reduce((first, current) => {
+      return current.peer.isActive && current.block.header.blockNumber.lt(first.block.header.blockNumber)
+        ? current
+        : first;
+    }, allData[0]);
 
-    const timeout = Date.now() + REQUEST_TIMEOUT;
-    const request = new BlockRequest({
-      from: new BlockRequest$From(from, 1),
-      id: peer.getNextId(),
-      max: defaults.MAX_REQUEST_BLOCKS
-    });
+    // don't clobber peer with requests, wait patiently
+    if (this.blockRequests[peer.id]) {
+      return;
+    }
 
-    this.blockRequests[peer.id] = {
-      peer,
-      request,
-      timeout
-    };
+    const from = block.header.blockNumber.subn(defaults.MAX_REQUEST_BLOCKS);
 
-    peer.send(request);
+    this.requestFromPeer(peer, from, true);
   }
 
   // TODO We can probably use a package with a timeout like an LRU

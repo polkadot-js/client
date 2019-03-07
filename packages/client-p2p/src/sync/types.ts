@@ -17,11 +17,13 @@ export type SyncState$BlockRequests = {
   [index: string]: SyncState$Request
 };
 
+export type SyncState$PeerBlock = {
+  block: BlockData,
+  peer: PeerInterface
+};
+
 export type SyncState$BlockQueue = {
-  [index: string]: {
-    block: BlockData,
-    peer: PeerInterface
-  }
+  [index: string]: SyncState$PeerBlock
 };
 
 export type SyncState = {
