@@ -13,7 +13,7 @@ import { BlockData } from '@polkadot/client-types/index';
 import { BlockRequest, BlockResponse } from '@polkadot/client-types/messages';
 import { BlockRequest$From } from '@polkadot/client-types/messages/BlockRequest';
 import { Hash } from '@polkadot/types';
-import { logger } from '@polkadot/util';
+import { isU8a, logger, u8aToHex } from '@polkadot/util';
 
 import defaults from '../defaults';
 
@@ -29,6 +29,7 @@ export default class Sync extends EventEmitter implements SyncInterface {
   private blockRequests: SyncState$BlockRequests = {};
   private blockQueue: SyncState$BlockQueue = {};
   private bestQueued: BN = new BN(0);
+  private worstQueued: BN = new BN(Number.MAX_SAFE_INTEGER);
   bestSeen: BN = new BN(0);
   status: SyncStatus = 'Idle';
 
@@ -73,12 +74,20 @@ export default class Sync extends EventEmitter implements SyncInterface {
     const nextNumber = bestNumber.addn(1);
     const nextId = Object
       .keys(this.blockQueue)
+      .sort((a: string, b: string): number => {
+        const aData = this.blockQueue[a];
+        const bData = this.blockQueue[b];
+
+         return aData.block.header.blockNumber.cmp(bData.block.header.blockNumber);
+      })
       .find((nextId) => {
         const { block: { header } } = this.blockQueue[nextId];
 
         if (header.blockNumber.lt(bestNumber)) {
           // if we already have this one, remove it from the queue
           if (this.hasBlockData(header.hash)) {
+            console.log('Already have', header.blockNumber);
+
             delete this.blockQueue[nextId];
 
             return false;
@@ -86,9 +95,14 @@ export default class Sync extends EventEmitter implements SyncInterface {
 
           // see if it is importable, i.e. we have the parent
           if (this.hasBlockData(header.parentHash)) {
+
+            console.log('have parent for', header.blockNumber);
+
             return true;
           }
-        } else if (nextNumber.eq(header.blockNumber)) {
+        }
+
+        if (nextNumber.eq(header.blockNumber)) {
           return this.hasBlockData(header.parentHash);
         }
 
@@ -207,31 +221,34 @@ export default class Sync extends EventEmitter implements SyncInterface {
       // l.warn(`Mismatched response from ${peer.shortId}`);
     }
 
-    const bestNumber = this.chain.blocks.bestNumber.get();
     let firstNumber;
     let count = 0;
 
     for (let i = 0; i < blocks.length; i++) {
       const block = blocks[i];
       const dbBlock = this.chain.blocks.blockData.get(block.hash);
-      const header = block.header;
-      const queueNumber = header.blockNumber.toString();
-      const isImportable = !dbBlock.length || bestNumber.lt(header.blockNumber);
-      const canQueue = isImportable && !this.blockQueue[queueNumber];
+      const { header: { blockNumber } } = block;
+      const queueNumber = blockNumber.toString();
 
-      if (canQueue) {
-        this.blockQueue[queueNumber] = {
-          block,
-          peer
-        };
-        firstNumber = firstNumber || header.blockNumber;
-
-        if (this.bestQueued.lt(header.blockNumber)) {
-          this.bestQueued = header.blockNumber;
-        }
-
-        count++;
+      if (dbBlock.length || this.blockQueue[queueNumber]) {
+        continue;
       }
+
+      this.blockQueue[queueNumber] = {
+        block,
+        peer
+      };
+      firstNumber = firstNumber || blockNumber;
+
+      if (this.bestQueued.lt(blockNumber)) {
+        this.bestQueued = blockNumber;
+      }
+
+      if (this.worstQueued.gt(blockNumber)) {
+        this.worstQueued = blockNumber;
+      }
+
+      count++;
     }
 
     if (count && firstNumber) {
@@ -245,11 +262,14 @@ export default class Sync extends EventEmitter implements SyncInterface {
       return;
     }
 
-    l.debug(() => `Requesting blocks from ${peer.shortId}, #${from.toString()} ${isStale ? '(older)' : '-'}`);
+    const fromStr = isU8a(from)
+      ? u8aToHex(from, 48)
+      : `#${from.toString()}`;
 
-    const timeout = Date.now() + REQUEST_TIMEOUT;
+    l.debug(() => `Requesting blocks from ${peer.shortId}, ${fromStr} ${isStale ? '(older)' : '-'}`);
+
     const request = new BlockRequest({
-      from: new BlockRequest$From(from, 1),
+      from: new BlockRequest$From(from, isU8a(from) ? 0 : 1),
       id: peer.getNextId(),
       max: defaults.MAX_REQUEST_BLOCKS
     });
@@ -257,7 +277,7 @@ export default class Sync extends EventEmitter implements SyncInterface {
     this.blockRequests[peer.id] = {
       peer,
       request,
-      timeout
+      timeout: Date.now() + REQUEST_TIMEOUT
     };
 
     peer.send(request);
@@ -290,14 +310,12 @@ export default class Sync extends EventEmitter implements SyncInterface {
     }
 
     const { block, peer } = allData.reduce((first, current) => {
-      return current.peer.isActive && current.block.header.blockNumber.lt(first.block.header.blockNumber)
+      return current.block.header.blockNumber.lt(first.block.header.blockNumber)
         ? current
         : first;
     }, allData[0]);
 
-    const from = block.header.blockNumber.subn(defaults.MAX_REQUEST_BLOCKS);
-
-    this.requestFromPeer(peer, from, true);
+    this.requestFromPeer(peer, block.header.blockNumber.subn(defaults.MAX_REQUEST_BLOCKS), true);
   }
 
   // TODO We can probably use a package with a timeout like an LRU

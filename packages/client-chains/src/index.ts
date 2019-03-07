@@ -61,8 +61,10 @@ export default class Chain implements ChainInterface {
     }
 
     const bestBlock = this.getBlock(bestHash);
+    // const parentBlock = this.getBlock(bestBlock.header.parentHash);
 
-    return this.initGenesisFromBest(bestBlock.header);
+    // return this.initGenesisFromBest(bestBlock.header);
+    return this.rollbackBlock(bestBlock.header, true, false);
   }
 
   private initGenesisFromBest (bestHeader: Header, rollback: boolean = true): ChainGenesis {
@@ -88,12 +90,14 @@ export default class Chain implements ChainInterface {
     };
   }
 
-  private rollbackBlock (bestHeader: Header, rollback: boolean = true): ChainGenesis {
+  private rollbackBlock (bestHeader: Header, rollback: boolean, isLogging: boolean = true): ChainGenesis {
     const prevHash = bestHeader.parentHash;
     const prevNumber = bestHeader.blockNumber.subn(1);
 
     if (rollback && prevNumber.gtn(1)) {
-      l.warn(`Unable to validate root, moving to block #${prevNumber.toString()}, ${u8aToHex(prevHash, 48)}`);
+      if (isLogging) {
+        l.warn(`Unable to validate root, moving to block #${prevNumber.toString()}, ${u8aToHex(prevHash, 48)}`);
+      }
 
       const prevBlock = this.getBlock(prevHash);
 
