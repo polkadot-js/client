@@ -71,11 +71,28 @@ export default class Client {
     this.startInformant();
   }
 
-  stop () {
+  async stop (): Promise<boolean> {
+    l.log(`Shutting down client`);
+
     this.stopInformant();
 
-    // TODO We need to destroy/stop the p2p, rpc, etc interfaces created in the start()
-    // here as well.
+    if (this.p2p) {
+      await this.p2p.stop();
+    }
+
+    if (this.rpc) {
+      await this.rpc.stop();
+    }
+
+    if (this.telemetry) {
+      await this.telemetry.stop();
+    }
+
+    if (this.chain) {
+      this.chain.stop();
+    }
+
+    return true;
   }
 
   private startInformant () {

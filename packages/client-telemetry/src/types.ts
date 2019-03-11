@@ -13,4 +13,5 @@ export interface TelemetryInterface {
   blockImported: () => void;
   intervalInfo: (peers: number, status: SyncStatus) => void;
   start: () => Promise<void>;
+  stop: () => Promise<boolean>;
 }

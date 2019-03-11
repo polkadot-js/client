@@ -52,6 +52,11 @@ export default class Dbs implements ChainDbs {
       : new MemoryDb();
   }
 
+  close (): void {
+    this.blocks.db.close();
+    this.state.db.close();
+  }
+
   snapshot (): void {
     if (!this.config.snapshot) {
       return;

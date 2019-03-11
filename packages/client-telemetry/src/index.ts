@@ -46,7 +46,22 @@ export default class Telemetry implements TelemetryInterface {
     this.connect();
   }
 
+  async stop (): Promise<boolean> {
+    this.isActive = false;
+
+    if (this.websocket) {
+      this.websocket.close();
+      this.websocket = null;
+    }
+
+    return true;
+  }
+
   private connect () {
+    if (!this.isActive) {
+      return;
+    }
+
     l.log(`Connecting to telemetry, url=${this.url}, name=${this.name}`);
 
     const websocket = new WebSocket(this.url);
