@@ -26,17 +26,17 @@
   "homepage": "https://github.com/polkadot-js/client/tree/master/packages/client-db#readme",
   "dependencies": {
     "@babel/runtime": "^7.3.4",
-    "@polkadot/db": "^0.35.7",
+    "@polkadot/db": "^0.35.8",
     "@polkadot/storage": "^0.46.9",
-    "@polkadot/trie-db": "^0.35.7",
-    "@polkadot/trie-hash": "^0.35.7",
+    "@polkadot/trie-db": "^0.35.8",
+    "@polkadot/trie-hash": "^0.35.8",
     "@polkadot/types": "^0.46.9",
-    "@polkadot/util": "^0.35.7",
-    "@polkadot/util-crypto": "^0.35.7",
+    "@polkadot/util": "^0.35.8",
+    "@polkadot/util-crypto": "^0.35.8",
     "@types/mkdirp": "^0.5.2",
     "mkdirp": "^0.5.1"
   },
   "devDependencies": {
-    "@polkadot/keyring": "^0.35.7"
+    "@polkadot/keyring": "^0.35.8"
   }
 }
