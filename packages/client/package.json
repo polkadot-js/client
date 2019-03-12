@@ -35,7 +35,7 @@
     "@polkadot/client-rpc": "^0.19.6",
     "@polkadot/client-telemetry": "^0.19.6",
     "@polkadot/client-wasm": "^0.19.6",
-    "@polkadot/util": "^0.35.6",
+    "@polkadot/util": "^0.35.10",
     "@types/package-json": "^5.0.0",
     "@types/semver-compare": "^1.0.0",
     "package-json": "^6.0.0",

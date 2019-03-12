@@ -29,6 +29,7 @@ export default class Sync extends EventEmitter implements SyncInterface {
   private blockRequests: SyncState$BlockRequests = {};
   private blockQueue: SyncState$BlockQueue = {};
   private bestQueued: BN = new BN(0);
+  private isActive: boolean = false;
   bestSeen: BN = new BN(0);
   status: SyncStatus = 'Idle';
 
@@ -36,8 +37,13 @@ export default class Sync extends EventEmitter implements SyncInterface {
     super();
 
     this.chain = chain;
+    this.isActive = true;
 
     this.processBlocks();
+  }
+
+  stop () {
+    this.isActive = false;
   }
 
   peerRequests (peer: PeerInterface): Requests {
@@ -69,6 +75,10 @@ export default class Sync extends EventEmitter implements SyncInterface {
   }
 
   private getNextBlock (): [string, BlockData] | null {
+    if (!this.isActive) {
+      return null;
+    }
+
     const bestNumber = this.chain.blocks.bestNumber.get();
     const nextNumber = bestNumber.addn(1);
     const nextId = Object

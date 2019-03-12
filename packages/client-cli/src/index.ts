@@ -5,8 +5,12 @@
 import { Config, ConfigKeys } from '@polkadot/client/types';
 
 import Client from '@polkadot/client/index';
+import { logger } from '@polkadot/util';
+
 import getArgv from './argv';
 import keyToCamel from './keyToCamel';
+
+const l = logger('client/cli');
 
 function cli (params?: string): Config {
   const argv = getArgv(params);
@@ -41,10 +45,18 @@ function cli (params?: string): Config {
 //   l.error('Uncaught exception', err);
 // });
 
-new Client()
-  .start(cli())
-  .catch((error) => {
-    console.error('Failed to start client', error);
+const client = new Client();
 
-    process.exit(-1);
-  });
+client.start(cli()).catch((error) => {
+  l.error('Failed to start client', error);
+
+  process.exit(-1);
+});
+
+process.on('SIGINT', async () => {
+  l.log('Caught interrupt signal, shutting down');
+
+  await client.stop();
+
+  process.exit(0);
+});

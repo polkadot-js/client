@@ -4,20 +4,24 @@
 
 import { Struct, Vector } from '@polkadot/types/codec';
 import { Bytes, Header } from '@polkadot/types';
+import { Seal } from '@polkadot/types/type/Digest';
 
 import BlockData from './BlockData';
 
 export default class ImportBlock extends Struct {
-  constructor ({ body, header: { blockNumber, extrinsicsRoot, parentHash, stateRoot } }: BlockData) {
+  constructor ({ body, header }: BlockData) {
     super({
       header: Header,
       body: Vector.with(Bytes)
     }, {
       header: {
-        extrinsicsRoot,
-        number: blockNumber,
-        parentHash,
-        stateRoot
+        ...header.toJSON(),
+        digest: {
+          // remove all Seal logs
+          logs: header.digest.logs.filter((item) =>
+            !(item.value instanceof Seal)
+          )
+        }
       },
       body
     });

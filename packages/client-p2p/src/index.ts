@@ -109,7 +109,9 @@ export default class P2p extends EventEmitter implements P2pInterface {
     delete this.node;
     delete this.peers;
 
-    node._dht.randomWalk.stop();
+    this.sync.stop();
+    // node._dht.randomWalk.stop();
+
     await promisify(node, node.stop);
 
     l.log('Server stopped');

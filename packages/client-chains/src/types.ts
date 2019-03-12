@@ -30,6 +30,8 @@ export interface ChainInterface {
   readonly chain: Chainspec;
   readonly executor: ExecutorInterface;
   readonly genesis: ChainGenesis;
+
+  stop (): void;
 }
 
 export type ChainState = {
