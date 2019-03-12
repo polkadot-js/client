@@ -72,7 +72,7 @@ export default class Client {
   }
 
   async stop (): Promise<boolean> {
-    l.log(`Shutting down client`);
+    l.log('Shutting down client');
 
     this.stopInformant();
 
