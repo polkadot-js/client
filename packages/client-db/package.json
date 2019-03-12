@@ -1,6 +1,6 @@
 {
   "name": "@polkadot/client-db",
-  "version": "0.19.6",
+  "version": "0.19.7",
   "description": "Wrapper databases for managing on-chain storage",
   "main": "index.js",
   "publishConfig": {
