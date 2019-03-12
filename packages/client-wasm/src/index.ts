@@ -71,7 +71,7 @@ export default class Executor implements ExecutorInterface {
         this.executeBlock(blockData)
       );
     } catch (error) {
-      l.error(`Failed importing #${blockNumber}, ${shortHash}`);
+      l.error(`Failed importing #${blockNumber}, ${shortHash}`, JSON.stringify(blockData.toJSON()));
 
       throw error;
     }
