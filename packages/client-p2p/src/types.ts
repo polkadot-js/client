@@ -33,9 +33,10 @@ export type P2pNode = {
 
 export type P2pConfig = {
   address: string,
+  discoverBoot?: boolean,
+  discoverStar?: boolean,
   maxPeers: number,
   nodes?: P2pNodes,
-  noBootnodes?: boolean,
   port: number,
   type?: EnvType
 };
