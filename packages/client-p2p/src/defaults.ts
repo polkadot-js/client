@@ -26,10 +26,8 @@ export default {
   PROTOCOL_PING: '/ipfs/ping/1.0.0',
   SIGNALLING: [
     // https://github.com/libp2p/js-libp2p-webrtc-star
-    // /dns4/star-signal.cloud.ipfs.team/wss/p2p-webrtc-star/ipfs/<your-peer-id>
     // '/dns4/star-signal.cloud.ipfs.team/tcp/443/wss/p2p-webrtc-star/p2p',
     // https://github.com/libp2p/js-libp2p-websocket-star
-    // /dns4/ws-star.discovery.libp2p.io/tcp/443/wss/p2p-websocket-star/ipfs/<your-peer-id>
     // '/dns4/ws-star.discovery.libp2p.io/tcp/443/wss/p2p-websocket-star/p2p',
     // '/dns4/wss-star-test.polkadot.io/tcp/443/wss/p2p-websocket-star/p2p',
     '/dns4/wss-star-test.polkadot.io/tcp/9090/ws/p2p-websocket-star/p2p'
