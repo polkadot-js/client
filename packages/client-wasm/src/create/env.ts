@@ -10,13 +10,13 @@ import { WasmInstanceExports } from '../types';
 import runtimeProxy from '../wasm/proxy_runtime_wasm';
 import createExports from './exports';
 
-export default function createEnv (runtime: RuntimeInterface, memory: WebAssembly.Memory): WasmInstanceExports {
-  const proxy = createExports(runtimeProxy, { runtime: runtime.exports }, memory).exports;
+export default async function createEnv (runtime: RuntimeInterface, memory: WebAssembly.Memory): Promise<WasmInstanceExports> {
+  const proxy = await createExports(runtimeProxy, { runtime: runtime.exports }, memory);
 
   return Object.keys(runtime.exports).reduce((result, name) => {
     const extName = `ext_${name}`;
 
-    result[extName] = proxy[extName];
+    result[extName] = proxy.exports[extName];
 
     return result;
   }, {} as WasmInstanceExports);

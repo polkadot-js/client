@@ -123,7 +123,7 @@ export default class Client {
   }
 
   private runInformant = () => {
-    if (isUndefined(this.chain) || isUndefined(this.p2p) || isUndefined(this.rpc)) {
+    if (isUndefined(this.chain) || isUndefined(this.p2p)) {
       this.stopInformant();
 
       return;

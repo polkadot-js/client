@@ -13,13 +13,13 @@ export default ({
     type: 'string'
   },
   'p2p-discover-boot': {
-    default: true,
-    description: 'When specified, do not make connections to chain-specific bootnodes',
+    default: defaults.DISCOVER_BOOT_ENABLED,
+    description: 'Discover nodes from the chain-specific bootnodes config (--no-p2p-discover-boot disables)',
     type: 'boolean'
   },
   'p2p-discover-star': {
-    default: false,
-    description: 'When specified, allow star discovery',
+    default: defaults.DISCOVER_STAR_ENABLED,
+    description: 'Discover nodes via the WebSocket-star discovery mechanism (--no-p2p-discover-star disables)',
     type: 'boolean'
   },
   'p2p-max-peers': {

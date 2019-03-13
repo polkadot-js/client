@@ -5,7 +5,7 @@
 import { Config } from '@polkadot/client/types';
 import { BlockDb, StateDb } from '@polkadot/client-db/types';
 import { RuntimeInterface } from '@polkadot/client-runtime/types';
-import { ExecutorInterface } from './types';
+import { ExecutorInterface, WasmInstanceExports } from './types';
 
 import { BlockData, ImportBlock } from '@polkadot/client-types/index';
 import storage from '@polkadot/storage/static';
@@ -40,20 +40,30 @@ export default class Executor implements ExecutorInterface {
     this.runtime = runtime;
   }
 
-  private executeBlock (blockData: BlockData, forceNew: boolean = false): boolean {
+  private createWasm (forceNew: boolean = false): Promise<WasmInstanceExports> {
+    const code = this.stateDb.db.get(CODE_KEY);
+
+    assert(code, 'Expected to have code available in runtime');
+
+    // @ts-ignore code check above
+    return createWasm({ config: this.config, l }, this.runtime, code, proxy, forceNew);
+  }
+
+  private executeBlock (wasm: WasmInstanceExports, blockData: BlockData): boolean {
     const start = Date.now();
 
     l.debug(() => 'Executing block');
 
     const u8a = new ImportBlock(blockData).toU8a();
-    const result = this.call('Core_execute_block', forceNew)(u8a);
+    const fn = this.call(wasm, 'Core_execute_block');
+    const result = fn(u8a);
 
     l.debug(() => `Block execution completed (${Date.now() - start}ms)`);
 
     return result.bool;
   }
 
-  importBlock (blockData: BlockData): boolean {
+  async importBlock (blockData: BlockData): Promise<boolean> {
     const start = Date.now();
     const { blockNumber, hash, parentHash } = blockData.header;
     const shortHash = u8aToHex(hash, 48);
@@ -64,11 +74,15 @@ export default class Executor implements ExecutorInterface {
       // get the parent block, set the root accordingly
       const { header: { stateRoot } } = new BlockData(this.blockDb.blockData.get(parentHash));
 
-      this.stateDb.db.setRoot(stateRoot);
+      if (!stateRoot.eq(this.stateDb.db.getRoot())) {
+        this.stateDb.db.setRoot(stateRoot);
+      }
+
+      const wasm = await this.createWasm();
 
       // execute the block against this root
       this.stateDb.db.transaction(() =>
-        this.executeBlock(blockData)
+        this.executeBlock(wasm, blockData)
       );
     } catch (error) {
       l.error(`Failed importing #${blockNumber}, ${shortHash}`, JSON.stringify(blockData.toJSON()));
@@ -88,13 +102,7 @@ export default class Executor implements ExecutorInterface {
     });
   }
 
-  private call (name: string, forceNew: boolean = false): Call {
-    const code = this.stateDb.db.get(CODE_KEY);
-
-    assert(code, 'Expected to have code available in runtime');
-
-    // @ts-ignore code check above
-    const instance = createWasm({ config: this.config, l }, this.runtime, code, proxy, forceNew);
+  private call (wasm: WasmInstanceExports, name: string): Call {
     const { heap } = this.runtime.environment;
 
     return (...data: Array<Uint8Array>): CallResult => {
@@ -114,8 +122,8 @@ export default class Executor implements ExecutorInterface {
 
       l.debug(() => ['executing', name, params]);
 
-      const lo: number = instance[name].apply(null, params);
-      const hi: number = instance['get_result_hi']();
+      const lo: number = wasm[name].apply(null, params);
+      const hi: number = wasm['get_result_hi']();
 
       // l.debug(() => runtime.instrument.stop());
       l.debug(() => [name, 'returned', [lo, hi], `(${Date.now() - start}ms)`]);

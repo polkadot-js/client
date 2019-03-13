@@ -39,7 +39,9 @@ export default class Sync extends EventEmitter implements SyncInterface {
     this.chain = chain;
     this.isActive = true;
 
-    this.processBlocks();
+    setTimeout(() => {
+      this.processBlocks();
+    }, 1000);
   }
 
   stop () {
@@ -54,8 +56,8 @@ export default class Sync extends EventEmitter implements SyncInterface {
     );
   }
 
-  private processBlocks () {
-    const hasOne = this.processBlock();
+  private async processBlocks () {
+    const hasOne = await this.processBlock();
 
     setTimeout(() => {
       this.processBlocks();
@@ -118,7 +120,7 @@ export default class Sync extends EventEmitter implements SyncInterface {
       : null;
   }
 
-  private processBlock (): boolean {
+  private async processBlock (): Promise<boolean> {
     this.setStatus();
 
     const nextImportable = this.getNextBlock();
@@ -130,10 +132,11 @@ export default class Sync extends EventEmitter implements SyncInterface {
     }
 
     const [blockId, block] = nextImportable;
+    const result = await this.chain.executor.importBlock(block);
 
     // l.debug(() => `Importing block #${blockId}`);
 
-    if (!this.chain.executor.importBlock(block)) {
+    if (!result) {
       return false;
     }
 
