@@ -4,7 +4,7 @@
 
 import EventEmitter from 'eventemitter3';
 
-import Peers from './index';
+import Peers from '.';
 
 describe('Peers', () => {
   let node;

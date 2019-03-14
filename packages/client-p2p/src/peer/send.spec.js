@@ -6,7 +6,7 @@ import BN from 'bn.js';
 import { Status } from '@polkadot/client-types/messages';
 import { logger } from '@polkadot/util';
 
-import Peer from './index';
+import Peer from '.';
 
 describe('send', () => {
   let peer;

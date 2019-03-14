@@ -6,7 +6,7 @@
 import { stringToU8a } from '@polkadot/util';
 
 import env from '../environment';
-import index from './index';
+import index from '.';
 
 describe('print_utf8', () => {
   const TEST = 'Привет, мир!';

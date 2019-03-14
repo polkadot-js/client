@@ -8,10 +8,10 @@ import { BlockDb, StateDb } from '@polkadot/client-db/types';
 import { ExecutorInterface } from '@polkadot/client-wasm/types';
 import { ChainInterface, ChainGenesis } from './types';
 
-import ChainDbs from '@polkadot/client-db/index';
-import createRuntime from '@polkadot/client-runtime/index';
-import { BlockData } from '@polkadot/client-types/index';
-import Executor from '@polkadot/client-wasm/index';
+import ChainDbs from '@polkadot/client-db';
+import createRuntime from '@polkadot/client-runtime';
+import { BlockData } from '@polkadot/client-types';
+import Executor from '@polkadot/client-wasm';
 import { Header } from '@polkadot/types';
 import storage from '@polkadot/storage/static';
 import { assert, compactStripLength, hexToU8a, logger, u8aToHex } from '@polkadot/util';

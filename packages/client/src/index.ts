@@ -11,10 +11,10 @@ import { TelemetryInterface } from '@polkadot/client-telemetry/types';
 import './license';
 
 import BN from 'bn.js';
-import Chain from '@polkadot/client-chains/index';
-import Telemetry from '@polkadot/client-telemetry/index';
-import Rpc from '@polkadot/client-rpc/index';
-import P2p from '@polkadot/client-p2p/index';
+import Chain from '@polkadot/client-chains';
+import Telemetry from '@polkadot/client-telemetry';
+import Rpc from '@polkadot/client-rpc';
+import P2p from '@polkadot/client-p2p';
 import { logger, isUndefined, u8aToHex } from '@polkadot/util';
 
 import * as clientId from './clientId';

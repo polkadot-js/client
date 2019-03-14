@@ -6,7 +6,7 @@ import { ExtError } from '@polkadot/util';
 
 const mockExtError = ExtError;
 
-jest.mock('./handlers/index', () => () => ({
+jest.mock('./handlers', () => () => ({
   errorThrow: () => {
     throw new Error('errorThrow');
   },
@@ -26,7 +26,7 @@ jest.mock('./handlers/index', () => () => ({
 import HttpProvider from '@polkadot/rpc-provider/http';
 import WsProvider from '@polkadot/rpc-provider/ws';
 
-import Rpc from './index';
+import Rpc from '.';
 
 describe('server', () => {
   let config;

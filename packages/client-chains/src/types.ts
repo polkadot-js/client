@@ -6,7 +6,7 @@ import { Chainspec } from '@polkadot/chainspec/types';
 import { Config } from '@polkadot/client/types';
 import { BlockDb, StateDb } from '@polkadot/client-db/types';
 import { RuntimeInterface } from '@polkadot/client-runtime/types';
-import { BlockData } from '@polkadot/client-types/index';
+import { BlockData } from '@polkadot/client-types';
 import { ExecutorInterface } from '@polkadot/client-wasm/types';
 import { Logger } from '@polkadot/util/types';
 

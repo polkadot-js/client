@@ -5,7 +5,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import styled from 'styled-components';
-import Client from '@polkadot/client/index';
+import Client from '@polkadot/client';
 
 import config from './config';
 

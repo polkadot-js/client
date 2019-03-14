@@ -5,7 +5,7 @@
 
 import { logger } from '@polkadot/util';
 
-import index from './index';
+import index from '.';
 
 const l = logger('test');
 

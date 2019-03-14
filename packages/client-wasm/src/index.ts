@@ -7,7 +7,7 @@ import { BlockDb, StateDb } from '@polkadot/client-db/types';
 import { RuntimeInterface } from '@polkadot/client-runtime/types';
 import { ExecutorInterface, WasmInstanceExports } from './types';
 
-import { BlockData, ImportBlock } from '@polkadot/client-types/index';
+import { BlockData, ImportBlock } from '@polkadot/client-types';
 import storage from '@polkadot/storage/static';
 import { assert, compactStripLength, logger, u8aToHex } from '@polkadot/util';
 

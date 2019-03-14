@@ -9,9 +9,9 @@ import { SyncInterface, SyncState$Request, SyncState$BlockRequests, SyncState$Bl
 
 import BN from 'bn.js';
 import EventEmitter from 'eventemitter3';
-import { BlockData } from '@polkadot/client-types/index';
+import { BlockData } from '@polkadot/client-types';
 import { BlockRequest, BlockResponse } from '@polkadot/client-types/messages';
-import { BlockRequest$From } from '@polkadot/client-types/messages/BlockRequest';
+import { BlockRequest$Direction, BlockRequest$From } from '@polkadot/client-types/messages/BlockRequest';
 import { Hash } from '@polkadot/types';
 import { isU8a, logger, u8aToHex } from '@polkadot/util';
 
@@ -81,35 +81,19 @@ export default class Sync extends EventEmitter implements SyncInterface {
       return null;
     }
 
-    const bestNumber = this.chain.blocks.bestNumber.get();
-    const nextNumber = bestNumber.addn(1);
     const nextId = Object
       .keys(this.blockQueue)
-      // .sort((a: string, b: string): number => {
-      //   const aData = this.blockQueue[a];
-      //   const bData = this.blockQueue[b];
-
-      //    return aData.block.header.blockNumber.cmp(bData.block.header.blockNumber);
-      // })
       .find((nextId) => {
         const { block: { header } } = this.blockQueue[nextId];
 
-        if (header.blockNumber.lt(bestNumber)) {
-          // if we already have this one, remove it from the queue
-          if (this.hasBlockData(header.hash)) {
-            delete this.blockQueue[nextId];
+        if (this.hasBlockData(header.hash)) {
+          delete this.blockQueue[nextId];
 
-            return false;
-          }
-
-          // see if it is importable, i.e. we have the parent
-          if (this.hasBlockData(header.parentHash)) {
-            return true;
-          }
+          return false;
         }
 
-        if (nextNumber.eq(header.blockNumber)) {
-          return this.hasBlockData(header.parentHash);
+        if (this.hasBlockData(header.parentHash)) {
+          return true;
         }
 
         return false;
@@ -260,20 +244,22 @@ export default class Sync extends EventEmitter implements SyncInterface {
     }
   }
 
-  private requestFromPeer (peer: PeerInterface, from: BN | null, isStale: boolean) {
+  private requestFromPeer (peer: PeerInterface, from: BN | Uint8Array | null, isStale: boolean) {
     // TODO: This assumes no stale block downloading
-    if (this.blockRequests[peer.id] || !peer.isActive() || !from || from.gt(peer.bestNumber)) {
+    if (this.blockRequests[peer.id] || !peer.isActive() || !from) { // || from.gt(peer.bestNumber)) {
       return;
     }
 
-    const fromStr = isU8a(from)
-      ? u8aToHex(from, 48)
+    const isHash = isU8a(from);
+    const fromStr = isHash
+      ? u8aToHex(from as Uint8Array, 48)
       : `#${from.toString()}`;
 
     l.debug(() => `Requesting blocks from ${peer.shortId}, ${fromStr} ${isStale ? '(older)' : '-'}`);
 
     const request = new BlockRequest({
-      from: new BlockRequest$From(from, isU8a(from) ? 0 : 1),
+      direction: new BlockRequest$Direction(isHash ? 'Descending' : 'Ascending'),
+      from: new BlockRequest$From(from, isHash ? 0 : 1),
       id: peer.getNextId(),
       max: defaults.MAX_REQUEST_BLOCKS
     });

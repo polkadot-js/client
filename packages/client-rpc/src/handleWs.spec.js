@@ -2,13 +2,13 @@
 // This software may be modified and distributed under the terms
 // of the Apache-2.0 license. See the LICENSE file for details.
 
-jest.mock('./handlers/index', () => () => ({
+jest.mock('./handlers', () => () => ({
   test: jest.fn(() => Promise.resolve('test'))
 }));
 
 import { isFunction } from '@polkadot/util';
 
-import Rpc from './index';
+import Rpc from '.';
 
 describe('handleWs', () => {
   let context;

@@ -4,7 +4,7 @@
 
 import { Config, ConfigKeys } from '@polkadot/client/types';
 
-import Client from '@polkadot/client/index';
+import Client from '@polkadot/client';
 import { logger } from '@polkadot/util';
 
 import getArgv from './argv';
