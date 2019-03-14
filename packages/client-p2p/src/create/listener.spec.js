@@ -36,16 +36,8 @@ describe('createListener', () => {
     });
   });
 
-  it('creates using defaults', async () => {
-    await createListener('nodejs');
-
-    expect(
-      PeerInfo.create
-    ).toHaveBeenCalled();
-  });
-
   it('returns the created PeerInfo instance', async () => {
-    const peerInfo = await createListener('nodejs');
+    const peerInfo = await createListener('nodejs', { address: '127.0.0.1', port: 7788 });
 
     expect(
       peerInfo
@@ -55,14 +47,14 @@ describe('createListener', () => {
   it('fails when PeerInfo.create fails', () => {
     PeerInfo.create = (cb) => cb(new Error('test create failure'));
 
-    return createListener('nodejs', '127.0.0.1', 999).catch((error) => {
+    return createListener('nodejs', { address: '127.0.0.1', port: 7788 }).catch((error) => {
       expect(error.message).toMatch(/test create failure/);
     });
   });
 
   describe('IPv4', () => {
     beforeEach(async () => {
-      await createListener('nodejs', '10.12.34.67', 7788);
+      await createListener('nodejs', { address: '10.12.34.67', port: 7788 });
     });
 
     it('adds tcp entry', () => {
@@ -74,7 +66,7 @@ describe('createListener', () => {
 
   describe('IPv6', () => {
     beforeEach(async () => {
-      await createListener('nodejs', '2:3:4:5:6:7:8:9', 6677);
+      await createListener('nodejs', { address: '2:3:4:5:6:7:8:9', port: 6677 });
     });
 
     it('adds tcp entry', () => {

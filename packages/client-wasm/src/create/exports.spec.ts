@@ -11,20 +11,20 @@ import createMemory from './memory';
 
 describe('exports', () => {
   describe('valid modules, defaults', () => {
-    it('creates instance with defaults', () => {
+    it('creates instance with defaults', async () => {
       expect(
-        createExports(wasmAddTwo).exports
+        (await createExports(wasmAddTwo)).exports
       ).toBeDefined();
     });
   });
 
   describe('valid modules, with memory', () => {
-    it('allows calls into the module', () => {
-      const instance = createExports(
+    it('allows calls into the module', async () => {
+      const instance = (await createExports(
         wasmAddTwo,
         {},
         createMemory(0, 0)
-      ).exports;
+      )).exports;
 
       expect(
         instance.addTwo(22, 33)
@@ -33,13 +33,13 @@ describe('exports', () => {
   });
 
   describe('imports', () => {
-    it('allows imports to be called', () => {
+    it('allows imports to be called', async () => {
       const callback = jest.fn();
-      const instance = createExports(
+      const instance = (await createExports(
         wasmImport,
         { js: { callback } },
         createMemory(0, 0)
-      ).exports;
+      )).exports;
 
       instance.go(123);
 
@@ -48,10 +48,10 @@ describe('exports', () => {
   });
 
   describe('start', () => {
-    it('allows imports to be called', () => {
+    it('allows imports to be called', async () => {
       const callback = jest.fn();
 
-      createExports(
+      await createExports(
         wasmStart,
         { js: { callback } },
         createMemory(0, 0)

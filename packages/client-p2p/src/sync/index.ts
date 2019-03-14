@@ -39,9 +39,7 @@ export default class Sync extends EventEmitter implements SyncInterface {
     this.chain = chain;
     this.isActive = true;
 
-    setTimeout(() => {
-      this.processBlocks();
-    }, 1000);
+    this.setProcessTimeout(false);
   }
 
   stop () {
@@ -56,12 +54,20 @@ export default class Sync extends EventEmitter implements SyncInterface {
     );
   }
 
+  private setProcessTimeout (isFast: boolean = true) {
+    setTimeout(async () => {
+      try {
+        await this.processBlocks();
+      } catch (error) {
+        // ignore
+      }
+    }, isFast ? 1 : 100);
+  }
+
   private async processBlocks () {
     const hasOne = await this.processBlock();
 
-    setTimeout(() => {
-      this.processBlocks();
-    }, hasOne ? 1 : 100);
+    this.setProcessTimeout(hasOne);
   }
 
   private setStatus (): void {
