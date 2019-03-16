@@ -22,9 +22,9 @@ const mockHandlers = ({
   echo: (...params) => Promise.resolve(`echo: ${params.join(', ')}`)
 });
 
-jest.mock('./handlers/index', () => () => mockHandlers);
+jest.mock('./handlers', () => () => mockHandlers);
 
-import Rpc from './index';
+import Rpc from '.';
 
 describe('handleMessage', () => {
   let server;

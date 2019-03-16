@@ -13,7 +13,7 @@ import EventEmitter from 'eventemitter3';
 import PullPushable, { Pushable } from 'pull-pushable';
 import pull from 'pull-stream';
 import varint from 'varint';
-import decodeMessage, { Status } from '@polkadot/client-types/messages/index';
+import decodeMessage, { Status } from '@polkadot/client-types/messages';
 import { bufferToU8a, logger, stringShorten, u8aConcat, u8aToBuffer, u8aToHex } from '@polkadot/util';
 
 import defaults from '../defaults';

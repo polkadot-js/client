@@ -6,7 +6,7 @@ import pull from 'pull-stream';
 import pushable from 'pull-pushable';
 import { logger } from '@polkadot/util';
 
-import Peer from './index';
+import Peer from '.';
 
 describe('receive', () => {
   let peer;

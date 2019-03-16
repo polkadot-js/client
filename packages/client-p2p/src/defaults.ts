@@ -14,6 +14,8 @@ function getProtocol (type?: string | null): string {
 
 export default {
   ADDRESS: '127.0.0.1',
+  DISCOVER_BOOT_ENABLED: true,
+  DISCOVER_STAR_ENABLED: false,
   MAX_PEERS: 25,
   MAX_REQUEST_BLOCKS,
   MAX_QUEUED_BLOCKS: MAX_REQUEST_BLOCKS * 8,
@@ -26,11 +28,12 @@ export default {
   PROTOCOL_PING: '/ipfs/ping/1.0.0',
   SIGNALLING: [
     // https://github.com/libp2p/js-libp2p-webrtc-star
-    // /dns4/star-signal.cloud.ipfs.team/wss/p2p-webrtc-star/ipfs/<your-peer-id>
-    '/dns4/star-signal.cloud.ipfs.team/tcp/443/wss/p2p-webrtc-star/p2p',
+    // '/dns4/star-signal.cloud.ipfs.team/tcp/443/wss/p2p-webrtc-star/p2p',
     // https://github.com/libp2p/js-libp2p-websocket-star
-    // /dns4/ws-star.discovery.libp2p.io/tcp/443/wss/p2p-websocket-star/ipfs/<your-peer-id>
-    '/dns4/ws-star.discovery.libp2p.io/tcp/443/wss/p2p-websocket-star/p2p'
+    // '/dns4/ws-star.discovery.libp2p.io/tcp/443/wss/p2p-websocket-star/p2p',
+    // '/dns4/wss-star-test.polkadot.io/tcp/443/wss/p2p-websocket-star/p2p',
+    // NOTE The websocket-star split on `ipfs` (doesn't yet to p2p)
+    '/dns4/wss-star-test.polkadot.io/tcp/9090/ws/p2p-websocket-star/p2p'
   ],
   getProtocol
 };

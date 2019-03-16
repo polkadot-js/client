@@ -10,22 +10,30 @@ import { assert, isIp, promisify } from '@polkadot/util';
 
 import defaults from '../defaults';
 
-export default async function createListener (envType: EnvType, ip: string = defaults.ADDRESS, port: number = defaults.PORT): Promise<PeerInfo> {
-  assert(isIp(ip), `Expected a valid IP address`);
+type Config = {
+  address: string,
+  discoverStar: boolean,
+  port: number
+};
+
+export default async function createListener (envType: EnvType, { address, discoverStar, port }: Config): Promise<PeerInfo> {
+  assert(isIp(address), `Expected a valid IP address`);
 
   const peerInfo = await promisify(null, PeerInfo.create);
   const peerIdStr = peerInfo.id.toB58String();
   const isCli = envType !== 'browser';
 
   if (isCli) {
-    const type = isIp(ip, 'v4') ? 'ip4' : 'ip6';
+    const type = isIp(address, 'v4') ? 'ip4' : 'ip6';
 
-    peerInfo.multiaddrs.add(`/${type}/${ip}/tcp/${port}/p2p/${peerIdStr}`);
+    peerInfo.multiaddrs.add(`/${type}/${address}/tcp/${port}/p2p/${peerIdStr}`);
   }
 
-  defaults.SIGNALLING.forEach((addr) =>
-    peerInfo.multiaddrs.add(`${addr}/${peerIdStr}`)
-  );
+  if (discoverStar) {
+    defaults.SIGNALLING.forEach((addr) =>
+      peerInfo.multiaddrs.add(`${addr}/${peerIdStr}`)
+    );
+  }
 
   return peerInfo;
 }

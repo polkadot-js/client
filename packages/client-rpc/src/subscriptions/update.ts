@@ -5,7 +5,7 @@
 import { ChainInterface } from '@polkadot/client-chains/types';
 import { Sockets, Subscriptions } from './types';
 
-import { BlockData } from '@polkadot/client-types/index';
+import { BlockData } from '@polkadot/client-types';
 import { isUndefined } from '@polkadot/util';
 
 import send from './send';

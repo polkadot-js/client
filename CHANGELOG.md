@@ -1,3 +1,7 @@
+# 0.20.1
+
+- Swap to publishing -beta.x on merge (non-breaking testing)
+
 # 0.19.1
 
 - Support for POC-3 testnets, including Alexander (Polkadot) & Dried Danta (Substrate)

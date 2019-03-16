@@ -4,7 +4,7 @@
 
 import { EnvType, P2pNodes } from '../types';
 
-import DHT from 'libp2p-kad-dht';
+import dht from 'libp2p-kad-dht';
 // import mplex from 'libp2p-mplex';
 // import Multicast from 'libp2p-mdns';
 import Bootstrap from 'libp2p-bootstrap';
@@ -12,20 +12,29 @@ import secio from 'libp2p-secio';
 import spdy from 'libp2p-spdy';
 import TCP from 'libp2p-tcp';
 import PeerInfo from 'peer-info';
-import WebRTCStar from 'libp2p-webrtc-star';
+// import WebRTCStar from 'libp2p-webrtc-star';
 import WebSocketStar from 'libp2p-websocket-star';
 import WS from 'libp2p-websockets';
 import mplex from 'pull-mplex';
 
-export default function createModules (envType: EnvType, peerInfo: PeerInfo, bootNodes: P2pNodes, nodes: P2pNodes): LibP2p.OptionsModules {
+type Config = {
+  discoverBoot: boolean,
+  discoverStar: boolean,
+  bootNodes: P2pNodes,
+  nodes: P2pNodes
+};
+
+export default function createModules (envType: EnvType, { id }: PeerInfo, { bootNodes, discoverBoot, discoverStar, nodes }: Config): LibP2p.OptionsModules {
   const isCli = envType !== 'browser';
-  const starTransports = [new WebRTCStar({ id: peerInfo.id }), new WebSocketStar({ id: peerInfo.id })];
+  const starTransports = discoverStar
+    ? [new WebSocketStar({ id })] // new WebRTCStar({ id })
+    : [];
   const transport = isCli
     ? [new WS(), new TCP()]
-    : [new WS()].concat(starTransports);
+    : [new WS()];
   const peerDiscovery = isCli
-    ? [new Bootstrap({ list: bootNodes.concat(nodes) })]
-    : starTransports.map((transport) => transport.discovery);
+    ? [new Bootstrap({ list: (discoverBoot ? bootNodes : []).concat(nodes) })]
+    : [];
 
   return {
     connEncryption: [
@@ -35,8 +44,10 @@ export default function createModules (envType: EnvType, peerInfo: PeerInfo, boo
       mplex,
       spdy
     ],
-    dht: DHT,
-    peerDiscovery,
-    transport
+    dht,
+    peerDiscovery: peerDiscovery.concat(
+      starTransports.map(({ discovery }) => discovery)
+    ),
+    transport: transport.concat(starTransports)
   };
 }

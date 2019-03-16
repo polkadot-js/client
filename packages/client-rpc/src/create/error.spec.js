@@ -4,7 +4,7 @@
 
 import { ExtError } from '@polkadot/util';
 
-import { createError } from './index';
+import { createError } from '.';
 
 describe('createError', () => {
   it('creates a valid JSONRPC structure', () => {

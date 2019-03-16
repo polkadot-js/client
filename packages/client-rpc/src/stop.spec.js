@@ -4,7 +4,7 @@
 
 import EventEmitter from 'eventemitter3';
 
-import Rpc from './index';
+import Rpc from '.';
 
 describe('stop', () => {
   let server;

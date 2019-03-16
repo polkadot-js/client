@@ -4,7 +4,7 @@
 
 import { PeerInterface, SyncStatus } from '../types';
 
-import { BlockData } from '@polkadot/client-types/index';
+import { BlockData } from '@polkadot/client-types';
 import { BlockRequest } from '@polkadot/client-types/messages';
 
 export type SyncState$Request = {

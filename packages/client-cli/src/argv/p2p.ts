@@ -12,6 +12,16 @@ export default ({
     description: 'The interface to bind to (p2p-port > 0)',
     type: 'string'
   },
+  'p2p-discover-boot': {
+    default: defaults.DISCOVER_BOOT_ENABLED,
+    description: 'Discover nodes from the chain-specific bootnodes config (--no-p2p-discover-boot disables)',
+    type: 'boolean'
+  },
+  'p2p-discover-star': {
+    default: defaults.DISCOVER_STAR_ENABLED,
+    description: 'Discover nodes via the WebSocket-star discovery mechanism (--no-p2p-discover-star disables)',
+    type: 'boolean'
+  },
   'p2p-max-peers': {
     default: defaults.MAX_PEERS,
     description: 'The maximum allowed peers',
@@ -26,10 +36,5 @@ export default ({
     default: defaults.PORT,
     description: 'Sets the peer-to-peer port, 0 for non-listening mode',
     type: 'number'
-  },
-  'p2p-no-bootnodes': {
-    default: false,
-    description: 'When specified, do not make connections to chain-specific bootnodes',
-    type: 'boolean'
   }
 } as { [index: string]: Options });

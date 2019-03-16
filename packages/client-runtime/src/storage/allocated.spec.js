@@ -7,7 +7,7 @@ import MemoryDb from '@polkadot/db/Memory';
 import { logger, stringToU8a } from '@polkadot/util';
 
 import Heap from '../environment/heap';
-import index from './index';
+import index from '.';
 
 const l = logger('test');
 

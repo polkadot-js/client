@@ -12,6 +12,12 @@ type Cache = {
   [index: string]: WebAssembly.Instance
 };
 
+type ExportResult = {
+  codeHash: string,
+  exports: WasmInstanceExports,
+  isNewHash: boolean
+};
+
 const DEFAULT_TABLE: WebAssembly.TableDescriptor = {
   initial: 0,
   element: 'anyfunc'
@@ -19,7 +25,7 @@ const DEFAULT_TABLE: WebAssembly.TableDescriptor = {
 
 const cache: Cache = {};
 
-export default function createExports (bytecode: Uint8Array, imports?: WasmExtraImports, memory?: WebAssembly.Memory | null, forceCreate: boolean = false): { codeHash: string, exports: WasmInstanceExports, isNewHash: boolean } {
+export default async function createExports (bytecode: Uint8Array, imports?: WasmExtraImports, memory?: WebAssembly.Memory | null, forceCreate: boolean = false): Promise<ExportResult> {
   // FIXME This should be the full hash, however it takes 35-65ms - this is a danger area
   const codeHash = xxhashAsHex(bytecode.subarray(0, 2048));
   const lookup = `${codeHash}_${bytecode.length}`;
@@ -29,10 +35,12 @@ export default function createExports (bytecode: Uint8Array, imports?: WasmExtra
   if (isNewHash || forceCreate) {
     const table = new WebAssembly.Table(DEFAULT_TABLE);
 
-    cache[lookup] = new WebAssembly.Instance(
-      new WebAssembly.Module(bytecode),
+    const { instance } = await WebAssembly.instantiate(
+      bytecode,
       createImports(memory, table, imports)
     );
+
+    cache[lookup] = instance;
   }
 
   return {

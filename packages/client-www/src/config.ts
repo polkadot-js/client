@@ -17,6 +17,8 @@ export default ({
   },
   p2p: {
     address: defaultsP2p.ADDRESS,
+    discoverBoot: false,
+    discoverStar: true,
     maxPeers: defaultsP2p.MAX_PEERS,
     nodes: [],
     port: defaultsP2p.PORT,

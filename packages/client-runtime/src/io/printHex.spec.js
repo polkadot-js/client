@@ -4,7 +4,7 @@
 /* eslint camelcase: 0 */
 
 import env from '../environment';
-import index from './index';
+import index from '.';
 
 describe('print_hex', () => {
   let heap;
