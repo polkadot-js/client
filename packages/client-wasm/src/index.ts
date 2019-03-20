@@ -85,7 +85,7 @@ export default class Executor implements ExecutorInterface {
         this.executeBlock(wasm, blockData)
       );
     } catch (error) {
-      l.error(`Failed importing #${blockNumber}, ${shortHash}`, JSON.stringify(blockData.toJSON()));
+      l.error(`Failed importing #${blockNumber}, ${shortHash}`, JSON.stringify(blockData.toJSON()), error.message);
 
       throw error;
     }
