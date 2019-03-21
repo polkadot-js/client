@@ -16,6 +16,7 @@ import Telemetry from '@polkadot/client-telemetry';
 import Rpc from '@polkadot/client-rpc';
 import P2p from '@polkadot/client-p2p';
 import { logger, isUndefined, u8aToHex } from '@polkadot/util';
+import { cryptoWaitReady } from '@polkadot/util-crypto';
 
 import * as clientId from './clientId';
 import defaults from './defaults';
@@ -33,6 +34,8 @@ export default class Client {
   private prevImport: number = 0;
 
   async start (config: ConfigPartial) {
+    await cryptoWaitReady();
+
     const verStatus = await clientId.getNpmStatus();
     const status = verStatus
       ? `(${verStatus})`
@@ -148,7 +151,7 @@ export default class Client {
       ? `, target #${this.p2p.sync.bestSeen.toString()}`
       : '';
 
-    l.log(`${status} (${numPeers} peers)${target}, current #${bestNumber.toNumber()}, ${u8aToHex(bestHash, 48)}${newBlocks}`);
+    l.log(`${status} (${numPeers} peers), current #${bestNumber.toNumber()}${target}, ${u8aToHex(bestHash, 48)}${newBlocks}`);
 
     this.prevBest = bestNumber;
     this.prevTime = now;

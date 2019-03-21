@@ -10,10 +10,11 @@
   ],
   "resolutions": {
     "babel-core": "^7.0.0-bridge.0",
-    "typescript": "^3.3.3333"
+    "typescript": "^3.3.4000"
   },
   "scripts": {
     "build": "polkadot-dev-build-ts && cp -r packages/client-cli/scripts build",
+    "build:wasm": "./scripts/polkadot-wasm-js-compat.sh",
     "check": "tslint --project . && tsc --version && tsc --noEmit --pretty",
     "clean": "polkadot-dev-clean-build",
     "postinstall": "polkadot-dev-yarn-only",
@@ -22,9 +23,9 @@
     "start:www": "cd packages/client-www && webpack --config webpack.config.js"
   },
   "devDependencies": {
-    "@babel/core": "^7.3.4",
-    "@babel/runtime": "^7.3.4",
-    "@polkadot/dev-react": "^0.27.1",
+    "@babel/core": "^7.4.0",
+    "@babel/runtime": "^7.4.2",
+    "@polkadot/dev-react": "^0.28.1",
     "@polkadot/ts": "^0.1.56",
     "empty": "^0.10.1"
   }
