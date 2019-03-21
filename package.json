@@ -14,6 +14,7 @@
   },
   "scripts": {
     "build": "polkadot-dev-build-ts && cp -r packages/client-cli/scripts build",
+    "build:wasm": "./scripts/polkadot-wasm-js-compat.sh",
     "check": "tslint --project . && tsc --version && tsc --noEmit --pretty",
     "clean": "polkadot-dev-clean-build",
     "postinstall": "polkadot-dev-yarn-only",

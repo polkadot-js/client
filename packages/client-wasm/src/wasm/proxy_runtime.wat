@@ -53,6 +53,11 @@
       (param i32 i32 i32 i32 i32) (result i32)
     )
   )
+  (import "runtime" "keccak_256"
+    (func $keccak_256
+      (param i32 i32 i32)
+    )
+  )
   (import "runtime" "malloc"
     (func $malloc
       (param i32) (result i32)
@@ -128,9 +133,19 @@
       (param i32)
     )
   )
+  (import "runtime" "secp256k1_ecdsa_recover"
+    (func $secp256k1_ecdsa_recover
+      (param i32 i32 i32)
+    )
+  )
   (import "runtime" "set_storage"
     (func $set_storage
       (param i32 i32 i32 i32)
+    )
+  )
+  (import "runtime" "sr25519_verify"
+    (func $sr25519_verify
+      (param i32 i32 i32 i32) (result i32)
     )
   )
   (import "runtime" "storage_changes_root"
@@ -211,6 +226,7 @@
   (export "ext_free" (func $free))
   (export "ext_get_allocated_storage" (func $get_allocated_storage))
   (export "ext_get_storage_into" (func $get_storage_into))
+  (export "ext_keccak_256" (func $keccak_256))
   (export "ext_malloc" (func $malloc))
   (export "ext_memcmp" (func $memcmp))
   (export "ext_memcpy" (func $memcpy))
@@ -225,7 +241,9 @@
   (export "ext_sandbox_memory_new" (func $sandbox_memory_new))
   (export "ext_sandbox_memory_set" (func $sandbox_memory_set))
   (export "ext_sandbox_memory_teardown" (func $sandbox_memory_teardown))
+  (export "ext_secp256k1_ecdsa_recover" (func $secp256k1_ecdsa_recover))
   (export "ext_set_storage" (func $set_storage))
+  (export "ext_sr25519_verify" (func $ed25519_verify))
   (export "ext_storage_root" (func $storage_root))
   (export "ext_twox_128" (func $twox_128))
 )

@@ -5,7 +5,7 @@
 import { RuntimeEnv, RuntimeInterface$Crypto, Pointer } from '../types';
 
 import { u8aToHex } from '@polkadot/util';
-import { blake2AsU8a, naclVerify, xxhashAsU8a } from '@polkadot/util-crypto';
+import { blake2AsU8a, keccakAsU8a, naclVerify, schnorrkelVerify, xxhashAsU8a, secp256k1Recover } from '@polkadot/util-crypto';
 
 import instrument from '../instrument';
 
@@ -52,6 +52,43 @@ export default function crypto ({ l, heap }: RuntimeEnv): RuntimeInterface$Crypt
         l.debug(() => ['ed25519_verify', [msgPtr, msgLen, sigPtr, pubkeyPtr]]);
 
         return naclVerify(
+          heap.get(msgPtr, msgLen),
+          heap.get(sigPtr, 64),
+          heap.get(pubkeyPtr, 32)
+        ) ? 0 : 5;
+      }),
+    keccak_256: (dataPtr: Pointer, dataLen: number, outPtr: Pointer): void =>
+      instrument('keccak_256', (): void => {
+        const data = heap.get(dataPtr, dataLen);
+        const hash = keccakAsU8a(data);
+
+        l.debug(() => ['keccak_256', [dataPtr, dataLen, outPtr], '<-', u8aToHex(data), '->', u8aToHex(hash)]);
+
+        heap.set(outPtr, hash);
+      }),
+    secp256k1_ecdsa_recover: (msgPtr: Pointer, sigPtr: Pointer, pubkeyPtr: Pointer): number =>
+      instrument('secp256k1_ecdsa_recover', (): number => {
+        l.debug(() => ['secp256k1_ecdsa_recover', [msgPtr, sigPtr, pubkeyPtr]]);
+
+        try {
+          const publicKey = secp256k1Recover(
+            heap.get(msgPtr, 32),
+            heap.get(sigPtr, 65),
+            0
+          );
+
+          heap.set(pubkeyPtr, publicKey);
+        } catch (error) {
+          return 5;
+        }
+
+        return 0;
+      }),
+    sr25519_verify: (msgPtr: Pointer, msgLen: number, sigPtr: Pointer, pubkeyPtr: Pointer): number =>
+      instrument('sr25519_verify', (): number => {
+        l.debug(() => ['sr25519_verify', [msgPtr, msgLen, sigPtr, pubkeyPtr]]);
+
+        return schnorrkelVerify(
           heap.get(msgPtr, msgLen),
           heap.get(sigPtr, 64),
           heap.get(pubkeyPtr, 32)

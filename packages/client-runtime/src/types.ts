@@ -50,6 +50,9 @@ export type RuntimeInterface$Chain = {
 export type RuntimeInterface$Crypto = {
   blake2_256: (data: Pointer, len: number, out: Pointer) => void,
   ed25519_verify: (msgPtr: Pointer, msgLen: number, sigPtr: Pointer, pubkeyPtr: Pointer) => number,
+  keccak_256: (data: Pointer, len: number, out: Pointer) => void,
+  secp256k1_ecdsa_recover: (msgPtr: Pointer, sigPtr: Pointer, pubkeyPtr: Pointer) => number,
+  sr25519_verify: (msgPtr: Pointer, msgLen: number, sigPtr: Pointer, pubkeyPtr: Pointer) => number,
   twox_128: (data: Pointer, len: number, out: Pointer) => void,
   twox_256: (data: Pointer, len: number, out: Pointer) => void
 };
