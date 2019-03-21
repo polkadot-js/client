@@ -9,13 +9,11 @@ const npmJson = require('package-json');
 const clientId = require('./clientId');
 
 describe('clientId', () => {
-  it('returns <name>/<version>-<type>', () => {
-    const [name, versionFull] = clientId.clientId.split('/');
-    const [version, stability] = versionFull.split('-');
+  it('returns <name>/<version>', () => {
+    const [name, version] = clientId.clientId.split('/');
 
     expect(name.length).not.toEqual(0);
     expect(version).toEqual(clientId.version);
-    expect(stability).toEqual(clientId.stability);
   });
 
   describe('getNpmVersion', () => {
