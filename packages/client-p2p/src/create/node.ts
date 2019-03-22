@@ -15,11 +15,14 @@ import createPeerBook from './peerBook';
 
 const config = {
   dht: {
-    kBucketSize: 20
+    enabled: true,
+    kBucketSize: 20,
+    randomWalk: {
+      enabled: true
+    }
   },
   EXPERIMENTAL: {
-    pubsub: false,
-    dht: true
+    pubsub: false
   }
 };
 
