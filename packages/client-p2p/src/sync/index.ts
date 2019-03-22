@@ -13,7 +13,7 @@ import { BlockData } from '@polkadot/client-types';
 import { BlockRequest, BlockResponse } from '@polkadot/client-types/messages';
 import { BlockRequest$Direction, BlockRequest$From } from '@polkadot/client-types/messages/BlockRequest';
 import { Hash } from '@polkadot/types';
-import { isU8a, logger, u8aToHex } from '@polkadot/util';
+import { isBn, isU8a, logger, u8aToHex } from '@polkadot/util';
 
 import defaults from '../defaults';
 
@@ -251,8 +251,9 @@ export default class Sync extends EventEmitter implements SyncInterface {
   }
 
   private requestFromPeer (peer: PeerInterface, from: BN | Uint8Array | null, isStale: boolean) {
-    // TODO: This assumes no stale block downloading
-    if (this.blockRequests[peer.id] || !peer.isActive() || !from) { // || from.gt(peer.bestNumber)) {
+    const isFromValid = !isBn(from) || from.lte(peer.bestNumber);
+
+    if (this.blockRequests[peer.id] || !peer.isActive() || !from || !isFromValid) {
       return;
     }
 
