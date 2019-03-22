@@ -13,7 +13,7 @@
     "typescript": "^3.3.4000"
   },
   "scripts": {
-    "build": "polkadot-dev-build-ts && cp -r packages/client-cli/scripts build",
+    "build": "polkadot-dev-build-ts && (cd packages/client-cli && copyfiles scripts/* build)",
     "build:wasm": "./scripts/polkadot-wasm-js-compat.sh",
     "check": "tslint --project . && tsc --version && tsc --noEmit --pretty",
     "clean": "polkadot-dev-clean-build",
@@ -27,6 +27,7 @@
     "@babel/runtime": "^7.4.2",
     "@polkadot/dev-react": "^0.28.1",
     "@polkadot/ts": "^0.1.56",
+    "copyfiles": "^2.1.0",
     "empty": "^0.10.1"
   }
 }
