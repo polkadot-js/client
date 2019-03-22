@@ -28,10 +28,10 @@
   "dependencies": {
     "@babel/runtime": "^7.4.2",
     "@polkadot/client-types": "^0.21.0-beta.1",
-    "@polkadot/util": "^0.40.0-beta.1",
+    "@polkadot/util": "^0.40.0-beta.2",
     "@types/varint": "^5.0.0",
     "eventemitter3": "^3.1.0",
-    "libp2p": "^0.24.4",
+    "libp2p": "^0.25.0-rc.5",
     "libp2p-bootstrap": "^0.9.7",
     "libp2p-kad-dht": "^0.14.9",
     "libp2p-mdns": "^0.12.2",
