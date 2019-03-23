@@ -27,8 +27,8 @@ export default class Dbs implements ChainDbs {
 
   constructor ({ db }: Config, chain: ChainLoader) {
     this.config = db;
-    this.basePath = db.type === 'disk'
-      ? path.join(db.path, 'chains', chain.id, u8aToHex(chain.genesisRoot))
+    this.basePath = db.type !== 'memory'
+      ? path.join(db.path, 'chains', chain.id, u8aToHex(chain.genesisRoot), db.type)
       : '';
 
     // NOTE blocks compress very well
@@ -47,8 +47,10 @@ export default class Dbs implements ChainDbs {
   }
 
   private createBackingDb (name: string, isCompressed: boolean): TxDb {
-    return this.config.type === 'disk'
-      ? new DiskDb(this.basePath, name, { isCompressed })
+    const isNative = this.config.type === 'file';
+
+    return this.config.type !== 'memory'
+      ? new DiskDb(this.basePath, name, { isCompressed, isNative })
       : new MemoryDb();
   }
 

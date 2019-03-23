@@ -8,7 +8,7 @@ import os from 'os';
 import path from 'path';
 
 const PATH = path.join(os.homedir(), '.polkadot-js');
-const TYPE: DbConfig$Type = 'disk';
+const TYPE: DbConfig$Type = 'lmdb';
 
 export default {
   PATH,

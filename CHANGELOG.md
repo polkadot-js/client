@@ -1,3 +1,7 @@
+# 0.22.1
+
+- Support for both lmdb and file (native node) database interfaces
+
 # 0.21.1
 
 - Support for sr25519 and secp256k1 externals
