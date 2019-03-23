@@ -1,6 +1,6 @@
 {
   "name": "@polkadot/client-telemetry",
-  "version": "0.21.0",
+  "version": "0.21.1",
   "description": "Telementry client",
   "main": "index.js",
   "publishConfig": {
