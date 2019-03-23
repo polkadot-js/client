@@ -1,3 +1,10 @@
+# 0.21.1
+
+- Support for sr25519 and secp256k1 externals
+- Swap to WASM crypto (all hashing functions)
+- Swap Kad to new interfaces, no manual randomWalk start
+- Dockerfile available
+
 # 0.20.1
 
 - Swap to publishing -beta.x on merge (non-breaking testing)

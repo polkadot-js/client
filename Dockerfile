@@ -9,7 +9,7 @@ RUN curl -sL https://deb.nodesource.com/setup_10.x | bash -
 RUN apt-get install -y nodejs
 
 # env variable gets around gyp install with root permissions
-RUN NPM_CONFIG_USER=root npm install -g @polkadot/client-cli@beta
+RUN NPM_CONFIG_USER=root npm install -g @polkadot/client-cli@0.21.1
 
 # ports for p2p & ws-rpc
 EXPOSE 31333 9966

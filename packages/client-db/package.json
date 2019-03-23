@@ -1,6 +1,6 @@
 {
   "name": "@polkadot/client-db",
-  "version": "0.21.0-beta.4",
+  "version": "0.21.0",
   "description": "Wrapper databases for managing on-chain storage",
   "main": "index.js",
   "publishConfig": {
@@ -26,17 +26,17 @@
   "homepage": "https://github.com/polkadot-js/client/tree/master/packages/client-db#readme",
   "dependencies": {
     "@babel/runtime": "^7.4.2",
-    "@polkadot/db": "^0.40.0-beta.2",
-    "@polkadot/storage": "^0.50.0-beta.0",
-    "@polkadot/trie-db": "^0.40.0-beta.2",
-    "@polkadot/trie-hash": "^0.40.0-beta.2",
-    "@polkadot/types": "^0.50.0-beta.0",
-    "@polkadot/util": "^0.40.0-beta.2",
-    "@polkadot/util-crypto": "^0.40.0-beta.2",
+    "@polkadot/db": "^0.40.1",
+    "@polkadot/storage": "^0.50.1",
+    "@polkadot/trie-db": "^0.40.1",
+    "@polkadot/trie-hash": "^0.40.1",
+    "@polkadot/types": "^0.50.1",
+    "@polkadot/util": "^0.40.1",
+    "@polkadot/util-crypto": "^0.40.1",
     "@types/mkdirp": "^0.5.2",
     "mkdirp": "^0.5.1"
   },
   "devDependencies": {
-    "@polkadot/keyring": "^0.40.0-beta.2"
+    "@polkadot/keyring": "^0.40.1"
   }
 }
