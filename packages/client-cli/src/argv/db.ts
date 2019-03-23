@@ -23,9 +23,9 @@ export default ({
     type: 'boolean'
   },
   'db-type': {
-    choices: ['disk', 'memory'],
+    choices: ['file', 'lmdb', 'memory'],
     default: defaults.TYPE,
-    description: 'The type of database storage to use',
+    description: 'The type of database type to use',
     type: 'string'
   }
 } as { [index: string]: Options });

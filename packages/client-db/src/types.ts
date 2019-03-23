@@ -8,7 +8,7 @@ import { TrieDb } from '@polkadot/trie-db/types';
 
 export type DbPathPrefix = 'database';
 
-export type DbConfig$Type = 'disk' | 'memory';
+export type DbConfig$Type = 'file' | 'lmdb' | 'memory';
 
 export type DbConfig = {
   compact: boolean,
