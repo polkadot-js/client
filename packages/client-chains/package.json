@@ -1,6 +1,6 @@
 {
   "name": "@polkadot/client-chains",
-  "version": "0.21.1",
+  "version": "0.22.0-beta.0",
   "description": "Node configuration definitions for specific chains",
   "main": "index.js",
   "keywords": [
@@ -27,9 +27,9 @@
   "dependencies": {
     "@babel/runtime": "^7.4.2",
     "@polkadot/chainspec": "^0.41.0-beta.1",
-    "@polkadot/client-db": "^0.21.1",
-    "@polkadot/client-runtime": "^0.21.1",
-    "@polkadot/client-wasm": "^0.21.1",
+    "@polkadot/client-db": "^0.22.0-beta.0",
+    "@polkadot/client-runtime": "^0.22.0-beta.0",
+    "@polkadot/client-wasm": "^0.22.0-beta.0",
     "@polkadot/storage": "^0.51.0-beta.1",
     "@polkadot/types": "^0.51.0-beta.1"
   },
