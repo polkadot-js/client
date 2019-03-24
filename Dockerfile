@@ -12,5 +12,5 @@ RUN apt-get install -y nodejs
 RUN NPM_CONFIG_USER=root npm install -g @polkadot/client-cli@0.22.0-beta.0
 
 # ports for p2p & ws-rpc
-EXPOSE 31333 9966
+EXPOSE 60666 9966
 ENTRYPOINT ["polkadot-js"]
