@@ -98,16 +98,16 @@ export default class Peer extends EventEmitter implements PeerInterface {
             const elapsed = Date.now() - start;
 
             l.debug(`Ping from ${this.shortId} ${elapsed}ms`);
-          } else if (error) {
-            l.warn(() => `error on reading ping from ${this.shortId}`);
           } else {
-            l.warn(() => `wrong ping received from ${this.shortId}`);
+            if (error) {
+              l.warn(() => `error on reading ping from ${this.shortId}`);
+            } else {
+              l.warn(() => `wrong ping received from ${this.shortId}`);
+            }
+
+            this.disconnect();
           }
 
-          // setTimeout(next, PING_INTERVAL);
-          // return;
-
-          this.disconnect();
           shake.abort();
 
           this.startPing();
