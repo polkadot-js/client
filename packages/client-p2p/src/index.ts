@@ -30,7 +30,6 @@ type QueuedPeer = {
   nextDial: number
 };
 
-const DIAL_BACKOFF = 1 * 60 * 1000;
 const DIAL_INTERVAL = 15000;
 const REQUEST_INTERVAL = 15000;
 
@@ -188,7 +187,7 @@ export default class P2p extends EventEmitter implements P2pInterface {
       defaults.PROTOCOL_PING,
       async (protocol: string, connection: LibP2pConnection): Promise<void> => {
         try {
-          const stream = handshake({ timeout: defaults.PING_TIMEOUT });
+          const stream = handshake({ timeout: defaults.WAIT_TIMEOUT });
           const shake = stream.handshake;
           const next = () => {
             shake.read(defaults.PING_LENGTH, (error, buffer) => {
@@ -267,7 +266,7 @@ export default class P2p extends EventEmitter implements P2pInterface {
           return;
         }
 
-        item.nextDial = now + DIAL_BACKOFF;
+        item.nextDial = now + defaults.WAIT_TIMEOUT;
 
         await this._dialPeer(item.peer, this.peers);
       }
