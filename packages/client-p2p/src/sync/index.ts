@@ -321,9 +321,17 @@ export default class Sync extends EventEmitter implements SyncInterface {
 
     this.blockRequests = Object
       .keys(this.blockRequests)
-      .filter((id) =>
-        this.blockRequests[id].timeout > now
-      )
+      .filter((id) => {
+        const request = this.blockRequests[id];
+
+        if (request.timeout > now) {
+          return true;
+        }
+
+        request.peer.disconnect();
+
+        return false;
+      })
       .reduce((result, id) => {
         result[id] = this.blockRequests[id];
 

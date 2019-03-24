@@ -3,8 +3,6 @@
 // of the Apache-2.0 license. See the LICENSE file for details.
 
 import pull from 'pull-stream';
-import pushable from 'pull-pushable';
-import { logger } from '@polkadot/util';
 
 import Peer from '.';
 
@@ -13,6 +11,7 @@ describe('receive', () => {
 
   beforeEach(() => {
     const peerInfo = {
+      disconnect: () => void 0,
       id: {
         toB58String: () => '123'
       }

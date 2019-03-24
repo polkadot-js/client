@@ -55,13 +55,15 @@ export default class Peer extends EventEmitter implements PeerInterface {
   }
 
   private clearConnection (connId: number): void {
-    delete this.connections[connId];
+    // delete this.connections[connId];
 
-    l.debug(() => ['clearConnection', connId, this.shortId, this.isWritable()]);
+    // l.debug(() => ['clearConnection', connId, this.shortId, this.isWritable()]);
 
-    if (!this.isWritable()) {
-      this.emit('disconnected');
-    }
+    // if (!this.isWritable()) {
+    //   this.emit('disconnected');
+    // }
+
+    this.disconnect();
   }
 
   private startPing () {
@@ -81,7 +83,7 @@ export default class Peer extends EventEmitter implements PeerInterface {
         this.node, this.node.dialProtocol, this.peerInfo, defaults.PROTOCOL_PING
       );
 
-      const stream = handshake({ timeout: defaults.PING_TIMEOUT }, (error) => {
+      const stream = handshake({ timeout: defaults.WAIT_TIMEOUT }, (error) => {
         if (error) {
           l.warn(() => ['ping disconnected', this.shortId, error]);
           this.disconnect();
@@ -161,7 +163,14 @@ export default class Peer extends EventEmitter implements PeerInterface {
   }
 
   disconnect (): void {
+    // Object.keys(this.connections).forEach((connId: any) =>
+    //   this.clearConnection(connId)
+    // );
+
+    this.bestHash = new Uint8Array([]);
     this.connections = {};
+    this.peerInfo.disconnect();
+
     this.emit('disconnected');
   }
 
