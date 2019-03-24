@@ -69,7 +69,7 @@ export default class Peer extends EventEmitter implements PeerInterface {
   }
 
   private async ping (): Promise<boolean> {
-    if (!this.isActive()) {
+    if (!this.node || !this.isActive()) {
       this.startPing();
       return false;
     }
