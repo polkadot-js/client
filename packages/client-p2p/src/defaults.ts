@@ -13,8 +13,9 @@ function getProtocol (type?: string | null): string {
 }
 
 export default {
-  ADDRESS: '127.0.0.1',
+  ADDRESS: '0.0.0.0',
   DISCOVER_BOOT_ENABLED: true,
+  DISCOVER_RAND_ENABLED: true,
   DISCOVER_STAR_ENABLED: false,
   MAX_PEERS: 25,
   MAX_REQUEST_BLOCKS,
