@@ -10,11 +10,13 @@ import { PeerInterface } from '../types';
 
 import BN from 'bn.js';
 import EventEmitter from 'eventemitter3';
+import handshake from 'pull-handshake';
 import PullPushable, { Pushable } from 'pull-pushable';
 import pull from 'pull-stream';
 import varint from 'varint';
 import decodeMessage, { Status } from '@polkadot/client-types/messages';
-import { bufferToU8a, logger, stringShorten, u8aConcat, u8aToBuffer, u8aToHex } from '@polkadot/util';
+import { bufferToU8a, logger, promisify, stringShorten, u8aConcat, u8aToBuffer, u8aToHex } from '@polkadot/util';
+import { randomAsU8a } from '@polkadot/util-crypto';
 
 import defaults from '../defaults';
 
@@ -34,18 +36,22 @@ export default class Peer extends EventEmitter implements PeerInterface {
   private connections: { [index: number]: Connection };
   private nextId: number = 0;
   private nextConnId: number = 0;
+  private node: LibP2p;
   readonly peerInfo: PeerInfo;
   readonly shortId: string;
 
-  constructor (config: Config, chain: ChainInterface, peerInfo: PeerInfo) {
+  constructor (config: Config, chain: ChainInterface, node: LibP2p, peerInfo: PeerInfo) {
     super();
 
     this.chain = chain;
     this.config = config;
     this.connections = {};
     this.id = peerInfo.id.toB58String();
+    this.node = node;
     this.peerInfo = peerInfo;
     this.shortId = stringShorten(this.id);
+
+    this.startPing();
   }
 
   private clearConnection (connId: number): void {
@@ -56,6 +62,67 @@ export default class Peer extends EventEmitter implements PeerInterface {
     if (!this.isWritable()) {
       this.emit('disconnected');
     }
+  }
+
+  private startPing () {
+    setTimeout(() => this.ping(), defaults.PING_INTERVAL);
+  }
+
+  private async ping (): Promise<boolean> {
+    if (!this.isActive()) {
+      this.startPing();
+      return false;
+    }
+
+    l.debug(() => `Starting ping with ${this.shortId}`);
+
+    try {
+      const connection = await promisify(
+        this.node, this.node.dialProtocol, this.peerInfo, defaults.PROTOCOL_PING
+      );
+
+      const stream = handshake({ timeout: defaults.PING_TIMEOUT }, (error) => {
+        if (error) {
+          l.warn(() => ['ping disconnected', this.shortId, error]);
+          this.disconnect();
+        }
+      });
+      const shake = stream.handshake;
+      const next = () => {
+        const start = Date.now();
+        const request = u8aToBuffer(randomAsU8a());
+
+        shake.write(request);
+        shake.read(defaults.PING_LENGTH, (error, response) => {
+          if (!error && request.equals(response)) {
+            const elapsed = Date.now() - start;
+
+            l.debug(`Ping from ${this.shortId} ${elapsed}ms`);
+          } else if (error) {
+            l.warn(() => `error on reading ping from ${this.shortId}`);
+          } else {
+            l.warn(() => `wrong ping received from ${this.shortId}`);
+          }
+
+          // setTimeout(next, PING_INTERVAL);
+          // return;
+
+          this.disconnect();
+          shake.abort();
+
+          this.startPing();
+        });
+      };
+
+      pull(stream, connection, stream);
+      next();
+    } catch (error) {
+      l.error(`error opening ping with ${this.shortId}`, error);
+
+      return false;
+    }
+
+    return true;
   }
 
   addConnection (connection: LibP2pConnection, isWritable: boolean): number {

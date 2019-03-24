@@ -2,7 +2,7 @@
 // This software may be modified and distributed under the terms
 // of the Apache-2.0 license. See the LICENSE file for details.
 
-const MAX_REQUEST_BLOCKS = 128;
+const MAX_REQUEST_BLOCKS = 256;
 const PROTOCOL_BASE = 'substrate';
 const PROTOCOL_TYPE = 'sup';
 const PROTOCOL_VERSION = 2;
@@ -18,8 +18,11 @@ export default {
   DISCOVER_STAR_ENABLED: false,
   MAX_PEERS: 25,
   MAX_REQUEST_BLOCKS,
-  MAX_QUEUED_BLOCKS: MAX_REQUEST_BLOCKS * 8,
+  MAX_QUEUED_BLOCKS: MAX_REQUEST_BLOCKS * 4,
   MIN_IDLE_BLOCKS: 16,
+  PING_INTERVAL: 30000,
+  PING_TIMEOUT: 60000,
+  PING_LENGTH: 32,
   PORT: 31333,
   ROLE: 'full',
   PROTOCOL_BASE,

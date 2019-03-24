@@ -33,9 +33,6 @@ type QueuedPeer = {
 const DIAL_BACKOFF = 1 * 60 * 1000;
 const DIAL_INTERVAL = 15000;
 const REQUEST_INTERVAL = 15000;
-// const PING_INTERVAL = 30000;
-const PING_TIMEOUT = 60000;
-const PING_LENGTH = 32;
 
 const l = logger('p2p');
 
@@ -191,10 +188,10 @@ export default class P2p extends EventEmitter implements P2pInterface {
       defaults.PROTOCOL_PING,
       async (protocol: string, connection: LibP2pConnection): Promise<void> => {
         try {
-          const stream = handshake({ timeout: PING_TIMEOUT });
+          const stream = handshake({ timeout: defaults.PING_TIMEOUT });
           const shake = stream.handshake;
           const next = () => {
-            shake.read(PING_LENGTH, (error, buffer) => {
+            shake.read(defaults.PING_LENGTH, (error, buffer) => {
               if (error) {
                 // l.debug(() => ['ping error', error]);
                 return;
@@ -216,69 +213,6 @@ export default class P2p extends EventEmitter implements P2pInterface {
     );
   }
 
-  private async _pingPeer (peer: PeerInterface): Promise<boolean> {
-    return false;
-
-    // Rust nodes currently misbehaves against this implementation, including not being
-    // able to connect as well as only seding a first response (could be multiplex or
-    // otherwise connection-related)
-
-    // if (!this.node) {
-    //   return false;
-    // }
-
-    // l.debug(() => `Starting ping with ${peer.shortId}`);
-
-    // try {
-    //   const connection = await promisify(
-    //     this.node, this.node.dialProtocol, peer.peerInfo, defaults.PROTOCOL_PING
-    //   );
-
-    //   const stream = handshake({ timeout: PING_TIMEOUT }, (error) => {
-    //     if (error) {
-    //       l.warn(() => ['ping disconnected', peer.shortId, error]);
-    //       peer.disconnect();
-    //     }
-    //   });
-    //   const shake = stream.handshake;
-    //   const next = () => {
-    //     const start = Date.now();
-    //     const request = u8aToBuffer(randomAsU8a());
-
-    //     shake.write(request);
-    //     shake.read(PING_LENGTH, (error, response) => {
-    //       if (!error && request.equals(response)) {
-    //         const elapsed = Date.now() - start;
-
-    //         l.debug(`Ping from ${peer.shortId} ${elapsed}ms`);
-    //         setTimeout(next, PING_INTERVAL);
-
-    //         return;
-    //       } else if (error) {
-    //         l.warn(() => `error on reading ping from ${peer.shortId}`);
-    //       } else {
-    //         l.warn(() => `wrong ping received from ${peer.shortId}`);
-    //       }
-
-    //       // setTimeout(next, PING_INTERVAL);
-    //       // return;
-
-    //       peer.disconnect();
-    //       shake.abort();
-    //     });
-    //   };
-
-    //   pull(stream, connection, stream);
-    //   next();
-    // } catch (error) {
-    //   l.error(`error opening ping with ${peer.shortId}`, error);
-
-    //   return false;
-    // }
-
-    // return true;
-  }
-
   private async _dialPeer (peer: PeerInterface, peers: PeersInterface): Promise<boolean> {
     if (!this.node) {
       return false;
@@ -290,8 +224,6 @@ export default class P2p extends EventEmitter implements P2pInterface {
       const connection = await promisify(
         this.node, this.node.dialProtocol, peer.peerInfo, this.protocol
       );
-
-      await this._pingPeer(peer);
 
       peer.addConnection(connection, true);
       peers.log('dialled', peer);
