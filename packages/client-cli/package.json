@@ -1,6 +1,6 @@
 {
   "name": "@polkadot/client-cli",
-  "version": "0.22.0-beta.0",
+  "version": "0.22.0-beta.1",
   "description": "A JavaScript client node for the polkadot network",
   "main": "polkadot.js",
   "bin": {
@@ -33,7 +33,7 @@
   "homepage": "https://github.com/polkadot-js/client/tree/master/packages/client#readme",
   "dependencies": {
     "@babel/runtime": "^7.4.2",
-    "@polkadot/client": "^0.22.0-beta.0",
+    "@polkadot/client": "^0.22.0-beta.1",
     "@types/yargs": "^12.0.10",
     "yargs": "^13.2.2"
   },
