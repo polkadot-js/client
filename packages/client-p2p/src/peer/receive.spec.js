@@ -17,7 +17,7 @@ describe('receive', () => {
         toB58String: () => '123'
       }
     };
-    peer = new Peer({}, {}, peerInfo);
+    peer = new Peer({}, {}, null, peerInfo);
   });
 
   it('returns false when on error', () => {

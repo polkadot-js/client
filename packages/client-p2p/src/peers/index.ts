@@ -22,6 +22,7 @@ export default class Peers extends EventEmitter implements PeersInterface {
   private map: {
     [index: string]: KnownPeer
   };
+  private node: LibP2p;
 
   constructor (config: Config, chain: ChainInterface, node: LibP2p) {
     super();
@@ -29,6 +30,7 @@ export default class Peers extends EventEmitter implements PeersInterface {
     this.chain = chain;
     this.config = config;
     this.map = {};
+    this.node = node;
 
     this._onConnect(node);
     this._onDisconnect(node);
@@ -43,7 +45,7 @@ export default class Peers extends EventEmitter implements PeersInterface {
       return info.peer;
     }
 
-    const peer = new Peer(this.config, this.chain, peerInfo);
+    const peer = new Peer(this.config, this.chain, this.node, peerInfo);
     this.map[id] = {
       peer,
       isConnected: false

@@ -4,7 +4,6 @@
 
 import BN from 'bn.js';
 import { Status } from '@polkadot/client-types/messages';
-import { logger } from '@polkadot/util';
 
 import Peer from '.';
 
@@ -18,7 +17,7 @@ describe('send', () => {
         toB58String: () => '123'
       }
     };
-    peer = new Peer({}, {}, peerInfo);
+    peer = new Peer({}, {}, null, peerInfo);
     peer.connections = { 0: { pushable: [ 'test' ] } };
 
     status = new Status({

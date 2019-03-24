@@ -8,7 +8,7 @@ describe('setBest', () => {
   let peer;
 
   beforeEach(() => {
-    peer = new Peer({}, {}, {
+    peer = new Peer({}, {}, null, {
       id: {
         toB58String: () => '0x1234'
       }

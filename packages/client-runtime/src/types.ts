@@ -91,13 +91,23 @@ export type RuntimeInterface$Storage$Data = {
   set_storage: (keyPtr: Pointer, keyLength: number, dataPtr: Pointer, dataLength: number) => void
 };
 
+export type RuntimeInterface$Storage$Child = {
+  set_child_storage: (storageKeyData: Pointer, storageKeyLen: number, keyData: Pointer, keyLen: number, valueData: Pointer, valueLen: number) => void,
+  clear_child_storage: (storageKeyData: Pointer, storageKeyLen: number, keyData: Pointer, keyLen: number) => void,
+  exists_child_storage: (storageKeyData: Pointer, storageKeyLen: number, keyData: Pointer, keyLen: number) => number,
+  kill_child_storage: (storageKeyData: Pointer, storageKeyLen: number) => void,
+  get_allocated_child_storage: (storageKeyData: Pointer, storageKeyLen: number, keyData: Pointer, keyLen: number, writtenOut: Pointer) => Pointer,
+  get_child_storage_into: (storageKeyData: Pointer, storageKeyLen: number, keyData: Pointer, keyLen: number, valueData: Pointer, valueLen: number, valueOffset: number) => number,
+  child_storage_root: (storageKeyData: Pointer, storageKeyLen: number, writtenOut: Pointer) => Pointer
+};
+
 export type RuntimeInterface$Storage$Trie = {
   blake2_256_enumerated_trie_root: (valuesPtr: Pointer, lensPtr: Pointer, lensLen: number, resultPtr: Pointer) => void,
   storage_changes_root: (parentHashData: Pointer, parentHashLen: number, parentNumHi: number, parentNumLo: number, result: Pointer) => number,
   storage_root: (resultPtr: Pointer) => void
 };
 
-export type RuntimeInterface$Storage = RuntimeInterface$Storage$Data & RuntimeInterface$Storage$Trie;
+export type RuntimeInterface$Storage = RuntimeInterface$Storage$Child & RuntimeInterface$Storage$Data & RuntimeInterface$Storage$Trie;
 
 export type RuntimeInterface$Exports = RuntimeInterface$Chain & RuntimeInterface$Crypto & RuntimeInterface$Io & RuntimeInterface$Memory & RuntimeInterface$Sandbox & RuntimeInterface$Storage;
 

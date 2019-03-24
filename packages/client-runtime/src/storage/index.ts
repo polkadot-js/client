@@ -4,11 +4,13 @@
 
 import { RuntimeEnv, RuntimeInterface$Storage } from '../types';
 
+import child from './child';
 import data from './data';
 import trie from './trie';
 
 export default function storage (env: RuntimeEnv): RuntimeInterface$Storage {
   return {
+    ...child(env),
     ...data(env),
     ...trie(env)
   };

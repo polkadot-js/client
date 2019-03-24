@@ -15,7 +15,7 @@ describe('createPeer', () => {
         toB58String: () => id
       }
     };
-    peer = new Peer({}, {}, peerInfo);
+    peer = new Peer({}, {}, null, peerInfo);
   });
 
   it('stores the peerInfo id', () => {

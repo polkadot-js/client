@@ -18,6 +18,16 @@
       (result i32)
     )
   )
+  (import "runtime" "child_storage_root"
+    (func $child_storage_root
+      (param i32 i32 i32) (result i32)
+    )
+  )
+  (import "runtime" "clear_child_storage"
+    (func $clear_child_storage
+      (param i32 i32 i32 i32)
+    )
+  )
   (import "runtime" "clear_prefix"
     (func $clear_prefix
       (param i32 i32)
@@ -33,6 +43,11 @@
       (param i32 i32 i32 i32) (result i32)
     )
   )
+  (import "runtime" "exists_child_storage"
+    (func $exists_child_storage
+      (param i32 i32 i32 i32) (result i32)
+    )
+  )
   (import "runtime" "exists_storage"
     (func $exists_storage
       (param i32 i32) (result i32)
@@ -43,9 +58,19 @@
       (param i32)
     )
   )
+  (import "runtime" "get_allocated_child_storage"
+    (func $get_allocated_child_storage
+      (param i32 i32 i32 i32 i32) (result i32)
+    )
+  )
   (import "runtime" "get_allocated_storage"
     (func $get_allocated_storage
       (param i32 i32 i32) (result i32)
+    )
+  )
+  (import "runtime" "get_child_storage_into"
+    (func $get_child_storage_into
+      (param i32 i32 i32 i32 i32 i32 i32) (result i32)
     )
   )
   (import "runtime" "get_storage_into"
@@ -56,6 +81,11 @@
   (import "runtime" "keccak_256"
     (func $keccak_256
       (param i32 i32 i32)
+    )
+  )
+  (import "runtime" "kill_child_storage"
+    (func $kill_child_storage
+      (param i32 i32)
     )
   )
   (import "runtime" "malloc"
@@ -136,6 +166,11 @@
   (import "runtime" "secp256k1_ecdsa_recover"
     (func $secp256k1_ecdsa_recover
       (param i32 i32 i32)
+    )
+  )
+  (import "runtime" "set_child_storage"
+    (func $set_child_storage
+      (param i32 i32 i32 i32 i32 i32)
     )
   )
   (import "runtime" "set_storage"
@@ -219,14 +254,20 @@
 
   (export "ext_blake2_256" (func $blake2_256))
   (export "ext_blake2_256_enumerated_trie_root" (func $blake2_256_enumerated_trie_root))
+  (export "ext_child_storage_root" (func $child_storage_root))
+  (export "ext_clear_child_storage" (func $clear_child_storage))
   (export "ext_clear_prefix" (func $clear_prefix))
   (export "ext_clear_storage" (func $clear_storage))
   (export "ext_ed25519_verify" (func $ed25519_verify))
+  (export "ext_exists_child_storage" (func $exists_child_storage))
   (export "ext_exists_storage" (func $exists_storage))
   (export "ext_free" (func $free))
+  (export "ext_get_allocated_child_storage" (func $get_allocated_child_storage))
   (export "ext_get_allocated_storage" (func $get_allocated_storage))
+  (export "ext_get_child_storage_into" (func $get_child_storage_into))
   (export "ext_get_storage_into" (func $get_storage_into))
   (export "ext_keccak_256" (func $keccak_256))
+  (export "ext_kill_child_storage" (func $kill_child_storage))
   (export "ext_malloc" (func $malloc))
   (export "ext_memcmp" (func $memcmp))
   (export "ext_memcpy" (func $memcpy))
@@ -242,6 +283,7 @@
   (export "ext_sandbox_memory_set" (func $sandbox_memory_set))
   (export "ext_sandbox_memory_teardown" (func $sandbox_memory_teardown))
   (export "ext_secp256k1_ecdsa_recover" (func $secp256k1_ecdsa_recover))
+  (export "ext_set_child_storage" (func $set_child_storage))
   (export "ext_set_storage" (func $set_storage))
   (export "ext_sr25519_verify" (func $ed25519_verify))
   (export "ext_storage_root" (func $storage_root))
