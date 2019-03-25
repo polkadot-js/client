@@ -17,7 +17,7 @@ A JavaScript version of a Polkadot/Substrate network client. It allows operation
 
 This is the current status of the client -
 
-- It can sync and operate on Polkadot POC-3 networks, and has been tested against Dried Danta (Substrate)& Alexander (Polkadot) as well as Edgeware networks.
+- It can sync and operate on Polkadot POC-3 networks, and has been tested against Alexander (Polkadot), Dried Danta (Substrate) as well as Edgeware networks.
 - It currently does not include much (if any) of the RPC interfaces - so it is not (currently) able to support eg. the apps UI connecting to it
 - It does not (currently) do any state and trie pruning, so the resulting backing database growth is not controlled
 - As of 0.19.1 the backing database has been swapped to LmDB, this interface is much faster than the previous implementation, however uses more disk space (follow-up from the previous point). Investigations are still ongoing as to the best fit for the backend DB engine.
