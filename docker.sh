@@ -1,8 +1,19 @@
 #!/bin/sh
+# Copyright 2017-2019 @polkadot/client authors & contributors
+# This software may be modified and distributed under the terms
+# of the Apache-2.0 license. See the LICENSE file for details.
 
+# fail fast on any non-zero exits
 set -e
 
+# the option as passed on the commandline
 CMD="$1"
+
+# the docker image name and dockerhub repo
+NAME="polkadot-js-client"
+REPO="jacogr"
+
+# extract the current npm version from package.json
 VERSION=$(cat package.json \
   | grep version \
   | head -1 \
@@ -10,32 +21,43 @@ VERSION=$(cat package.json \
   | sed 's/[",]//g' \
   | sed 's/ //g')
 
+# helper function for the build logic
 function build () {
-  echo "*** Creating Dokcerfile from latest version (via template)"
+  echo "*** Creating Dockerfile from latest npm version"
   sed "s/VERSION/$VERSION/g" Dockerfile.tmpl > Dockerfile
 
-  echo "*** Building polkadot-js-client"
-  docker build -t polkadot-js-client .
+  echo "*** Building $NAME"
+  docker build -t $NAME .
 
   exit 0
 }
 
+# helper function for the publishing logic
 function publish () {
-  echo "*** Tagging polkadot-js-client $VERSION"
-  docker tag polkadot-js-client jacogr/polkadot-js-client:$VERSION
+  echo "*** Tagging $NAME $VERSION"
+  docker tag $NAME $REPO/$NAME:$VERSION
 
-  echo "*** Publishing polkadot-js-client $VERSION"
-  docker push jacogr/polkadot-js-client:$VERSION
+  echo "*** Publishing $NAME $VERSION"
+  docker push $REPO/$NAME:$VERSION
 
   exit 0
 }
 
+# helper function for the usage logic
 function usage () {
+  echo "This builds a docker image for the latest npm published version."
+  echo "For maintainers publishing functionality is also provided."
+  echo ""
   echo "Usage: docker.sh <build|publish>"
+  echo "Commands:"
+  echo "  build: builds a `polkadot-js-client` docker image"
+  echo "  publish: publishes a built image to dockerhub"
+  echo ""
 
   exit 1
 }
 
+# execute the command specified
 case $CMD in
   build)
     build
