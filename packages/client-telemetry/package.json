@@ -1,6 +1,6 @@
 {
   "name": "@polkadot/client-telemetry",
-  "version": "0.22.0-beta.4",
+  "version": "0.22.0",
   "description": "Telementry client",
   "main": "index.js",
   "publishConfig": {
@@ -27,7 +27,7 @@
   "homepage": "https://github.com/polkadot-js/client/tree/master/packages/client-telemetry#readme",
   "dependencies": {
     "@babel/runtime": "^7.4.2",
-    "@polkadot/util": "^0.41.0-beta.2",
+    "@polkadot/util": "^0.41.1",
     "websocket": "^1.0.28"
   }
 }
