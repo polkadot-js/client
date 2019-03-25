@@ -56,9 +56,12 @@ docker run -d \
     --telemetry-name "some-cool-name-here"
 ```
 
-Som additional expansio to the above -
+Some additional expansion to the above -
 
-- This uses the local path, `~/db` as the data path, mapping it to the container itself.
+- docker `-d` runs the container as a daemon (skip as required)
+- docker `--name` specifies the name of the container in `docker container ls`
+- docker `-p` maps the p2p port externally (ensure the firewall is open on this)
+- docker `-v` uses the local host path `~/db` as the data path, mapping it to the container itself.
 - For `--chain` either `alexander` or `dried-danta` are built-in options.
 - `--db-type` can be either `file` (default, experimental) or `lmdb` (experimental, more memory intensive).
 - The `0.22.1` is the version tag, as of this writing it was the latest image deployed to [dockerhub](https://cloud.docker.com/u/jacogr/repository/docker/jacogr/polkadot-js-client).
