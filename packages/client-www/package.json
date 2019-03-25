@@ -1,6 +1,6 @@
 {
   "name": "@polkadot/client-www",
-  "version": "0.22.0-beta.3",
+  "version": "0.22.0-beta.4",
   "description": "A simple POC browser wrapper for the client",
   "main": "index.js",
   "publishConfig": {
@@ -27,6 +27,6 @@
   "homepage": "https://github.com/polkadot-js/client/tree/master/packages/client-www#readme",
   "dependencies": {
     "@babel/runtime": "^7.4.2",
-    "@polkadot/client": "^0.22.0-beta.3"
+    "@polkadot/client": "^0.22.0-beta.4"
   }
 }
