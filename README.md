@@ -15,9 +15,9 @@ A JavaScript version of a Polkadot/Substrate network client. It allows operation
 
 ## Current status
 
-As of 0.19.1, this is the current status of the client -
+This is the current status of the client -
 
-- It can sync and operate on Polkadot POC-3 networks, and has been tested against Dried Danta (Substrate). Alexander (Polkadot) support is up next once the network stabilises.
+- It can sync and operate on Polkadot POC-3 networks, and has been tested against Alexander (Polkadot), Dried Danta (Substrate) as well as Edgeware networks.
 - It currently does not include much (if any) of the RPC interfaces - so it is not (currently) able to support eg. the apps UI connecting to it
 - It does not (currently) do any state and trie pruning, so the resulting backing database growth is not controlled
 - As of 0.19.1 the backing database has been swapped to LmDB, this interface is much faster than the previous implementation, however uses more disk space (follow-up from the previous point). Investigations are still ongoing as to the best fit for the backend DB engine.
@@ -39,6 +39,31 @@ It is split up into a number of internal packages -
 ## Local development node
 
 Start the node with `yarn run start <options>`, e.g. `yarn run start --chain dried-danta`. You can use `--help` to get a list of the available options.
+
+## Running via docker
+
+A docker image is built from the supplied `Dockerfile`, which includes the latest version as supported and deployed to the registry. To run via docker, the following commands can be used. (Split into lines for readability) -
+
+```
+docker run -d \
+  --name dd \
+  -p 60666:60666 \
+  -v ~/db:/data \
+  jacogr/polkadot-js-client:0.22.0-beta.2 \
+    --chain dried-danta \
+    --db-path /data \
+    --db-type file \
+    --telemetry-name "some-cool-name-here"
+```
+
+Som additional expansio to the above -
+
+- This uses the local path, `~/db` as the data path, mapping it to the container itself.
+- For `--chain` either `alexander` or `dried-danta` are built-in options.
+- `--db-type` can be either `lmdb` (default) or `file` (experimental, less memory and disk overhead).
+- The `0.22.0-beta.2` is the version tag, as of this writing it was the latest image deployed to [dockerhub](https://cloud.docker.com/u/jacogr/repository/docker/jacogr/polkadot-js-client).
+
+You can build your own container via the `./docker.sh` script included which will use the latest available repo version to base an image on.
 
 ## Contributing
 
