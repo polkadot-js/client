@@ -13,12 +13,12 @@ import handlers from './handler';
 import EventEmitter from 'eventemitter3';
 import handshake from 'pull-handshake';
 import pull from 'pull-stream';
+import Sync from '@polkadot/client-sync';
 import { logger, promisify } from '@polkadot/util';
 
 import createNode from './create/node';
 import defaults from './defaults';
 import Peers from './peers';
-import Sync from './sync';
 
 type OnMessage = {
   peer: PeerInterface,

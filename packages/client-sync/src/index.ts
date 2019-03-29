@@ -1,11 +1,11 @@
-// Copyright 2017-2019 @polkadot/client-p2p authors & contributors
+// Copyright 2017-2019 @polkadot/client-sync authors & contributors
 // This software may be modified and distributed under the terms
 // of the Apache-2.0 license. See the LICENSE file for details.
 
 import { Config } from '@polkadot/client/types';
 import { ChainInterface } from '@polkadot/client-chains/types';
-import { PeerInterface, SyncStatus } from '../types';
-import { SyncInterface, SyncState$Request, SyncState$BlockRequests, SyncState$BlockQueue } from './types';
+import { PeerInterface } from '@polkadot/client-p2p/types';
+import { SyncInterface, SyncState$Request, SyncState$BlockRequests, SyncState$BlockQueue, SyncStatus } from './types';
 
 import BN from 'bn.js';
 import EventEmitter from 'eventemitter3';
@@ -15,7 +15,7 @@ import { BlockRequest$Direction, BlockRequest$From } from '@polkadot/client-type
 import { Hash } from '@polkadot/types';
 import { isBn, isU8a, logger, u8aToHex } from '@polkadot/util';
 
-import defaults from '../defaults';
+import defaults from './defaults';
 
 type Requests = Array<SyncState$Request>;
 

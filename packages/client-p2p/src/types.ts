@@ -2,20 +2,19 @@
 // This software may be modified and distributed under the terms
 // of the Apache-2.0 license. See the LICENSE file for details.
 
-import BN from 'bn.js';
-// import { LibP2pConnection } from 'interface-connection';
-import LibP2p from 'libp2p';
-import EventEmitter from 'eventemitter3';
 import { Logger } from '@polkadot/util/types';
 import { Config } from '@polkadot/client/types';
 import { ChainInterface } from '@polkadot/client-chains/types';
 import { MessageInterface } from '@polkadot/client-types/messages/types';
-import { SyncState } from './sync/types';
-import Sync from './sync';
+import { SyncState } from '@polkadot/client-sync/types';
+
+import BN from 'bn.js';
+// import { LibP2pConnection } from 'interface-connection';
+import LibP2p from 'libp2p';
+import EventEmitter from 'eventemitter3';
+import Sync from '@polkadot/client-sync';
 
 export type EnvType = 'browser' | 'nodejs';
-
-export type SyncStatus = 'Idle' | 'Sync';
 
 export type P2pNodes = Array<string>;
 

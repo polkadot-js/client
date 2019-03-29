@@ -50,7 +50,7 @@ function usage () {
   echo ""
   echo "Usage: docker.sh <build|publish>"
   echo "Commands:"
-  echo "  build: builds a `polkadot-js-client` docker image"
+  echo "  build: builds a `$NAME` docker image"
   echo "  publish: publishes a built image to dockerhub"
   echo ""
 

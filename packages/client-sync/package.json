@@ -1,7 +1,7 @@
 {
-  "name": "@polkadot/client-chains",
+  "name": "@polkadot/client-sync",
   "version": "0.22.1",
-  "description": "Node configuration definitions for specific chains",
+  "description": "Sync interface",
   "main": "index.js",
   "keywords": [
     "Polkadot"
@@ -23,17 +23,9 @@
   "bugs": {
     "url": "https://github.com/polkadot-js/client/issues"
   },
-  "homepage": "https://github.com/polkadot-js/client/client/tree/master/packages/client-chains#readme",
+  "homepage": "https://github.com/polkadot-js/client/client/tree/master/packages/client-sync#readme",
   "dependencies": {
     "@babel/runtime": "^7.4.2",
-    "@polkadot/chainspec": "^0.75.1",
-    "@polkadot/client-db": "^0.22.1",
-    "@polkadot/client-runtime": "^0.22.1",
-    "@polkadot/client-wasm": "^0.22.1",
-    "@polkadot/storage": "^0.75.1",
-    "@polkadot/types": "^0.75.1"
-  },
-  "devDependencies": {
-    "@polkadot/extrinsics": "^0.75.1"
+    "@polkadot/client-rpc": "^0.22.1"
   }
 }
