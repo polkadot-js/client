@@ -25,7 +25,7 @@ export default class Dbs implements ChainDbs {
   private basePath: string;
   private config: DbConfig;
 
-  constructor ({ db }: Config, chain: ChainLoader) {
+  constructor ({ db, sync }: Config, chain: ChainLoader) {
     this.config = db;
     this.basePath = db.type !== 'memory'
       ? path.join(db.path, 'chains', chain.id, u8aToHex(chain.genesisRoot), db.type)
@@ -33,12 +33,12 @@ export default class Dbs implements ChainDbs {
 
     // NOTE blocks compress very well
     this.blocks = createBlockDb(
-      this.createBackingDb('block.db', true)
+      this.createBackingDb('block.db', true, this.config.type === 'memory')
     );
     // NOTE state RLP does not compress well here
     this.state = createStateDb(
       new TrieDb(
-        this.createBackingDb('state.db', false)
+        this.createBackingDb('state.db', false, sync !== 'state')
       )
     );
 
@@ -46,12 +46,12 @@ export default class Dbs implements ChainDbs {
     this.state.db.open();
   }
 
-  private createBackingDb (name: string, isCompressed: boolean): TxDb {
+  private createBackingDb (name: string, isCompressed: boolean, isMemory: boolean): TxDb {
     const isNative = this.config.type === 'file';
 
-    return this.config.type !== 'memory'
-      ? new DiskDb(this.basePath, name, { isCompressed, isNative })
-      : new MemoryDb();
+    return isMemory
+      ? new MemoryDb()
+      : new DiskDb(this.basePath, name, { isCompressed, isNative });
   }
 
   close (): void {
@@ -65,7 +65,7 @@ export default class Dbs implements ChainDbs {
     }
 
     const newDb = new TrieDb(
-      this.createBackingDb('state.db.snapshot', false)
+      this.createBackingDb('state.db.snapshot', false, false)
     );
 
     newDb.open();

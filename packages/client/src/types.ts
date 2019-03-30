@@ -6,6 +6,7 @@ import { ChainName } from '@polkadot/client-chains/types';
 import { DbConfig } from '@polkadot/client-db/types';
 import { P2pConfig } from '@polkadot/client-p2p/types';
 import { RpcConfig } from '@polkadot/client-rpc/types';
+import { SyncTypes } from '@polkadot/client-sync/types';
 import { TelemetryConfig } from '@polkadot/client-telemetry/types';
 import { WasmConfig } from '@polkadot/client-wasm/types';
 
@@ -14,7 +15,7 @@ export type Config = {
   db: DbConfig,
   p2p: P2pConfig,
   rpc: RpcConfig,
-  roles: Array<string>,
+  sync: SyncTypes,
   telemetry: TelemetryConfig,
   wasm: WasmConfig
 };
@@ -24,7 +25,7 @@ export type ConfigPartial = {
   db: DbConfig,
   p2p: P2pConfig,
   rpc: RpcConfig | null,
-  roles: Array<string>,
+  sync: SyncTypes,
   telemetry: TelemetryConfig | null,
   wasm: WasmConfig
 };

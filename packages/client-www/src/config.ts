@@ -24,8 +24,8 @@ export default ({
     port: defaultsP2p.PORT,
     type: 'browser'
   },
-  roles: ['full'],
   rpc: null,
+  sync: 'block',
   telemetry: null,
   wasm: {
     heapSize: defaultsWasm.HEAP_SIZE_KB

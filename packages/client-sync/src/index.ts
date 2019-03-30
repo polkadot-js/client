@@ -26,6 +26,7 @@ const l = logger('sync');
 
 export default class Sync extends EventEmitter implements SyncInterface {
   private chain: ChainInterface;
+  private config: Config;
   private blockRequests: SyncState$BlockRequests = {};
   private blockQueue: SyncState$BlockQueue = {};
   private bestQueued: BN = new BN(0);
@@ -37,6 +38,7 @@ export default class Sync extends EventEmitter implements SyncInterface {
     super();
 
     this.chain = chain;
+    this.config = config;
     this.isActive = true;
 
     this.setProcessTimeout(false);
@@ -122,9 +124,9 @@ export default class Sync extends EventEmitter implements SyncInterface {
     }
 
     const [blockId, block] = nextImportable;
-    const result = await this.chain.executor.importBlock(block);
-
-    // l.debug(() => `Importing block #${blockId}`);
+    const result = this.config.sync === 'state'
+      ? await this.chain.executor.importBlock(block)
+      : await this.chain.executor.importHeader(block);
 
     if (!result) {
       return false;

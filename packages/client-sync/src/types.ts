@@ -8,6 +8,8 @@ import { BlockRequest } from '@polkadot/client-types/messages';
 
 export type SyncStatus = 'Idle' | 'Sync';
 
+export type SyncTypes = 'block' | 'header' | 'state';
+
 export type SyncState$Request = {
   peer: PeerInterface,
   request: BlockRequest,

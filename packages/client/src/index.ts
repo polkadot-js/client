@@ -6,6 +6,7 @@ import { Config, ConfigPartial } from './types';
 import { ChainInterface } from '@polkadot/client-chains/types';
 import { P2pInterface } from '@polkadot/client-p2p/types';
 import { RpcInterface } from '@polkadot/client-rpc/types';
+import { SyncTypes } from '@polkadot/client-sync/types';
 import { TelemetryInterface } from '@polkadot/client-telemetry/types';
 
 import './license';
@@ -28,6 +29,7 @@ export default class Client {
   private informantId?: NodeJS.Timer;
   private p2p?: P2pInterface;
   private rpc?: RpcInterface;
+  private sync: SyncTypes = 'state';
   private telemetry?: TelemetryInterface;
   private prevBest?: BN;
   private prevTime: number = Date.now();
@@ -41,8 +43,10 @@ export default class Client {
       ? `(${verStatus})`
       : '';
 
+    this.sync = config.sync;
+
     l.log(`Running version ${clientId.version} ${status}`);
-    l.log(`Initialising for roles=${config.roles.join(',')} on chain=${config.chain}`);
+    l.log(`Initialising for sync ${this.sync} on chain ${config.chain}`);
 
     this.chain = new Chain(config as Config);
     this.p2p = new P2p(config as Config, this.chain);
@@ -142,10 +146,10 @@ export default class Client {
     const hasBlocks = this.prevBest && this.prevBest.lt(bestNumber);
     const numBlocks = hasBlocks && this.prevBest ? bestNumber.sub(this.prevBest) : new BN(1);
     const newSpeed = isSync
-      ? ` (${(elapsed / numBlocks.toNumber()).toFixed(0)} ms/block)`
+      ? ` (${(elapsed / numBlocks.toNumber()).toFixed(0)} ms/${this.sync === 'state' ? 'block' : 'header'})`
       : '';
     const newBlocks = hasBlocks && this.prevBest
-      ? `, +${numBlocks.toString()} blocks${newSpeed}`
+      ? `, +${numBlocks.toString()} ${this.sync === 'state' ? 'blocks' : 'headers'}${newSpeed}`
       : '';
     const target = isSync
       ? `, target #${this.p2p.sync.bestSeen.toString()}`
