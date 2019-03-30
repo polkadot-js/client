@@ -176,8 +176,9 @@ export default class P2p extends EventEmitter implements P2pInterface {
       }
       // , (protocol: string, requested: string, callback: (error: null, accept: boolean) => void): void => {
       //   l.debug(() => `matching protocol ${requested}`);
+      //   console.error(`matching protocol ${requested}`);
 
-      //   callback(null, requested.indexOf(defaults.PROTOCOL) === 0);
+      //   callback(null, requested.indexOf(this.protocol) === 0);
       // }
     );
   }
