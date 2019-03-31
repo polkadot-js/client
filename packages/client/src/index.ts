@@ -29,7 +29,7 @@ export default class Client {
   private informantId?: NodeJS.Timer;
   private p2p?: P2pInterface;
   private rpc?: RpcInterface;
-  private sync: SyncTypes = 'state';
+  private sync: SyncTypes = 'light';
   private telemetry?: TelemetryInterface;
   private prevBest?: BN;
   private prevTime: number = Date.now();
@@ -46,7 +46,7 @@ export default class Client {
     this.sync = config.sync;
 
     l.log(`Running version ${clientId.version} ${status}`);
-    l.log(`Initialising for sync ${this.sync} on chain ${config.chain}`);
+    l.log(`Initialising for ${this.sync} sync on chain ${config.chain}`);
 
     this.chain = new Chain(config as Config);
     this.p2p = new P2p(config as Config, this.chain);
@@ -145,11 +145,12 @@ export default class Client {
     const isSync = status === 'Sync';
     const hasBlocks = this.prevBest && this.prevBest.lt(bestNumber);
     const numBlocks = hasBlocks && this.prevBest ? bestNumber.sub(this.prevBest) : new BN(1);
+    const blockType = this.sync === 'full' ? 'block' : 'header';
     const newSpeed = isSync
-      ? ` (${(elapsed / numBlocks.toNumber()).toFixed(0)} ms/${this.sync === 'state' ? 'block' : 'header'})`
+      ? ` (${(elapsed / numBlocks.toNumber()).toFixed(0)} ms/${blockType})`
       : '';
     const newBlocks = hasBlocks && this.prevBest
-      ? `, +${numBlocks.toString()} ${this.sync === 'state' ? 'blocks' : 'headers'}${newSpeed}`
+      ? `, +${numBlocks.toString()} ${blockType}s${newSpeed}`
       : '';
     const target = isSync
       ? `, target #${this.p2p.sync.bestSeen.toString()}`

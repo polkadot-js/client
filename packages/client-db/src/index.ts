@@ -30,15 +30,17 @@ export default class Dbs implements ChainDbs {
     this.basePath = db.type !== 'memory'
       ? path.join(db.path, 'chains', chain.id, u8aToHex(chain.genesisRoot), db.type)
       : '';
+    const isMemory = this.config.type === 'memory';
+    const isLight = sync === 'light';
 
     // NOTE blocks compress very well
     this.blocks = createBlockDb(
-      this.createBackingDb('block.db', true, this.config.type === 'memory')
+      this.createBackingDb('block.db', true, isMemory)
     );
-    // NOTE state RLP does not compress well here
+    // NOTE state does not compress well here
     this.state = createStateDb(
       new TrieDb(
-        this.createBackingDb('state.db', false, sync !== 'state')
+        this.createBackingDb('state.db', false, isMemory || isLight)
       )
     );
 
@@ -51,7 +53,7 @@ export default class Dbs implements ChainDbs {
 
     return isMemory
       ? new MemoryDb()
-      : new DiskDb(this.basePath, name, { isCompressed, isNative });
+      : new DiskDb(this.basePath, name, { isCompressed, isLru: true, isNative });
   }
 
   close (): void {

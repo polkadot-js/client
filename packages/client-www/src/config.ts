@@ -25,7 +25,7 @@ export default ({
     type: 'browser'
   },
   rpc: null,
-  sync: 'header',
+  sync: 'light',
   telemetry: null,
   wasm: {
     heapSize: defaultsWasm.HEAP_SIZE_KB

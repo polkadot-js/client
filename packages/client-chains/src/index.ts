@@ -64,7 +64,7 @@ export default class Chain implements ChainInterface {
     const bestHash = this.blocks.bestHash.get();
     const hasBest = !!bestHash && !!bestHash.length;
 
-    if (!hasBest || this.config.sync !== 'state') {
+    if (!hasBest || this.config.sync === 'light') {
       return this.createGenesis(!hasBest);
     }
 

@@ -4,7 +4,7 @@
 
 import { SyncTypes } from './types';
 
-const SYNC_DEFAULT: SyncTypes = 'block';
+const SYNC_DEFAULT: SyncTypes = 'light';
 const MAX_REQUEST_BLOCKS = 128;
 
 export default {

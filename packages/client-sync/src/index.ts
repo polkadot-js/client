@@ -124,7 +124,7 @@ export default class Sync extends EventEmitter implements SyncInterface {
     }
 
     const [blockId, block] = nextImportable;
-    const result = this.config.sync === 'state'
+    const result = this.config.sync === 'full'
       ? await this.chain.executor.importBlock(block)
       : await this.chain.executor.importHeader(block);
 

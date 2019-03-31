@@ -23,9 +23,9 @@ export default ({
     type: 'string'
   },
   'sync': {
-    choices: ['block', 'header', 'state'] as Array<SyncTypes>,
+    choices: ['full', 'light'] as Array<SyncTypes>,
     default: syncDefaults.SYNC_DEFAULT,
-    description: 'Sets the sync type, header, block (header + body) or state (full node)',
+    description: 'Sets the sync type full (state validation) or light (header valiation)',
     type: 'string'
   }
 } as { [index: string]: Options });

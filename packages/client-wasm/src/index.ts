@@ -65,10 +65,16 @@ export default class Executor implements ExecutorInterface {
 
   private updateBlockDb (blockData: BlockData): boolean {
     const { blockNumber, hash } = blockData.header;
+    const bestNumber = this.blockDb.bestNumber.get();
 
     return this.blockDb.db.transaction(() => {
-      this.blockDb.bestHash.set(hash);
-      this.blockDb.bestNumber.set(blockNumber);
+      // only set the best number when higher that what we have
+      if (bestNumber.lt(blockNumber)) {
+        this.blockDb.bestHash.set(hash);
+        this.blockDb.bestNumber.set(blockNumber);
+      }
+
+      // FIXME This could be problematic, i.e. the hash <-> numberr mappings (multiples)
       this.blockDb.blockData.set(blockData.toU8a(), hash);
       this.blockDb.hash.set(hash, blockNumber);
 
