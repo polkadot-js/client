@@ -11,7 +11,7 @@ import BN from 'bn.js';
 import EventEmitter from 'eventemitter3';
 import { BlockData } from '@polkadot/client-types';
 import { BlockRequest, BlockResponse } from '@polkadot/client-types/messages';
-import { BlockRequest$Direction, BlockRequest$From } from '@polkadot/client-types/messages/BlockRequest';
+import { BlockRequest$Direction, BlockRequest$Fields, BlockRequest$From } from '@polkadot/client-types/messages/BlockRequest';
 import { Hash } from '@polkadot/types';
 import { isBn, isU8a, logger, u8aToHex } from '@polkadot/util';
 
@@ -248,7 +248,7 @@ export default class Sync extends EventEmitter implements SyncInterface {
     }
 
     if (count && firstNumber) {
-      l.log(`Queued ${count} blocks from ${peer.shortId}, #${firstNumber.toString()}+`);
+      l.log(`Queued ${count} from ${peer.shortId}, #${firstNumber.toString()}+`);
     }
   }
 
@@ -264,10 +264,15 @@ export default class Sync extends EventEmitter implements SyncInterface {
       ? u8aToHex(from as Uint8Array, 48)
       : `#${from.toString()}`;
 
-    l.debug(() => `Requesting blocks from ${peer.shortId}, ${fromStr} ${isStale ? '(older)' : '-'}`);
+    l.debug(() => `Requesting from ${peer.shortId}, ${fromStr} ${isStale ? '(older)' : '-'}`);
 
     const request = new BlockRequest({
       direction: new BlockRequest$Direction(isHash ? 'Descending' : 'Ascending'),
+      fields: new BlockRequest$Fields(
+        this.config.sync === 'full'
+          ? ['header', 'body', 'justification']
+          : ['header']
+      ),
       from: new BlockRequest$From(from, isHash ? 0 : 1),
       id: peer.getNextId(),
       max: defaults.MAX_REQUEST_BLOCKS
@@ -317,7 +322,6 @@ export default class Sync extends EventEmitter implements SyncInterface {
     this.requestFromPeer(peer, block.header.blockNumber.subn(defaults.MAX_REQUEST_BLOCKS), true);
   }
 
-  // TODO We can probably use a package with a timeout like an LRU
   private timeoutRequests (): void {
     const now = Date.now();
 

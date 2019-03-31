@@ -1635,15 +1635,15 @@
     node-lmdb "^0.6.2"
     snappy "^6.1.2"
 
-"@polkadot/dev-react@^0.29.0-beta.1":
-  version "0.29.0-beta.1"
-  resolved "https://registry.yarnpkg.com/@polkadot/dev-react/-/dev-react-0.29.0-beta.1.tgz#3f20001850d91428b4e8e5d9f070e1f73c3b1b65"
-  integrity sha512-hONIgASNgbvEXbCXgCrVjgepMDY4Pr645ZcNNRNlIfDKigN3BH9D7FiynpAZVhzNqlPwdIf2It76csZ8qVN20A==
+"@polkadot/dev-react@^0.29.1":
+  version "0.29.1"
+  resolved "https://registry.yarnpkg.com/@polkadot/dev-react/-/dev-react-0.29.1.tgz#c264e64cb2ed8405bc411ea76aa0965217f394cf"
+  integrity sha512-7VFiylCVnjhLTqUAGQogQOaqMKSDgfdIi60X7WMSbQ5LKyI0aczCGg5ggsE5lCIgcFeLYrJJTNRrOTMZya4GGg==
   dependencies:
     "@babel/core" "^7.4.0"
     "@babel/plugin-syntax-dynamic-import" "^7.2.0"
     "@babel/preset-react" "^7.0.0"
-    "@polkadot/dev" "^0.29.0-beta.1"
+    "@polkadot/dev" "^0.29.1"
     "@types/react" "^16.8.8"
     "@types/react-dom" "^16.8.2"
     "@types/styled-components" "4.1.8"
@@ -1671,10 +1671,10 @@
     webpack-plugin-serve "^0.7.4"
     worker-loader "^2.0.0"
 
-"@polkadot/dev@^0.29.0-beta.1":
-  version "0.29.0-beta.1"
-  resolved "https://registry.yarnpkg.com/@polkadot/dev/-/dev-0.29.0-beta.1.tgz#a87f8cdfb480d3b9fc09c76152df2e0a1ef9b900"
-  integrity sha512-4niAaZpnQeq7KBDfLxvXr2DcHO50E96JjbOZkJ4yXhuMdAKRKQjpxIKqIQ6OfX3V17yvzk+AwJRwmk960FidXA==
+"@polkadot/dev@^0.29.1":
+  version "0.29.1"
+  resolved "https://registry.yarnpkg.com/@polkadot/dev/-/dev-0.29.1.tgz#919c7b6b8e76dbdb4f59abe5f6d7f812d2b1e99d"
+  integrity sha512-Z3L2lvMQ/KAkIjP3MTgbjZGmX4WWXAR6S+mhQZ6srdFF+Y8uhmNIrC9QW+KQGGN7o1O8XglitRbQJKtsRkjdlg==
   dependencies:
     "@babel/cli" "^7.2.3"
     "@babel/core" "^7.4.0"
