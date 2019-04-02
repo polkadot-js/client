@@ -6,10 +6,12 @@ import { SyncTypes } from './types';
 
 const SYNC_DEFAULT: SyncTypes = 'light';
 const MAX_REQUEST_BLOCKS = 128;
+const MAX_QUEUED_BLOCKS = MAX_REQUEST_BLOCKS * 8;
 
 export default {
   MAX_REQUEST_BLOCKS,
-  MAX_QUEUED_BLOCKS: MAX_REQUEST_BLOCKS * 8,
+  MAX_QUEUED_BLOCKS,
   MIN_IDLE_BLOCKS: 16,
+  MIN_QUEUE_SIZE: MAX_QUEUED_BLOCKS / 2,
   SYNC_DEFAULT
 };

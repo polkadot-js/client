@@ -2,83 +2,155 @@
 // This software may be modified and distributed under the terms
 // of the Apache-2.0 license. See the LICENSE file for details.
 
+import { Message$Console, Message$Imported, Message$Informant } from './types';
+
 import React from 'react';
 import ReactDOM from 'react-dom';
 import styled from 'styled-components';
-import Client from '@polkadot/client';
 
 import config from './config';
 
+const ClientWorker = require('worker-loader?name=[name].[hash:8].js!./worker');
+
 type Props = {};
-type State = {};
+type State = Message$Informant & {};
 
 const SCROLLING: ScrollIntoViewOptions = { behavior: 'smooth' };
 
 const Wrapper = styled.div`
-  pre {
-    margin: 0;
-    padding: 0.125rem 0.25rem;
+  .console {
+    pre {
+      margin: 0;
+      padding: 0.125rem 0.25rem;
 
-    &.error {
-      color: white;
-      background: red;
+      &.error {
+        color: white;
+        background: red;
+      }
+
+      &.warn {
+        color: black;
+        background: yellow;
+      }
     }
+  }
 
-    &.warn {
-      color: black;
-      background: yellow;
+  .informant {
+    position: fixed;
+    top: 0.25rem;
+    right: 0.5rem;
+
+    > div {
+      background: #555;
+      color: #eee;
+      display: inline-block;
+      border: 2px solid #555;
+      border-radius: 0.5rem;
+      margin: 0.25rem;
+      padding: 0.5rem 1rem;
+      text-align: right;
+
+      > label {
+        opacity: 0.5;
+      }
+
+      > div {
+        font-family: monospace;
+        font-size: 1.5rem;
+      }
     }
   }
 `;
 
 export default class App extends React.PureComponent<Props, State> {
-  private client: Client;
-  private logsEnd?: HTMLDivElement;
-  private wrapper?: HTMLElement;
-  state: State = {};
+  private console?: HTMLElement;
+  state: State = {
+    bestNumber: '-',
+    numPeers: 0,
+    status: 'Idle'
+  };
 
   constructor (props: Props) {
     super(props);
 
-    console.error = this.consoleHook('error');
-    console.log = this.consoleHook('log');
-    console.warn = this.consoleHook('warn');
-
-    this.client = new Client();
-    this.client.start(config).catch((error) => {
-      console.error('Failed to start client', error);
-    });
+    this.initWorker();
   }
 
   render () {
+    const { bestNumber, numPeers, status } = this.state;
+
     return (
-      <Wrapper ref={this.setWrapper}>
-        <div ref={this.setLogsEnd} />
+      <Wrapper>
+        <div
+          className='console'
+          ref={this.setConsole}
+        />
+        <div className='informant'>
+          <div>
+            <label>best</label>
+            <div>#{bestNumber}</div>
+          </div>
+          <div>
+            <label>peers</label>
+            <div>{numPeers}</div>
+          </div>
+          <div>
+            <label>status</label>
+            <div>{status}</div>
+          </div>
+        </div>
       </Wrapper>
     );
   }
 
-  private consoleHook (type: 'error' | 'log' | 'warn') {
-    return (...args: Array<string>) => {
-      if (this.wrapper && this.logsEnd) {
-        const pre = document.createElement('pre');
-        const txt = document.createTextNode(args.join(' '));
+  private initWorker () {
+    const worker = new ClientWorker();
 
-        pre.appendChild(txt);
-        pre.classList.add(type);
+    worker.onmessage = ({ data: { data, type } }: MessageEvent) => {
+      switch (type) {
+        case 'console':
+          this.onConsole(data);
+          break;
 
-        this.wrapper.insertBefore(pre, this.logsEnd);
-        this.logsEnd.scrollIntoView(SCROLLING);
+        case 'imported':
+        case 'informant':
+          this.onInformant(data);
+          break;
+
+        default:
+          break;
       }
     };
+
+    worker.postMessage({
+      data: config,
+      type: 'create'
+    });
   }
 
-  private setWrapper = (wrapper: HTMLDivElement) => {
-    this.wrapper = wrapper;
+  private onConsole ({ text, type }: Message$Console) {
+    if (this.console) {
+      const pre = document.createElement('pre');
+      const txt = document.createTextNode(text);
+
+      pre.appendChild(txt);
+      pre.classList.add(type);
+
+      this.console.append(pre);
+      pre.scrollIntoView(SCROLLING);
+
+      while (this.console.childElementCount > 512) {
+        this.console.childNodes[0].remove();
+      }
+    }
   }
 
-  private setLogsEnd = (logsEnd: HTMLDivElement) => {
-    this.logsEnd = logsEnd;
+  private onInformant (data: Message$Informant | Message$Imported) {
+    this.setState(data as State);
+  }
+
+  private setConsole = (ref: HTMLDivElement) => {
+    this.console = ref;
   }
 }
 

@@ -2,34 +2,52 @@
 // This software may be modified and distributed under the terms
 // of the Apache-2.0 license. See the LICENSE file for details.
 
-import Client from '@polkadot/client';
+import { ConfigPartial } from '@polkadot/client/types';
 
-import config from './config';
+import Client from '@polkadot/client';
 
 const ctx: Worker = self as any;
 let client: Client;
 
-// const ClientWorker = require('worker-loader?name=[name].[hash:8].js!./worker');
+function consoleHook (type: 'error' | 'log' | 'warn') {
+  return (...args: Array<string>) => {
+    ctx.postMessage({
+      data: {
+        type,
+        text: args.join(' ')
+      },
+      type: 'console'
+    });
+  };
+}
 
-// function initWorker () {
-//   const worker = new ClientWorker();
+function initClient (config: ConfigPartial) {
+  console.error = consoleHook('error');
+  console.log = consoleHook('log');
+  console.warn = consoleHook('warn');
 
-//   worker.onmessage = (event: MessageEvent) => {
-//     // handle
-//   };
-
-//   worker.postMessage('create');
-// }
-
-function initClient () {
   client = new Client();
   client.start(config).catch((error) => {
     console.error('Failed to start client', error);
   });
+
+  client.on('imported', (data) => {
+    ctx.postMessage({
+      type: 'imported',
+      data
+    });
+  });
+
+  client.on('informant', (data) => {
+    ctx.postMessage({
+      type: 'informant',
+      data
+    });
+  });
 }
 
-ctx.onmessage = async () => {
-  if (!client) {
-    initClient();
+ctx.onmessage = async ({ data: { data, type } }) => {
+  if (type === 'create') {
+    initClient(data);
   }
 };

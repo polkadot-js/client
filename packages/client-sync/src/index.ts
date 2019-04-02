@@ -132,7 +132,14 @@ export default class Sync extends EventEmitter implements SyncInterface {
       return false;
     }
 
+    const queueCount = Object.keys(this.blockQueue).length;
+    const peer = this.blockQueue[blockId].peer;
+
     delete this.blockQueue[blockId];
+
+    if (queueCount < defaults.MIN_QUEUE_SIZE && !this.blockRequests[peer.id]) {
+      this.requestBlocks(peer);
+    }
 
     this.emit('imported');
 
@@ -215,13 +222,12 @@ export default class Sync extends EventEmitter implements SyncInterface {
     delete this.blockRequests[peer.id];
 
     if (!request) {
-      l.warn(`Unrequested response from ${peer.shortId}`);
-      return;
+      // l.warn(`Unrequested response from ${peer.shortId}`);
     } else if (!id.eq(request.request.id)) {
       // l.warn(`Mismatched response from ${peer.shortId}`);
     }
 
-    let firstNumber;
+    let firstNumber: BN | null = null;
     let count = 0;
 
     for (let i = 0; i < blocks.length; i++) {
@@ -248,7 +254,7 @@ export default class Sync extends EventEmitter implements SyncInterface {
     }
 
     if (count && firstNumber) {
-      l.log(`Queued ${count} from ${peer.shortId}, #${firstNumber.toString()}+`);
+      l.debug(`Queued ${count} from ${peer.shortId}, #${firstNumber.toString()}+`);
     }
   }
 
@@ -294,7 +300,7 @@ export default class Sync extends EventEmitter implements SyncInterface {
     const from = this.bestQueued.lt(nextNumber)
       ? nextNumber
       : (
-        this.bestQueued.sub(nextNumber).ltn(defaults.MAX_QUEUED_BLOCKS / 2)
+        this.bestQueued.sub(nextNumber).ltn(defaults.MIN_QUEUE_SIZE)
           ? this.bestQueued.addn(1)
           : null
       );

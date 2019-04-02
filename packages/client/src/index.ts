@@ -12,6 +12,7 @@ import { TelemetryInterface } from '@polkadot/client-telemetry/types';
 import './license';
 
 import BN from 'bn.js';
+import EventEmitter from 'eventemitter3';
 import Chain from '@polkadot/client-chains';
 import Telemetry from '@polkadot/client-telemetry';
 import Rpc from '@polkadot/client-rpc';
@@ -24,7 +25,7 @@ import defaults from './defaults';
 
 const l = logger('client');
 
-export default class Client {
+export default class Client extends EventEmitter {
   private chain?: ChainInterface;
   private informantId?: NodeJS.Timer;
   private p2p?: P2pInterface;
@@ -110,6 +111,14 @@ export default class Client {
     }
 
     this.p2p.sync.on('imported', () => {
+      if (!isUndefined(this.chain)) {
+        const bestNumber = this.chain.blocks.bestNumber.get();
+
+        this.emit('imported', {
+          bestNumber: bestNumber.toString()
+        });
+      }
+
       if (!isUndefined(this.telemetry)) {
         const now = Date.now();
 
@@ -157,6 +166,12 @@ export default class Client {
       : '';
 
     l.log(`${status} (${numPeers} peers), current #${bestNumber.toNumber()}${target}, ${u8aToHex(bestHash, 48)}${newBlocks}`);
+
+    this.emit('informant', {
+      bestNumber: bestNumber.toString(),
+      numPeers,
+      status
+    });
 
     this.prevBest = bestNumber;
     this.prevTime = now;
