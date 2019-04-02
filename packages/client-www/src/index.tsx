@@ -10,18 +10,14 @@ import Client from '@polkadot/client';
 import config from './config';
 
 type Props = {};
+type State = {};
 
-type State = {
-  logs: Array<{
-    text: string,
-    type: 'error' | 'log' | 'warn'
-  }>
-};
+const SCROLLING: ScrollIntoViewOptions = { behavior: 'smooth' };
 
 const Wrapper = styled.div`
   pre {
     margin: 0;
-    padding: 0.25rem 0.5rem;
+    padding: 0.125rem 0.25rem;
 
     &.error {
       color: white;
@@ -37,7 +33,9 @@ const Wrapper = styled.div`
 
 export default class App extends React.PureComponent<Props, State> {
   private client: Client;
-  state: State = { logs: [] };
+  private logsEnd?: HTMLDivElement;
+  private wrapper?: HTMLElement;
+  state: State = {};
 
   constructor (props: Props) {
     super(props);
@@ -53,26 +51,34 @@ export default class App extends React.PureComponent<Props, State> {
   }
 
   render () {
-    const { logs } = this.state;
-
     return (
-      <Wrapper>
-        {logs.map(({ text, type }, index) => (
-          <pre className={type} key={index}>{text}</pre>
-        ))}
+      <Wrapper ref={this.setWrapper}>
+        <div ref={this.setLogsEnd} />
       </Wrapper>
     );
   }
 
   private consoleHook (type: 'error' | 'log' | 'warn') {
     return (...args: Array<string>) => {
-      this.setState(({ logs }): State => ({
-        logs: logs.concat({
-          text: args.join(' '),
-          type
-        })
-      }));
+      if (this.wrapper && this.logsEnd) {
+        const pre = document.createElement('pre');
+        const txt = document.createTextNode(args.join(' '));
+
+        pre.appendChild(txt);
+        pre.classList.add(type);
+
+        this.wrapper.insertBefore(pre, this.logsEnd);
+        this.logsEnd.scrollIntoView(SCROLLING);
+      }
     };
+  }
+
+  private setWrapper = (wrapper: HTMLDivElement) => {
+    this.wrapper = wrapper;
+  }
+
+  private setLogsEnd = (logsEnd: HTMLDivElement) => {
+    this.logsEnd = logsEnd;
   }
 }
 
