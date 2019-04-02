@@ -32,16 +32,16 @@ export default class Sync extends EventEmitter implements SyncInterface {
   private bestQueued: BN = new BN(0);
   private isActive: boolean = false;
   private lastBest: BN = new BN(0);
-  private peers: PeersInterface;
+  private peers: PeersInterface | null;
   bestSeen: BN = new BN(0);
   status: SyncStatus = 'Idle';
 
-  constructor (config: Config, chain: ChainInterface, peers: PeersInterface) {
+  constructor (config: Config, chain: ChainInterface) {
     super();
 
     this.chain = chain;
     this.config = config;
-    this.peers = peers;
+    this.peers = null;
     this.isActive = true;
 
     this.setProcessTimeout(false);
@@ -59,6 +59,10 @@ export default class Sync extends EventEmitter implements SyncInterface {
     );
   }
 
+  setPeers (peers: PeersInterface): void {
+    this.peers = peers;
+  }
+
   private setProcessTimeout (isFast: boolean = true) {
     setTimeout(async () => {
       try {
@@ -70,7 +74,7 @@ export default class Sync extends EventEmitter implements SyncInterface {
   }
 
   private announce (header: Header) {
-    if (header.blockNumber.lte(this.lastBest)) {
+    if (header.blockNumber.lte(this.lastBest) || !this.peers) {
       return;
     }
 

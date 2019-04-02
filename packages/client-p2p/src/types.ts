@@ -79,6 +79,7 @@ export type P2pInterface$Events = 'started' | 'stopped';
 
 export type P2pInterface = {
   readonly l: Logger;
+  readonly sync: Sync;
 
   // _announceBlock: (hash: Uint8Array, header: Uint8Array, body: Uint8Array) => void,
   isStarted: () => boolean,
