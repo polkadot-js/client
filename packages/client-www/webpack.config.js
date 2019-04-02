@@ -39,8 +39,10 @@ function createWebpack ({ alias = {}, context, name = 'index' }) {
     devtool: isProd ? 'source-map' : 'cheap-eval-source-map',
     entry: [
       `./src/${name}.tsx`,
-      'webpack-plugin-serve/client'
-    ],
+      isProd
+        ? null
+        :'webpack-plugin-serve/client'
+    ].filter((entry) => entry),
     mode: ENV,
     output: {
       chunkFilename: `[name].[chunkhash:8].js`,
@@ -138,7 +140,7 @@ function createWebpack ({ alias = {}, context, name = 'index' }) {
       new HtmlWebpackPlugin({
         inject: true,
         template: path.join(context, `${hasPublic ? 'public/' : ''}${name}.html`),
-        PAGE_TITLE: 'Polkadot/Substrate Client'
+        PAGE_TITLE: 'PRE Light Client'
       }),
       new webpack.optimize.SplitChunksPlugin(),
       new WebpackPluginServe({
