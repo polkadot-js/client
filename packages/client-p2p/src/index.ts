@@ -44,7 +44,7 @@ export default class P2p extends EventEmitter implements P2pInterface {
   private peers: PeersInterface | undefined;
   private protocol: string;
   private dialTimer: NodeJS.Timer | null;
-  readonly sync: Sync;
+  private sync: Sync | undefined;
 
   constructor (config: Config, chain: ChainInterface) {
     super();
@@ -52,7 +52,6 @@ export default class P2p extends EventEmitter implements P2pInterface {
     this.config = config;
     this.chain = chain;
     this.l = l;
-    this.sync = new Sync(config, chain);
     this.dialQueue = {};
     this.dialTimer = null;
     this.protocol = defaults.getProtocol(chain.chain.protocolId);
@@ -73,6 +72,7 @@ export default class P2p extends EventEmitter implements P2pInterface {
 
     this.node = await createNode(this.config, this.chain, l);
     this.peers = new Peers(this.config, this.chain, this.node);
+    this.sync = new Sync(this.config, this.chain, this.peers);
 
     this._handleProtocol(this.node, this.peers);
     this._handlePing(this.node);
@@ -99,12 +99,14 @@ export default class P2p extends EventEmitter implements P2pInterface {
       this.dialTimer = null;
     }
 
+    if (this.sync) {
+      this.sync.stop();
+    }
+
     const node = this.node;
 
     delete this.node;
     delete this.peers;
-
-    this.sync.stop();
 
     await promisify(node, node.stop);
 
@@ -113,23 +115,6 @@ export default class P2p extends EventEmitter implements P2pInterface {
 
     return true;
   }
-
-  // _announceBlock (hash: Uint8Array, _header: Uint8Array, body: Uint8Array): void {
-  //   if (!this.peers) {
-  //     return;
-  //   }
-
-  //   const header = decodeHeader(_header);
-  //   const message = new BlockAnnounce({
-  //     header
-  //   });
-
-  //   this.peers.peers().forEach((peer) => {
-  //     if (header.number.gt(peer.bestNumber)) {
-  //       peer.send(message);
-  //     }
-  //   });
-  // }
 
   private _onPeerDiscovery (node: LibP2p, peers: PeersInterface): void {
     node.on('start', () =>
@@ -276,9 +261,9 @@ export default class P2p extends EventEmitter implements P2pInterface {
 
   private _requestAny (): void {
     if (this.peers) {
-      this.peers.peers().forEach((peer) =>
-        this.sync.requestBlocks(peer)
-      );
+      this.peers.peers().forEach((peer) => {
+        this.sync && this.sync.requestBlocks(peer);
+      });
     }
 
     setTimeout(() => {

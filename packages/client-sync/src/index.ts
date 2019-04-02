@@ -4,15 +4,15 @@
 
 import { Config } from '@polkadot/client/types';
 import { ChainInterface } from '@polkadot/client-chains/types';
-import { PeerInterface } from '@polkadot/client-p2p/types';
+import { PeerInterface, PeersInterface } from '@polkadot/client-p2p/types';
 import { SyncInterface, SyncState$Request, SyncState$BlockRequests, SyncState$BlockQueue, SyncStatus } from './types';
 
 import BN from 'bn.js';
 import EventEmitter from 'eventemitter3';
 import { BlockData } from '@polkadot/client-types';
-import { BlockRequest, BlockResponse } from '@polkadot/client-types/messages';
+import { BlockAnnounce, BlockRequest, BlockResponse } from '@polkadot/client-types/messages';
 import { BlockRequest$Direction, BlockRequest$Fields, BlockRequest$From } from '@polkadot/client-types/messages/BlockRequest';
-import { Hash } from '@polkadot/types';
+import { Hash, Header } from '@polkadot/types';
 import { isBn, isU8a, logger, u8aToHex } from '@polkadot/util';
 
 import defaults from './defaults';
@@ -31,14 +31,17 @@ export default class Sync extends EventEmitter implements SyncInterface {
   private blockQueue: SyncState$BlockQueue = {};
   private bestQueued: BN = new BN(0);
   private isActive: boolean = false;
+  private lastBest: BN = new BN(0);
+  private peers: PeersInterface;
   bestSeen: BN = new BN(0);
   status: SyncStatus = 'Idle';
 
-  constructor (config: Config, chain: ChainInterface) {
+  constructor (config: Config, chain: ChainInterface, peers: PeersInterface) {
     super();
 
     this.chain = chain;
     this.config = config;
+    this.peers = peers;
     this.isActive = true;
 
     this.setProcessTimeout(false);
@@ -64,6 +67,19 @@ export default class Sync extends EventEmitter implements SyncInterface {
         // ignore
       }
     }, isFast ? 1 : 100);
+  }
+
+  private announce (header: Header) {
+    if (header.blockNumber.lte(this.lastBest)) {
+      return;
+    }
+
+    this.lastBest = header.blockNumber;
+    this.peers.peers().forEach((peer) => {
+      peer.send(
+        new BlockAnnounce({ header })
+      );
+    });
   }
 
   private async processBlocks () {
@@ -141,6 +157,7 @@ export default class Sync extends EventEmitter implements SyncInterface {
       this.requestBlocks(peer);
     }
 
+    this.announce(block.header);
     this.emit('imported');
 
     return true;
