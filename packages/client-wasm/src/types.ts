@@ -28,4 +28,5 @@ export type ExecutorInstance = {
 
 export type ExecutorInterface = {
   importBlock (block: BlockData): Promise<boolean>;
+  importHeader (block: BlockData): Promise<boolean>;
 };

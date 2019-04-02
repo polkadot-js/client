@@ -1,23 +1,21 @@
-// Copyright 2017-2019 @polkadot/client-p2p authors & contributors
+// Copyright 2017-2019 @polkadot/client-sync authors & contributors
 // This software may be modified and distributed under the terms
 // of the Apache-2.0 license. See the LICENSE file for details.
 
 import { Config } from '@polkadot/client/types';
 import { ChainInterface } from '@polkadot/client-chains/types';
-import { PeerInterface, SyncStatus } from '../types';
-import { SyncInterface, SyncState$Request, SyncState$BlockRequests, SyncState$BlockQueue } from './types';
+import { PeerInterface, PeersInterface } from '@polkadot/client-p2p/types';
+import { SyncInterface, SyncState$BlockRequests, SyncState$BlockQueue, SyncStatus } from './types';
 
 import BN from 'bn.js';
 import EventEmitter from 'eventemitter3';
 import { BlockData } from '@polkadot/client-types';
-import { BlockRequest, BlockResponse } from '@polkadot/client-types/messages';
-import { BlockRequest$Direction, BlockRequest$From } from '@polkadot/client-types/messages/BlockRequest';
-import { Hash } from '@polkadot/types';
+import { BlockAnnounce, BlockRequest, BlockResponse } from '@polkadot/client-types/messages';
+import { BlockRequest$Direction, BlockRequest$Fields, BlockRequest$From } from '@polkadot/client-types/messages/BlockRequest';
+import { Hash, Header } from '@polkadot/types';
 import { isBn, isU8a, logger, u8aToHex } from '@polkadot/util';
 
-import defaults from '../defaults';
-
-type Requests = Array<SyncState$Request>;
+import defaults from './defaults';
 
 const REQUEST_TIMEOUT = 60000;
 const MAX_REQUEST_BN = new BN(defaults.MAX_REQUEST_BLOCKS);
@@ -26,10 +24,13 @@ const l = logger('sync');
 
 export default class Sync extends EventEmitter implements SyncInterface {
   private chain: ChainInterface;
+  private config: Config;
   private blockRequests: SyncState$BlockRequests = {};
   private blockQueue: SyncState$BlockQueue = {};
   private bestQueued: BN = new BN(0);
   private isActive: boolean = false;
+  private lastBest: BN = new BN(0);
+  private peers: PeersInterface | null;
   bestSeen: BN = new BN(0);
   status: SyncStatus = 'Idle';
 
@@ -37,6 +38,8 @@ export default class Sync extends EventEmitter implements SyncInterface {
     super();
 
     this.chain = chain;
+    this.config = config;
+    this.peers = null;
     this.isActive = true;
 
     this.setProcessTimeout(false);
@@ -46,12 +49,8 @@ export default class Sync extends EventEmitter implements SyncInterface {
     this.isActive = false;
   }
 
-  peerRequests (peer: PeerInterface): Requests {
-    const requests: Requests = Object.values(this.blockRequests);
-
-    return requests.filter(({ peer: { id } }) =>
-      peer.id === id
-    );
+  setPeers (peers: PeersInterface): void {
+    this.peers = peers;
   }
 
   private setProcessTimeout (isFast: boolean = true) {
@@ -62,6 +61,19 @@ export default class Sync extends EventEmitter implements SyncInterface {
         // ignore
       }
     }, isFast ? 1 : 100);
+  }
+
+  private announce (header: Header) {
+    if (header.blockNumber.lte(this.lastBest) || !this.peers) {
+      return;
+    }
+
+    this.lastBest = header.blockNumber;
+    this.peers.peers().forEach((peer) => {
+      peer.send(
+        new BlockAnnounce({ header })
+      );
+    });
   }
 
   private async processBlocks () {
@@ -122,16 +134,24 @@ export default class Sync extends EventEmitter implements SyncInterface {
     }
 
     const [blockId, block] = nextImportable;
-    const result = await this.chain.executor.importBlock(block);
-
-    // l.debug(() => `Importing block #${blockId}`);
+    const result = this.config.sync === 'full'
+      ? await this.chain.executor.importBlock(block)
+      : await this.chain.executor.importHeader(block);
 
     if (!result) {
       return false;
     }
 
+    const queueCount = Object.keys(this.blockQueue).length;
+    const peer = this.blockQueue[blockId].peer;
+
     delete this.blockQueue[blockId];
 
+    if (queueCount < defaults.MIN_QUEUE_SIZE && !this.blockRequests[peer.id]) {
+      this.requestBlocks(peer);
+    }
+
+    this.announce(block.header);
     this.emit('imported');
 
     return true;
@@ -213,13 +233,12 @@ export default class Sync extends EventEmitter implements SyncInterface {
     delete this.blockRequests[peer.id];
 
     if (!request) {
-      l.warn(`Unrequested response from ${peer.shortId}`);
-      return;
+      // l.warn(`Unrequested response from ${peer.shortId}`);
     } else if (!id.eq(request.request.id)) {
       // l.warn(`Mismatched response from ${peer.shortId}`);
     }
 
-    let firstNumber;
+    let firstNumber: BN | null = null;
     let count = 0;
 
     for (let i = 0; i < blocks.length; i++) {
@@ -246,8 +265,10 @@ export default class Sync extends EventEmitter implements SyncInterface {
     }
 
     if (count && firstNumber) {
-      l.log(`Queued ${count} blocks from ${peer.shortId}, #${firstNumber.toString()}+`);
+      l.debug(`Queued ${count} from ${peer.shortId}, #${firstNumber.toString()}+`);
     }
+
+    // this.requestBlocks(peer);
   }
 
   private requestFromPeer (peer: PeerInterface, from: BN | Uint8Array | null, isStale: boolean) {
@@ -262,10 +283,15 @@ export default class Sync extends EventEmitter implements SyncInterface {
       ? u8aToHex(from as Uint8Array, 48)
       : `#${from.toString()}`;
 
-    l.debug(() => `Requesting blocks from ${peer.shortId}, ${fromStr} ${isStale ? '(older)' : '-'}`);
+    l.debug(() => `Requesting from ${peer.shortId}, ${fromStr} ${isStale ? '(older)' : '-'}`);
 
     const request = new BlockRequest({
       direction: new BlockRequest$Direction(isHash ? 'Descending' : 'Ascending'),
+      fields: new BlockRequest$Fields(
+        this.config.sync === 'full'
+          ? ['header', 'body', 'justification']
+          : ['header']
+      ),
       from: new BlockRequest$From(from, isHash ? 0 : 1),
       id: peer.getNextId(),
       max: defaults.MAX_REQUEST_BLOCKS
@@ -287,7 +313,7 @@ export default class Sync extends EventEmitter implements SyncInterface {
     const from = this.bestQueued.lt(nextNumber)
       ? nextNumber
       : (
-        this.bestQueued.sub(nextNumber).ltn(defaults.MAX_QUEUED_BLOCKS / 2)
+        this.bestQueued.sub(nextNumber).ltn(defaults.MIN_QUEUE_SIZE)
           ? this.bestQueued.addn(1)
           : null
       );
@@ -315,7 +341,6 @@ export default class Sync extends EventEmitter implements SyncInterface {
     this.requestFromPeer(peer, block.header.blockNumber.subn(defaults.MAX_REQUEST_BLOCKS), true);
   }
 
-  // TODO We can probably use a package with a timeout like an LRU
   private timeoutRequests (): void {
     const now = Date.now();
 

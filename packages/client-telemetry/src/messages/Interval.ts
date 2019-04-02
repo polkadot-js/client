@@ -2,7 +2,7 @@
 // This software may be modified and distributed under the terms
 // of the Apache-2.0 license. See the LICENSE file for details.
 
-import { SyncStatus } from '@polkadot/client-p2p/types';
+import { SyncStatus } from '@polkadot/client-sync/types';
 import { IntervalJson } from './types';
 
 import BN from 'bn.js';

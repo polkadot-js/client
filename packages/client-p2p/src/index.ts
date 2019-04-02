@@ -13,12 +13,12 @@ import handlers from './handler';
 import EventEmitter from 'eventemitter3';
 import handshake from 'pull-handshake';
 import pull from 'pull-stream';
+import Sync from '@polkadot/client-sync';
 import { logger, promisify } from '@polkadot/util';
 
 import createNode from './create/node';
 import defaults from './defaults';
 import Peers from './peers';
-import Sync from './sync';
 
 type OnMessage = {
   peer: PeerInterface,
@@ -52,10 +52,10 @@ export default class P2p extends EventEmitter implements P2pInterface {
     this.config = config;
     this.chain = chain;
     this.l = l;
-    this.sync = new Sync(config, chain);
     this.dialQueue = {};
     this.dialTimer = null;
     this.protocol = defaults.getProtocol(chain.chain.protocolId);
+    this.sync = new Sync(this.config, this.chain);
   }
 
   isStarted (): boolean {
@@ -73,6 +73,7 @@ export default class P2p extends EventEmitter implements P2pInterface {
 
     this.node = await createNode(this.config, this.chain, l);
     this.peers = new Peers(this.config, this.chain, this.node);
+    this.sync.setPeers(this.peers);
 
     this._handleProtocol(this.node, this.peers);
     this._handlePing(this.node);
@@ -99,12 +100,14 @@ export default class P2p extends EventEmitter implements P2pInterface {
       this.dialTimer = null;
     }
 
+    if (this.sync) {
+      this.sync.stop();
+    }
+
     const node = this.node;
 
     delete this.node;
     delete this.peers;
-
-    this.sync.stop();
 
     await promisify(node, node.stop);
 
@@ -113,23 +116,6 @@ export default class P2p extends EventEmitter implements P2pInterface {
 
     return true;
   }
-
-  // _announceBlock (hash: Uint8Array, _header: Uint8Array, body: Uint8Array): void {
-  //   if (!this.peers) {
-  //     return;
-  //   }
-
-  //   const header = decodeHeader(_header);
-  //   const message = new BlockAnnounce({
-  //     header
-  //   });
-
-  //   this.peers.peers().forEach((peer) => {
-  //     if (header.number.gt(peer.bestNumber)) {
-  //       peer.send(message);
-  //     }
-  //   });
-  // }
 
   private _onPeerDiscovery (node: LibP2p, peers: PeersInterface): void {
     node.on('start', () =>
@@ -176,8 +162,9 @@ export default class P2p extends EventEmitter implements P2pInterface {
       }
       // , (protocol: string, requested: string, callback: (error: null, accept: boolean) => void): void => {
       //   l.debug(() => `matching protocol ${requested}`);
+      //   console.error(`matching protocol ${requested}`);
 
-      //   callback(null, requested.indexOf(defaults.PROTOCOL) === 0);
+      //   callback(null, requested.indexOf(this.protocol) === 0);
       // }
     );
   }
@@ -275,9 +262,9 @@ export default class P2p extends EventEmitter implements P2pInterface {
 
   private _requestAny (): void {
     if (this.peers) {
-      this.peers.peers().forEach((peer) =>
-        this.sync.requestBlocks(peer)
-      );
+      this.peers.peers().forEach((peer) => {
+        this.sync && this.sync.requestBlocks(peer);
+      });
     }
 
     setTimeout(() => {

@@ -6,16 +6,18 @@ import { Config, ConfigPartial } from './types';
 import { ChainInterface } from '@polkadot/client-chains/types';
 import { P2pInterface } from '@polkadot/client-p2p/types';
 import { RpcInterface } from '@polkadot/client-rpc/types';
+import { SyncTypes } from '@polkadot/client-sync/types';
 import { TelemetryInterface } from '@polkadot/client-telemetry/types';
 
 import './license';
 
 import BN from 'bn.js';
+import EventEmitter from 'eventemitter3';
 import Chain from '@polkadot/client-chains';
 import Telemetry from '@polkadot/client-telemetry';
 import Rpc from '@polkadot/client-rpc';
 import P2p from '@polkadot/client-p2p';
-import { logger, isUndefined, u8aToHex } from '@polkadot/util';
+import { logger, formatNumber, isUndefined, u8aToHex } from '@polkadot/util';
 import { cryptoWaitReady } from '@polkadot/util-crypto';
 
 import * as clientId from './clientId';
@@ -23,11 +25,12 @@ import defaults from './defaults';
 
 const l = logger('client');
 
-export default class Client {
+export default class Client extends EventEmitter {
   private chain?: ChainInterface;
   private informantId?: NodeJS.Timer;
   private p2p?: P2pInterface;
   private rpc?: RpcInterface;
+  private sync: SyncTypes = 'light';
   private telemetry?: TelemetryInterface;
   private prevBest?: BN;
   private prevTime: number = Date.now();
@@ -41,8 +44,10 @@ export default class Client {
       ? `(${verStatus})`
       : '';
 
+    this.sync = config.sync;
+
     l.log(`Running version ${clientId.version} ${status}`);
-    l.log(`Initialising for roles=${config.roles.join(',')} on chain=${config.chain}`);
+    l.log(`Initialising for ${this.sync} sync on chain ${config.chain}`);
 
     this.chain = new Chain(config as Config);
     this.p2p = new P2p(config as Config, this.chain);
@@ -106,6 +111,14 @@ export default class Client {
     }
 
     this.p2p.sync.on('imported', () => {
+      if (!isUndefined(this.chain)) {
+        const bestNumber = this.chain.blocks.bestNumber.get();
+
+        this.emit('imported', {
+          bestNumber: bestNumber.toString()
+        });
+      }
+
       if (!isUndefined(this.telemetry)) {
         const now = Date.now();
 
@@ -141,17 +154,24 @@ export default class Client {
     const isSync = status === 'Sync';
     const hasBlocks = this.prevBest && this.prevBest.lt(bestNumber);
     const numBlocks = hasBlocks && this.prevBest ? bestNumber.sub(this.prevBest) : new BN(1);
+    const blockType = this.sync === 'full' ? 'block' : 'header';
     const newSpeed = isSync
-      ? ` (${(elapsed / numBlocks.toNumber()).toFixed(0)} ms/block)`
+      ? ` (${(elapsed / numBlocks.toNumber()).toFixed(0)} ms/${blockType})`
       : '';
     const newBlocks = hasBlocks && this.prevBest
-      ? `, +${numBlocks.toString()} blocks${newSpeed}`
+      ? `, +${formatNumber(numBlocks)} ${blockType}s${newSpeed}`
       : '';
     const target = isSync
-      ? `, target #${this.p2p.sync.bestSeen.toString()}`
+      ? `, target #${formatNumber(this.p2p.sync.bestSeen)}`
       : '';
 
-    l.log(`${status} (${numPeers} peers), current #${bestNumber.toNumber()}${target}, ${u8aToHex(bestHash, 48)}${newBlocks}`);
+    l.log(`${status} (${numPeers} peers), current #${formatNumber(bestNumber)}${target}, ${u8aToHex(bestHash, 48)}${newBlocks}`);
+
+    this.emit('informant', {
+      bestNumber: bestNumber.toString(),
+      numPeers,
+      status
+    });
 
     this.prevBest = bestNumber;
     this.prevTime = now;

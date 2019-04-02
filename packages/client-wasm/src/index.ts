@@ -63,12 +63,30 @@ export default class Executor implements ExecutorInterface {
     return result.bool;
   }
 
+  private updateBlockDb (blockData: BlockData): boolean {
+    const { blockNumber, hash } = blockData.header;
+    const bestNumber = this.blockDb.bestNumber.get();
+
+    return this.blockDb.db.transaction(() => {
+      // only set the best number when higher that what we have
+      if (bestNumber.lt(blockNumber)) {
+        this.blockDb.bestHash.set(hash);
+        this.blockDb.bestNumber.set(blockNumber);
+      }
+
+      // FIXME This could be problematic, i.e. the hash <-> numberr mappings (multiples)
+      this.blockDb.blockData.set(blockData.toU8a(), hash);
+      this.blockDb.hash.set(hash, blockNumber);
+
+      return true;
+    });
+  }
+
   async importBlock (blockData: BlockData): Promise<boolean> {
     const start = Date.now();
-    const { blockNumber, hash, parentHash } = blockData.header;
-    const shortHash = u8aToHex(hash, 48);
+    const { blockNumber, parentHash } = blockData.header;
 
-    l.debug(() => `Importing block #${blockNumber}, ${shortHash}`);
+    l.debug(() => `Importing block #${blockNumber}, ${u8aToHex(blockData.header.hash, 48)}`);
 
     try {
       // get the parent block, set the root accordingly
@@ -85,21 +103,34 @@ export default class Executor implements ExecutorInterface {
         this.executeBlock(wasm, blockData)
       );
     } catch (error) {
-      l.error(`Failed importing #${blockNumber}, ${shortHash}`, JSON.stringify(blockData.toJSON()), error.message);
+      l.error(`Failed importing #${blockNumber}, ${u8aToHex(blockData.header.hash, 48)}`, JSON.stringify(blockData.toJSON()));
+      l.error(error);
 
       throw error;
     }
 
-    return this.blockDb.db.transaction(() => {
-      this.blockDb.bestHash.set(hash);
-      this.blockDb.bestNumber.set(blockNumber);
-      this.blockDb.blockData.set(blockData.toU8a(), hash);
-      this.blockDb.hash.set(hash, blockNumber);
+    const result = this.updateBlockDb(blockData);
 
+    if (result) {
       l.debug(() => `Imported block #${blockNumber} (${Date.now() - start}ms)`);
+    }
 
-      return true;
-    });
+    return result;
+  }
+
+  async importHeader (blockData: BlockData): Promise<boolean> {
+    const start = Date.now();
+    const { blockNumber } = blockData.header;
+
+    l.debug(() => `Importing block #${blockNumber}, ${u8aToHex(blockData.header.hash, 48)}`);
+
+    const result = this.updateBlockDb(blockData);
+
+    if (result) {
+      l.debug(() => `Imported header #${blockNumber} (${Date.now() - start}ms)`);
+    }
+
+    return result;
   }
 
   private call (wasm: WasmInstanceExports, name: string): Call {

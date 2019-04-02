@@ -5,7 +5,7 @@
 import { Config } from '@polkadot/client/types';
 import { ChainInterface } from '@polkadot/client-chains/types';
 import { BlockDb } from '@polkadot/client-db/types';
-import { SyncStatus } from '@polkadot/client-p2p/types';
+import { SyncStatus } from '@polkadot/client-sync/types';
 import { TelemetryInterface } from './types';
 
 import './polyfill';

@@ -149,7 +149,7 @@ export default class Peer extends EventEmitter implements PeerInterface {
 
       this.send(
         new Status({
-          roles: this.config.roles,
+          roles: [this.config.sync === 'full' ? 'full' : 'light'],
           bestNumber: this.chain.blocks.bestNumber.get(),
           bestHash: this.chain.blocks.bestHash.get(),
           genesisHash: this.chain.genesis.block.hash,

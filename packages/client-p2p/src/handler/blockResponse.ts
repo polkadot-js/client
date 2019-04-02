@@ -7,11 +7,10 @@ import { Handler } from './types';
 
 import { BlockResponse } from '@polkadot/client-types/messages';
 
-function handleBlockResponse (self: P2pInterface, peer: PeerInterface, message: BlockResponse): void {
+function handleBlockResponse ({ sync }: P2pInterface, peer: PeerInterface, message: BlockResponse): void {
   // self.l.debug(() => [peer.shortId, 'BlockResponse', JSON.stringify(message)]);
 
-  self.sync.queueBlocks(peer, message);
-  self.sync.requestBlocks(peer);
+  sync.queueBlocks(peer, message);
 }
 
 (handleBlockResponse as Handler).type = BlockResponse.type;

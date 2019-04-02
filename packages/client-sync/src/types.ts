@@ -1,11 +1,14 @@
-// Copyright 2017-2019 @polkadot/client-p2p authors & contributors
+// Copyright 2017-2019 @polkadot/client-sync authors & contributors
 // This software may be modified and distributed under the terms
 // of the Apache-2.0 license. See the LICENSE file for details.
 
-import { PeerInterface, SyncStatus } from '../types';
-
+import { PeerInterface } from '@polkadot/client-p2p/types';
 import { BlockData } from '@polkadot/client-types';
 import { BlockRequest } from '@polkadot/client-types/messages';
+
+export type SyncStatus = 'Idle' | 'Sync';
+
+export type SyncTypes = 'full' | 'light';
 
 export type SyncState$Request = {
   peer: PeerInterface,

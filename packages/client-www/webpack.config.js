@@ -17,10 +17,13 @@ const packages = [
   'client-p2p',
   'client-rpc',
   'client-runtime',
+  'client-sync',
   'client-telemetry',
   'client-types',
   'client-wasm'
 ];
+
+const DEBUG = ''; // 'p2p,sync';
 
 function createWebpack ({ alias = {}, context, name = 'index' }) {
   const pkgJson = require(path.join(context, 'package.json'));
@@ -129,7 +132,7 @@ function createWebpack ({ alias = {}, context, name = 'index' }) {
         'process.env': {
           NODE_ENV: JSON.stringify(ENV),
           VERSION: JSON.stringify(pkgJson.version),
-          WS_URL: JSON.stringify(process.env.WS_URL)
+          DEBUG: JSON.stringify(DEBUG)
         }
       }),
       new HtmlWebpackPlugin({

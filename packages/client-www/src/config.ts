@@ -8,7 +8,7 @@ import defaultsP2p from '@polkadot/client-p2p/defaults';
 import defaultsWasm from '@polkadot/client-wasm/defaults';
 
 export default ({
-  chain: 'dried-danta',
+  chain: 'alexander', // 'dried-danta',
   db: {
     compact: false,
     path: '.',
@@ -24,8 +24,8 @@ export default ({
     port: defaultsP2p.PORT,
     type: 'browser'
   },
-  roles: ['full'],
   rpc: null,
+  sync: 'light',
   telemetry: null,
   wasm: {
     heapSize: defaultsWasm.HEAP_SIZE_KB

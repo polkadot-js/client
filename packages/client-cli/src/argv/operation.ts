@@ -3,9 +3,11 @@
 // of the Apache-2.0 license. See the LICENSE file for details.
 
 import { Options } from 'yargs';
+import { SyncTypes } from '@polkadot/client-sync/types';
 
 import chains from '@polkadot/client-chains/chains';
 import { clientId } from '@polkadot/client/clientId';
+import syncDefaults from '@polkadot/client-sync/defaults';
 
 const allChains = Object.keys(chains).map((chain) => `'${chain}'`);
 
@@ -20,10 +22,10 @@ export default ({
     description: 'The client/version identifier for the running node',
     type: 'string'
   },
-  'roles': {
-    choices: ['full', 'light'],
-    default: ['full'],
-    description: 'Sets the type of roles the node operates as',
-    type: 'array'
+  'sync': {
+    choices: ['full', 'light'] as Array<SyncTypes>,
+    default: syncDefaults.SYNC_DEFAULT,
+    description: 'Sets the sync type full (state validation) or light (header valiation)',
+    type: 'string'
   }
 } as { [index: string]: Options });

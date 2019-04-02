@@ -14,7 +14,7 @@ import { BlockData } from '@polkadot/client-types';
 import Executor from '@polkadot/client-wasm';
 import { Header } from '@polkadot/types';
 import storage from '@polkadot/storage/static';
-import { assert, compactStripLength, hexToU8a, logger, u8aToHex } from '@polkadot/util';
+import { assert, compactStripLength, formatNumber, hexToU8a, logger, u8aToHex } from '@polkadot/util';
 import { trieRoot } from '@polkadot/trie-hash';
 
 import Loader from './loader';
@@ -27,11 +27,13 @@ export default class Chain implements ChainInterface {
   readonly executor: ExecutorInterface;
   readonly genesis: ChainGenesis;
   readonly state: StateDb;
+  private config: Config;
   private dbs: ChainDbs;
 
   constructor (config: Config) {
     const chain = new Loader(config);
 
+    this.config = config;
     this.dbs = new ChainDbs(config, chain);
     this.chain = chain.chain;
     this.blocks = this.dbs.blocks;
@@ -44,7 +46,7 @@ export default class Chain implements ChainInterface {
       ? ''
       : `(genesis ${u8aToHex(this.genesis.block.hash, 48)})`;
 
-    l.log(`${this.chain.name}, #${bestNumber.toString()}, ${u8aToHex(bestHash, 48)} ${logGenesis}`);
+    l.log(`${this.chain.name}, #${formatNumber(bestNumber)}, ${u8aToHex(bestHash, 48)} ${logGenesis}`);
 
     // NOTE Snapshot _before_ we attach the runtime since it ties directly to the backing DBs
     this.dbs.snapshot();
@@ -60,9 +62,10 @@ export default class Chain implements ChainInterface {
 
   private initGenesis (): ChainGenesis {
     const bestHash = this.blocks.bestHash.get();
+    const hasBest = !!bestHash && !!bestHash.length;
 
-    if (!bestHash || !bestHash.length) {
-      return this.createGenesis();
+    if (!hasBest || this.config.sync === 'light') {
+      return this.createGenesis(!hasBest);
     }
 
     const bestBlock = this.getBlock(bestHash);
@@ -140,19 +143,21 @@ export default class Chain implements ChainInterface {
     return code;
   }
 
-  private createGenesis (): ChainGenesis {
+  private createGenesis (setBest: boolean): ChainGenesis {
     this.createGenesisState();
 
     const genesis = this.createGenesisBlock();
 
-    this.blocks.db.transaction(() => {
-      this.blocks.bestHash.set(genesis.block.hash);
-      this.blocks.bestNumber.set(0);
-      this.blocks.blockData.set(genesis.block.toU8a(), genesis.block.hash);
-      this.blocks.hash.set(genesis.block.hash, 0);
+    if (setBest) {
+      this.blocks.db.transaction(() => {
+        this.blocks.bestHash.set(genesis.block.hash);
+        this.blocks.bestNumber.set(0);
+        this.blocks.blockData.set(genesis.block.toU8a(), genesis.block.hash);
+        this.blocks.hash.set(genesis.block.hash, 0);
 
-      return true;
-    });
+        return true;
+      });
+    }
 
     return genesis;
   }
