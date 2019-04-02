@@ -1,5 +1,7 @@
 # 0.22.1
 
+- Light client sync, along with default to light
+- Light client browser deployment
 - Support for both lmdb and file (native node) database interfaces
 - Swap default DB to file (less memory intensive, which seems to be problematic on cloud instances)
 - Rework connection and disconnect logic, it now works in adverse network conditions

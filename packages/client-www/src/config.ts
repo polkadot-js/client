@@ -8,7 +8,7 @@ import defaultsP2p from '@polkadot/client-p2p/defaults';
 import defaultsWasm from '@polkadot/client-wasm/defaults';
 
 export default ({
-  chain: 'alexander',
+  chain: 'alexander', // 'dried-danta',
   db: {
     compact: false,
     path: '.',

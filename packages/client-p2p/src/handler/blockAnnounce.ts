@@ -8,7 +8,7 @@ import { Handler } from './types';
 import { BlockAnnounce } from '@polkadot/client-types/messages';
 import { Header } from '@polkadot/types';
 
-function handleBlockAnnounce (self: P2pInterface, peer: PeerInterface, message: BlockAnnounce): void {
+function handleBlockAnnounce ({ sync }: P2pInterface, peer: PeerInterface, message: BlockAnnounce): void {
   // self.l.debug(() => [peer.shortId, 'BlockAnnounce', JSON.stringify(message)]);
 
   const header = message.header;
@@ -17,7 +17,7 @@ function handleBlockAnnounce (self: P2pInterface, peer: PeerInterface, message: 
     peer.setBest(header.blockNumber, (new Header(header)).hash);
   }
 
-  self.sync.requestBlocks(peer);
+  sync.requestBlocks(peer);
 }
 
 (handleBlockAnnounce as Handler).type = BlockAnnounce.type;

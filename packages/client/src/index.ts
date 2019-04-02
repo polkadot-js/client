@@ -17,7 +17,7 @@ import Chain from '@polkadot/client-chains';
 import Telemetry from '@polkadot/client-telemetry';
 import Rpc from '@polkadot/client-rpc';
 import P2p from '@polkadot/client-p2p';
-import { logger, isUndefined, u8aToHex } from '@polkadot/util';
+import { logger, formatNumber, isUndefined, u8aToHex } from '@polkadot/util';
 import { cryptoWaitReady } from '@polkadot/util-crypto';
 
 import * as clientId from './clientId';
@@ -159,13 +159,13 @@ export default class Client extends EventEmitter {
       ? ` (${(elapsed / numBlocks.toNumber()).toFixed(0)} ms/${blockType})`
       : '';
     const newBlocks = hasBlocks && this.prevBest
-      ? `, +${numBlocks.toString()} ${blockType}s${newSpeed}`
+      ? `, +${formatNumber(numBlocks)} ${blockType}s${newSpeed}`
       : '';
     const target = isSync
-      ? `, target #${this.p2p.sync.bestSeen.toString()}`
+      ? `, target #${formatNumber(this.p2p.sync.bestSeen)}`
       : '';
 
-    l.log(`${status} (${numPeers} peers), current #${bestNumber.toNumber()}${target}, ${u8aToHex(bestHash, 48)}${newBlocks}`);
+    l.log(`${status} (${numPeers} peers), current #${formatNumber(bestNumber)}${target}, ${u8aToHex(bestHash, 48)}${newBlocks}`);
 
     this.emit('informant', {
       bestNumber: bestNumber.toString(),

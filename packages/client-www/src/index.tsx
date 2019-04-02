@@ -7,6 +7,7 @@ import { Message$Console, Message$Imported, Message$Informant } from './types';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import styled from 'styled-components';
+import { formatNumber } from '@polkadot/util';
 
 import config from './config';
 
@@ -88,7 +89,7 @@ export default class App extends React.PureComponent<Props, State> {
         <div className='informant'>
           <div>
             <label>best</label>
-            <div>#{bestNumber}</div>
+            <div>#{formatNumber(bestNumber as any)}</div>
           </div>
           <div>
             <label>peers</label>

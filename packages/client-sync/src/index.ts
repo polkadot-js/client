@@ -5,7 +5,7 @@
 import { Config } from '@polkadot/client/types';
 import { ChainInterface } from '@polkadot/client-chains/types';
 import { PeerInterface, PeersInterface } from '@polkadot/client-p2p/types';
-import { SyncInterface, SyncState$Request, SyncState$BlockRequests, SyncState$BlockQueue, SyncStatus } from './types';
+import { SyncInterface, SyncState$BlockRequests, SyncState$BlockQueue, SyncStatus } from './types';
 
 import BN from 'bn.js';
 import EventEmitter from 'eventemitter3';
@@ -16,8 +16,6 @@ import { Hash, Header } from '@polkadot/types';
 import { isBn, isU8a, logger, u8aToHex } from '@polkadot/util';
 
 import defaults from './defaults';
-
-type Requests = Array<SyncState$Request>;
 
 const REQUEST_TIMEOUT = 60000;
 const MAX_REQUEST_BN = new BN(defaults.MAX_REQUEST_BLOCKS);
@@ -49,14 +47,6 @@ export default class Sync extends EventEmitter implements SyncInterface {
 
   stop () {
     this.isActive = false;
-  }
-
-  peerRequests (peer: PeerInterface): Requests {
-    const requests: Requests = Object.values(this.blockRequests);
-
-    return requests.filter(({ peer: { id } }) =>
-      peer.id === id
-    );
   }
 
   setPeers (peers: PeersInterface): void {
@@ -277,6 +267,8 @@ export default class Sync extends EventEmitter implements SyncInterface {
     if (count && firstNumber) {
       l.debug(`Queued ${count} from ${peer.shortId}, #${firstNumber.toString()}+`);
     }
+
+    // this.requestBlocks(peer);
   }
 
   private requestFromPeer (peer: PeerInterface, from: BN | Uint8Array | null, isStale: boolean) {

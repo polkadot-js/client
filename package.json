@@ -29,6 +29,7 @@
     "@polkadot/dev-react": "^0.29.1",
     "@polkadot/ts": "^0.1.56",
     "copyfiles": "^2.1.0",
-    "empty": "^0.10.1"
+    "empty": "^0.10.1",
+    "gh-pages": "^2.0.1"
   }
 }

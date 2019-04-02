@@ -14,7 +14,7 @@ import { BlockData } from '@polkadot/client-types';
 import Executor from '@polkadot/client-wasm';
 import { Header } from '@polkadot/types';
 import storage from '@polkadot/storage/static';
-import { assert, compactStripLength, hexToU8a, logger, u8aToHex } from '@polkadot/util';
+import { assert, compactStripLength, formatNumber, hexToU8a, logger, u8aToHex } from '@polkadot/util';
 import { trieRoot } from '@polkadot/trie-hash';
 
 import Loader from './loader';
@@ -46,7 +46,7 @@ export default class Chain implements ChainInterface {
       ? ''
       : `(genesis ${u8aToHex(this.genesis.block.hash, 48)})`;
 
-    l.log(`${this.chain.name}, #${bestNumber.toString()}, ${u8aToHex(bestHash, 48)} ${logGenesis}`);
+    l.log(`${this.chain.name}, #${formatNumber(bestNumber)}, ${u8aToHex(bestHash, 48)} ${logGenesis}`);
 
     // NOTE Snapshot _before_ we attach the runtime since it ties directly to the backing DBs
     this.dbs.snapshot();
