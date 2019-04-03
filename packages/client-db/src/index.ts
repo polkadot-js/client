@@ -8,11 +8,11 @@ import { ChainLoader } from '@polkadot/client-chains/types';
 import { BlockDb, StateDb, ChainDbs, DbConfig } from './types';
 
 import path from 'path';
-import DiskDb from '@polkadot/db/Disk';
 import MemoryDb from '@polkadot/db/Memory';
 import TrieDb from '@polkadot/trie-db';
 import { u8aToHex } from '@polkadot/util';
 
+import DiskDb from './DiskDb';
 import createBlockDb from './block';
 import createStateDb from './state';
 

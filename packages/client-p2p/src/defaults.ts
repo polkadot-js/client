@@ -15,7 +15,7 @@ export default {
   ADDRESS: '0.0.0.0',
   DISCOVER_BOOT_ENABLED: true,
   DISCOVER_RAND_ENABLED: true,
-  DISCOVER_STAR_ENABLED: false,
+  DISCOVER_STAR_ENABLED: true,
   MAX_PEERS: 25,
   PING_INTERVAL: 30000,
   PING_LENGTH: 32,
@@ -26,7 +26,10 @@ export default {
   MIN_PROTOCOL_VERSION,
   PROTOCOL_PING: '/ipfs/ping/1.0.0',
   SIGNALLING: [
-    '/dns4/wss-star-test.polkadot.io/tcp/443/wss/p2p-websocket-star/p2p'
+    '/dns4/wss-star.polkadotjs.net/tcp/443/wss/p2p-websocket-star/p2p'
+    // '/dns4/wss-star-test.polkadot.io/tcp/9090/ws/p2p-websocket-star/p2p'
+    // '/dnsaddr/wss-star-test.polkadot.io/tcp/443/wss/p2p-websocket-star',
+    // '/dns4/wss-star-test.polkadot.io/tcp/9090/ws/p2p-websocket-star'
   ],
   WAIT_TIMEOUT: 60 * 1000,
   getProtocol

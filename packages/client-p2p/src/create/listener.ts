@@ -16,6 +16,8 @@ type Config = {
   port: number
 };
 
+// const PORT_OFFSET = 30333;
+
 export default async function createListener (envType: EnvType, { address, discoverStar, port }: Config): Promise<PeerInfo> {
   assert(isIp(address), `Expected a valid IP address`);
 
@@ -27,6 +29,7 @@ export default async function createListener (envType: EnvType, { address, disco
     const type = isIp(address, 'v4') ? 'ip4' : 'ip6';
 
     peerInfo.multiaddrs.add(`/${type}/${address}/tcp/${port}/p2p/${peerIdStr}`);
+    // peerInfo.multiaddrs.add(`/${type}/${address}/tcp/${port + PORT_OFFSET}/p2p/${peerIdStr}`);
   }
 
   if (discoverStar) {
