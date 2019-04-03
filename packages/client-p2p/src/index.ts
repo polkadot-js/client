@@ -82,7 +82,7 @@ export default class P2p extends EventEmitter implements P2pInterface {
 
     await promisify(this.node, this.node.start);
 
-    l.log(`Started on address=${this.config.p2p.address}, port=${this.config.p2p.port}`);
+    l.log(`Started with bootnodes ${this.config.p2p.discoverBoot ? 'en' : 'dis'}abled & star ${this.config.p2p.discoverStar ? 'en' : 'dis '}abled`);
     this.emit('started');
 
     this._requestAny();
