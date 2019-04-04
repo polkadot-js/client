@@ -97,11 +97,18 @@ export default class P2p extends EventEmitter implements P2pInterface {
 
     if (this.dialTimer !== null) {
       clearTimeout(this.dialTimer);
+
       this.dialTimer = null;
     }
 
     if (this.sync) {
       this.sync.stop();
+    }
+
+    if (this.peers) {
+      this.peers.peers().forEach((peer) => {
+        peer.disconnect();
+      });
     }
 
     const node = this.node;
@@ -225,6 +232,7 @@ export default class P2p extends EventEmitter implements P2pInterface {
   private _dialPeers (peer?: PeerInterface): void {
     if (this.dialTimer !== null) {
       clearTimeout(this.dialTimer);
+
       this.dialTimer = null;
     }
 

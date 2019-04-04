@@ -55,15 +55,13 @@ export default class Peer extends EventEmitter implements PeerInterface {
   }
 
   private clearConnection (connId: number): void {
-    // delete this.connections[connId];
+    delete this.connections[connId];
 
-    // l.debug(() => ['clearConnection', connId, this.shortId, this.isWritable()]);
+    l.debug(() => ['clearConnection', connId, this.shortId, this.isWritable()]);
 
-    // if (!this.isWritable()) {
-    //   this.emit('disconnected');
-    // }
-
-    this.disconnect();
+    if (!this.isWritable()) {
+      this.emit('disconnected');
+    }
   }
 
   private startPing () {
@@ -86,7 +84,6 @@ export default class Peer extends EventEmitter implements PeerInterface {
       const stream = handshake({ timeout: defaults.WAIT_TIMEOUT }, (error) => {
         if (error) {
           l.warn(() => ['ping disconnected', this.shortId, error]);
-          // this.disconnect();
         }
       });
       const shake = stream.handshake;
@@ -106,8 +103,6 @@ export default class Peer extends EventEmitter implements PeerInterface {
             } else {
               l.warn(`wrong ping received from ${this.shortId}`);
             }
-
-            // this.disconnect();
           }
 
           shake.abort();
@@ -137,15 +132,15 @@ export default class Peer extends EventEmitter implements PeerInterface {
       })
       : null;
 
-    this.connections[connId] = {
-      connection,
-      pushable
-    };
-
     this._receive(connection, connId);
 
     if (isWritable) {
       pull(pushable, connection);
+
+      this.connections[connId] = {
+        connection,
+        pushable
+      };
 
       this.send(
         new Status({
@@ -162,20 +157,16 @@ export default class Peer extends EventEmitter implements PeerInterface {
     return connId;
   }
 
-  disconnect (): void {
-    // Object.keys(this.connections).forEach((connId: any) =>
-    //   this.clearConnection(connId)
-    // );
+  isActive (): boolean {
+    return this.bestHash.length !== 0 && this.isWritable();
+  }
 
+  disconnect (): void {
     this.bestHash = new Uint8Array([]);
     this.connections = {};
     this.peerInfo.disconnect();
 
     this.emit('disconnected');
-  }
-
-  isActive (): boolean {
-    return this.bestHash.length !== 0 && this.isWritable();
   }
 
   private pushables (): Array<Pushable> {

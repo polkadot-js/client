@@ -355,8 +355,6 @@ export default class Sync extends EventEmitter implements SyncInterface {
           return true;
         }
 
-        request.peer.disconnect();
-
         return false;
       })
       .reduce((result, id) => {
