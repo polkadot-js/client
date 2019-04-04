@@ -13,6 +13,7 @@ import { formatNumber } from '@polkadot/util';
 import Client from '@polkadot/client';
 // const ClientWorker = require('worker-loader?name=[name].[hash:8].js!./worker');
 
+import Intro from './Intro';
 import config from './config';
 
 type Props = {};
@@ -44,10 +45,9 @@ const Wrapper = styled.div`
     right: 0.25rem;
 
     > div {
-      background: #555;
+      background: #282d35;
       color: #eee;
       display: inline-block;
-      border: 2px solid #555;
       border-radius: 0.25rem;
       margin: 0.25rem;
       padding: 0.5rem 1rem;
@@ -86,6 +86,7 @@ export default class App extends React.PureComponent<Props, State> {
 
     return (
       <Wrapper>
+        <Intro />
         <div
           className='console'
           ref={this.setConsole}
