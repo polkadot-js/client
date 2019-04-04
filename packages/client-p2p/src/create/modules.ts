@@ -12,8 +12,8 @@ import secio from 'libp2p-secio';
 import spdy from 'libp2p-spdy';
 import TCP from 'libp2p-tcp';
 import PeerInfo from 'peer-info';
-// import WebRTCStar from 'libp2p-webrtc-star';
-import WSStar from 'libp2p-websocket-star';
+import WebRTCStar from 'libp2p-webrtc-star';
+// import WSStar from 'libp2p-websocket-star';
 // import WebSocketStarMulti from 'libp2p-websocket-star-multi';
 import WS from 'libp2p-websockets';
 import mplex from 'pull-mplex';
@@ -24,13 +24,14 @@ type Config = {
   discoverBoot: boolean,
   discoverStar: boolean,
   bootNodes: P2pNodes,
-  nodes: P2pNodes
+  nodes: P2pNodes,
+  wrtc?: any
 };
 
-export default function createModules (envType: EnvType, { id }: PeerInfo, { bootNodes, discoverBoot, discoverStar, nodes }: Config): LibP2p.OptionsModules {
+export default function createModules (envType: EnvType, { id }: PeerInfo, { bootNodes, discoverBoot, discoverStar, nodes, wrtc }: Config): LibP2p.OptionsModules {
   const isCli = envType !== 'browser';
   const starTransports = discoverStar
-    ? [new WSStar({ id })] // new WebRTCStar({ id })
+    ? [new WebRTCStar({ id, wrtc })] //  new WSStar({ id })
     : [];
   const transport = isCli
     ? [new WS(), new TCP()]

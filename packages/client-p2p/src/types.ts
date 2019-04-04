@@ -37,7 +37,8 @@ export type P2pConfig = {
   maxPeers: number,
   nodes?: P2pNodes,
   port: number,
-  type?: EnvType
+  type?: EnvType,
+  wrtc?: any
 };
 
 export type PeerInterface$Events = 'active' | 'message' | 'disconnected';

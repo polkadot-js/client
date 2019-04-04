@@ -9,9 +9,11 @@ import ReactDOM from 'react-dom';
 import styled from 'styled-components';
 import { formatNumber } from '@polkadot/util';
 
-import config from './config';
+// Workers are not supported as of now - WebRTC cannot work inside a webworker
+import Client from '@polkadot/client';
+// const ClientWorker = require('worker-loader?name=[name].[hash:8].js!./worker');
 
-const ClientWorker = require('worker-loader?name=[name].[hash:8].js!./worker');
+import config from './config';
 
 type Props = {};
 type State = Message$Informant & {};
@@ -39,19 +41,21 @@ const Wrapper = styled.div`
   .informant {
     position: fixed;
     top: 0.25rem;
-    right: 0.5rem;
+    right: 0.25rem;
 
     > div {
       background: #555;
       color: #eee;
       display: inline-block;
       border: 2px solid #555;
-      border-radius: 0.5rem;
+      border-radius: 0.25rem;
       margin: 0.25rem;
       padding: 0.5rem 1rem;
       text-align: right;
 
       > label {
+        font-family: sans-serif;
+        font-size: 0.75rem;
         opacity: 0.5;
       }
 
@@ -74,7 +78,7 @@ export default class App extends React.PureComponent<Props, State> {
   constructor (props: Props) {
     super(props);
 
-    this.initWorker();
+    this.initClient();
   }
 
   render () {
@@ -104,32 +108,27 @@ export default class App extends React.PureComponent<Props, State> {
     );
   }
 
-  private initWorker () {
-    const worker = new ClientWorker();
+  private initClient () {
+    console.error = this.consoleHook('error');
+    console.log = this.consoleHook('log');
+    console.warn = this.consoleHook('warn');
 
-    worker.onmessage = ({ data: { data, type } }: MessageEvent) => {
-      switch (type) {
-        case 'console':
-          this.onConsole(data);
-          break;
+    const client = new Client();
 
-        case 'imported':
-        case 'informant':
-          this.onInformant(data);
-          break;
-
-        default:
-          break;
-      }
-    };
-
-    worker.postMessage({
-      data: config,
-      type: 'create'
+    client.start(config).catch((error) => {
+      console.error('FATAL: Failed to start client', error.message);
     });
+
+    client.on('imported', this.onInformant);
+    client.on('informant', this.onInformant);
   }
 
-  private onConsole ({ text, type }: Message$Console) {
+  private consoleHook (type: 'error' | 'log' | 'warn') {
+    return (...args: Array<string>): void =>
+      this.onConsole({ text: args.join(' '), type });
+  }
+
+  private onConsole = ({ text, type }: Message$Console): void => {
     if (this.console) {
       const pre = document.createElement('pre');
       const txt = document.createTextNode(text);
@@ -146,11 +145,11 @@ export default class App extends React.PureComponent<Props, State> {
     }
   }
 
-  private onInformant (data: Message$Informant | Message$Imported) {
+  private onInformant = (data: Message$Informant | Message$Imported): void => {
     this.setState(data as State);
   }
 
-  private setConsole = (ref: HTMLDivElement) => {
+  private setConsole = (ref: HTMLDivElement): void => {
     this.console = ref;
   }
 }

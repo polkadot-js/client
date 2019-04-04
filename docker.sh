@@ -34,11 +34,13 @@ function build () {
 
 # helper function for the publishing logic
 function publish () {
-  echo "*** Tagging $NAME $VERSION"
-  docker tag $NAME $REPO/$NAME:$VERSION
+  TAGVER="latest" # $VERSION
 
-  echo "*** Publishing $NAME $VERSION"
-  docker push $REPO/$NAME:$VERSION
+  echo "*** Tagging $NAME $TAGVER"
+  docker tag $NAME $REPO/$NAME:$TAGVER
+
+  echo "*** Publishing $NAME $TAGVER"
+  docker push $REPO/$NAME:$TAGVER
 
   exit 0
 }

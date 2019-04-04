@@ -4,6 +4,7 @@
 
 import { Config, ConfigKeys } from '@polkadot/client/types';
 
+import wrtc from 'wrtc';
 import Client from '@polkadot/client';
 import { logger } from '@polkadot/util';
 
@@ -33,7 +34,7 @@ function cli (params?: string): Config {
       }
 
       return config;
-    }, {} as Config);
+    }, { p2p: { wrtc } } as Config);
 }
 
 // FIXME Catch the uncaught errors that weren't wrapped in a domain or try catch statement
