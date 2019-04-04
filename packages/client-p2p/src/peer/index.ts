@@ -86,7 +86,7 @@ export default class Peer extends EventEmitter implements PeerInterface {
       const stream = handshake({ timeout: defaults.WAIT_TIMEOUT }, (error) => {
         if (error) {
           l.warn(() => ['ping disconnected', this.shortId, error]);
-          this.disconnect();
+          // this.disconnect();
         }
       });
       const shake = stream.handshake;
@@ -102,12 +102,12 @@ export default class Peer extends EventEmitter implements PeerInterface {
             l.debug(`Ping from ${this.shortId} ${elapsed}ms`);
           } else {
             if (error) {
-              l.warn(() => `error on reading ping from ${this.shortId}`);
+              l.warn(`error on reading ping from ${this.shortId}`);
             } else {
-              l.warn(() => `wrong ping received from ${this.shortId}`);
+              l.warn(`wrong ping received from ${this.shortId}`);
             }
 
-            this.disconnect();
+            // this.disconnect();
           }
 
           shake.abort();
@@ -119,7 +119,7 @@ export default class Peer extends EventEmitter implements PeerInterface {
       pull(stream, connection, stream);
       next();
     } catch (error) {
-      l.error(`error opening ping with ${this.shortId}`, error);
+      l.error(`error opening ping with ${this.shortId}`);
 
       return false;
     }
