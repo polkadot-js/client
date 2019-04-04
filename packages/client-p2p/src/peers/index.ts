@@ -52,6 +52,10 @@ export default class Peers extends EventEmitter implements PeersInterface {
     };
 
     peer.on('active', () => {
+      if (this.map[id].isConnected) {
+        return;
+      }
+
       this.map[id].isConnected = true;
       this.log('active', peer, false);
     });
