@@ -26,11 +26,11 @@ const config = {
   }
 };
 
-export default async function createNode ({ p2p: { address = defaults.ADDRESS, discoverStar = false, discoverBoot = true, nodes = [], port = defaults.PORT, type } }: Config, { chain: { bootNodes = [] } }: ChainInterface, l: Logger): Promise<Libp2p> {
+export default async function createNode ({ p2p: { address = defaults.ADDRESS, discoverStar = false, discoverBoot = true, nodes = [], port = defaults.PORT, type, wrtc } }: Config, { chain: { bootNodes = [] } }: ChainInterface, l: Logger): Promise<Libp2p> {
   const envType = type || 'nodejs';
   const peerBook = await createPeerBook([]);
   const peerInfo = await createListener(envType, { address, discoverStar, port });
-  const modules = createModules(envType, peerInfo, { bootNodes, discoverBoot, discoverStar, nodes });
+  const modules = createModules(envType, peerInfo, { bootNodes, discoverBoot, discoverStar, nodes, wrtc });
   const addrs = peerInfo.multiaddrs.toArray().map((addr) =>
     addr.toString()
   );
@@ -43,9 +43,9 @@ export default async function createNode ({ p2p: { address = defaults.ADDRESS, d
     config: {
       ...config,
       peerDiscovery: {
-        // webRTCStar: {
-        //   enabled: isBrowser
-        // },
+        webRTCStar: {
+          enabled: discoverStar
+        },
         websocketStar: {
           enabled: discoverStar
         }

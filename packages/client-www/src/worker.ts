@@ -9,6 +9,29 @@ import Client from '@polkadot/client';
 const ctx: Worker = self as any;
 let client: Client;
 
+// const worker = new ClientWorker();
+
+// worker.onmessage = ({ data: { data, type } }: MessageEvent) => {
+//   switch (type) {
+//     case 'console':
+//       this.onConsole(data);
+//       break;
+
+//     case 'imported':
+//     case 'informant':
+//       this.onInformant(data);
+//       break;
+
+//     default:
+//       break;
+//   }
+// };
+
+// worker.postMessage({
+//   data: config,
+//   type: 'create'
+// });
+
 function consoleHook (type: 'error' | 'log' | 'warn') {
   return (...args: Array<string>) => {
     ctx.postMessage({
