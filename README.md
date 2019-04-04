@@ -49,8 +49,8 @@ docker run -d \
   --name dd \
   -p 60666:60666 \
   -v ~/db:/data \
-  jacogr/polkadot-js-client:0.22.1 \
-    --chain dried-danta \
+  jacogr/polkadot-js-client:latest \
+    --chain alexander \
     --db-path /data \
     --db-type file \
     --telemetry-name "some-cool-name-here"
@@ -64,7 +64,7 @@ Some additional expansion to the above -
 - docker `-v` uses the local host path `~/db` as the data path, mapping it to the container itself.
 - For `--chain` either `alexander` or `dried-danta` are built-in options.
 - `--db-type` can be either `file` (default, experimental) or `lmdb` (experimental, more memory intensive).
-- The `0.22.1` is the version tag, as of this writing it was the latest image deployed to [dockerhub](https://cloud.docker.com/u/jacogr/repository/docker/jacogr/polkadot-js-client).
+- Images are deployed to [dockerhub](https://cloud.docker.com/u/jacogr/repository/docker/jacogr/polkadot-js-client), and we try to keep them current.
 
 You can build your own container via the `./docker.sh` script included which will use the latest available repo version to base an image on.
 
