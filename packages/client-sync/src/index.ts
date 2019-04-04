@@ -64,15 +64,17 @@ export default class Sync extends EventEmitter implements SyncInterface {
   }
 
   private announce (header: Header) {
-    if (header.blockNumber.lte(this.lastBest) || !this.peers) {
+    if (header.blockNumber.lte(this.lastBest) || !this.peers || this.status === 'Sync') {
       return;
     }
 
     this.lastBest = header.blockNumber;
     this.peers.peers().forEach((peer) => {
-      peer.send(
-        new BlockAnnounce({ header })
-      );
+      if (peer.bestNumber.lt(header.blockNumber)) {
+        peer.send(
+          new BlockAnnounce({ header })
+        );
+      }
     });
   }
 
