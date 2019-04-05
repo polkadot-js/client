@@ -289,11 +289,11 @@ export default class Sync extends EventEmitter implements SyncInterface {
 
     const request = new BlockRequest({
       direction: new BlockRequest$Direction(isHash ? 'Descending' : 'Ascending'),
-      fields: new BlockRequest$Fields(
-        this.config.sync === 'full'
-          ? ['header', 'body', 'justification']
-          : ['header']
-      ),
+      // fields: new BlockRequest$Fields(
+      //   this.config.sync === 'full'
+      //     ? ['header', 'body', 'justification']
+      //     : ['header']
+      // ),
       from: new BlockRequest$From(from, isHash ? 0 : 1),
       id: peer.getNextId(),
       max: defaults.MAX_REQUEST_BLOCKS
