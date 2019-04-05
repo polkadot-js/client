@@ -48,25 +48,17 @@ export default class Peers extends EventEmitter implements PeersInterface {
     const peer = new Peer(this.config, this.chain, this.node, peerInfo);
     this.map[id] = {
       peer,
+      isActive: false,
       isConnected: false
     };
 
     peer.on('active', () => {
-      if (this.map[id].isConnected) {
+      if (this.map[id].isActive) {
         return;
       }
 
-      this.map[id].isConnected = true;
+      this.map[id].isActive = true;
       this.log('active', peer, false);
-    });
-
-    peer.on('disconnected', () => {
-      if (!this.map[id].isConnected) {
-        return;
-      }
-
-      this.map[id].isConnected = false;
-      this.log('disconnected', peer);
     });
 
     peer.on('message', (message: MessageInterface): void => {
@@ -124,7 +116,7 @@ export default class Peers extends EventEmitter implements PeersInterface {
       }
 
       info.isConnected = true;
-      this.log('connected', info.peer);
+      this.log('connected', info.peer, false);
 
       return true;
     });
@@ -142,8 +134,11 @@ export default class Peers extends EventEmitter implements PeersInterface {
         return false;
       }
 
+      info.isActive = false;
       info.isConnected = false;
-      this.log('disconnected', info.peer);
+      info.peer.disconnect();
+
+      this.log('disconnected', info.peer, false);
 
       return true;
     });
@@ -163,7 +158,7 @@ export default class Peers extends EventEmitter implements PeersInterface {
 
       const peer = this.add(peerInfo);
 
-      this.log('discovered', peer, false, false);
+      this.log('discovered', peer, false);
 
       return true;
     });
