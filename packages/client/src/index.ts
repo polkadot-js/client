@@ -6,6 +6,7 @@ import { Config, ConfigPartial } from './types';
 import { ChainInterface } from '@polkadot/client-chains/types';
 import { P2pInterface } from '@polkadot/client-p2p/types';
 import { RpcInterface } from '@polkadot/client-rpc/types';
+import { SignalInterface } from '@polkadot/client-signal/types';
 import { SyncTypes } from '@polkadot/client-sync/types';
 import { TelemetryInterface } from '@polkadot/client-telemetry/types';
 
@@ -14,9 +15,10 @@ import './license';
 import BN from 'bn.js';
 import EventEmitter from 'eventemitter3';
 import Chain from '@polkadot/client-chains';
-import Telemetry from '@polkadot/client-telemetry';
-import Rpc from '@polkadot/client-rpc';
 import P2p from '@polkadot/client-p2p';
+import Rpc from '@polkadot/client-rpc';
+import WebRTCSignal from '@polkadot/client-signal';
+import Telemetry from '@polkadot/client-telemetry';
 import { logger, formatNumber, isUndefined, u8aToHex } from '@polkadot/util';
 import { cryptoWaitReady } from '@polkadot/util-crypto';
 
@@ -30,6 +32,7 @@ export default class Client extends EventEmitter {
   private informantId?: NodeJS.Timer;
   private p2p?: P2pInterface;
   private rpc?: RpcInterface;
+  private signal?: SignalInterface;
   private sync: SyncTypes = 'light';
   private telemetry?: TelemetryInterface;
   private prevBest?: BN;
@@ -50,10 +53,17 @@ export default class Client extends EventEmitter {
     l.log(`Initialising for ${this.sync} sync on chain ${config.chain}`);
 
     this.chain = new Chain(config as Config);
-    this.p2p = new P2p(config as Config, this.chain);
 
-    if (config.rpc && config.rpc.active) {
+    if (config.p2p && config.p2p.active && config.p2p.port) {
+      this.p2p = new P2p(config as Config, this.chain);
+    }
+
+    if (config.rpc && config.rpc.active && config.rpc.port) {
       this.rpc = new Rpc(config as Config, this.chain);
+    }
+
+    if (config.signal && config.signal.active && config.signal.port) {
+      this.signal = new WebRTCSignal(config as Config);
     }
 
     if (config.telemetry) {
@@ -70,6 +80,10 @@ export default class Client extends EventEmitter {
 
     if (this.rpc) {
       await this.rpc.start();
+    }
+
+    if (this.signal) {
+      await this.signal.start();
     }
 
     if (this.telemetry) {
@@ -90,6 +104,10 @@ export default class Client extends EventEmitter {
 
     if (this.rpc) {
       await this.rpc.stop();
+    }
+
+    if (this.signal) {
+      await this.signal.stop();
     }
 
     if (this.telemetry) {

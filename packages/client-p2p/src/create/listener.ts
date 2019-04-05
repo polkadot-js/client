@@ -13,12 +13,17 @@ import defaults from '../defaults';
 type Config = {
   address: string,
   discoverStar: boolean,
+  externalIp?: string | null,
   port: number
 };
 
-// const PORT_OFFSET = 30333;
+function constructMa (address: string, port: number, peerIdStr: string): string {
+  const type = isIp(address, 'v4') ? 'ip4' : 'ip6';
 
-export default async function createListener (envType: EnvType, { address, discoverStar, port }: Config): Promise<PeerInfo> {
+  return `/${type}/${address}/tcp/${port}/p2p/${peerIdStr}`;
+}
+
+export default async function createListener (envType: EnvType, { address, discoverStar, externalIp, port }: Config): Promise<PeerInfo> {
   assert(isIp(address), `Expected a valid IP address`);
 
   const peerInfo = await promisify(null, PeerInfo.create);
@@ -26,10 +31,11 @@ export default async function createListener (envType: EnvType, { address, disco
   const isCli = envType !== 'browser';
 
   if (isCli) {
-    const type = isIp(address, 'v4') ? 'ip4' : 'ip6';
+    peerInfo.multiaddrs.add(constructMa(address, port, peerIdStr));
 
-    peerInfo.multiaddrs.add(`/${type}/${address}/tcp/${port}/p2p/${peerIdStr}`);
-    // peerInfo.multiaddrs.add(`/${type}/${address}/tcp/${port + PORT_OFFSET}/p2p/${peerIdStr}`);
+    if (externalIp) {
+      peerInfo.multiaddrs.add(constructMa(externalIp, port, peerIdStr));
+    }
   }
 
   if (discoverStar) {

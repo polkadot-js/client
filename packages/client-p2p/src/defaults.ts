@@ -26,10 +26,7 @@ export default {
   PROTOCOL_PING: '/ipfs/ping/1.0.0',
   SIGNALLING: [
     '/dns4/wrtc-01.polkadotjs.net/tcp/443/wss/p2p-webrtc-star/p2p'
-    // '/dns4/wss-01.polkadotjs.net/tcp/443/wss/p2p-websocket-star/p2p'
-    // '/dns4/wss-star-test.polkadot.io/tcp/9090/ws/p2p-websocket-star/p2p'
-    // '/dnsaddr/wss-star-test.polkadot.io/tcp/443/wss/p2p-websocket-star',
-    // '/dns4/wss-star-test.polkadot.io/tcp/9090/ws/p2p-websocket-star'
+    // '/ip4/127.0.0.1/tcp/9090/ws/p2p-webrtc-star/p2p'
   ],
   WAIT_TIMEOUT: 60 * 1000,
   getProtocol

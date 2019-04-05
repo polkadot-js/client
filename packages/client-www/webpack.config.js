@@ -17,6 +17,7 @@ const packages = [
   'client-p2p',
   'client-rpc',
   'client-runtime',
+  'client-signal',
   'client-sync',
   'client-telemetry',
   'client-types',

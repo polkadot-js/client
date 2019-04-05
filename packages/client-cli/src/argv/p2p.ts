@@ -7,6 +7,11 @@ import { Options } from 'yargs';
 import defaults from '@polkadot/client-p2p/defaults';
 
 export default ({
+  'p2p-active': {
+    default: true,
+    description: 'Controls the starting of the libp2p (--no-p2p-active disables)',
+    type: 'boolean'
+  },
   'p2p-address': {
     default: defaults.ADDRESS,
     description: 'The interface to bind to (p2p-port > 0)',
@@ -34,7 +39,7 @@ export default ({
   },
   'p2p-port': {
     default: defaults.PORT,
-    description: 'Sets the peer-to-peer port, 0 for non-listening mode',
+    description: 'Sets the peer-to-peer port',
     type: 'number'
   }
 } as { [index: string]: Options });

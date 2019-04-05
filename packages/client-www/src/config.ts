@@ -16,6 +16,7 @@ export default ({
     type: 'memory'
   },
   p2p: {
+    active: true,
     address: defaultsP2p.ADDRESS,
     discoverBoot: false,
     discoverStar: true,
@@ -25,6 +26,7 @@ export default ({
     type: 'browser'
   },
   rpc: null,
+  signal: null,
   sync: 'light',
   telemetry: null,
   wasm: {

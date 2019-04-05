@@ -1,0 +1,31 @@
+{
+  "name": "@polkadot/client-signal",
+  "version": "0.23.0-beta.9",
+  "description": "WebRTC signalling server (compat with libp2p-webrtc-star)",
+  "main": "index.js",
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/polkadot-js/client.git"
+  },
+  "keywords": [],
+  "author": "Jaco Greeff <jacogr@gmail.com>",
+  "maintainers": [
+    "Jaco Greeff <jacogr@gmail.com>"
+  ],
+  "contributors": [],
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/polkadot-js/client/issues"
+  },
+  "homepage": "https://github.com/polkadot-js/client/tree/master/packages/client-signal#readme",
+  "dependencies": {
+    "@babel/runtime": "^7.4.3",
+    "@polkadot/util": "^0.76.1",
+    "socket.io": "^2.2.0",
+    "uws": "10.148.1"
+  }
+}

@@ -6,6 +6,7 @@ import { ChainName } from '@polkadot/client-chains/types';
 import { DbConfig } from '@polkadot/client-db/types';
 import { P2pConfig } from '@polkadot/client-p2p/types';
 import { RpcConfig } from '@polkadot/client-rpc/types';
+import { SignalConfig } from '@polkadot/client-signal/types';
 import { SyncTypes } from '@polkadot/client-sync/types';
 import { TelemetryConfig } from '@polkadot/client-telemetry/types';
 import { WasmConfig } from '@polkadot/client-wasm/types';
@@ -13,8 +14,10 @@ import { WasmConfig } from '@polkadot/client-wasm/types';
 export type Config = {
   chain: ChainName,
   db: DbConfig,
+  externalIp?: string | null,
   p2p: P2pConfig,
   rpc: RpcConfig,
+  signal: SignalConfig,
   sync: SyncTypes,
   telemetry: TelemetryConfig,
   wasm: WasmConfig
@@ -23,8 +26,10 @@ export type Config = {
 export type ConfigPartial = {
   chain: ChainName,
   db: DbConfig,
+  externalIp?: string | null,
   p2p: P2pConfig,
   rpc: RpcConfig | null,
+  signal: SignalConfig | null,
   sync: SyncTypes,
   telemetry: TelemetryConfig | null,
   wasm: WasmConfig
