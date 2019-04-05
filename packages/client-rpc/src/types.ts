@@ -43,6 +43,7 @@ export type JsonRpcResponse = JsonRpcBase & {
 export type Rpc = 'http' | 'ws';
 
 export type RpcConfig = {
+  active: boolean,
   path: string,
   port: number,
   types: Array<Rpc>

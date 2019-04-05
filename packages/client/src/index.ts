@@ -52,7 +52,7 @@ export default class Client extends EventEmitter {
     this.chain = new Chain(config as Config);
     this.p2p = new P2p(config as Config, this.chain);
 
-    if (config.rpc) {
+    if (config.rpc && config.rpc.active) {
       this.rpc = new Rpc(config as Config, this.chain);
     }
 

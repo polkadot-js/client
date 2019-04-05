@@ -7,6 +7,11 @@ import { Options } from 'yargs';
 import defaults from '@polkadot/client-rpc/defaults';
 
 export default ({
+  'rpc-active': {
+    default: true,
+    description: 'Controls the starting of the RPC server (--no-rpc-active disables)',
+    type: 'boolean'
+  },
   'rpc-path': {
     default: defaults.PATH,
     description: 'Sets the endpoint for RPC POST requests',

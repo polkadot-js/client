@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # Copyright 2017-2019 @polkadot/client authors & contributors
 # This software may be modified and distributed under the terms
 # of the Apache-2.0 license. See the LICENSE file for details.
@@ -21,19 +21,20 @@ VERSION=$(cat package.json \
   | sed 's/[",]//g' \
   | sed 's/ //g')
 
-# helper function for the build logic
-function build () {
+# helper function to update the version
+function do_version () {
   echo "*** Creating Dockerfile from latest npm version"
   sed "s/VERSION/$VERSION/g" Dockerfile.tmpl > Dockerfile
+}
 
+# helper function for the build logic
+function do_build () {
   echo "*** Building $NAME"
   docker build -t $NAME .
-
-  exit 0
 }
 
 # helper function for the publishing logic
-function publish () {
+function do_publish () {
   TAGVER="latest" # $VERSION
 
   echo "*** Tagging $NAME $TAGVER"
@@ -41,12 +42,10 @@ function publish () {
 
   echo "*** Publishing $NAME $TAGVER"
   docker push $REPO/$NAME:$TAGVER
-
-  exit 0
 }
 
 # helper function for the usage logic
-function usage () {
+function do_usage () {
   echo "This builds a docker image for the latest npm published version."
   echo "For maintainers publishing functionality is also provided."
   echo ""
@@ -54,20 +53,27 @@ function usage () {
   echo "Commands:"
   echo "  build: builds a `$NAME` docker image"
   echo "  publish: publishes a built image to dockerhub"
+  echo "  version: Updates the Dockerfile version (typically on CI)"
   echo ""
-
-  exit 1
 }
 
 # execute the command specified
 case $CMD in
   build)
-    build
+    do_version
+    do_build
+    exit 0
     ;;
   publish)
-    publish
+    do_publish
+    exit 0
+    ;;
+  version)
+    do_version
+    exit 0
     ;;
   *)
-    usage
+    do_usage
+    exit 1
     ;;
 esac

@@ -18,7 +18,7 @@ const config = {
     enabled: true,
     kBucketSize: 20,
     randomWalk: {
-      enabled: defaults.DISCOVER_RAND_ENABLED
+      enabled: true
     }
   },
   EXPERIMENTAL: {

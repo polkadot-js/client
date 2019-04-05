@@ -13,7 +13,7 @@
     "typescript": "^3.4.1"
   },
   "scripts": {
-    "build": "polkadot-dev-build-ts && (cd packages/client-cli && copyfiles scripts/* build)",
+    "build": "polkadot-dev-build-ts && (./docker.sh version) && (cd packages/client-cli && copyfiles scripts/* build)",
     "build:wasm": "./scripts/polkadot-wasm-js-compat.sh",
     "check": "yarn lint",
     "lint": "tslint --project . && tsc --noEmit --pretty",
