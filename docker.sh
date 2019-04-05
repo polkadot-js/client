@@ -22,19 +22,19 @@ VERSION=$(cat package.json \
   | sed 's/ //g')
 
 # helper function to update the version
-function version () {
+function do_version () {
   echo "*** Creating Dockerfile from latest npm version"
   sed "s/VERSION/$VERSION/g" Dockerfile.tmpl > Dockerfile
 }
 
 # helper function for the build logic
-function build () {
+function do_build () {
   echo "*** Building $NAME"
   docker build -t $NAME .
 }
 
 # helper function for the publishing logic
-function publish () {
+function do_publish () {
   TAGVER="latest" # $VERSION
 
   echo "*** Tagging $NAME $TAGVER"
@@ -62,16 +62,16 @@ function usage () {
 # execute the command specified
 case $CMD in
   build)
-    version
-    build
+    do_version
+    do_build
     exit 0
     ;;
   publish)
-    publish
+    do_publish
     exit 0
     ;;
   version)
-    version
+    do_version
     exit 0
     ;;
   *)
