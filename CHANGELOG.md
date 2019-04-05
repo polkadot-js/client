@@ -1,6 +1,8 @@
 # 0.23.1
 
+- Determine and listen on external p2p IP
 - WebRTC signalling server support
+- WebRTC (basic) signalling server via `--signal-active`
 - Light client sync, along with default to light
 - Light client browser deployment
 

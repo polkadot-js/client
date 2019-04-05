@@ -14,6 +14,7 @@ import { WasmConfig } from '@polkadot/client-wasm/types';
 export type Config = {
   chain: ChainName,
   db: DbConfig,
+  externalIp?: string | null,
   p2p: P2pConfig,
   rpc: RpcConfig,
   signal: SignalConfig,
@@ -25,6 +26,7 @@ export type Config = {
 export type ConfigPartial = {
   chain: ChainName,
   db: DbConfig,
+  externalIp?: string | null,
   p2p: P2pConfig,
   rpc: RpcConfig | null,
   signal: SignalConfig | null,

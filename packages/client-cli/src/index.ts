@@ -9,6 +9,7 @@ import Client from '@polkadot/client';
 import { logger } from '@polkadot/util';
 
 import getArgv from './argv';
+import getExternalIp from './getExternalIp';
 import keyToCamel from './keyToCamel';
 
 const l = logger('client/cli');
@@ -46,13 +47,19 @@ function cli (params?: string): Config {
 //   l.error('Uncaught exception', err);
 // });
 
+const config = cli();
 const client = new Client();
 
-client.start(cli()).catch((error) => {
-  l.error('Failed to start client', error);
+getExternalIp()
+  .then((externalIp) => {
+    console.error('externalIp', externalIp);
+    return client.start({ ...config, externalIp });
+  })
+  .catch((error) => {
+    l.error('Failed to start client', error);
 
-  process.exit(-1);
-});
+    process.exit(-1);
+  });
 
 process.on('SIGINT', async () => {
   l.log('Caught interrupt signal, shutting down');
