@@ -10,6 +10,7 @@ import db from './db';
 import operation from './operation';
 import p2p from './p2p';
 import rpc from './rpc';
+import signal from './signal';
 import telemetry from './telemetry';
 import wasm from './wasm';
 
@@ -18,7 +19,7 @@ export default function argv (cli?: string): Config {
     .version(operation['client-id'].default)
     .strict()
     .options({
-      ...operation, ...db, ...p2p, ...rpc, ...telemetry, ...wasm
+      ...operation, ...db, ...p2p, ...rpc, ...signal, ...telemetry, ...wasm
     })
     .wrap(
       Math.min(120, yargs.terminalWidth())
@@ -27,6 +28,7 @@ export default function argv (cli?: string): Config {
     .group(Object.keys(db), 'Database')
     .group(Object.keys(p2p), 'Peer-to-peer')
     .group(Object.keys(rpc), 'RPC server')
+    .group(Object.keys(signal), 'WebRTC Signalling')
     .group(Object.keys(telemetry), 'Telemetry client')
     .group(Object.keys(wasm), 'Wasm Runtime');
 

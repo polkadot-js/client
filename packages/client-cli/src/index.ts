@@ -19,14 +19,14 @@ function cli (params?: string): Config {
   return Object
     .keys(argv)
     .reduce((config, key) => {
-      if (/^(db|dev|p2p|rpc|telemetry|wasm)-/.test(key)) {
+      if (/^(db|dev|p2p|rpc|signal|telemetry|wasm)-/.test(key)) {
         const section = key.substr(0, key.indexOf('-')) as ConfigKeys;
         const name = keyToCamel(key, 1);
 
         (config as any)[section] = config[section] || {};
         // @ts-ignore ummm... no index, not Map-ing this one
         config[section][name] = argv[key];
-      } else if (!/^(db|dev|p2p|rpc|telemetry|wasm)[A-Z]/.test(key)) {
+      } else if (!/^(db|dev|p2p|rpc|signal|telemetry|wasm)[A-Z]/.test(key)) {
         const name = keyToCamel(key) as ConfigKeys;
 
         // @ts-ignore ummm... no index, not Map-ing this one

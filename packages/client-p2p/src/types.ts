@@ -31,6 +31,7 @@ export type P2pNode = {
 };
 
 export type P2pConfig = {
+  active: boolean,
   address: string,
   discoverBoot?: boolean,
   discoverStar?: boolean,
