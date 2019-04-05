@@ -17,8 +17,8 @@ RUN curl -sL https://deb.nodesource.com/setup_10.x | bash -
 RUN apt-get install -y nodejs
 
 # env variable works around gyp install (lmdb) with root permissions
-RUN NPM_CONFIG_USER=root npm install -g @polkadot/client-cli@0.23.0-beta.7
+RUN NPM_CONFIG_USER=root npm install -g @polkadot/client-cli@0.23.0-beta.9
 
 # ports for p2p & ws-rpc
-EXPOSE 30333 60666 9966
+EXPOSE 30333 60666 9944
 ENTRYPOINT ["polkadot-js"]
