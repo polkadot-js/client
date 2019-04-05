@@ -206,7 +206,7 @@ export default class P2p extends EventEmitter implements P2pInterface {
     );
   }
 
-  private async _dialPeer (peer: PeerInterface, peers: PeersInterface): Promise<boolean> {
+  private async _dialPeer ({ peer }: QueuedPeer, peers: PeersInterface): Promise<boolean> {
     if (!this.node) {
       return false;
     }
@@ -223,7 +223,7 @@ export default class P2p extends EventEmitter implements P2pInterface {
 
       return true;
     } catch (error) {
-      l.debug(() => `dial error ${error.message}`);
+      l.debug(() => `${peer.shortId} dial error ${error.message}`);
     }
 
     return false;
@@ -263,7 +263,7 @@ export default class P2p extends EventEmitter implements P2pInterface {
 
         item.nextDial = now + defaults.WAIT_TIMEOUT;
 
-        await this._dialPeer(item.peer, this.peers);
+        await this._dialPeer(item, this.peers);
       }
     );
   }
