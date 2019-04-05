@@ -14,7 +14,6 @@ function getProtocol (type?: string | null): string {
 export default {
   ADDRESS: '0.0.0.0',
   DISCOVER_BOOT_ENABLED: true,
-  DISCOVER_RAND_ENABLED: true,
   DISCOVER_STAR_ENABLED: true,
   MAX_PEERS: 25,
   PING_INTERVAL: 30000,

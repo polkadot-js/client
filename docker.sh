@@ -21,15 +21,16 @@ VERSION=$(cat package.json \
   | sed 's/[",]//g' \
   | sed 's/ //g')
 
-# helper function for the build logic
-function build () {
+# helper function to update the version
+function version () {
   echo "*** Creating Dockerfile from latest npm version"
   sed "s/VERSION/$VERSION/g" Dockerfile.tmpl > Dockerfile
+}
 
+# helper function for the build logic
+function build () {
   echo "*** Building $NAME"
   docker build -t $NAME .
-
-  exit 0
 }
 
 # helper function for the publishing logic
@@ -41,8 +42,6 @@ function publish () {
 
   echo "*** Publishing $NAME $TAGVER"
   docker push $REPO/$NAME:$TAGVER
-
-  exit 0
 }
 
 # helper function for the usage logic
@@ -54,6 +53,7 @@ function usage () {
   echo "Commands:"
   echo "  build: builds a `$NAME` docker image"
   echo "  publish: publishes a built image to dockerhub"
+  echo "  version: Updates the Dockerfile version (typically on CI)"
   echo ""
 
   exit 1
@@ -62,12 +62,20 @@ function usage () {
 # execute the command specified
 case $CMD in
   build)
+    version
     build
+    exit 0
     ;;
   publish)
     publish
+    exit 0
+    ;;
+  version)
+    version
+    exit 0
     ;;
   *)
     usage
+    exit 1
     ;;
 esac
