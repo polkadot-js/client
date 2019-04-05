@@ -45,7 +45,7 @@ function do_publish () {
 }
 
 # helper function for the usage logic
-function usage () {
+function do_usage () {
   echo "This builds a docker image for the latest npm published version."
   echo "For maintainers publishing functionality is also provided."
   echo ""
@@ -55,8 +55,6 @@ function usage () {
   echo "  publish: publishes a built image to dockerhub"
   echo "  version: Updates the Dockerfile version (typically on CI)"
   echo ""
-
-  exit 1
 }
 
 # execute the command specified
@@ -75,7 +73,7 @@ case $CMD in
     exit 0
     ;;
   *)
-    usage
+    do_usage
     exit 1
     ;;
 esac
