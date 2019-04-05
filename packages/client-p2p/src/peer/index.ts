@@ -58,10 +58,6 @@ export default class Peer extends EventEmitter implements PeerInterface {
     delete this.connections[connId];
 
     l.debug(() => ['clearConnection', connId, this.shortId, this.isWritable()]);
-
-    if (!this.isWritable()) {
-      this.emit('disconnected');
-    }
   }
 
   private startPing () {

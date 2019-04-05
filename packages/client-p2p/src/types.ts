@@ -64,6 +64,7 @@ export type PeersInterface$Events = 'active' | 'connected' | 'dialled' | 'discon
 
 export type KnownPeer = {
   peer: PeerInterface,
+  isActive: boolean,
   isConnected: boolean
 };
 
@@ -71,7 +72,7 @@ export type PeersInterface = {
   add: (peerInfo: PeerInfo) => PeerInterface,
   count: () => number,
   get: (peerInfo: PeerInfo) => KnownPeer | undefined,
-  log: (event: PeersInterface$Events, peer: PeerInterface) => void,
+  log: (event: PeersInterface$Events, peer: PeerInterface, withDebug?: boolean) => void,
   on: (type: PeersInterface$Events, cb: (peer: any) => any) => any,
   peers: () => Array<PeerInterface>
 };
