@@ -11,7 +11,7 @@ import BN from 'bn.js';
 import EventEmitter from 'eventemitter3';
 import { BlockData } from '@polkadot/client-types';
 import { BlockAnnounce, BlockRequest, BlockResponse } from '@polkadot/client-types/messages';
-import { BlockRequest$Direction, BlockRequest$Fields, BlockRequest$From } from '@polkadot/client-types/messages/BlockRequest';
+import { BlockRequest$Direction, BlockRequest$From } from '@polkadot/client-types/messages/BlockRequest';
 import { Hash, Header } from '@polkadot/types';
 import { isBn, isU8a, logger, u8aToHex } from '@polkadot/util';
 
