@@ -10,17 +10,13 @@ import * as net from 'net';
 import socketio from 'socket.io';
 import { logger } from '@polkadot/util';
 
-import defaults from './defaults';
-
 const l = logger('wrtc/signal');
 
-type Connected = {
-  [index: string]: {
-    ma: string,
-    socket: net.Socket,
-    offer: SSOffer | null
-  }
+type Sockets = {
+  [index: string]: net.Socket
 };
+
+type MessageTypesOut = 'ws-handshake' | 'ws-peer';
 
 type SSOffer = {
   answer?: boolean,
@@ -36,14 +32,14 @@ type SSOffer = {
 
 export default class WebRTCSignal extends EventEmitter {
   private config: Config;
-  private connected: Connected;
   private server: net.Server | null;
+  private sockets: Sockets;
 
   constructor (config: Config) {
     super();
 
     this.config = config;
-    this.connected = {};
+    this.sockets = {};
     this.server = null;
   }
 
@@ -78,70 +74,55 @@ export default class WebRTCSignal extends EventEmitter {
     return true;
   }
 
-  private getId (ma: string): string {
-    const parts = ma.split('/');
-
-    return parts[parts.length - 1];
-  }
-
-  private send (ma: string | undefined | null, type: string, value: any) {
-    if (!ma) {
+  private send (ma: string | undefined | null, type: MessageTypesOut, value: any) {
+    if (!ma || !this.sockets[ma]) {
       return false;
     }
 
-    const id = this.getId(ma);
+    l.debug(() => ['send', type, value]);
 
-    if (!this.connected[id]) {
-      return false;
-    }
-
-    this.connected[id].socket.emit(type, value);
+    this.sockets[ma].emit(type, value);
 
     return true;
   }
 
+  private sendConnected (newMa: string): void {
+    Object.keys(this.sockets).forEach((ma) => {
+      if (newMa !== ma) {
+        // send new peer to old peer
+        this.send(ma, 'ws-peer', newMa);
+
+        // send old peer to new peer
+        this.send(newMa, 'ws-peer', ma);
+      }
+    });
+  }
+
   private onConnection = (socket: net.Socket) => {
-    let id: string;
     let ma: string;
-    let timerId: NodeJS.Timeout | null = null;
 
     const clear = () => {
-      if (timerId) {
-        clearInterval(timerId);
+      l.debug(() => ['disconnect', ma]);
 
-        timerId = null;
-      }
-
-      delete this.connected[id];
-    };
-
-    const provideAll = () => {
-      Object.keys(this.connected).forEach((connId) => {
-        if (connId === id) {
-          return;
-        }
-
-        const peer = this.connected[id];
-
-        this.send(ma, 'ws-peer', peer.ma);
-      });
+      delete this.sockets[ma];
     };
 
     socket.on('ss-join', (_ma?: string) => {
+      l.debug(() => ['ss-join', _ma]);
+
       if (!_ma) {
         return;
       }
 
       ma = _ma;
-      id = this.getId(ma);
-      timerId = setInterval(provideAll, defaults.INTERVAL);
 
-      this.connected[id] = { ma, offer: null, socket };
-
-      provideAll();
+      this.sockets[ma] = socket;
+      this.sendConnected(ma);
     });
 
     socket.on('ss-handshake', (offer?: SSOffer) => {
+      l.debug(() => ['ss-handshake', JSON.stringify(offer)]);
+
       if (!offer || !offer.dstMultiaddr || !offer.srcMultiaddr || !offer.signal) {
         return;
       }
@@ -157,5 +138,5 @@ export default class WebRTCSignal extends EventEmitter {
 
     socket.on('ss-leave', clear);
     socket.on('disconnect', clear);
-  };
+  }
 }

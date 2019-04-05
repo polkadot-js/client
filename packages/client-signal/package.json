@@ -24,6 +24,8 @@
   "homepage": "https://github.com/polkadot-js/client/tree/master/packages/client-signal#readme",
   "dependencies": {
     "@babel/runtime": "^7.4.3",
-    "@polkadot/util": "^0.76.1"
+    "@polkadot/util": "^0.76.1",
+    "socket.io": "^2.2.0",
+    "uws": "10.148.1"
   }
 }
