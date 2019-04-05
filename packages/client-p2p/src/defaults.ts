@@ -25,8 +25,7 @@ export default {
   MIN_PROTOCOL_VERSION,
   PROTOCOL_PING: '/ipfs/ping/1.0.0',
   SIGNALLING: [
-    // '/dns4/wrtc-01.polkadotjs.net/tcp/443/wss/p2p-webrtc-star/p2p',
-    '/dns4/wrtc-02.polkadotjs.net/tcp/443/wss/p2p-webrtc-star/p2p'
+    '/dns4/wrtc-01.polkadotjs.net/tcp/443/wss/p2p-webrtc-star/p2p',
     // '/ip4/127.0.0.1/tcp/9090/ws/p2p-webrtc-star/p2p'
   ],
   WAIT_TIMEOUT: 60 * 1000,
