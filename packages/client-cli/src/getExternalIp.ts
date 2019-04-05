@@ -8,7 +8,7 @@ const getContent = function (url: string): Promise<string> {
   return new Promise((resolve, reject) => {
     const request = https.get(url, (response) => {
       if (!response.statusCode || response.statusCode < 200 || response.statusCode > 299) {
-        reject(new Error(`Failed to load page, status code: ${response.statusCode}`));
+        reject(new Error(`Failed to load, status code: ${response.statusCode}`));
       }
 
       const body: Array<string> = [];
@@ -17,7 +17,7 @@ const getContent = function (url: string): Promise<string> {
       response.on('end', () => resolve(body.join('')));
     });
 
-    request.on('error', (err) => reject(err))
+    request.on('error', (error) => reject(error));
   });
 };
 
