@@ -51,10 +51,7 @@ const config = cli();
 const client = new Client();
 
 getExternalIp()
-  .then((externalIp) => {
-    console.error('externalIp', externalIp);
-    return client.start({ ...config, externalIp });
-  })
+  .then((externalIp) => client.start({ ...config, externalIp }))
   .catch((error) => {
     l.error('Failed to start client', error);
 
