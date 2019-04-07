@@ -11,3 +11,17 @@ export interface SignalInterface {
   start (): Promise<boolean>;
   stop (): Promise<boolean>;
 }
+
+export type SSSignal = {
+  type: 'offer' | 'answer',
+  sdp: string
+};
+
+export type SSOffer = {
+  answer?: boolean,
+  dstMultiaddr: string,
+  err?: string,
+  intentId: string,
+  srcMultiaddr: string,
+  signal: SSSignal
+};

@@ -12,11 +12,9 @@ import secio from 'libp2p-secio';
 import spdy from 'libp2p-spdy';
 import TCP from 'libp2p-tcp';
 import PeerInfo from 'peer-info';
-import WebRTCStar from 'libp2p-webrtc-star';
-// import WSStar from 'libp2p-websocket-star';
-// import WebSocketStarMulti from 'libp2p-websocket-star-multi';
 import WS from 'libp2p-websockets';
 import mplex from 'pull-mplex';
+import WebRTClient from '@polkadot/client-signal/client';
 
 // import defaults from '../defaults';
 
@@ -28,10 +26,10 @@ type Config = {
   wrtc?: any
 };
 
-export default function createModules (envType: EnvType, { id }: PeerInfo, { bootNodes, discoverBoot, discoverStar, nodes, wrtc }: Config): LibP2p.OptionsModules {
+export default function createModules (envType: EnvType, peerInfo: PeerInfo, { bootNodes, discoverBoot, discoverStar, nodes, wrtc }: Config): LibP2p.OptionsModules {
   const isCli = envType !== 'browser';
   const starTransports = discoverStar
-    ? [new WebRTCStar({ id, wrtc })] //  new WSStar({ id })
+    ? [new WebRTClient({ wrtc })]
     : [];
   const transport = isCli
     ? [new WS(), new TCP()]

@@ -3,6 +3,7 @@
 // of the Apache-2.0 license. See the LICENSE file for details.
 
 import { Config } from '@polkadot/client/types';
+import { SSOffer } from './types';
 
 import EventEmitter from 'eventemitter3';
 import Koa from 'koa';
@@ -17,18 +18,6 @@ type Sockets = {
 };
 
 type MessageTypesOut = 'ws-handshake' | 'ws-peer';
-
-type SSOffer = {
-  answer?: boolean,
-  dstMultiaddr: string,
-  err?: string,
-  intentId: string,
-  srcMultiaddr: string,
-  signal: {
-    type: 'offer' | 'answer',
-    sdp: string
-  }
-};
 
 export default class WebRTCSignal extends EventEmitter {
   private config: Config;
@@ -88,13 +77,8 @@ export default class WebRTCSignal extends EventEmitter {
 
   private sendConnected (newMa: string): void {
     Object.keys(this.sockets).forEach((ma) => {
-      if (newMa !== ma) {
-        // send new peer to old peer
-        this.send(ma, 'ws-peer', newMa);
-
-        // send old peer to new peer
-        this.send(newMa, 'ws-peer', ma);
-      }
+      this.send(ma, 'ws-peer', newMa);
+      this.send(newMa, 'ws-peer', ma);
     });
   }
 
@@ -116,8 +100,8 @@ export default class WebRTCSignal extends EventEmitter {
 
       ma = _ma;
 
-      this.sockets[ma] = socket;
       this.sendConnected(ma);
+      this.sockets[ma] = socket;
     });
 
     socket.on('ss-handshake', (offer?: SSOffer) => {

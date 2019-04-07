@@ -17,7 +17,7 @@ import EventEmitter from 'eventemitter3';
 import Chain from '@polkadot/client-chains';
 import P2p from '@polkadot/client-p2p';
 import Rpc from '@polkadot/client-rpc';
-import WebRTCSignal from '@polkadot/client-signal';
+import WebRTCSignal from '@polkadot/client-signal/server';
 import Telemetry from '@polkadot/client-telemetry';
 import { logger, formatNumber, isUndefined, u8aToHex } from '@polkadot/util';
 import { cryptoWaitReady } from '@polkadot/util-crypto';
