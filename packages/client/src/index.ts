@@ -157,19 +157,28 @@ export default class Client extends EventEmitter {
   }
 
   private runInformant = () => {
-    if (isUndefined(this.chain) || isUndefined(this.p2p)) {
+    if (isUndefined(this.chain)) {
       this.stopInformant();
 
       return;
     }
 
     const now = Date.now();
+    const numPeers = (this.p2p ? this.p2p.getNumPeers() : 0) + (this.signal ? this.signal.numConnected : 0);
+    const status = this.p2p ? this.p2p.sync.status : 'Idle';
+    const isSync = status === 'Sync';
+
+    if (!isUndefined(this.telemetry)) {
+      this.telemetry.intervalInfo(numPeers, status);
+    }
+
+    if (isUndefined(this.p2p)) {
+      return;
+    }
+
     const elapsed = now - this.prevTime;
-    const numPeers = this.p2p.getNumPeers();
     const bestHash = this.chain.blocks.bestHash.get();
     const bestNumber = this.chain.blocks.bestNumber.get();
-    const status = this.p2p.sync.status;
-    const isSync = status === 'Sync';
     const hasBlocks = this.prevBest && this.prevBest.lt(bestNumber);
     const numBlocks = hasBlocks && this.prevBest ? bestNumber.sub(this.prevBest) : new BN(1);
     const blockType = this.sync === 'full' ? 'block' : 'header';
@@ -194,9 +203,5 @@ export default class Client extends EventEmitter {
     this.prevBest = bestNumber;
     this.prevTime = now;
     this.prevImport = now;
-
-    if (!isUndefined(this.telemetry)) {
-      this.telemetry.intervalInfo(numPeers, status);
-    }
   }
 }

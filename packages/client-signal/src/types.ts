@@ -8,6 +8,8 @@ export type SignalConfig = {
 };
 
 export interface SignalInterface {
+  readonly numConnected: number;
+
   start (): Promise<boolean>;
   stop (): Promise<boolean>;
 }

@@ -32,6 +32,10 @@ export default class WebRTCSignal extends EventEmitter {
     this.server = null;
   }
 
+  get numConnected (): number {
+    return Object.keys(this.sockets).length;
+  }
+
   async start (): Promise<boolean> {
     await this.stop();
 
