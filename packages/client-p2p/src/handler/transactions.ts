@@ -9,7 +9,7 @@ import { Transactions } from '@polkadot/client-types/messages';
 
 // TODO Propagate
 function handleTransactions (self: P2pInterface, peer: PeerInterface, message: Transactions): void {
-  self.l.debug(() => [peer.shortId, 'Transactions', JSON.stringify(message)]);
+  // self.l.debug(() => [peer.shortId, 'Transactions', JSON.stringify(message)]);
 }
 
 (handleTransactions as Handler).type = Transactions.type;
