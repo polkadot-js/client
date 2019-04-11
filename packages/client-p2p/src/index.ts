@@ -240,11 +240,9 @@ export default class P2p extends EventEmitter implements P2pInterface {
       this._dialPeers();
     }, DIAL_INTERVAL);
 
-    const now = Date.now();
-
     if (peer && !this.dialQueue[peer.id]) {
       this.dialQueue[peer.id] = {
-        nextDial: now,
+        nextDial: 0,
         peer
       };
     }
@@ -253,15 +251,17 @@ export default class P2p extends EventEmitter implements P2pInterface {
       return;
     }
 
+    const now = Date.now();
+
     Object.keys(this.dialQueue).forEach(
       async (id: string): Promise<void> => {
         const item = this.dialQueue[id];
 
-        if (!this.peers || item.nextDial > now || item.peer.isActive()) {
+        if (!this.peers || (item.nextDial > now) || item.peer.isActive()) {
           return;
         }
 
-        item.nextDial = now + defaults.WAIT_TIMEOUT;
+        item.nextDial = Date.now() + defaults.WAIT_TIMEOUT + Math.floor(Math.random() * defaults.WAIT_TIMEOUT);
 
         await this._dialPeer(item, this.peers);
       }

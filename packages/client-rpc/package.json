@@ -27,7 +27,7 @@
   "homepage": "https://github.com/polkadot-js/client/tree/master/packages/client-rpc#readme",
   "devDependencies": {
     "@polkadot/client": "^0.23.0-beta.14",
-    "@polkadot/rpc-provider": "^0.76.1"
+    "@polkadot/rpc-provider": "^0.77.0-beta.3"
   },
   "dependencies": {
     "@babel/runtime": "^7.4.3",
