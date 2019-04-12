@@ -27,7 +27,8 @@ type OnMessage = {
 
 type QueuedPeer = {
   peer: PeerInterface,
-  nextDial: number
+  nextDial: number,
+  numDials: number
 };
 
 const DIAL_INTERVAL = 15000;
@@ -243,6 +244,7 @@ export default class P2p extends EventEmitter implements P2pInterface {
     if (peer && !this.dialQueue[peer.id]) {
       this.dialQueue[peer.id] = {
         nextDial: 0,
+        numDials: 1,
         peer
       };
     }
@@ -254,16 +256,22 @@ export default class P2p extends EventEmitter implements P2pInterface {
     const now = Date.now();
 
     Object.keys(this.dialQueue).forEach(
-      async (id: string): Promise<void> => {
+      (id: string): void => {
         const item = this.dialQueue[id];
 
         if (!this.peers || (item.nextDial > now) || item.peer.isActive()) {
           return;
         }
 
-        item.nextDial = Date.now() + defaults.WAIT_TIMEOUT + Math.floor(Math.random() * defaults.WAIT_TIMEOUT);
+        const delay = defaults.WAIT_TIMEOUT + Math.floor(Math.random() * defaults.WAIT_TIMEOUT);
 
-        await this._dialPeer(item, this.peers);
+        item.nextDial = Date.now() + (delay * item.numDials);
+        item.numDials = item.numDials + 1;
+
+        // TODO We really want to reset (when all ok and we have the status)
+        this._dialPeer(item, this.peers).catch(() => {
+          // ignore, handled above
+        });
       }
     );
   }
