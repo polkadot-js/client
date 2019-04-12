@@ -1,6 +1,6 @@
 {
   "name": "@polkadot/client-rpc",
-  "version": "0.23.0-beta.15",
+  "version": "0.23.0-beta.16",
   "description": "RPC server for a Polkadot client",
   "main": "index.js",
   "keywords": [
@@ -26,7 +26,7 @@
   },
   "homepage": "https://github.com/polkadot-js/client/tree/master/packages/client-rpc#readme",
   "devDependencies": {
-    "@polkadot/client": "^0.23.0-beta.15",
+    "@polkadot/client": "^0.23.0-beta.16",
     "@polkadot/rpc-provider": "^0.77.0-beta.3"
   },
   "dependencies": {
