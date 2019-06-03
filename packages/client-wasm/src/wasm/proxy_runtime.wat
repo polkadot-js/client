@@ -285,7 +285,7 @@
   (export "ext_secp256k1_ecdsa_recover" (func $secp256k1_ecdsa_recover))
   (export "ext_set_child_storage" (func $set_child_storage))
   (export "ext_set_storage" (func $set_storage))
-  (export "ext_sr25519_verify" (func $ed25519_verify))
+  (export "ext_sr25519_verify" (func $sr25519_verify))
   (export "ext_storage_root" (func $storage_root))
   (export "ext_twox_128" (func $twox_128))
 )
