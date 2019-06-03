@@ -16,9 +16,6 @@
   ],
   "contributors": [],
   "license": "Apache-2.0",
-  "engines": {
-    "node": "^10.13.0"
-  },
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org"
