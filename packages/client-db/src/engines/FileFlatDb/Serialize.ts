@@ -30,7 +30,7 @@ export default class Serialize {
   }
 
   protected _serializeKey (u8a: Uint8Array): NibbleBuffer {
-    assert(u8a.length <= defaults.KEY_SIZE, `${u8aToHex(u8a)} too large, expected <= 32 bytes`);
+    assert(u8a.length <= defaults.KEY_SIZE, `${u8aToHex(u8a)} too large, expected <= 32 bytes, found ${u8a.length} bytes`);
 
     let buffer;
     let full;

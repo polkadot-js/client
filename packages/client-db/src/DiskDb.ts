@@ -6,9 +6,10 @@ import { BaseDbOptions } from '@polkadot/db/types';
 
 import LruDb from '@polkadot/db/engines/LruDb';
 import TransactionDb from '@polkadot/db/engines/TransactionDb';
+import { assert } from '@polkadot/util';
 
 import FileFlatDb from './engines/FileFlatDb';
-import LmDb from './engines/LmDb';
+// import LmDb from './engines/LmDb';
 
 /**
  * @name DiskDb
@@ -67,9 +68,9 @@ import LmDb from './engines/LmDb';
  */
 export default class DiskDb extends TransactionDb {
   constructor (base: string, name: string, options: BaseDbOptions = {}) {
-    const backing = options.isNative
-      ? new FileFlatDb(base, name, options)
-      : new LmDb(base, name, options);
+    assert(options.isNative, 'LmDb support removed');
+
+    const backing = new FileFlatDb(base, name, options);
 
     super(
       options.isLru

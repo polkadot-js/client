@@ -47,11 +47,9 @@ export default class Dbs implements ChainDbs {
   }
 
   private createBackingDb (name: string, isMemory: boolean): TxDb {
-    const isNative = this.config.type === 'file';
-
     return isMemory
       ? new MemoryDb()
-      : new DiskDb(this.basePath, name, { isCompressed: false, isLru: true, isNative });
+      : new DiskDb(this.basePath, name, { isCompressed: false, isLru: true, isNative: true });
   }
 
   close (): void {

@@ -33,9 +33,9 @@ export default async function createListener (envType: EnvType, { address, disco
   if (isCli) {
     peerInfo.multiaddrs.add(constructMa(address, port, peerIdStr));
 
-    if (externalIp) {
-      peerInfo.multiaddrs.add(constructMa(externalIp, port, peerIdStr));
-    }
+    // if (externalIp) {
+    //   peerInfo.multiaddrs.add(constructMa(externalIp, port, peerIdStr));
+    // }
   }
 
   if (discoverStar) {

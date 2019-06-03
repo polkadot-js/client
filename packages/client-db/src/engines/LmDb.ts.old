@@ -2,6 +2,8 @@
 // This software may be modified and distributed under the terms
 // of the Apache-2.0 license. See the LICENSE file for details.
 
+// node-lmdb ^0.6.2
+
 import { BaseDb, BaseDbOptions, ProgressCb } from '@polkadot/db/types';
 
 import fs from 'fs';
