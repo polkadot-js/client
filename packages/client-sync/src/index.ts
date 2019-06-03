@@ -245,6 +245,9 @@ export default class Sync extends EventEmitter implements SyncInterface {
 
     for (let i = 0; i < blocks.length; i++) {
       const block = blocks[i];
+
+      // console.error(JSON.stringify(block), block.toHex());
+
       const dbBlock = this.chain.blocks.blockData.get(block.hash);
       const { header: { blockNumber } } = block;
       const queueNumber = blockNumber.toString();

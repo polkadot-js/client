@@ -183,14 +183,12 @@ export default class Chain implements ChainInterface {
     const { genesis: { raw } } = this.chain;
 
     this.state.db.transaction((): boolean => {
-      Object
-        .keys(raw)
-        .forEach((key) =>
-          this.state.db.put(
-            hexToU8a(key),
-            hexToU8a(raw[key])
-          )
-        );
+      Object.entries(raw).forEach(([key, value]) =>
+        this.state.db.put(
+          hexToU8a(key),
+          hexToU8a(value)
+        )
+      );
 
       return true;
     });

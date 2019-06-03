@@ -4,7 +4,7 @@
 
 import { SyncTypes } from './types';
 
-const SYNC_DEFAULT: SyncTypes = 'light';
+const SYNC_DEFAULT: SyncTypes = 'full';
 const MAX_REQUEST_BLOCKS = 128;
 const MAX_QUEUED_BLOCKS = MAX_REQUEST_BLOCKS * 8;
 

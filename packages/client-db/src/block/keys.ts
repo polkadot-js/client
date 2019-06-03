@@ -19,15 +19,12 @@ const createMethod = (method: string, key: string, { documentation, type }: Subs
     new Text(method),
     {
       documentation: new Vector(Text, documentation),
-      modifier: new StorageFunctionModifier(0),
+      modifier: new StorageFunctionModifier(1), // default
       type: new StorageFunctionType(type, isString(type) ? 0 : 1),
       toJSON: (): any =>
         key
     } as StorageFunctionMetadata,
-    {
-      key,
-      skipHashing: true
-    }
+    { key, skipHashing: false }
   );
 
 export default {
