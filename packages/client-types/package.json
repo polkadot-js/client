@@ -1,6 +1,6 @@
 {
   "name": "@polkadot/client-types",
-  "version": "0.23.0-beta.17",
+  "version": "0.23.0-beta.18",
   "description": "Types specific to the client implementation",
   "main": "index.js",
   "publishConfig": {
