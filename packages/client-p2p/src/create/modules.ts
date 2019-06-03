@@ -48,8 +48,8 @@ export default function createModules (envType: EnvType, peerInfo: PeerInfo, { b
     ],
     dht,
     peerDiscovery: peerDiscovery.concat(
-      starTransports.map(({ discovery }) => discovery)
-    ),
+      starTransports.map(({ discovery }) => discovery) as Array<any>
+    ) as Array<any>,
     transport: transport.concat(starTransports)
   };
 }

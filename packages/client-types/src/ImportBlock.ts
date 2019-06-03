@@ -2,8 +2,7 @@
 // This software may be modified and distributed under the terms
 // of the Apache-2.0 license. See the LICENSE file for details.
 
-import { Struct, Vector } from '@polkadot/types/codec';
-import { Bytes, Header } from '@polkadot/types';
+import { Bytes, Header, Struct, Vector } from '@polkadot/types';
 
 import BlockData from './BlockData';
 

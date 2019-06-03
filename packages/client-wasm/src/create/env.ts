@@ -2,8 +2,6 @@
 // This software may be modified and distributed under the terms
 // of the Apache-2.0 license. See the LICENSE file for details.
 
-/// <reference types="webassembly-js-api"/>
-
 import { RuntimeInterface } from '@polkadot/client-runtime/types';
 import { WasmInstanceExports } from '../types';
 

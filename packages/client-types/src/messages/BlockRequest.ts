@@ -34,7 +34,7 @@ export class BlockRequest$Direction extends Enum {
   }
 }
 
-export class BlockRequest$From extends EnumType<BlockNumber | Hash> {
+export class BlockRequest$From extends EnumType {
   constructor (value?: any, index?: number) {
     super({
       Hash,

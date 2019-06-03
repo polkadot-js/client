@@ -23,7 +23,7 @@ export default ({
     type: 'boolean'
   },
   'db-type': {
-    choices: ['file', 'lmdb', 'memory'],
+    choices: ['file', 'memory'],
     default: defaults.TYPE,
     description: 'The type of database type to use',
     type: 'string'

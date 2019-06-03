@@ -2,8 +2,8 @@
 // This software may be modified and distributed under the terms
 // of the Apache-2.0 license. See the LICENSE file for details.
 
-import createFunction from '@polkadot/storage/utils/createFunction';
-import { StorageFunctionMetadata, StorageFunctionModifier, StorageFunctionType } from '@polkadot/types/Metadata/v0/Modules';
+import createFunction from '@polkadot/storage/fromMetadata/createFunction';
+import { StorageFunctionMetadata, StorageFunctionModifier, StorageFunctionType } from '@polkadot/types/Metadata/v4/Storage';
 import { Text, Vector } from '@polkadot/types';
 import { isString } from '@polkadot/util';
 
@@ -25,8 +25,8 @@ const createMethod = (method: string, key: string, { documentation, type }: Subs
         key
     } as StorageFunctionMetadata,
     {
-      isUnhashed: false,
-      key
+      key,
+      skipHashing: true
     }
   );
 
