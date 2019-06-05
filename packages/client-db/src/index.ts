@@ -34,11 +34,11 @@ export default class Dbs implements ChainDbs {
     const isLight = sync === 'light';
 
     this.blocks = createBlockDb(
-      this.createBackingDb(`${isLight ? 'header' : 'block'}.db`, isMemory)
+      this.createBackingDb(isLight ? 'header' : 'block', isMemory)
     );
     this.state = createStateDb(
       new TrieDb(
-        this.createBackingDb('state.db', isMemory || isLight)
+        this.createBackingDb('state', isMemory || isLight)
       )
     );
 
@@ -49,7 +49,7 @@ export default class Dbs implements ChainDbs {
   private createBackingDb (name: string, isMemory: boolean): TxDb {
     return isMemory
       ? new MemoryDb()
-      : new DiskDb(this.basePath, name, { isCompressed: false, isLru: true, isNative: true });
+      : new DiskDb(this.basePath, name, { isCompressed: false, isLru: true });
   }
 
   close (): void {
@@ -63,17 +63,17 @@ export default class Dbs implements ChainDbs {
     }
 
     const newDb = new TrieDb(
-      this.createBackingDb('state.db.snapshot', false)
+      this.createBackingDb('state.snapshot', false)
     );
 
     newDb.open();
 
     this.state.db.snapshot(newDb, this.createProgress());
     this.state.db.close();
-    this.state.db.rename(this.basePath, `state.db.backup-${Date.now()}`);
+    this.state.db.rename(this.basePath, `state.backup-${Date.now()}`);
 
     newDb.close();
-    newDb.rename(this.basePath, 'state.db');
+    newDb.rename(this.basePath, 'state');
     newDb.open();
 
     this.state.db = newDb;

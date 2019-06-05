@@ -6,19 +6,16 @@ import { BaseDbOptions } from '@polkadot/db/types';
 
 import LruDb from '@polkadot/db/engines/LruDb';
 import TransactionDb from '@polkadot/db/engines/TransactionDb';
-import { assert } from '@polkadot/util';
 
-import FlatDb from './engines/FileFlatDb';
+// import FlatDb from './engines/FileFlatDb';
 import StructDb from './engines/FileStructDb';
 
 const LRU_SIZE = 8 * 1024;
 
 export default class DiskDb extends TransactionDb {
   constructor (base: string, name: string, options: BaseDbOptions = {}) {
-    assert(options.isNative, 'LmDb support removed');
-
     // const backing = new FlatDb(base, name, options);
-    const backing = new StructDb(`${base}-struct`, name, options);
+    const backing = new StructDb(base, name, options);
 
     super(
       options.isLru
