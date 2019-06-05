@@ -49,12 +49,12 @@ export default class FileStructDb extends Impl implements BaseDb {
 
     return !keyInfo
       ? null
-      : deserializeValue(keyInfo.valData);
+      : deserializeValue(keyInfo.valData, this._isCompressed);
   }
 
   put (key: Uint8Array, value: Uint8Array): void {
     l.debug(() => ['set', { key, value }]);
 
-    this._findValue(serializeKey(key), serializeValue(value));
+    this._findValue(serializeKey(key), serializeValue(value, this._isCompressed));
   }
 }

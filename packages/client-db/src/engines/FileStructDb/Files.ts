@@ -18,12 +18,14 @@ type Fds = {
 };
 
 export default class File {
+  protected _isCompressed: boolean;
   protected _isOpen: boolean = false;
   protected _fds: Array<Fds> = [];
   protected _path: string;
   protected _file: string;
 
   constructor (base: string, file: string, options: BaseDbOptions) {
+    this._isCompressed = options.isCompressed || false;
     this._file = file;
     this._path = path.join(base, file);
 

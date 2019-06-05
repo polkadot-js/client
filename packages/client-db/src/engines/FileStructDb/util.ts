@@ -4,6 +4,7 @@
 
 import { NibbleBuffer, ParsedHdr, ParsedKey, Slot, ValInfo } from './types';
 
+import lz4 from 'lz4';
 import { toNibbles } from '@polkadot/trie-codec/util';
 import { assert, bufferToU8a, u8aToBuffer, u8aToHex } from '@polkadot/util';
 
@@ -64,14 +65,22 @@ export function parseKey (keyData: Buffer): ParsedKey {
   };
 }
 
-export function deserializeValue (value: Buffer | null): Uint8Array | null {
-  return value
-    ? bufferToU8a(value)
+export function deserializeValue (buffer: Buffer | null, isCompressed: boolean): Uint8Array | null {
+  return buffer
+    ? bufferToU8a(
+      isCompressed
+        ? lz4.decode(buffer)
+        : buffer
+    )
     : null;
 }
 
-export function serializeValue (value: Uint8Array): Buffer {
-  return u8aToBuffer(value);
+export function serializeValue (u8a: Uint8Array, isCompressed: boolean): Buffer {
+  const buffer = u8aToBuffer(u8a);
+
+  return isCompressed
+    ? lz4.encode(buffer, { highCompression: true })
+    : buffer;
 }
 
 export function serializeKey (u8a: Uint8Array): NibbleBuffer {
