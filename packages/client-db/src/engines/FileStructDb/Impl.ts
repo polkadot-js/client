@@ -17,7 +17,7 @@ export default class Impl extends Files {
   protected _findValue (key: NibbleBuffer, value: Buffer | null = null, keyIndex: number = 1, hdrAt: number = 0): KVInfo | null {
     const hdr = this._readHdr(key.index, hdrAt);
     const parsedHdr = parseHdr(hdr);
-    const hdrIndex = key.nibbles[keyIndex];
+    const hdrIndex = key.parts[keyIndex];
     const entry = parsedHdr[hdrIndex];
 
     switch (entry.type) {
@@ -35,11 +35,11 @@ export default class Impl extends Files {
     }
   }
 
-  private __appendNewValue (key: NibbleBuffer, value: Buffer): ValInfo {
+  private __appendNewValue (key: NibbleBuffer, valData: Buffer): ValInfo {
     return {
-      valAt: this._appendVal(key.index, value),
-      valData: value,
-      valSize: value.length
+      valAt: this._appendVal(key.index, valData),
+      valData,
+      valSize: valData.length
     };
   }
 
@@ -48,11 +48,7 @@ export default class Impl extends Files {
     const keyData = newKey(key, valInfo);
     const keyAt = this._appendKey(key.index, keyData);
 
-    return {
-      ...valInfo,
-      keyAt,
-      keyData
-    };
+    return { ...valInfo, keyAt, keyData };
   }
 
   private __retrieveEmpty (key: NibbleBuffer, value: Buffer | null, keyIndex: number, hdr: Buffer, hdrAt: number, parsedHdr: ParsedHdr): KVInfo | null {
@@ -60,7 +56,7 @@ export default class Impl extends Files {
       return null;
     }
 
-    const hdrIndex = key.nibbles[keyIndex];
+    const hdrIndex = key.parts[keyIndex];
     const newInfo = this.__appendNewKeyValue(key, value);
 
     modifyHdr(hdr, hdrIndex, Slot.KEY, newInfo.keyAt);
@@ -70,16 +66,15 @@ export default class Impl extends Files {
   }
 
   private __retrieveKey (key: NibbleBuffer, value: Buffer | null, keyIndex: number, hdr: Buffer, hdrAt: number, parsedHdr: ParsedHdr): KVInfo | null {
-
-    const hdrIndex = key.nibbles[keyIndex];
+    const hdrIndex = key.parts[keyIndex];
     const keyAt = parsedHdr[hdrIndex].at;
     const keyData = this._readKey(key.index, keyAt);
     const prevKey = serializeKey(keyData.subarray(0, defaults.KEY_SIZE));
     let matchIndex = keyIndex;
 
     // see if this key matches fully with what we are supplied
-    while (matchIndex < defaults.KEY_PARTS_LENGTH) {
-      if (prevKey.nibbles[matchIndex] !== key.nibbles[matchIndex]) {
+    while (matchIndex < key.parts.length) {
+      if (prevKey.parts[matchIndex] !== key.parts[matchIndex]) {
         break;
       }
 
@@ -87,30 +82,19 @@ export default class Impl extends Files {
     }
 
     // we have a match, either retrieve or update
-    if (matchIndex === defaults.KEY_PARTS_LENGTH) {
+    if (matchIndex === key.parts.length) {
       if (value) {
         const { valAt, valData, valSize } = this.__appendNewValue(key, value);
 
         this._updateKey(key.index, keyAt, modifyKey(keyData, valAt, valSize));
 
-        return {
-          keyAt,
-          keyData,
-          valAt,
-          valData,
-          valSize
-        };
+        return { keyAt, keyData, valAt, valData, valSize };
       }
 
       const { valAt, valSize } = parseKey(keyData);
+      const valData = this._readVal(key.index, valAt, valSize);
 
-      return {
-        keyAt,
-        keyData,
-        valAt,
-        valData: this._readVal(key.index, valAt, valSize),
-        valSize
-      };
+      return { keyAt, keyData, valAt, valData, valSize };
     } else if (!value) {
       return null;
     }
@@ -121,14 +105,14 @@ export default class Impl extends Files {
 
     // write the last header - this contains the old and new keys at the correct indexes
     let lastAt = this._appendHdr(key.index, newHdr([
-      { dataAt: keyAt, hdrIndex: prevKey.nibbles[matchIndex], type: Slot.KEY },
-      { dataAt: newKv.keyAt, hdrIndex: key.nibbles[matchIndex], type: Slot.KEY }
+      { dataAt: keyAt, hdrIndex: prevKey.parts[matchIndex], type: Slot.KEY },
+      { dataAt: newKv.keyAt, hdrIndex: key.parts[matchIndex], type: Slot.KEY }
     ]));
 
     // make a tree from the header we are modifying down to the others
     for (let offset = 1; depth > 0; depth--, offset++) {
       lastAt = this._appendHdr(key.index, newHdr([
-        { dataAt: lastAt, hdrIndex: key.nibbles[matchIndex - offset], type: Slot.HDR }
+        { dataAt: lastAt, hdrIndex: key.parts[matchIndex - offset], type: Slot.HDR }
       ]));
     }
 

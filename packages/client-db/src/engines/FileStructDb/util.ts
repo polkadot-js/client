@@ -46,9 +46,10 @@ export function newKey (key: NibbleBuffer, { valAt, valSize }: ValInfo): Buffer 
 
 export function parseHdr (hdr: Buffer): ParsedHdr {
   const parsed: ParsedHdr = [];
+  const hdrLength = hdr.length;
   let offset = 0;
 
-  for (let i = 0; i < defaults.ENTRY_NUM; i++, offset += defaults.ENTRY_SIZE) {
+  for (let i = 0; offset < hdrLength; i++, offset += defaults.ENTRY_SIZE) {
     parsed.push({
       at: hdr.readUIntBE(offset + 1, defaults.UINT_SIZE),
       type: hdr[offset]
@@ -88,6 +89,8 @@ export function serializeKey (u8a: Uint8Array): NibbleBuffer {
 
   let full;
 
+  // for trie, we expect 32-bytes, however for straight xxhash-64 values, such
+  // as the keys from block, we extend the key to be the full 32 bytes
   if (u8a.length === defaults.KEY_SIZE) {
     full = u8a;
   } else {
@@ -96,13 +99,17 @@ export function serializeKey (u8a: Uint8Array): NibbleBuffer {
     full.set(u8a, 0);
   }
 
+  // the full nibbles - here we will use the first (index 0) as a pointer to the file,
+  // indicated by "index" and combine the second and third (1 & 2) for a 256-length first
+  // header. Both these make initial reads slightly more bearable.
   const nibbles = toNibbles(full);
+  const parts = nibbles.subarray(2);
 
-  // console.error(u8aToHex(u8a), u8aToHex(full), nibbles.subarray(1));
+  parts.set([(nibbles[1] << 4) + nibbles[2]], 0);
 
   return {
     buffer: u8aToBuffer(full),
     index: nibbles[0],
-    nibbles: nibbles.subarray(1)
+    parts
   };
 }

@@ -34,11 +34,11 @@ export default class Dbs implements ChainDbs {
     const isLight = sync === 'light';
 
     this.blocks = createBlockDb(
-      this.createBackingDb(isLight ? 'header' : 'block', isMemory, false)
+      this.createBackingDb(isLight ? 'header' : 'block', isMemory)
     );
     this.state = createStateDb(
       new TrieDb(
-        this.createBackingDb('state', isMemory || isLight, true)
+        this.createBackingDb('state', isMemory || isLight)
       )
     );
 
@@ -46,10 +46,10 @@ export default class Dbs implements ChainDbs {
     this.state.db.open();
   }
 
-  private createBackingDb (name: string, isMemory: boolean, isCompressed: boolean): TxDb {
+  private createBackingDb (name: string, isMemory: boolean): TxDb {
     return isMemory
       ? new MemoryDb()
-      : new DiskDb(this.basePath, name, { isCompressed, isLru: true });
+      : new DiskDb(this.basePath, name, { isCompressed: false, isLru: true });
   }
 
   close (): void {
@@ -63,7 +63,7 @@ export default class Dbs implements ChainDbs {
     }
 
     const newDb = new TrieDb(
-      this.createBackingDb('state.snapshot', false, true)
+      this.createBackingDb('state.snapshot', false)
     );
 
     newDb.open();

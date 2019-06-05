@@ -10,17 +10,17 @@ const ENTRY_SIZE = 1 + UINT_SIZE;
 
 // the size of a branch entry, 96 for nibbles, 1,536 for bytes
 const HDR_SIZE = ENTRY_NUM * ENTRY_SIZE;
+const HDR_SIZE_0 = ENTRY_NUM * HDR_SIZE;
 
 // key calculations
 const KEY_SIZE = 32;
-const KEY_PARTS_LENGTH = (KEY_SIZE * 2) - 1; // first byte for file
 const KEY_TOTAL_SIZE = KEY_SIZE + UINT_SIZE + UINT_SIZE;
 
 export default {
   ENTRY_NUM,
   ENTRY_SIZE,
   HDR_SIZE,
-  KEY_PARTS_LENGTH,
+  HDR_SIZE_0,
   KEY_SIZE,
   KEY_TOTAL_SIZE,
   UINT_SIZE

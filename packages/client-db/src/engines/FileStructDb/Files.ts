@@ -52,7 +52,7 @@ export default class File {
         const file = path.join(this._path, `${i.toString(16)}.${type as string}`);
 
         if (!fs.existsSync(file)) {
-          fs.writeFileSync(file, Buffer.alloc(type === 'hdr' ? defaults.HDR_SIZE : 0));
+          fs.writeFileSync(file, Buffer.alloc(type === 'hdr' ? defaults.HDR_SIZE_0 : 0));
         }
 
         const fd = fs.openSync(file, 'r+');
@@ -102,7 +102,8 @@ export default class File {
   }
 
   protected _readHdr (index: number, offset: number): Buffer {
-    return this.__read('hdr', index, offset, defaults.HDR_SIZE);
+    // our first header has a large value than the rest
+    return this.__read('hdr', index, offset, offset ? defaults.HDR_SIZE : defaults.HDR_SIZE_0);
   }
 
   protected _readKey (index: number, offset: number): Buffer {
@@ -121,7 +122,7 @@ export default class File {
     return this.__update('key', index, offset, buffer);
   }
 
-  protected _updateVal (index: number, offset: number, buffer: Buffer): number {
-    return this.__append('val', index, buffer);
-  }
+  // protected _updateVal (index: number, offset: number, buffer: Buffer): number {
+  //   return this.__append('val', index, buffer);
+  // }
 }
