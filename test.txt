@@ -1,0 +1,16 @@
+2019-06-04 23:21:20        EXECUTOR: Using new on-chain WASM code, header 0x240d3511d8769b59
+2019-06-04 23:21:21         RUNTIME: src/lib.rs
+2019-06-04 23:21:21         RUNTIME: 281
+2019-06-04 23:21:21         RUNTIME: 1
+2019-06-04 23:21:21        EXECUTOR: Failed importing #742039, 0xfed954…416b47 {"hash":"0xfed95440a27da371dc51cbb3057c75e279bf086e1b26c137ecae1172f6416b47","header":{"parentHash":"0x2cf35984d702f62cab0e8ac2cf9ea7c1d4bf8df2d61ed1a3e920719d8f3e40f2","number":742039,"stateRoot":"0xf920e50bfd88493a0741ec923b01d5482c8665688e2b9326bfd20b84b927583a","extrinsicsRoot":"0xcbb323a942f6b588a5f5d27a780b61bcf2ecdc66801b189b18f913a4328f50bf","digest":{"logs":[{"Consensus":[1634891105,"0xc4d7700f000000003d3e92f2f09ccf6ebd5a88c91b474d82b268383d1710b617b0ced0a4f9735581e9843169bf07530afe43d7b40349eab57b9cca6d56993b9104838742df411a0d"]}]}},"body":["0x01000003980ea55c","0x010d0000"],"receipt":null,"messageQueue":null,"justification":null}
+2019-06-04 23:21:21        EXECUTOR: RuntimeError: unreachable
+    at rust_begin_unwind (wasm-function[89]:36)
+    at core::panicking::panic_fmt::h8a97af3c4a58de81 (wasm-function[97]:70)
+    at Core_execute_block (wasm-function[242]:3162)
+    at wasm-function[4]:5
+    at apply (/Users/jacogreeff/Projects/polkadot/client/packages/client-wasm/src/index.ts:156:37)
+    at Executor.fn [as executeBlock] (/Users/jacogreeff/Projects/polkadot/client/packages/client-wasm/src/index.ts:59:20)
+    at executeBlock (/Users/jacogreeff/Projects/polkadot/client/packages/client-wasm/src/index.ts:103:14)
+    at DiskDb.transaction (/Users/jacogreeff/Projects/polkadot/client/node_modules/@polkadot/db/engines/TransactionDb.js:30:22)
+    at Trie.transaction (/Users/jacogreeff/Projects/polkadot/client/node_modules/@polkadot/trie-db/index.js:46:30)
+    at Executor.transaction (/Users/jacogreeff/Projects/polkadot/client/packages/client-wasm/src/index.ts:102:23)

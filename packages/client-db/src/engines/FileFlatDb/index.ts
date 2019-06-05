@@ -24,16 +24,16 @@ export default class FileFlatDb extends Impl implements BaseDb {
     this.assertOpen(false);
 
     this._open(this._path);
-    this._lruBranch.clear();
-    this._lruData.clear();
+    // this._lruBranch.clear();
+    // this._lruData.clear();
   }
 
   close (): void {
     this.assertOpen();
 
     this._close();
-    this._lruBranch.clear();
-    this._lruData.clear();
+    // this._lruBranch.clear();
+    // this._lruData.clear();
   }
 
   drop (): void {

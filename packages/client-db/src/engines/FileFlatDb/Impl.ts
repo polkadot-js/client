@@ -7,14 +7,14 @@ import { Key, NibbleBuffer, Slot, Value } from './types';
 import fs from 'fs';
 import { logger } from '@polkadot/util';
 
-import Cache from './Cache';
+import File from './File';
 import defaults from './defaults';
 
 const l = logger('db/flat');
 
-export default class Impl extends Cache {
+export default class Impl extends File {
   protected _getKeyValue (keyAt: number): Buffer {
-    return this._getCachedData(keyAt, defaults.KEY_TOTAL_SIZE);
+    return this._readData(keyAt, defaults.KEY_TOTAL_SIZE);
   }
 
   protected _retrieveBranch (doCreate: boolean, branch: Buffer, entryIndex: number, keyIndex: number, key: NibbleBuffer): Key | null {
@@ -64,7 +64,7 @@ export default class Impl extends Cache {
 
   protected _findKey (key: NibbleBuffer, doCreate: boolean, keyIndex: number, branchAt: number): Key | null {
     const entryIndex = key.parts[keyIndex] * defaults.ENTRY_SIZE;
-    const branch = this._getCachedBranch(branchAt);
+    const branch = this._readBranch(branchAt);
 
     l.debug(() => ['findKey', { key, doCreate, keyIndex, branchAt, branch, entryIndex }]);
 
@@ -96,7 +96,7 @@ export default class Impl extends Cache {
     l.debug(() => ['readValue', { keyValue }]);
 
     const { valueAt, valueLength } = this._extractValueInfo(keyValue);
-    const value = this._getCachedData(valueAt, valueLength);
+    const value = this._readData(valueAt, valueLength);
 
     return {
       value,
@@ -216,19 +216,14 @@ export default class Impl extends Cache {
 
   protected _writeUpdatedBuffer (buffer: Buffer, bufferAt: number): number {
     fs.writeSync(this._fd, buffer, 0, buffer.length, bufferAt);
-    this._cacheData(bufferAt, buffer);
 
     return bufferAt;
   }
 
-  protected _writeNewBuffer (buffer: Buffer, withCache: boolean = true): number {
+  protected _writeNewBuffer (buffer: Buffer): number {
     const startAt = this._fileSize;
 
     fs.writeSync(this._fd, buffer, 0, buffer.length, startAt);
-
-    if (withCache) {
-      this._cacheData(startAt, buffer);
-    }
 
     this._fileSize += buffer.length;
 
@@ -236,13 +231,22 @@ export default class Impl extends Cache {
   }
 
   protected _writeNewBuffers (buffers: Array<Buffer>): number {
-    let bufferAt = this._fileSize;
+    return this._writeNewBuffer(Buffer.concat(buffers));
+  }
 
-    buffers.forEach((buffer) => {
-      this._cacheData(bufferAt, buffer);
-      bufferAt += buffer.length;
-    });
+  protected _readBranch (branchAt: number): Buffer {
+    const branch = Buffer.alloc(defaults.BRANCH_SIZE);
 
-    return this._writeNewBuffer(Buffer.concat(buffers), false);
+    fs.readSync(this._fd, branch, 0, defaults.BRANCH_SIZE, branchAt);
+
+    return branch;
+  }
+
+  protected _readData (dataAt: number, length: number): Buffer {
+    const data = Buffer.alloc(length);
+
+    fs.readSync(this._fd, data, 0, length, dataAt);
+
+    return data;
   }
 }

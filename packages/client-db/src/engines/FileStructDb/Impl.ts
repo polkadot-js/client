@@ -1,0 +1,139 @@
+// Copyright 2017-2019 @polkadot/client-db authors & contributors
+// This software may be modified and distributed under the terms
+// of the Apache-2.0 license. See the LICENSE file for details.
+
+import { KVInfo, NibbleBuffer, ParsedHdr, Slot, ValInfo } from './types';
+
+// import { logger } from '@polkadot/util';
+
+import Files from './Files';
+import defaults from './defaults';
+import { modifyHdr, modifyKey, newHdr, newKey, parseHdr, parseKey, serializeKey } from './util';
+
+// const l = logger('db/struct');
+
+export default class Impl extends Files {
+  // skip first byte, part of the file
+  protected _findValue (key: NibbleBuffer, value: Buffer | null = null, keyIndex: number = 1, hdrAt: number = 0): KVInfo | null {
+    const hdr = this._readHdr(key.index, hdrAt);
+    const parsedHdr = parseHdr(hdr);
+    const hdrIndex = key.nibbles[keyIndex];
+    const entry = parsedHdr[hdrIndex];
+
+    switch (entry.type) {
+      case Slot.EMPTY:
+        return this.__retrieveEmpty(key, value, keyIndex, hdr, hdrAt, parsedHdr);
+
+      case Slot.HDR:
+        return this._findValue(key, value, keyIndex + 1, entry.at);
+
+      case Slot.KEY:
+        return this.__retrieveKey(key, value, keyIndex, hdr, hdrAt, parsedHdr);
+
+      default:
+        throw new Error(`Unhandled entry type ${entry.type}`);
+    }
+  }
+
+  private __appendNewValue (key: NibbleBuffer, value: Buffer): ValInfo {
+    return {
+      valAt: this._appendVal(key.index, value),
+      valData: value,
+      valSize: value.length
+    };
+  }
+
+  private __appendNewKeyValue (key: NibbleBuffer, value: Buffer): KVInfo {
+    const valInfo = this.__appendNewValue(key, value);
+    const keyData = newKey(key, valInfo);
+    const keyAt = this._appendKey(key.index, keyData);
+
+    return {
+      ...valInfo,
+      keyAt,
+      keyData
+    };
+  }
+
+  private __retrieveEmpty (key: NibbleBuffer, value: Buffer | null, keyIndex: number, hdr: Buffer, hdrAt: number, parsedHdr: ParsedHdr): KVInfo | null {
+    if (!value) {
+      return null;
+    }
+
+    const hdrIndex = key.nibbles[keyIndex];
+    const newInfo = this.__appendNewKeyValue(key, value);
+
+    modifyHdr(hdr, hdrIndex, Slot.KEY, newInfo.keyAt);
+    this._updateHdr(key.index, hdrAt, hdr);
+
+    return newInfo;
+  }
+
+  private __retrieveKey (key: NibbleBuffer, value: Buffer | null, keyIndex: number, hdr: Buffer, hdrAt: number, parsedHdr: ParsedHdr): KVInfo | null {
+
+    const hdrIndex = key.nibbles[keyIndex];
+    const keyAt = parsedHdr[hdrIndex].at;
+    const keyData = this._readKey(key.index, keyAt);
+    const prevKey = serializeKey(keyData.subarray(0, defaults.KEY_SIZE));
+    let matchIndex = keyIndex;
+
+    // see if this key matches fully with what we are supplied
+    while (matchIndex < defaults.KEY_PARTS_LENGTH) {
+      if (prevKey.nibbles[matchIndex] !== key.nibbles[matchIndex]) {
+        break;
+      }
+
+      matchIndex++;
+    }
+
+    // we have a match, either retrieve or update
+    if (matchIndex === defaults.KEY_PARTS_LENGTH) {
+      if (value) {
+        const { valAt, valData, valSize } = this.__appendNewValue(key, value);
+
+        this._updateKey(key.index, keyAt, modifyKey(keyData, valAt, valSize));
+
+        return {
+          keyAt,
+          keyData,
+          valAt,
+          valData,
+          valSize
+        };
+      }
+
+      const { valAt, valSize } = parseKey(keyData);
+
+      return {
+        keyAt,
+        keyData,
+        valAt,
+        valData: this._readVal(key.index, valAt, valSize),
+        valSize
+      };
+    } else if (!value) {
+      return null;
+    }
+
+    // write the new key and create a header with the 2 new values
+    const newKv = this.__appendNewKeyValue(key, value);
+    let depth = matchIndex - keyIndex - 1;
+
+    // write the last header - this contains the old and new keys at the correct indexes
+    let lastAt = this._appendHdr(key.index, newHdr([
+      { dataAt: keyAt, hdrIndex: prevKey.nibbles[matchIndex], type: Slot.KEY },
+      { dataAt: newKv.keyAt, hdrIndex: key.nibbles[matchIndex], type: Slot.KEY }
+    ]));
+
+    // make a tree from the header we are modifying down to the others
+    for (let offset = 1; depth > 0; depth--, offset++) {
+      lastAt = this._appendHdr(key.index, newHdr([
+        { dataAt: lastAt, hdrIndex: key.nibbles[matchIndex - offset], type: Slot.HDR }
+      ]));
+    }
+
+    this._updateHdr(key.index, hdrAt, modifyHdr(hdr, hdrIndex, Slot.HDR, lastAt));
+
+    return newKv;
+  }
+}
