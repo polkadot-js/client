@@ -60,7 +60,7 @@ export default class Impl extends Files {
     const newInfo = this.__appendNewKeyValue(key, value);
 
     modifyHdr(hdr, hdrIndex, Slot.KEY, newInfo.keyAt);
-    this._updateHdr(key.index, hdrAt, hdr);
+    this._updateHdrPartial(key.index, hdrAt, hdr, hdrIndex);
 
     return newInfo;
   }
@@ -116,7 +116,7 @@ export default class Impl extends Files {
       ]));
     }
 
-    this._updateHdr(key.index, hdrAt, modifyHdr(hdr, hdrIndex, Slot.HDR, lastAt));
+    this._updateHdrPartial(key.index, hdrAt, modifyHdr(hdr, hdrIndex, Slot.HDR, lastAt), hdrIndex);
 
     return newKv;
   }

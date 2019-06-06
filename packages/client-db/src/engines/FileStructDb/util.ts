@@ -6,12 +6,13 @@ import { NibbleBuffer, ParsedHdr, ParsedKey, Slot, ValInfo } from './types';
 
 import lz4 from 'lz4';
 import { toNibbles } from '@polkadot/trie-codec/util';
-import { assert, bufferToU8a, u8aToBuffer, u8aToHex } from '@polkadot/util';
+import { bufferToU8a, u8aToBuffer } from '@polkadot/util';
+import { blake2AsU8a } from '@polkadot/util-crypto';
 
 import defaults from './defaults';
 
 export function modifyHdr (hdr: Buffer, hdrIndex: number, type: Slot, at: number): Buffer {
-  const entryIndex = hdrIndex * defaults.ENTRY_SIZE;
+  const entryIndex = hdrIndex * defaults.HDR_ENTRY_SIZE;
 
   hdr.set([type], entryIndex);
   hdr.writeUIntBE(at, entryIndex + 1, defaults.UINT_SIZE);
@@ -49,7 +50,7 @@ export function parseHdr (hdr: Buffer): ParsedHdr {
   const hdrLength = hdr.length;
   let offset = 0;
 
-  for (let i = 0; offset < hdrLength; i++, offset += defaults.ENTRY_SIZE) {
+  for (let i = 0; offset < hdrLength; i++, offset += defaults.HDR_ENTRY_SIZE) {
     parsed.push({
       at: hdr.readUIntBE(offset + 1, defaults.UINT_SIZE),
       type: hdr[offset]
@@ -85,19 +86,12 @@ export function serializeValue (u8a: Uint8Array, isCompressed: boolean): Buffer 
 }
 
 export function serializeKey (u8a: Uint8Array): NibbleBuffer {
-  assert(u8a.length <= defaults.KEY_SIZE, () => `${u8aToHex(u8a)} too large, expected <= 32 bytes, found ${u8a.length} bytes`);
-
-  let full;
-
-  // for trie, we expect 32-bytes, however for straight xxhash-64 values, such
-  // as the keys from block, we extend the key to be the full 32 bytes
-  if (u8a.length === defaults.KEY_SIZE) {
-    full = u8a;
-  } else {
-    full = new Uint8Array(defaults.KEY_SIZE);
-
-    full.set(u8a, 0);
-  }
+  // Convert any non-32-byte keys into a hash of the key. This allows for proper
+  // key distribution. In practice, the inputs should already be hashed, in the
+  // case of using a trie, however if used directly, this would come into play
+  const full = u8a.length === defaults.KEY_SIZE
+    ? u8a
+    : blake2AsU8a(u8a);
 
   // the full nibbles - here we will use the first (index 0) as a pointer to the file,
   // indicated by "index" and combine the second and third (1 & 2) for a 256-length first

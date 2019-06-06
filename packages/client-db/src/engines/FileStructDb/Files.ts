@@ -89,6 +89,10 @@ export default class File {
     return offset;
   }
 
+  protected __updatePartial (type: keyof Fds, index: number, offset: number, buffer: Buffer, writeOffset: number, writeLength: number): void {
+    fs.writeSync(this._fds[index][type].fd, buffer, writeOffset, writeLength, offset + writeOffset);
+  }
+
   protected _appendHdr (index: number, buffer: Buffer): number {
     return this.__append('hdr', index, buffer);
   }
@@ -116,6 +120,10 @@ export default class File {
 
   protected _updateHdr (index: number, offset: number, buffer: Buffer): number {
     return this.__update('hdr', index, offset, buffer);
+  }
+
+  protected _updateHdrPartial (index: number, offset: number, buffer: Buffer, hdrIndex: number): void {
+    return this.__updatePartial('hdr', index, offset, buffer, defaults.HDR_ENTRY_SIZE * hdrIndex, defaults.HDR_ENTRY_SIZE);
   }
 
   protected _updateKey (index: number, offset: number, buffer: Buffer): number {

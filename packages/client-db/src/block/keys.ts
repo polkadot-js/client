@@ -24,7 +24,7 @@ const createMethod = (method: string, key: string, { documentation, type }: Subs
       toJSON: (): any =>
         key
     } as StorageFunctionMetadata,
-    { key, skipHashing: false }
+    { key, skipHashing: true }
   );
 
 export default {
