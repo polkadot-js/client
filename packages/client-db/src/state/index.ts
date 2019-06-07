@@ -4,9 +4,9 @@
 
 import { StateDb } from '../types';
 
+import BN from 'bn.js';
 // import MemoryDb from '@polkadot/db/Memory';
 import TrieDb from '@polkadot/trie-db';
-// import { u8aToHex } from '@polkadot/util';
 
 export default function createState (db: TrieDb): StateDb {
   let _db: TrieDb = db;
@@ -17,27 +17,25 @@ export default function createState (db: TrieDb): StateDb {
     },
 
     getRoot (): Uint8Array {
-      // console.error('getRoot', '\n\t', u8aToHex(_db.getRoot()));
-
       return _db.getRoot();
     },
 
     setRoot (root: Uint8Array): void {
-      // console.error('setRoot', '\n\t', u8aToHex(root), '\n\t', u8aToHex(_db.getRoot()));
-
       _db.setRoot(root);
     },
 
-    snapshot (): void {
-      // const newDb = new TrieDb(new MemoryDb());
-      // const oldDb = _db;
+    snapshot (blockNumber: BN): void {
+      // if (blockNumber.modn(2048) === 0) {
+      //   console.time('snapshot');
+      //   const newDb = new TrieDb(new MemoryDb());
 
-      // const keys = oldDb.snapshot(newDb);
+      //   const keys = _db.snapshot(newDb);
+      //   _db.close();
+      //   _db = newDb;
 
-      // console.log('snapshot', keys, '\n\t', u8aToHex(newDb.getRoot()));
-
-      // _db.close();
-      // _db = newDb;
+      //   console.timeEnd('snapshot');
+      //   console.log('*** snapshot size', keys, newDb.size());
+      // }
     }
   };
 }

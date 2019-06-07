@@ -51,7 +51,7 @@ export interface StateDb {
 
   getRoot (): Uint8Array;
   setRoot (root: Uint8Array): void;
-  snapshot (): void;
+  snapshot (blockNumber: BN): void;
 }
 
 export interface ChainDbs {

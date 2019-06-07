@@ -112,7 +112,7 @@ export default class Executor implements ExecutorInterface {
     const result = this.updateBlockDb(blockData);
 
     if (result) {
-      this.stateDb.snapshot();
+      this.stateDb.snapshot(blockNumber);
 
       l.debug(() => `Imported block #${blockNumber} (${Date.now() - start}ms)`);
     }
