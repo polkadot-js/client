@@ -2,7 +2,7 @@
 // This software may be modified and distributed under the terms
 // of the Apache-2.0 license. See the LICENSE file for details.
 
-import { TrieDb } from '@polkadot/trie-db/types';
+import { StateDb } from '@polkadot/client-db/types';
 import { RuntimeInterface, RuntimeInterface$Exports } from './types';
 
 import createChain from './chain';
@@ -14,7 +14,7 @@ import createSandbox from './sandbox';
 import createStorage from './storage';
 import instrument from './instrument';
 
-export default function runtime (stateDb: TrieDb): RuntimeInterface {
+export default function runtime (stateDb: StateDb): RuntimeInterface {
   const environment = createEnv(stateDb);
 
   return {

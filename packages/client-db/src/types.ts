@@ -13,7 +13,6 @@ export type DbConfig$Type = 'file' | 'lmdb' | 'memory';
 export type DbConfig = {
   compact: boolean,
   path: string,
-  snapshot: boolean,
   type: DbConfig$Type
 };
 
@@ -47,14 +46,15 @@ export type BlockDb = {
   header: StorageMethod$U8a
 };
 
-export type StateDb = {
-  db: TrieDb,
-  code: StorageMethod$U8a
-};
+export interface StateDb {
+  db: TrieDb;
+
+  getRoot (): Uint8Array;
+  setRoot (root: Uint8Array): void;
+  snapshot (): void;
+}
 
 export interface ChainDbs {
   readonly blocks: BlockDb;
   readonly state: StateDb;
-
-  snapshot (): void;
 }

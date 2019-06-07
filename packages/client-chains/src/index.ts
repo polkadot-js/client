@@ -48,10 +48,7 @@ export default class Chain implements ChainInterface {
 
     l.log(`${this.chain.name}, #${formatNumber(bestNumber)}, ${u8aToHex(bestHash, 48)} ${logGenesis}`);
 
-    // NOTE Snapshot _before_ we attach the runtime since it ties directly to the backing DBs
-    this.dbs.snapshot();
-
-    const runtime = createRuntime(this.state.db);
+    const runtime = createRuntime(this.state);
 
     this.executor = new Executor(config, this.blocks, this.state, runtime);
   }
@@ -79,7 +76,7 @@ export default class Chain implements ChainInterface {
 
     l.debug(`Initialising from state ${hexState}`);
 
-    this.state.db.setRoot(bestHeader.stateRoot);
+    this.state.setRoot(bestHeader.stateRoot);
 
     assert(u8aToHex(this.state.db.getRoot(), 48) === hexState, `Unable to move state to ${hexState}`);
 
