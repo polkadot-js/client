@@ -4,7 +4,7 @@
 
 import BN from 'bn.js';
 import { TxDb } from '@polkadot/db/types';
-import { TrieDb } from '@polkadot/trie-db/types';
+import { TrieDb, TrieEntry } from '@polkadot/trie-db/types';
 
 export type DbPathPrefix = 'database';
 
@@ -49,6 +49,7 @@ export type BlockDb = {
 export interface StateDb {
   db: TrieDb;
 
+  getRootEntry (): TrieEntry | null;
   getRoot (): Uint8Array;
   setRoot (root: Uint8Array): void;
   snapshot (blockNumber: BN): void;

@@ -40,6 +40,12 @@ export default class Chain implements ChainInterface {
     this.state = this.dbs.state;
     this.genesis = this.initGenesis();
 
+    // const entry = this.state.getRootEntry();
+
+    // if (entry) {
+    //   console.log(u8aToHex(entry[0]), entry[2].map((child) => u8aToHex(child)));
+    // }
+
     const bestHash = this.blocks.bestHash.get();
     const bestNumber = this.blocks.bestNumber.get();
     const logGenesis = bestNumber.isZero()
@@ -74,7 +80,7 @@ export default class Chain implements ChainInterface {
   private initGenesisFromBest (bestHeader: Header, rollback: boolean = true): ChainGenesis {
     const hexState = u8aToHex(bestHeader.stateRoot, 48);
 
-    l.debug(`Initialising from state ${hexState}`);
+    l.log(`Initializing from state ${hexState}`);
 
     this.state.setRoot(bestHeader.stateRoot);
 

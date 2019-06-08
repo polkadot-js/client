@@ -2,6 +2,7 @@
 // This software may be modified and distributed under the terms
 // of the Apache-2.0 license. See the LICENSE file for details.
 
+import { TrieEntry } from '@polkadot/trie-db/types';
 import { StateDb } from '../types';
 
 import BN from 'bn.js';
@@ -14,6 +15,10 @@ export default function createState (db: TrieDb): StateDb {
   return {
     get db (): TrieDb {
       return _db;
+    },
+
+    getRootEntry (): TrieEntry | null {
+      return _db.getEntry(_db.getRoot());
     },
 
     getRoot (): Uint8Array {
