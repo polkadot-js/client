@@ -4,3 +4,4 @@
 
 export { default as BlockData } from './BlockData';
 export { default as ImportBlock } from './ImportBlock';
+export { default as TrieChanges } from './TrieChanges';

@@ -6,10 +6,13 @@ import { TrieEntry } from '@polkadot/trie-db/types';
 import { StateDb } from '../types';
 
 import BN from 'bn.js';
+// import { TrieChanges } from '@polkadot/client-types';
 // import MemoryDb from '@polkadot/db/Memory';
 import TrieDb from '@polkadot/trie-db';
+// import { u8aToHex } from '@polkadot/util';
 
 export default function createState (db: TrieDb): StateDb {
+  // let _changes: TrieChanges | undefined;
   let _db: TrieDb = db;
 
   return {
@@ -30,6 +33,10 @@ export default function createState (db: TrieDb): StateDb {
     },
 
     snapshot (blockNumber: BN): void {
+      // _changes = new TrieChanges(_db.getEntry(), _changes);
+
+      // console.log(added.map((child) => u8aToHex(child)), removed.map((child) => u8aToHex(child)), same.map((child) => u8aToHex(child)));
+
       // if (blockNumber.modn(2048) === 0) {
       //   console.time('snapshot');
       //   const newDb = new TrieDb(new MemoryDb());
