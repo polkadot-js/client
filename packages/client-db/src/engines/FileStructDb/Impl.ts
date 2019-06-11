@@ -14,7 +14,7 @@ import { modifyHdr, modifyKey, newHdr, newKey, parseHdr, parseKey, serializeKey 
 
 export default class Impl extends Files {
   // skip first byte, part of the file
-  protected _findValue (key: NibbleBuffer, value: Buffer | null = null, keyIndex: number = 0, hdrAt: number = 0): KVInfo | null {
+  protected _findValue (key: NibbleBuffer, value: Buffer | null = null, withValue: boolean = true, keyIndex: number = 0, hdrAt: number = 0): KVInfo | null {
     const hdr = this._readHdr(key.index, hdrAt);
     const parsedHdr = parseHdr(hdr);
     const hdrIndex = key.parts[keyIndex];
@@ -25,10 +25,10 @@ export default class Impl extends Files {
         return this.__retrieveEmpty(key, value, keyIndex, hdr, hdrAt, parsedHdr);
 
       case Slot.HDR:
-        return this._findValue(key, value, keyIndex + 1, entry.at);
+        return this._findValue(key, value, withValue, keyIndex + 1, entry.at);
 
       case Slot.KEY:
-        return this.__retrieveKey(key, value, keyIndex, hdr, hdrAt, parsedHdr);
+        return this.__retrieveKey(key, value, withValue, keyIndex, hdr, hdrAt, parsedHdr);
 
       default:
         throw new Error(`Unhandled entry type ${entry.type}`);
@@ -65,7 +65,7 @@ export default class Impl extends Files {
     return newInfo;
   }
 
-  private __retrieveKey (key: NibbleBuffer, value: Buffer | null, keyIndex: number, hdr: Buffer, hdrAt: number, parsedHdr: ParsedHdr): KVInfo | null {
+  private __retrieveKey (key: NibbleBuffer, value: Buffer | null, withValue: boolean, keyIndex: number, hdr: Buffer, hdrAt: number, parsedHdr: ParsedHdr): KVInfo | null {
     const hdrIndex = key.parts[keyIndex];
     const keyAt = parsedHdr[hdrIndex].at;
     const keyData = this._readKey(key.index, keyAt);
@@ -92,7 +92,9 @@ export default class Impl extends Files {
       }
 
       const { valAt, valSize } = parseKey(keyData);
-      const valData = this._readVal(key.index, valAt, valSize);
+      const valData = withValue
+        ? this._readVal(key.index, valAt, valSize)
+        : null;
 
       return { keyAt, keyData, valAt, valData, valSize };
     } else if (!value) {

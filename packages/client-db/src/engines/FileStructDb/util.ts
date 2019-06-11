@@ -102,7 +102,7 @@ export function serializeKey (u8a: Uint8Array): NibbleBuffer {
 
     if (i === 0) {
       index = item & 0b1111;
-      parts.push((item >> 4) & 0b1111);
+      parts.push((item >> 4) & 0b11, (item >> 6) & 0b11);
     } else {
       parts.push(item & 0b11, (item >> 2) & 0b11, (item >> 4) & 0b11, (item >> 6) & 0b11);
     }

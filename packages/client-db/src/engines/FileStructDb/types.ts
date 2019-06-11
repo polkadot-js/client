@@ -8,6 +8,11 @@ export enum Slot {
   KEY = 2
 }
 
+export enum TrieDecoded {
+  UNTOUCHED = 0,
+  LINKED = 1
+}
+
 export type NibbleBuffer = {
   buffer: Buffer,
   index: number,

@@ -3,8 +3,10 @@
 // of the Apache-2.0 license. See the LICENSE file for details.
 
 import { BaseDb, ProgressCb } from '@polkadot/db/types';
+import { KVInfo, TrieDecoded } from './types';
 
-import { logger } from '@polkadot/util';
+import codec from '@polkadot/trie-codec';
+import { logger, compactToU8a, compactFromU8a } from '@polkadot/util';
 
 import Impl from './Impl';
 import { deserializeValue, serializeKey, serializeValue } from './util';
@@ -43,18 +45,87 @@ export default class FileStructDb extends Impl implements BaseDb {
   }
 
   get (key: Uint8Array): Uint8Array | null {
-    l.debug(() => ['get', { key }]);
+    // l.debug(() => ['get', { key }]);
 
     const keyInfo = this._findValue(serializeKey(key));
 
-    return !keyInfo
-      ? null
-      : deserializeValue(keyInfo.valData, this._isCompressed);
+    if (!keyInfo || !keyInfo.valData) {
+      return null;
+    }
+
+    let adjusted: Buffer | null = null;
+
+    if (this._isTrie) {
+      if (keyInfo.valData[0] === TrieDecoded.UNTOUCHED) {
+        adjusted = keyInfo.valData.subarray(1);
+      } else {
+        let offset = 1;
+        const recoded: Array<Buffer | null> = [];
+
+        while (offset < keyInfo.valData.length) {
+          if (keyInfo.valData[offset++] === TrieDecoded.UNTOUCHED) {
+            recoded.push(null);
+          } else {
+            const index = keyInfo.valData[offset++];
+            const [coffset, keyAt] = compactFromU8a(keyInfo.valData.subarray(offset));
+            const keyBuff = this._readKey(index, keyAt.toNumber());
+
+            offset += coffset;
+
+            recoded.push(keyBuff.subarray(0, 32));
+          }
+        }
+
+        adjusted = Buffer.from(codec.encode(recoded));
+      }
+    }
+
+    return deserializeValue(adjusted || keyInfo.valData, this._isCompressed);
   }
 
   put (key: Uint8Array, value: Uint8Array): void {
-    l.debug(() => ['set', { key, value }]);
+    // l.debug(() => ['put', { key, value }]);
 
-    this._findValue(serializeKey(key), serializeValue(value, this._isCompressed));
+    let adjusted: Uint8Array | null = null;
+
+    if (this._isTrie) {
+      const decoded = codec.decode(value);
+
+      // extension nodes are going away anyway, so just ignore, no worse off.
+      if (Array.isArray(decoded) && decoded.length === 17) {
+        // only deal with keys where it is an actual trie hash
+        const hasArrays = decoded.some((value) =>
+          Array.isArray(value) ||
+          (value ? value.length !== 32 : false)
+        );
+
+        // great we are dealing with keys only here
+        if (!hasArrays) {
+          const recoded: Array<number> = [TrieDecoded.LINKED];
+
+          decoded.forEach((value) => {
+            const u8a = value as Uint8Array | null;
+
+            if (u8a) {
+              const entry = serializeKey(u8a);
+              const keyInfo = this._findValue(entry, null, false) as KVInfo;
+
+              recoded.push(TrieDecoded.LINKED, entry.index, ...compactToU8a(keyInfo.keyAt));
+            } else {
+              recoded.push(TrieDecoded.UNTOUCHED);
+            }
+          });
+
+          adjusted = new Uint8Array(recoded);
+        }
+      }
+
+      if (!adjusted) {
+        adjusted = new Uint8Array(value.length + 1);
+        adjusted.set(value, 1);
+      }
+    }
+
+    this._findValue(serializeKey(key), serializeValue(adjusted || value, this._isCompressed));
   }
 }

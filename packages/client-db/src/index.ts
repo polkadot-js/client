@@ -2,7 +2,6 @@
 // This software may be modified and distributed under the terms
 // of the Apache-2.0 license. See the LICENSE file for details.
 
-import { TxDb } from '@polkadot/db/types';
 import { Config } from '@polkadot/client/types';
 import { ChainLoader } from '@polkadot/client-chains/types';
 import { BlockDb, StateDb, ChainDbs, DbConfig } from './types';
@@ -15,6 +14,9 @@ import { u8aToHex } from '@polkadot/util';
 import DiskDb from './DiskDb';
 import createBlockDb from './block';
 import createStateDb from './state';
+
+const BDB_OPT = { isCompressed: false, isLru: true, isTrie: false };
+const SDB_OPT = { isCompressed: false, isLru: true, isTrie: true };
 
 export default class Dbs implements ChainDbs {
   readonly blocks: BlockDb;
@@ -31,22 +33,18 @@ export default class Dbs implements ChainDbs {
     const isLight = sync === 'light';
 
     this.blocks = createBlockDb(
-      this.createBackingDb(isLight ? 'header' : 'block', isMemory)
+      isMemory
+        ? new MemoryDb()
+        : new DiskDb(this.basePath, isLight ? 'header' : 'block', BDB_OPT)
     );
-    this.state = createStateDb(
-      new TrieDb(
-        this.createBackingDb('state', isMemory || isLight)
-      )
-    );
+    this.state = createStateDb(new TrieDb(
+      isMemory || isLight
+        ? new MemoryDb()
+        : new DiskDb(this.basePath, 'state', SDB_OPT)
+    ));
 
     this.blocks.db.open();
     this.state.db.open();
-  }
-
-  private createBackingDb (name: string, isMemory: boolean): TxDb {
-    return isMemory
-      ? new MemoryDb()
-      : new DiskDb(this.basePath, name, { isCompressed: false, isLru: true });
   }
 
   close (): void {

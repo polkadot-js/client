@@ -55,7 +55,7 @@ describe.skip('FileStructDb', () => {
     beforeAll(() => {
       mkdirp.sync(location);
 
-      store = new Db(location, 'testing', {});
+      store = new Db(location, 'testing', { isCompressed: false, isLru: false, isTrie: false });
       store.open();
     });
 
@@ -178,7 +178,7 @@ describe.skip('FileStructDb', () => {
     beforeAll(() => {
       mkdirp.sync(location);
 
-      store = new Db(location, 'testing', {});
+      store = new Db(location, 'testing', { isCompressed: false, isLru: false, isTrie: true });
       store.open();
     });
 
@@ -207,7 +207,7 @@ describe.skip('FileStructDb', () => {
   describe('via TrieDb', () => {
     class TestDb extends TxDb {
       constructor (base: string, name: string) {
-        super(new Db(base, name, {}));
+        super(new Db(base, name, { isCompressed: false, isLru: false, isTrie: true }));
       }
     }
 

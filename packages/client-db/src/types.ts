@@ -10,6 +10,12 @@ export type DbPathPrefix = 'database';
 
 export type DbConfig$Type = 'file' | 'lmdb' | 'memory';
 
+export type DiskDbOptions = {
+  isCompressed: boolean,
+  isLru: boolean,
+  isTrie: boolean
+};
+
 export type DbConfig = {
   compact: boolean,
   path: string,

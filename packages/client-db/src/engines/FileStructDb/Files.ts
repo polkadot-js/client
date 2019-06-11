@@ -2,7 +2,7 @@
 // This software may be modified and distributed under the terms
 // of the Apache-2.0 license. See the LICENSE file for details.
 
-import { BaseDbOptions } from '@polkadot/db/types';
+import { DiskDbOptions } from '../../types';
 
 import fs from 'fs';
 import mkdirp from 'mkdirp';
@@ -19,13 +19,15 @@ type Fds = {
 
 export default class File {
   protected _isCompressed: boolean;
+  protected _isTrie: boolean = false;
   protected _isOpen: boolean = false;
   protected _fds: Array<Fds> = [];
   protected _path: string;
   protected _file: string;
 
-  constructor (base: string, file: string, options: BaseDbOptions) {
-    this._isCompressed = options.isCompressed || false;
+  constructor (base: string, file: string, options: DiskDbOptions) {
+    this._isCompressed = options.isCompressed;
+    this._isTrie = options.isTrie;
     this._file = file;
     this._path = path.join(base, file);
 
@@ -47,12 +49,14 @@ export default class File {
   }
 
   open (): void {
-    for (let i = 0; i < defaults.HDR_FILE_NUM; i++) {
+    const max = defaults.HDR_ENTRY_NUM * defaults.HDR_ENTRY_NUM;
+
+    for (let i = 0; i < max; i++) {
       this._fds[i] = (['idx', 'key', 'val'] as Array<keyof Fds>).reduce((fds, type) => {
         const file = path.join(this._path, `${i.toString(16)}.${type as string}`);
 
         if (!fs.existsSync(file)) {
-          fs.writeFileSync(file, Buffer.alloc(type === 'idx' ? defaults.HDR_SIZE_0 : 0));
+          fs.writeFileSync(file, Buffer.alloc(type === 'idx' ? defaults.HDR_SIZE : 0));
         }
 
         const fd = fs.openSync(file, 'r+');
@@ -106,8 +110,7 @@ export default class File {
   }
 
   protected _readHdr (index: number, offset: number): Buffer {
-    // our first header has a large value than the rest
-    return this.__read('idx', index, offset, offset ? defaults.HDR_SIZE : defaults.HDR_SIZE_0);
+    return this.__read('idx', index, offset, defaults.HDR_SIZE);
   }
 
   protected _readKey (index: number, offset: number): Buffer {
@@ -118,10 +121,6 @@ export default class File {
     return this.__read('val', index, offset, length);
   }
 
-  protected _updateHdr (index: number, offset: number, buffer: Buffer): number {
-    return this.__update('idx', index, offset, buffer);
-  }
-
   protected _updateHdrPartial (index: number, offset: number, buffer: Buffer, hdrIndex: number): void {
     return this.__updatePartial('idx', index, offset, buffer, defaults.HDR_ENTRY_SIZE * hdrIndex, defaults.HDR_ENTRY_SIZE);
   }
@@ -129,8 +128,4 @@ export default class File {
   protected _updateKey (index: number, offset: number, buffer: Buffer): number {
     return this.__update('key', index, offset, buffer);
   }
-
-  // protected _updateVal (index: number, offset: number, buffer: Buffer): number {
-  //   return this.__append('val', index, buffer);
-  // }
 }
