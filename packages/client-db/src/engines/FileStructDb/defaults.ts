@@ -4,26 +4,26 @@
 
 // 5 allows for 1,099,511,627,776 filesize (max allowed here is 6 as per Nodejs)
 // 4 allows for 4,294,967,296 filesize (* 16 = 68,719,476,736)
-const UINT_SIZE = 4;
+const U32_SIZE = 4;
 
 // the number of entries in a header
-const HDR_ENTRY_NUM = 4;
+const HDR_ENTRY_NUM = 16;
 
 // first byte for the type, followed by offset
-const HDR_ENTRY_SIZE = 1 + UINT_SIZE;
+const HDR_ENTRY_SIZE = 1 + U32_SIZE;
 
 // the size of a branch entry, 24 bytes
-const HDR_SIZE = HDR_ENTRY_NUM * HDR_ENTRY_SIZE;
+const HDR_TOTAL_SIZE = HDR_ENTRY_NUM * HDR_ENTRY_SIZE;
 
 // key calculations
-const KEY_SIZE = 32;
-const KEY_TOTAL_SIZE = KEY_SIZE + UINT_SIZE + UINT_SIZE;
+const KEY_DATA_SIZE = 32;
+const KEY_TOTAL_SIZE = KEY_DATA_SIZE + U32_SIZE + U32_SIZE;
 
 export default {
   HDR_ENTRY_NUM,
   HDR_ENTRY_SIZE,
-  HDR_SIZE,
-  KEY_SIZE,
+  HDR_TOTAL_SIZE,
+  KEY_DATA_SIZE,
   KEY_TOTAL_SIZE,
-  UINT_SIZE
+  U32_SIZE
 };

@@ -32,14 +32,14 @@ export function modifyHdr (hdr: Uint8Array, hdrIndex: number, type: Slot, at: nu
 }
 
 export function modifyKey (keyData: Uint8Array, valAt: number, valSize: number): Uint8Array {
-  writeU8aU32(keyData, valAt, defaults.KEY_SIZE);
-  writeU8aU32(keyData, valSize, defaults.KEY_SIZE + defaults.UINT_SIZE);
+  writeU8aU32(keyData, valAt, defaults.KEY_DATA_SIZE);
+  writeU8aU32(keyData, valSize, defaults.KEY_DATA_SIZE + defaults.U32_SIZE);
 
   return keyData;
 }
 
 export function newHdr (indexes: Array<{ dataAt: number, hdrIndex: number, type: Slot }>): Uint8Array {
-  const hdr = new Uint8Array(defaults.HDR_SIZE);
+  const hdr = new Uint8Array(defaults.HDR_TOTAL_SIZE);
 
   indexes.forEach(({ dataAt, hdrIndex, type }) =>
     modifyHdr(hdr, hdrIndex, type, dataAt)
@@ -73,8 +73,8 @@ export function parseHdr (hdr: Uint8Array): ParsedHdr {
 
 export function parseKey (keyData: Uint8Array): ParsedKey {
   return {
-    valAt: readU8aU32(keyData, defaults.KEY_SIZE),
-    valSize: readU8aU32(keyData, defaults.KEY_SIZE + defaults.UINT_SIZE)
+    valAt: readU8aU32(keyData, defaults.KEY_DATA_SIZE),
+    valSize: readU8aU32(keyData, defaults.KEY_DATA_SIZE + defaults.U32_SIZE)
   };
 }
 
@@ -96,7 +96,7 @@ export function serializeKey (u8a: Uint8Array): KeyParts {
   // Convert any non-32-byte keys into a hash of the key. This allows for proper
   // key distribution. In practice, the inputs should already be hashed, in the
   // case of using a trie, however if used directly, this would come into play
-  const buffer = u8a.length === defaults.KEY_SIZE
+  const buffer = u8a.length === defaults.KEY_DATA_SIZE
     ? u8a
     : blake2AsU8a(u8a);
 
@@ -108,9 +108,9 @@ export function serializeKey (u8a: Uint8Array): KeyParts {
 
     if (i === 0) {
       index = item & 0b1111;
-      parts.push((item >> 4) & 0b11, (item >> 6) & 0b11);
+      parts.push((item >> 4) & 0b1111); // 0b11, (item >> 6) & 0b11);
     } else {
-      parts.push(item & 0b11, (item >> 2) & 0b11, (item >> 4) & 0b11, (item >> 6) & 0b11);
+      parts.push(item & 0b1111, (item >> 4) & 0b1111); // 0b11, (item >> 2) & 0b11, (item >> 4) & 0b11, (item >> 6) & 0b11);
     }
   }
 

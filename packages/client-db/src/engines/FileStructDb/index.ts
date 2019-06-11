@@ -9,6 +9,7 @@ import codec from '@polkadot/trie-codec';
 import { logger } from '@polkadot/util';
 
 import Impl from './Impl';
+import defaults from './defaults';
 import { deserializeValue, serializeKey, readU8aU32, serializeValue, u32ToArray } from './util';
 
 const l = logger('db/struct');
@@ -77,7 +78,7 @@ export default class FileStructDb extends Impl implements BaseDb {
 
             offset += 4;
 
-            recoded.push(keyBuff.subarray(0, 32));
+            recoded.push(keyBuff.subarray(0, defaults.KEY_DATA_SIZE));
           }
         }
 

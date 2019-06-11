@@ -49,14 +49,14 @@ export default class File {
   }
 
   open (): void {
-    const max = defaults.HDR_ENTRY_NUM * defaults.HDR_ENTRY_NUM;
+    const max = defaults.HDR_ENTRY_NUM;
 
     for (let i = 0; i < max; i++) {
       this._fds[i] = (['idx', 'key', 'val'] as Array<keyof Fds>).reduce((fds, type) => {
         const file = path.join(this._path, `${i.toString(16)}.${type as string}`);
 
         if (!fs.existsSync(file)) {
-          fs.writeFileSync(file, new Uint8Array(type === 'idx' ? defaults.HDR_SIZE : 0));
+          fs.writeFileSync(file, new Uint8Array(type === 'idx' ? defaults.HDR_TOTAL_SIZE : 0));
         }
 
         const fd = fs.openSync(file, 'r+');
@@ -110,7 +110,7 @@ export default class File {
   }
 
   protected _readHdr (index: number, offset: number): Uint8Array {
-    return this.__read('idx', index, offset, defaults.HDR_SIZE);
+    return this.__read('idx', index, offset, defaults.HDR_TOTAL_SIZE);
   }
 
   protected _readKey (index: number, offset: number): Uint8Array {

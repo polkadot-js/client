@@ -69,7 +69,7 @@ export default class Impl extends Files {
     const hdrIndex = key.parts[keyIndex];
     const keyAt = parsedHdr[hdrIndex].at;
     const keyData = this._readKey(key.index, keyAt);
-    const prevKey = serializeKey(keyData.subarray(0, defaults.KEY_SIZE));
+    const prevKey = serializeKey(keyData.subarray(0, defaults.KEY_DATA_SIZE));
     let matchIndex = keyIndex;
 
     // see if this key matches fully with what we are supplied
