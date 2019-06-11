@@ -4,8 +4,6 @@
 
 import { KeyParts, ParsedHdr, ParsedKey, Slot, ValInfo } from './types';
 
-import lz4 from 'lz4';
-import { bufferToU8a } from '@polkadot/util';
 import { blake2AsU8a } from '@polkadot/util-crypto';
 
 import defaults from './defaults';
@@ -23,10 +21,7 @@ export function writeU8aU32 (u8a: Uint8Array, value: number, offset: number): vo
 }
 
 export function modifyHdr (hdr: Uint8Array, hdrIndex: number, type: Slot, at: number): Uint8Array {
-  const entryIndex = hdrIndex * defaults.HDR_ENTRY_SIZE;
-
-  // hdr.set([type], entryIndex);
-  writeU8aU32(hdr, (at << 2) | type, entryIndex);
+  writeU8aU32(hdr, (at << 2) | type, hdrIndex * defaults.HDR_ENTRY_SIZE);
 
   return hdr;
 }
@@ -78,20 +73,6 @@ export function parseKey (keyData: Uint8Array): ParsedKey {
     valAt: readU8aU32(keyData, defaults.KEY_DATA_SIZE),
     valSize: readU8aU32(keyData, defaults.KEY_DATA_SIZE + defaults.U32_SIZE)
   };
-}
-
-export function deserializeValue (buffer: Uint8Array | null, isCompressed: boolean): Uint8Array | null {
-  return buffer
-    ? isCompressed
-      ? bufferToU8a(lz4.decode(buffer))
-      : buffer
-    : null;
-}
-
-export function serializeValue (u8a: Uint8Array, isCompressed: boolean): Uint8Array {
-  return isCompressed
-    ? lz4.encode(u8a, { highCompression: true })
-    : u8a;
 }
 
 export function serializeKey (u8a: Uint8Array): KeyParts {

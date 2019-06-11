@@ -18,17 +18,13 @@ type Fds = {
 };
 
 export default class File {
-  protected _isCompressed: boolean;
   protected _isTrie: boolean = false;
   protected _isOpen: boolean = false;
-  protected _fds: Array<Fds> = [];
-  protected _path: string;
-  protected _file: string;
+  private _fds: Array<Fds> = [];
+  private _path: string;
 
   constructor (base: string, file: string, options: DiskDbOptions) {
-    this._isCompressed = options.isCompressed;
     this._isTrie = options.isTrie;
-    this._file = file;
     this._path = path.join(base, file);
 
     mkdirp.sync(this._path);
@@ -49,9 +45,7 @@ export default class File {
   }
 
   open (): void {
-    const max = defaults.HDR_ENTRY_NUM;
-
-    for (let i = 0; i < max; i++) {
+    for (let i = 0; i < defaults.HDR_ENTRY_NUM; i++) {
       this._fds[i] = (['idx', 'key', 'val'] as Array<keyof Fds>).reduce((fds, type) => {
         const file = path.join(this._path, `${i.toString(16)}.${type as string}`);
 

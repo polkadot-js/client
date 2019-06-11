@@ -37,9 +37,7 @@
     "@types/rimraf": "^2.0.2",
     "@types/snappy": "^6.0.0",
     "lru_map": "^0.3.3",
-    "lz4": "^0.6.2",
-    "mkdirp": "^0.5.1",
-    "snappy": "^6.1.2"
+    "mkdirp": "^0.5.1"
   },
   "devDependencies": {
     "@polkadot/keyring": "^0.93.0-beta.1"

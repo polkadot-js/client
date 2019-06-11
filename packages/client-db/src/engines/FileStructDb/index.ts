@@ -10,7 +10,7 @@ import { logger } from '@polkadot/util';
 
 import Impl from './Impl';
 import defaults from './defaults';
-import { deserializeValue, serializeKey, readU8aU32, serializeValue, u32ToArray } from './util';
+import { serializeKey, readU8aU32, u32ToArray } from './util';
 
 const l = logger('db/struct');
 
@@ -73,10 +73,9 @@ export default class FileStructDb extends Impl implements BaseDb {
           if (flag === FLAG_EMPTY) {
             recoded.push(null);
           } else {
-            const index = flag & UNFLAG_LINKED;
-            const keyBuff = this._readKey(index, readU8aU32(keyInfo.valData, offset));
+            const keyBuff = this._readKey(flag & UNFLAG_LINKED, readU8aU32(keyInfo.valData, offset));
 
-            offset += 4;
+            offset += defaults.U32_SIZE;
 
             recoded.push(keyBuff.subarray(0, defaults.KEY_DATA_SIZE));
           }
@@ -86,7 +85,7 @@ export default class FileStructDb extends Impl implements BaseDb {
       }
     }
 
-    return deserializeValue(adjusted || keyInfo.valData, this._isCompressed);
+    return adjusted || keyInfo.valData;
   }
 
   put (key: Uint8Array, value: Uint8Array): void {
@@ -101,8 +100,7 @@ export default class FileStructDb extends Impl implements BaseDb {
       if (Array.isArray(decoded) && decoded.length === 17) {
         // only deal with keys where it is an actual trie hash
         const hasArrays = decoded.some((value) =>
-          Array.isArray(value) ||
-          (value ? value.length !== 32 : false)
+          Array.isArray(value) || (value && value.length !== 32)
         );
 
         // great we are dealing with keys only here
@@ -132,6 +130,6 @@ export default class FileStructDb extends Impl implements BaseDb {
       }
     }
 
-    this._findValue(serializeKey(key), serializeValue(adjusted || value, this._isCompressed));
+    this._findValue(serializeKey(key), adjusted || value);
   }
 }
