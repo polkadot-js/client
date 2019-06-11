@@ -5,7 +5,6 @@
 import { NibbleBuffer, ParsedHdr, ParsedKey, Slot, ValInfo } from './types';
 
 import lz4 from 'lz4';
-import { toNibbles } from '@polkadot/trie-codec/util';
 import { bufferToU8a, u8aToBuffer } from '@polkadot/util';
 import { blake2AsU8a } from '@polkadot/util-crypto';
 
@@ -89,21 +88,25 @@ export function serializeKey (u8a: Uint8Array): NibbleBuffer {
   // Convert any non-32-byte keys into a hash of the key. This allows for proper
   // key distribution. In practice, the inputs should already be hashed, in the
   // case of using a trie, however if used directly, this would come into play
-  const full = u8a.length === defaults.KEY_SIZE
-    ? u8a
-    : blake2AsU8a(u8a);
+  const buffer = u8aToBuffer(
+    u8a.length === defaults.KEY_SIZE
+      ? u8a
+      : blake2AsU8a(u8a)
+  );
 
-  // the full nibbles - here we will use the first (index 0) as a pointer to the file,
-  // indicated by "index" and combine the second and third (1 & 2) for a 256-length first
-  // header. Both these make initial reads slightly more bearable.
-  const nibbles = toNibbles(full);
-  const parts = nibbles.subarray(2);
+  const parts: Array<number> = [];
+  let index = 0;
 
-  parts.set([(nibbles[1] << 4) + nibbles[2]], 0);
+  for (let i = 0; i < buffer.length; i++) {
+    const item = buffer[i];
 
-  return {
-    buffer: u8aToBuffer(full),
-    index: nibbles[0],
-    parts
-  };
+    if (i === 0) {
+      index = item & 0b1111;
+      parts.push((item >> 4) & 0b1111);
+    } else {
+      parts.push(item & 0b11, (item >> 2) & 0b11, (item >> 4) & 0b11, (item >> 6) & 0b11);
+    }
+  }
+
+  return { buffer, index, parts };
 }

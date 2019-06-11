@@ -14,7 +14,7 @@ import { modifyHdr, modifyKey, newHdr, newKey, parseHdr, parseKey, serializeKey 
 
 export default class Impl extends Files {
   // skip first byte, part of the file
-  protected _findValue (key: NibbleBuffer, value: Buffer | null = null, keyIndex: number = 1, hdrAt: number = 0): KVInfo | null {
+  protected _findValue (key: NibbleBuffer, value: Buffer | null = null, keyIndex: number = 0, hdrAt: number = 0): KVInfo | null {
     const hdr = this._readHdr(key.index, hdrAt);
     const parsedHdr = parseHdr(hdr);
     const hdrIndex = key.parts[keyIndex];

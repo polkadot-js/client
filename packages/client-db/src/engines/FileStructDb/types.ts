@@ -11,7 +11,7 @@ export enum Slot {
 export type NibbleBuffer = {
   buffer: Buffer,
   index: number,
-  parts: Uint8Array
+  parts: Array<number>
 };
 
 export type KeyInfo = {

@@ -12,7 +12,7 @@ import { assert } from '@polkadot/util';
 import defaults from './defaults';
 
 type Fds = {
-  hdr: { fd: number, file: string, size: number },
+  idx: { fd: number, file: string, size: number },
   key: { fd: number, file: string, size: number },
   val: { fd: number, file: string, size: number }
 };
@@ -47,12 +47,12 @@ export default class File {
   }
 
   open (): void {
-    for (let i = 0; i < 16; i++) {
-      this._fds[i] = (['hdr', 'key', 'val'] as Array<keyof Fds>).reduce((fds, type) => {
+    for (let i = 0; i < defaults.HDR_FILE_NUM; i++) {
+      this._fds[i] = (['idx', 'key', 'val'] as Array<keyof Fds>).reduce((fds, type) => {
         const file = path.join(this._path, `${i.toString(16)}.${type as string}`);
 
         if (!fs.existsSync(file)) {
-          fs.writeFileSync(file, Buffer.alloc(type === 'hdr' ? defaults.HDR_SIZE_0 : 0));
+          fs.writeFileSync(file, Buffer.alloc(type === 'idx' ? defaults.HDR_SIZE_0 : 0));
         }
 
         const fd = fs.openSync(file, 'r+');
@@ -94,7 +94,7 @@ export default class File {
   }
 
   protected _appendHdr (index: number, buffer: Buffer): number {
-    return this.__append('hdr', index, buffer);
+    return this.__append('idx', index, buffer);
   }
 
   protected _appendKey (index: number, buffer: Buffer): number {
@@ -107,7 +107,7 @@ export default class File {
 
   protected _readHdr (index: number, offset: number): Buffer {
     // our first header has a large value than the rest
-    return this.__read('hdr', index, offset, offset ? defaults.HDR_SIZE : defaults.HDR_SIZE_0);
+    return this.__read('idx', index, offset, offset ? defaults.HDR_SIZE : defaults.HDR_SIZE_0);
   }
 
   protected _readKey (index: number, offset: number): Buffer {
@@ -119,11 +119,11 @@ export default class File {
   }
 
   protected _updateHdr (index: number, offset: number, buffer: Buffer): number {
-    return this.__update('hdr', index, offset, buffer);
+    return this.__update('idx', index, offset, buffer);
   }
 
   protected _updateHdrPartial (index: number, offset: number, buffer: Buffer, hdrIndex: number): void {
-    return this.__updatePartial('hdr', index, offset, buffer, defaults.HDR_ENTRY_SIZE * hdrIndex, defaults.HDR_ENTRY_SIZE);
+    return this.__updatePartial('idx', index, offset, buffer, defaults.HDR_ENTRY_SIZE * hdrIndex, defaults.HDR_ENTRY_SIZE);
   }
 
   protected _updateKey (index: number, offset: number, buffer: Buffer): number {
