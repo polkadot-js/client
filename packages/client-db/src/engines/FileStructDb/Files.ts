@@ -98,11 +98,11 @@ export default class File {
   }
 
   protected _appendHdr (index: number, buffer: Uint8Array): number {
-    return this.__append('idx', index, buffer);
+    return this.__append('idx', index, buffer) / defaults.HDR_TOTAL_SIZE;
   }
 
   protected _appendKey (index: number, buffer: Uint8Array): number {
-    return this.__append('key', index, buffer);
+    return this.__append('key', index, buffer) / defaults.KEY_TOTAL_SIZE;
   }
 
   protected _appendVal (index: number, buffer: Uint8Array): number {
@@ -110,11 +110,11 @@ export default class File {
   }
 
   protected _readHdr (index: number, offset: number): Uint8Array {
-    return this.__read('idx', index, offset, defaults.HDR_TOTAL_SIZE);
+    return this.__read('idx', index, offset * defaults.HDR_TOTAL_SIZE, defaults.HDR_TOTAL_SIZE);
   }
 
   protected _readKey (index: number, offset: number): Uint8Array {
-    return this.__read('key', index, offset, defaults.KEY_TOTAL_SIZE);
+    return this.__read('key', index, offset * defaults.KEY_TOTAL_SIZE, defaults.KEY_TOTAL_SIZE);
   }
 
   protected _readVal (index: number, offset: number, length: number): Uint8Array {
@@ -122,10 +122,10 @@ export default class File {
   }
 
   protected _updateHdrPartial (index: number, offset: number, buffer: Uint8Array, hdrIndex: number): void {
-    return this.__updatePartial('idx', index, offset, buffer, defaults.HDR_ENTRY_SIZE * hdrIndex, defaults.HDR_ENTRY_SIZE);
+    this.__updatePartial('idx', index, offset * defaults.HDR_TOTAL_SIZE, buffer, defaults.HDR_ENTRY_SIZE * hdrIndex, defaults.HDR_ENTRY_SIZE);
   }
 
   protected _updateKey (index: number, offset: number, buffer: Uint8Array): number {
-    return this.__update('key', index, offset, buffer);
+    return this.__update('key', index, offset * defaults.KEY_TOTAL_SIZE, buffer) / defaults.KEY_TOTAL_SIZE;
   }
 }

@@ -25,8 +25,8 @@ export function writeU8aU32 (u8a: Uint8Array, value: number, offset: number): vo
 export function modifyHdr (hdr: Uint8Array, hdrIndex: number, type: Slot, at: number): Uint8Array {
   const entryIndex = hdrIndex * defaults.HDR_ENTRY_SIZE;
 
-  hdr.set([type], entryIndex);
-  writeU8aU32(hdr, at, entryIndex + 1);
+  // hdr.set([type], entryIndex);
+  writeU8aU32(hdr, (at << 2) | type, entryIndex);
 
   return hdr;
 }
@@ -62,9 +62,11 @@ export function parseHdr (hdr: Uint8Array): ParsedHdr {
   let offset = 0;
 
   for (let i = 0; offset < hdrLength; i++, offset += defaults.HDR_ENTRY_SIZE) {
+    const value = readU8aU32(hdr, offset);
+
     parsed.push({
-      at: readU8aU32(hdr, offset + 1),
-      type: hdr[offset]
+      at: value >> 2,
+      type: value & 0b11
     });
   }
 
