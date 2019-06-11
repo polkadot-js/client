@@ -53,14 +53,14 @@ export default class FileStructDb extends Impl implements BaseDb {
       return null;
     }
 
-    let adjusted: Buffer | null = null;
+    let adjusted: Uint8Array | null = null;
 
     if (this._isTrie) {
       if (keyInfo.valData[0] === TrieDecoded.UNTOUCHED) {
         adjusted = keyInfo.valData.subarray(1);
       } else {
         let offset = 1;
-        const recoded: Array<Buffer | null> = [];
+        const recoded: Array<Uint8Array | null> = [];
 
         while (offset < keyInfo.valData.length) {
           if (keyInfo.valData[offset++] === TrieDecoded.UNTOUCHED) {
@@ -76,7 +76,7 @@ export default class FileStructDb extends Impl implements BaseDb {
           }
         }
 
-        adjusted = Buffer.from(codec.encode(recoded));
+        adjusted = codec.encode(recoded);
       }
     }
 
@@ -108,7 +108,12 @@ export default class FileStructDb extends Impl implements BaseDb {
 
             if (u8a) {
               const entry = serializeKey(u8a);
+
+              // console.log(entry);
+
               const keyInfo = this._findValue(entry, null, false) as KVInfo;
+
+              // console.log(keyInfo);
 
               recoded.push(TrieDecoded.LINKED, entry.index, ...compactToU8a(keyInfo.keyAt));
             } else {

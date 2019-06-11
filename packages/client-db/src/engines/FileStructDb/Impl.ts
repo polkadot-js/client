@@ -2,7 +2,7 @@
 // This software may be modified and distributed under the terms
 // of the Apache-2.0 license. See the LICENSE file for details.
 
-import { KVInfo, NibbleBuffer, ParsedHdr, Slot, ValInfo } from './types';
+import { KVInfo, KeyParts, ParsedHdr, Slot, ValInfo } from './types';
 
 // import { logger } from '@polkadot/util';
 
@@ -14,7 +14,7 @@ import { modifyHdr, modifyKey, newHdr, newKey, parseHdr, parseKey, serializeKey 
 
 export default class Impl extends Files {
   // skip first byte, part of the file
-  protected _findValue (key: NibbleBuffer, value: Buffer | null = null, withValue: boolean = true, keyIndex: number = 0, hdrAt: number = 0): KVInfo | null {
+  protected _findValue (key: KeyParts, value: Uint8Array | null = null, withValue: boolean = true, keyIndex: number = 0, hdrAt: number = 0): KVInfo | null {
     const hdr = this._readHdr(key.index, hdrAt);
     const parsedHdr = parseHdr(hdr);
     const hdrIndex = key.parts[keyIndex];
@@ -35,7 +35,7 @@ export default class Impl extends Files {
     }
   }
 
-  private __appendNewValue (key: NibbleBuffer, valData: Buffer): ValInfo {
+  private __appendNewValue (key: KeyParts, valData: Uint8Array): ValInfo {
     return {
       valAt: this._appendVal(key.index, valData),
       valData,
@@ -43,7 +43,7 @@ export default class Impl extends Files {
     };
   }
 
-  private __appendNewKeyValue (key: NibbleBuffer, value: Buffer): KVInfo {
+  private __appendNewKeyValue (key: KeyParts, value: Uint8Array): KVInfo {
     const valInfo = this.__appendNewValue(key, value);
     const keyData = newKey(key, valInfo);
     const keyAt = this._appendKey(key.index, keyData);
@@ -51,7 +51,7 @@ export default class Impl extends Files {
     return { ...valInfo, keyAt, keyData };
   }
 
-  private __retrieveEmpty (key: NibbleBuffer, value: Buffer | null, keyIndex: number, hdr: Buffer, hdrAt: number, parsedHdr: ParsedHdr): KVInfo | null {
+  private __retrieveEmpty (key: KeyParts, value: Uint8Array | null, keyIndex: number, hdr: Uint8Array, hdrAt: number, parsedHdr: ParsedHdr): KVInfo | null {
     if (!value) {
       return null;
     }
@@ -65,7 +65,7 @@ export default class Impl extends Files {
     return newInfo;
   }
 
-  private __retrieveKey (key: NibbleBuffer, value: Buffer | null, withValue: boolean, keyIndex: number, hdr: Buffer, hdrAt: number, parsedHdr: ParsedHdr): KVInfo | null {
+  private __retrieveKey (key: KeyParts, value: Uint8Array | null, withValue: boolean, keyIndex: number, hdr: Uint8Array, hdrAt: number, parsedHdr: ParsedHdr): KVInfo | null {
     const hdrIndex = key.parts[keyIndex];
     const keyAt = parsedHdr[hdrIndex].at;
     const keyData = this._readKey(key.index, keyAt);

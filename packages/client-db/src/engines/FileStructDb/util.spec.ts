@@ -3,7 +3,7 @@
 // of the Apache-2.0 license. See the LICENSE file for details.
 
 import { hexToU8a } from '@polkadot/util';
-import { serializeValue } from './util';
+import { readU8aU32, serializeValue, writeU8aU32 } from './util';
 
 describe('util', () => {
   it('compresses when serializing', () => {
@@ -14,5 +14,13 @@ describe('util', () => {
     console.log('original vs serialized', u8a.length, cmp.length);
 
     expect(u8a.length !== cmp.length).toBe(true);
+  });
+
+  it('reads and writes u8a t uint32', () => {
+    const u8a = new Uint8Array(6);
+
+    writeU8aU32(u8a, 0x12345678, 1);
+
+    expect(readU8aU32(u8a, 1)).toEqual(0x12345678);
   });
 });

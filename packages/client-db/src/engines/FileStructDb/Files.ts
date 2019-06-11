@@ -56,7 +56,7 @@ export default class File {
         const file = path.join(this._path, `${i.toString(16)}.${type as string}`);
 
         if (!fs.existsSync(file)) {
-          fs.writeFileSync(file, Buffer.alloc(type === 'idx' ? defaults.HDR_SIZE : 0));
+          fs.writeFileSync(file, new Uint8Array(type === 'idx' ? defaults.HDR_SIZE : 0));
         }
 
         const fd = fs.openSync(file, 'r+');
@@ -69,7 +69,7 @@ export default class File {
     }
   }
 
-  protected __append (type: keyof Fds, index: number, buffer: Buffer): number {
+  protected __append (type: keyof Fds, index: number, buffer: Uint8Array): number {
     const offset = this._fds[index][type].size;
 
     fs.writeSync(this._fds[index][type].fd, buffer, 0, buffer.length, offset);
@@ -79,53 +79,53 @@ export default class File {
     return offset;
   }
 
-  protected __read (type: keyof Fds, index: number, offset: number, length: number): Buffer {
-    const buffer = Buffer.alloc(length);
+  protected __read (type: keyof Fds, index: number, offset: number, length: number): Uint8Array {
+    const buffer = new Uint8Array(length);
 
     fs.readSync(this._fds[index][type].fd, buffer, 0, length, offset);
 
     return buffer;
   }
 
-  protected __update (type: keyof Fds, index: number, offset: number, buffer: Buffer): number {
+  protected __update (type: keyof Fds, index: number, offset: number, buffer: Uint8Array): number {
     fs.writeSync(this._fds[index][type].fd, buffer, 0, buffer.length, offset);
 
     return offset;
   }
 
-  protected __updatePartial (type: keyof Fds, index: number, offset: number, buffer: Buffer, writeOffset: number, writeLength: number): void {
+  protected __updatePartial (type: keyof Fds, index: number, offset: number, buffer: Uint8Array, writeOffset: number, writeLength: number): void {
     fs.writeSync(this._fds[index][type].fd, buffer, writeOffset, writeLength, offset + writeOffset);
   }
 
-  protected _appendHdr (index: number, buffer: Buffer): number {
+  protected _appendHdr (index: number, buffer: Uint8Array): number {
     return this.__append('idx', index, buffer);
   }
 
-  protected _appendKey (index: number, buffer: Buffer): number {
+  protected _appendKey (index: number, buffer: Uint8Array): number {
     return this.__append('key', index, buffer);
   }
 
-  protected _appendVal (index: number, buffer: Buffer): number {
+  protected _appendVal (index: number, buffer: Uint8Array): number {
     return this.__append('val', index, buffer);
   }
 
-  protected _readHdr (index: number, offset: number): Buffer {
+  protected _readHdr (index: number, offset: number): Uint8Array {
     return this.__read('idx', index, offset, defaults.HDR_SIZE);
   }
 
-  protected _readKey (index: number, offset: number): Buffer {
+  protected _readKey (index: number, offset: number): Uint8Array {
     return this.__read('key', index, offset, defaults.KEY_TOTAL_SIZE);
   }
 
-  protected _readVal (index: number, offset: number, length: number): Buffer {
+  protected _readVal (index: number, offset: number, length: number): Uint8Array {
     return this.__read('val', index, offset, length);
   }
 
-  protected _updateHdrPartial (index: number, offset: number, buffer: Buffer, hdrIndex: number): void {
+  protected _updateHdrPartial (index: number, offset: number, buffer: Uint8Array, hdrIndex: number): void {
     return this.__updatePartial('idx', index, offset, buffer, defaults.HDR_ENTRY_SIZE * hdrIndex, defaults.HDR_ENTRY_SIZE);
   }
 
-  protected _updateKey (index: number, offset: number, buffer: Buffer): number {
+  protected _updateKey (index: number, offset: number, buffer: Uint8Array): number {
     return this.__update('key', index, offset, buffer);
   }
 }

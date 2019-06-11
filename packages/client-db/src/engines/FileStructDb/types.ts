@@ -13,20 +13,20 @@ export enum TrieDecoded {
   LINKED = 1
 }
 
-export type NibbleBuffer = {
-  buffer: Buffer,
+export type KeyParts = {
+  buffer: Uint8Array,
   index: number,
   parts: Array<number>
 };
 
 export type KeyInfo = {
   keyAt: number,
-  keyData: Buffer
+  keyData: Uint8Array
 };
 
 export type ValInfo = {
   valAt: number,
-  valData: Buffer | null,
+  valData: Uint8Array | null,
   valSize: number
 };
 
