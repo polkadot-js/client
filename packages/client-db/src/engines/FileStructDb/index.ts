@@ -3,15 +3,19 @@
 // of the Apache-2.0 license. See the LICENSE file for details.
 
 import { BaseDb, ProgressCb } from '@polkadot/db/types';
-import { KVInfo, TrieDecoded } from './types';
+import { KVInfo } from './types';
 
 import codec from '@polkadot/trie-codec';
-import { logger, compactToU8a, compactFromU8a } from '@polkadot/util';
+import { logger } from '@polkadot/util';
 
 import Impl from './Impl';
-import { deserializeValue, serializeKey, serializeValue } from './util';
+import { deserializeValue, serializeKey, readU8aU32, serializeValue, u32ToArray } from './util';
 
 const l = logger('db/struct');
+
+const FLAG_EMPTY = 0;
+const FLAG_LINKED = 0b10000000;
+const UNFLAG_LINKED = 0b01111111;
 
 export default class FileStructDb extends Impl implements BaseDb {
   drop (): void {
@@ -56,21 +60,22 @@ export default class FileStructDb extends Impl implements BaseDb {
     let adjusted: Uint8Array | null = null;
 
     if (this._isTrie) {
-      if (keyInfo.valData[0] === TrieDecoded.UNTOUCHED) {
+      if (keyInfo.valData[0] === FLAG_EMPTY) {
         adjusted = keyInfo.valData.subarray(1);
       } else {
         let offset = 1;
         const recoded: Array<Uint8Array | null> = [];
 
         while (offset < keyInfo.valData.length) {
-          if (keyInfo.valData[offset++] === TrieDecoded.UNTOUCHED) {
+          const flag = keyInfo.valData[offset++];
+
+          if (flag === FLAG_EMPTY) {
             recoded.push(null);
           } else {
-            const index = keyInfo.valData[offset++];
-            const [coffset, keyAt] = compactFromU8a(keyInfo.valData.subarray(offset));
-            const keyBuff = this._readKey(index, keyAt.toNumber());
+            const index = flag & UNFLAG_LINKED;
+            const keyBuff = this._readKey(index, readU8aU32(keyInfo.valData, offset));
 
-            offset += coffset;
+            offset += 4;
 
             recoded.push(keyBuff.subarray(0, 32));
           }
@@ -101,23 +106,18 @@ export default class FileStructDb extends Impl implements BaseDb {
 
         // great we are dealing with keys only here
         if (!hasArrays) {
-          const recoded: Array<number> = [TrieDecoded.LINKED];
+          const recoded: Array<number> = [17 | FLAG_LINKED];
 
           decoded.forEach((value) => {
             const u8a = value as Uint8Array | null;
 
             if (u8a) {
               const entry = serializeKey(u8a);
-
-              // console.log(entry);
-
               const keyInfo = this._findValue(entry, null, false) as KVInfo;
 
-              // console.log(keyInfo);
-
-              recoded.push(TrieDecoded.LINKED, entry.index, ...compactToU8a(keyInfo.keyAt));
+              recoded.push(entry.index | FLAG_LINKED, ...u32ToArray(keyInfo.keyAt));
             } else {
-              recoded.push(TrieDecoded.UNTOUCHED);
+              recoded.push(FLAG_EMPTY);
             }
           });
 

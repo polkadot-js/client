@@ -9,8 +9,7 @@ export enum Slot {
 }
 
 export enum TrieDecoded {
-  UNTOUCHED = 0,
-  LINKED = 1
+  UNTOUCHED = 0
 }
 
 export type KeyParts = {

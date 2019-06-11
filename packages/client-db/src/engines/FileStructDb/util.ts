@@ -10,12 +10,16 @@ import { blake2AsU8a } from '@polkadot/util-crypto';
 
 import defaults from './defaults';
 
+export function u32ToArray (value: number): Array<number> {
+  return [value & 0xff, (value >> 8) & 0xff, (value >> 16) & 0xff, (value >> 24) & 0xff];
+}
+
 export function readU8aU32 (u8a: Uint8Array, offset: number): number {
   return u8a[offset] + (u8a[offset + 1] << 8) + (u8a[offset + 2] << 16) + (u8a[offset + 3] << 24);
 }
 
 export function writeU8aU32 (u8a: Uint8Array, value: number, offset: number): void {
-  u8a.set([value & 0xff, (value >> 8) & 0xff, (value >> 16) & 0xff, (value >> 24) & 0xff], offset);
+  u8a.set(u32ToArray(value), offset);
 }
 
 export function modifyHdr (hdr: Uint8Array, hdrIndex: number, type: Slot, at: number): Uint8Array {
