@@ -5,6 +5,7 @@
 import { DiskDbOptions } from '../../types';
 
 import fs from 'fs';
+import { LRUMap } from 'lru_map';
 import mkdirp from 'mkdirp';
 import path from 'path';
 import { assert } from '@polkadot/util';
@@ -17,10 +18,13 @@ type Fds = {
   val: { fd: number, file: string, size: number }
 };
 
+const LRU_IDX_SIZE = 2048;
+
 export default class File {
   protected _isTrie: boolean = false;
   protected _isOpen: boolean = false;
   private _fds: Array<Fds> = [];
+  private _lru: { [index: number]: LRUMap<number,Uint8Array> } = {};
   private _path: string;
 
   constructor (base: string, file: string, options: DiskDbOptions) {
@@ -46,6 +50,7 @@ export default class File {
 
   open (): void {
     for (let i = 0; i < defaults.HDR_ENTRY_NUM; i++) {
+      this._lru[i] = new LRUMap(LRU_IDX_SIZE);
       this._fds[i] = (['idx', 'key', 'val'] as Array<keyof Fds>).reduce((fds, type) => {
         const file = path.join(this._path, `${i.toString(16)}.${type as string}`);
 
@@ -92,7 +97,11 @@ export default class File {
   }
 
   protected _appendHdr (index: number, buffer: Uint8Array): number {
-    return this.__append('idx', index, buffer) / defaults.HDR_TOTAL_SIZE;
+    const offset = this.__append('idx', index, buffer) / defaults.HDR_TOTAL_SIZE;
+
+    this._lru[index].set(offset, buffer);
+
+    return offset;
   }
 
   protected _appendKey (index: number, buffer: Uint8Array): number {
@@ -104,7 +113,17 @@ export default class File {
   }
 
   protected _readHdr (index: number, offset: number): Uint8Array {
-    return this.__read('idx', index, offset * defaults.HDR_TOTAL_SIZE, defaults.HDR_TOTAL_SIZE);
+    const cached = this._lru[index].get(offset);
+
+    if (cached) {
+      return cached;
+    }
+
+    const buffer = this.__read('idx', index, offset * defaults.HDR_TOTAL_SIZE, defaults.HDR_TOTAL_SIZE);
+
+    this._lru[index].set(offset, buffer);
+
+    return buffer;
   }
 
   protected _readKey (index: number, offset: number): Uint8Array {

@@ -9,7 +9,7 @@ import TransactionDb from '@polkadot/db/engines/TransactionDb';
 
 import StructDb from './engines/FileStructDb';
 
-const LRU_SIZE = 1 * 1024;
+const LRU_SIZE = 8 * 1024;
 
 export default class DiskDb extends TransactionDb {
   constructor (base: string, name: string, options: DiskDbOptions) {
