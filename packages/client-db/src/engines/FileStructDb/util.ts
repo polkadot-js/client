@@ -4,20 +4,32 @@
 
 import { KeyParts, ParsedHdr, ParsedKey, Slot, ValInfo } from './types';
 
+import { compactToU8a, compactFromU8a } from '@polkadot/util';
 import { blake2AsU8a } from '@polkadot/util-crypto';
 
 import defaults from './defaults';
 
-export function u32ToArray (value: number): Array<number> {
-  return [value & 0xff, (value >> 8) & 0xff, (value >> 16) & 0xff, (value >> 24) & 0xff];
+export function u32ToArray (value: number, isCompact?: boolean): Array<number> | Uint8Array {
+  return isCompact
+    ? compactToU8a(value)
+    : [value & 0xff, (value >> 8) & 0xff, (value >> 16) & 0xff, (value >> 24) & 0xff];
 }
 
-export function readU8aU32 (u8a: Uint8Array, offset: number): number {
-  return u8a[offset] + (u8a[offset + 1] << 8) + (u8a[offset + 2] << 16) + (u8a[offset + 3] << 24);
+export function readU8aU32 (u8a: Uint8Array, offset: number, isCompact?: boolean): [number, number] {
+  if (isCompact) {
+    const [length, bn] = compactFromU8a(u8a.subarray(offset));
+
+    return [length, bn.toNumber()];
+  }
+
+  return [
+    defaults.U32_SIZE,
+    u8a[offset] + (u8a[offset + 1] << 8) + (u8a[offset + 2] << 16) + (u8a[offset + 3] << 24)
+  ];
 }
 
-export function writeU8aU32 (u8a: Uint8Array, value: number, offset: number): void {
-  u8a.set(u32ToArray(value), offset);
+export function writeU8aU32 (u8a: Uint8Array, value: number, offset: number, isCompact?: boolean): void {
+  u8a.set(u32ToArray(value, isCompact), offset);
 }
 
 export function modifyHdr (hdr: Uint8Array, hdrIndex: number, type: Slot, at: number): Uint8Array {
@@ -57,7 +69,7 @@ export function parseHdr (hdr: Uint8Array): ParsedHdr {
   let offset = 0;
 
   for (let i = 0; offset < hdrLength; i++, offset += defaults.HDR_ENTRY_SIZE) {
-    const value = readU8aU32(hdr, offset);
+    const [, value] = readU8aU32(hdr, offset);
 
     parsed.push({
       at: value >> 2,
@@ -70,8 +82,8 @@ export function parseHdr (hdr: Uint8Array): ParsedHdr {
 
 export function parseKey (keyData: Uint8Array): ParsedKey {
   return {
-    valAt: readU8aU32(keyData, defaults.KEY_DATA_SIZE),
-    valSize: readU8aU32(keyData, defaults.KEY_DATA_SIZE + defaults.U32_SIZE)
+    valAt: readU8aU32(keyData, defaults.KEY_DATA_SIZE)[1],
+    valSize: readU8aU32(keyData, defaults.KEY_DATA_SIZE + defaults.U32_SIZE)[1]
   };
 }
 
