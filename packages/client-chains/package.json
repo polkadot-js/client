@@ -30,10 +30,10 @@
     "@polkadot/client-db": "^0.23.0-beta.18",
     "@polkadot/client-runtime": "^0.23.0-beta.18",
     "@polkadot/client-wasm": "^0.23.0-beta.18",
-    "@polkadot/storage": "^0.81.0-beta.3",
-    "@polkadot/types": "^0.81.0-beta.3"
+    "@polkadot/storage": "^0.81.0-beta.7",
+    "@polkadot/types": "^0.81.0-beta.7"
   },
   "devDependencies": {
-    "@polkadot/extrinsics": "^0.81.0-beta.3"
+    "@polkadot/extrinsics": "^0.81.0-beta.7"
   }
 }

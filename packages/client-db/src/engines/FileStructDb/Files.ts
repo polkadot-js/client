@@ -12,19 +12,29 @@ import { assert } from '@polkadot/util';
 
 import defaults from './defaults';
 
-type Fds = {
-  idx: { fd: number, file: string, size: number },
-  key: { fd: number, file: string, size: number },
-  val: { fd: number, file: string, size: number }
+type Fd = {
+  fd: number,
+  file: string,
+  lru: LRUMap<number, Uint8Array>,
+  size: number
 };
 
-const LRU_IDX_SIZE = 2048;
+type Fds = {
+  idx: Fd,
+  key: Fd,
+  val: Fd
+};
+
+const LRU_SIZE = {
+  idx: 8 * 1024,
+  key: 8 * 1024,
+  val: 8 * 1024
+};
 
 export default class File {
   protected _isTrie: boolean = false;
   protected _isOpen: boolean = false;
   private _fds: Array<Fds> = [];
-  private _lru: { [index: number]: LRUMap<number,Uint8Array> } = {};
   private _path: string;
 
   constructor (base: string, file: string, options: DiskDbOptions) {
@@ -49,19 +59,20 @@ export default class File {
   }
 
   open (): void {
-    for (let i = 0; i < defaults.HDR_ENTRY_NUM; i++) {
-      this._lru[i] = new LRUMap(LRU_IDX_SIZE);
+    for (let i = 0; i < defaults.HDR_SPLIT_FILES; i++) {
       this._fds[i] = (['idx', 'key', 'val'] as Array<keyof Fds>).reduce((fds, type) => {
-        const file = path.join(this._path, `${i.toString(16)}.${type as string}`);
+        const prefix = `0${i}`.slice(-2);
+        const file = path.join(this._path, `${prefix}.${type as string}`);
 
         if (!fs.existsSync(file)) {
           fs.writeFileSync(file, new Uint8Array(type === 'idx' ? defaults.HDR_TOTAL_SIZE : 0));
         }
 
         const fd = fs.openSync(file, 'r+');
+        const lru = new LRUMap<number, Uint8Array>(LRU_SIZE[type]);
         const size = fs.fstatSync(fd).size;
 
-        fds[type] = { fd, file, size };
+        fds[type] = { fd, file, lru, size };
 
         return fds;
       }, {} as Fds);
@@ -69,19 +80,28 @@ export default class File {
   }
 
   protected __append (type: keyof Fds, index: number, buffer: Uint8Array): number {
-    const offset = this._fds[index][type].size;
+    const fd = this._fds[index][type];
+    const offset = fd.size;
 
-    fs.writeSync(this._fds[index][type].fd, buffer, 0, buffer.length, offset);
-
-    this._fds[index][type].size += buffer.length;
+    fs.writeSync(fd.fd, buffer, 0, buffer.length, offset);
+    fd.lru.set(offset, buffer);
+    fd.size += buffer.length;
 
     return offset;
   }
 
   protected __read (type: keyof Fds, index: number, offset: number, length: number): Uint8Array {
+    const fd = this._fds[index][type];
+    const cached = fd.lru.get(offset);
+
+    if (cached) {
+      return cached;
+    }
+
     const buffer = new Uint8Array(length);
 
-    fs.readSync(this._fds[index][type].fd, buffer, 0, length, offset);
+    fs.readSync(fd.fd, buffer, 0, length, offset);
+    fd.lru.set(offset, buffer);
 
     return buffer;
   }
@@ -97,11 +117,7 @@ export default class File {
   }
 
   protected _appendHdr (index: number, buffer: Uint8Array): number {
-    const offset = this.__append('idx', index, buffer) / defaults.HDR_TOTAL_SIZE;
-
-    this._lru[index].set(offset, buffer);
-
-    return offset;
+    return this.__append('idx', index, buffer) / defaults.HDR_TOTAL_SIZE;
   }
 
   protected _appendKey (index: number, buffer: Uint8Array): number {
@@ -113,17 +129,7 @@ export default class File {
   }
 
   protected _readHdr (index: number, offset: number): Uint8Array {
-    const cached = this._lru[index].get(offset);
-
-    if (cached) {
-      return cached;
-    }
-
-    const buffer = this.__read('idx', index, offset * defaults.HDR_TOTAL_SIZE, defaults.HDR_TOTAL_SIZE);
-
-    this._lru[index].set(offset, buffer);
-
-    return buffer;
+    return this.__read('idx', index, offset * defaults.HDR_TOTAL_SIZE, defaults.HDR_TOTAL_SIZE);
   }
 
   protected _readKey (index: number, offset: number): Uint8Array {

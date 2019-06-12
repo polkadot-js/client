@@ -86,14 +86,17 @@ export function serializeKey (u8a: Uint8Array): KeyParts {
   const parts: Array<number> = [];
   let index = 0;
 
-  for (let i = 0; i < buffer.length; i++) {
+  for (let i = 0; i < defaults.KEY_DATA_SIZE; i++) {
     const item = buffer[i];
 
     if (i === 0) {
-      index = item & 0b1111;
-      parts.push((item >> 4) & 0b1111); // 0b11, (item >> 6) & 0b11);
+      index = item & 0b111111; // for the file split
+      // parts.push((item >> 4) & 0b1111); // 16 entries per header
+      // parts.push((item >> 4) & 0b11, (item >> 6) & 0b11); // 4 entries per header
+      parts.push((item >> 6) & 0b11); // 4 entries per header
     } else {
-      parts.push(item & 0b1111, (item >> 4) & 0b1111); // 0b11, (item >> 2) & 0b11, (item >> 4) & 0b11, (item >> 6) & 0b11);
+      // parts.push(item & 0b1111, (item >> 4) & 0b1111); // 16
+      parts.push(item & 0b11, (item >> 2) & 0b11, (item >> 4) & 0b11, (item >> 6) & 0b11); // 4
     }
   }
 

@@ -10,7 +10,7 @@ import { logger } from '@polkadot/util';
 
 import Impl from './Impl';
 import defaults from './defaults';
-import { serializeKey, readU8aU32, u32ToArray } from './util';
+import { readU8aU32, serializeKey, u32ToArray } from './util';
 
 const l = logger('db/struct');
 
@@ -56,36 +56,30 @@ export default class FileStructDb extends Impl implements BaseDb {
 
     if (!keyInfo || !keyInfo.valData) {
       return null;
+    } else if (!this._isTrie) {
+      return keyInfo.valData;
+    } else if (keyInfo.valData[0] === FLAG_EMPTY) {
+      return keyInfo.valData.subarray(1);
     }
 
-    let adjusted: Uint8Array | null = null;
+    let offset = 1;
+    const recoded: Array<Uint8Array | null> = [];
 
-    if (this._isTrie) {
-      if (keyInfo.valData[0] === FLAG_EMPTY) {
-        adjusted = keyInfo.valData.subarray(1);
+    while (offset < keyInfo.valData.length) {
+      const flag = keyInfo.valData[offset++];
+
+      if (flag === FLAG_EMPTY) {
+        recoded.push(null);
       } else {
-        let offset = 1;
-        const recoded: Array<Uint8Array | null> = [];
+        const keyBuff = this._readKey(flag & UNFLAG_LINKED, readU8aU32(keyInfo.valData, offset));
 
-        while (offset < keyInfo.valData.length) {
-          const flag = keyInfo.valData[offset++];
+        offset += defaults.U32_SIZE;
 
-          if (flag === FLAG_EMPTY) {
-            recoded.push(null);
-          } else {
-            const keyBuff = this._readKey(flag & UNFLAG_LINKED, readU8aU32(keyInfo.valData, offset));
-
-            offset += defaults.U32_SIZE;
-
-            recoded.push(keyBuff.subarray(0, defaults.KEY_DATA_SIZE));
-          }
-        }
-
-        adjusted = codec.encode(recoded);
+        recoded.push(keyBuff.subarray(0, defaults.KEY_DATA_SIZE));
       }
     }
 
-    return adjusted || keyInfo.valData;
+    return codec.encode(recoded);
   }
 
   put (key: Uint8Array, value: Uint8Array): void {
