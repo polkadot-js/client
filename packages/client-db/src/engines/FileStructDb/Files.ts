@@ -5,7 +5,6 @@
 import { DiskDbOptions } from '../../types';
 
 import fs from 'fs';
-import { LRUMap } from 'lru_map';
 import mkdirp from 'mkdirp';
 import path from 'path';
 import { assert } from '@polkadot/util';
@@ -15,7 +14,6 @@ import defaults from './defaults';
 type Fd = {
   fd: number,
   file: string,
-  lru: LRUMap<number, Uint8Array>,
   size: number
 };
 
@@ -23,12 +21,6 @@ type Fds = {
   idx: Fd,
   key: Fd,
   val: Fd
-};
-
-const LRU_SIZE = {
-  idx: 8 * 1024,
-  key: 8 * 1024,
-  val: 8 * 1024
 };
 
 export default class File {
@@ -69,10 +61,9 @@ export default class File {
         }
 
         const fd = fs.openSync(file, 'r+');
-        const lru = new LRUMap<number, Uint8Array>(LRU_SIZE[type]);
         const size = fs.fstatSync(fd).size;
 
-        fds[type] = { fd, file, lru, size };
+        fds[type] = { fd, file, size };
 
         return fds;
       }, {} as Fds);
@@ -84,24 +75,15 @@ export default class File {
     const offset = fd.size;
 
     fs.writeSync(fd.fd, buffer, 0, buffer.length, offset);
-    fd.lru.set(offset, buffer);
     fd.size += buffer.length;
 
     return offset;
   }
 
   protected __read (type: keyof Fds, index: number, offset: number, length: number): Uint8Array {
-    const fd = this._fds[index][type];
-    const cached = fd.lru.get(offset);
-
-    if (cached) {
-      return cached;
-    }
-
     const buffer = new Uint8Array(length);
 
-    fs.readSync(fd.fd, buffer, 0, length, offset);
-    fd.lru.set(offset, buffer);
+    fs.readSync(this._fds[index][type].fd, buffer, 0, length, offset);
 
     return buffer;
   }
