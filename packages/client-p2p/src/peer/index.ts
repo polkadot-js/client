@@ -33,7 +33,7 @@ export default class Peer extends EventEmitter implements PeerInterface {
   readonly chain: ChainInterface;
   readonly config: Config;
   readonly id: string;
-  private connections: { [index: number]: Connection };
+  private connections: Map<number, Connection> = new Map();
   private nextId: number = 0;
   private nextConnId: number = 0;
   private node: LibP2p;
@@ -45,7 +45,6 @@ export default class Peer extends EventEmitter implements PeerInterface {
 
     this.chain = chain;
     this.config = config;
-    this.connections = {};
     this.id = peerInfo.id.toB58String();
     this.node = node;
     this.peerInfo = peerInfo;
@@ -55,7 +54,7 @@ export default class Peer extends EventEmitter implements PeerInterface {
   }
 
   private clearConnection (connId: number): void {
-    delete this.connections[connId];
+    this.connections.delete(connId);
 
     l.debug(() => ['clearConnection', connId, this.shortId, this.isWritable()]);
   }
@@ -133,10 +132,10 @@ export default class Peer extends EventEmitter implements PeerInterface {
     if (isWritable) {
       pull(pushable, connection);
 
-      this.connections[connId] = {
+      this.connections.set(connId, {
         connection,
         pushable
-      };
+      });
 
       this.send(
         new Status({
@@ -159,7 +158,7 @@ export default class Peer extends EventEmitter implements PeerInterface {
 
   disconnect (): void {
     this.bestHash = new Uint8Array([]);
-    this.connections = {};
+    this.connections.clear();
     this.peerInfo.disconnect();
 
     this.emit('disconnected');
@@ -167,8 +166,7 @@ export default class Peer extends EventEmitter implements PeerInterface {
 
   private pushables (): Array<Pushable> {
     // @ts-ignore yeap, we are filtering them right out at the end
-    return Object
-      .values(this.connections)
+    return [...this.connections.values()]
       .map(({ pushable }) => pushable)
       .filter((pushable) => pushable);
   }

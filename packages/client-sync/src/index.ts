@@ -26,7 +26,7 @@ export default class Sync extends EventEmitter implements SyncInterface {
   private chain: ChainInterface;
   private config: Config;
   private blockRequests: Map<string, SyncState$PeerRequest> = new Map();
-  private blockQueue: Map<string, SyncState$PeerBlock> = new Map();;
+  private blockQueue: Map<string, SyncState$PeerBlock> = new Map();
   private bestQueued: BN = new BN(0);
   private isActive: boolean = false;
   private lastBest: BN = new BN(0);

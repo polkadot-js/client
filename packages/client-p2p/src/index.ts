@@ -40,7 +40,7 @@ export default class P2p extends EventEmitter implements P2pInterface {
   readonly chain: ChainInterface;
   readonly config: Config;
   readonly l: Logger;
-  private dialQueue: { [index: string]: QueuedPeer };
+  private dialQueue: Map<string, QueuedPeer> = new Map();
   private node: LibP2p | undefined;
   private peers: PeersInterface | undefined;
   private protocol: string;
@@ -53,7 +53,6 @@ export default class P2p extends EventEmitter implements P2pInterface {
     this.config = config;
     this.chain = chain;
     this.l = l;
-    this.dialQueue = {};
     this.dialTimer = null;
     this.protocol = defaults.getProtocol(chain.chain.protocolId);
     this.sync = new Sync(this.config, this.chain);
@@ -241,12 +240,12 @@ export default class P2p extends EventEmitter implements P2pInterface {
       this._dialPeers();
     }, DIAL_INTERVAL);
 
-    if (peer && !this.dialQueue[peer.id]) {
-      this.dialQueue[peer.id] = {
+    if (peer && !this.dialQueue.get(peer.id)) {
+      this.dialQueue.set(peer.id, {
         nextDial: 0,
         numDials: 1,
         peer
-      };
+      });
     }
 
     if (!this.node || !this.node.isStarted()) {
@@ -255,25 +254,21 @@ export default class P2p extends EventEmitter implements P2pInterface {
 
     const now = Date.now();
 
-    Object.keys(this.dialQueue).forEach(
-      (id: string): void => {
-        const item = this.dialQueue[id];
-
-        if (!this.peers || (item.nextDial > now) || item.peer.isActive()) {
-          return;
-        }
-
-        const delay = defaults.WAIT_TIMEOUT + Math.floor(Math.random() * defaults.WAIT_TIMEOUT);
-
-        item.nextDial = Date.now() + (delay * item.numDials);
-        item.numDials = item.numDials + 1;
-
-        // TODO We really want to reset (when all ok and we have the status)
-        this._dialPeer(item, this.peers).catch(() => {
-          // ignore, handled above
-        });
+    this.dialQueue.forEach((item) => {
+      if (!this.peers || (item.nextDial > now) || item.peer.isActive()) {
+        return;
       }
-    );
+
+      const delay = defaults.WAIT_TIMEOUT + Math.floor(Math.random() * defaults.WAIT_TIMEOUT);
+
+      item.nextDial = Date.now() + (delay * item.numDials);
+      item.numDials = item.numDials + 1;
+
+      // TODO We really want to reset (when all ok and we have the status)
+      this._dialPeer(item, this.peers).catch(() => {
+        // ignore, handled above
+      });
+    });
   }
 
   private _requestAny (): void {
