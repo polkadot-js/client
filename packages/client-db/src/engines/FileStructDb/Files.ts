@@ -9,9 +9,11 @@ import mkdirp from 'mkdirp';
 import path from 'path';
 import { assert } from '@polkadot/util';
 
+import Cache from './Cache';
 import defaults from './defaults';
 
 type Fd = {
+  cache: Cache,
   fd: number,
   file: string,
   size: number
@@ -60,10 +62,11 @@ export default class File {
           fs.writeFileSync(file, new Uint8Array(type === 'idx' ? defaults.HDR_TOTAL_SIZE : 0));
         }
 
+        const cache = new Cache(4096);
         const fd = fs.openSync(file, 'r+');
         const size = fs.fstatSync(fd).size;
 
-        fds[type] = { fd, file, size };
+        fds[type] = { cache, fd, file, size };
 
         return fds;
       }, {} as Fds);
@@ -76,20 +79,32 @@ export default class File {
 
     fs.writeSync(fd.fd, buffer, 0, buffer.length, offset);
     fd.size += buffer.length;
+    fd.cache.set(offset, buffer);
 
     return offset;
   }
 
   protected __read (type: keyof Fds, index: number, offset: number, length: number): Uint8Array {
+    const fd = this._fds[index][type];
+    const cached = fd.cache.get(offset);
+
+    if (cached) {
+      return cached;
+    }
+
     const buffer = new Uint8Array(length);
 
-    fs.readSync(this._fds[index][type].fd, buffer, 0, length, offset);
+    fs.readSync(fd.fd, buffer, 0, length, offset);
+    fd.cache.set(offset, buffer);
 
     return buffer;
   }
 
   protected __update (type: keyof Fds, index: number, offset: number, buffer: Uint8Array): number {
-    fs.writeSync(this._fds[index][type].fd, buffer, 0, buffer.length, offset);
+    const fd = this._fds[index][type];
+
+    fs.writeSync(fd.fd, buffer, 0, buffer.length, offset);
+    fd.cache.set(offset, buffer);
 
     return offset;
   }
