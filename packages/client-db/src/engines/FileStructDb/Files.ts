@@ -25,6 +25,12 @@ type Fds = {
   val: Fd
 };
 
+const CACHE_SIZES = {
+  idx: 8 * 1024,
+  key: 4 * 1024,
+  val: 4 * 1024
+};
+
 export default class File {
   protected _isTrie: boolean = false;
   protected _isOpen: boolean = false;
@@ -62,7 +68,7 @@ export default class File {
           fs.writeFileSync(file, new Uint8Array(type === 'idx' ? defaults.HDR_TOTAL_SIZE : 0));
         }
 
-        const cache = new Cache(4096);
+        const cache = new Cache(CACHE_SIZES[type]);
         const fd = fs.openSync(file, 'r+');
         const size = fs.fstatSync(fd).size;
 
