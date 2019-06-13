@@ -11,11 +11,8 @@ describe('allocate', () => {
     heap = new Heap();
 
     heap.memory = {
-      deallocated: {
-        0: 3,
-        3: 166
-      },
-      allocated: {},
+      deallocated: new Map([[0, 3], [3, 166]]),
+      allocated: new Map(),
       end: 110,
       offset: 100,
       size: 250
@@ -43,7 +40,7 @@ describe('allocate', () => {
   it('adds the allocated map to the alloc heap section', () => {
     heap.allocate(100);
 
-    expect(heap.memory.allocated).toEqual({ 100: 100 });
+    expect([...heap.memory.allocated.entries()]).toEqual([[100, 100]]);
   });
 
   it('updates the internal offset for next allocation', () => {

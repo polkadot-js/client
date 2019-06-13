@@ -18,7 +18,7 @@ describe('send', () => {
       }
     };
     peer = new Peer({}, {}, null, peerInfo);
-    peer.connections = { 0: { pushable: [ 'test' ] } };
+    peer.connections = new Map([[0, { pushable: ['test'] }]]);
 
     status = new Status({
       bestHash: new Uint8Array([]),
@@ -29,11 +29,11 @@ describe('send', () => {
   });
 
   it('returns false when sending fails', () => {
-    peer.connections = { 0: {
+    peer.connections = new Map([[0, {
       pushable: {
         push: () => { throw new Error('invalid'); }
       }
-    } };
+    }]]);
 
     expect(
       peer.send(status)
@@ -50,7 +50,7 @@ describe('send', () => {
     peer.send(status);
 
     expect(
-      peer.connections[0].pushable
+      peer.connections.get(0).pushable
     ).toHaveLength(2);
   });
 });

@@ -11,8 +11,8 @@ describe('deallocate', () => {
     heap = new Heap();
 
     heap.memory = {
-      allocated: { 123: 456 },
-      deallocated: {}
+      allocated: new Map([[123, 456]]),
+      deallocated: new Map()
     };
   });
 
@@ -26,15 +26,15 @@ describe('deallocate', () => {
     heap.deallocate(123);
 
     expect(
-      heap.memory.allocated
-    ).toEqual({});
+      heap.memory.allocated.size
+    ).toEqual(0);
   });
 
   it('adds the allocation from the deallocated table', () => {
     heap.deallocate(123);
 
     expect(
-      heap.memory.deallocated
-    ).toEqual({ 123: 456 });
+      [...heap.memory.deallocated.entries()]
+    ).toEqual([[123, 456]]);
   });
 });
