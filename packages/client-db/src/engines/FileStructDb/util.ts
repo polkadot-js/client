@@ -63,21 +63,13 @@ export function newKey (key: KeyParts, { valAt, valSize }: ValInfo): Uint8Array 
   return modifyKey(keyData, valAt, valSize);
 }
 
-export function parseHdr (hdr: Uint8Array): ParsedHdr {
-  const parsed: ParsedHdr = [];
-  const hdrLength = hdr.length;
-  let offset = 0;
+export function parseHdr (hdr: Uint8Array, hdrIndex: number): ParsedHdr {
+  const [, value] = readU8aU32(hdr, hdrIndex * defaults.HDR_ENTRY_SIZE);
 
-  for (let i = 0; offset < hdrLength; i++, offset += defaults.HDR_ENTRY_SIZE) {
-    const [, value] = readU8aU32(hdr, offset);
-
-    parsed.push({
-      at: value >> 2,
-      type: value & 0b11
-    });
-  }
-
-  return parsed;
+  return {
+    at: value >> 2,
+    type: value & 0b11
+  };
 }
 
 export function parseKey (keyData: Uint8Array): ParsedKey {
@@ -102,13 +94,14 @@ export function serializeKey (u8a: Uint8Array): KeyParts {
     const item = buffer[i];
 
     if (i === 0) {
-      index = item & 0b111111; // for the file split
-      // parts.push((item >> 4) & 0b1111); // 16 entries per header
+      // index = item & 0b111111; // for the file split, 64
+      index = item & 0b1111; // for the file split
+      parts.push((item >> 4) & 0b1111); // 16 entries per header
       // parts.push((item >> 4) & 0b11, (item >> 6) & 0b11); // 4 entries per header
-      parts.push((item >> 6) & 0b11); // 4 entries per header
+      // parts.push((item >> 6) & 0b11); // 4 entries per header, 64 files
     } else {
-      // parts.push(item & 0b1111, (item >> 4) & 0b1111); // 16
-      parts.push(item & 0b11, (item >> 2) & 0b11, (item >> 4) & 0b11, (item >> 6) & 0b11); // 4
+      parts.push(item & 0b1111, (item >> 4) & 0b1111); // 16
+      // parts.push(item & 0b11, (item >> 2) & 0b11, (item >> 4) & 0b11, (item >> 6) & 0b11); // 4
     }
   }
 

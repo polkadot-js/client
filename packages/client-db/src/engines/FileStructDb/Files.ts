@@ -53,7 +53,7 @@ export default class File {
   open (): void {
     for (let i = 0; i < defaults.HDR_SPLIT_FILES; i++) {
       this._fds[i] = (['idx', 'key', 'val'] as Array<keyof Fds>).reduce((fds, type) => {
-        const prefix = `0${i}`.slice(-2);
+        const prefix = i.toString(16); // `0${i}`.slice(-2);
         const file = path.join(this._path, `${prefix}.${type as string}`);
 
         if (!fs.existsSync(file)) {
@@ -94,10 +94,6 @@ export default class File {
     return offset;
   }
 
-  protected __updatePartial (type: keyof Fds, index: number, offset: number, buffer: Uint8Array, writeOffset: number, writeLength: number): void {
-    fs.writeSync(this._fds[index][type].fd, buffer, writeOffset, writeLength, offset + writeOffset);
-  }
-
   protected _appendHdr (index: number, buffer: Uint8Array): number {
     return this.__append('idx', index, buffer) / defaults.HDR_TOTAL_SIZE;
   }
@@ -122,8 +118,8 @@ export default class File {
     return this.__read('val', index, offset, length);
   }
 
-  protected _updateHdrPartial (index: number, offset: number, buffer: Uint8Array, hdrIndex: number): void {
-    this.__updatePartial('idx', index, offset * defaults.HDR_TOTAL_SIZE, buffer, defaults.HDR_ENTRY_SIZE * hdrIndex, defaults.HDR_ENTRY_SIZE);
+  protected _updateHdr (index: number, offset: number, buffer: Uint8Array): number {
+    return this.__update('idx', index, offset * defaults.HDR_TOTAL_SIZE, buffer) / defaults.HDR_ENTRY_SIZE;
   }
 
   protected _updateKey (index: number, offset: number, buffer: Uint8Array): number {

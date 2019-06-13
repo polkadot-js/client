@@ -31,6 +31,6 @@ export type ValInfo = {
 
 export type KVInfo = KeyInfo & ValInfo;
 
-export type ParsedHdr = Array<{ at: number, type: Slot }>;
+export type ParsedHdr = { at: number, type: Slot };
 
 export type ParsedKey = { valAt: number, valSize: number };

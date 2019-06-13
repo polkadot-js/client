@@ -6,15 +6,15 @@
 const U32_SIZE = 4;
 
 // the number of entries in a header
-const HDR_ENTRY_NUM = 4; // 2 bits
+const HDR_ENTRY_NUM = 16; // 4; // 2 bits
 
 // the number of index blocks
-const HDR_SPLIT_FILES = 64; // 6 bits
+const HDR_SPLIT_FILES = 16; // 64; // 6 bits
 
 // first byte for the type, followed by offset
 const HDR_ENTRY_SIZE = U32_SIZE;
 
-// the size of a branch entry, 24 bytes
+// the size of a branch entry
 const HDR_TOTAL_SIZE = HDR_ENTRY_NUM * HDR_ENTRY_SIZE;
 
 // key calculations

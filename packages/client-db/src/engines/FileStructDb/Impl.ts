@@ -2,7 +2,7 @@
 // This software may be modified and distributed under the terms
 // of the Apache-2.0 license. See the LICENSE file for details.
 
-import { KVInfo, KeyParts, ParsedHdr, Slot, ValInfo } from './types';
+import { KVInfo, KeyParts, Slot, ValInfo } from './types';
 
 // import { logger } from '@polkadot/util';
 
@@ -16,22 +16,20 @@ export default class Impl extends Files {
   // skip first byte, part of the file
   protected _findValue (key: KeyParts, value: Uint8Array | null = null, withValue: boolean = true, keyIndex: number = 0, hdrAt: number = 0): KVInfo | null {
     const hdr = this._readHdr(key.index, hdrAt);
-    const parsedHdr = parseHdr(hdr);
-    const hdrIndex = key.parts[keyIndex];
-    const entry = parsedHdr[hdrIndex];
+    const parsedHdr = parseHdr(hdr, key.parts[keyIndex]);
 
-    switch (entry.type) {
+    switch (parsedHdr.type) {
       case Slot.EMPTY:
-        return this.__retrieveEmpty(key, value, keyIndex, hdr, hdrAt, parsedHdr);
+        return this.__retrieveEmpty(key, value, keyIndex, hdr, hdrAt);
 
       case Slot.HDR:
-        return this._findValue(key, value, withValue, keyIndex + 1, entry.at);
+        return this._findValue(key, value, withValue, keyIndex + 1, parsedHdr.at);
 
       case Slot.KEY:
-        return this.__retrieveKey(key, value, withValue, keyIndex, hdr, hdrAt, parsedHdr);
+        return this.__retrieveKey(key, value, withValue, keyIndex, hdr, hdrAt, parsedHdr.at);
 
       default:
-        throw new Error(`Unhandled entry type ${entry.type}`);
+        throw new Error(`Unhandled entry type ${parsedHdr.type}`);
     }
   }
 
@@ -51,7 +49,7 @@ export default class Impl extends Files {
     return { ...valInfo, keyAt, keyData };
   }
 
-  private __retrieveEmpty (key: KeyParts, value: Uint8Array | null, keyIndex: number, hdr: Uint8Array, hdrAt: number, parsedHdr: ParsedHdr): KVInfo | null {
+  private __retrieveEmpty (key: KeyParts, value: Uint8Array | null, keyIndex: number, hdr: Uint8Array, hdrAt: number): KVInfo | null {
     if (!value) {
       return null;
     }
@@ -60,14 +58,13 @@ export default class Impl extends Files {
     const newInfo = this.__appendNewKeyValue(key, value);
 
     modifyHdr(hdr, hdrIndex, Slot.KEY, newInfo.keyAt);
-    this._updateHdrPartial(key.index, hdrAt, hdr, hdrIndex);
+    this._updateHdr(key.index, hdrAt, hdr);
 
     return newInfo;
   }
 
-  private __retrieveKey (key: KeyParts, value: Uint8Array | null, withValue: boolean, keyIndex: number, hdr: Uint8Array, hdrAt: number, parsedHdr: ParsedHdr): KVInfo | null {
+  private __retrieveKey (key: KeyParts, value: Uint8Array | null, withValue: boolean, keyIndex: number, hdr: Uint8Array, hdrAt: number, keyAt: number): KVInfo | null {
     const hdrIndex = key.parts[keyIndex];
-    const keyAt = parsedHdr[hdrIndex].at;
     const keyData = this._readKey(key.index, keyAt);
     const prevKey = serializeKey(keyData.subarray(0, defaults.KEY_DATA_SIZE));
     let matchIndex = keyIndex;
@@ -118,7 +115,7 @@ export default class Impl extends Files {
       ]));
     }
 
-    this._updateHdrPartial(key.index, hdrAt, modifyHdr(hdr, hdrIndex, Slot.HDR, lastAt), hdrIndex);
+    this._updateHdr(key.index, hdrAt, modifyHdr(hdr, hdrIndex, Slot.HDR, lastAt));
 
     return newKv;
   }

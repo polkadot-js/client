@@ -29,7 +29,7 @@
     "@babel/runtime": "^7.4.3",
     "@polkadot/client-sync": "^0.23.0-beta.18",
     "@polkadot/client-types": "^0.23.0-beta.18",
-    "@polkadot/util": "^0.93.0-beta.1",
+    "@polkadot/util": "^0.93.0-beta.3",
     "@types/varint": "^5.0.0",
     "eventemitter3": "^3.1.0",
     "libp2p": "^0.25.0-rc.5",

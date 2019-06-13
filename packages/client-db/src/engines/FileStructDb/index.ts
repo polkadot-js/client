@@ -71,7 +71,7 @@ export default class FileStructDb extends Impl implements BaseDb {
       if (flag === FLAG_EMPTY) {
         recoded.push(null);
       } else {
-        const [length, keyOffset] = readU8aU32(keyInfo.valData, offset, true);
+        const [length, keyOffset] = readU8aU32(keyInfo.valData, offset, false);
         const keyBuff = this._readKey(flag & UNFLAG_LINKED, keyOffset);
 
         offset += length;
@@ -109,7 +109,7 @@ export default class FileStructDb extends Impl implements BaseDb {
               const entry = serializeKey(u8a);
               const keyInfo = this._findValue(entry, null, false) as KVInfo;
 
-              recoded.push(entry.index | FLAG_LINKED, ...u32ToArray(keyInfo.keyAt, true));
+              recoded.push(entry.index | FLAG_LINKED, ...u32ToArray(keyInfo.keyAt, false));
             } else {
               recoded.push(FLAG_EMPTY);
             }
