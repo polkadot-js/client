@@ -2,13 +2,9 @@
 // This software may be modified and distributed under the terms
 // of the Apache-2.0 license. See the LICENSE file for details.
 
-export type Memory$Buffer = {
-  [index: number]: number // offset -> size
-};
-
 export type Memory = {
-  allocated: Memory$Buffer,
-  deallocated: Memory$Buffer,
+  allocated: Map<number, number>,
+  deallocated: Map<number, number>,
   isResized: boolean,
   offset: number,
   size: number,
