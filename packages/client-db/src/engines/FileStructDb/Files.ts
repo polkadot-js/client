@@ -7,7 +7,6 @@ import { DiskDbOptions } from '../../types';
 import fs from 'fs';
 import mkdirp from 'mkdirp';
 import path from 'path';
-import { assert } from '@polkadot/util';
 
 import Cache from './Cache';
 import defaults from './defaults';
@@ -31,7 +30,7 @@ const CACHE_SIZES = {
   val: 4 * 1024
 };
 
-export default class File {
+export default class Files {
   protected _isTrie: boolean = false;
   protected _isOpen: boolean = false;
   private _fds: Array<Fds> = [];
@@ -42,10 +41,6 @@ export default class File {
     this._path = path.join(base, file);
 
     mkdirp.sync(this._path);
-  }
-
-  protected assertOpen (isOpen: boolean = true): void {
-    assert(isOpen === this._isOpen, `Expected ${isOpen ? 'an open' : 'a closed'} database`);
   }
 
   close (): void {
@@ -79,7 +74,7 @@ export default class File {
     }
   }
 
-  protected __append (type: keyof Fds, index: number, buffer: Uint8Array): number {
+  private __append (type: keyof Fds, index: number, buffer: Uint8Array): number {
     const fd = this._fds[index][type];
     const offset = fd.size;
 
@@ -90,7 +85,7 @@ export default class File {
     return offset;
   }
 
-  protected __read (type: keyof Fds, index: number, offset: number, length: number): Uint8Array {
+  private __read (type: keyof Fds, index: number, offset: number, length: number): Uint8Array {
     const fd = this._fds[index][type];
     const cached = fd.cache.get(offset);
 
@@ -106,7 +101,7 @@ export default class File {
     return buffer;
   }
 
-  protected __update (type: keyof Fds, index: number, offset: number, buffer: Uint8Array): number {
+  private __update (type: keyof Fds, index: number, offset: number, buffer: Uint8Array): number {
     const fd = this._fds[index][type];
 
     fs.writeSync(fd.fd, buffer, 0, buffer.length, offset);
