@@ -25,7 +25,7 @@ type Fds = {
 };
 
 const CACHE_SIZES = {
-  idx: 8 * 1024,
+  idx: 16 * 1024,
   key: 4 * 1024,
   val: 4 * 1024
 };
