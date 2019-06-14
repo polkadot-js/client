@@ -12,7 +12,7 @@ import Cache from './Cache';
 import defaults from './defaults';
 
 type Fd = {
-  cache: Cache,
+  cache: Cache<number>,
   fd: number,
   file: string,
   size: number
@@ -25,9 +25,9 @@ type Fds = {
 };
 
 const CACHE_SIZES = {
-  idx: 16 * 1024,
-  key: 4 * 1024,
-  val: 4 * 1024
+  idx: 8 * 1024,
+  key: 8 * 1024,
+  val: 8 * 1024
 };
 
 export default class Files {
@@ -63,7 +63,7 @@ export default class Files {
           fs.writeFileSync(file, new Uint8Array(type === 'idx' ? defaults.HDR_TOTAL_SIZE : 0));
         }
 
-        const cache = new Cache(CACHE_SIZES[type]);
+        const cache = new Cache<number>(CACHE_SIZES[type]);
         const fd = fs.openSync(file, 'r+');
         const size = fs.fstatSync(fd).size;
 

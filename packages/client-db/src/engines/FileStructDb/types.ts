@@ -15,7 +15,7 @@ export enum TrieDecoded {
 export type KeyParts = {
   buffer: Uint8Array,
   index: number,
-  parts: Array<number>
+  parts: Uint8Array
 };
 
 export type KeyInfo = {

@@ -15,8 +15,8 @@ import DiskDb from './DiskDb';
 import createBlockDb from './block';
 import createStateDb from './state';
 
-const BDB_OPT = { isCompressed: false, isLru: true, isTrie: false };
-const SDB_OPT = { isCompressed: false, isLru: true, isTrie: true };
+const BDB_OPT = { isCompressed: false, isLru: false, isTrie: false };
+const SDB_OPT = { isCompressed: false, isLru: false, isTrie: true };
 
 export default class Dbs implements ChainDbs {
   readonly blocks: BlockDb;

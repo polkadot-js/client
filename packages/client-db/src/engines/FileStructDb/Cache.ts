@@ -4,17 +4,17 @@
 
 import { assert } from '@polkadot/util';
 
-type CacheValue = {
-  key: number,
-  next: CacheValue | null,
-  prev: CacheValue | null,
+type CacheValue<T> = {
+  key: T,
+  next: CacheValue<T> | null,
+  prev: CacheValue<T> | null,
   value: Uint8Array
 };
 
-export default class Cache {
-  private _cache: Map<number, CacheValue> = new Map();
-  private _first: CacheValue;
-  private _last: CacheValue;
+export default class Cache<T> {
+  private _cache = new Map<T, CacheValue<T>>();
+  private _first: CacheValue<T>;
+  private _last: CacheValue<T>;
   private _maxEntries: number;
 
   constructor (maxEntries: number) {
@@ -22,8 +22,8 @@ export default class Cache {
 
     this._maxEntries = maxEntries;
 
-    this._first = { key: 123.456, next: null, prev: null, value: new Uint8Array() };
-    this._last = { key: 987.654, next: null, prev: null, value: new Uint8Array() };
+    this._first = { key: (Symbol() as any), next: null, prev: null, value: new Uint8Array() };
+    this._last = { key: (Symbol() as any), next: null, prev: null, value: new Uint8Array() };
 
     this._first.next = this._last;
     this._last.prev = this._first;
@@ -49,7 +49,7 @@ export default class Cache {
   //   this._first = node;
   // }
 
-  get (key: number): Uint8Array | null {
+  get (key: T): Uint8Array | null {
     const cached = this._cache.get(key);
 
     if (cached) {
@@ -61,13 +61,11 @@ export default class Cache {
     return null;
   }
 
-  set (key: number, value: Uint8Array): void {
+  set (key: T, value: Uint8Array): void {
     let cached = this._cache.get(key);
 
     if (cached) {
-      // this._insertFirst(cached);
-      // cached.value = value;
-
+      cached.value = value;
       return;
     }
 

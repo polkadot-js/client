@@ -8,6 +8,7 @@ import { KVInfo } from './types';
 import codec from '@polkadot/trie-codec';
 import { logger } from '@polkadot/util';
 
+import Cache from './Cache';
 import Impl from './Impl';
 import defaults from './defaults';
 import { readU8aU32, serializeKey, u32ToArray } from './util';
@@ -19,6 +20,8 @@ const FLAG_LINKED = 0b10000000;
 const UNFLAG_LINKED = 0b01111111;
 
 export default class FileStructDb extends Impl implements BaseDb {
+  private _cache: Cache<string> = new Cache(16 * 1024);
+
   drop (): void {
     l.error('drop() is not implemented');
   }
@@ -49,9 +52,7 @@ export default class FileStructDb extends Impl implements BaseDb {
     l.error('del() is not implemented');
   }
 
-  get (key: Uint8Array): Uint8Array | null {
-    // l.debug(() => ['get', { key }]);
-
+  private _get (key: Uint8Array): Uint8Array | null {
     const keyInfo = this._findValue(serializeKey(key));
 
     if (!keyInfo || !keyInfo.valData) {
@@ -79,6 +80,25 @@ export default class FileStructDb extends Impl implements BaseDb {
     }
 
     return codec.encode(recoded);
+  }
+
+  get (key: Uint8Array): Uint8Array | null {
+    // l.debug(() => ['get', { key }]);
+
+    const keyStr = key.toString();
+    const cached = this._cache.get(keyStr);
+
+    if (cached) {
+      return cached;
+    }
+
+    const value = this._get(key);
+
+    if (value) {
+      this._cache.set(keyStr, value);
+    }
+
+    return value;
   }
 
   put (key: Uint8Array, value: Uint8Array): void {
@@ -123,6 +143,7 @@ export default class FileStructDb extends Impl implements BaseDb {
       }
     }
 
+    this._cache.set(key.toString(), value);
     this._findValue(serializeKey(key), adjusted || value);
   }
 }
