@@ -56,7 +56,7 @@ export default class Files {
   open (): void {
     for (let i = 0; i < defaults.HDR_SPLIT_FILES; i++) {
       this._fds[i] = (['idx', 'key', 'val'] as Array<keyof Fds>).reduce((fds, type) => {
-        const prefix = i.toString(16); // `0${i}`.slice(-2);
+        const prefix = `0${i.toString(16)}`.slice(-2);
         const file = path.join(this._path, `${prefix}.${type as string}`);
 
         if (!fs.existsSync(file)) {
