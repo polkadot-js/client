@@ -76,23 +76,30 @@ export function serializeKey (u8a: Uint8Array): KeyParts {
     : blake2AsU8a(u8a);
 
   const parts = new Uint8Array(defaults.KEY_PARTS_SIZE);
-  let index = 0;
-  let count = 0;
+  let count = 1;
 
-  index = buffer[0] & 0b1111; // 16 files
-  parts[count++] = buffer[0] >> 4; // 16 entries per header
-  // index = buffer[0] & 0b111111; // for the file split, 6-bits, 64 files
-  // parts[count++] = (buffer[0] >> 6) & 0b11;
+  // for 16 files, with 16 entries per header
+  // const index = buffer[0] & 0b1111;
+  // parts[count++] = buffer[0] >> 4;
+
+  // for 64 files, with 4 entries per header
+  const index = buffer[0] & 0b111111;
+  parts[0] = buffer[0] >> 6;
 
   for (let i = 1; i < defaults.KEY_DATA_SIZE; i++) {
     const item = buffer[i];
 
-    parts[count++] = item & 0b1111;
-    parts[count++] = item >> 4;
-    // parts[count++] = item & 0b11;
-    // parts[count++] = (item >> 2) & 0b11;
-    // parts[count++] = (item >> 4) & 0b11;
-    // parts[count++] = (item >> 6) & 0b11;
+    // for 16 files, with 16 entries per header
+    // parts[count] = item & 0b1111;
+    // parts[count + 1] = item >> 4;
+    // count += 2
+
+    // for 64 files, with 4 entries per header
+    parts[count] = item & 0b11;
+    parts[count + 1] = (item >> 2) & 0b11;
+    parts[count + 2] = (item >> 4) & 0b11;
+    parts[count + 3] = (item >> 6) & 0b11;
+    count += 4;
   }
 
   return { buffer, index, parts };
