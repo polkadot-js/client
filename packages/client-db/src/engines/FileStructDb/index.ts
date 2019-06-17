@@ -56,13 +56,16 @@ export default class FileStructDb extends Impl implements BaseDb {
       return null;
     } else if (!this._isTrie) {
       return keyInfo.valData;
-    } else if (!keyInfo.valData[0]) {
-      return keyInfo.valData.subarray(1);
+    }
+
+    const bitmap = (keyInfo.valData[0] << 8) + keyInfo.valData[1];
+    let offset = 2;
+
+    if (!bitmap) {
+      return keyInfo.valData.subarray(offset);
     }
 
     const recoded: Array<Uint8Array | null> = [];
-    const bitmap = (keyInfo.valData[1] << 8) + keyInfo.valData[2];
-    let offset = 3;
 
     for (let index = 0; index < 16; index++) {
       if (bitmap & BITMAP[index]) {
@@ -117,7 +120,7 @@ export default class FileStructDb extends Impl implements BaseDb {
         // great we are dealing with keys only here
         if (!hasArrays && !decoded[16]) {
           let bitmap = 0;
-          const recoded: Array<number> = [1, 0, 0];
+          const recoded: Array<number> = [0, 0];
 
           for (let index = 0; index < 16; index++) {
             const u8a = decoded[index] as Uint8Array;
@@ -131,16 +134,16 @@ export default class FileStructDb extends Impl implements BaseDb {
             }
           }
 
-          recoded[1] = bitmap >> 8;
-          recoded[2] = bitmap & 255;
+          recoded[0] = bitmap >> 8;
+          recoded[1] = bitmap & 255;
 
           adjusted = new Uint8Array(recoded);
         }
       }
 
       if (!adjusted) {
-        adjusted = new Uint8Array(value.length + 1);
-        adjusted.set(value, 1);
+        adjusted = new Uint8Array(value.length + 2);
+        adjusted.set(value, 2);
       }
     }
 
