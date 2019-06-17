@@ -4,16 +4,21 @@
 
 import BN from 'bn.js';
 import { TxDb } from '@polkadot/db/types';
-import { TrieDb } from '@polkadot/trie-db/types';
+import { TrieDb, TrieEntry } from '@polkadot/trie-db/types';
 
 export type DbPathPrefix = 'database';
 
 export type DbConfig$Type = 'file' | 'lmdb' | 'memory';
 
+export type DiskDbOptions = {
+  isCompressed: boolean,
+  isLru: boolean,
+  isTrie: boolean
+};
+
 export type DbConfig = {
   compact: boolean,
   path: string,
-  snapshot: boolean,
   type: DbConfig$Type
 };
 
@@ -47,14 +52,16 @@ export type BlockDb = {
   header: StorageMethod$U8a
 };
 
-export type StateDb = {
-  db: TrieDb,
-  code: StorageMethod$U8a
-};
+export interface StateDb {
+  db: TrieDb;
+
+  getRootEntry (): TrieEntry | null;
+  getRoot (): Uint8Array;
+  setRoot (root: Uint8Array): void;
+  snapshot (blockNumber: BN): void;
+}
 
 export interface ChainDbs {
   readonly blocks: BlockDb;
   readonly state: StateDb;
-
-  snapshot (): void;
 }

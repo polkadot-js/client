@@ -15,10 +15,8 @@ export default class ImportBlock extends Struct {
       header: {
         ...header.toJSON(),
         digest: {
-          // remove all Seal logs (not susre about consensus)
-          logs: header.digest.logs.filter((item) =>
-            !item.isSeal // && !item.isConsensus
-          )
+          // remove all Seal logs (not sure about consensus)
+          logs: header.digest.logsWithout('SealV0', 'Consensus')
         }
       },
       body

@@ -50,7 +50,7 @@ export default class Client extends EventEmitter {
     this.sync = config.sync;
 
     l.log(`Running version ${clientId.version} ${status}`);
-    l.log(`Initialising for ${this.sync} sync on chain ${config.chain}`);
+    l.log(`Initializing for ${this.sync} sync on chain ${config.chain}`);
 
     this.chain = new Chain(config as Config);
 

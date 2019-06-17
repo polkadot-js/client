@@ -10,14 +10,14 @@ describe('freealloc', () => {
   beforeEach(() => {
     heap = new Heap();
     heap.memory = {
-      allocated: {},
+      allocated: new Map(),
       // ok, these don't make much sense as a layout, but it allows for sorting inside the actual findContaining function to find the first & smallest
-      deallocated: {
-        0: 200,
-        3: 120,
-        4: 120,
-        122: 500
-      }
+      deallocated: new Map([
+        [0, 200],
+        [3, 120],
+        [4, 120],
+        [122, 500]
+      ])
     };
   });
 
@@ -42,12 +42,12 @@ describe('freealloc', () => {
   it('removes the previous deallocated slot', () => {
     heap.freealloc(100);
 
-    expect(heap.memory.deallocated[3]).not.toBeDefined();
+    expect(heap.memory.deallocated.get(3)).not.toBeDefined();
   });
 
   it('adds the allocated slot', () => {
     heap.freealloc(100);
 
-    expect(heap.memory.allocated[3]).toEqual(100);
+    expect(heap.memory.allocated.get(3)).toEqual(100);
   });
 });

@@ -3,7 +3,8 @@
 // of the Apache-2.0 license. See the LICENSE file for details.
 /* eslint camelcase: 0 */
 
-import MemoryDb from '@polkadot/db/Memory';
+import createState from '@polkadot/client-db/state';
+import TrieDb from '@polkadot/trie-db';
 import { logger, stringToU8a } from '@polkadot/util';
 
 import Heap from '../environment/heap';
@@ -14,22 +15,22 @@ const l = logger('test');
 describe('get_allocated_storage', () => {
   let get_allocated_storage;
   let heap;
-  let db;
+  let stateDb;
 
   beforeEach(() => {
     heap = new Heap();
     heap.setWasmMemory({ buffer: new Uint8Array(1024 * 1024) });
 
-    db = new MemoryDb();
+    stateDb = createState(new TrieDb());
 
-    get_allocated_storage = index({ l, heap, db }).get_allocated_storage;
+    get_allocated_storage = index({ l, heap, stateDb }).get_allocated_storage;
   });
 
   it('retrieves allocated storage for a key', () => {
     const key = stringToU8a('key');
     const value = stringToU8a('some value');
 
-    db.put(key, value);
+    stateDb.db.put(key, value);
 
     const keyPtr = heap.allocate(key.length);
     const lenPtr = heap.allocate(4);

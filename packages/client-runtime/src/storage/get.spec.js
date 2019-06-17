@@ -11,7 +11,7 @@ const l = logger('test');
 
 describe('get_storage_into', () => {
   let heap;
-  let db;
+  let stateDb;
   let get_storage_into;
 
   beforeEach(() => {
@@ -26,22 +26,24 @@ describe('get_storage_into', () => {
       set: jest.fn()
     };
 
-    db = {
-      get: jest.fn((key) => {
-        return key[0] !== 0xff
-          ? new Uint8Array([0x1, 0x2, 0x3, 0x4, 0x5])
-          : new Uint8Array(20);
-      })
+    stateDb = {
+      db: {
+        get: jest.fn((key) => {
+          return key[0] !== 0xff
+            ? new Uint8Array([0x1, 0x2, 0x3, 0x4, 0x5])
+            : new Uint8Array(20);
+        })
+      }
     };
 
-    get_storage_into = index({ l, heap, db }).get_storage_into;
+    get_storage_into = index({ l, heap, stateDb }).get_storage_into;
   });
 
   it('retrieves the correct value from storage', () => {
     get_storage_into(1, 3, 3, 3, 0);
 
     expect(
-      db.get
+      stateDb.db.get
     ).toHaveBeenCalledWith(
       new Uint8Array([0x53, 0x61, 0x79])
     );

@@ -10,7 +10,7 @@ import { u8aToHex } from '@polkadot/util';
 import instrument from '../instrument';
 // import unimplemented from '../unimplemented';
 
-export default function storage ({ l, heap, db }: RuntimeEnv): RuntimeInterface$Storage$Trie {
+export default function storage ({ l, heap, stateDb }: RuntimeEnv): RuntimeInterface$Storage$Trie {
   return {
     blake2_256_enumerated_trie_root: (valuesPtr: Pointer, lenPtr: Pointer, count: number, resultPtr: Pointer): void =>
       instrument('enumerated_trie_root', (): void => {
@@ -44,7 +44,7 @@ export default function storage ({ l, heap, db }: RuntimeEnv): RuntimeInterface$
       }),
     storage_root: (resultPtr: Pointer): void =>
       instrument('storage_root', (): void => {
-        const root = db.getRoot();
+        const root = stateDb.getRoot();
 
         l.debug(() => ['storage_root', [resultPtr], '->', u8aToHex(root)]);
 

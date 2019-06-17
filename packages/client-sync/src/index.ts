@@ -5,7 +5,7 @@
 import { Config } from '@polkadot/client/types';
 import { ChainInterface } from '@polkadot/client-chains/types';
 import { PeerInterface, PeersInterface } from '@polkadot/client-p2p/types';
-import { SyncInterface, SyncState$BlockRequests, SyncState$BlockQueue, SyncStatus } from './types';
+import { SyncInterface, SyncState$PeerBlock, SyncState$PeerRequest, SyncStatus } from './types';
 
 import BN from 'bn.js';
 import EventEmitter from 'eventemitter3';
@@ -25,8 +25,8 @@ const l = logger('sync');
 export default class Sync extends EventEmitter implements SyncInterface {
   private chain: ChainInterface;
   private config: Config;
-  private blockRequests: SyncState$BlockRequests = {};
-  private blockQueue: SyncState$BlockQueue = {};
+  private blockRequests: Map<string, SyncState$PeerRequest> = new Map();
+  private blockQueue: Map<string, SyncState$PeerBlock> = new Map();
   private bestQueued: BN = new BN(0);
   private isActive: boolean = false;
   private lastBest: BN = new BN(0);
@@ -85,7 +85,7 @@ export default class Sync extends EventEmitter implements SyncInterface {
   }
 
   private setStatus (): void {
-    this.status = Object.keys(this.blockQueue).length > defaults.MIN_IDLE_BLOCKS
+    this.status = this.blockQueue.size > defaults.MIN_IDLE_BLOCKS
       ? 'Sync'
       : 'Idle';
   }
@@ -96,32 +96,26 @@ export default class Sync extends EventEmitter implements SyncInterface {
     return !!data && !!data.length;
   }
 
-  private getNextBlock (): [string, BlockData] | null {
+  private getNextBlock (): SyncState$PeerBlock | null {
     if (!this.isActive) {
       return null;
     }
 
-    const nextId = Object
-      .keys(this.blockQueue)
-      .find((nextId) => {
-        const { block: { header } } = this.blockQueue[nextId];
+    let result: SyncState$PeerBlock | null = null;
+
+    this.blockQueue.forEach((queued, blockId) => {
+      if (!result) {
+        const { block: { header } } = queued;
 
         if (this.hasBlockData(header.hash)) {
-          delete this.blockQueue[nextId];
-
-          return false;
+          this.blockQueue.delete(blockId);
+        } else if (this.hasBlockData(header.parentHash)) {
+          result = queued;
         }
+      }
+    });
 
-        if (this.hasBlockData(header.parentHash)) {
-          return true;
-        }
-
-        return false;
-      });
-
-    return nextId
-      ? [nextId, this.blockQueue[nextId].block]
-      : null;
+    return result;
   }
 
   private async processBlock (): Promise<boolean> {
@@ -135,7 +129,7 @@ export default class Sync extends EventEmitter implements SyncInterface {
       return false;
     }
 
-    const [blockId, block] = nextImportable;
+    const { blockId, block, peer } = nextImportable;
     const result = this.config.sync === 'full'
       ? await this.chain.executor.importBlock(block)
       : await this.chain.executor.importHeader(block);
@@ -144,12 +138,11 @@ export default class Sync extends EventEmitter implements SyncInterface {
       return false;
     }
 
-    const queueCount = Object.keys(this.blockQueue).length;
-    const peer = this.blockQueue[blockId].peer;
+    const queueCount = this.blockQueue.size;
 
-    delete this.blockQueue[blockId];
+    this.blockQueue.delete(blockId);
 
-    if (queueCount < defaults.MIN_QUEUE_SIZE && !this.blockRequests[peer.id]) {
+    if (queueCount < defaults.MIN_QUEUE_SIZE && !this.blockRequests.get(peer.id)) {
       this.requestBlocks(peer);
     }
 
@@ -229,10 +222,10 @@ export default class Sync extends EventEmitter implements SyncInterface {
   }
 
   queueBlocks (peer: PeerInterface, { blocks, id }: BlockResponse): void {
-    const request = this.blockRequests[peer.id];
+    const request = this.blockRequests.get(peer.id);
     const bestNumber = this.chain.blocks.bestNumber.get();
 
-    delete this.blockRequests[peer.id];
+    this.blockRequests.delete(peer.id);
 
     if (!request) {
       // l.warn(`Unrequested response from ${peer.shortId}`);
@@ -250,16 +243,17 @@ export default class Sync extends EventEmitter implements SyncInterface {
 
       const dbBlock = this.chain.blocks.blockData.get(block.hash);
       const { header: { blockNumber } } = block;
-      const queueNumber = blockNumber.toString();
+      const blockId = blockNumber.toString();
 
-      if ((dbBlock.length && blockNumber.lte(bestNumber)) || this.blockQueue[queueNumber]) {
+      if ((dbBlock.length && blockNumber.lte(bestNumber)) || this.blockQueue.get(blockId)) {
         continue;
       }
 
-      this.blockQueue[queueNumber] = {
+      this.blockQueue.set(blockId, {
+        blockId,
         block,
         peer
-      };
+      });
       firstNumber = firstNumber || blockNumber;
 
       if (this.bestQueued.lt(blockNumber)) {
@@ -279,7 +273,7 @@ export default class Sync extends EventEmitter implements SyncInterface {
   private requestFromPeer (peer: PeerInterface, from: BN | Uint8Array | null, isStale: boolean) {
     const isFromValid = !isBn(from) || from.lte(peer.bestNumber);
 
-    if (this.blockRequests[peer.id] || !peer.isActive() || !from || !isFromValid) {
+    if (this.blockRequests.get(peer.id) || !peer.isActive() || !from || !isFromValid) {
       return;
     }
 
@@ -302,11 +296,11 @@ export default class Sync extends EventEmitter implements SyncInterface {
       max: defaults.MAX_REQUEST_BLOCKS
     });
 
-    this.blockRequests[peer.id] = {
+    this.blockRequests.set(peer.id, {
       peer,
       request,
       timeout: Date.now() + REQUEST_TIMEOUT
-    };
+    });
 
     peer.send(request);
   }
@@ -331,39 +325,32 @@ export default class Sync extends EventEmitter implements SyncInterface {
   }
 
   private requestOther () {
-    const allData = Object.values(this.blockQueue);
+    let result: SyncState$PeerBlock | null = null;
 
-    if (allData.length === 0) {
+    this.blockQueue.forEach((current) => {
+      if (!result || current.block.header.blockNumber.lt(result.block.header.blockNumber)) {
+        result = current;
+      }
+    });
+
+    if (!result) {
       return;
     }
 
-    const { block, peer } = allData.reduce((first, current) => {
-      return current.block.header.blockNumber.lt(first.block.header.blockNumber)
-        ? current
-        : first;
-    }, allData[0]);
-
-    this.requestFromPeer(peer, block.header.blockNumber.subn(defaults.MAX_REQUEST_BLOCKS), true);
+    this.requestFromPeer(
+      (result as SyncState$PeerBlock).peer,
+      (result as SyncState$PeerBlock).block.header.blockNumber.subn(defaults.MAX_REQUEST_BLOCKS),
+      true
+    );
   }
 
   private timeoutRequests (): void {
     const now = Date.now();
 
-    this.blockRequests = Object
-      .keys(this.blockRequests)
-      .filter((id) => {
-        const request = this.blockRequests[id];
-
-        if (request.timeout > now) {
-          return true;
-        }
-
-        return false;
-      })
-      .reduce((result, id) => {
-        result[id] = this.blockRequests[id];
-
-        return result;
-      }, {} as SyncState$BlockRequests);
+    this.blockRequests.forEach((request, key) => {
+      if (request.timeout < now) {
+        this.blockRequests.delete(key);
+      }
+    });
   }
 }

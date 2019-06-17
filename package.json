@@ -25,8 +25,8 @@
   "devDependencies": {
     "@babel/core": "^7.4.4",
     "@babel/runtime": "^7.4.4",
-    "@polkadot/dev-react": "^0.30.0-beta.8",
-    "@polkadot/ts": "^0.1.58",
+    "@polkadot/dev-react": "^0.30.0-beta.13",
+    "@polkadot/ts": "^0.1.60",
     "copyfiles": "^2.1.0",
     "empty": "^0.10.1",
     "gh-pages": "^2.0.1"

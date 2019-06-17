@@ -74,7 +74,7 @@ export default class Executor implements ExecutorInterface {
         this.blockDb.bestNumber.set(blockNumber);
       }
 
-      // FIXME This could be problematic, i.e. the hash <-> numberr mappings (multiples)
+      // FIXME This could be problematic, i.e. the hash <-> number mappings (multiples)
       this.blockDb.blockData.set(blockData.toU8a(), hash);
       this.blockDb.hash.set(hash, blockNumber);
 
@@ -92,8 +92,8 @@ export default class Executor implements ExecutorInterface {
       // get the parent block, set the root accordingly
       const { header: { stateRoot } } = new BlockData(this.blockDb.blockData.get(parentHash));
 
-      if (!stateRoot.eq(this.stateDb.db.getRoot())) {
-        this.stateDb.db.setRoot(stateRoot);
+      if (!stateRoot.eq(this.stateDb.getRoot())) {
+        this.stateDb.setRoot(stateRoot);
       }
 
       const wasm = await this.createWasm();
@@ -112,6 +112,8 @@ export default class Executor implements ExecutorInterface {
     const result = this.updateBlockDb(blockData);
 
     if (result) {
+      this.stateDb.snapshot(blockNumber);
+
       l.debug(() => `Imported block #${blockNumber} (${Date.now() - start}ms)`);
     }
 

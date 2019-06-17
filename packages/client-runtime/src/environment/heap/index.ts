@@ -3,7 +3,7 @@
 // of the Apache-2.0 license. See the LICENSE file for details.
 
 import { RuntimeEnv$Heap, Pointer } from '../../types';
-import { Memory, Memory$Buffer, SizeUsed } from './types';
+import { Memory, SizeUsed } from './types';
 
 import { ExtError, isUndefined, logger } from '@polkadot/util';
 
@@ -33,7 +33,7 @@ export default class Heap implements RuntimeEnv$Heap {
 
     if (offset < this.memory.size) {
       this.memory.offset = offset;
-      this.memory.allocated[ptr] = size;
+      this.memory.allocated.set(ptr, size);
 
       return ptr;
     }
@@ -42,15 +42,14 @@ export default class Heap implements RuntimeEnv$Heap {
   }
 
   deallocate (ptr: Pointer): number {
-    const size = this.memory.allocated[ptr];
+    const size = this.memory.allocated.get(ptr);
 
     if (isUndefined(size)) {
       throw new ExtError('Calling free() on unallocated memory');
     }
 
-    delete this.memory.allocated[ptr];
-
-    this.memory.deallocated[ptr] = size;
+    this.memory.allocated.delete(ptr);
+    this.memory.deallocated.set(ptr, size);
     // this.memory.uint8.fill(0, ptr, size);
 
     return size;
@@ -74,8 +73,8 @@ export default class Heap implements RuntimeEnv$Heap {
     }
 
     // FIXME: We are being wasteful here, i.e. we should just un-free the requested size instead of everything (long-term fragmentation and loss)
-    delete this.memory.deallocated[ptr];
-    this.memory.allocated[ptr] = size;
+    this.memory.deallocated.delete(ptr);
+    this.memory.allocated.set(ptr, size);
 
     return ptr;
   }
@@ -125,10 +124,12 @@ export default class Heap implements RuntimeEnv$Heap {
     };
   }
 
-  private calculateSize (buffer: Memory$Buffer): number {
-    return Object
-      .values(buffer)
-      .reduce((total, size) => total + (size), 0);
+  private calculateSize (buffer: Map<number, number>): number {
+    let total: number = 0;
+
+    buffer.forEach((size) => total += size);
+
+    return total;
   }
 
   private growMemory (pages: number): boolean {
@@ -157,8 +158,8 @@ export default class Heap implements RuntimeEnv$Heap {
     // l.debug(() => `Creating WASM memory wrap, ${(size - offset) / 1024}KB`);
 
     return {
-      allocated: {},
-      deallocated: {},
+      allocated: new Map<number, number>(),
+      deallocated: new Map<number, number>(),
       isResized: false,
       offset, // aligned with Rust (should have offset)
       size,
@@ -167,29 +168,21 @@ export default class Heap implements RuntimeEnv$Heap {
     };
   }
 
-  private findContaining (size: number): Pointer {
-    const [ptr] = Object
-      .keys(this.memory.deallocated)
-      .filter((offset) =>
-        this.memory.deallocated[offset as any] >= size
-      )
-      .sort((a: any, b: any) => {
-        const sizeA = this.memory.deallocated[a];
-        const sizeB = this.memory.deallocated[b];
-
-        if (sizeA < sizeB) {
+  private findContaining (total: number): Pointer {
+    const [ptr] = [...this.memory.deallocated.entries()]
+      .filter(([, size]) => size >= total)
+      .sort((a: [number, number], b: [number, number]) => {
+        if (a[1] < b[1]) {
           return -1;
-        } else if (sizeA > sizeB) {
+        } else if (a[1] > b[1]) {
           return 1;
         }
 
         return 0;
       });
 
-    if (ptr) {
-      return parseInt(ptr, 10);
-    }
-
-    return -1;
+    return ptr
+      ? ptr[0]
+      : -1;
   }
 }

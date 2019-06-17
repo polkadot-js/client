@@ -3,6 +3,7 @@
 // of the Apache-2.0 license. See the LICENSE file for details.
 /* eslint camelcase: 0 */
 
+import createState from '@polkadot/client-db/state';
 import TrieDb from '@polkadot/trie-db';
 import { logger, stringToU8a } from '@polkadot/util';
 
@@ -12,7 +13,7 @@ const l = logger('test');
 
 describe('storage_root', () => {
   let heap;
-  let db;
+  let stateDb;
   let storage_root;
 
   beforeEach(() => {
@@ -20,15 +21,15 @@ describe('storage_root', () => {
       set: jest.fn()
     };
 
-    db = new TrieDb();
+    stateDb = createState(new TrieDb());
 
-    storage_root = index({ l, heap, db }).storage_root;
+    storage_root = index({ l, heap, stateDb }).storage_root;
   });
 
   it('creates a basic storage root', () => {
-    db.put(stringToU8a('doe'), stringToU8a('reindeer'));
-    db.put(stringToU8a('dog'), stringToU8a('puppy'));
-    db.put(stringToU8a('dogglesworth'), stringToU8a('cat'));
+    stateDb.db.put(stringToU8a('doe'), stringToU8a('reindeer'));
+    stateDb.db.put(stringToU8a('dog'), stringToU8a('puppy'));
+    stateDb.db.put(stringToU8a('dogglesworth'), stringToU8a('cat'));
 
     storage_root(5);
 

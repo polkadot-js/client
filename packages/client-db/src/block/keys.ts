@@ -3,7 +3,7 @@
 // of the Apache-2.0 license. See the LICENSE file for details.
 
 import createFunction from '@polkadot/storage/fromMetadata/createFunction';
-import { StorageFunctionMetadata, StorageFunctionModifier, StorageFunctionType } from '@polkadot/types/Metadata/v4/Storage';
+import { StorageFunctionMetadata, StorageFunctionModifier, StorageFunctionType } from '@polkadot/types/Metadata/v5/Storage';
 import { Text, Vector } from '@polkadot/types';
 import { isString } from '@polkadot/util';
 
@@ -24,7 +24,7 @@ const createMethod = (method: string, key: string, { documentation, type }: Subs
       toJSON: (): any =>
         key
     } as StorageFunctionMetadata,
-    { key, skipHashing: false }
+    { key, skipHashing: true }
   );
 
 export default {

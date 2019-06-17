@@ -12,7 +12,6 @@ export default ({
   db: {
     compact: false,
     path: '.',
-    snapshot: false,
     type: 'memory'
   },
   p2p: {
