@@ -6,6 +6,7 @@ import { BaseDb, ProgressCb } from '@polkadot/db/types';
 import { KVInfo } from './types';
 
 import codec from '@polkadot/trie-codec';
+import { BITMAP } from '@polkadot/trie-codec/constants';
 import { logger } from '@polkadot/util';
 
 import Cache from './Cache';
@@ -14,10 +15,6 @@ import defaults from './defaults';
 import { readU8aU32, serializeKey, u32ToArray } from './util';
 
 const l = logger('db/struct');
-
-const FLAG_EMPTY = 0;
-const FLAG_LINKED = 0b10000000;
-const UNFLAG_LINKED = 0b01111111;
 
 export default class FileStructDb extends Impl implements BaseDb {
   private _cache: Cache<string> = new Cache(16 * 1024);
@@ -59,25 +56,26 @@ export default class FileStructDb extends Impl implements BaseDb {
       return null;
     } else if (!this._isTrie) {
       return keyInfo.valData;
-    } else if (keyInfo.valData[0] === FLAG_EMPTY) {
+    } else if (!keyInfo.valData[0]) {
       return keyInfo.valData.subarray(1);
     }
 
-    let offset = 1;
     const recoded: Array<Uint8Array | null> = [];
+    const bitmap = (keyInfo.valData[1] << 8) + keyInfo.valData[2];
+    let offset = 3;
 
-    while (offset < keyInfo.valData.length) {
-      const flag = keyInfo.valData[offset++];
-
-      if (flag === FLAG_EMPTY) {
-        recoded.push(null);
-      } else {
-        const keyBuff = this._readKey(flag & UNFLAG_LINKED, readU8aU32(keyInfo.valData, offset));
+    for (let index = 0; index < 16; index++) {
+      if (bitmap & BITMAP[index]) {
+        const keyBuff = this._readKey(0, readU8aU32(keyInfo.valData, offset));
 
         recoded.push(keyBuff.subarray(0, defaults.KEY_DATA_SIZE));
         offset += defaults.U32_SIZE;
+      } else {
+        recoded.push(null);
       }
     }
+
+    recoded.push(null);
 
     return codec.encode(recoded);
   }
@@ -117,21 +115,24 @@ export default class FileStructDb extends Impl implements BaseDb {
         );
 
         // great we are dealing with keys only here
-        if (!hasArrays) {
-          const recoded: Array<number> = [17 | FLAG_LINKED];
+        if (!hasArrays && !decoded[16]) {
+          let bitmap = 0;
+          const recoded: Array<number> = [1, 0, 0];
 
-          decoded.forEach((value) => {
-            const u8a = value as Uint8Array | null;
+          for (let index = 0; index < 16; index++) {
+            const u8a = decoded[index] as Uint8Array;
 
             if (u8a) {
               const entry = serializeKey(u8a);
               const keyInfo = this._findValue(entry, null, false) as KVInfo;
 
-              recoded.push(entry.index | FLAG_LINKED, ...u32ToArray(keyInfo.keyAt));
-            } else {
-              recoded.push(FLAG_EMPTY);
+              bitmap |= BITMAP[index];
+              recoded.push(...u32ToArray(keyInfo.keyAt));
             }
-          });
+          }
+
+          recoded[1] = bitmap >> 8;
+          recoded[2] = bitmap & 255;
 
           adjusted = new Uint8Array(recoded);
         }

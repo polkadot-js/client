@@ -60,7 +60,13 @@ export default class Files {
         const file = path.join(this._path, `${prefix}.${type as string}`);
 
         if (!fs.existsSync(file)) {
-          fs.writeFileSync(file, new Uint8Array(type === 'idx' ? defaults.HDR_TOTAL_SIZE : 0));
+          fs.writeFileSync(file, new Uint8Array(
+            type === 'idx'
+              ? defaults.HDR_TOTAL_SIZE
+              : type === 'key'
+                ? defaults.KEY_TOTAL_SIZE
+                : 0
+          ));
         }
 
         const cache = new Cache<number>(CACHE_SIZES[type]);
