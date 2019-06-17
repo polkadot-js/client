@@ -25,6 +25,9 @@ const HDR_ENTRY_SIZE = U32_SIZE;
 // the size of a branch entry
 const HDR_TOTAL_SIZE = HDR_ENTRY_NUM * HDR_ENTRY_SIZE;
 
+// the actual DB version
+const VERSION = '001';
+
 export default {
   HDR_ENTRY_NUM,
   HDR_ENTRY_SIZE,
@@ -33,5 +36,6 @@ export default {
   KEY_DATA_SIZE,
   KEY_PARTS_SIZE,
   KEY_TOTAL_SIZE,
-  U32_SIZE
+  U32_SIZE,
+  VERSION
 };
