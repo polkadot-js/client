@@ -25,9 +25,9 @@ type Fds = {
 };
 
 const CACHE_SIZES = {
-  idx: 4 * 512,
-  key: 3 * 512,
-  val: 2 * 512
+  idx: 8 * 1024,
+  key: 6 * 1024,
+  val: 4 * 1024
 };
 
 export default class Files {

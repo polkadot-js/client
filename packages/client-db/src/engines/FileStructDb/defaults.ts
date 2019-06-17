@@ -13,10 +13,10 @@ const KEY_TOTAL_SIZE = KEY_DATA_SIZE + U32_SIZE + U32_SIZE;
 const KEY_PARTS_SIZE = ((KEY_DATA_SIZE - 1) * 2) + 1; // 16 entries = nibbles
 
 // the number of entries in a header
-const HDR_ENTRY_NUM = 16; // 16 = 4-bits
+const HDR_ENTRY_NUM = 16; // 16 = 4 bits
 
 // the number of index files
-const HDR_SPLIT_FILES = 128; // 128 = 7 bits
+const HDR_SPLIT_FILES = 16; // 16 = 4 bits, 64 = 6 bits, 128 = 7 bits
 
 // first byte for the type, followed by offset
 const HDR_ENTRY_SIZE = U32_SIZE;
