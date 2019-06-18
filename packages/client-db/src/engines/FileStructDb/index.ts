@@ -15,6 +15,8 @@ import { serializeKey } from './util';
 
 const l = logger('db/struct');
 
+const TRIE_BRANCH_LEN = 17;
+
 export default class FileStructDb extends Impl implements BaseDb {
   private _cache: Cache<string> = new Cache(16 * 1024);
 
@@ -62,17 +64,23 @@ export default class FileStructDb extends Impl implements BaseDb {
     const recoded: Array<Uint8Array | null> = [];
     let offset = 1;
 
-    while (offset < keyInfo.valData.length) {
-      if (!keyInfo.valData[offset]) {
-        recoded.push(null);
-        offset++;
-      } else {
-        const [length, keyAt] = compactFromU8a(keyInfo.valData.subarray(offset));
-        const keyBuff = this._readKey(0, keyAt.toNumber());
+    try {
+      while (offset < keyInfo.valData.length) {
+        if (keyInfo.valData[offset]) {
+          const [length, keyAt] = compactFromU8a(keyInfo.valData.subarray(offset));
+          const keyBuff = this._readKey(0, keyAt.toNumber());
 
-        recoded.push(keyBuff.subarray(0, defaults.KEY_DATA_SIZE));
-        offset += length;
+          recoded.push(keyBuff.subarray(0, defaults.KEY_DATA_SIZE));
+          offset += length;
+        } else {
+          recoded.push(null);
+          offset += 1;
+        }
       }
+    } catch (error) {
+      console.error(error.message, keyInfo.valData);
+
+      throw error;
     }
 
     return codec.encode(recoded);
@@ -100,40 +108,33 @@ export default class FileStructDb extends Impl implements BaseDb {
   put (key: Uint8Array, value: Uint8Array): void {
     // l.debug(() => ['put', { key, value }]);
 
-    let adjusted: Uint8Array | null = null;
+    let adjusted: Uint8Array | undefined;
 
     if (this._isTrie) {
       const decoded = codec.decode(value);
+      const isEncodable = Array.isArray(decoded) &&
+        decoded.length === TRIE_BRANCH_LEN &&
+        !decoded.some((value) => value && value.length !== 32);
 
       // extension nodes are going away anyway, so just ignore, no worse off.
-      if (Array.isArray(decoded) && decoded.length === 17) {
-        // only deal with keys where it is an actual trie hash
-        const hasArrays = decoded.some((value) =>
-          Array.isArray(value) || (value && value.length !== 32)
-        );
+      if (isEncodable) {
+        const recoded: Array<number> = [TRIE_BRANCH_LEN];
 
-        // great we are dealing with keys only here
-        if (!hasArrays) {
-          const recoded: Array<number> = [1];
+        for (let index = 0; index < TRIE_BRANCH_LEN; index++) {
+          const u8a = (decoded as Array<Uint8Array>)[index];
 
-          for (let index = 0; index < 17; index++) {
-            const u8a = decoded[index] as Uint8Array;
+          if (u8a) {
+            const entry = serializeKey(u8a);
+            const keyInfo = this._findValue(entry, null, false) as KVInfo;
 
-            if (u8a) {
-              const entry = serializeKey(u8a);
-              const keyInfo = this._findValue(entry, null, false) as KVInfo;
-
-              recoded.push(...compactToU8a(keyInfo.keyAt));
-            } else {
-              recoded.push(0);
-            }
+            recoded.push(...compactToU8a(keyInfo.keyAt));
+          } else {
+            recoded.push(0);
           }
-
-          adjusted = new Uint8Array(recoded);
         }
-      }
 
-      if (!adjusted) {
+        adjusted = new Uint8Array(recoded);
+      } else {
         adjusted = new Uint8Array(value.length + 1);
         adjusted.set(value, 1);
       }
