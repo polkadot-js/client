@@ -1,6 +1,6 @@
 {
   "name": "@polkadot/client-runtime",
-  "version": "0.23.0-beta.19",
+  "version": "0.23.0-beta.20",
   "description": "Basic execution wrapper interface for WASM programs",
   "main": "index.js",
   "publishConfig": {
@@ -27,7 +27,7 @@
   "homepage": "https://github.com/polkadot-js/client/tree/master/packages/client-runtime#readme",
   "dependencies": {
     "@babel/runtime": "^7.4.3",
-    "@polkadot/client-db": "^0.23.0-beta.19",
+    "@polkadot/client-db": "^0.23.0-beta.20",
     "@polkadot/util": "^0.94.0-beta.3",
     "@polkadot/util-crypto": "^0.94.0-beta.3"
   }
