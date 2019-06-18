@@ -6,13 +6,12 @@ import { BaseDb, ProgressCb } from '@polkadot/db/types';
 import { KVInfo } from './types';
 
 import codec from '@polkadot/trie-codec';
-import { BITMAP } from '@polkadot/trie-codec/constants';
-import { logger } from '@polkadot/util';
+import { compactFromU8a, compactToU8a, logger } from '@polkadot/util';
 
 import Cache from './Cache';
 import Impl from './Impl';
 import defaults from './defaults';
-import { readU8aU32, serializeKey, u32ToArray } from './util';
+import { serializeKey } from './util';
 
 const l = logger('db/struct');
 
@@ -56,29 +55,25 @@ export default class FileStructDb extends Impl implements BaseDb {
       return null;
     } else if (!this._isTrie) {
       return keyInfo.valData;
-    }
-
-    const bitmap = (keyInfo.valData[0] << 8) + keyInfo.valData[1];
-    let offset = 2;
-
-    if (!bitmap) {
-      return keyInfo.valData.subarray(offset);
+    } else if (!keyInfo.valData[0]) {
+      return keyInfo.valData.subarray(1);
     }
 
     const recoded: Array<Uint8Array | null> = [];
+    let offset = 1;
 
-    for (let index = 0; index < 16; index++) {
-      if (bitmap & BITMAP[index]) {
-        const keyBuff = this._readKey(0, readU8aU32(keyInfo.valData, offset));
+    while (offset < keyInfo.valData.length) {
+      if (!keyInfo.valData[offset]) {
+        recoded.push(null);
+        offset++;
+      } else {
+        const [length, keyAt] = compactFromU8a(keyInfo.valData.subarray(offset));
+        const keyBuff = this._readKey(0, keyAt.toNumber());
 
         recoded.push(keyBuff.subarray(0, defaults.KEY_DATA_SIZE));
-        offset += defaults.U32_SIZE;
-      } else {
-        recoded.push(null);
+        offset += length;
       }
     }
-
-    recoded.push(null);
 
     return codec.encode(recoded);
   }
@@ -118,32 +113,29 @@ export default class FileStructDb extends Impl implements BaseDb {
         );
 
         // great we are dealing with keys only here
-        if (!hasArrays && !decoded[16]) {
-          let bitmap = 0;
-          const recoded: Array<number> = [0, 0];
+        if (!hasArrays) {
+          const recoded: Array<number> = [1];
 
-          for (let index = 0; index < 16; index++) {
+          for (let index = 0; index < 17; index++) {
             const u8a = decoded[index] as Uint8Array;
 
             if (u8a) {
               const entry = serializeKey(u8a);
               const keyInfo = this._findValue(entry, null, false) as KVInfo;
 
-              bitmap |= BITMAP[index];
-              recoded.push(...u32ToArray(keyInfo.keyAt));
+              recoded.push(...compactToU8a(keyInfo.keyAt));
+            } else {
+              recoded.push(0);
             }
           }
-
-          recoded[0] = bitmap >> 8;
-          recoded[1] = bitmap & 255;
 
           adjusted = new Uint8Array(recoded);
         }
       }
 
       if (!adjusted) {
-        adjusted = new Uint8Array(value.length + 2);
-        adjusted.set(value, 2);
+        adjusted = new Uint8Array(value.length + 1);
+        adjusted.set(value, 1);
       }
     }
 
