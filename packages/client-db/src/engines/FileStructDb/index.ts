@@ -10,7 +10,7 @@ import { logger } from '@polkadot/util';
 
 import Cache from './Cache';
 import Impl from './Impl';
-import { BITS_F, BITS_U, U32_SIZE } from './defaults';
+import { BITS_F, BITS_U, KEY_DATA_SIZE, U32_SIZE } from './defaults';
 import { readU8aU32, serializeKey, writeU8aU32 } from './util';
 
 const l = logger('db/struct');
@@ -74,7 +74,7 @@ export default class FileStructDb extends Impl implements BaseDb {
 
     while (offset < info.valData.length) {
       if (info.valData[offset]) {
-        recoded[index] = this._readKey(readU8aU32(info.valData, offset) & BITS_U).subarray(0, 32);
+        recoded[index] = this._readKey(readU8aU32(info.valData, offset) & BITS_U).subarray(0, KEY_DATA_SIZE);
         offset += U32_SIZE;
       } else {
         offset++;
@@ -119,7 +119,7 @@ export default class FileStructDb extends Impl implements BaseDb {
     const decoded = codec.decode(value);
     const isEncodable = Array.isArray(decoded) &&
       decoded.length === TRIE_BRANCH_LEN &&
-      !decoded.some((value) => value && value.length !== 32);
+      !decoded.some((value) => value && value.length !== KEY_DATA_SIZE);
 
     // extension nodes are going away anyway, so just ignore, no worse off.
     if (isEncodable) {
