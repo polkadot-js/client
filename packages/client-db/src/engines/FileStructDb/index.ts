@@ -123,7 +123,7 @@ export default class FileStructDb extends Impl implements BaseDb {
 
     // extension nodes are going away anyway, so just ignore, no worse off.
     if (isEncodable) {
-      const recoded = new Uint8Array((TRIE_BRANCH_LEN * 4) + 1);
+      const recoded = new Uint8Array((TRIE_BRANCH_LEN * U32_SIZE) + 1);
       let length: number = 1;
 
       // set the initial flag, i.e. we have data following
