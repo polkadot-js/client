@@ -9,7 +9,7 @@ import mkdirp from 'mkdirp';
 import path from 'path';
 
 import Cache from './Cache';
-import { DB_VERSION, HDR_TOTAL_SIZE, KEY_TOTAL_SIZE } from './defaults';
+import { HDR_TOTAL_SIZE, KEY_TOTAL_SIZE } from './defaults';
 
 type Fd = {
   cache: Cache<number>,
@@ -23,6 +23,8 @@ type Fds = {
   key: Fd,
   val: Fd
 };
+
+const DB_VERSION = '004';
 
 const CACHE_SIZES = {
   idx: 8 * 1024,
@@ -44,9 +46,7 @@ export default class Files {
   }
 
   close (): void {
-    Object.values(this._fds).forEach(({ fd }) =>
-      fs.closeSync(fd)
-    );
+    Object.values(this._fds).forEach(({ fd }) => fs.closeSync(fd));
 
     this._isOpen = false;
   }
@@ -59,9 +59,7 @@ export default class Files {
         fs.writeFileSync(file, new Uint8Array(
           type === 'idx'
             ? HDR_TOTAL_SIZE
-            : type === 'key'
-              ? KEY_TOTAL_SIZE
-              : 0
+            : 0
         ));
       }
 

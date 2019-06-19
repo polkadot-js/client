@@ -2,7 +2,7 @@
 // This software may be modified and distributed under the terms
 // of the Apache-2.0 license. See the LICENSE file for details.
 
-import { KVInfo, KeyParts, Slot, ValInfo } from './types';
+import { KVInfo, KeyParts, ValInfo } from './types';
 
 // import { logger } from '@polkadot/util';
 
@@ -17,22 +17,16 @@ export default class Impl extends Files {
     const hdr = this._readHdr(hdrAt);
     const parsedHdr = parseHdr(hdr, key.parts[keyIndex]);
 
-    switch (parsedHdr.type) {
-      case Slot.EMPTY:
-        return this.__retrieveEmpty(key, value, keyIndex, hdr, hdrAt);
-
-      case Slot.HDR:
-        return this._findValue(key, value, withValue, keyIndex + 1, parsedHdr.at);
-
-      case Slot.KEY:
-        return this.__retrieveKey(key, value, withValue, keyIndex, hdr, hdrAt, parsedHdr.at);
-
-      default:
-        throw new Error(`Unhandled entry type ${parsedHdr.type}`);
+    if (parsedHdr.isKey) {
+      return this.__retrieveKey(key, value, withValue, keyIndex, hdr, hdrAt, parsedHdr.linkTo);
+    } else if (parsedHdr.linkTo) {
+      return this._findValue(key, value, withValue, keyIndex + 1, parsedHdr.linkTo);
     }
+
+    return this.__retrieveEmpty(key, value, keyIndex, hdr, hdrAt);
   }
 
-  private __appendNewValue (key: KeyParts, valData: Uint8Array): ValInfo {
+  private __appendNewValue (valData: Uint8Array): ValInfo {
     return {
       valAt: this._appendVal(valData),
       valData,
@@ -41,7 +35,7 @@ export default class Impl extends Files {
   }
 
   private __appendNewKeyValue (key: KeyParts, value: Uint8Array): KVInfo {
-    const kvInfo = this.__appendNewValue(key, value) as KVInfo;
+    const kvInfo = this.__appendNewValue(value) as KVInfo;
 
     kvInfo.keyData = newKey(key, kvInfo);
     kvInfo.keyAt = this._appendKey(kvInfo.keyData);
@@ -57,7 +51,8 @@ export default class Impl extends Files {
     const hdrIndex = key.parts[keyIndex];
     const newInfo = this.__appendNewKeyValue(key, value);
 
-    modifyHdr(hdr, hdrIndex, Slot.KEY, newInfo.keyAt);
+    modifyHdr(hdr, hdrIndex, newInfo.keyAt, true);
+
     this._updateHdr(hdrAt, hdr);
 
     return newInfo;
@@ -81,7 +76,7 @@ export default class Impl extends Files {
     // we have a match, either retrieve or update
     if (matchIndex === key.parts.length) {
       if (value) {
-        const { valAt, valData, valSize } = this.__appendNewValue(key, value);
+        const { valAt, valData, valSize } = this.__appendNewValue(value);
 
         this._updateKey(keyAt, modifyKey(keyData, valAt, valSize));
 
@@ -104,18 +99,18 @@ export default class Impl extends Files {
 
     // write the last header - this contains the old and new keys at the correct indexes
     let lastAt = this._appendHdr(newHdr([
-      { dataAt: keyAt, hdrIndex: prevKey.parts[matchIndex], type: Slot.KEY },
-      { dataAt: newKv.keyAt, hdrIndex: key.parts[matchIndex], type: Slot.KEY }
+      { dataAt: keyAt, hdrIndex: prevKey.parts[matchIndex], isKey: true },
+      { dataAt: newKv.keyAt, hdrIndex: key.parts[matchIndex], isKey: true }
     ]));
 
     // make a tree from the header we are modifying down to the others
     for (let offset = 1; depth > 0; depth--, offset++) {
       lastAt = this._appendHdr(newHdr([
-        { dataAt: lastAt, hdrIndex: key.parts[matchIndex - offset], type: Slot.HDR }
+        { dataAt: lastAt, hdrIndex: key.parts[matchIndex - offset], isKey: false }
       ]));
     }
 
-    this._updateHdr(hdrAt, modifyHdr(hdr, hdrIndex, Slot.HDR, lastAt));
+    this._updateHdr(hdrAt, modifyHdr(hdr, hdrIndex, lastAt, false));
 
     return newKv;
   }

@@ -22,9 +22,6 @@ export const HDR_ENTRY_SIZE = U32_SIZE;
 // the size of a branch entry
 export const HDR_TOTAL_SIZE = HDR_ENTRY_NUM * HDR_ENTRY_SIZE;
 
-// the actual DB version
-export const DB_VERSION = '001';
-
 // bits for flagging
-export const F_BITS = 0b10000000000000000000000000000000;
-export const U_BITS = 0b01111111111111111111111111111111;
+export const BITS_F = 0b10000000000000000000000000000000;
+export const BITS_U = 0b01111111111111111111111111111111;
