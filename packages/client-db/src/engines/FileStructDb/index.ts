@@ -11,7 +11,7 @@ import { logger } from '@polkadot/util';
 import Cache from './Cache';
 import Impl from './Impl';
 import { BITS_F, BITS_U, KEY_DATA_SIZE, U32_SIZE } from './defaults';
-import { readU8aU32, serializeKey, writeU8aU32 } from './util';
+import { readU32, serializeKey, writeU32 } from './util';
 
 const l = logger('db/struct');
 
@@ -74,7 +74,7 @@ export default class FileStructDb extends Impl implements BaseDb {
 
     while (offset < info.valData.length) {
       if (info.valData[offset]) {
-        recoded[index] = this._readKey(readU8aU32(info.valData, offset) & BITS_U).subarray(0, KEY_DATA_SIZE);
+        recoded[index] = this._readKey(readU32(info.valData, offset) & BITS_U).subarray(0, KEY_DATA_SIZE);
         offset += U32_SIZE;
       } else {
         offset++;
@@ -135,7 +135,7 @@ export default class FileStructDb extends Impl implements BaseDb {
         if (u8a) {
           const info = this._findValue(serializeKey(u8a), null, false);
 
-          writeU8aU32(recoded, ((info as KVInfo).keyAt | BITS_F), length);
+          writeU32(recoded, ((info as KVInfo).keyAt | BITS_F), length);
           length += 4;
         } else {
           recoded[length] = 0;

@@ -2,7 +2,7 @@
 // This software may be modified and distributed under the terms
 // of the Apache-2.0 license. See the LICENSE file for details.
 
-import { readU8aU32, writeU8aU32 } from './util';
+import { readU32, writeU32 } from './util';
 
 describe('util', () => {
   // it('compresses when serializing', () => {
@@ -18,8 +18,8 @@ describe('util', () => {
   it('reads and writes u8a uint32', () => {
     const u8a = new Uint8Array(6);
 
-    writeU8aU32(u8a, 0x12345678, 1);
+    writeU32(u8a, 0x12345678, 1);
 
-    expect(readU8aU32(u8a, 1)).toEqual(0x12345678);
+    expect(readU32(u8a, 1)).toEqual(0x12345678);
   });
 });
