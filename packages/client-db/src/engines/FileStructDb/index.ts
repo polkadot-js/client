@@ -10,8 +10,9 @@ import { compactFromU8a, compactToU8a, logger } from '@polkadot/util';
 
 import Cache from './Cache';
 import Impl from './Impl';
-import defaults from './defaults';
+import { KEY_DATA_SIZE } from './defaults';
 import { serializeKey } from './util';
+// import { readU8aU32, writeU8aU32 } from './util';
 
 const l = logger('db/struct');
 
@@ -61,24 +62,37 @@ export default class FileStructDb extends Impl implements BaseDb {
       return keyInfo.valData.subarray(1);
     }
 
-    const recoded: Array<Uint8Array | null> = [];
+    // 17 entries, assuming there may be an encoded value in there
+    const recoded: Array<Uint8Array | null> = [
+      null, null, null, null,
+      null, null, null, null,
+      null, null, null, null,
+      null, null, null, null,
+      null
+    ];
+    let index = 0;
     let offset = 1;
 
     try {
       while (offset < keyInfo.valData.length) {
         if (keyInfo.valData[offset]) {
           const [length, keyAt] = compactFromU8a(keyInfo.valData.subarray(offset));
-          const keyBuff = this._readKey(0, keyAt.toNumber());
+          // const keyAt = readU8aU32(keyInfo.valData, offset) & U_VALUE;
+          const keyBuff = this._readKey(keyAt.toNumber());
 
-          recoded.push(keyBuff.subarray(0, defaults.KEY_DATA_SIZE));
+          // recoded.push(keyBuff.subarray(0, KEY_DATA_SIZE));
+          recoded[index] = keyBuff.subarray(0, KEY_DATA_SIZE);
           offset += length;
+          // offset += 4;
         } else {
-          recoded.push(null);
-          offset += 1;
+          // recoded.push(null);
+          offset++;
         }
+
+        index++;
       }
     } catch (error) {
-      console.error(error.message, keyInfo.valData);
+      console.error(error.message, key, keyInfo.valData, keyInfo.keyAt, JSON.stringify(keyInfo));
 
       throw error;
     }
@@ -108,39 +122,52 @@ export default class FileStructDb extends Impl implements BaseDb {
   put (key: Uint8Array, value: Uint8Array): void {
     // l.debug(() => ['put', { key, value }]);
 
-    let adjusted: Uint8Array | undefined;
+    this._cache.set(key.toString(), value);
 
-    if (this._isTrie) {
-      const decoded = codec.decode(value);
-      const isEncodable = Array.isArray(decoded) &&
-        decoded.length === TRIE_BRANCH_LEN &&
-        !decoded.some((value) => value && value.length !== 32);
-
-      // extension nodes are going away anyway, so just ignore, no worse off.
-      if (isEncodable) {
-        const recoded: Array<number> = [TRIE_BRANCH_LEN];
-
-        for (let index = 0; index < TRIE_BRANCH_LEN; index++) {
-          const u8a = (decoded as Array<Uint8Array>)[index];
-
-          if (u8a) {
-            const entry = serializeKey(u8a);
-            const keyInfo = this._findValue(entry, null, false) as KVInfo;
-
-            recoded.push(...compactToU8a(keyInfo.keyAt));
-          } else {
-            recoded.push(0);
-          }
-        }
-
-        adjusted = new Uint8Array(recoded);
-      } else {
-        adjusted = new Uint8Array(value.length + 1);
-        adjusted.set(value, 1);
-      }
+    if (!this._isTrie) {
+      this._findValue(serializeKey(key), value);
+      return;
     }
 
-    this._cache.set(key.toString(), value);
-    this._findValue(serializeKey(key), adjusted || value);
+    let adjusted: Uint8Array;
+    const decoded = codec.decode(value);
+    const isEncodable = Array.isArray(decoded) &&
+      decoded.length === TRIE_BRANCH_LEN &&
+      !decoded.some((value) => value && value.length !== KEY_DATA_SIZE);
+
+    // extension nodes are going away anyway, so just ignore, no worse off.
+    if (isEncodable) {
+      // instead of growing and allocating, we probably want to dynamically allocate
+      // the maximum possible size and then work with the Uint8Array (we can adjust
+      // the size with a subarray at the end)
+      const recoded: Array<number> = [TRIE_BRANCH_LEN];
+      // const recoded = new Uint8Array((TRIE_BRANCH_LEN * 4) + 1);
+      // let length: number = 1;
+      // recoded[0] = TRIE_BRANCH_LEN;
+
+      for (let index = 0; index < TRIE_BRANCH_LEN; index++) {
+        const u8a = (decoded as Array<Uint8Array>)[index];
+
+        if (u8a) {
+          const keyInfo = this._findValue(serializeKey(u8a), null, false) as KVInfo;
+
+          recoded.push(...compactToU8a(keyInfo.keyAt));
+          // writeU8aU32(recoded, keyInfo.keyAt & F_VALUE, length);
+          // length += 4;
+        } else {
+          recoded.push(0);
+          // recoded[length] = 0;
+          // length++;
+        }
+      }
+
+      adjusted = new Uint8Array(recoded);
+      // adjusted = recoded.subarray(0, offset);
+    } else {
+      adjusted = new Uint8Array(value.length + 1);
+      adjusted.set(value, 1);
+    }
+
+    this._findValue(serializeKey(key), adjusted);
   }
 }
