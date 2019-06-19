@@ -6,14 +6,16 @@ import { KeyParts, ParsedHdr, ParsedKey, ValInfo } from './types';
 
 import { blake2AsU8a } from '@polkadot/util-crypto';
 
-import { BITS_F, BITS_U, HDR_ENTRY_SIZE, HDR_TOTAL_SIZE, KEY_DATA_SIZE, KEY_PARTS_SIZE, KEY_TOTAL_SIZE, U32_SIZE } from './defaults';
+import { BITS_F, BITS_U, HDR_ENTRY_SIZE, HDR_TOTAL_SIZE, KEY_DATA_SIZE, KEY_PARTS_SIZE, KEY_TOTAL_SIZE, UINT_SIZE } from './defaults';
 
-export function readU8aU32 (u8a: Uint8Array, offset: number): number {
+const MAX_U32 = 2 ** 32;
+
+export function readU32 (u8a: Uint8Array, offset: number): number {
   // reverse the writing, highest bits goes first, lowest are last
   return (u8a[offset] << 24) + (u8a[offset + 1] << 16) + (u8a[offset + 2] << 8) + u8a[offset + 3];
 }
 
-export function writeU8aU32 (u8a: Uint8Array, value: number, offset: number): void {
+export function writeU32 (u8a: Uint8Array, value: number, offset: number): void {
   // write the highest bits first - this way, when flagged, we only need to
   // read a single byte (this is useful in the cases where we re-encode a trie)
   u8a[offset] = (value >> 24) & 0xff;
@@ -22,15 +24,25 @@ export function writeU8aU32 (u8a: Uint8Array, value: number, offset: number): vo
   u8a[offset + 3] = value & 0xff;
 }
 
+export function readUint (u8a: Uint8Array, offset: number): number {
+  return (u8a[offset] * MAX_U32) + readU32(u8a, offset + 1);
+}
+
+export function writeUint (u8a: Uint8Array, value: number, offset: number): void {
+  u8a[offset] = (value / MAX_U32) & 0xff;
+
+  writeU32(u8a, value, offset + 1);
+}
+
 export function modifyHdr (hdr: Uint8Array, hdrIndex: number, linkAt: number, isKey: boolean): Uint8Array {
-  writeU8aU32(hdr, isKey ? (linkAt | BITS_F) : linkAt, hdrIndex * HDR_ENTRY_SIZE);
+  writeU32(hdr, isKey ? (linkAt | BITS_F) : linkAt, hdrIndex * HDR_ENTRY_SIZE);
 
   return hdr;
 }
 
 export function modifyKey (keyData: Uint8Array, valAt: number, valSize: number): Uint8Array {
-  writeU8aU32(keyData, valAt, KEY_DATA_SIZE);
-  writeU8aU32(keyData, valSize, KEY_DATA_SIZE + U32_SIZE);
+  writeUint(keyData, valAt, KEY_DATA_SIZE);
+  writeU32(keyData, valSize, KEY_DATA_SIZE + UINT_SIZE);
 
   return keyData;
 }
@@ -54,7 +66,7 @@ export function newKey (key: KeyParts, { valAt, valSize }: ValInfo): Uint8Array 
 }
 
 export function parseHdr (hdr: Uint8Array, hdrIndex: number): ParsedHdr {
-  const u32 = readU8aU32(hdr, hdrIndex * HDR_ENTRY_SIZE);
+  const u32 = readU32(hdr, hdrIndex * HDR_ENTRY_SIZE);
   const linkTo = u32 & BITS_U;
 
   return {
@@ -65,8 +77,8 @@ export function parseHdr (hdr: Uint8Array, hdrIndex: number): ParsedHdr {
 
 export function parseKey (keyData: Uint8Array): ParsedKey {
   return {
-    valAt: readU8aU32(keyData, KEY_DATA_SIZE),
-    valSize: readU8aU32(keyData, KEY_DATA_SIZE + U32_SIZE)
+    valAt: readUint(keyData, KEY_DATA_SIZE),
+    valSize: readU32(keyData, KEY_DATA_SIZE + UINT_SIZE)
   };
 }
 
