@@ -16,6 +16,7 @@ import { readU32, serializeKey, writeU32 } from './util';
 const l = logger('db/struct');
 
 const TRIE_BRANCH_LEN = 17;
+const TRIE_ENC_SIZE = U32_SIZE + 1;
 
 export default class FileStructDb extends Impl implements BaseDb {
   private _cache: Cache<string> = new Cache(16 * 1024);
@@ -74,8 +75,11 @@ export default class FileStructDb extends Impl implements BaseDb {
 
     while (offset < info.valData.length) {
       if (info.valData[offset]) {
-        recoded[index] = this._readKey(readU32(info.valData, offset) & BITS_U).subarray(0, KEY_DATA_SIZE);
-        offset += U32_SIZE;
+        const keyAt = readU32(info.valData, offset) & BITS_U;
+        const keyIdx = info.valData[offset + U32_SIZE];
+
+        recoded[index] = this._readKey(keyIdx, keyAt).subarray(0, KEY_DATA_SIZE);
+        offset += TRIE_ENC_SIZE;
       } else {
         offset++;
       }
@@ -123,7 +127,7 @@ export default class FileStructDb extends Impl implements BaseDb {
 
     // extension nodes are going away anyway, so just ignore, no worse off.
     if (isEncodable) {
-      const recoded = new Uint8Array((TRIE_BRANCH_LEN * U32_SIZE) + 1);
+      const recoded = new Uint8Array((TRIE_BRANCH_LEN * TRIE_ENC_SIZE) + 1);
       let length: number = 1;
 
       // set the initial flag, i.e. we have data following
@@ -133,10 +137,12 @@ export default class FileStructDb extends Impl implements BaseDb {
         const u8a = (decoded as Array<Uint8Array>)[index];
 
         if (u8a) {
-          const info = this._findValue(serializeKey(u8a), null, false);
+          const key = serializeKey(u8a);
+          const info = this._findValue(key, null, false);
 
           writeU32(recoded, ((info as KVInfo).keyAt | BITS_F), length);
-          length += 4;
+          recoded[length + U32_SIZE] = key.index;
+          length += TRIE_ENC_SIZE;
         } else {
           recoded[length] = 0;
           length++;

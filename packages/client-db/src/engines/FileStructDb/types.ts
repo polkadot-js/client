@@ -4,6 +4,7 @@
 
 export type KeyParts = {
   buffer: Uint8Array,
+  index: number,
   parts: Uint8Array
 };
 
