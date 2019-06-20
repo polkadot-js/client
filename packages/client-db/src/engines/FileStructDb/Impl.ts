@@ -7,7 +7,7 @@ import { KVInfo, KeyParts, ValInfo } from './types';
 // import { logger } from '@polkadot/util';
 
 import Files from './Files';
-import { KEY_DATA_SIZE } from './defaults';
+import { KEY_DATA_SIZE } from './constants';
 import { modifyHdr, modifyKey, newHdr, newKey, parseHdr, parseKey, serializeKey } from './util';
 
 // const l = logger('db/struct');
