@@ -6,9 +6,7 @@ import { KeyParts, ParsedHdr, ParsedKey, ValInfo } from './types';
 
 import { blake2AsU8a } from '@polkadot/util-crypto';
 
-import { BITS_F, BITS_U, HDR_ENTRY_SIZE, HDR_TOTAL_SIZE, KEY_DATA_SIZE, KEY_PARTS_SIZE, KEY_TOTAL_SIZE, UINT_SIZE } from './defaults';
-
-const MAX_U32 = 2 ** 32;
+import { BITS_F, BITS_U, HDR_ENTRY_SIZE, HDR_TOTAL_SIZE, KEY_DATA_SIZE, KEY_PARTS_SIZE, KEY_TOTAL_SIZE, U32_SIZE } from './defaults';
 
 export function readU32 (u8a: Uint8Array, offset: number): number {
   // reverse the writing, highest bits goes first, lowest are last
@@ -24,16 +22,6 @@ export function writeU32 (u8a: Uint8Array, value: number, offset: number): void 
   u8a[offset + 3] = value & 0xff;
 }
 
-export function readUint (u8a: Uint8Array, offset: number): number {
-  return (u8a[offset] * MAX_U32) + readU32(u8a, offset + 1);
-}
-
-export function writeUint (u8a: Uint8Array, value: number, offset: number): void {
-  u8a[offset] = (value / MAX_U32) & 0xff;
-
-  writeU32(u8a, value, offset + 1);
-}
-
 export function modifyHdr (hdr: Uint8Array, hdrIndex: number, linkAt: number, isKey: boolean): Uint8Array {
   writeU32(hdr, isKey ? (linkAt | BITS_F) : linkAt, hdrIndex * HDR_ENTRY_SIZE);
 
@@ -41,8 +29,8 @@ export function modifyHdr (hdr: Uint8Array, hdrIndex: number, linkAt: number, is
 }
 
 export function modifyKey (keyData: Uint8Array, valAt: number, valSize: number): Uint8Array {
-  writeUint(keyData, valAt, KEY_DATA_SIZE);
-  writeU32(keyData, valSize, KEY_DATA_SIZE + UINT_SIZE);
+  writeU32(keyData, valAt, KEY_DATA_SIZE);
+  writeU32(keyData, valSize, KEY_DATA_SIZE + U32_SIZE);
 
   return keyData;
 }
@@ -77,8 +65,8 @@ export function parseHdr (hdr: Uint8Array, hdrIndex: number): ParsedHdr {
 
 export function parseKey (keyData: Uint8Array): ParsedKey {
   return {
-    valAt: readUint(keyData, KEY_DATA_SIZE),
-    valSize: readU32(keyData, KEY_DATA_SIZE + UINT_SIZE)
+    valAt: readU32(keyData, KEY_DATA_SIZE),
+    valSize: readU32(keyData, KEY_DATA_SIZE + U32_SIZE)
   };
 }
 
@@ -91,9 +79,10 @@ export function serializeKey (u8a: Uint8Array): KeyParts {
     : blake2AsU8a(u8a);
 
   const parts = new Uint8Array(KEY_PARTS_SIZE);
+  const index = u8a[0];
   let offset = 0;
 
-  for (let i = 0; i < KEY_DATA_SIZE; i++) {
+  for (let i = 1; i < KEY_DATA_SIZE; i++) {
     const item = buffer[i];
 
     parts[offset] = item & 0b1111;
@@ -101,5 +90,5 @@ export function serializeKey (u8a: Uint8Array): KeyParts {
     offset += 2;
   }
 
-  return { buffer, parts };
+  return { buffer, index, parts };
 }

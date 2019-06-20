@@ -6,6 +6,7 @@ import createFunction from '@polkadot/storage/fromMetadata/createFunction';
 import { StorageFunctionMetadata, StorageFunctionModifier, StorageFunctionType } from '@polkadot/types/Metadata/v5/Storage';
 import { Text, Vector } from '@polkadot/types';
 import { isString } from '@polkadot/util';
+import { blake2AsU8a } from '@polkadot/util-crypto';
 
 interface SubstrateMetadata {
   documentation: Array<string>;
@@ -13,8 +14,8 @@ interface SubstrateMetadata {
 }
 
 // Small helper function to factorize code on this page.
-const createMethod = (method: string, key: string, { documentation, type }: SubstrateMetadata) =>
-  createFunction(
+const createMethod = (method: string, key: string, { documentation, type }: SubstrateMetadata) => {
+  const creator = createFunction(
     new Text('Block'),
     new Text(method),
     {
@@ -26,6 +27,10 @@ const createMethod = (method: string, key: string, { documentation, type }: Subs
     } as StorageFunctionMetadata,
     { key, skipHashing: true }
   );
+
+  return (...args: Array<any>): Uint8Array =>
+    blake2AsU8a(creator(...args));
+};
 
 export default {
   bestHash: createMethod('bestHash', 'bst:hsh', {

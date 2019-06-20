@@ -4,15 +4,13 @@
 
 // 4 allows for 4,294,967,296
 export const U32_SIZE = 4;
-export const UINT_SIZE = 5;
 
 // key calculations
 export const KEY_DATA_SIZE = 32;
-export const KEY_TOTAL_SIZE = KEY_DATA_SIZE + U32_SIZE + UINT_SIZE;
+export const KEY_TOTAL_SIZE = KEY_DATA_SIZE + U32_SIZE + U32_SIZE;
 
 // the size of the parts
-// const KEY_PARTS_SIZE = ((KEY_DATA_SIZE - 1) * 2) + 1; // 16 entries = nibbles
-export const KEY_PARTS_SIZE = KEY_DATA_SIZE * 2; // 16 entries = nibbles
+export const KEY_PARTS_SIZE = (KEY_DATA_SIZE - 1) * 2; // 16 entries = nibbles, index removed
 
 // the number of entries in a header
 export const HDR_ENTRY_NUM = 16; // 16 = 4 bits
