@@ -9,7 +9,7 @@ import mkdirp from 'mkdirp';
 import path from 'path';
 
 import Cache from './Cache';
-import { HDR_TOTAL_SIZE, KEY_TOTAL_SIZE } from './defaults';
+import { DB_VERSION, DB_MAX_FILES, HDR_TOTAL_SIZE, KEY_TOTAL_SIZE } from './constants';
 
 type Fd = {
   cache: Cache<number>,
@@ -24,13 +24,10 @@ type Fds = {
   val: Fd
 };
 
-const DB_VERSION = '005';
-const DB_MAX_FILES = 256;
-
 const CACHE_SIZES = {
-  idx: 3 * 256,
-  key: 2 * 256,
-  val: 1 * 256
+  idx: 6 * 512,
+  key: 4 * 512,
+  val: 2 * 512
 };
 
 export default class Files {
@@ -41,7 +38,7 @@ export default class Files {
 
   constructor (base: string, file: string, options: DiskDbOptions) {
     this._isTrie = options.isTrie;
-    this._path = path.join(base, file);
+    this._path = path.join(base, DB_VERSION, file);
 
     mkdirp.sync(this._path);
   }
@@ -60,14 +57,10 @@ export default class Files {
     for (let i = 0; i < DB_MAX_FILES; i++) {
       this._fds[i] = (['idx', 'key', 'val'] as Array<keyof Fds>).reduce((fds, type) => {
         const count = `0${i.toString(16)}`.slice(-2);
-        const file = path.join(this._path, `${DB_VERSION}.${count}.${type as string}`);
+        const file = path.join(this._path, `${count}.${type as string}`);
 
         if (!fs.existsSync(file)) {
-          fs.writeFileSync(file, new Uint8Array(
-            type === 'idx'
-              ? HDR_TOTAL_SIZE
-              : 0
-          ));
+          fs.writeFileSync(file, new Uint8Array(type === 'idx' ? HDR_TOTAL_SIZE : 0));
         }
 
         const cache = new Cache<number>(CACHE_SIZES[type]);
@@ -81,8 +74,8 @@ export default class Files {
     }
   }
 
-  private __append (index: number, type: keyof Fds, buffer: Uint8Array): number {
-    const fd = this._fds[index][type];
+  private __append (type: keyof Fds, fileAt: number, buffer: Uint8Array): number {
+    const fd = this._fds[fileAt][type];
     const at = fd.size;
 
     fs.writeSync(fd.fd, buffer, 0, buffer.length, at);
@@ -92,8 +85,8 @@ export default class Files {
     return at;
   }
 
-  private __read (index: number, type: keyof Fds, at: number, length: number): Uint8Array {
-    const fd = this._fds[index][type];
+  private __read (type: keyof Fds, fileAt: number, at: number, length: number): Uint8Array {
+    const fd = this._fds[fileAt][type];
     const cached = fd.cache.get(at);
 
     if (cached) {
@@ -108,8 +101,8 @@ export default class Files {
     return buffer;
   }
 
-  private __update (index: number, type: keyof Fds, at: number, buffer: Uint8Array): number {
-    const fd = this._fds[index][type];
+  private __update (type: keyof Fds, fileAt: number, at: number, buffer: Uint8Array): number {
+    const fd = this._fds[fileAt][type];
 
     fs.writeSync(fd.fd, buffer, 0, buffer.length, at);
     fd.cache.set(at, buffer);
@@ -117,35 +110,35 @@ export default class Files {
     return at;
   }
 
-  protected _appendHdr (index: number, buffer: Uint8Array): number {
-    return this.__append(index, 'idx', buffer) / HDR_TOTAL_SIZE;
+  protected _appendHdr (fileAt: number, buffer: Uint8Array): number {
+    return this.__append('idx', fileAt, buffer) / HDR_TOTAL_SIZE;
   }
 
-  protected _appendKey (index: number, buffer: Uint8Array): number {
-    return this.__append(index, 'key', buffer) / KEY_TOTAL_SIZE;
+  protected _appendKey (fileAt: number, buffer: Uint8Array): number {
+    return this.__append('key', fileAt, buffer) / KEY_TOTAL_SIZE;
   }
 
-  protected _appendVal (index: number, buffer: Uint8Array): number {
-    return this.__append(index, 'val', buffer);
+  protected _appendVal (fileAt: number, buffer: Uint8Array): number {
+    return this.__append('val', fileAt, buffer);
   }
 
-  protected _readHdr (index: number, at: number): Uint8Array {
-    return this.__read(index, 'idx', at * HDR_TOTAL_SIZE, HDR_TOTAL_SIZE);
+  protected _readHdr (fileAt: number, at: number): Uint8Array {
+    return this.__read('idx', fileAt, at * HDR_TOTAL_SIZE, HDR_TOTAL_SIZE);
   }
 
-  protected _readKey (index: number, at: number): Uint8Array {
-    return this.__read(index, 'key', at * KEY_TOTAL_SIZE, KEY_TOTAL_SIZE);
+  protected _readKey (fileAt: number, at: number): Uint8Array {
+    return this.__read('key', fileAt, at * KEY_TOTAL_SIZE, KEY_TOTAL_SIZE);
   }
 
-  protected _readVal (index: number, at: number, length: number): Uint8Array {
-    return this.__read(index, 'val', at, length);
+  protected _readVal (fileAt: number, at: number, length: number): Uint8Array {
+    return this.__read('val', fileAt, at, length);
   }
 
-  protected _updateHdr (index: number, at: number, buffer: Uint8Array): void {
-    this.__update(index, 'idx', at * HDR_TOTAL_SIZE, buffer);
+  protected _updateHdr (fileAt: number, at: number, buffer: Uint8Array): void {
+    this.__update('idx', fileAt, at * HDR_TOTAL_SIZE, buffer);
   }
 
-  protected _updateKey (index: number, at: number, buffer: Uint8Array): void {
-    this.__update(index, 'key', at * KEY_TOTAL_SIZE, buffer);
+  protected _updateKey (fileAt: number, at: number, buffer: Uint8Array): void {
+    this.__update('key', fileAt, at * KEY_TOTAL_SIZE, buffer);
   }
 }

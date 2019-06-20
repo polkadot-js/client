@@ -4,13 +4,14 @@
 
 import { KeyParts, ParsedHdr, ParsedKey, ValInfo } from './types';
 
-import { blake2AsU8a } from '@polkadot/util-crypto';
-
-import { BITS_F, BITS_U, HDR_ENTRY_SIZE, HDR_TOTAL_SIZE, KEY_DATA_SIZE, KEY_PARTS_SIZE, KEY_TOTAL_SIZE, U32_SIZE } from './defaults';
+import { BITS_F, BITS_U, DB_MAX_FILES, HDR_ENTRY_SIZE, HDR_TOTAL_SIZE, KEY_DATA_SIZE, KEY_PARTS_SIZE, KEY_TOTAL_SIZE, U32_SIZE } from './constants';
 
 export function readU32 (u8a: Uint8Array, offset: number): number {
   // reverse the writing, highest bits goes first, lowest are last
-  return (u8a[offset] << 24) + (u8a[offset + 1] << 16) + (u8a[offset + 2] << 8) + u8a[offset + 3];
+  return (u8a[offset] << 24) +
+    (u8a[offset + 1] << 16) +
+    (u8a[offset + 2] << 8) +
+    u8a[offset + 3];
 }
 
 export function writeU32 (u8a: Uint8Array, value: number, offset: number): void {
@@ -70,25 +71,17 @@ export function parseKey (keyData: Uint8Array): ParsedKey {
   };
 }
 
-export function serializeKey (u8a: Uint8Array): KeyParts {
-  // Convert any non-32-byte keys into a hash of the key. This allows for proper
-  // key distribution. In practice, the inputs should already be hashed, in the
-  // case of using a trie, however if used directly, this would come into play
-  const buffer = u8a.length === KEY_DATA_SIZE
-    ? u8a
-    : blake2AsU8a(u8a);
-
-  const parts = new Uint8Array(KEY_PARTS_SIZE);
-  const index = u8a[0];
+export function serializeKey (buffer: Uint8Array): KeyParts {
+  const nibbles = new Uint8Array(KEY_PARTS_SIZE);
   let offset = 0;
 
-  for (let i = 1; i < KEY_DATA_SIZE; i++) {
+  for (let i = 0; i < KEY_DATA_SIZE; i++) {
     const item = buffer[i];
 
-    parts[offset] = item & 0b1111;
-    parts[offset + 1] = item >> 4;
+    nibbles[offset] = item & 0b1111;
+    nibbles[offset + 1] = item >> 4;
     offset += 2;
   }
 
-  return { buffer, index, parts };
+  return { buffer, fileAt: (buffer[0] % DB_MAX_FILES), nibbles };
 }

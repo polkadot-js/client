@@ -6,17 +6,19 @@ import { BaseDb, ProgressCb } from '@polkadot/db/types';
 import { KVInfo } from './types';
 
 import codec from '@polkadot/trie-codec';
-import { logger } from '@polkadot/util';
+import { BITMAP } from '@polkadot/trie-codec/constants';
+import { logger, compactToU8a, compactFromU8a } from '@polkadot/util';
 
 import Cache from './Cache';
 import Impl from './Impl';
-import { BITS_F, BITS_U, KEY_DATA_SIZE, U32_SIZE } from './defaults';
-import { readU32, serializeKey, writeU32 } from './util';
+import { KEY_DATA_SIZE, U32_SIZE } from './constants';
+import { serializeKey } from './util';
 
 const l = logger('db/struct');
 
-const TRIE_BRANCH_LEN = 17;
-const TRIE_ENC_SIZE = U32_SIZE + 1;
+const TRIE_BRANCH_KEYS = 16;
+const TRIE_BRANCH_LEN = TRIE_BRANCH_KEYS + 1;
+const TRIE_ENC_SIZE = U32_SIZE + 2;
 
 export default class FileStructDb extends Impl implements BaseDb {
   private _cache: Cache<string> = new Cache(16 * 1024);
@@ -54,6 +56,8 @@ export default class FileStructDb extends Impl implements BaseDb {
   private _get (key: Uint8Array): Uint8Array | null {
     const info = this._findValue(serializeKey(key));
 
+    // console.log('_get', this._isTrie, key, info);
+
     if (!info || !info.valData) {
       return null;
     } else if (!this._isTrie) {
@@ -70,21 +74,17 @@ export default class FileStructDb extends Impl implements BaseDb {
       null, null, null, null,
       null
     ];
-    let index = 0;
-    let offset = 1;
+    let offset = 3;
+    const bitmap = info.valData[1] + (info.valData[2] << 8);
 
-    while (offset < info.valData.length) {
-      if (info.valData[offset]) {
-        const keyAt = readU32(info.valData, offset) & BITS_U;
-        const keyIdx = info.valData[offset + U32_SIZE];
+    for (let index = 0; index < TRIE_BRANCH_KEYS; index++) {
+      if (bitmap & BITMAP[index]) {
+        const fileAt = info.valData[offset++];
+        const [length, keyAt] = compactFromU8a(info.valData.subarray(offset));
 
-        recoded[index] = this._readKey(keyIdx, keyAt).subarray(0, KEY_DATA_SIZE);
-        offset += TRIE_ENC_SIZE;
-      } else {
-        offset++;
+        recoded[index] = this._readKey(fileAt, keyAt.toNumber()).subarray(0, KEY_DATA_SIZE);
+        offset += length;
       }
-
-      index++;
     }
 
     return codec.encode(recoded);
@@ -127,28 +127,30 @@ export default class FileStructDb extends Impl implements BaseDb {
 
     // extension nodes are going away anyway, so just ignore, no worse off.
     if (isEncodable) {
-      const recoded = new Uint8Array((TRIE_BRANCH_LEN * TRIE_ENC_SIZE) + 1);
-      let length: number = 1;
+      const recoded = new Uint8Array((TRIE_BRANCH_KEYS * TRIE_ENC_SIZE) + 1 + 2);
+      let length: number = 3;
+      let bitmap = 0;
 
-      // set the initial flag, i.e. we have data following
-      recoded[0] = TRIE_BRANCH_LEN;
-
-      for (let index = 0; index < TRIE_BRANCH_LEN; index++) {
+      for (let index = 0; index < TRIE_BRANCH_KEYS; index++) {
         const u8a = (decoded as Array<Uint8Array>)[index];
 
         if (u8a) {
           const key = serializeKey(u8a);
           const info = this._findValue(key, null, false);
+          const atEnc = compactToU8a((info as KVInfo).keyAt);
 
-          writeU32(recoded, ((info as KVInfo).keyAt | BITS_F), length);
-          recoded[length + U32_SIZE] = key.index;
-          length += TRIE_ENC_SIZE;
-        } else {
-          recoded[length] = 0;
-          length++;
+          bitmap |= BITMAP[index];
+          recoded[length++] = key.fileAt;
+
+          recoded.set(atEnc, length);
+
+          length += atEnc.length;
         }
       }
 
+      recoded[0] = TRIE_BRANCH_KEYS;
+      recoded[1] = bitmap & 0xff;
+      recoded[2] = bitmap >> 8;
       adjusted = recoded.subarray(0, length);
     } else {
       adjusted = new Uint8Array(value.length + 1);

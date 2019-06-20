@@ -27,7 +27,7 @@ export default class Dbs implements ChainDbs {
   constructor ({ db, sync }: Config, chain: ChainLoader) {
     this.config = db;
     this.basePath = db.type !== 'memory'
-      ? path.join(db.path, 'chains', chain.id, u8aToHex(chain.genesisRoot), db.type)
+      ? path.join(db.path, 'chains', chain.id, u8aToHex(chain.genesisRoot), 'db')
       : '';
     const isMemory = this.config.type === 'memory';
     const isLight = sync === 'light';

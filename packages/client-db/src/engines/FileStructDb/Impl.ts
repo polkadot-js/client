@@ -7,15 +7,15 @@ import { KVInfo, KeyParts, ValInfo } from './types';
 // import { logger } from '@polkadot/util';
 
 import Files from './Files';
-import { KEY_DATA_SIZE } from './defaults';
+import { KEY_DATA_SIZE } from './constants';
 import { modifyHdr, modifyKey, newHdr, newKey, parseHdr, parseKey, serializeKey } from './util';
 
 // const l = logger('db/struct');
 
 export default class Impl extends Files {
   protected _findValue (key: KeyParts, value: Uint8Array | null = null, withValue: boolean = true, keyIndex: number = 0, hdrAt: number = 0): KVInfo | null {
-    const hdr = this._readHdr(key.index, hdrAt);
-    const parsedHdr = parseHdr(hdr, key.parts[keyIndex]);
+    const hdr = this._readHdr(key.fileAt, hdrAt);
+    const parsedHdr = parseHdr(hdr, key.nibbles[keyIndex]);
 
     if (parsedHdr.isKey) {
       return this.__retrieveKey(key, value, withValue, keyIndex, hdr, hdrAt, parsedHdr.linkTo);
@@ -28,7 +28,7 @@ export default class Impl extends Files {
 
   private __appendNewValue (key: KeyParts, valData: Uint8Array): ValInfo {
     return {
-      valAt: this._appendVal(key.index, valData),
+      valAt: this._appendVal(key.fileAt, valData),
       valData,
       valSize: valData.length
     };
@@ -38,7 +38,7 @@ export default class Impl extends Files {
     const kvInfo = this.__appendNewValue(key, value) as KVInfo;
 
     kvInfo.keyData = newKey(key, kvInfo);
-    kvInfo.keyAt = this._appendKey(key.index, kvInfo.keyData);
+    kvInfo.keyAt = this._appendKey(key.fileAt, kvInfo.keyData);
 
     return kvInfo;
   }
@@ -48,25 +48,25 @@ export default class Impl extends Files {
       return null;
     }
 
-    const hdrIndex = key.parts[keyIndex];
+    const hdrIndex = key.nibbles[keyIndex];
     const newInfo = this.__appendNewKeyValue(key, value);
 
     modifyHdr(hdr, hdrIndex, newInfo.keyAt, true);
 
-    this._updateHdr(key.index, hdrAt, hdr);
+    this._updateHdr(key.fileAt, hdrAt, hdr);
 
     return newInfo;
   }
 
   private __retrieveKey (key: KeyParts, value: Uint8Array | null, withValue: boolean, keyIndex: number, hdr: Uint8Array, hdrAt: number, keyAt: number): KVInfo | null {
-    const hdrIndex = key.parts[keyIndex];
-    const keyData = this._readKey(key.index, keyAt);
+    const hdrIndex = key.nibbles[keyIndex];
+    const keyData = this._readKey(key.fileAt, keyAt);
     const prevKey = serializeKey(keyData.subarray(0, KEY_DATA_SIZE));
     let matchIndex = keyIndex;
 
     // see if this key matches fully with what we are supplied
-    while (matchIndex < key.parts.length) {
-      if (prevKey.parts[matchIndex] !== key.parts[matchIndex]) {
+    while (matchIndex < key.nibbles.length) {
+      if (prevKey.nibbles[matchIndex] !== key.nibbles[matchIndex]) {
         break;
       }
 
@@ -74,18 +74,18 @@ export default class Impl extends Files {
     }
 
     // we have a match, either retrieve or update
-    if (matchIndex === key.parts.length) {
+    if (matchIndex === key.nibbles.length) {
       if (value) {
         const { valAt, valData, valSize } = this.__appendNewValue(key, value);
 
-        this._updateKey(key.index, keyAt, modifyKey(keyData, valAt, valSize));
+        this._updateKey(key.fileAt, keyAt, modifyKey(keyData, valAt, valSize));
 
         return { keyAt, keyData, valAt, valData, valSize };
       }
 
       const { valAt, valSize } = parseKey(keyData);
       const valData = withValue
-        ? this._readVal(key.index, valAt, valSize)
+        ? this._readVal(key.fileAt, valAt, valSize)
         : null;
 
       return { keyAt, keyData, valAt, valData, valSize };
@@ -98,19 +98,19 @@ export default class Impl extends Files {
     let depth = matchIndex - keyIndex - 1;
 
     // write the last header - this contains the old and new keys at the correct indexes
-    let lastAt = this._appendHdr(key.index, newHdr([
-      { dataAt: keyAt, hdrIndex: prevKey.parts[matchIndex], isKey: true },
-      { dataAt: newKv.keyAt, hdrIndex: key.parts[matchIndex], isKey: true }
+    let lastAt = this._appendHdr(key.fileAt, newHdr([
+      { dataAt: keyAt, hdrIndex: prevKey.nibbles[matchIndex], isKey: true },
+      { dataAt: newKv.keyAt, hdrIndex: key.nibbles[matchIndex], isKey: true }
     ]));
 
     // make a tree from the header we are modifying down to the others
     for (let offset = 1; depth > 0; depth--, offset++) {
-      lastAt = this._appendHdr(key.index, newHdr([
-        { dataAt: lastAt, hdrIndex: key.parts[matchIndex - offset], isKey: false }
+      lastAt = this._appendHdr(key.fileAt, newHdr([
+        { dataAt: lastAt, hdrIndex: key.nibbles[matchIndex - offset], isKey: false }
       ]));
     }
 
-    this._updateHdr(key.index, hdrAt, modifyHdr(hdr, hdrIndex, lastAt, false));
+    this._updateHdr(key.fileAt, hdrAt, modifyHdr(hdr, hdrIndex, lastAt, false));
 
     return newKv;
   }
