@@ -7,6 +7,7 @@ import { StorageFunctionMetadata, StorageFunctionModifier, StorageFunctionType }
 import { Text, Vector } from '@polkadot/types';
 import { isString } from '@polkadot/util';
 import { blake2AsU8a } from '@polkadot/util-crypto';
+import { StorageFunction } from '@polkadot/types/primitive/StorageKey';
 
 interface SubstrateMetadata {
   documentation: Array<string>;
@@ -28,8 +29,9 @@ const createMethod = (method: string, key: string, { documentation, type }: Subs
     { key, skipHashing: true }
   );
 
-  return (...args: Array<any>): Uint8Array =>
-    blake2AsU8a(creator(...args));
+  return ((...args: Array<any>): Uint8Array =>
+    blake2AsU8a(creator(...args))
+  ) as StorageFunction;
 };
 
 export default {
