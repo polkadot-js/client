@@ -1,12 +1,12 @@
 [![polkadotjs](https://img.shields.io/badge/polkadot-js-orange?style=for-the-badge)](https://polkadot.js.org)
-![license](https://img.shields.io/badge/License-Apache%202.0-blue?label=&logo=apache&style=for-the-badge)
-[![npm](https://img.shields.io/npm/v/@polkadot/client?label=&logo=npm&style=for-the-badge)](https://www.npmjs.com/package/@polkadot/client)
-[![beta](https://img.shields.io/npm/v/@polkadot/client/beta?label=&logo=npm&style=for-the-badge)](https://www.npmjs.com/package/@polkadot/client)
-[![travisci](https://img.shields.io/travis/com/polkadot-js/client?label=&logo=travis&style=for-the-badge)](https://travis-ci.com/polkadot-js/client)
-[![circleci](https://img.shields.io/circleci/build/github/polkadot-js/client/master?label=&logo=circleci&style=for-the-badge)](https://circleci.com/gh/polkadot-js/client)
-[![maintainability](https://img.shields.io/codeclimate/maintainability/polkadot-js/client?label=&logo=code-climate&style=for-the-badge)](https://codeclimate.com/github/polkadot-js/client/maintainability)
-[![coverage](https://img.shields.io/coveralls/polkadot-js/client?label=&logo=code-climate&style=for-the-badge)](https://coveralls.io/github/polkadot-js/client?branch=master)
-[![greenkeeper](https://img.shields.io/badge/greenkeeper-enabled-brightgreen?label=&logo=greenkeeper&style=for-the-badge)](https://greenkeeper.io/)
+![license](https://img.shields.io/badge/License-Apache%202.0-blue?logo=apache&style=for-the-badge)
+[![npm](https://img.shields.io/npm/v/@polkadot/client?logo=npm&style=for-the-badge)](https://www.npmjs.com/package/@polkadot/client)
+[![beta](https://img.shields.io/npm/v/@polkadot/client/beta?label=beta&logo=npm&style=for-the-badge)](https://www.npmjs.com/package/@polkadot/client)
+[![travisci](https://img.shields.io/travis/com/polkadot-js/client?logo=travis&style=for-the-badge)](https://travis-ci.com/polkadot-js/client)
+[![circleci](https://img.shields.io/circleci/build/github/polkadot-js/client/master?logo=circleci&style=for-the-badge)](https://circleci.com/gh/polkadot-js/client)
+[![maintainability](https://img.shields.io/codeclimate/maintainability/polkadot-js/client?logo=code-climate&style=for-the-badge)](https://codeclimate.com/github/polkadot-js/client/maintainability)
+[![coverage](https://img.shields.io/coveralls/polkadot-js/client?logo=code-climate&style=for-the-badge)](https://coveralls.io/github/polkadot-js/client?branch=master)
+[![greenkeeper](https://img.shields.io/badge/greenkeeper-enabled-brightgreen?logo=greenkeeper&style=for-the-badge)](https://greenkeeper.io/)
 
 # @polkadot/client
 
