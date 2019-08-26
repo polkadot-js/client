@@ -3,12 +3,11 @@
 // of the Apache-2.0 license. See the LICENSE file for details.
 
 import { BaseDb } from '@polkadot/db/types';
-import { StorageFunction } from '@polkadot/types/primitive/StorageKey';
 import { StorageMethod$ArrayU8a } from '../types';
 
 import { bnToU8a, u8aConcat, u8aToBn } from '@polkadot/util';
 
-export default function decodeArrayU8a (db: BaseDb, createKey: StorageFunction): StorageMethod$ArrayU8a {
+export default function decodeArrayU8a (db: BaseDb, createKey: Function): StorageMethod$ArrayU8a {
   return {
     del: (keyParam: any): void =>
       db.del(createKey(keyParam)),

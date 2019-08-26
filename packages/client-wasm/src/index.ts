@@ -7,8 +7,8 @@ import { BlockDb, StateDb } from '@polkadot/client-db/types';
 import { RuntimeInterface } from '@polkadot/client-runtime/types';
 import { ExecutorInterface, WasmInstanceExports } from './types';
 
+import storage from '@polkadot/api-metadata/storage/static';
 import { BlockData, ImportBlock } from '@polkadot/client-types';
-import storage from '@polkadot/storage/static';
 import { assert, compactStripLength, logger, u8aToHex } from '@polkadot/util';
 
 import createWasm from './create';
@@ -64,7 +64,8 @@ export default class Executor implements ExecutorInterface {
   }
 
   private updateBlockDb (blockData: BlockData): boolean {
-    const { blockNumber, hash } = blockData.header;
+    const { hash } = blockData.header;
+    const blockNumber = blockData.header.number.unwrap();
     const bestNumber = this.blockDb.bestNumber.get();
 
     return this.blockDb.db.transaction(() => {
@@ -84,7 +85,8 @@ export default class Executor implements ExecutorInterface {
 
   async importBlock (blockData: BlockData): Promise<boolean> {
     const start = Date.now();
-    const { blockNumber, parentHash } = blockData.header;
+    const { parentHash } = blockData.header;
+    const blockNumber = blockData.header.number.unwrap();
 
     l.debug(() => `Importing block #${blockNumber}, ${u8aToHex(blockData.header.hash, 48)}`);
 
@@ -122,7 +124,7 @@ export default class Executor implements ExecutorInterface {
 
   async importHeader (blockData: BlockData): Promise<boolean> {
     const start = Date.now();
-    const { blockNumber } = blockData.header;
+    const blockNumber = blockData.header.number.unwrap();
 
     l.debug(() => `Importing block #${blockNumber}, ${u8aToHex(blockData.header.hash, 48)}`);
 

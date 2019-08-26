@@ -6,16 +6,17 @@ import { Chainspec } from '@polkadot/chainspec/types';
 import { Config } from '@polkadot/client/types';
 import { BlockDb, StateDb } from '@polkadot/client-db/types';
 import { ExecutorInterface } from '@polkadot/client-wasm/types';
+import { Header } from '@polkadot/types/interfaces';
 import { ChainInterface, ChainGenesis } from './types';
 
+import storage from '@polkadot/api-metadata/storage/static';
 import ChainDbs from '@polkadot/client-db';
 import createRuntime from '@polkadot/client-runtime';
 import { BlockData } from '@polkadot/client-types';
 import Executor from '@polkadot/client-wasm';
-import { Header } from '@polkadot/types';
-import storage from '@polkadot/storage/static';
 import { assert, compactStripLength, formatNumber, hexToU8a, logger, u8aToHex } from '@polkadot/util';
 import { trieRoot } from '@polkadot/trie-hash';
+import { createType } from '@polkadot/types';
 
 import Loader from './loader';
 
@@ -96,7 +97,7 @@ export default class Chain implements ChainInterface {
 
   private rollbackBlock (bestHeader: Header, rollback: boolean, isLogging: boolean = true): ChainGenesis {
     const prevHash = bestHeader.parentHash;
-    const prevNumber = bestHeader.blockNumber.subn(1);
+    const prevNumber = bestHeader.number.unwrap().subn(1);
 
     if (rollback && prevNumber.gtn(1)) {
       if (isLogging) {
@@ -107,7 +108,7 @@ export default class Chain implements ChainInterface {
 
       this.blocks.db.transaction(() => {
         this.blocks.bestHash.set(prevHash);
-        this.blocks.bestNumber.set(prevBlock.header.blockNumber);
+        this.blocks.bestNumber.set(prevBlock.header.number.unwrap());
 
         return true;
       });
@@ -160,7 +161,7 @@ export default class Chain implements ChainInterface {
   }
 
   private createGenesisBlock (): ChainGenesis {
-    const header = new Header({
+    const header = createType('Header', {
       stateRoot: this.state.db.getRoot(),
       extrinsicsRoot: trieRoot([]),
       parentHash: new Uint8Array(32)

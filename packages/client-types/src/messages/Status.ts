@@ -2,10 +2,11 @@
 // This software may be modified and distributed under the terms
 // of the Apache-2.0 license. See the LICENSE file for details.
 
+import { BlockNumber, Hash } from '@polkadot/types/interfaces';
 import { MessageInterface } from './types';
 
 import { Set, Struct } from '@polkadot/types/codec';
-import { BlockNumber, Bytes, Hash, u32 as U32 } from '@polkadot/types';
+import { Bytes, u32 } from '@polkadot/types';
 
 import BaseMessage from './BaseMessage';
 
@@ -23,12 +24,12 @@ export class StatusMessage$Roles extends Set {
 export class StatusMessage extends Struct {
   constructor (value: any) {
     super({
-      version: U32,
-      minSupportedVersion: U32,
+      version: 'u32',
+      minSupportedVersion: 'u32',
       roles: StatusMessage$Roles,
-      bestNumber: BlockNumber,
-      bestHash: Hash,
-      genesisHash: Hash,
+      bestNumber: 'BlockNumber',
+      bestHash: 'Hash',
+      genesisHash: 'Hash',
       chainStatus: Bytes
     }, value);
   }
@@ -57,15 +58,15 @@ export default class Status extends BaseMessage implements MessageInterface {
     return this.message.get('genesisHash') as Hash;
   }
 
-  get minSupportedVersion (): U32 {
-    return this.message.get('minSupportedVersion') as U32;
+  get minSupportedVersion (): u32 {
+    return this.message.get('minSupportedVersion') as u32;
   }
 
   get roles (): StatusMessage$Roles {
     return this.message.get('roles') as StatusMessage$Roles;
   }
 
-  get version (): U32 {
-    return this.message.get('version') as U32;
+  get version (): u32 {
+    return this.message.get('version') as u32;
   }
 }

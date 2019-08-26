@@ -33,7 +33,7 @@
     "@polkadot/client-signal": "^0.23.0-beta.25",
     "@polkadot/client-telemetry": "^0.23.0-beta.25",
     "@polkadot/client-wasm": "^0.23.0-beta.25",
-    "@polkadot/util": "^0.94.0-beta.3",
+    "@polkadot/util": "^1.1.1",
     "@types/semver-compare": "^1.0.0",
     "package-json": "^6.5.0",
     "semver-compare": "^1.0.0"

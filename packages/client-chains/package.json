@@ -26,14 +26,11 @@
   "homepage": "https://github.com/polkadot-js/client/client/tree/master/packages/client-chains#readme",
   "dependencies": {
     "@babel/runtime": "^7.5.5",
-    "@polkadot/chainspec": "^0.94.0-beta.3",
+    "@polkadot/api-metadata": "^0.91.0-beta.1",
+    "@polkadot/chainspec": "^1.1.1",
     "@polkadot/client-db": "^0.23.0-beta.25",
     "@polkadot/client-runtime": "^0.23.0-beta.25",
     "@polkadot/client-wasm": "^0.23.0-beta.25",
-    "@polkadot/storage": "^0.82.0-beta.9",
-    "@polkadot/types": "^0.82.0-beta.9"
-  },
-  "devDependencies": {
-    "@polkadot/extrinsics": "^0.82.0-beta.9"
+    "@polkadot/types": "^0.91.0-beta.1"
   }
 }

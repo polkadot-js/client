@@ -73,7 +73,8 @@ export default class Peer extends EventEmitter implements PeerInterface {
 
     try {
       const connection = await promisify(
-        this.node, this.node.dialProtocol, this.peerInfo, defaults.PROTOCOL_PING
+         // @ts-ignore 0.26 turns this into a promise
+         this.node, this.node.dialProtocol, this.peerInfo, defaults.PROTOCOL_PING
       );
 
       const stream = handshake({ timeout: defaults.WAIT_TIMEOUT }, (error) => {

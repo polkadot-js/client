@@ -5,6 +5,7 @@
 import { Config } from '@polkadot/client/types';
 import { ChainInterface } from '@polkadot/client-chains/types';
 import { PeerInterface, PeersInterface } from '@polkadot/client-p2p/types';
+import { Hash, Header } from '@polkadot/types/interfaces';
 import { SyncInterface, SyncState$PeerBlock, SyncState$PeerRequest, SyncStatus } from './types';
 
 import BN from 'bn.js';
@@ -12,7 +13,6 @@ import EventEmitter from 'eventemitter3';
 import { BlockData } from '@polkadot/client-types';
 import { BlockAnnounce, BlockRequest, BlockResponse } from '@polkadot/client-types/messages';
 import { BlockRequest$Direction, BlockRequest$From } from '@polkadot/client-types/messages/BlockRequest';
-import { Hash, Header } from '@polkadot/types';
 import { isBn, isU8a, logger, u8aToHex } from '@polkadot/util';
 
 import defaults from './defaults';
@@ -64,13 +64,13 @@ export default class Sync extends EventEmitter implements SyncInterface {
   }
 
   private announce (header: Header) {
-    if (header.blockNumber.lte(this.lastBest) || !this.peers || this.status === 'Sync') {
+    if (header.number.unwrap().lte(this.lastBest) || !this.peers || this.status === 'Sync') {
       return;
     }
 
-    this.lastBest = header.blockNumber;
+    this.lastBest = header.number.unwrap();
     this.peers.peers().forEach((peer) => {
-      if (peer.bestNumber.lt(header.blockNumber)) {
+      if (peer.bestNumber.lt(this.lastBest)) {
         peer.send(
           new BlockAnnounce({ header })
         );
@@ -160,7 +160,7 @@ export default class Sync extends EventEmitter implements SyncInterface {
       return [];
     }
 
-    return this.blocksFromNumber(count, data.header.blockNumber, to, increment);
+    return this.blocksFromNumber(count, data.header.number.unwrap(), to, increment);
   }
 
   private blocksFromNumber (count: number, from: BN, to: Hash | null, increment: BN): Array<Uint8Array> {
@@ -242,7 +242,7 @@ export default class Sync extends EventEmitter implements SyncInterface {
       // console.error(JSON.stringify(block), block.toHex());
 
       const dbBlock = this.chain.blocks.blockData.get(block.hash);
-      const { header: { blockNumber } } = block;
+      const blockNumber = block.header.number.unwrap();
       const blockId = blockNumber.toString();
 
       if ((dbBlock.length && blockNumber.lte(bestNumber)) || this.blockQueue.get(blockId)) {
@@ -328,7 +328,7 @@ export default class Sync extends EventEmitter implements SyncInterface {
     let result: SyncState$PeerBlock | null = null;
 
     this.blockQueue.forEach((current) => {
-      if (!result || current.block.header.blockNumber.lt(result.block.header.blockNumber)) {
+      if (!result || current.block.header.number.unwrap().lt(result.block.header.number.unwrap())) {
         result = current;
       }
     });
@@ -339,7 +339,7 @@ export default class Sync extends EventEmitter implements SyncInterface {
 
     this.requestFromPeer(
       (result as SyncState$PeerBlock).peer,
-      (result as SyncState$PeerBlock).block.header.blockNumber.subn(defaults.MAX_REQUEST_BLOCKS),
+      (result as SyncState$PeerBlock).block.header.number.unwrap().subn(defaults.MAX_REQUEST_BLOCKS),
       true
     );
   }

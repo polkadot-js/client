@@ -24,7 +24,7 @@
   "homepage": "https://github.com/polkadot-js/client/tree/master/packages/client-signal#readme",
   "dependencies": {
     "@babel/runtime": "^7.5.5",
-    "@polkadot/util": "^0.94.0-beta.3",
+    "@polkadot/util": "^1.1.1",
     "simple-peer": "^9.5.0",
     "socket.io": "^2.2.0",
     "socket.io-client": "^2.2.0",

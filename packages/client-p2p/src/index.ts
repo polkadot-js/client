@@ -80,6 +80,7 @@ export default class P2p extends EventEmitter implements P2pInterface {
     this._onPeerDiscovery(this.node, this.peers);
     this._onPeerMessage(this.node, this.peers);
 
+    // @ts-ignore Only in 0.26+
     await promisify(this.node, this.node.start);
 
     l.log(`Started with bootnodes ${this.config.p2p.discoverBoot ? 'en' : 'dis'}abled & star ${this.config.p2p.discoverStar ? 'en' : 'dis '}abled`);
@@ -116,6 +117,7 @@ export default class P2p extends EventEmitter implements P2pInterface {
     delete this.node;
     delete this.peers;
 
+    // @ts-ignore Only in 0.26+
     await promisify(node, node.stop);
 
     l.log('Server stopped');
@@ -215,7 +217,8 @@ export default class P2p extends EventEmitter implements P2pInterface {
 
     try {
       const connection = await promisify(
-        this.node, this.node.dialProtocol, peer.peerInfo, this.protocol
+         // @ts-ignore 0.26 turns this into a promise
+         this.node, this.node.dialProtocol, peer.peerInfo, this.protocol
       );
 
       peer.addConnection(connection, true);

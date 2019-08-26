@@ -3,7 +3,8 @@
 // of the Apache-2.0 license. See the LICENSE file for details.
 
 import { TrieEntry } from '@polkadot/trie-db/types';
-import { Hash, Struct, Vector } from '@polkadot/types';
+import { Hash } from '@polkadot/types/interfaces';
+import { Struct, Vec } from '@polkadot/types';
 
 export default class TrieChanges extends Struct {
   private _added: Array<Hash>;
@@ -12,8 +13,8 @@ export default class TrieChanges extends Struct {
 
   constructor (entry: TrieEntry | null, prev?: TrieChanges) {
     super({
-      root: Hash,
-      children: Vector.with(Hash)
+      root: 'Hash',
+      children: 'Vec<Hash>'
     }, entry ? { root: entry[0], children: entry[2] } : {});
 
     const prevDeps = prev ? prev.children : null;
@@ -36,8 +37,8 @@ export default class TrieChanges extends Struct {
     return [this._added, this._removed, this._same];
   }
 
-  get children (): Vector<Hash> {
-    return this.get('children') as Vector<Hash>;
+  get children (): Vec<Hash> {
+    return this.get('children') as Vec<Hash>;
   }
 
   get root (): Hash {
