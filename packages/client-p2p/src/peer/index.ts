@@ -73,7 +73,7 @@ export default class Peer extends EventEmitter implements PeerInterface {
 
     try {
       const connection = await promisify(
-        this.node, this.node.dialProtocol, this.peerInfo, defaults.PROTOCOL_PING
+        this.node, this.node.dialProtocol as any, this.peerInfo, defaults.PROTOCOL_PING
       );
 
       const stream = handshake({ timeout: defaults.WAIT_TIMEOUT }, (error) => {
@@ -216,7 +216,7 @@ export default class Peer extends EventEmitter implements PeerInterface {
             if (remaining === 0) {
               const message = decodeMessage(data);
 
-              l.log(() => [this.shortId, 'decoded', { data: u8aToHex(data), message }]);
+              l.debug(() => [this.shortId, 'decoded', { data: u8aToHex(data), message }]);
 
               this.emit('message', message);
 
@@ -258,7 +258,7 @@ export default class Peer extends EventEmitter implements PeerInterface {
         )
       );
 
-      l.log(() => [`sending ${this.shortId} -> ${u8aToHex(encoded)}`]);
+      l.debug(() => [`sending ${this.shortId} -> ${u8aToHex(encoded)}`]);
 
       this.pushables().forEach((pushable) =>
         pushable.push(buffer)
