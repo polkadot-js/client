@@ -6,12 +6,12 @@ import { P2pNodes } from '../types';
 
 import PeerInfo from 'peer-info';
 
-import { assert, promisify } from '@polkadot/util';
+import { assert } from '@polkadot/util';
 
 export default async function createPeerInfo (addresses: P2pNodes): Promise<PeerInfo> {
   assert(addresses.length, 'Expected at least one network address');
 
-  const peerInfo: PeerInfo = await promisify(null, PeerInfo.create);
+  const peerInfo: PeerInfo = await PeerInfo.create();
 
   addresses.forEach((address) =>
     peerInfo.multiaddrs.add(address)

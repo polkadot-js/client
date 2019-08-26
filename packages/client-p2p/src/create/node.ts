@@ -21,8 +21,15 @@ const config = {
       enabled: true
     }
   },
-  EXPERIMENTAL: {
-    pubsub: false
+  pubsub: {
+    enabled: false
+  },
+  relay: {
+    enabled: true,
+    hop: {
+      active: false,
+      enabled: false
+    }
   }
 };
 
@@ -43,6 +50,12 @@ export default async function createNode ({ externalIp, p2p: { address = default
     config: {
       ...config,
       peerDiscovery: {
+        autoDial: true,
+        enabled: true,
+        bootstrap: {
+          enabled: true,
+          list: (discoverBoot ? bootNodes : []).concat(nodes)
+        },
         webRTCStar: {
           enabled: discoverStar
         },

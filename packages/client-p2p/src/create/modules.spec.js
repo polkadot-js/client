@@ -14,7 +14,7 @@ describe.skip('createModules', () => {
   let peerInfo;
 
   beforeEach(async () => {
-    peerInfo = await promisify(null, PeerInfo.create);
+    peerInfo = await PeerInfo.create();
   });
 
   it('uses Railing when bootnodes available', () => {

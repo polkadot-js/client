@@ -14,7 +14,7 @@ import EventEmitter from 'eventemitter3';
 import handshake from 'pull-handshake';
 import pull from 'pull-stream';
 import Sync from '@polkadot/client-sync';
-import { logger, promisify } from '@polkadot/util';
+import { logger } from '@polkadot/util';
 
 import createNode from './create/node';
 import defaults from './defaults';
@@ -77,10 +77,11 @@ export default class P2p extends EventEmitter implements P2pInterface {
 
     this._handleProtocol(this.node, this.peers);
     this._handlePing(this.node);
+    this._onError(this.node);
     this._onPeerDiscovery(this.node, this.peers);
     this._onPeerMessage(this.node, this.peers);
 
-    await promisify(this.node, this.node.start);
+    await this.node.start();
 
     l.log(`Started with bootnodes ${this.config.p2p.discoverBoot ? 'en' : 'dis'}abled & star ${this.config.p2p.discoverStar ? 'en' : 'dis '}abled`);
     this.emit('started');
@@ -116,12 +117,18 @@ export default class P2p extends EventEmitter implements P2pInterface {
     delete this.node;
     delete this.peers;
 
-    await promisify(node, node.stop);
+    await node.stop();
 
     l.log('Server stopped');
     this.emit('stopped');
 
     return true;
+  }
+
+  private _onError (node: LibP2p): void {
+    node.on('error', (error: Error): void => {
+      l.error(`libp2p error: ${error.message}`);
+    });
   }
 
   private _onPeerDiscovery (node: LibP2p, peers: PeersInterface): void {
@@ -214,9 +221,7 @@ export default class P2p extends EventEmitter implements P2pInterface {
     l.debug(() => `dialing ${peer.shortId}`);
 
     try {
-      const connection = await promisify(
-        this.node, this.node.dialProtocol, peer.peerInfo, this.protocol
-      );
+      const connection = await this.node.dialProtocol(peer.peerInfo, this.protocol);
 
       peer.addConnection(connection, true);
       peers.log('dialled', peer);

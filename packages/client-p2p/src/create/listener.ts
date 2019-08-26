@@ -6,7 +6,7 @@ import { EnvType } from '../types';
 
 import PeerInfo from 'peer-info';
 
-import { assert, isIp, promisify } from '@polkadot/util';
+import { assert, isIp } from '@polkadot/util';
 
 import defaults from '../defaults';
 
@@ -23,10 +23,10 @@ function constructMa (address: string, port: number, peerIdStr: string): string 
   return `/${type}/${address}/tcp/${port}/p2p/${peerIdStr}`;
 }
 
-export default async function createListener (envType: EnvType, { address, discoverStar, externalIp, port }: Config): Promise<PeerInfo> {
+export default async function createListener (envType: EnvType, { address, discoverStar, port }: Config): Promise<PeerInfo> {
   assert(isIp(address), `Expected a valid IP address`);
 
-  const peerInfo = await promisify(null, PeerInfo.create);
+  const peerInfo = await PeerInfo.create();
   const peerIdStr = peerInfo.id.toB58String();
   const isCli = envType !== 'browser';
 

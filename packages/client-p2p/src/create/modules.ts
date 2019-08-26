@@ -32,10 +32,11 @@ export default function createModules (envType: EnvType, peerInfo: PeerInfo, { b
     ? [new WebRTClient({ wrtc })]
     : [];
   const transport = isCli
-    ? [new WS(), new TCP()]
-    : [new WS()];
+    ? [WS, TCP]
+    : [WS];
   const peerDiscovery = isCli
-    ? [new Bootstrap({ list: (discoverBoot ? bootNodes : []).concat(nodes) })]
+  // TODO When libp2p2 is actually consistent again, this will change to [Bootstrap]
+    ? [new Bootstrap({ enabled: true, list: (discoverBoot ? bootNodes : []).concat(nodes) })]
     : [];
 
   return {
@@ -48,8 +49,8 @@ export default function createModules (envType: EnvType, peerInfo: PeerInfo, { b
     ],
     dht,
     peerDiscovery: peerDiscovery.concat(
-      starTransports.map(({ discovery }) => discovery) as Array<any>
-    ) as Array<any>,
-    transport: transport.concat(starTransports)
+      starTransports.map(({ discovery }) => discovery) as any[]
+    ) as any[],
+    transport: transport.concat(starTransports as any)
   };
 }
