@@ -30,17 +30,17 @@
     "@polkadot/rpc-provider": "^0.82.0-beta.9"
   },
   "dependencies": {
-    "@babel/runtime": "^7.4.3",
+    "@babel/runtime": "^7.5.5",
     "@polkadot/util": "^0.94.0-beta.3",
     "@types/co-body": "^0.0.3",
-    "@types/koa": "^2.0.48",
+    "@types/koa": "^2.0.49",
     "@types/koa-compose": "^3.2.3",
     "@types/koa-route": "^3.2.4",
-    "@types/koa-websocket": "^5.0.3",
+    "@types/koa-websocket": "^5.0.4",
     "co-body": "^6.0.0",
     "eventemitter3": "^3.1.0",
-    "koa": "^2.7.0",
+    "koa": "^2.8.1",
     "koa-route": "^3.2.0",
-    "koa-websocket": "^5.0.1"
+    "koa-websocket": "^6.0.0"
   }
 }

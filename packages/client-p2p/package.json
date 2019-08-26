@@ -26,7 +26,7 @@
   },
   "homepage": "https://github.com/polkadot-js/client/client/tree/master/packages/client-p2p#readme",
   "dependencies": {
-    "@babel/runtime": "^7.4.3",
+    "@babel/runtime": "^7.5.5",
     "@polkadot/client-sync": "^0.23.0-beta.25",
     "@polkadot/client-types": "^0.23.0-beta.25",
     "@polkadot/util": "^0.94.0-beta.3",
@@ -43,7 +43,7 @@
     "libp2p-websockets": "^0.12.2",
     "pull-mplex": "^0.1.2",
     "pull-pushable": "^2.2.0",
-    "pull-stream": "^3.6.9",
+    "pull-stream": "^3.6.14",
     "pump": "^3.0.0",
     "varint": "^5.0.0"
   },
