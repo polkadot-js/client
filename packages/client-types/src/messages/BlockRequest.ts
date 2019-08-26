@@ -2,10 +2,11 @@
 // This software may be modified and distributed under the terms
 // of the Apache-2.0 license. See the LICENSE file for details.
 
+import { BlockNumber, Hash } from '@polkadot/types/interfaces';
 import { MessageInterface } from './types';
 
-import { Enum, EnumType, Option, Set, Struct } from '@polkadot/types/codec';
-import { BlockNumber, Hash, u32 as U32, u64 as U64 } from '@polkadot/types';
+import { Enum, Option, Set, Struct } from '@polkadot/types/codec';
+import { u32 as U32, u64 as U64 } from '@polkadot/types';
 
 import BaseMessage from './BaseMessage';
 
@@ -34,11 +35,11 @@ export class BlockRequest$Direction extends Enum {
   }
 }
 
-export class BlockRequest$From extends EnumType {
+export class BlockRequest$From extends Enum {
   constructor (value?: any, index?: number) {
     super({
-      Hash,
-      BlockNumber
+      Hash: 'Hash',
+      BlockNumber: 'BlockNumber'
     }, value, index);
   }
 
@@ -58,12 +59,12 @@ export class BlockRequest$From extends EnumType {
 export class BlockRequestMessage extends Struct {
   constructor (value?: any) {
     super({
-      id: U64,
+      id: 'u64',
       fields: BlockRequest$Fields,
       from: BlockRequest$From,
-      to: Option.with(Hash),
+      to: 'Option<Hash>',
       direction: BlockRequest$Direction,
-      max: Option.with(U32)
+      max: 'Option<u32>'
     }, value);
   }
 }

@@ -23,10 +23,10 @@
     "start:www": "cd packages/client-www && webpack --config webpack.config.js"
   },
   "devDependencies": {
-    "@babel/core": "^7.4.4",
-    "@babel/runtime": "^7.4.4",
-    "@polkadot/dev-react": "^0.30.0-beta.15",
-    "@polkadot/ts": "^0.1.60",
+    "@babel/core": "^7.5.5",
+    "@babel/runtime": "^7.5.5",
+    "@polkadot/dev-react": "^0.31.0-beta.3",
+    "@polkadot/ts": "^0.1.64",
     "copyfiles": "^2.1.0",
     "empty": "^0.10.1",
     "gh-pages": "^2.0.1"

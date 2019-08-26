@@ -4,7 +4,7 @@
 
 import { MessageInterface } from './types';
 
-import { Struct, Vector, u64 as U64 } from '@polkadot/types';
+import { Struct, Vec, u64 as U64 } from '@polkadot/types';
 
 import BlockData from '../BlockData';
 import BaseMessage from './BaseMessage';
@@ -12,13 +12,13 @@ import BaseMessage from './BaseMessage';
 export class BlockResponseMessage extends Struct {
   constructor (value?: any) {
     super({
-      id: U64,
-      blocks: Vector.with(BlockData)
+      id: 'u64',
+      blocks: Vec.with(BlockData)
     }, value);
   }
 
-  get blocks (): Vector<BlockData> {
-    return this.get('blocks') as Vector<BlockData>;
+  get blocks (): Vec<BlockData> {
+    return this.get('blocks') as Vec<BlockData>;
   }
 
   get id (): U64 {
@@ -33,8 +33,8 @@ export default class BlockResponse extends BaseMessage implements MessageInterfa
     super(BlockResponse.type, new BlockResponseMessage(value));
   }
 
-  get blocks (): Vector<BlockData> {
-    return this.message.get('blocks') as Vector<BlockData>;
+  get blocks (): Vec<BlockData> {
+    return this.message.get('blocks') as Vec<BlockData>;
   }
 
   get id (): U64 {

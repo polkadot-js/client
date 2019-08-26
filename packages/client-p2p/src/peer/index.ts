@@ -216,7 +216,7 @@ export default class Peer extends EventEmitter implements PeerInterface {
             if (remaining === 0) {
               const message = decodeMessage(data);
 
-              // l.debug(() => [this.shortId, 'decoded', { message }]);
+              l.log(() => [this.shortId, 'decoded', { data: u8aToHex(data), message }]);
 
               this.emit('message', message);
 
@@ -258,7 +258,7 @@ export default class Peer extends EventEmitter implements PeerInterface {
         )
       );
 
-      l.debug(() => [`sending ${this.shortId} -> ${u8aToHex(encoded)}`]);
+      l.log(() => [`sending ${this.shortId} -> ${u8aToHex(encoded)}`]);
 
       this.pushables().forEach((pushable) =>
         pushable.push(buffer)

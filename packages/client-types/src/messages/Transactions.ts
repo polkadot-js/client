@@ -4,14 +4,14 @@
 
 import { MessageInterface } from './types';
 
-import { Bytes, Struct, Vector } from '@polkadot/types';
+import { Bytes, Struct, Vec } from '@polkadot/types';
 
 import BaseMessage from './BaseMessage';
 
 export class TransactionsMessage extends Struct {
   constructor (value?: any) {
     super({
-      transactions: Vector.with(Bytes)
+      transactions: Vec.with(Bytes)
     }, value);
   }
 }
@@ -23,8 +23,8 @@ export default class Transactions extends BaseMessage implements MessageInterfac
     super(Transactions.type, message);
   }
 
-  get transactions (): Vector<Bytes> {
-    return this.message.get('transactions') as Vector<Bytes>;
+  get transactions (): Vec<Bytes> {
+    return this.message.get('transactions') as Vec<Bytes>;
   }
 
   static decode (u8a: Uint8Array): Transactions {
