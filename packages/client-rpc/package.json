@@ -38,9 +38,9 @@
     "@types/koa-route": "^3.2.4",
     "@types/koa-websocket": "^5.0.4",
     "co-body": "^6.0.0",
-    "eventemitter3": "^3.1.0",
+    "eventemitter3": "^4.0.0",
     "koa": "^2.8.1",
     "koa-route": "^3.2.0",
-    "koa-websocket": "^5.0.1"
+    "koa-websocket": "^6.0.0"
   }
 }

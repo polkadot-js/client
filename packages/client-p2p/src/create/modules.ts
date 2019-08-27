@@ -32,8 +32,8 @@ export default function createModules (envType: EnvType, peerInfo: PeerInfo, { b
     ? [new WebRTClient({ wrtc })]
     : [];
   const transport = isCli
-    ? [new WS(), new TCP()]
-    : [new WS()];
+    ? [WS, TCP]
+    : [WS];
   const peerDiscovery = isCli
     ? [new Bootstrap({ list: (discoverBoot ? bootNodes : []).concat(nodes) })]
     : [];
