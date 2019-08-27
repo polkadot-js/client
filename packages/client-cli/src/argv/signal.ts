@@ -6,7 +6,7 @@ import { Options } from 'yargs';
 
 import defaults from '@polkadot/client-signal/defaults';
 
-export default ({
+const config: Record<string, Options> = {
   'signal-active': {
     default: false,
     description: 'Activate the (optional) WebRTC signalling server',
@@ -17,4 +17,6 @@ export default ({
     description: 'Default port to listen on',
     type: 'number'
   }
-} as { [index: string]: Options });
+};
+
+export default config;

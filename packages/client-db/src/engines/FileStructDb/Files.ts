@@ -32,20 +32,23 @@ const CACHE_SIZES = {
 
 export default class Files {
   protected _isTrie: boolean = false;
+
   protected _isOpen: boolean = false;
+
   private _fds: Fds[] = [];
+
   private _path: string;
 
-  constructor (base: string, file: string, options: DiskDbOptions) {
+  public constructor (base: string, file: string, options: DiskDbOptions) {
     this._isTrie = options.isTrie;
     this._path = path.join(base, DB_VERSION, file);
 
     mkdirp.sync(this._path);
   }
 
-  close (): void {
-    this._fds.forEach((fds) =>
-      Object.values(fds).forEach(({ fd }) =>
+  public close (): void {
+    this._fds.forEach((fds): void =>
+      Object.values(fds).forEach(({ fd }): void =>
         fs.closeSync(fd)
       )
     );
@@ -53,9 +56,9 @@ export default class Files {
     this._isOpen = false;
   }
 
-  open (): void {
+  public open (): void {
     for (let i = 0; i < DB_MAX_FILES; i++) {
-      this._fds[i] = (['idx', 'key', 'val'] as (keyof Fds)[]).reduce((fds, type) => {
+      this._fds[i] = (['idx', 'key', 'val'] as (keyof Fds)[]).reduce((fds: any, type): Fds => {
         const count = `0${i.toString(16)}`.slice(-2);
         const file = path.join(this._path, `${count}.${type as string}`);
 
@@ -70,7 +73,7 @@ export default class Files {
         fds[type] = { cache, fd, file, size };
 
         return fds;
-      }, {} as Fds);
+      }, {});
     }
   }
 

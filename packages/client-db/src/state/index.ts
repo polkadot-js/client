@@ -9,6 +9,7 @@ import BN from 'bn.js';
 import TrieDb from '@polkadot/trie-db';
 
 export default function createState (db: TrieDb): StateDb {
+  // eslint-disable-next-line prefer-const
   let _db: TrieDb = db;
 
   return {
@@ -28,6 +29,7 @@ export default function createState (db: TrieDb): StateDb {
       _db.setRoot(root);
     },
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     snapshot (blockNumber: BN): void {
       // nothing, yet
     }

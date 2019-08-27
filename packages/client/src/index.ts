@@ -29,17 +29,26 @@ const l = logger('client');
 
 export default class Client extends EventEmitter {
   private chain?: ChainInterface;
+
   private informantId?: NodeJS.Timer;
+
   private p2p?: P2pInterface;
+
   private rpc?: RpcInterface;
+
   private signal?: SignalInterface;
+
   private sync: SyncTypes = 'light';
+
   private telemetry?: TelemetryInterface;
+
   private prevBest?: BN;
+
   private prevTime: number = Date.now();
+
   private prevImport: number = 0;
 
-  async start (config: ConfigPartial) {
+  public async start (config: ConfigPartial): Promise<void> {
     await cryptoWaitReady();
 
     const verStatus = await clientId.getNpmStatus();
@@ -73,7 +82,7 @@ export default class Client extends EventEmitter {
     await this.startServices();
   }
 
-  private async startServices () {
+  private async startServices (): Promise<void> {
     if (this.p2p) {
       await this.p2p.start();
     }
@@ -93,7 +102,7 @@ export default class Client extends EventEmitter {
     this.startInformant();
   }
 
-  async stop (): Promise<boolean> {
+  public async stop (): Promise<boolean> {
     l.log('Shutting down client');
 
     this.stopInformant();
@@ -121,14 +130,14 @@ export default class Client extends EventEmitter {
     return true;
   }
 
-  private startInformant () {
+  private startInformant (): void {
     this.informantId = setInterval(this.runInformant, defaults.INFORMANT_DELAY);
 
     if (isUndefined(this.p2p)) {
       return;
     }
 
-    this.p2p.sync.on('imported', () => {
+    this.p2p.sync.on('imported', (): void => {
       if (!isUndefined(this.chain)) {
         const bestNumber = this.chain.blocks.bestNumber.get();
 
@@ -148,7 +157,7 @@ export default class Client extends EventEmitter {
     });
   }
 
-  private stopInformant () {
+  private stopInformant (): void {
     if (!isUndefined(this.informantId)) {
       clearInterval(this.informantId);
     }
@@ -156,7 +165,7 @@ export default class Client extends EventEmitter {
     this.informantId = undefined;
   }
 
-  private runInformant = () => {
+  private runInformant = (): void => {
     if (isUndefined(this.chain)) {
       this.stopInformant();
 

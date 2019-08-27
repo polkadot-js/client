@@ -26,7 +26,7 @@ export default function base <T> (db: BaseDb): Base<T> {
     },
     set: (key: Uint8Array, value: T, raw: Uint8Array): void => {
       db.put(key, raw);
-      subscribers.forEach((subscriber) =>
+      subscribers.forEach((subscriber): void =>
         subscriber(value, raw)
       );
     },

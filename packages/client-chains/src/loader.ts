@@ -12,13 +12,17 @@ import { assert, hexToU8a } from '@polkadot/util';
 
 import chains from './chains';
 
-export default class Loader implements ChainLoader {
-  readonly chain: Chainspec;
-  readonly id: string;
-  readonly genesisRoot: Uint8Array;
+type ChainKey = keyof typeof chains;
 
-  constructor ({ chain }: Config) {
-    this.chain = chains[chain] || this.loadJson(chain);
+export default class Loader implements ChainLoader {
+  public readonly chain: Chainspec;
+
+  public readonly id: string;
+
+  public readonly genesisRoot: Uint8Array;
+
+  public constructor ({ chain }: Config) {
+    this.chain = chains[chain as ChainKey] || this.loadJson(chain);
 
     this.genesisRoot = this.calculateGenesisRoot();
     this.id = this.chain.id;
@@ -37,7 +41,7 @@ export default class Loader implements ChainLoader {
     const { genesis: { raw } } = this.chain;
 
     return trieRoot(
-      Object.keys(raw).map((key) => ({
+      Object.keys(raw).map((key): { k: Uint8Array; v: Uint8Array } => ({
         k: hexToU8a(key),
         v: hexToU8a(raw[key])
       }))

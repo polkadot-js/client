@@ -9,10 +9,10 @@ import chains from '@polkadot/client-chains/chains';
 import { clientId } from '@polkadot/client/clientId';
 import syncDefaults from '@polkadot/client-sync/defaults';
 
-const allChains = Object.keys(chains).map((chain) => `'${chain}'`);
+const allChains = Object.keys(chains).map((chain): string => `'${chain}'`);
 
-export default ({
-  'chain': {
+const config: Record<string, Options> = {
+  chain: {
     description: `Use the chain specified, one of ${allChains.join(', ')} or custom '<chain>.json'`,
     required: true,
     type: 'string'
@@ -22,10 +22,12 @@ export default ({
     description: 'The client/version identifier for the running node',
     type: 'string'
   },
-  'sync': {
+  sync: {
     choices: ['full', 'light'] as SyncTypes[],
     default: syncDefaults.SYNC_DEFAULT,
     description: 'Sets the sync type full (state validation) or light (header valiation)',
     type: 'string'
   }
-} as { [index: string]: Options });
+};
+
+export default config;

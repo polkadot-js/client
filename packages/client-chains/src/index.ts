@@ -23,15 +23,21 @@ import Loader from './loader';
 const l = logger('chain');
 
 export default class Chain implements ChainInterface {
-  readonly blocks: BlockDb;
-  readonly chain: Chainspec;
-  readonly executor: ExecutorInterface;
-  readonly genesis: ChainGenesis;
-  readonly state: StateDb;
+  public readonly blocks: BlockDb;
+
+  public readonly chain: Chainspec;
+
+  public readonly executor: ExecutorInterface;
+
+  public readonly genesis: ChainGenesis;
+
+  public readonly state: StateDb;
+
   private config: Config;
+
   private dbs: ChainDbs;
 
-  constructor (config: Config) {
+  public constructor (config: Config) {
     const chain = new Loader(config);
 
     this.config = config;
@@ -54,7 +60,7 @@ export default class Chain implements ChainInterface {
     this.executor = new Executor(config, this.blocks, this.state, runtime);
   }
 
-  stop () {
+  public stop (): void {
     this.dbs.close();
   }
 
@@ -106,7 +112,7 @@ export default class Chain implements ChainInterface {
 
       const prevBlock = this.getBlock(prevHash);
 
-      this.blocks.db.transaction(() => {
+      this.blocks.db.transaction((): boolean => {
         this.blocks.bestHash.set(prevHash);
         this.blocks.bestNumber.set(prevBlock.header.number.unwrap());
 
@@ -147,7 +153,7 @@ export default class Chain implements ChainInterface {
     const genesis = this.createGenesisBlock();
 
     if (setBest) {
-      this.blocks.db.transaction(() => {
+      this.blocks.db.transaction((): boolean => {
         this.blocks.bestHash.set(genesis.block.hash);
         this.blocks.bestNumber.set(0);
         this.blocks.blockData.set(genesis.block.toU8a(), genesis.block.hash);
@@ -181,7 +187,7 @@ export default class Chain implements ChainInterface {
     const { genesis: { raw } } = this.chain;
 
     this.state.db.transaction((): boolean => {
-      Object.entries(raw).forEach(([key, value]) =>
+      Object.entries(raw).forEach(([key, value]): void =>
         this.state.db.put(
           hexToU8a(key),
           hexToU8a(value)

@@ -6,7 +6,7 @@ import { Options } from 'yargs';
 
 import defaults from '@polkadot/client-telemetry/defaults';
 
-export default ({
+const config: Record<string, Options> = {
   'telemetry-name': {
     default: '',
     description: 'Unique name of this node to report',
@@ -17,4 +17,6 @@ export default ({
     description: 'Websocket endpoint for telemetry stats',
     type: 'string'
   }
-} as { [index: string]: Options });
+};
+
+export default config;

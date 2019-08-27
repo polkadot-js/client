@@ -6,7 +6,7 @@ import { Options } from 'yargs';
 
 import defaults from '@polkadot/client-p2p/defaults';
 
-export default ({
+const config: Record<string, Options> = {
   'p2p-active': {
     default: true,
     description: 'Controls the starting of the libp2p (--no-p2p-active disables)',
@@ -42,4 +42,6 @@ export default ({
     description: 'Sets the peer-to-peer port',
     type: 'number'
   }
-} as { [index: string]: Options });
+};
+
+export default config;

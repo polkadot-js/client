@@ -7,7 +7,7 @@
 export default function keyToCamel (key: string, startIndex: number = 0): string {
   return key
     .split('-')
-    .reduce((name, part, index) => {
+    .reduce((name, part, index): string => {
       if (index <= startIndex) {
         return part;
       }

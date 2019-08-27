@@ -10,14 +10,14 @@ import { blake2AsU8a } from '@polkadot/util-crypto';
 
 interface SubstrateMetadata {
   documentation: string[];
-  type: string | { key: string, value: string };
+  type: string | { key: string; value: string };
 }
 
 const prefix = 'Block';
 const section = 'Block';
 
 // Small helper function to factorize code on this page.
-const createMethod = (method: string, key: string, { documentation, type }: SubstrateMetadata) => {
+const createMethod = (method: string, key: string, { documentation, type }: SubstrateMetadata): any => {
   const creator = createFunction(
     {
       meta: {

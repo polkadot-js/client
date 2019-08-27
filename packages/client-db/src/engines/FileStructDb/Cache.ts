@@ -10,15 +10,16 @@ interface CacheValue {
 
 export default class Cache<T> {
   private _cache = new Map<T, CacheValue>();
+
   private _maxEntries: number;
 
-  constructor (maxEntries: number) {
+  public constructor (maxEntries: number) {
     assert(maxEntries >= 10, `Need a minimum of 10 entries, ${maxEntries} found`);
 
     this._maxEntries = maxEntries;
   }
 
-  get (key: T): Uint8Array | null {
+  public get (key: T): Uint8Array | null {
     const cached = this._cache.get(key);
 
     if (cached) {
@@ -28,8 +29,8 @@ export default class Cache<T> {
     return null;
   }
 
-  set (key: T, value: Uint8Array): void {
-    let cached = this._cache.get(key);
+  public set (key: T, value: Uint8Array): void {
+    const cached = this._cache.get(key);
 
     if (cached) {
       cached.value = value;

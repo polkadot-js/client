@@ -19,12 +19,15 @@ const BDB_OPT = { isCompressed: false, isLru: false, isTrie: false };
 const SDB_OPT = { isCompressed: false, isLru: false, isTrie: true };
 
 export default class Dbs implements ChainDbs {
-  readonly blocks: BlockDb;
-  readonly state: StateDb;
+  public readonly blocks: BlockDb;
+
+  public readonly state: StateDb;
+
   private basePath: string;
+
   private config: DbConfig;
 
-  constructor ({ db, sync }: Config, chain: ChainLoader) {
+  public constructor ({ db, sync }: Config, chain: ChainLoader) {
     this.config = db;
     this.basePath = db.type !== 'memory'
       ? path.join(db.path, 'chains', chain.id, u8aToHex(chain.genesisRoot), 'db')
@@ -47,7 +50,7 @@ export default class Dbs implements ChainDbs {
     this.state.db.open();
   }
 
-  close (): void {
+  public close (): void {
     this.blocks.db.close();
     this.state.db.close();
   }

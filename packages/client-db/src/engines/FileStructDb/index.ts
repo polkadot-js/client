@@ -23,25 +23,26 @@ const TRIE_ENC_SIZE = U32_SIZE + 2;
 export default class FileStructDb extends Impl implements BaseDb {
   private _cache: Cache<string> = new Cache(16 * 1024);
 
-  drop (): void {
+  public drop (): void {
     l.error('drop() is not implemented');
   }
 
-  empty (): void {
+  public empty (): void {
     l.error('empty() is not implemented');
   }
 
-  rename (base: string, file: string): void {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  public rename (base: string, file: string): void {
     l.error('rename() is not implemented');
   }
 
-  size (): number {
+  public size (): number {
     l.error('size() is not implemented');
 
     return 0;
   }
 
-  maintain (fn: ProgressCb): void {
+  public maintain (fn: ProgressCb): void {
     fn({
       isCompleted: true,
       keys: 0,
@@ -49,7 +50,8 @@ export default class FileStructDb extends Impl implements BaseDb {
     });
   }
 
-  del (key: Uint8Array): void {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  public del (key: Uint8Array): void {
     l.error('del() is not implemented');
   }
 
@@ -90,7 +92,7 @@ export default class FileStructDb extends Impl implements BaseDb {
     return codec.encode(recoded);
   }
 
-  get (key: Uint8Array): Uint8Array | null {
+  public get (key: Uint8Array): Uint8Array | null {
     // l.debug(() => ['get', { key }]);
 
     const keyStr = key.toString();
@@ -109,7 +111,7 @@ export default class FileStructDb extends Impl implements BaseDb {
     return value;
   }
 
-  put (key: Uint8Array, value: Uint8Array): void {
+  public put (key: Uint8Array, value: Uint8Array): void {
     // l.debug(() => ['put', { key, value }]);
 
     this._cache.set(key.toString(), value);
@@ -123,12 +125,12 @@ export default class FileStructDb extends Impl implements BaseDb {
     const decoded = codec.decode(value);
     const isEncodable = Array.isArray(decoded) &&
       decoded.length === TRIE_BRANCH_LEN &&
-      !decoded.some((value) => value && value.length !== KEY_DATA_SIZE);
+      !decoded.some((value): boolean => !!value && value.length !== KEY_DATA_SIZE);
 
     // extension nodes are going away anyway, so just ignore, no worse off.
     if (isEncodable) {
       const recoded = new Uint8Array((TRIE_BRANCH_KEYS * TRIE_ENC_SIZE) + 1 + 2);
-      let length: number = 3;
+      let length = 3;
       let bitmap = 0;
 
       for (let index = 0; index < TRIE_BRANCH_KEYS; index++) {

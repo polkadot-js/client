@@ -6,7 +6,7 @@ import { Options } from 'yargs';
 
 import defaults from '@polkadot/client-rpc/defaults';
 
-export default ({
+const config: Record<string, Options> = {
   'rpc-active': {
     default: true,
     description: 'Controls the starting of the RPC server (--no-rpc-active disables)',
@@ -28,4 +28,6 @@ export default ({
     type: 'array',
     choices: ['http', 'ws']
   }
-} as { [index: string]: Options });
+};
+
+export default config;
