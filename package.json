@@ -16,7 +16,7 @@
     "build": "polkadot-dev-build-ts && (./docker.sh version) && (cd packages/client-cli && copyfiles scripts/* build)",
     "build:wasm": "./scripts/polkadot-wasm-js-compat.sh",
     "check": "yarn lint",
-    "lint": "tslint --project . && tsc --noEmit --pretty",
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx . && tsc --noEmit --pretty",
     "clean": "polkadot-dev-clean-build",
     "postinstall": "polkadot-dev-yarn-only",
     "test": "jest --coverage",
@@ -26,8 +26,8 @@
   "devDependencies": {
     "@babel/core": "^7.5.5",
     "@babel/runtime": "^7.5.5",
-    "@polkadot/dev-react": "^0.31.0-beta.3",
-    "@polkadot/ts": "^0.1.67",
+    "@polkadot/dev-react": "^0.31.0-beta.4",
+    "@polkadot/ts": "^0.1.68",
     "copyfiles": "^2.1.1",
     "empty": "^0.10.1",
     "gh-pages": "^2.1.1"

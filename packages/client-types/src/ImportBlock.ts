@@ -7,7 +7,7 @@ import { Struct } from '@polkadot/types';
 import BlockData from './BlockData';
 
 export default class ImportBlock extends Struct {
-  constructor ({ body, header }: BlockData) {
+  public constructor ({ body, header }: BlockData) {
     super({
       header: 'Header',
       body: 'Vec<Bytes>'

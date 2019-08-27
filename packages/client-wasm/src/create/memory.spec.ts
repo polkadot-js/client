@@ -7,34 +7,36 @@ import { isInstanceOf } from '@polkadot/util';
 import defaults from '../defaults';
 import createMemory from './memory';
 
-describe('createMemory', () => {
+describe('createMemory', (): void => {
   let globalWasm: any;
   let constructInstanceSpy: Function;
 
-  beforeEach(() => {
+  beforeEach((): void => {
     globalWasm = (global as any).WebAssembly;
     constructInstanceSpy = jest.fn();
 
     (global as any).WebAssembly = class {
-      static Memory = class {
-        constructor (defaults: any) {
+      public static Memory = class {
+        public constructor (defaults: any) {
           constructInstanceSpy(defaults);
         }
       };
     };
   });
 
-  afterEach(() => {
+  afterEach((): void => {
     (global as any).WebAssembly = globalWasm;
   });
 
-  it('expects initial <= maximum', () => {
+  it('expects initial <= maximum', (): void => {
     expect(
-      () => createMemory(16, 8)
+      (): void => {
+        createMemory(16, 8);
+      }
     ).toThrow(/initial size to be/);
   });
 
-  it('constructs WebAssembly.Memory with defaults', () => {
+  it('constructs WebAssembly.Memory with defaults', (): void => {
     createMemory();
 
     expect(
@@ -45,7 +47,7 @@ describe('createMemory', () => {
     });
   });
 
-  it('constructs WebAssembly.Memory with provided values', () => {
+  it('constructs WebAssembly.Memory with provided values', (): void => {
     createMemory(256, 512);
 
     expect(
@@ -56,7 +58,7 @@ describe('createMemory', () => {
     });
   });
 
-  it('constructs WebAssembly.Memory with minimum values', () => {
+  it('constructs WebAssembly.Memory with minimum values', (): void => {
     createMemory(0, 0);
 
     expect(
@@ -67,7 +69,7 @@ describe('createMemory', () => {
     });
   });
 
-  it('returns a WebAssembly.Memory instance', () => {
+  it('returns a WebAssembly.Memory instance', (): void => {
     expect(
       isInstanceOf(
         createMemory(), WebAssembly.Memory

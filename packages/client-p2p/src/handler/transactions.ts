@@ -8,6 +8,7 @@ import { Handler } from './types';
 import { Transactions } from '@polkadot/client-types/messages';
 
 // TODO Propagate
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function handleTransactions (self: P2pInterface, peer: PeerInterface, message: Transactions): void {
   // self.l.debug(() => [peer.shortId, 'Transactions', JSON.stringify(message)]);
 }

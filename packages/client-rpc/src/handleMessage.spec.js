@@ -4,19 +4,19 @@
 
 import { ExtError } from '@polkadot/util';
 
-const mockExtError = ExtError;
+const MockExtError = ExtError;
 const mockHandlers = ({
   errorThrow: () => {
     throw new Error('errorThrow');
   },
   errorThrowEx: () => {
-    throw new mockExtError('errorThrowEx', -123);
+    throw new MockExtError('errorThrowEx', -123);
   },
   errorRet: () => {
     return Promise.resolve(new Error('errorRet'));
   },
   errorRetEx: () => {
-    return Promise.resolve(new mockExtError('errorRetEx', -456));
+    return Promise.resolve(new MockExtError('errorRetEx', -456));
   },
   test: jest.fn(() => Promise.resolve('test')),
   echo: (...params) => Promise.resolve(`echo: ${params.join(', ')}`)
@@ -24,7 +24,8 @@ const mockHandlers = ({
 
 jest.mock('./handlers', () => () => mockHandlers);
 
-import Rpc from '.';
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const Rpc = require('.').default;
 
 describe('handleMessage', () => {
   let server;
@@ -94,7 +95,7 @@ describe('handleMessage', () => {
       params: ['a', 'b']
     });
 
-    return server.handleMessage(message).then((result) => {
+    return server.handleMessage(message).then(() => {
       expect(mockHandlers.test).toHaveBeenCalledWith(['a', 'b']);
     });
   });

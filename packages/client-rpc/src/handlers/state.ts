@@ -15,5 +15,6 @@ const getStorage = ({ state: { db } }: ChainInterface): (params: string[]) => Pr
     );
 
 export default (config: Config, chain: ChainInterface): Endpoint => ({
-  'state_getStorage': getStorage(chain)
+  // eslint-disable-next-line @typescript-eslint/camelcase
+  state_getStorage: getStorage(chain)
 });

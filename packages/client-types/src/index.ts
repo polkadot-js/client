@@ -6,8 +6,8 @@
 import { getTypeRegistry } from '@polkadot/types';
 
 getTypeRegistry().register({
-  'BlockNumber': 'u64',
-  'Index': 'u64'
+  BlockNumber: 'u64',
+  Index: 'u64'
 });
 
 export { default as BlockData } from './BlockData';

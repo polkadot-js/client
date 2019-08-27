@@ -22,6 +22,8 @@ const getBlock = ({ blocks }: ChainInterface): (params: string[]) => Promise<str
   };
 
 export default (config: Config, chain: ChainInterface): Endpoint => ({
-  'chain_subscribeNewHead': subscribeNewHead,
-  'chain_getBlock': getBlock(chain)
+  // eslint-disable-next-line @typescript-eslint/camelcase
+  chain_subscribeNewHead: subscribeNewHead,
+  // eslint-disable-next-line @typescript-eslint/camelcase
+  chain_getBlock: getBlock(chain)
 });

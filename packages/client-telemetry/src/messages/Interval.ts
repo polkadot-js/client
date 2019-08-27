@@ -40,18 +40,20 @@ import BlockMessage from './BlockMessage';
 // }
 
 export default class Interval extends BlockMessage {
-  readonly peers: number;
-  readonly status: SyncStatus;
-  readonly txcount: number = 0;
+  public readonly peers: number;
 
-  constructor (bestHash: Uint8Array, bestNumber: BN, peers: number, status: SyncStatus) {
+  public readonly status: SyncStatus;
+
+  public readonly txcount: number = 0;
+
+  public constructor (bestHash: Uint8Array, bestNumber: BN, peers: number, status: SyncStatus) {
     super('system.interval', bestHash, bestNumber);
 
     this.peers = peers;
     this.status = status;
   }
 
-  toJSON (): IntervalJson {
+  public toJSON (): IntervalJson {
     return {
       ...super.toJSON(),
       // cpu: cpuUsage(),

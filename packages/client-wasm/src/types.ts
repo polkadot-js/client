@@ -8,7 +8,7 @@ import { BlockData } from '@polkadot/client-types';
 export type WasmInstanceExports = Record<string, any>;
 
 export interface WasmExports {
-  env: Object;
+  env: Record<string, any>;
 }
 
 export interface WasmConfig {

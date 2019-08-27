@@ -11,12 +11,12 @@ export default function createImports (memory: WebAssembly.Memory | null | undef
       memoryBase:
         memory
           ? 0
-          : void 0,
+          : undefined,
       table,
       tableBase:
         table
           ? 0
-          : void 0
+          : undefined
     }, imports.env || {})
   });
 }

@@ -32,8 +32,8 @@ let client: Client;
 //   type: 'create'
 // });
 
-function consoleHook (type: 'error' | 'log' | 'warn') {
-  return (...args: string[]) => {
+function consoleHook (type: 'error' | 'log' | 'warn'): (...args: string[]) => void {
+  return (...args: string[]): void => {
     ctx.postMessage({
       data: {
         type,
@@ -44,24 +44,24 @@ function consoleHook (type: 'error' | 'log' | 'warn') {
   };
 }
 
-function initClient (config: ConfigPartial) {
+function initClient (config: ConfigPartial): void {
   console.error = consoleHook('error');
   console.log = consoleHook('log');
   console.warn = consoleHook('warn');
 
   client = new Client();
-  client.start(config).catch((error) => {
+  client.start(config).catch((error): void => {
     console.error('Failed to start client', error);
   });
 
-  client.on('imported', (data) => {
+  client.on('imported', (data): void => {
     ctx.postMessage({
       type: 'imported',
       data
     });
   });
 
-  client.on('informant', (data) => {
+  client.on('informant', (data): void => {
     ctx.postMessage({
       type: 'informant',
       data
@@ -69,7 +69,7 @@ function initClient (config: ConfigPartial) {
   });
 }
 
-ctx.onmessage = async ({ data: { data, type } }) => {
+ctx.onmessage = async ({ data: { data, type } }): Promise<void> => {
   if (type === 'create') {
     initClient(data);
   }

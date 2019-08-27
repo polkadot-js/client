@@ -8,10 +8,12 @@ import { Struct, Vec } from '@polkadot/types';
 
 export default class TrieChanges extends Struct {
   private _added: Hash[];
+
   private _removed: Hash[];
+
   private _same: Hash[];
 
-  constructor (entry: TrieEntry | null, prev?: TrieChanges) {
+  public constructor (entry: TrieEntry | null, prev?: TrieChanges) {
     super({
       root: 'Hash',
       children: 'Vec<Hash>'
@@ -20,11 +22,11 @@ export default class TrieChanges extends Struct {
     const prevDeps = prev ? prev.children : null;
     const currDeps = this.children;
 
-    this._added = prevDeps ? currDeps.filter((hash) => !prevDeps.includes(hash)) : [];
+    this._added = prevDeps ? currDeps.filter((hash): boolean => !prevDeps.includes(hash)) : [];
     this._removed = [];
     this._same = [];
 
-    (prevDeps || []).forEach((hash) => {
+    (prevDeps || []).forEach((hash): void => {
       if (currDeps.includes(hash)) {
         this._same.push(hash);
       } else {
@@ -33,15 +35,15 @@ export default class TrieChanges extends Struct {
     });
   }
 
-  get changes (): [Hash[], Hash[], Hash[]] {
+  public get changes (): [Hash[], Hash[], Hash[]] {
     return [this._added, this._removed, this._same];
   }
 
-  get children (): Vec<Hash> {
+  public get children (): Vec<Hash> {
     return this.get('children') as Vec<Hash>;
   }
 
-  get root (): Hash {
+  public get root (): Hash {
     return this.get('root') as Hash;
   }
 }

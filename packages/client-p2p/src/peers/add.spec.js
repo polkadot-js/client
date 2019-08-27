@@ -36,7 +36,7 @@ describe('add', () => {
 
   it('emits message when peer receives', (done) => {
     const peer = peers.add(peerInfo);
-    const message = { 'something': 'else' };
+    const message = { something: 'else' };
 
     peers.on('message', (info) => {
       expect(info).toEqual({

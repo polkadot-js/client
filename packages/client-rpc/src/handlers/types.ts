@@ -7,12 +7,8 @@ import { ChainInterface } from '@polkadot/client-chains/types';
 
 export type Handler = (...params: any[]) => Promise<any>;
 
-export type Handlers = {
-  [index: string]: Handler
-};
+export type Handlers = Record<string, Handler>;
 
 export type HandlersFactory = (config: Config, chain: ChainInterface) => Handlers;
 
-export type Endpoint = {
-  [index: string]: Handler
-};
+export type Endpoint = Record<string, Handler>;

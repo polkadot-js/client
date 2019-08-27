@@ -2,11 +2,11 @@
 // This software may be modified and distributed under the terms
 // of the Apache-2.0 license. See the LICENSE file for details.
 
-import { WsContext$Socket } from '../types';
+import { WsContextSocket } from '../types';
 
 import createJson from '../create/json';
 
-export default function send (socket: WsContext$Socket, method: string, subscription: number, result: any): void {
+export default function send (socket: WsContextSocket, method: string, subscription: number, result: any): void {
   if (result === undefined) {
     return;
   }

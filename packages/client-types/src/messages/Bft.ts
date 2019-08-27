@@ -9,7 +9,7 @@ import { Null, Struct } from '@polkadot/types';
 import BaseMessage from './BaseMessage';
 
 export class BftMessage extends Struct {
-  constructor (value?: any) {
+  public constructor (value?: any) {
     super({
       bft: Null
     }, value);
@@ -17,9 +17,9 @@ export class BftMessage extends Struct {
 }
 
 export default class Bft extends BaseMessage implements MessageInterface {
-  static type = 5;
+  public static type = 5;
 
-  constructor (value: any) {
+  public constructor (value: any) {
     super(Bft.type, new BftMessage(value));
   }
 }

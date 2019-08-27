@@ -17,12 +17,15 @@ import Peer from '../peer';
 const l = logger('p2p/peers');
 
 export default class Peers extends EventEmitter implements PeersInterface {
-  readonly chain: ChainInterface;
-  readonly config: Config;
+  public readonly chain: ChainInterface;
+
+  public readonly config: Config;
+
   private map: Map<string, KnownPeer> = new Map();
+
   private node: LibP2p;
 
-  constructor (config: Config, chain: ChainInterface, node: LibP2p) {
+  public constructor (config: Config, chain: ChainInterface, node: LibP2p) {
     super();
 
     this.chain = chain;
@@ -34,7 +37,7 @@ export default class Peers extends EventEmitter implements PeersInterface {
     this._onDiscovery(node);
   }
 
-  add (peerInfo: PeerInfo): PeerInterface {
+  public add (peerInfo: PeerInfo): PeerInterface {
     const id = peerInfo.id.toB58String();
     const info = this.map.get(id);
 
@@ -49,7 +52,7 @@ export default class Peers extends EventEmitter implements PeersInterface {
       isConnected: false
     });
 
-    peer.on('active', () => {
+    peer.on('active', (): void => {
       const item = this.map.get(id);
 
       if (!item || item.isActive) {
@@ -70,30 +73,30 @@ export default class Peers extends EventEmitter implements PeersInterface {
     return peer;
   }
 
-  countAll (): number {
+  public countAll (): number {
     return this.map.size;
   }
 
-  count (): number {
+  public count (): number {
     return [...this.map.values()]
-      .filter(({ peer }) => peer.isActive())
+      .filter(({ peer }): boolean => peer.isActive())
       .length;
   }
 
-  log (event: PeersInterface$Events, peer: PeerInterface, withDebug: boolean = true, withShort: boolean = true): void {
-    l[withDebug ? 'debug' : 'log'](() => [withShort ? peer.shortId : peer.id, event]);
+  public log (event: PeersInterface$Events, peer: PeerInterface, withDebug: boolean = true, withShort: boolean = true): void {
+    l[withDebug ? 'debug' : 'log']((): any[] => [withShort ? peer.shortId : peer.id, event]);
 
     this.emit(event, peer);
   }
 
-  get (peerInfo: PeerInfo): KnownPeer | undefined {
+  public get (peerInfo: PeerInfo): KnownPeer | undefined {
     const id = peerInfo.id.toB58String();
 
     return this.map.get(id);
   }
 
-  peers (): PeerInterface[] {
-    return [...this.map.values()].map(({ peer }) => peer);
+  public peers (): PeerInterface[] {
+    return [...this.map.values()].map(({ peer }): PeerInterface => peer);
   }
 
   private _onConnect (node: LibP2p): void {

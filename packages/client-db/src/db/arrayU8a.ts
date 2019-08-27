@@ -35,7 +35,7 @@ export default function decodeArrayU8a (db: BaseDb, createKey: Function): Storag
       ),
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     onUpdate: (updater: (value: Uint8Array[], raw: Uint8Array) => void): void => {
-      throw new Error(`No subscriber available for db/arrayU8a`);
+      throw new Error('No subscriber available for db/arrayU8a');
     }
   };
 }

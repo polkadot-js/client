@@ -9,7 +9,7 @@ import { Bytes, Struct, Vec } from '@polkadot/types';
 import BaseMessage from './BaseMessage';
 
 export class TransactionsMessage extends Struct {
-  constructor (value?: any) {
+  public constructor (value?: any) {
     super({
       transactions: Vec.with(Bytes)
     }, value);
@@ -17,17 +17,17 @@ export class TransactionsMessage extends Struct {
 }
 
 export default class Transactions extends BaseMessage implements MessageInterface {
-  static type = 4;
+  public static type = 4;
 
-  constructor (message: TransactionsMessage) {
+  public constructor (message: TransactionsMessage) {
     super(Transactions.type, message);
   }
 
-  get transactions (): Vec<Bytes> {
+  public get transactions (): Vec<Bytes> {
     return this.message.get('transactions') as Vec<Bytes>;
   }
 
-  static decode (u8a: Uint8Array): Transactions {
+  public static decode (u8a: Uint8Array): Transactions {
     return new Transactions(
       new TransactionsMessage(u8a)
     );

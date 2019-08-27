@@ -10,10 +10,6 @@ function val (array: string[]): string {
   return array[num(array.length)];
 }
 
-export default function randName (): string {
-  return `${val(VERBS)}-${val(NOUNS)}-${num(10)}${num(10)}`;
-}
-
 const NOUNS = [
   'variation',
   'supermarket',
@@ -219,3 +215,7 @@ const VERBS = [
   'bend',
   'buy'
 ];
+
+export default function randName (): string {
+  return `${val(VERBS)}-${val(NOUNS)}-${num(10)}${num(10)}`;
+}

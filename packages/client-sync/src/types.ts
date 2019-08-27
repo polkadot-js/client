@@ -10,21 +10,21 @@ export type SyncStatus = 'Idle' | 'Sync';
 
 export type SyncTypes = 'full' | 'light';
 
-export interface SyncState$PeerRequest {
+export interface SyncStatePeerRequest {
   peer: PeerInterface;
   request: BlockRequest;
   timeout: number;
 }
 
-export interface SyncState$PeerBlock {
+export interface SyncStatePeerBlock {
   blockId: string;
   block: BlockData;
   peer: PeerInterface;
 }
 
 export interface SyncState {
-  blockRequests: Map<string, SyncState$PeerRequest>;
-  blockQueue: Map<string, SyncState$PeerBlock>;
+  blockRequests: Map<string, SyncStatePeerRequest>;
+  blockQueue: Map<string, SyncStatePeerBlock>;
   status: SyncStatus;
 }
 

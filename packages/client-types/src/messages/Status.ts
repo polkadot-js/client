@@ -10,23 +10,23 @@ import { Bytes, u32 } from '@polkadot/types';
 
 import BaseMessage from './BaseMessage';
 
-export class StatusMessage$Roles extends Set {
-  constructor (value?: any) {
+export class StatusMessageRoles extends Set {
+  public constructor (value?: any) {
     super({
-      none:      0b00000000,
-      full:      0b00000001,
-      light:     0b00000010,
+      none: 0b00000000,
+      full: 0b00000001,
+      light: 0b00000010,
       authority: 0b00000100
     }, value);
   }
 }
 
 export class StatusMessage extends Struct {
-  constructor (value: any) {
+  public constructor (value: any) {
     super({
       version: 'u32',
       minSupportedVersion: 'u32',
-      roles: StatusMessage$Roles,
+      roles: StatusMessageRoles,
       bestNumber: 'BlockNumber',
       bestHash: 'Hash',
       genesisHash: 'Hash',
@@ -36,37 +36,37 @@ export class StatusMessage extends Struct {
 }
 
 export default class Status extends BaseMessage implements MessageInterface {
-  static type = 0;
+  public static type = 0;
 
-  constructor (value: any) {
+  public constructor (value: any) {
     super(Status.type, new StatusMessage(value));
   }
 
-  get bestHash (): Hash {
+  public get bestHash (): Hash {
     return this.message.get('bestHash') as Hash;
   }
 
-  get bestNumber (): BlockNumber {
+  public get bestNumber (): BlockNumber {
     return this.message.get('bestNumber') as BlockNumber;
   }
 
-  get chainStatus (): Bytes {
+  public get chainStatus (): Bytes {
     return this.message.get('chainStatus') as Bytes;
   }
 
-  get genesisHash (): Hash {
+  public get genesisHash (): Hash {
     return this.message.get('genesisHash') as Hash;
   }
 
-  get minSupportedVersion (): u32 {
+  public get minSupportedVersion (): u32 {
     return this.message.get('minSupportedVersion') as u32;
   }
 
-  get roles (): StatusMessage$Roles {
-    return this.message.get('roles') as StatusMessage$Roles;
+  public get roles (): StatusMessageRoles {
+    return this.message.get('roles') as StatusMessageRoles;
   }
 
-  get version (): u32 {
+  public get version (): u32 {
     return this.message.get('version') as u32;
   }
 }

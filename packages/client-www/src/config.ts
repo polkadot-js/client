@@ -7,7 +7,7 @@ import { ConfigPartial } from '@polkadot/client/types';
 import defaultsP2p from '@polkadot/client-p2p/defaults';
 import defaultsWasm from '@polkadot/client-wasm/defaults';
 
-export default ({
+const config: ConfigPartial = {
   chain: 'alexander', // 'dried-danta',
   db: {
     compact: false,
@@ -31,4 +31,6 @@ export default ({
   wasm: {
     heapSize: defaultsWasm.HEAP_SIZE_KB
   }
-} as ConfigPartial);
+};
+
+export default config;

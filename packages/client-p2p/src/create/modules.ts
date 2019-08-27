@@ -48,7 +48,7 @@ export default function createModules (envType: EnvType, peerInfo: PeerInfo, { b
     ],
     dht,
     peerDiscovery: peerDiscovery.concat(
-      starTransports.map(({ discovery }) => discovery) as any[]
+      starTransports.map(({ discovery }): any => discovery)
     ) as any[],
     transport: transport.concat(starTransports as any[])
   };

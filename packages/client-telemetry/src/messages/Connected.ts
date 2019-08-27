@@ -7,18 +7,20 @@ import { name as implementation, version } from '@polkadot/client/clientId';
 import Base from './Base';
 
 export default class Connected extends Base {
-  readonly config: string = '';
-  readonly chain: string;
-  readonly name: string;
+  public readonly config: string = '';
 
-  constructor (chain: string, name: string) {
+  public readonly chain: string;
+
+  public readonly name: string;
+
+  public constructor (chain: string, name: string) {
     super('system.connected');
 
     this.chain = chain;
     this.name = name;
   }
 
-  toJSON (): ConnectedJson {
+  public toJSON (): ConnectedJson {
     return {
       ...super.toJSON(),
       chain: this.chain,

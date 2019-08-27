@@ -8,7 +8,7 @@ import * as net from 'net';
 import { Config } from '@polkadot/client/types';
 import { ChainInterface } from '@polkadot/client-chains/types';
 import { Handlers } from './handlers/types';
-import { JsonRpcError, JsonRpcRequest, JsonRpcResponse, RpcInterface, SubInterface, WsContext, WsContext$Socket } from './types';
+import { JsonRpcError, JsonRpcRequest, JsonRpcResponse, RpcInterface, SubInterface, WsContext, WsContextSocket } from './types';
 
 import coBody from 'co-body';
 import { ExtError, assert, isError, isFunction, isUndefined, logger } from '@polkadot/util';
@@ -25,11 +25,14 @@ const l = logger('rpc');
 
 export default class Rpc extends EventEmitter implements RpcInterface {
   private config: Config;
+
   private handlers: Handlers;
+
   private servers: net.Server[];
+
   private subscribe: SubInterface;
 
-  constructor (config: Config, chain: ChainInterface) {
+  public constructor (config: Config, chain: ChainInterface) {
     super();
 
     this.config = config;
@@ -40,7 +43,7 @@ export default class Rpc extends EventEmitter implements RpcInterface {
     validateConfig(config.rpc);
   }
 
-  async start (): Promise<boolean> {
+  public async start (): Promise<boolean> {
     await this.stop();
 
     if (this.config.rpc.types.length === 0) {
@@ -58,7 +61,7 @@ export default class Rpc extends EventEmitter implements RpcInterface {
       types: this.config.rpc.types
     });
 
-    this.servers = apps.map((app, index) => {
+    this.servers = apps.map((app, index): net.Server => {
       const port = this.config.rpc.port + (11 * index);
       const server = app.listen(port);
 
@@ -72,7 +75,7 @@ export default class Rpc extends EventEmitter implements RpcInterface {
     return true;
   }
 
-  async stop (): Promise<boolean> {
+  public async stop (): Promise<boolean> {
     if (this.servers.length === 0) {
       return false;
     }
@@ -80,9 +83,9 @@ export default class Rpc extends EventEmitter implements RpcInterface {
     const servers = this.servers;
 
     this.servers = [];
-    servers.forEach((server) =>
-      server.close()
-    );
+    servers.forEach((server): void => {
+      server.close();
+    });
 
     l.log('Server stopped');
     this.emit('stopped');
@@ -90,7 +93,7 @@ export default class Rpc extends EventEmitter implements RpcInterface {
     return true;
   }
 
-  private handleRequest = async ({ id, jsonrpc, method, params }: JsonRpcRequest, socket?: WsContext$Socket): Promise<JsonRpcError | JsonRpcResponse> => {
+  private handleRequest = async ({ id, jsonrpc, method, params }: JsonRpcRequest, socket?: WsContextSocket): Promise<JsonRpcError | JsonRpcResponse> => {
     const isSubscription = SUBSCRIBE_REGEX.test(method);
 
     if (isSubscription && isUndefined(socket)) {
@@ -108,7 +111,7 @@ export default class Rpc extends EventEmitter implements RpcInterface {
         ? await this.subscribe(socket, handler, params)
         : await handler(params);
 
-      l.debug(() => ['executed', method, params, '->', result]);
+      l.debug((): any[] => ['executed', method, params, '->', result]);
 
       if (isError(result)) {
         throw result;
@@ -120,7 +123,7 @@ export default class Rpc extends EventEmitter implements RpcInterface {
     }
   }
 
-  private handleMessage = async (message: string, socket?: WsContext$Socket): Promise<JsonRpcError | JsonRpcResponse> => {
+  private handleMessage = async (message: string, socket?: WsContextSocket): Promise<JsonRpcError | JsonRpcResponse> => {
     try {
       return this.handleRequest(JSON.parse(message), socket);
     } catch (error) {
@@ -137,7 +140,7 @@ export default class Rpc extends EventEmitter implements RpcInterface {
   }
 
   private handleWs = (ctx: WsContext): void => {
-    ctx.websocket.on('message', async (message: string) => {
+    ctx.websocket.on('message', async (message: string): Promise<void> => {
       const response = await this.handleMessage(message, ctx.websocket);
 
       ctx.websocket.send(

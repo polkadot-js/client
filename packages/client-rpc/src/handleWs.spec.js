@@ -6,9 +6,7 @@ jest.mock('./handlers', () => () => ({
   test: jest.fn(() => Promise.resolve('test'))
 }));
 
-import { isFunction } from '@polkadot/util';
-
-import Rpc from '.';
+const Rpc = require('.').default;
 
 describe('handleWs', () => {
   let context;

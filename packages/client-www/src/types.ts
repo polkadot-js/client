@@ -2,16 +2,16 @@
 // This software may be modified and distributed under the terms
 // of the Apache-2.0 license. See the LICENSE file for details.
 
-export interface Message$Console {
+export interface MessageConsole {
   type: 'error' | 'log' | 'warn';
   text: string;
 }
 
-export interface Message$Imported {
+export interface MessageImported {
   bestNumber: string;
 }
 
-export interface Message$Informant {
+export interface MessageInformant {
   bestNumber: string;
   numPeers: number;
   status: 'Idle' | 'Sync';

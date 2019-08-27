@@ -37,17 +37,25 @@ const REQUEST_INTERVAL = 15000;
 const l = logger('p2p');
 
 export default class P2p extends EventEmitter implements P2pInterface {
-  readonly chain: ChainInterface;
-  readonly config: Config;
-  readonly l: Logger;
-  private dialQueue: Map<string, QueuedPeer> = new Map();
-  private node: LibP2p | undefined;
-  private peers: PeersInterface | undefined;
-  private protocol: string;
-  private dialTimer: NodeJS.Timer | null;
-  readonly sync: Sync;
+  public readonly chain: ChainInterface;
 
-  constructor (config: Config, chain: ChainInterface) {
+  public readonly config: Config;
+
+  public readonly l: Logger;
+
+  private dialQueue: Map<string, QueuedPeer> = new Map();
+
+  private node: LibP2p | undefined;
+
+  private peers: PeersInterface | undefined;
+
+  private protocol: string;
+
+  private dialTimer: NodeJS.Timer | null;
+
+  public readonly sync: Sync;
+
+  public constructor (config: Config, chain: ChainInterface) {
     super();
 
     this.config = config;
@@ -58,17 +66,17 @@ export default class P2p extends EventEmitter implements P2pInterface {
     this.sync = new Sync(this.config, this.chain);
   }
 
-  isStarted (): boolean {
+  public isStarted (): boolean {
     return !!this.node;
   }
 
-  getNumPeers (): number {
+  public getNumPeers (): number {
     return this.peers
       ? this.peers.count()
       : 0;
   }
 
-  async start (): Promise<boolean> {
+  public async start (): Promise<boolean> {
     await this.stop();
 
     this.node = await createNode(this.config, this.chain, l);
@@ -90,7 +98,7 @@ export default class P2p extends EventEmitter implements P2pInterface {
     return true;
   }
 
-  async stop (): Promise<boolean> {
+  public async stop (): Promise<boolean> {
     if (!this.node) {
       return false;
     }
@@ -106,7 +114,7 @@ export default class P2p extends EventEmitter implements P2pInterface {
     }
 
     if (this.peers) {
-      this.peers.peers().forEach((peer) => {
+      this.peers.peers().forEach((peer): void => {
         peer.disconnect();
       });
     }
@@ -126,7 +134,7 @@ export default class P2p extends EventEmitter implements P2pInterface {
   }
 
   private _onPeerDiscovery (node: LibP2p, peers: PeersInterface): void {
-    node.on('start', () =>
+    node.on('start', (): void =>
       this._dialPeers()
     );
 
@@ -137,7 +145,7 @@ export default class P2p extends EventEmitter implements P2pInterface {
 
   private _onPeerMessage (node: LibP2p, peers: PeersInterface): void {
     peers.on('message', ({ peer, message }: OnMessage): void => {
-      const handler = handlers.find(({ type }) =>
+      const handler = handlers.find(({ type }): boolean =>
         type === message.type
       );
 
@@ -184,8 +192,8 @@ export default class P2p extends EventEmitter implements P2pInterface {
         try {
           const stream = handshake({ timeout: defaults.WAIT_TIMEOUT });
           const shake = stream.handshake;
-          const next = () => {
-            shake.read(defaults.PING_LENGTH, (error, buffer) => {
+          const next = (): void => {
+            shake.read(defaults.PING_LENGTH, (error, buffer): void => {
               if (error) {
                 // l.debug(() => ['ping error', error]);
                 return;
@@ -212,7 +220,7 @@ export default class P2p extends EventEmitter implements P2pInterface {
       return false;
     }
 
-    l.debug(() => `dialing ${peer.shortId}`);
+    l.debug((): string => `dialing ${peer.shortId}`);
 
     try {
       // const connection = await this.node.dialProtocol(peer.peerInfo, this.protocol);
@@ -224,7 +232,7 @@ export default class P2p extends EventEmitter implements P2pInterface {
 
       return true;
     } catch (error) {
-      l.debug(() => `${peer.shortId} dial error ${error.message}`);
+      l.debug((): string => `${peer.shortId} dial error ${error.message}`);
     }
 
     return false;
@@ -237,7 +245,7 @@ export default class P2p extends EventEmitter implements P2pInterface {
       this.dialTimer = null;
     }
 
-    this.dialTimer = setTimeout(() => {
+    this.dialTimer = setTimeout((): void => {
       this._dialPeers();
     }, DIAL_INTERVAL);
 
@@ -255,7 +263,7 @@ export default class P2p extends EventEmitter implements P2pInterface {
 
     const now = Date.now();
 
-    this.dialQueue.forEach((item) => {
+    this.dialQueue.forEach((item): void => {
       if (!this.peers || (item.nextDial > now) || item.peer.isActive()) {
         return;
       }
@@ -266,20 +274,18 @@ export default class P2p extends EventEmitter implements P2pInterface {
       item.numDials = item.numDials + 1;
 
       // TODO We really want to reset (when all ok and we have the status)
-      this._dialPeer(item, this.peers).catch(() => {
-        // ignore, handled above
-      });
+      this._dialPeer(item, this.peers).catch((): void => {});
     });
   }
 
   private _requestAny (): void {
     if (this.peers) {
-      this.peers.peers().forEach((peer) => {
+      this.peers.peers().forEach((peer): void => {
         this.sync && this.sync.requestBlocks(peer);
       });
     }
 
-    setTimeout(() => {
+    setTimeout((): void => {
       this._requestAny();
     }, REQUEST_INTERVAL);
   }

@@ -51,13 +51,13 @@ export interface RpcConfig {
 
 export type RpcInterface$Events = 'started' | 'stopped';
 
-export interface WsContext$Socket {
+export interface WsContextSocket {
   on: (type: 'close' | 'message', cb: (message: string) => void | Promise<void>) => void;
   send: (message: string) => void | Promise<void>;
 }
 
 export type WsContext = Koa.Context & {
-  websocket: WsContext$Socket
+  websocket: WsContextSocket;
 };
 
 export interface RpcInterface {
@@ -66,7 +66,7 @@ export interface RpcInterface {
   stop (): Promise<boolean>;
 }
 
-export type SubInterface = (socket: WsContext$Socket | undefined, handler: Handler, params: any[]) => Promise<number>;
+export type SubInterface = (socket: WsContextSocket | undefined, handler: Handler, params: any[]) => Promise<number>;
 
 export interface RpcState {
   chain: ChainInterface;

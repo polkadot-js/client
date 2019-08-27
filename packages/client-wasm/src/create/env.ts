@@ -11,11 +11,11 @@ import createExports from './exports';
 export default async function createEnv (runtime: RuntimeInterface, memory: WebAssembly.Memory): Promise<WasmInstanceExports> {
   const proxy = await createExports(runtimeProxy, { runtime: runtime.exports }, memory);
 
-  return Object.keys(runtime.exports).reduce((result, name) => {
+  return Object.keys(runtime.exports).reduce((result: WasmInstanceExports, name): WasmInstanceExports => {
     const extName = `ext_${name}`;
 
     result[extName] = proxy.exports[extName];
 
     return result;
-  }, {} as WasmInstanceExports);
+  }, {});
 }

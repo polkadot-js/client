@@ -9,7 +9,7 @@ import { Status } from '@polkadot/client-types/messages';
 
 // TODO: We should check the genesisHash here and act appropriately
 function handleStatus (self: P2pInterface, peer: PeerInterface, message: Status): void {
-  self.l.debug(() => [peer.shortId, 'Status', { message }]);
+  self.l.debug((): any[] => [peer.shortId, 'Status', { message }]);
 
   const { bestHash, bestNumber } = message;
 

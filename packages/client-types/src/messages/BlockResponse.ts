@@ -10,34 +10,34 @@ import BlockData from '../BlockData';
 import BaseMessage from './BaseMessage';
 
 export class BlockResponseMessage extends Struct {
-  constructor (value?: any) {
+  public constructor (value?: any) {
     super({
       id: 'u64',
       blocks: Vec.with(BlockData)
     }, value);
   }
 
-  get blocks (): Vec<BlockData> {
+  public get blocks (): Vec<BlockData> {
     return this.get('blocks') as Vec<BlockData>;
   }
 
-  get id (): u64 {
+  public get id (): u64 {
     return this.get('id') as u64;
   }
 }
 
 export default class BlockResponse extends BaseMessage implements MessageInterface {
-  static type = 2;
+  public static type = 2;
 
-  constructor (value?: any) {
+  public constructor (value?: any) {
     super(BlockResponse.type, new BlockResponseMessage(value));
   }
 
-  get blocks (): Vec<BlockData> {
+  public get blocks (): Vec<BlockData> {
     return this.message.get('blocks') as Vec<BlockData>;
   }
 
-  get id (): u64 {
+  public get id (): u64 {
     return this.message.get('id') as u64;
   }
 }

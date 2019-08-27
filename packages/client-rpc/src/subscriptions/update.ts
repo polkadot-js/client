@@ -20,7 +20,7 @@ const updateAll = (subscriptions: Subscriptions, sockets: Sockets, method: strin
     subscriptions[method].value = value;
   }
 
-  subscriptions[method].subscriptions.forEach((subId) => {
+  subscriptions[method].subscriptions.forEach((subId): void => {
     const socket = sockets[subId];
 
     if (socket) {

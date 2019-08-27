@@ -10,17 +10,18 @@ import { u8aToHex } from '@polkadot/util';
 import Base from './Base';
 
 export default class BlockMessage extends Base {
-  readonly bestHash: Uint8Array;
-  readonly bestNumber: BN;
+  public readonly bestHash: Uint8Array;
 
-  constructor (type: Message, bestHash: Uint8Array, bestNumber: BN) {
+  public readonly bestNumber: BN;
+
+  public constructor (type: Message, bestHash: Uint8Array, bestNumber: BN) {
     super(type);
 
     this.bestHash = bestHash;
     this.bestNumber = bestNumber;
   }
 
-  toJSON (): BlockJson {
+  public toJSON (): BlockJson {
     return {
       ...super.toJSON(),
       best: u8aToHex(this.bestHash),

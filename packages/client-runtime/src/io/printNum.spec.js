@@ -11,7 +11,7 @@ describe('printNum', () => {
   beforeEach(() => {
     l = {
       debug: jest.fn((cb) => cb()),
-      warn: jest.fn(() => void 0)
+      warn: jest.fn(() => {})
     };
     printNum = index({ l }).print_num;
   });
