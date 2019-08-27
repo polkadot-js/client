@@ -215,7 +215,9 @@ export default class P2p extends EventEmitter implements P2pInterface {
     l.debug(() => `dialing ${peer.shortId}`);
 
     try {
-      const connection = await this.node.dialProtocol(peer.peerInfo, this.protocol);
+      // const connection = await this.node.dialProtocol(peer.peerInfo, this.protocol);
+      // @ts-ignore
+      const connection = await promisify(this.node, this.node.dialProtocol, peer.peerInfo, this.protocol);
 
       peer.addConnection(connection, true);
       peers.log('dialled', peer);

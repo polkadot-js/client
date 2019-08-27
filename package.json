@@ -9,6 +9,7 @@
   ],
   "resolutions": {
     "babel-core": "^7.0.0-bridge.0",
+    "peer-id": "0.12.2",
     "typescript": "^3.5.3"
   },
   "scripts": {

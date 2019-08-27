@@ -21,8 +21,11 @@ const config = {
       enabled: true
     }
   },
-  pubsub: {
-    enabled: false
+  // pubsub: {
+  //   enabled: false
+  // }
+  EXPERIMENTAL: {
+    pubsub: false
   }
 };
 
