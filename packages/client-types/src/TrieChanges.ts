@@ -7,9 +7,9 @@ import { Hash } from '@polkadot/types/interfaces';
 import { Struct, Vec } from '@polkadot/types';
 
 export default class TrieChanges extends Struct {
-  private _added: Array<Hash>;
-  private _removed: Array<Hash>;
-  private _same: Array<Hash>;
+  private _added: Hash[];
+  private _removed: Hash[];
+  private _same: Hash[];
 
   constructor (entry: TrieEntry | null, prev?: TrieChanges) {
     super({
@@ -33,7 +33,7 @@ export default class TrieChanges extends Struct {
     });
   }
 
-  get changes (): [Array<Hash>, Array<Hash>, Array<Hash>] {
+  get changes (): [Hash[], Hash[], Hash[]] {
     return [this._added, this._removed, this._same];
   }
 

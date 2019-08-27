@@ -36,7 +36,7 @@ export function modifyKey (keyData: Uint8Array, valAt: number, valSize: number):
   return keyData;
 }
 
-export function newHdr (indexes: Array<{ dataAt: number, hdrIndex: number, isKey: boolean }>): Uint8Array {
+export function newHdr (indexes: { dataAt: number, hdrIndex: number, isKey: boolean }[]): Uint8Array {
   const hdr = new Uint8Array(HDR_TOTAL_SIZE);
 
   indexes.forEach(({ dataAt, hdrIndex, isKey }) =>

@@ -67,7 +67,7 @@ export default class FileStructDb extends Impl implements BaseDb {
     }
 
     // 17 entries, assuming there may be an encoded value in there
-    const recoded: Array<Uint8Array | null> = [
+    const recoded: (Uint8Array | null)[] = [
       null, null, null, null,
       null, null, null, null,
       null, null, null, null,
@@ -132,7 +132,7 @@ export default class FileStructDb extends Impl implements BaseDb {
       let bitmap = 0;
 
       for (let index = 0; index < TRIE_BRANCH_KEYS; index++) {
-        const u8a = (decoded as Array<Uint8Array>)[index];
+        const u8a = (decoded as Uint8Array[])[index];
 
         if (u8a) {
           const key = serializeKey(u8a);

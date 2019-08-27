@@ -92,7 +92,7 @@ export default class Peers extends EventEmitter implements PeersInterface {
     return this.map.get(id);
   }
 
-  peers (): Array<PeerInterface> {
+  peers (): PeerInterface[] {
     return [...this.map.values()].map(({ peer }) => peer);
   }
 

@@ -11,18 +11,18 @@ import path from 'path';
 import Cache from './Cache';
 import { DB_VERSION, DB_MAX_FILES, HDR_TOTAL_SIZE, KEY_TOTAL_SIZE } from './constants';
 
-type Fd = {
-  cache: Cache<number>,
-  fd: number,
-  file: string,
-  size: number
-};
+interface Fd {
+  cache: Cache<number>;
+  fd: number;
+  file: string;
+  size: number;
+}
 
-type Fds = {
-  idx: Fd,
-  key: Fd,
-  val: Fd
-};
+interface Fds {
+  idx: Fd;
+  key: Fd;
+  val: Fd;
+}
 
 const CACHE_SIZES = {
   idx: 6 * 512,
@@ -33,7 +33,7 @@ const CACHE_SIZES = {
 export default class Files {
   protected _isTrie: boolean = false;
   protected _isOpen: boolean = false;
-  private _fds: Array<Fds> = [];
+  private _fds: Fds[] = [];
   private _path: string;
 
   constructor (base: string, file: string, options: DiskDbOptions) {
@@ -55,7 +55,7 @@ export default class Files {
 
   open (): void {
     for (let i = 0; i < DB_MAX_FILES; i++) {
-      this._fds[i] = (['idx', 'key', 'val'] as Array<keyof Fds>).reduce((fds, type) => {
+      this._fds[i] = (['idx', 'key', 'val'] as (keyof Fds)[]).reduce((fds, type) => {
         const count = `0${i.toString(16)}`.slice(-2);
         const file = path.join(this._path, `${count}.${type as string}`);
 

@@ -23,7 +23,7 @@ export default ({
     type: 'string'
   },
   'sync': {
-    choices: ['full', 'light'] as Array<SyncTypes>,
+    choices: ['full', 'light'] as SyncTypes[],
     default: syncDefaults.SYNC_DEFAULT,
     description: 'Sets the sync type full (state validation) or light (header valiation)',
     type: 'string'

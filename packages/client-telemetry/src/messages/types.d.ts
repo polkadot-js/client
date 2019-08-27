@@ -8,29 +8,29 @@ export type Level = 'INFO';
 
 export type Message = 'system.connected' | 'system.interval' | 'node.start' | 'block.import';
 
-export type BaseJson = {
-  level: Level,
-  msg: Message,
-  ts: string
-};
+export interface BaseJson {
+  level: Level;
+  msg: Message;
+  ts: string;
+}
 
-export type BlockJson = BaseJson & {
-  best: string,
-  height: number
-};
+export interface BlockJson extends BaseJson {
+  best: string;
+  height: number;
+}
 
-export type ConnectedJson = BaseJson & {
-  chain: string,
-  config: string,
-  implementation: string,
-  name: string,
-  version: string
-};
+export interface ConnectedJson extends BaseJson {
+  chain: string;
+  config: string;
+  implementation: string;
+  name: string;
+  version: string;
+}
 
-export type IntervalJson = BlockJson & {
-  cpu?: number,
-  memory?: number,
-  peers: number,
-  status: SyncStatus,
-  txcount: number
+export interface IntervalJson extends BlockJson {
+  cpu?: number;
+  memory?: number;
+  peers: number;
+  status: SyncStatus;
+  txcount: number;
 }

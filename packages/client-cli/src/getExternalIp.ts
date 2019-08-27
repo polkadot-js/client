@@ -11,7 +11,7 @@ const getContent = function (url: string): Promise<string> {
         reject(new Error(`Failed to load, status code: ${response.statusCode}`));
       }
 
-      const body: Array<string> = [];
+      const body: string[] = [];
 
       response.on('data', (chunk) => body.push(chunk));
       response.on('end', () => resolve(body.join('')));

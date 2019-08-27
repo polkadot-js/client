@@ -4,13 +4,9 @@
 
 import { WsContext$Socket } from '../types';
 
-export type Sockets = {
-  [index: number]: WsContext$Socket
-};
+export type Sockets = Record<number, WsContext$Socket>;
 
-export type Subscriptions = {
-  [index: string]: {
-    subscriptions: Array<number>,
-    value: any
-  }
-};
+export type Subscriptions = Record<string, {
+  subscriptions: number[],
+  value: any;
+}>;

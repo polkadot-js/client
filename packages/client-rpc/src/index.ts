@@ -26,7 +26,7 @@ const l = logger('rpc');
 export default class Rpc extends EventEmitter implements RpcInterface {
   private config: Config;
   private handlers: Handlers;
-  private servers: Array<net.Server>;
+  private servers: net.Server[];
   private subscribe: SubInterface;
 
   constructor (config: Config, chain: ChainInterface) {

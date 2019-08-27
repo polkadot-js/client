@@ -6,7 +6,7 @@ function num (max: number): number {
   return Math.floor(Math.random() * max);
 }
 
-function val (array: Array<string>): string {
+function val (array: string[]): string {
   return array[num(array.length)];
 }
 

@@ -13,9 +13,7 @@ import BlockResponse from './BlockResponse';
 import Status from './Status';
 import Transactions from './Transactions';
 
-type DecoderMapping = {
-  [index: number]: MessageDecoder<any>
-};
+type DecoderMapping = Record<number, MessageDecoder<any>>;
 
 const decoders: DecoderMapping = {
   [Bft.type]: Bft,

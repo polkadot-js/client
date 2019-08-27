@@ -152,7 +152,7 @@ export default class Sync extends EventEmitter implements SyncInterface {
     return true;
   }
 
-  private blocksFromHash (count: number, from: Hash, to: Hash | null, increment: BN): Array<Uint8Array> {
+  private blocksFromHash (count: number, from: Hash, to: Hash | null, increment: BN): Uint8Array[] {
     const data = new BlockData(this.chain.blocks.blockData.get(from));
 
     // nothing here, just get out gracefully
@@ -163,9 +163,9 @@ export default class Sync extends EventEmitter implements SyncInterface {
     return this.blocksFromNumber(count, data.header.number.unwrap(), to, increment);
   }
 
-  private blocksFromNumber (count: number, from: BN, to: Hash | null, increment: BN): Array<Uint8Array> {
+  private blocksFromNumber (count: number, from: BN, to: Hash | null, increment: BN): Uint8Array[] {
     const best = this.chain.blocks.bestNumber.get();
-    const blocks: Array<Uint8Array> = [];
+    const blocks: Uint8Array[] = [];
     let current = from;
 
     // l.debug(() => `Reading ${count} blocks from #${from} -> ${to}, ${increment} (best #${best})`);

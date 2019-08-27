@@ -11,7 +11,7 @@ import blockResponse from './blockResponse';
 import status from './status';
 import transactions from './transactions';
 
-const handlers: Array<Handler> = [
+const handlers: Handler[] = [
   bft, blockAnnounce, blockRequest, blockResponse, status, transactions
 ];
 

@@ -15,7 +15,7 @@ import PullPushable, { Pushable } from 'pull-pushable';
 import pull from 'pull-stream';
 import varint from 'varint';
 import decodeMessage, { Status } from '@polkadot/client-types/messages';
-import { bufferToU8a, logger, promisify, stringShorten, u8aConcat, u8aToBuffer, u8aToHex } from '@polkadot/util';
+import { bufferToU8a, logger, stringShorten, u8aConcat, u8aToBuffer, u8aToHex } from '@polkadot/util';
 import { randomAsU8a } from '@polkadot/util-crypto';
 
 import defaults from '../defaults';
@@ -72,10 +72,7 @@ export default class Peer extends EventEmitter implements PeerInterface {
     l.debug(() => `Starting ping with ${this.shortId}`);
 
     try {
-      const connection = await promisify(
-         // @ts-ignore 0.26 turns this into a promise
-         this.node, this.node.dialProtocol, this.peerInfo, defaults.PROTOCOL_PING
-      );
+      const connection = await this.node.dialProtocol(this.peerInfo, defaults.PROTOCOL_PING);
 
       const stream = handshake({ timeout: defaults.WAIT_TIMEOUT }, (error) => {
         if (error) {
@@ -165,7 +162,7 @@ export default class Peer extends EventEmitter implements PeerInterface {
     this.emit('disconnected');
   }
 
-  private pushables (): Array<Pushable> {
+  private pushables (): Pushable[] {
     // @ts-ignore yeap, we are filtering them right out at the end
     return [...this.connections.values()]
       .map(({ pushable }) => pushable)

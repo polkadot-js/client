@@ -8,8 +8,8 @@ import { Endpoint } from './types';
 
 import { u8aToHex, u8aToU8a } from '@polkadot/util';
 
-const getStorage = ({ state: { db } }: ChainInterface): (params: Array<string>) => Promise<string> =>
-  async ([key]: Array<string>): Promise<string> =>
+const getStorage = ({ state: { db } }: ChainInterface): (params: string[]) => Promise<string> =>
+  async ([key]: string[]): Promise<string> =>
     u8aToHex(
       db.get(u8aToU8a(key))
     );

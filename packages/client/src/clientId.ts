@@ -6,10 +6,10 @@ import npmQuery from 'package-json';
 import semcmp from 'semver-compare';
 import { isFunction } from '@polkadot/util';
 
-type PackageJson = {
-  name: string,
-  version: string
-};
+interface PackageJson {
+  name: string;
+  version: string;
+}
 
 const DEVELOPMENT = 'development';
 const RELEASE = 'alpha'; // 'release'

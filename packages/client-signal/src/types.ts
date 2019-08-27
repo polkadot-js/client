@@ -2,10 +2,10 @@
 // This software may be modified and distributed under the terms
 // of the Apache-2.0 license. See the LICENSE file for details.
 
-export type SignalConfig = {
-  active: boolean,
-  port: number
-};
+export interface SignalConfig {
+  active: boolean;
+  port: number;
+}
 
 export interface SignalInterface {
   readonly numConnected: number;
@@ -14,16 +14,16 @@ export interface SignalInterface {
   stop (): Promise<boolean>;
 }
 
-export type SSSignal = {
-  type: 'offer' | 'answer',
-  sdp: string
-};
+export interface SSSignal {
+  type: 'offer' | 'answer';
+  sdp: string;
+}
 
-export type SSOffer = {
-  answer?: boolean,
-  dstMultiaddr: string,
-  err?: string,
-  intentId: string,
-  srcMultiaddr: string,
-  signal: SSSignal
-};
+export interface SSOffer {
+  answer?: boolean;
+  dstMultiaddr: string;
+  err?: string;
+  intentId: string;
+  srcMultiaddr: string;
+  signal: SSSignal;
+}

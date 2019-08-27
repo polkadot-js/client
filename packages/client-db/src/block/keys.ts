@@ -9,7 +9,7 @@ import { isString } from '@polkadot/util';
 import { blake2AsU8a } from '@polkadot/util-crypto';
 
 interface SubstrateMetadata {
-  documentation: Array<string>;
+  documentation: string[];
   type: string | { key: string, value: string };
 }
 
@@ -33,7 +33,7 @@ const createMethod = (method: string, key: string, { documentation, type }: Subs
     { key, skipHashing: true }
   );
 
-  return ((...args: Array<any>): Uint8Array =>
+  return ((...args: any[]): Uint8Array =>
     blake2AsU8a(creator(...args))
   ) as any;
 };

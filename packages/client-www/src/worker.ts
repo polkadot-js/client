@@ -33,7 +33,7 @@ let client: Client;
 // });
 
 function consoleHook (type: 'error' | 'log' | 'warn') {
-  return (...args: Array<string>) => {
+  return (...args: string[]) => {
     ctx.postMessage({
       data: {
         type,

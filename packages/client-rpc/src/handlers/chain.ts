@@ -11,8 +11,8 @@ import { hexToU8a, u8aToHex } from '@polkadot/util';
 const subscribeNewHead = async (): Promise<string> =>
   'chain_newHead';
 
-const getBlock = ({ blocks }: ChainInterface): (params: Array<string>) => Promise<string> =>
-  async ([hash]: Array<string>): Promise<string> => {
+const getBlock = ({ blocks }: ChainInterface): (params: string[]) => Promise<string> =>
+  async ([hash]: string[]): Promise<string> => {
     // FIXME This is BlockData, not SignedBlock as it should be
     return u8aToHex(
       blocks.blockData.get(

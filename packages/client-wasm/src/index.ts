@@ -20,8 +20,8 @@ type CallResult = {
   hi: number
 };
 
-type Call = (...data: Array<Uint8Array>) => CallResult;
-// type CallU8a = (...data: Array<Uint8Array>) => Uint8Array;
+type Call = (...data: Uint8Array[]) => CallResult;
+// type CallU8a = (...data: Uint8Array[]) => Uint8Array;
 
 const [, CODE_KEY] = compactStripLength(storage.substrate.code());
 
@@ -140,7 +140,7 @@ export default class Executor implements ExecutorInterface {
   private call (wasm: WasmInstanceExports, name: string): Call {
     const { heap } = this.runtime.environment;
 
-    return (...data: Array<Uint8Array>): CallResult => {
+    return (...data: Uint8Array[]): CallResult => {
       const start = Date.now();
 
       l.debug(() => ['preparing', name]);
@@ -175,7 +175,7 @@ export default class Executor implements ExecutorInterface {
   //   const fn = this.call(name);
   //   const { heap } = this.runtime.environment;
 
-  //   return (...data: Array<Uint8Array>): Uint8Array => {
+  //   return (...data: Uint8Array[]): Uint8Array => {
   //     const { hi, lo } = fn.apply(null, data);
   //     const result = heap.get(lo, hi).slice();
 

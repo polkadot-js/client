@@ -6,7 +6,7 @@ import { Rpc } from './types';
 
 const PATH: string = '/';
 const PORT: number = 9933;
-const TYPES: Array<Rpc> = ['http', 'ws'];
+const TYPES: Rpc[] = ['http', 'ws'];
 
 export default {
   PATH,

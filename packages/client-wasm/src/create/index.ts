@@ -17,7 +17,7 @@ type Options = {
   l: Logger
 };
 
-function instrument <T> (name: string, elapsed: Array<string>, fn: () => T): T {
+function instrument <T> (name: string, elapsed: string[], fn: () => T): T {
   const start = Date.now();
   const result = fn();
 

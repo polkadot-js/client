@@ -20,16 +20,16 @@ import createNode from './create/node';
 import defaults from './defaults';
 import Peers from './peers';
 
-type OnMessage = {
-  peer: PeerInterface,
-  message: MessageInterface
-};
+interface OnMessage {
+  peer: PeerInterface;
+  message: MessageInterface;
+}
 
-type QueuedPeer = {
-  peer: PeerInterface,
-  nextDial: number,
-  numDials: number
-};
+interface QueuedPeer {
+  peer: PeerInterface;
+  nextDial: number;
+  numDials: number;
+}
 
 const DIAL_INTERVAL = 15000;
 const REQUEST_INTERVAL = 15000;
@@ -80,8 +80,7 @@ export default class P2p extends EventEmitter implements P2pInterface {
     this._onPeerDiscovery(this.node, this.peers);
     this._onPeerMessage(this.node, this.peers);
 
-    // @ts-ignore Only in 0.26+
-    await promisify(this.node, this.node.start);
+    await this.node.start();
 
     l.log(`Started with bootnodes ${this.config.p2p.discoverBoot ? 'en' : 'dis'}abled & star ${this.config.p2p.discoverStar ? 'en' : 'dis '}abled`);
     this.emit('started');
@@ -118,7 +117,7 @@ export default class P2p extends EventEmitter implements P2pInterface {
     delete this.peers;
 
     // @ts-ignore Only in 0.26+
-    await promisify(node, node.stop);
+    await node.stop();
 
     l.log('Server stopped');
     this.emit('stopped');
@@ -216,10 +215,7 @@ export default class P2p extends EventEmitter implements P2pInterface {
     l.debug(() => `dialing ${peer.shortId}`);
 
     try {
-      const connection = await promisify(
-         // @ts-ignore 0.26 turns this into a promise
-         this.node, this.node.dialProtocol, peer.peerInfo, this.protocol
-      );
+      const connection = await this.node.dialProtocol(peer.peerInfo, this.protocol);
 
       peer.addConnection(connection, true);
       peers.log('dialled', peer);

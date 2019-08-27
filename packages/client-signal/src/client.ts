@@ -20,10 +20,10 @@ type Options = {
   wrtc?: any;
 };
 
-function once (callback: (...params: Array<any>) => void) {
+function once (callback: (...params: any[]) => void) {
   let wasCalled = false;
 
-  return (...params: Array<any>): void => {
+  return (...params: any[]): void => {
     if (!wasCalled) {
       wasCalled = true;
 
@@ -123,7 +123,7 @@ class Listener extends EventEmitter {
         const conn = new Connection(toPull.duplex(channel));
 
         channel.once('connect', () => {
-          conn.getObservedAddrs = (callback: (error: Error | null, addrs: Array<string>) => void) => {
+          conn.getObservedAddrs = (callback: (error: Error | null, addrs: string[]) => void) => {
             return callback(null, [offer.srcMultiaddr]);
           };
 
@@ -165,14 +165,14 @@ class Listener extends EventEmitter {
     callback();
   }
 
-  getAddrs (callback: (errror: null, mas: Array<Multiaddr>) => void): void {
+  getAddrs (callback: (errror: null, mas: Multiaddr[]) => void): void {
     callback(null, [this.ma as Multiaddr]);
   }
 }
 
 export default class WebRTCClient {
   discovery: Discovery;
-  private listeners: Array<Listener>;
+  private listeners: Listener[];
   private options: Options;
 
   constructor (options: Options = {}) {
@@ -259,7 +259,7 @@ export default class WebRTCClient {
 
         channel.once('close', () => conn.destroy());
 
-        conn.getObservedAddrs = (callback: (error: Error | null, mas: Array<Multiaddr>) => void) =>
+        conn.getObservedAddrs = (callback: (error: Error | null, mas: Multiaddr[]) => void) =>
           callback(null, [ma]);
 
         callback(null, conn);
@@ -271,7 +271,7 @@ export default class WebRTCClient {
     return conn;
   }
 
-  filter (multiaddrs: Multiaddr | Array<Multiaddr>): Array<Multiaddr> {
+  filter (multiaddrs: Multiaddr | Multiaddr[]): Multiaddr[] {
     return (Array.isArray(multiaddrs) ? multiaddrs : [multiaddrs]).filter((ma) =>
       ma.protoNames().indexOf('p2p-circuit') !== -1
         ? false

@@ -11,7 +11,7 @@ export default function decodeArrayU8a (db: BaseDb, createKey: Function): Storag
   return {
     del: (keyParam: any): void =>
       db.del(createKey(keyParam)),
-    get: (keyParam: any): Array<Uint8Array> => {
+    get: (keyParam: any): Uint8Array[] => {
       const u8a = db.get(createKey(keyParam));
 
       if (u8a === null) {
@@ -28,12 +28,12 @@ export default function decodeArrayU8a (db: BaseDb, createKey: Function): Storag
 
       return result;
     },
-    set: (value: Array<Uint8Array>, keyParam: any): void =>
+    set: (value: Uint8Array[], keyParam: any): void =>
       db.put(createKey(keyParam), u8aConcat(
         bnToU8a(value.length, 32, true),
         u8aConcat.apply(null, value))
       ),
-    onUpdate: (updater: (value: Array<Uint8Array>, raw: Uint8Array) => void): void => {
+    onUpdate: (updater: (value: Uint8Array[], raw: Uint8Array) => void): void => {
       throw new Error(`No subscriber available for db/arrayU8a`);
     }
   };

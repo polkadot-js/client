@@ -4,9 +4,9 @@
 
 import { assert } from '@polkadot/util';
 
-type CacheValue = {
-  value: Uint8Array
-};
+interface CacheValue {
+  value: Uint8Array;
+}
 
 export default class Cache<T> {
   private _cache = new Map<T, CacheValue>();

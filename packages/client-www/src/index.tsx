@@ -125,7 +125,7 @@ export default class App extends React.PureComponent<Props, State> {
   }
 
   private consoleHook (type: 'error' | 'log' | 'warn') {
-    return (...args: Array<string>): void =>
+    return (...args: string[]): void =>
       this.onConsole({ text: args.join(' '), type });
   }
 

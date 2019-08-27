@@ -5,28 +5,24 @@
 import { RuntimeInterface } from '@polkadot/client-runtime/types';
 import { BlockData } from '@polkadot/client-types';
 
-export type WasmInstanceExports = {
-  [index: string]: any
-};
+export type WasmInstanceExports = Record<string, any>;
 
-export type WasmExports = {
-  env: Object
-};
+export interface WasmExports {
+  env: Object;
+}
 
-export type WasmConfig = {
-  heapSize: number
-};
+export interface WasmConfig {
+  heapSize: number;
+}
 
-export type WasmExtraImports = {
-  [index: string]: any
-};
+export type WasmExtraImports = Record<string, any>;
 
-export type ExecutorInstance = {
-  instance: WasmInstanceExports,
-  runtime: RuntimeInterface
-};
+export interface ExecutorInstance {
+  instance: WasmInstanceExports;
+  runtime: RuntimeInterface;
+}
 
-export type ExecutorInterface = {
+export interface ExecutorInterface {
   importBlock (block: BlockData): Promise<boolean>;
   importHeader (block: BlockData): Promise<boolean>;
-};
+}

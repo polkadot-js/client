@@ -8,16 +8,16 @@ import Koa from 'koa';
 import koaRoute from 'koa-route';
 import koaWebsocket from 'koa-websocket';
 
-type CreateKoaOption = {
+interface CreateKoaOption {
   handlers: {
-    http: (...params: any[]) => any,
-    ws: (...params: any[]) => any
-  },
-  path: string,
-  types: Array<Rpc>
-};
+    http: (...params: any[]) => any;
+    ws: (...params: any[]) => any;
+  };
+  path: string;
+  types: Rpc[];
+}
 
-export default function createKoa ({ handlers, path, types }: CreateKoaOption): Array<Koa> {
+export default function createKoa ({ handlers, path, types }: CreateKoaOption): Koa[] {
   return types.map((type) => {
     switch (type) {
       case 'http':

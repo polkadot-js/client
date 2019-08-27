@@ -4,10 +4,10 @@
 
 import { SyncStatus } from '@polkadot/client-sync/types';
 
-export type TelemetryConfig = {
-  name: string,
-  url: string
-};
+export interface TelemetryConfig {
+  name: string;
+  url: string;
+}
 
 export interface TelemetryInterface {
   blockImported: () => void;

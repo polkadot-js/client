@@ -10,12 +10,12 @@ import { assert, isIp, promisify } from '@polkadot/util';
 
 import defaults from '../defaults';
 
-type Config = {
-  address: string,
-  discoverStar: boolean,
-  externalIp?: string | null,
-  port: number
-};
+interface Config {
+  address: string;
+  discoverStar: boolean;
+  externalIp?: string | null;
+  port: number;
+}
 
 function constructMa (address: string, port: number, peerIdStr: string): string {
   const type = isIp(address, 'v4') ? 'ip4' : 'ip6';
