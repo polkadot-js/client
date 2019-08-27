@@ -13,10 +13,10 @@ import { Logger } from '@polkadot/util/types';
 export type ChainName = string;
 export type ChainType = 'polkadot' | 'substrate';
 
-export type ChainGenesis = {
-  block: BlockData,
-  code: Uint8Array
-};
+export interface ChainGenesis {
+  block: BlockData;
+  code: Uint8Array;
+}
 
 export interface ChainLoader {
   readonly chain: Chainspec;
@@ -34,10 +34,10 @@ export interface ChainInterface {
   stop (): void;
 }
 
-export type ChainState = {
-  blockDb: BlockDb,
-  config: Config,
-  l: Logger,
-  runtime: RuntimeInterface,
-  stateDb: StateDb
-};
+export interface ChainState {
+  blockDb: BlockDb;
+  config: Config;
+  l: Logger;
+  runtime: RuntimeInterface;
+  stateDb: StateDb;
+}

@@ -19,12 +19,12 @@ function cli (params?: string): Config {
 
   return Object
     .keys(argv)
-    .reduce((config, key) => {
+    .reduce((config: any, key): Config => {
       if (/^(db|dev|p2p|rpc|signal|telemetry|wasm)-/.test(key)) {
         const section = key.substr(0, key.indexOf('-')) as ConfigKeys;
         const name = keyToCamel(key, 1);
 
-        (config as any)[section] = config[section] || {};
+        config[section] = config[section] || {};
         // @ts-ignore ummm... no index, not Map-ing this one
         config[section][name] = argv[key];
       } else if (!/^(db|dev|p2p|rpc|signal|telemetry|wasm)[A-Z]/.test(key)) {
@@ -34,8 +34,8 @@ function cli (params?: string): Config {
         config[name] = argv[key];
       }
 
-      return config;
-    }, { p2p: { wrtc } } as Config);
+      return config as Config;
+    }, { p2p: { wrtc } });
 }
 
 // FIXME Catch the uncaught errors that weren't wrapped in a domain or try catch statement
@@ -51,14 +51,14 @@ const config = cli();
 const client = new Client();
 
 getExternalIp()
-  .then((externalIp) => client.start({ ...config, externalIp }))
-  .catch((error) => {
+  .then((externalIp): Promise<void> => client.start({ ...config, externalIp }))
+  .catch((error): void => {
     l.error('Failed to start client', error);
 
     process.exit(-1);
   });
 
-process.on('SIGINT', async () => {
+process.on('SIGINT', async (): Promise<void> => {
   l.log('Caught interrupt signal, shutting down');
 
   await client.stop();

@@ -9,5 +9,5 @@ import createJson from './json';
 export default function createResponse (id: number, result: any): JsonRpcResponse {
   return createJson(id, {
     result
-  } as JsonRpcResponse);
+  });
 }

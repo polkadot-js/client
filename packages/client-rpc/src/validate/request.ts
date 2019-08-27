@@ -5,6 +5,6 @@
 import { ExtError, assert, isNumber } from '@polkadot/util';
 
 export default function validateRequest (id: number, jsonrpc: string): void {
-  assert(jsonrpc === '2.0', `Invalid jsonrpc field, expected '2.0'`, ExtError.CODES.INVALID_JSONRPC);
-  assert(isNumber(id), `Expected a numeric id`, ExtError.CODES.INVALID_JSONRPC);
+  assert(jsonrpc === '2.0', 'Invalid jsonrpc field, expected \'2.0\'', ExtError.CODES.INVALID_JSONRPC);
+  assert(isNumber(id), 'Expected a numeric id', ExtError.CODES.INVALID_JSONRPC);
 }

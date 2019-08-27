@@ -21,6 +21,9 @@ const config = {
       enabled: true
     }
   },
+  // pubsub: {
+  //   enabled: false
+  // }
   EXPERIMENTAL: {
     pubsub: false
   }
@@ -31,18 +34,18 @@ export default async function createNode ({ externalIp, p2p: { address = default
   const peerBook = await createPeerBook([]);
   const peerInfo = await createListener(envType, { address, discoverStar, externalIp, port });
   const modules = createModules(envType, peerInfo, { bootNodes, discoverBoot, discoverStar, nodes, wrtc });
-  const addrs = peerInfo.multiaddrs.toArray().map((addr) =>
-    addr.toString()
-  );
+  const addrs = peerInfo.multiaddrs.toArray().map((addr): string => addr.toString());
 
-  l.log(`creating Libp2p with addresses:`);
+  l.log('creating Libp2p with addresses:');
 
-  addrs.forEach((addr) => l.log(`    ${addr}`));
+  addrs.forEach((addr): void => l.log(`    ${addr}`));
 
   return new Libp2p({
     config: {
       ...config,
       peerDiscovery: {
+        autoDial: false,
+        enabled: true,
         webRTCStar: {
           enabled: discoverStar
         },

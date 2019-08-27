@@ -12,8 +12,8 @@ export default function validateConfig ({ path, types }: RpcConfig): void {
   assert(/^\//.test(path), 'Expected valid path');
 
   const invalid = types
-    .filter((_type) => !defaults.TYPES.includes(_type))
-    .map((type) => `'${type}'`)
+    .filter((_type): boolean => !defaults.TYPES.includes(_type))
+    .map((type): string => `'${type}'`)
     .join(', ');
 
   assert(invalid.length === 0, `Invalid RPC type found: ${invalid}`);

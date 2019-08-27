@@ -6,12 +6,8 @@ function num (max: number): number {
   return Math.floor(Math.random() * max);
 }
 
-function val (array: Array<string>): string {
+function val (array: string[]): string {
   return array[num(array.length)];
-}
-
-export default function randName (): string {
-  return `${val(VERBS)}-${val(NOUNS)}-${num(10)}${num(10)}`;
 }
 
 const NOUNS = [
@@ -219,3 +215,7 @@ const VERBS = [
   'bend',
   'buy'
 ];
+
+export default function randName (): string {
+  return `${val(VERBS)}-${val(NOUNS)}-${num(10)}${num(10)}`;
+}

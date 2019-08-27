@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 // Copyright 2017-2019 @polkadot/client-www authors & contributors
 // This software may be modified and distributed under the terms
 // of the Apache-2.0 license. See the LICENSE file for details.
@@ -42,23 +43,23 @@ function createWebpack ({ alias = {}, context, name = 'index' }) {
       `./src/${name}.tsx`,
       isProd
         ? null
-        :'webpack-plugin-serve/client'
+        : 'webpack-plugin-serve/client'
     ].filter((entry) => entry),
     mode: ENV,
     output: {
-      chunkFilename: `[name].[chunkhash:8].js`,
-      filename: `[name].[hash:8].js`,
-      globalObject: `(typeof self !== 'undefined' ? self : this)`,
+      chunkFilename: '[name].[chunkhash:8].js',
+      filename: '[name].[hash:8].js',
+      globalObject: '(typeof self !== \'undefined\' ? self : this)',
       path: path.join(context, 'build')
     },
     resolve: {
       alias: {
         ...alias,
-        'koa': 'empty',
+        koa: 'empty',
         'koa-websocket': 'empty',
         'node-lmdb': 'empty',
         'package-json': 'empty',
-        'snappy': 'empty'
+        snappy: 'empty'
       },
       extensions: ['.js', '.jsx', '.ts', '.tsx']
     },
@@ -101,6 +102,7 @@ function createWebpack ({ alias = {}, context, name = 'index' }) {
       ]
     },
     node: {
+      // eslint-disable-next-line @typescript-eslint/camelcase
       child_process: 'empty',
       dgram: 'empty',
       fs: 'empty',

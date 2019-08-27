@@ -8,11 +8,11 @@ import { Config } from '@polkadot/client/types';
 import { ChainInterface } from '@polkadot/client-chains/types';
 import { Logger } from '@polkadot/util/types';
 
-export type PeerState = {
-  chain: ChainInterface,
-  config: Config,
-  emitter: EventEmitter,
-  l: Logger,
-  nextId: number,
-  pushable?: Pushable
-};
+export interface PeerState {
+  chain: ChainInterface;
+  config: Config;
+  emitter: EventEmitter;
+  l: Logger;
+  nextId: number;
+  pushable?: Pushable;
+}

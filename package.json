@@ -9,26 +9,28 @@
   ],
   "resolutions": {
     "babel-core": "^7.0.0-bridge.0",
-    "typescript": "^3.5.2"
+    "peer-id": "0.12.2",
+    "typescript": "^3.5.3"
   },
   "scripts": {
     "build": "polkadot-dev-build-ts && (./docker.sh version) && (cd packages/client-cli && copyfiles scripts/* build)",
     "build:wasm": "./scripts/polkadot-wasm-js-compat.sh",
     "check": "yarn lint",
-    "lint": "tslint --project . && tsc --noEmit --pretty",
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx . && tsc --noEmit --pretty",
     "clean": "polkadot-dev-clean-build",
     "postinstall": "polkadot-dev-yarn-only",
-    "test": "jest --coverage",
+    "test": "jest --coverage --runInBand",
+    "test:one": "jest",
     "start": "node packages/client-cli/scripts/polkadot.js",
     "start:www": "cd packages/client-www && webpack --config webpack.config.js"
   },
   "devDependencies": {
-    "@babel/core": "^7.4.4",
-    "@babel/runtime": "^7.4.4",
-    "@polkadot/dev-react": "^0.30.0-beta.15",
-    "@polkadot/ts": "^0.1.60",
-    "copyfiles": "^2.1.0",
+    "@babel/core": "^7.5.5",
+    "@babel/runtime": "^7.5.5",
+    "@polkadot/dev-react": "^0.31.0-beta.4",
+    "@polkadot/ts": "^0.1.68",
+    "copyfiles": "^2.1.1",
     "empty": "^0.10.1",
-    "gh-pages": "^2.0.1"
+    "gh-pages": "^2.1.1"
   }
 }

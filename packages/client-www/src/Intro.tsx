@@ -5,12 +5,54 @@
 import React from 'react';
 import styled from 'styled-components';
 
-type Props = {};
-type State = {
-  isClosed: boolean
-};
+interface Props {
+  className?: string;
+}
 
-const Wrapper = styled.div`
+interface State {
+  isClosed: boolean;
+}
+
+class Intro extends React.PureComponent<Props, State> {
+  public state: State = {
+    isClosed: false
+  };
+
+  public render (): React.ReactNode {
+    const { className } = this.props;
+    const { isClosed } = this.state;
+
+    if (isClosed) {
+      return null;
+    }
+
+    return (
+      <div className={className} onClick={this.onClose}>
+        <div className='box'>
+          <div className='header'>Use Disclaimer &amp; Pitfalls</div>
+          <div className='body'>
+            <p>Please be aware that this is still highly experimental and really an alpha-quality POC. So while it does what it is supposed to at this point it time (which is not all we want and need), it still needs a lot of TLC.</p>
+            <ul>
+              <li>It uses the libp2p WebRTC transport to communicate with other nodes</li>
+              <li>To find nodes, it uses a signalling server to gather connection details</li>
+              <li>While it can discover all network nodes, it cannot connect to non-WebRTC nodes</li>
+              <li>Sync will slow down if this tab moves into the background</li>
+              <li>It does a very basic header-only sync (not a fully light-validating... yet)</li>
+              <li>There is currrently no persistent storage, each refresh starts at #0</li>
+            </ul>
+            <p>So... enough reading, click anywhere to close this message.</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  private onClose = (): void => {
+    this.setState({ isClosed: true });
+  }
+}
+
+export default styled(Intro)`
   background: rgba(0, 0, 0, 0.2);
   bottom: 0;
   cursor: pointer;
@@ -49,41 +91,3 @@ const Wrapper = styled.div`
     }
   }
 `;
-
-export default class Intro extends React.PureComponent<Props, State> {
-  state: State = {
-    isClosed: false
-  };
-
-  render () {
-    const { isClosed } = this.state;
-
-    if (isClosed) {
-      return null;
-    }
-
-    return (
-      <Wrapper onClick={this.onClose}>
-        <div className='box'>
-          <div className='header'>Use Disclaimer &amp; Pitfalls</div>
-          <div className='body'>
-            <p>Please be aware that this is still highly experimental and really an alpha-quality POC. So while it does what it is supposed to at this point it time (which is not all we want and need), it still needs a lot of TLC.</p>
-            <ul>
-              <li>It uses the libp2p WebRTC transport to communicate with other nodes</li>
-              <li>To find nodes, it uses a signalling server to gather connection details</li>
-              <li>While it can discover all network nodes, it cannot connect to non-WebRTC nodes</li>
-              <li>Sync will slow down if this tab moves into the background</li>
-              <li>It does a very basic header-only sync (not a fully light-validating... yet)</li>
-              <li>There is currrently no persistent storage, each refresh starts at #0</li>
-            </ul>
-            <p>So... enough reading, click anywhere to close this message.</p>
-          </div>
-        </div>
-      </Wrapper>
-    );
-  }
-
-  private onClose = (): void => {
-    this.setState({ isClosed: true });
-  }
-}

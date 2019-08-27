@@ -16,31 +16,29 @@ import Sync from '@polkadot/client-sync';
 
 export type EnvType = 'browser' | 'nodejs';
 
-export type P2pNodes = Array<string>;
+export type P2pNodes = string[];
 
-export type RawMessage = {
-  message: {
-    [index: string]: any
-  },
-  type: number
-};
+export interface RawMessage {
+  message: Record<string, any>;
+  type: number;
+}
 
-export type P2pNode = {
-  address: string,
-  port: number
-};
+export interface P2pNode {
+  address: string;
+  port: number;
+}
 
-export type P2pConfig = {
-  active: boolean,
-  address: string,
-  discoverBoot?: boolean,
-  discoverStar?: boolean,
-  maxPeers: number,
-  nodes?: P2pNodes,
-  port: number,
-  type?: EnvType,
-  wrtc?: any
-};
+export interface P2pConfig {
+  active: boolean;
+  address: string;
+  discoverBoot?: boolean;
+  discoverStar?: boolean;
+  maxPeers: number;
+  nodes?: P2pNodes;
+  port: number;
+  type?: EnvType;
+  wrtc?: any;
+}
 
 export type PeerInterface$Events = 'active' | 'message' | 'disconnected';
 
@@ -63,41 +61,41 @@ export interface PeerInterface {
 
 export type PeersInterface$Events = 'active' | 'connected' | 'dialled' | 'disconnected' | 'discovered' | 'message' | 'protocol';
 
-export type KnownPeer = {
-  peer: PeerInterface,
-  isActive: boolean,
-  isConnected: boolean
-};
+export interface KnownPeer {
+  peer: PeerInterface;
+  isActive: boolean;
+  isConnected: boolean;
+}
 
-export type PeersInterface = {
-  add: (peerInfo: PeerInfo) => PeerInterface,
-  count: () => number,
-  get: (peerInfo: PeerInfo) => KnownPeer | undefined,
-  log: (event: PeersInterface$Events, peer: PeerInterface, withDebug?: boolean) => void,
-  on: (type: PeersInterface$Events, cb: (peer: any) => any) => any,
-  peers: () => Array<PeerInterface>
-};
+export interface PeersInterface {
+  add: (peerInfo: PeerInfo) => PeerInterface;
+  count: () => number;
+  get: (peerInfo: PeerInfo) => KnownPeer | undefined;
+  log: (event: PeersInterface$Events, peer: PeerInterface, withDebug?: boolean) => void;
+  on: (type: PeersInterface$Events, cb: (peer: any) => any) => any;
+  peers: () => PeerInterface[];
+}
 
 export type P2pInterface$Events = 'started' | 'stopped';
 
-export type P2pInterface = {
+export interface P2pInterface {
   readonly l: Logger;
   readonly sync: Sync;
 
-  // _announceBlock: (hash: Uint8Array, header: Uint8Array, body: Uint8Array) => void,
-  isStarted: () => boolean,
-  on: (type: P2pInterface$Events, cb: () => any) => any,
-  getNumPeers: () => number,
-  start: () => Promise<boolean>,
-  stop: () => Promise<boolean>
-};
+  // _announceBlock: (hash: Uint8Array, header: Uint8Array, body: Uint8Array) => void;
+  isStarted: () => boolean;
+  on: (type: P2pInterface$Events, cb: () => any) => any;
+  getNumPeers: () => number;
+  start: () => Promise<boolean>;
+  stop: () => Promise<boolean>;
+}
 
-export type P2pState = {
-  chain: ChainInterface,
-  config: Config,
-  emitter: EventEmitter,
-  l: Logger,
-  node: LibP2p,
-  peers: PeersInterface,
-  sync: SyncState
-};
+export interface P2pState {
+  chain: ChainInterface;
+  config: Config;
+  emitter: EventEmitter;
+  l: Logger;
+  node: LibP2p;
+  peers: PeersInterface;
+  sync: SyncState;
+}

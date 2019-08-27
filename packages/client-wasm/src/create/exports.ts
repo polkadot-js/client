@@ -8,11 +8,11 @@ import { xxhashAsHex } from '@polkadot/util-crypto';
 
 import createImports from './imports';
 
-type ExportResult = {
-  codeHash: string,
-  exports: WasmInstanceExports,
-  isNewHash: boolean
-};
+interface ExportResult {
+  codeHash: string;
+  exports: WasmInstanceExports;
+  isNewHash: boolean;
+}
 
 const DEFAULT_TABLE: WebAssembly.TableDescriptor = {
   initial: 0,

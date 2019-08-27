@@ -3,12 +3,11 @@
 // of the Apache-2.0 license. See the LICENSE file for details.
 
 import { BaseDb } from '@polkadot/db/types';
-import { StorageFunction } from '@polkadot/types/primitive/StorageKey';
 import { StorageMethod$Bool } from '../types';
 
 import createBase from './base';
 
-export default function decodeBool (db: BaseDb, createKey: StorageFunction): StorageMethod$Bool {
+export default function decodeBool (db: BaseDb, createKey: Function): StorageMethod$Bool {
   const base = createBase<boolean>(db);
 
   return {

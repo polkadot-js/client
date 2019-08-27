@@ -10,54 +10,54 @@ import { ChainInterface } from '@polkadot/client-chains/types';
 import { Logger } from '@polkadot/util/types';
 import { Handler, Handlers } from './handlers/types';
 
-export type JsonRpcBase = {
-  id: number,
-  jsonrpc: '2.0'
-};
+export interface JsonRpcBase {
+  id: number;
+  jsonrpc: '2.0';
+}
 
-export type JsonRpcError = JsonRpcBase & {
+export interface JsonRpcError extends JsonRpcBase {
   error: {
-    code: number,
-    message: string
-  }
-};
+    code: number;
+    message: string;
+  };
+}
 
-export type JsonRpcRequest = JsonRpcBase & {
-  method: string,
-  params: Array<any>
-};
+export interface JsonRpcRequest extends JsonRpcBase {
+  method: string;
+  params: any[];
+}
 
-export type JsonRpcSubscription = JsonRpcBase & {
-  method: string,
+export interface JsonRpcSubscription extends JsonRpcBase {
+  method: string;
   params: {
-    error?: Error,
-    result: any,
-    subscription: number
-  }
-};
+    error?: Error;
+    result: any;
+    subscription: number;
+  };
+}
 
-export type JsonRpcResponse = JsonRpcBase & {
-  result: any
-};
+export interface JsonRpcResponse extends JsonRpcBase {
+  result: any;
+}
 
 export type Rpc = 'http' | 'ws';
 
-export type RpcConfig = {
-  active: boolean,
-  path: string,
-  port: number,
-  types: Array<Rpc>
-};
+export interface RpcConfig {
+  active: boolean;
+  path: string;
+  port: number;
+  types: Rpc[];
+}
 
 export type RpcInterface$Events = 'started' | 'stopped';
 
-export type WsContext$Socket = {
-  on: (type: 'close' | 'message', cb: (message: string) => void | Promise<void>) => void,
-  send: (message: string) => void | Promise<void>
-};
+export interface WsContextSocket {
+  on: (type: 'close' | 'message', cb: (message: string) => void | Promise<void>) => void;
+  send: (message: string) => void | Promise<void>;
+}
 
 export type WsContext = Koa.Context & {
-  websocket: WsContext$Socket
+  websocket: WsContextSocket;
 };
 
 export interface RpcInterface {
@@ -66,14 +66,14 @@ export interface RpcInterface {
   stop (): Promise<boolean>;
 }
 
-export type SubInterface = (socket: WsContext$Socket | undefined, handler: Handler, params: Array<any>) => Promise<number>;
+export type SubInterface = (socket: WsContextSocket | undefined, handler: Handler, params: any[]) => Promise<number>;
 
-export type RpcState = {
-  chain: ChainInterface,
-  config: Config,
-  emitter: EventEmitter,
-  handlers: Handlers,
-  l: Logger,
-  servers: Array<net.Server>,
-  subscribe: SubInterface
-};
+export interface RpcState {
+  chain: ChainInterface;
+  config: Config;
+  emitter: EventEmitter;
+  handlers: Handlers;
+  l: Logger;
+  servers: net.Server[];
+  subscribe: SubInterface;
+}

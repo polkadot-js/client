@@ -18,13 +18,13 @@ import WebRTClient from '@polkadot/client-signal/client';
 
 // import defaults from '../defaults';
 
-type Config = {
-  discoverBoot: boolean,
-  discoverStar: boolean,
-  bootNodes: P2pNodes,
-  nodes: P2pNodes,
-  wrtc?: any
-};
+interface Config {
+  discoverBoot: boolean;
+  discoverStar: boolean;
+  bootNodes: P2pNodes;
+  nodes: P2pNodes;
+  wrtc?: any;
+}
 
 export default function createModules (envType: EnvType, peerInfo: PeerInfo, { bootNodes, discoverBoot, discoverStar, nodes, wrtc }: Config): LibP2p.OptionsModules {
   const isCli = envType !== 'browser';
@@ -32,8 +32,8 @@ export default function createModules (envType: EnvType, peerInfo: PeerInfo, { b
     ? [new WebRTClient({ wrtc })]
     : [];
   const transport = isCli
-    ? [new WS(), new TCP()]
-    : [new WS()];
+    ? [WS, TCP]
+    : [WS];
   const peerDiscovery = isCli
     ? [new Bootstrap({ list: (discoverBoot ? bootNodes : []).concat(nodes) })]
     : [];
@@ -48,8 +48,8 @@ export default function createModules (envType: EnvType, peerInfo: PeerInfo, { b
     ],
     dht,
     peerDiscovery: peerDiscovery.concat(
-      starTransports.map(({ discovery }) => discovery) as Array<any>
-    ) as Array<any>,
-    transport: transport.concat(starTransports)
+      starTransports.map(({ discovery }): any => discovery)
+    ) as any[],
+    transport: transport.concat(starTransports as any[])
   };
 }

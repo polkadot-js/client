@@ -4,14 +4,13 @@
 
 import BN from 'bn.js';
 import { BaseDb } from '@polkadot/db/types';
-import { StorageFunction } from '@polkadot/types/primitive/StorageKey';
 import { StorageMethod$Bn } from '../types';
 
 import { bnToU8a, u8aToBn } from '@polkadot/util';
 
 import createBase from './base';
 
-export default function decodeBn (db: BaseDb, createKey: StorageFunction, bitLength: 32 | 64 | 128): StorageMethod$Bn {
+export default function decodeBn (db: BaseDb, createKey: Function, bitLength: 32 | 64 | 128): StorageMethod$Bn {
   const base = createBase<BN | number>(db);
 
   return {

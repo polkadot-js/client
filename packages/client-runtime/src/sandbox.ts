@@ -1,14 +1,16 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/camelcase */
 // Copyright 2017-2019 @polkadot/client-runtime authors & contributors
 // This software may be modified and distributed under the terms
 // of the Apache-2.0 license. See the LICENSE file for details.
 
-import { RuntimeInterface$Sandbox, RuntimeEnv, Pointer } from './types';
+import { RuntimeInterfaceSandbox, RuntimeEnv, Pointer } from './types';
 
 import unimplemented from './unimplemented';
 
 // TODO Implement according to https://github.com/paritytech/polkadot/tree/master/substrate/runtime-sandbox
 
-export default function sandbox (env: RuntimeEnv): RuntimeInterface$Sandbox {
+export default function sandbox (env: RuntimeEnv): RuntimeInterfaceSandbox {
   return {
     sandbox_instantiate: (a: number, b: number, c: number, d: number, e: number, f: number): number =>
       unimplemented('sandbox_instantiate'),

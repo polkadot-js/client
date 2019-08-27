@@ -2,33 +2,38 @@
 // This software may be modified and distributed under the terms
 // of the Apache-2.0 license. See the LICENSE file for details.
 
-import createFunction from '@polkadot/storage/fromMetadata/createFunction';
-import { StorageFunctionMetadata, StorageFunctionModifier, StorageFunctionType } from '@polkadot/types/Metadata/v5/Storage';
-import { Text, Vector } from '@polkadot/types';
+import createFunction from '@polkadot/api-metadata/storage/fromMetadata/createFunction';
+import { StorageEntryMetadata, StorageEntryType } from '@polkadot/types/Metadata/v7/Storage';
+import { createType, Text, Vec } from '@polkadot/types';
 import { isString } from '@polkadot/util';
 import { blake2AsU8a } from '@polkadot/util-crypto';
 
 interface SubstrateMetadata {
-  documentation: Array<string>;
-  type: string | { key: string, value: string };
+  documentation: string[];
+  type: string | { key: string; value: string };
 }
 
+const prefix = 'Block';
+const section = 'Block';
+
 // Small helper function to factorize code on this page.
-const createMethod = (method: string, key: string, { documentation, type }: SubstrateMetadata) => {
+const createMethod = (method: string, key: string, { documentation, type }: SubstrateMetadata): any => {
   const creator = createFunction(
-    new Text('Block'),
-    new Text(method),
     {
-      documentation: new Vector(Text, documentation),
-      modifier: new StorageFunctionModifier(1), // default
-      type: new StorageFunctionType(type, isString(type) ? 0 : 1),
-      toJSON: (): any =>
-        key
-    } as StorageFunctionMetadata,
+      meta: {
+        documentation: new Vec(Text, documentation),
+        modifier: createType('StorageEntryModifierV7', 1), // default
+        type: new StorageEntryType(type, isString(type) ? 0 : 1),
+        toJSON: (): any => key
+      } as unknown as StorageEntryMetadata,
+      method,
+      prefix,
+      section
+    },
     { key, skipHashing: true }
   );
 
-  return ((...args: Array<any>): Uint8Array =>
+  return ((...args: any[]): Uint8Array =>
     blake2AsU8a(creator(...args))
   ) as any;
 };

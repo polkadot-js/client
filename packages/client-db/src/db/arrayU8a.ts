@@ -3,16 +3,15 @@
 // of the Apache-2.0 license. See the LICENSE file for details.
 
 import { BaseDb } from '@polkadot/db/types';
-import { StorageFunction } from '@polkadot/types/primitive/StorageKey';
 import { StorageMethod$ArrayU8a } from '../types';
 
 import { bnToU8a, u8aConcat, u8aToBn } from '@polkadot/util';
 
-export default function decodeArrayU8a (db: BaseDb, createKey: StorageFunction): StorageMethod$ArrayU8a {
+export default function decodeArrayU8a (db: BaseDb, createKey: Function): StorageMethod$ArrayU8a {
   return {
     del: (keyParam: any): void =>
       db.del(createKey(keyParam)),
-    get: (keyParam: any): Array<Uint8Array> => {
+    get: (keyParam: any): Uint8Array[] => {
       const u8a = db.get(createKey(keyParam));
 
       if (u8a === null) {
@@ -29,13 +28,14 @@ export default function decodeArrayU8a (db: BaseDb, createKey: StorageFunction):
 
       return result;
     },
-    set: (value: Array<Uint8Array>, keyParam: any): void =>
+    set: (value: Uint8Array[], keyParam: any): void =>
       db.put(createKey(keyParam), u8aConcat(
         bnToU8a(value.length, 32, true),
         u8aConcat.apply(null, value))
       ),
-    onUpdate: (updater: (value: Array<Uint8Array>, raw: Uint8Array) => void): void => {
-      throw new Error(`No subscriber available for db/arrayU8a`);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    onUpdate: (updater: (value: Uint8Array[], raw: Uint8Array) => void): void => {
+      throw new Error('No subscriber available for db/arrayU8a');
     }
   };
 }

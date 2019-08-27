@@ -13,7 +13,7 @@ export default async function createPeerInfo (addresses: P2pNodes): Promise<Peer
 
   const peerInfo: PeerInfo = await promisify(null, PeerInfo.create);
 
-  addresses.forEach((address) =>
+  addresses.forEach((address): void =>
     peerInfo.multiaddrs.add(address)
   );
 

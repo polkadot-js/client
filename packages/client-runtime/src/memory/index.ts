@@ -2,7 +2,7 @@
 // This software may be modified and distributed under the terms
 // of the Apache-2.0 license. See the LICENSE file for details.
 
-import { Pointer, RuntimeEnv, RuntimeInterface$Memory } from '../types';
+import { Pointer, RuntimeEnv, RuntimeInterfaceMemory } from '../types';
 
 import instrument from '../instrument';
 import memcpy from './memcpy';
@@ -10,7 +10,7 @@ import memcmp from './memcmp';
 import memmove from './memmove';
 import memset from './memset';
 
-export default function memory ({ heap }: RuntimeEnv): RuntimeInterface$Memory {
+export default function memory ({ heap }: RuntimeEnv): RuntimeInterfaceMemory {
   return {
     free: (ptr: Pointer): void =>
       instrument('free', (): void => {

@@ -5,16 +5,18 @@
 import { Level, Message, BaseJson } from './types';
 
 export default class Base {
-  readonly level: Level;
-  readonly message: Message;
-  readonly timestamp: Date = new Date();
+  public readonly level: Level;
 
-  constructor (message: Message, level: Level = 'INFO') {
+  public readonly message: Message;
+
+  public readonly timestamp: Date = new Date();
+
+  public constructor (message: Message, level: Level = 'INFO') {
     this.level = level;
     this.message = message;
   }
 
-  toJSON (): BaseJson {
+  public toJSON (): BaseJson {
     return {
       level: this.level,
       msg: this.message,

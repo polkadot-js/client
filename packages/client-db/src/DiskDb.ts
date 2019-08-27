@@ -12,7 +12,7 @@ import StructDb from './engines/FileStructDb';
 const LRU_SIZE = 8 * 1024;
 
 export default class DiskDb extends TransactionDb {
-  constructor (base: string, name: string, options: DiskDbOptions) {
+  public constructor (base: string, name: string, options: DiskDbOptions) {
     const backing = new StructDb(base, name, options);
 
     super(

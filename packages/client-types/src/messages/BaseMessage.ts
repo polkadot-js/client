@@ -6,26 +6,27 @@ import { Struct } from '@polkadot/types';
 import { bnToU8a, u8aConcat } from '@polkadot/util';
 
 export default class BaseMessage {
-  readonly message: Struct;
-  readonly type: number;
+  public readonly message: Struct;
 
-  constructor (type: number, message: Struct) {
+  public readonly type: number;
+
+  public constructor (type: number, message: Struct) {
     this.message = message;
     this.type = type;
   }
 
-  encode (): Uint8Array {
+  public encode (): Uint8Array {
     return u8aConcat(
       bnToU8a(this.type, 8, true),
       this.message.toU8a()
     );
   }
 
-  toJSON (): any {
+  public toJSON (): any {
     return this.message.toJSON();
   }
 
-  toString () {
+  public toString (): string {
     return JSON.stringify(this.toJSON());
   }
 }

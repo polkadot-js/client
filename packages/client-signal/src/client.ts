@@ -16,23 +16,23 @@ import socketio from 'socket.io-client';
 import toPull from 'stream-to-pull-stream';
 import { assert, logger } from '@polkadot/util';
 
-type Options = {
+interface Options {
   wrtc?: any;
-};
+}
 
-function once (callback: (...params: Array<any>) => void) {
+function once (fn: (...params: any[]) => void): (...params: any[]) => void {
   let wasCalled = false;
 
-  return (...params: Array<any>): void => {
+  return (...params: any[]): void => {
     if (!wasCalled) {
       wasCalled = true;
 
-      callback(...params);
+      fn(...params);
     }
   };
 }
 
-function createUrl (ma: Multiaddr) {
+function createUrl (ma: Multiaddr): string {
   const [,, host,, maPort] = ma.toString().split('/');
   const [, tcp, ws] = ma.protos();
   const tcpPort = ma.stringTuples()[1][1];
@@ -45,29 +45,34 @@ function createUrl (ma: Multiaddr) {
 }
 
 const l = logger('wrtc/client');
-const noop = () => void 0;
+const noop = (): void => {};
 
 class Discovery extends EventEmitter {
-  tag: string = 'webRTCStar';
+  public tag: string = 'webRTCStar';
 
-  start (callback: () => void) {
-    callback();
+  public start (fn: () => void): void {
+    fn();
   }
 
-  stop (callback: () => void) {
-    callback();
+  public stop (fn: () => void): void {
+    fn();
   }
 }
 
 class Listener extends EventEmitter {
   private handler: Function;
-  private onDiscovery: (addr: string) => void;
-  private options: Options;
-  private ma?: Multiaddr;
-  io: any;
-  srcMultiaddr: string = '<unknown>';
 
-  constructor (options: Options, handler: Function, onDiscovery: (addr: string) => void) {
+  private onDiscovery: (addr: string) => void;
+
+  private options: Options;
+
+  private ma?: Multiaddr;
+
+  public io: any;
+
+  public srcMultiaddr: string = '<unknown>';
+
+  public constructor (options: Options, handler: Function, onDiscovery: (addr: string) => void) {
     super();
 
     this.handler = handler;
@@ -75,7 +80,7 @@ class Listener extends EventEmitter {
     this.options = options;
   }
 
-  listen (ma: Multiaddr, _callback: (error: Error | null) => void = noop) {
+  public listen (ma: Multiaddr, _callback: (error: Error | null) => void = noop): void {
     const callback = once(_callback);
 
     if (!this.options.wrtc && !getBrowserRtc()) {
@@ -85,7 +90,7 @@ class Listener extends EventEmitter {
     try {
       const url = createUrl(ma);
 
-      l.debug(() => `Dialing to signalling server, ${url}`);
+      l.debug((): string => `Dialing to signalling server, ${url}`);
 
       this.ma = ma;
       this.srcMultiaddr = ma.toString();
@@ -101,7 +106,7 @@ class Listener extends EventEmitter {
 
       this.io = io;
 
-      const incommingDial = (offer: SSOffer) => {
+      const incommingDial = (offer: SSOffer): void => {
         if (offer.answer || offer.err) {
           return;
         }
@@ -113,17 +118,16 @@ class Listener extends EventEmitter {
             trickle: false,
             wrtc: this.options.wrtc
           });
-
         } catch (error) {
-          l.debug(() => ['Could not create incoming connection:', error]);
+          l.debug((): any[] => ['Could not create incoming connection:', error]);
 
           return callback(error);
         }
 
         const conn = new Connection(toPull.duplex(channel));
 
-        channel.once('connect', () => {
-          conn.getObservedAddrs = (callback: (error: Error | null, addrs: Array<string>) => void) => {
+        channel.once('connect', (): void => {
+          conn.getObservedAddrs = (callback: (error: Error | null, addrs: string[]) => void): void => {
             return callback(null, [offer.srcMultiaddr]);
           };
 
@@ -131,7 +135,7 @@ class Listener extends EventEmitter {
           this.handler(conn);
         });
 
-        channel.once('signal', (signal: SSSignal) => {
+        channel.once('signal', (signal: SSSignal): void => {
           offer.signal = signal;
           offer.answer = true;
 
@@ -144,47 +148,52 @@ class Listener extends EventEmitter {
       io.on('ws-handshake', incommingDial);
       io.on('ws-peer', this.onDiscovery);
 
-      io.on('connect', () => {
+      io.on('connect', (): void => {
         io.emit('ss-join', ma.toString());
       });
 
-      io.once('connect', () => {
+      io.once('connect', (): void => {
         this.emit('listening');
 
         callback();
       });
-
     } catch (error) {
       return callback(error);
     }
   }
 
-  close (callback: () => any = noop): void {
+  public close (fn: () => any = noop): void {
     this.emit('close');
 
-    callback();
+    fn();
   }
 
-  getAddrs (callback: (errror: null, mas: Array<Multiaddr>) => void): void {
+  public getAddrs (callback: (errror: null, mas: Multiaddr[]) => void): void {
     callback(null, [this.ma as Multiaddr]);
   }
 }
 
 export default class WebRTCClient {
-  discovery: Discovery;
-  private listeners: Array<Listener>;
+  public discovery: Discovery;
+
+  private listeners: Listener[];
+
   private options: Options;
 
-  constructor (options: Options = {}) {
+  public constructor (options: Options = {}) {
     this.options = options;
 
     this.discovery = new Discovery();
     this.listeners = [];
   }
 
-  createListener (options: Function): Listener;
-  createListener (options: Options, handler: Function): Listener;
-  createListener (options: Options | Function, handler?: Function): Listener {
+  public createListener (options: Function): Listener;
+
+  // eslint-disable-next-line no-dupe-class-members
+  public createListener (options: Options, handler: Function): Listener;
+
+  // eslint-disable-next-line no-dupe-class-members
+  public createListener (options: Options | Function, handler?: Function): Listener {
     if (typeof options === 'function') {
       handler = options;
       options = {};
@@ -197,7 +206,7 @@ export default class WebRTCClient {
     return listener;
   }
 
-  dial (ma: Multiaddr, options: any, _callback: any) {
+  public dial (ma: Multiaddr, options: any, _callback: any): void {
     if (typeof options === 'function') {
       _callback = options;
       options = {};
@@ -217,7 +226,7 @@ export default class WebRTCClient {
         wrtc: this.options.wrtc
       });
     } catch (error) {
-      l.debug(() => ['Could not create connection', error]);
+      l.debug((): any[] => ['Could not create connection', error]);
 
       return callback(error);
     }
@@ -225,7 +234,7 @@ export default class WebRTCClient {
     const conn = new Connection(toPull.duplex(channel));
     let connected = false;
 
-    channel.on('signal', (signal: any) => {
+    channel.on('signal', (signal: any): void => {
       sioClient.emit('ss-handshake', {
         intentId,
         srcMultiaddr: listener.srcMultiaddr,
@@ -234,17 +243,17 @@ export default class WebRTCClient {
       });
     });
 
-    channel.once('timeout', () =>
+    channel.once('timeout', (): void =>
       callback(new Error('timeout'))
     );
 
-    channel.once('error', (error: Error) => {
+    channel.once('error', (error: Error): void => {
       if (!connected) {
         callback(error);
       }
     });
 
-    sioClient.on('ws-handshake', (offer: SSOffer) => {
+    sioClient.on('ws-handshake', (offer: SSOffer): void => {
       if (offer.intentId === intentId && offer.err) {
         return callback(new Error(offer.err));
       }
@@ -253,13 +262,13 @@ export default class WebRTCClient {
         return;
       }
 
-      channel.once('connect', () => {
+      channel.once('connect', (): void => {
         connected = true;
         conn.destroy = channel.destroy.bind(channel);
 
-        channel.once('close', () => conn.destroy());
+        channel.once('close', (): void => conn.destroy());
 
-        conn.getObservedAddrs = (callback: (error: Error | null, mas: Array<Multiaddr>) => void) =>
+        conn.getObservedAddrs = (callback: (error: Error | null, mas: Multiaddr[]) => void): void =>
           callback(null, [ma]);
 
         callback(null, conn);
@@ -271,16 +280,16 @@ export default class WebRTCClient {
     return conn;
   }
 
-  filter (multiaddrs: Multiaddr | Array<Multiaddr>): Array<Multiaddr> {
-    return (Array.isArray(multiaddrs) ? multiaddrs : [multiaddrs]).filter((ma) =>
+  public filter (multiaddrs: Multiaddr | Multiaddr[]): Multiaddr[] {
+    return (Array.isArray(multiaddrs) ? multiaddrs : [multiaddrs]).filter((ma): boolean =>
       ma.protoNames().indexOf('p2p-circuit') !== -1
         ? false
         : mafmt.WebRTCStar.matches(ma)
     );
   }
 
-  onDiscovery = (addr: string): void => {
-    l.debug(() => `Peer Discovered ${addr}`);
+  public onDiscovery = (addr: string): void => {
+    l.debug((): string => `Peer Discovered ${addr}`);
 
     const split = addr.split('/ipfs/');
     const peerIdStr = split[split.length - 1];

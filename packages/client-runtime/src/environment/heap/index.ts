@@ -2,7 +2,7 @@
 // This software may be modified and distributed under the terms
 // of the Apache-2.0 license. See the LICENSE file for details.
 
-import { RuntimeEnv$Heap, Pointer } from '../../types';
+import { RuntimeEnvHeap, Pointer } from '../../types';
 import { Memory, SizeUsed } from './types';
 
 import { ExtError, isUndefined, logger } from '@polkadot/util';
@@ -11,19 +11,20 @@ const PAGE_SIZE = 64 * 1024;
 
 const l = logger('runtime/heap');
 
-export default class Heap implements RuntimeEnv$Heap {
+export default class Heap implements RuntimeEnvHeap {
   private memory: Memory;
+
   private wasmMemory?: WebAssembly.Memory;
 
-  constructor () {
+  public constructor () {
     this.memory = this.createMemory(new ArrayBuffer(0), 0);
   }
 
-  wasResized (): boolean {
+  public wasResized (): boolean {
     return this.memory.isResized;
   }
 
-  allocate (size: number): Pointer {
+  public allocate (size: number): Pointer {
     if (size === 0) {
       return 0;
     }
@@ -41,7 +42,7 @@ export default class Heap implements RuntimeEnv$Heap {
     return this.freealloc(size);
   }
 
-  deallocate (ptr: Pointer): number {
+  public deallocate (ptr: Pointer): number {
     const size = this.memory.allocated.get(ptr);
 
     if (isUndefined(size)) {
@@ -55,15 +56,15 @@ export default class Heap implements RuntimeEnv$Heap {
     return size;
   }
 
-  dup (ptr: Pointer, len: number): Uint8Array {
+  public dup (ptr: Pointer, len: number): Uint8Array {
     return this.memory.uint8.slice(ptr, ptr + len);
   }
 
-  fill (ptr: Pointer, value: number, len: number): Uint8Array {
+  public fill (ptr: Pointer, value: number, len: number): Uint8Array {
     return this.memory.uint8.fill(value, ptr, ptr + len);
   }
 
-  freealloc (size: number): Pointer {
+  public freealloc (size: number): Pointer {
     const ptr = this.findContaining(size);
 
     if (ptr === -1) {
@@ -79,45 +80,45 @@ export default class Heap implements RuntimeEnv$Heap {
     return ptr;
   }
 
-  growalloc (size: number): Pointer {
+  public growalloc (size: number): Pointer {
     // grow memory by 4 times the requested amount (rounded up)
     return this.growMemory(1 + Math.ceil(4 * size / PAGE_SIZE))
       ? this.allocate(size)
       : 0;
   }
 
-  get (ptr: Pointer, len: number): Uint8Array {
+  public get (ptr: Pointer, len: number): Uint8Array {
     return this.memory.uint8.subarray(ptr, ptr + len);
   }
 
-  getU32 (ptr: Pointer): number {
+  public getU32 (ptr: Pointer): number {
     return this.memory.view.getUint32(ptr, true);
   }
 
-  set (ptr: Pointer, data: Uint8Array): Pointer {
+  public set (ptr: Pointer, data: Uint8Array): Pointer {
     this.memory.uint8.set(data, ptr);
 
     return ptr;
   }
 
-  setU32 (ptr: Pointer, value: number): Pointer {
+  public setU32 (ptr: Pointer, value: number): Pointer {
     this.memory.view.setUint32(ptr, value, true);
 
     return ptr;
   }
 
-  setWasmMemory (wasmMemory: WebAssembly.Memory, pageOffset: number = 4): void {
+  public setWasmMemory (wasmMemory: WebAssembly.Memory, pageOffset: number = 4): void {
     const offset = pageOffset * PAGE_SIZE;
 
     this.wasmMemory = wasmMemory;
     this.memory = this.createMemory(wasmMemory.buffer, offset);
   }
 
-  size (): number {
+  public size (): number {
     return this.memory.size;
   }
 
-  used (): SizeUsed {
+  public used (): SizeUsed {
     return {
       allocated: this.calculateSize(this.memory.allocated),
       deallocated: this.calculateSize(this.memory.deallocated)
@@ -125,9 +126,11 @@ export default class Heap implements RuntimeEnv$Heap {
   }
 
   private calculateSize (buffer: Map<number, number>): number {
-    let total: number = 0;
+    let total = 0;
 
-    buffer.forEach((size) => total += size);
+    buffer.forEach((size): void => {
+      total += size;
+    });
 
     return total;
   }
@@ -137,7 +140,7 @@ export default class Heap implements RuntimeEnv$Heap {
       return false;
     }
 
-    l.debug(() => `Growing allocated memory by ${pages * 64}KB`);
+    l.debug((): string => `Growing allocated memory by ${pages * 64}KB`);
 
     this.wasmMemory.grow(pages);
     this.memory.size = this.wasmMemory.buffer.byteLength;
@@ -170,8 +173,8 @@ export default class Heap implements RuntimeEnv$Heap {
 
   private findContaining (total: number): Pointer {
     const [ptr] = [...this.memory.deallocated.entries()]
-      .filter(([, size]) => size >= total)
-      .sort((a: [number, number], b: [number, number]) => {
+      .filter(([, size]): boolean => size >= total)
+      .sort((a: [number, number], b: [number, number]): number => {
         if (a[1] < b[1]) {
           return -1;
         } else if (a[1] > b[1]) {

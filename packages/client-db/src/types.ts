@@ -10,24 +10,24 @@ export type DbPathPrefix = 'database';
 
 export type DbConfig$Type = 'file' | 'lmdb' | 'memory';
 
-export type DiskDbOptions = {
-  isCompressed: boolean,
-  isLru: boolean,
-  isTrie: boolean
-};
+export interface DiskDbOptions {
+  isCompressed: boolean;
+  isLru: boolean;
+  isTrie: boolean;
+}
 
-export type DbConfig = {
-  compact: boolean,
-  path: string,
-  type: DbConfig$Type
-};
+export interface DbConfig {
+  compact: boolean;
+  path: string;
+  type: DbConfig$Type;
+}
 
-export type StorageMethod<P, R> = {
-  del: (...params: Array<any>) => void,
-  get: (...params: Array<any>) => R,
-  set: (value: P, ...params: Array<any>) => void,
-  onUpdate: (callback: (value: P) => void) => void
-};
+export interface StorageMethod<P, R> {
+  del: (...params: any[]) => void;
+  get: (...params: any[]) => R;
+  set: (value: P, ...params: any[]) => void;
+  onUpdate: (callback: (value: P) => void) => void;
+}
 
 export type StorageMethod$Account = StorageMethod<Uint8Array, Uint8Array>;
 
@@ -37,20 +37,20 @@ export type StorageMethod$Bool = StorageMethod<boolean, boolean>;
 
 export type StorageMethod$U8a = StorageMethod<Uint8Array, Uint8Array>;
 
-export type StorageMethod$ArrayAccount = StorageMethod<Array<Uint8Array>, Array<Uint8Array>>;
+export type StorageMethod$ArrayAccount = StorageMethod<Uint8Array[], Uint8Array[]>;
 
-export type StorageMethod$ArrayU8a = StorageMethod<Array<Uint8Array>, Array<Uint8Array>>;
+export type StorageMethod$ArrayU8a = StorageMethod<Uint8Array[], Uint8Array[]>;
 
 export type StorageMethods = StorageMethod$Account | StorageMethod$Bn | StorageMethod$Bool | StorageMethod$U8a | StorageMethod$ArrayU8a | StorageMethod$ArrayAccount;
 
-export type BlockDb = {
-  db: TxDb,
-  bestHash: StorageMethod$U8a,
-  bestNumber: StorageMethod$Bn,
-  blockData: StorageMethod$U8a,
-  hash: StorageMethod$U8a,
-  header: StorageMethod$U8a
-};
+export interface BlockDb {
+  db: TxDb;
+  bestHash: StorageMethod$U8a;
+  bestNumber: StorageMethod$Bn;
+  blockData: StorageMethod$U8a;
+  hash: StorageMethod$U8a;
+  header: StorageMethod$U8a;
+}
 
 export interface StateDb {
   db: TrieDb;

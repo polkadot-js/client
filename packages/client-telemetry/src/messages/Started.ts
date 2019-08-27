@@ -7,7 +7,7 @@ import BN from 'bn.js';
 import BlockMessage from './BlockMessage';
 
 export default class Started extends BlockMessage {
-  constructor (bestHash: Uint8Array, bestNumber: BN) {
+  public constructor (bestHash: Uint8Array, bestNumber: BN) {
     super('node.start', bestHash, bestNumber);
   }
 }

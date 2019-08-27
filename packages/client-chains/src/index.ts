@@ -6,31 +6,38 @@ import { Chainspec } from '@polkadot/chainspec/types';
 import { Config } from '@polkadot/client/types';
 import { BlockDb, StateDb } from '@polkadot/client-db/types';
 import { ExecutorInterface } from '@polkadot/client-wasm/types';
+import { Header } from '@polkadot/types/interfaces';
 import { ChainInterface, ChainGenesis } from './types';
 
+import storage from '@polkadot/api-metadata/storage/static';
 import ChainDbs from '@polkadot/client-db';
 import createRuntime from '@polkadot/client-runtime';
 import { BlockData } from '@polkadot/client-types';
 import Executor from '@polkadot/client-wasm';
-import { Header } from '@polkadot/types';
-import storage from '@polkadot/storage/static';
 import { assert, compactStripLength, formatNumber, hexToU8a, logger, u8aToHex } from '@polkadot/util';
 import { trieRoot } from '@polkadot/trie-hash';
+import { createType } from '@polkadot/types';
 
 import Loader from './loader';
 
 const l = logger('chain');
 
 export default class Chain implements ChainInterface {
-  readonly blocks: BlockDb;
-  readonly chain: Chainspec;
-  readonly executor: ExecutorInterface;
-  readonly genesis: ChainGenesis;
-  readonly state: StateDb;
+  public readonly blocks: BlockDb;
+
+  public readonly chain: Chainspec;
+
+  public readonly executor: ExecutorInterface;
+
+  public readonly genesis: ChainGenesis;
+
+  public readonly state: StateDb;
+
   private config: Config;
+
   private dbs: ChainDbs;
 
-  constructor (config: Config) {
+  public constructor (config: Config) {
     const chain = new Loader(config);
 
     this.config = config;
@@ -53,7 +60,7 @@ export default class Chain implements ChainInterface {
     this.executor = new Executor(config, this.blocks, this.state, runtime);
   }
 
-  stop () {
+  public stop (): void {
     this.dbs.close();
   }
 
@@ -96,7 +103,7 @@ export default class Chain implements ChainInterface {
 
   private rollbackBlock (bestHeader: Header, rollback: boolean, isLogging: boolean = true): ChainGenesis {
     const prevHash = bestHeader.parentHash;
-    const prevNumber = bestHeader.blockNumber.subn(1);
+    const prevNumber = bestHeader.number.unwrap().subn(1);
 
     if (rollback && prevNumber.gtn(1)) {
       if (isLogging) {
@@ -105,9 +112,9 @@ export default class Chain implements ChainInterface {
 
       const prevBlock = this.getBlock(prevHash);
 
-      this.blocks.db.transaction(() => {
+      this.blocks.db.transaction((): boolean => {
         this.blocks.bestHash.set(prevHash);
-        this.blocks.bestNumber.set(prevBlock.header.blockNumber);
+        this.blocks.bestNumber.set(prevBlock.header.number.unwrap());
 
         return true;
       });
@@ -146,7 +153,7 @@ export default class Chain implements ChainInterface {
     const genesis = this.createGenesisBlock();
 
     if (setBest) {
-      this.blocks.db.transaction(() => {
+      this.blocks.db.transaction((): boolean => {
         this.blocks.bestHash.set(genesis.block.hash);
         this.blocks.bestNumber.set(0);
         this.blocks.blockData.set(genesis.block.toU8a(), genesis.block.hash);
@@ -160,7 +167,7 @@ export default class Chain implements ChainInterface {
   }
 
   private createGenesisBlock (): ChainGenesis {
-    const header = new Header({
+    const header = createType('Header', {
       stateRoot: this.state.db.getRoot(),
       extrinsicsRoot: trieRoot([]),
       parentHash: new Uint8Array(32)
@@ -180,7 +187,7 @@ export default class Chain implements ChainInterface {
     const { genesis: { raw } } = this.chain;
 
     this.state.db.transaction((): boolean => {
-      Object.entries(raw).forEach(([key, value]) =>
+      Object.entries(raw).forEach(([key, value]): void =>
         this.state.db.put(
           hexToU8a(key),
           hexToU8a(value)

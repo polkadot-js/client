@@ -11,7 +11,7 @@ describe('receive', () => {
 
   beforeEach(() => {
     const peerInfo = {
-      disconnect: () => void 0,
+      disconnect: () => {},
       id: {
         toB58String: () => '123'
       }

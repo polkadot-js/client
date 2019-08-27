@@ -9,17 +9,17 @@ import wasmStart from '../../test/wasm/start_wasm';
 import createExports from './exports';
 import createMemory from './memory';
 
-describe('exports', () => {
-  describe('valid modules, defaults', () => {
-    it('creates instance with defaults', async () => {
+describe('exports', (): void => {
+  describe('valid modules, defaults', (): void => {
+    it('creates instance with defaults', async (): Promise<void> => {
       expect(
         (await createExports(wasmAddTwo)).exports
       ).toBeDefined();
     });
   });
 
-  describe('valid modules, with memory', () => {
-    it('allows calls into the module', async () => {
+  describe('valid modules, with memory', (): void => {
+    it('allows calls into the module', async (): Promise<void> => {
       const instance = (await createExports(
         wasmAddTwo,
         {},
@@ -32,8 +32,8 @@ describe('exports', () => {
     });
   });
 
-  describe('imports', () => {
-    it('allows imports to be called', async () => {
+  describe('imports', (): void => {
+    it('allows imports to be called', async (): Promise<void> => {
       const callback = jest.fn();
       const instance = (await createExports(
         wasmImport,
@@ -47,8 +47,8 @@ describe('exports', () => {
     });
   });
 
-  describe('start', () => {
-    it('allows imports to be called', async () => {
+  describe('start', (): void => {
+    it('allows imports to be called', async (): Promise<void> => {
       const callback = jest.fn();
 
       await createExports(

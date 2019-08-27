@@ -44,27 +44,27 @@ const VAL_E = new Uint8Array([0x42, 1, 2, 3, 4, 5, 0x69]);
 const VAL_F = new Uint8Array([0x42, 1, 2, 3, 4, 5, 6, 0x69]);
 
 // NOTE Skipped, doesn't seem to be too happy on CI (cwd issues?)
-describe.skip('FileStructDb', () => {
-  describe('basics', () => {
+describe.skip('FileStructDb', (): void => {
+  describe('basics', (): void => {
     const location = path.join(process.cwd(), '--test-FileStructDb-basic');
     let store: Db;
 
-    const testGet = (key: Uint8Array, value: Uint8Array) =>
+    const testGet = (key: Uint8Array, value: Uint8Array): Uint8Array | null =>
       expect(store.get(key)).toEqual(value);
 
-    beforeAll(() => {
+    beforeAll((): void => {
       mkdirp.sync(location);
 
       store = new Db(location, 'testing', { isCompressed: false, isLru: false, isTrie: false });
       store.open();
     });
 
-    afterAll(() => {
+    afterAll((): void => {
       store.close();
       rimraf.sync(location);
     });
 
-    it('writes an entry', () => {
+    it('writes an entry', (): void => {
       console.error('A: execute');
 
       store.put(KEY_A, VAL_A);
@@ -74,7 +74,7 @@ describe.skip('FileStructDb', () => {
       testGet(KEY_A, VAL_A);
     });
 
-    it('writes an entry (additional)', () => {
+    it('writes an entry (additional)', (): void => {
       console.error('B: execute');
 
       store.put(KEY_B, VAL_B);
@@ -85,7 +85,7 @@ describe.skip('FileStructDb', () => {
       testGet(KEY_B, VAL_B);
     });
 
-    it('writes an entry (expanding the tree)', () => {
+    it('writes an entry (expanding the tree)', (): void => {
       console.error('C: execute');
 
       store.put(KEY_C, VAL_C);
@@ -97,7 +97,7 @@ describe.skip('FileStructDb', () => {
       testGet(KEY_C, VAL_C);
     });
 
-    it('writes an entry (expanding the tree, again)', () => {
+    it('writes an entry (expanding the tree, again)', (): void => {
       console.error('D: execute');
 
       store.put(KEY_F, VAL_F);
@@ -110,7 +110,7 @@ describe.skip('FileStructDb', () => {
       testGet(KEY_F, VAL_F);
     });
 
-    it('writes an entry (expanding the tree, yet again)', () => {
+    it('writes an entry (expanding the tree, yet again)', (): void => {
       console.error('E: execute');
 
       store.put(KEY_E, VAL_E);
@@ -124,7 +124,7 @@ describe.skip('FileStructDb', () => {
       testGet(KEY_F, VAL_F);
     });
 
-    it('writes an entry, expanding the top-level', () => {
+    it('writes an entry, expanding the top-level', (): void => {
       console.error('F: execute');
 
       store.put(KEY_D, VAL_D);
@@ -139,7 +139,7 @@ describe.skip('FileStructDb', () => {
       testGet(KEY_F, VAL_F);
     });
 
-    it('overrides with smaller values', () => {
+    it('overrides with smaller values', (): void => {
       console.error('G: execute');
 
       store.put(KEY_F, VAL_A);
@@ -154,7 +154,7 @@ describe.skip('FileStructDb', () => {
       testGet(KEY_F, VAL_A);
     });
 
-    it('overrides with larger values', () => {
+    it('overrides with larger values', (): void => {
       console.error('H: execute');
 
       store.put(KEY_A, VAL_F);
@@ -170,32 +170,32 @@ describe.skip('FileStructDb', () => {
     });
   });
 
-  describe('trie data', () => {
+  describe('trie data', (): void => {
     const { genesis: { raw } } = alexander;
     const location = path.join(process.cwd(), '--test-FileStructDb-trie-data');
     let store: Db;
 
-    beforeAll(() => {
+    beforeAll((): void => {
       mkdirp.sync(location);
 
       store = new Db(location, 'testing', { isCompressed: false, isLru: false, isTrie: true });
       store.open();
     });
 
-    afterAll(() => {
+    afterAll((): void => {
       store.close();
       rimraf.sync(location);
     });
 
-    it('stores all the values', () => {
-      Object.entries(raw).forEach(([key, val]) => {
+    it('stores all the values', (): void => {
+      Object.entries(raw).forEach(([key, val]): void => {
         store.put(hexToU8a(key), hexToU8a(val));
       });
     });
 
-    describe('retrieves all the values', () => {
-      Object.entries(raw).forEach(([key, val]) => {
-        it(key, () => {
+    describe('retrieves all the values', (): void => {
+      Object.entries(raw).forEach(([key, val]): void => {
+        it(key, (): void => {
           expect(
             u8aToHex(store.get(hexToU8a(key)))
           ).toEqual(val);
@@ -204,9 +204,9 @@ describe.skip('FileStructDb', () => {
     });
   });
 
-  describe('via TrieDb', () => {
+  describe('via TrieDb', (): void => {
     class TestDb extends TxDb {
-      constructor (base: string, name: string) {
+      public constructor (base: string, name: string) {
         super(new Db(base, name, { isCompressed: false, isLru: false, isTrie: true }));
       }
     }
@@ -214,19 +214,19 @@ describe.skip('FileStructDb', () => {
     const location = path.join(process.cwd(), '--test-FileStructDb-trie-db');
     const { genesis: { raw }, genesisRoot } = alexander;
 
-    beforeAll(() => {
+    beforeAll((): void => {
       rimraf.sync(location);
       mkdirp.sync(location);
     });
 
-    it('creates a trie with the correct root', () => {
+    it('creates a trie with the correct root', (): void => {
       console.error('TRIE: insert');
 
       const trie = new TrieDb(new TestDb(location, 'test.db'));
 
       trie.open();
-      trie.transaction(() => {
-        Object.entries(raw).forEach(([key, val]) => {
+      trie.transaction((): boolean => {
+        Object.entries(raw).forEach(([key, val]): void => {
           trie.put(hexToU8a(key), hexToU8a(val));
         });
 
@@ -238,7 +238,7 @@ describe.skip('FileStructDb', () => {
       ).toEqual(genesisRoot);
     });
 
-    describe('re-opens and has all the correct keys', () => {
+    describe('re-opens and has all the correct keys', (): void => {
       console.error('TRIE: retrieve');
 
       const trie = new TrieDb(new TestDb(location, 'test.db'));
@@ -246,8 +246,8 @@ describe.skip('FileStructDb', () => {
       trie.open();
       trie.setRoot(hexToU8a(genesisRoot));
 
-      Object.entries(raw).forEach(([key, val]) => {
-        it(key, () => {
+      Object.entries(raw).forEach(([key, val]): void => {
+        it(key, (): void => {
           expect(
             u8aToHex(trie.get(hexToU8a(key)))
           ).toEqual(val);

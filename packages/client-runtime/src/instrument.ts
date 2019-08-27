@@ -4,12 +4,12 @@
 
 import { RuntimeStats } from './types';
 
-type Instrument<T> = {
-  (name: string, fn: () => T): T,
+interface Instrument<T> {
+  (name: string, fn: () => T): T;
 
-  clear (): void,
-  stats (): RuntimeStats
-};
+  clear (): void;
+  stats (): RuntimeStats;
+}
 
 let stats: RuntimeStats = {};
 
@@ -41,7 +41,7 @@ function instrument <T> (name: string, fn: () => T): T {
 };
 
 (instrument as Instrument<any>).stats = (): RuntimeStats => {
-  Object.keys(stats).forEach((fn) => {
+  Object.keys(stats).forEach((fn): void => {
     if (fn === 'total') {
       return;
     }

@@ -12,12 +12,12 @@ import createEnv from './env';
 import createExports from './exports';
 import createMemory from './memory';
 
-type Options = {
-  config: Config,
-  l: Logger
-};
+interface Options {
+  config: Config;
+  l: Logger;
+}
 
-function instrument <T> (name: string, elapsed: Array<string>, fn: () => T): T {
+function instrument <T> (name: string, elapsed: string[], fn: () => T): T {
   const start = Date.now();
   const result = fn();
 
@@ -27,7 +27,7 @@ function instrument <T> (name: string, elapsed: Array<string>, fn: () => T): T {
 }
 
 let prevChain: WasmInstanceExports;
-let pageOffset: number = 0;
+let pageOffset = 0;
 
 export default async function wasm ({ config: { wasm: { heapSize = defaults.HEAP_SIZE_KB } }, l }: Options, runtime: RuntimeInterface, chainCode: Uint8Array, chainProxy: Uint8Array, forceNew: boolean = false): Promise<WasmInstanceExports> {
   const elapsed: string[] = [];
@@ -59,7 +59,7 @@ export default async function wasm ({ config: { wasm: { heapSize = defaults.HEAP
 
   runtime.environment.heap.setWasmMemory(chain.memory, pageOffset);
 
-  l.debug(() => `WASM created ${elapsed.join(', ')}`);
+  l.debug((): string => `WASM created ${elapsed.join(', ')}`);
 
   return instance;
 }

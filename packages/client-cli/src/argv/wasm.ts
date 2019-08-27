@@ -6,10 +6,12 @@ import { Options } from 'yargs';
 
 import defaults from '@polkadot/client-wasm/defaults';
 
-export default ({
+const config: Record<string, Options> = {
   'wasm-heap-size': {
     default: defaults.HEAP_SIZE_KB,
     description: 'Initial size for the WASM runtime heap (KB)',
     type: 'number'
   }
-} as { [index: string]: Options });
+};
+
+export default config;

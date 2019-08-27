@@ -14,5 +14,5 @@ export default function createError (id: number, error: Error | ExtError): JsonR
       code: (error as ExtError).code || ExtError.CODES.UNKNOWN,
       message: error.message
     }
-  } as JsonRpcError);
+  });
 }

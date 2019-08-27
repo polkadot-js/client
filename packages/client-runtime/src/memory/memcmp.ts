@@ -2,9 +2,9 @@
 // This software may be modified and distributed under the terms
 // of the Apache-2.0 license. See the LICENSE file for details.
 
-import { RuntimeEnv$Heap, Pointer } from '../types';
+import { RuntimeEnvHeap, Pointer } from '../types';
 
-export default function memcmp (heap: RuntimeEnv$Heap, s1: Pointer, s2: Pointer, length: number): number {
+export default function memcmp (heap: RuntimeEnvHeap, s1: Pointer, s2: Pointer, length: number): number {
   const v1 = heap.get(s1, length);
   const v2 = heap.get(s2, length);
 

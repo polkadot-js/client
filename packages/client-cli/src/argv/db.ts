@@ -6,7 +6,7 @@ import { Options } from 'yargs';
 
 import defaults from '@polkadot/client-db/defaults';
 
-export default ({
+const config: Record<string, Options> = {
   'db-compact': {
     default: false,
     description: 'Compact existing databases',
@@ -23,4 +23,6 @@ export default ({
     description: 'The type of database type to use',
     type: 'string'
   }
-} as { [index: string]: Options });
+};
+
+export default config;

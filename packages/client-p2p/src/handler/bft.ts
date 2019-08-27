@@ -8,6 +8,7 @@ import { Handler } from './types';
 import { Bft } from '@polkadot/client-types/messages';
 
 // TODO Propagate
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function handleBft (self: P2pInterface, peer: PeerInterface, message: Bft): void {
   // self.l.debug(() => [peer.shortId, 'Bft', JSON.stringify(message)]);
 }

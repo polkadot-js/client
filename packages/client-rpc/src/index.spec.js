@@ -1,23 +1,24 @@
+/* eslint-disable import/first */
 // Copyright 2017-2019 @polkadot/client-rpc authors & contributors
 // This software may be modified and distributed under the terms
 // of the Apache-2.0 license. See the LICENSE file for details.
 
 import { ExtError } from '@polkadot/util';
 
-const mockExtError = ExtError;
+const MockExtError = ExtError;
 
 jest.mock('./handlers', () => () => ({
   errorThrow: () => {
     throw new Error('errorThrow');
   },
   errorThrowEx: () => {
-    throw new mockExtError('errorThrowEx', -123);
+    throw new MockExtError('errorThrowEx', -123);
   },
   errorRet: () => {
     return Promise.resolve(new Error('errorRet'));
   },
   errorRetEx: () => {
-    return Promise.resolve(new mockExtError('errorRetEx', -456));
+    return Promise.resolve(new MockExtError('errorRetEx', -456));
   },
   test: jest.fn(() => Promise.resolve('test')),
   echo: (...params) => Promise.resolve(`echo: ${params.join(', ')}`)
@@ -33,7 +34,6 @@ describe('server', () => {
   let chain;
   let server;
   let handlers;
-  let testSpy;
 
   beforeEach(() => {
     chain = {

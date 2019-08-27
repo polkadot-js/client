@@ -22,13 +22,18 @@ const l = logger('telemetry');
 
 export default class Telemetry implements TelemetryInterface {
   private blocks: BlockDb;
+
   private isActive: boolean = false;
+
   private chain: string;
+
   private name: string;
+
   private url: string;
+
   private websocket: WebSocket | null = null;
 
-  constructor ({ telemetry }: Config, { blocks, chain }: ChainInterface) {
+  public constructor ({ telemetry }: Config, { blocks, chain }: ChainInterface) {
     const name = telemetry.name ? telemetry.name.trim() : '';
 
     this.blocks = blocks;
@@ -38,7 +43,7 @@ export default class Telemetry implements TelemetryInterface {
     this.url = telemetry.url;
   }
 
-  async start () {
+  public async start (): Promise<void> {
     if (!this.isActive) {
       return;
     }
@@ -46,7 +51,7 @@ export default class Telemetry implements TelemetryInterface {
     this.connect();
   }
 
-  async stop (): Promise<boolean> {
+  public async stop (): Promise<boolean> {
     this.isActive = false;
 
     if (this.websocket) {
@@ -57,7 +62,7 @@ export default class Telemetry implements TelemetryInterface {
     return true;
   }
 
-  private connect () {
+  private connect (): void {
     if (!this.isActive) {
       return;
     }
@@ -66,39 +71,39 @@ export default class Telemetry implements TelemetryInterface {
 
     const websocket = new WebSocket(this.url);
 
-    websocket.onclose = () => {
-      l.debug(() => 'Disconnected from telemetry');
+    websocket.onclose = (): void => {
+      l.debug((): string => 'Disconnected from telemetry');
 
       this.websocket = null;
 
-      setTimeout(() => {
+      setTimeout((): void => {
         this.connect();
       }, 5000);
     };
 
-    websocket.onopen = () => {
-      l.debug(() => 'Connected to telemetry');
+    websocket.onopen = (): void => {
+      l.debug((): string => 'Connected to telemetry');
 
       this.websocket = websocket;
       this.sendInitial();
     };
   }
 
-  blockImported () {
+  public blockImported (): void {
     const bestHash = this.blocks.bestHash.get();
     const bestNumber = this.blocks.bestNumber.get();
 
     this.send(new BlockImport(bestHash, bestNumber));
   }
 
-  intervalInfo (peers: number, status: SyncStatus) {
+  public intervalInfo (peers: number, status: SyncStatus): void {
     const bestHash = this.blocks.bestHash.get();
     const bestNumber = this.blocks.bestNumber.get();
 
     this.send(new Interval(bestHash, bestNumber, peers, status));
   }
 
-  private sendInitial () {
+  private sendInitial (): void {
     const bestHash = this.blocks.bestHash.get();
     const bestNumber = this.blocks.bestNumber.get();
 
@@ -113,7 +118,7 @@ export default class Telemetry implements TelemetryInterface {
 
     const json = JSON.stringify(message);
 
-    l.debug(() => `Sending ${json}`);
+    l.debug((): string => `Sending ${json}`);
     this.websocket.send(json);
   }
 }

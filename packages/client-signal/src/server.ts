@@ -13,18 +13,18 @@ import { logger } from '@polkadot/util';
 
 const l = logger('wrtc/signal');
 
-type Sockets = {
-  [index: string]: net.Socket
-};
+type Sockets = Record<string, net.Socket>;
 
 type MessageTypesOut = 'ws-handshake' | 'ws-peer';
 
 export default class WebRTCSignal extends EventEmitter {
   private config: Config;
+
   private server: net.Server | null;
+
   private sockets: Sockets;
 
-  constructor (config: Config) {
+  public constructor (config: Config) {
     super();
 
     this.config = config;
@@ -32,11 +32,11 @@ export default class WebRTCSignal extends EventEmitter {
     this.server = null;
   }
 
-  get numConnected (): number {
+  public get numConnected (): number {
     return Object.keys(this.sockets).length;
   }
 
-  async start (): Promise<boolean> {
+  public async start (): Promise<boolean> {
     await this.stop();
 
     const { port } = this.config.signal;
@@ -53,7 +53,7 @@ export default class WebRTCSignal extends EventEmitter {
     return true;
   }
 
-  async stop (): Promise<boolean> {
+  public async stop (): Promise<boolean> {
     if (!this.server) {
       return false;
     }
@@ -67,12 +67,12 @@ export default class WebRTCSignal extends EventEmitter {
     return true;
   }
 
-  private send (ma: string | undefined | null, type: MessageTypesOut, value: any) {
+  private send (ma: string | undefined | null, type: MessageTypesOut, value: any): boolean {
     if (!ma || !this.sockets[ma]) {
       return false;
     }
 
-    l.debug(() => ['send', type, value]);
+    l.debug((): any[] => ['send', type, value]);
 
     this.sockets[ma].emit(type, value);
 
@@ -80,23 +80,23 @@ export default class WebRTCSignal extends EventEmitter {
   }
 
   private sendConnected (newMa: string): void {
-    Object.keys(this.sockets).forEach((ma) => {
+    Object.keys(this.sockets).forEach((ma): void => {
       this.send(ma, 'ws-peer', newMa);
       this.send(newMa, 'ws-peer', ma);
     });
   }
 
-  private onConnection = (socket: net.Socket) => {
+  private onConnection = (socket: net.Socket): void => {
     let ma: string;
 
-    const clear = () => {
-      l.debug(() => ['disconnect', ma]);
+    const clear = (): void => {
+      l.debug((): any[] => ['disconnect', ma]);
 
       delete this.sockets[ma];
     };
 
-    socket.on('ss-join', (_ma?: string) => {
-      l.debug(() => ['ss-join', _ma]);
+    socket.on('ss-join', (_ma?: string): void => {
+      l.debug((): any[] => ['ss-join', _ma]);
 
       if (!_ma) {
         return;
@@ -108,8 +108,8 @@ export default class WebRTCSignal extends EventEmitter {
       this.sockets[ma] = socket;
     });
 
-    socket.on('ss-handshake', (offer?: SSOffer) => {
-      l.debug(() => ['ss-handshake', JSON.stringify(offer)]);
+    socket.on('ss-handshake', (offer?: SSOffer): void => {
+      l.debug((): any[] => ['ss-handshake', JSON.stringify(offer)]);
 
       if (!offer || !offer.dstMultiaddr || !offer.srcMultiaddr || !offer.signal) {
         return;

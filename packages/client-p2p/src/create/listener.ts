@@ -10,12 +10,12 @@ import { assert, isIp, promisify } from '@polkadot/util';
 
 import defaults from '../defaults';
 
-type Config = {
-  address: string,
-  discoverStar: boolean,
-  externalIp?: string | null,
-  port: number
-};
+interface Config {
+  address: string;
+  discoverStar: boolean;
+  externalIp?: string | null;
+  port: number;
+}
 
 function constructMa (address: string, port: number, peerIdStr: string): string {
   const type = isIp(address, 'v4') ? 'ip4' : 'ip6';
@@ -23,8 +23,8 @@ function constructMa (address: string, port: number, peerIdStr: string): string 
   return `/${type}/${address}/tcp/${port}/p2p/${peerIdStr}`;
 }
 
-export default async function createListener (envType: EnvType, { address, discoverStar, externalIp, port }: Config): Promise<PeerInfo> {
-  assert(isIp(address), `Expected a valid IP address`);
+export default async function createListener (envType: EnvType, { address, discoverStar, port }: Config): Promise<PeerInfo> {
+  assert(isIp(address), 'Expected a valid IP address');
 
   const peerInfo = await promisify(null, PeerInfo.create);
   const peerIdStr = peerInfo.id.toB58String();
@@ -39,7 +39,7 @@ export default async function createListener (envType: EnvType, { address, disco
   }
 
   if (discoverStar) {
-    defaults.SIGNALLING.forEach((addr) =>
+    defaults.SIGNALLING.forEach((addr): void =>
       peerInfo.multiaddrs.add(`${addr}/${peerIdStr}`)
     );
   }

@@ -11,12 +11,12 @@ import createPeerInfo from './peerInfo';
 export default async function createPeerBook (peers: P2pNodes = []): Promise<PeerBook> {
   const peerBook = new PeerBook();
   const peerInfos = await Promise.all(
-    peers.map((peer) =>
+    peers.map((peer): Promise<PeerInfo> =>
       createPeerInfo([peer])
     )
   );
 
-  peerInfos.forEach((peerInfo) => {
+  peerInfos.forEach((peerInfo): void => {
     peerBook.put(peerInfo);
   });
 

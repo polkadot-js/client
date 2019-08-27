@@ -4,14 +4,14 @@
 
 import { BaseDb } from '@polkadot/db/types';
 
-type Base <T> = {
-  del (key: Uint8Array): void,
-  get (key: Uint8Array): Uint8Array,
-  set (key: Uint8Array, value: T, raw: Uint8Array): void,
-  onUpdate (subscriber: (value: T, raw: Uint8Array) => void): void
-};
+interface Base <T> {
+  del (key: Uint8Array): void;
+  get (key: Uint8Array): Uint8Array;
+  set (key: Uint8Array, value: T, raw: Uint8Array): void;
+  onUpdate (subscriber: (value: T, raw: Uint8Array) => void): void;
+}
 
-type Subscribers <T> = Array<(value: T, raw: Uint8Array) => void>;
+type Subscribers <T> = ((value: T, raw: Uint8Array) => void)[];
 
 export default function base <T> (db: BaseDb): Base<T> {
   const subscribers: Subscribers<T> = [];
@@ -26,7 +26,7 @@ export default function base <T> (db: BaseDb): Base<T> {
     },
     set: (key: Uint8Array, value: T, raw: Uint8Array): void => {
       db.put(key, raw);
-      subscribers.forEach((subscriber) =>
+      subscribers.forEach((subscriber): void =>
         subscriber(value, raw)
       );
     },

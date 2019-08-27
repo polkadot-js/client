@@ -8,20 +8,20 @@ import Koa from 'koa';
 import koaRoute from 'koa-route';
 import koaWebsocket from 'koa-websocket';
 
-type CreateKoaOption = {
+interface CreateKoaOption {
   handlers: {
-    http: (...params: any[]) => any,
-    ws: (...params: any[]) => any
-  },
-  path: string,
-  types: Array<Rpc>
-};
+    http: (...params: any[]) => any;
+    ws: (...params: any[]) => any;
+  };
+  path: string;
+  types: Rpc[];
+}
 
-export default function createKoa ({ handlers, path, types }: CreateKoaOption): Array<Koa> {
-  return types.map((type) => {
+export default function createKoa ({ handlers, path, types }: CreateKoaOption): Koa[] {
+  return types.map((type): Koa => {
     switch (type) {
       case 'http':
-        return (() => {
+        return ((): Koa => {
           const app = new Koa();
 
           app.use(
@@ -32,7 +32,7 @@ export default function createKoa ({ handlers, path, types }: CreateKoaOption): 
         })();
 
       case 'ws':
-        return (() => {
+        return ((): Koa => {
           const app = koaWebsocket(new Koa());
 
           app.ws.use(
@@ -43,7 +43,7 @@ export default function createKoa ({ handlers, path, types }: CreateKoaOption): 
         })();
 
       default:
-        // tslint:disable-next-line
+        // eslint-disable-next-line no-unused-expressions
         (type as never);
         throw new Error(`Uanble to create RPC listener for ${type}`);
     }

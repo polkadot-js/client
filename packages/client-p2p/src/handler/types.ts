@@ -5,7 +5,7 @@
 import { MessageInterface } from '@polkadot/client-types/messages/types';
 import { P2pInterface, PeerInterface } from '../types';
 
-export type Handler = {
-  (self: P2pInterface, peer: PeerInterface, message: MessageInterface): void,
-  type: number
-};
+export interface Handler {
+  (self: P2pInterface, peer: PeerInterface, message: MessageInterface): void;
+  type: number;
+}
