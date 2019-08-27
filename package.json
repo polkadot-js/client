@@ -19,7 +19,8 @@
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx . && tsc --noEmit --pretty",
     "clean": "polkadot-dev-clean-build",
     "postinstall": "polkadot-dev-yarn-only",
-    "test": "jest --coverage",
+    "test": "jest --coverage --runInBand",
+    "test:one": "jest",
     "start": "node packages/client-cli/scripts/polkadot.js",
     "start:www": "cd packages/client-www && webpack --config webpack.config.js"
   },
