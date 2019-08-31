@@ -20,13 +20,16 @@ describe('createListener', () => {
       }
     };
 
+    // eslint-disable-next-line @typescript-eslint/unbound-method
     origPeerInfoCreate = PeerInfo.create;
+    // eslint-disable-next-line @typescript-eslint/unbound-method
     PeerInfo.create = jest.fn((callback) => {
       callback(null, peerInfoMock);
     });
   });
 
   afterEach(() => {
+    // eslint-disable-next-line @typescript-eslint/unbound-method
     PeerInfo.create = origPeerInfoCreate;
   });
 
@@ -45,6 +48,7 @@ describe('createListener', () => {
   });
 
   it('fails when PeerInfo.create fails', () => {
+    // eslint-disable-next-line @typescript-eslint/unbound-method
     PeerInfo.create = (cb) => cb(new Error('test create failure'));
 
     return createListener('nodejs', { address: '127.0.0.1', port: 7788 }).catch((error) => {

@@ -124,7 +124,6 @@ export default class P2p extends EventEmitter implements P2pInterface {
     delete this.node;
     delete this.peers;
 
-    // @ts-ignore Only in 0.26+
     await node.stop();
 
     l.log('Server stopped');
@@ -163,6 +162,7 @@ export default class P2p extends EventEmitter implements P2pInterface {
       this.protocol,
       async (protocol: string, connection: LibP2pConnection): Promise<void> => {
         try {
+          // eslint-disable-next-line @typescript-eslint/unbound-method
           const peerInfo = await promisify(connection, connection.getPeerInfo);
           const peer = peers.add(peerInfo);
 
@@ -188,6 +188,7 @@ export default class P2p extends EventEmitter implements P2pInterface {
   private _handlePing (node: LibP2p): void {
     node.handle(
       defaults.PROTOCOL_PING,
+      // eslint-disable-next-line @typescript-eslint/require-await
       async (protocol: string, connection: LibP2pConnection): Promise<void> => {
         try {
           const stream = handshake({ timeout: defaults.WAIT_TIMEOUT });
@@ -224,7 +225,7 @@ export default class P2p extends EventEmitter implements P2pInterface {
 
     try {
       // const connection = await this.node.dialProtocol(peer.peerInfo, this.protocol);
-      // @ts-ignore
+      // eslint-disable-next-line @typescript-eslint/unbound-method
       const connection = await promisify(this.node, this.node.dialProtocol, peer.peerInfo, this.protocol);
 
       peer.addConnection(connection, true);

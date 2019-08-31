@@ -26,6 +26,7 @@ function constructMa (address: string, port: number, peerIdStr: string): string 
 export default async function createListener (envType: EnvType, { address, discoverStar, port }: Config): Promise<PeerInfo> {
   assert(isIp(address), 'Expected a valid IP address');
 
+  // eslint-disable-next-line @typescript-eslint/unbound-method
   const peerInfo = await promisify(null, PeerInfo.create);
   const peerIdStr = peerInfo.id.toB58String();
   const isCli = envType !== 'browser';

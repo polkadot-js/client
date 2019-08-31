@@ -40,9 +40,9 @@ export default class Peer extends EventEmitter implements PeerInterface {
 
   private connections: Map<number, Connection> = new Map();
 
-  private nextId: number = 0;
+  private nextId = 0;
 
-  private nextConnId: number = 0;
+  private nextConnId = 0;
 
   private node: LibP2p;
 
@@ -70,6 +70,7 @@ export default class Peer extends EventEmitter implements PeerInterface {
   }
 
   private startPing (): void {
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
     setTimeout((): Promise<boolean> => this.ping(), defaults.PING_INTERVAL);
   }
 
@@ -83,7 +84,7 @@ export default class Peer extends EventEmitter implements PeerInterface {
 
     try {
       // const connection = await this.node.dialProtocol(this.peerInfo, defaults.PROTOCOL_PING);
-      // @ts-ignore
+      // eslint-disable-next-line @typescript-eslint/unbound-method
       const connection = await promisify(this.node, this.node.dialProtocol, this.peerInfo, defaults.PROTOCOL_PING);
 
       const stream = handshake({ timeout: defaults.WAIT_TIMEOUT }, (error): void => {
@@ -175,10 +176,10 @@ export default class Peer extends EventEmitter implements PeerInterface {
   }
 
   private pushables (): Pushable[] {
-    // @ts-ignore yeap, we are filtering them right out at the end
+    // yeap, we are filtering them right out at the end
     return [...this.connections.values()]
       .map(({ pushable }): Pushable | null => pushable)
-      .filter((pushable): boolean => !!pushable);
+      .filter((pushable): boolean => !!pushable) as Pushable[];
   }
 
   public isWritable (): boolean {

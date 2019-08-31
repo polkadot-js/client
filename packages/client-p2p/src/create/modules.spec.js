@@ -14,6 +14,7 @@ describe.skip('createModules', () => {
   let peerInfo;
 
   beforeEach(async () => {
+    // eslint-disable-next-line @typescript-eslint/unbound-method
     peerInfo = await promisify(null, PeerInfo.create);
   });
 

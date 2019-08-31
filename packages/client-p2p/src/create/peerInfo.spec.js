@@ -17,13 +17,16 @@ describe('createPeerInfo', () => {
   let count = 0;
 
   beforeEach(() => {
+    // eslint-disable-next-line @typescript-eslint/unbound-method
     origPeerInfoCreate = PeerInfo.create;
+    // eslint-disable-next-line @typescript-eslint/unbound-method
     PeerInfo.create = (callback) => {
       origPeerInfoCreate(new PeerId(Buffer.from([count++])), callback);
     };
   });
 
   afterEach(() => {
+    // eslint-disable-next-line @typescript-eslint/unbound-method
     PeerInfo.create = origPeerInfoCreate;
   });
 
