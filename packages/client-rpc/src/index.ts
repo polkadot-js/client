@@ -19,8 +19,6 @@ import subscriptions from './subscriptions';
 import createKoa from './create/koa';
 import { createError, createResponse } from './create';
 
-const SUBSCRIBE_REGEX = /_subscribe/;
-
 const l = logger('rpc');
 
 export default class Rpc extends EventEmitter implements RpcInterface {
@@ -75,6 +73,7 @@ export default class Rpc extends EventEmitter implements RpcInterface {
     return true;
   }
 
+  // eslint-disable-next-line @typescript-eslint/require-await
   public async stop (): Promise<boolean> {
     if (this.servers.length === 0) {
       return false;
@@ -94,7 +93,7 @@ export default class Rpc extends EventEmitter implements RpcInterface {
   }
 
   private handleRequest = async ({ id, jsonrpc, method, params }: JsonRpcRequest, socket?: WsContextSocket): Promise<JsonRpcError | JsonRpcResponse> => {
-    const isSubscription = SUBSCRIBE_REGEX.test(method);
+    const isSubscription = method && method.includes('_subscribe');
 
     if (isSubscription && isUndefined(socket)) {
       throw new Error(`Subscription for '${method}' not available on RPC interface`);

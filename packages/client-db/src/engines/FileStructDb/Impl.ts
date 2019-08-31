@@ -13,7 +13,7 @@ import { modifyHdr, modifyKey, newHdr, newKey, parseHdr, parseKey, serializeKey 
 // const l = logger('db/struct');
 
 export default class Impl extends Files {
-  protected _findValue (key: KeyParts, value: Uint8Array | null = null, withValue: boolean = true, keyIndex: number = 0, hdrAt: number = 0): KVInfo | null {
+  protected _findValue (key: KeyParts, value: Uint8Array | null = null, withValue = true, keyIndex = 0, hdrAt = 0): KVInfo | null {
     const hdr = this._readHdr(key.fileAt, hdrAt);
     const parsedHdr = parseHdr(hdr, key.nibbles[keyIndex]);
 

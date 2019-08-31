@@ -107,7 +107,7 @@ export default class Heap implements RuntimeEnvHeap {
     return ptr;
   }
 
-  public setWasmMemory (wasmMemory: WebAssembly.Memory, pageOffset: number = 4): void {
+  public setWasmMemory (wasmMemory: WebAssembly.Memory, pageOffset = 4): void {
     const offset = pageOffset * PAGE_SIZE;
 
     this.wasmMemory = wasmMemory;

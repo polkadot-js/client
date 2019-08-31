@@ -11,6 +11,7 @@ import { assert, promisify } from '@polkadot/util';
 export default async function createPeerInfo (addresses: P2pNodes): Promise<PeerInfo> {
   assert(addresses.length, 'Expected at least one network address');
 
+  // eslint-disable-next-line @typescript-eslint/unbound-method
   const peerInfo: PeerInfo = await promisify(null, PeerInfo.create);
 
   addresses.forEach((address): void =>

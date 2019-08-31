@@ -43,13 +43,12 @@ export default class Executor implements ExecutorInterface {
     this.runtime = runtime;
   }
 
-  private createWasm (forceNew: boolean = false): Promise<WasmInstanceExports> {
+  private createWasm (forceNew = false): Promise<WasmInstanceExports> {
     const code = this.stateDb.db.get(CODE_KEY);
 
     assert(code, 'Expected to have code available in runtime');
 
-    // @ts-ignore code check above
-    return createWasm({ config: this.config, l }, this.runtime, code, proxy, forceNew);
+    return createWasm({ config: this.config, l }, this.runtime, code as Uint8Array, proxy, forceNew);
   }
 
   private executeBlock (wasm: WasmInstanceExports, blockData: BlockData): boolean {
@@ -125,6 +124,7 @@ export default class Executor implements ExecutorInterface {
     return result;
   }
 
+  // eslint-disable-next-line @typescript-eslint/require-await
   public async importHeader (blockData: BlockData): Promise<boolean> {
     const start = Date.now();
     const blockNumber = blockData.header.number.unwrap();

@@ -33,7 +33,7 @@ export default class Sync extends EventEmitter implements SyncInterface {
 
   private bestQueued: BN = new BN(0);
 
-  private isActive: boolean = false;
+  private isActive = false;
 
   private lastBest: BN = new BN(0);
 
@@ -62,7 +62,8 @@ export default class Sync extends EventEmitter implements SyncInterface {
     this.peers = peers;
   }
 
-  private setProcessTimeout (isFast: boolean = true): void {
+  private setProcessTimeout (isFast = true): void {
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
     setTimeout(async (): Promise<void> => {
       try {
         await this.processBlocks();

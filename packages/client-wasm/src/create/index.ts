@@ -29,7 +29,7 @@ function instrument <T> (name: string, elapsed: string[], fn: () => T): T {
 let prevChain: WasmInstanceExports;
 let pageOffset = 0;
 
-export default async function wasm ({ config: { wasm: { heapSize = defaults.HEAP_SIZE_KB } }, l }: Options, runtime: RuntimeInterface, chainCode: Uint8Array, chainProxy: Uint8Array, forceNew: boolean = false): Promise<WasmInstanceExports> {
+export default async function wasm ({ config: { wasm: { heapSize = defaults.HEAP_SIZE_KB } }, l }: Options, runtime: RuntimeInterface, chainCode: Uint8Array, chainProxy: Uint8Array, forceNew = false): Promise<WasmInstanceExports> {
   const elapsed: string[] = [];
   const isResized = runtime.environment.heap.wasResized();
   const env = await instrument('runtime', elapsed, (): Promise<WasmInstanceExports> =>

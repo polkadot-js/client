@@ -31,9 +31,9 @@ const CACHE_SIZES = {
 };
 
 export default class Files {
-  protected _isTrie: boolean = false;
+  protected _isTrie = false;
 
-  protected _isOpen: boolean = false;
+  protected _isOpen = false;
 
   private _fds: Fds[] = [];
 

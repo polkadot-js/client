@@ -23,7 +23,7 @@ const l = logger('telemetry');
 export default class Telemetry implements TelemetryInterface {
   private blocks: BlockDb;
 
-  private isActive: boolean = false;
+  private isActive = false;
 
   private chain: string;
 
@@ -43,6 +43,7 @@ export default class Telemetry implements TelemetryInterface {
     this.url = telemetry.url;
   }
 
+  // eslint-disable-next-line @typescript-eslint/require-await
   public async start (): Promise<void> {
     if (!this.isActive) {
       return;
@@ -51,6 +52,7 @@ export default class Telemetry implements TelemetryInterface {
     this.connect();
   }
 
+  // eslint-disable-next-line @typescript-eslint/require-await
   public async stop (): Promise<boolean> {
     this.isActive = false;
 

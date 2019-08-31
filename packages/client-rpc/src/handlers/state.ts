@@ -9,6 +9,7 @@ import { Endpoint } from './types';
 import { u8aToHex, u8aToU8a } from '@polkadot/util';
 
 const getStorage = ({ state: { db } }: ChainInterface): (params: string[]) => Promise<string> =>
+  // eslint-disable-next-line @typescript-eslint/require-await
   async ([key]: string[]): Promise<string> =>
     u8aToHex(
       db.get(u8aToU8a(key))

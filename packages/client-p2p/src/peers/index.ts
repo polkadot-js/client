@@ -83,7 +83,7 @@ export default class Peers extends EventEmitter implements PeersInterface {
       .length;
   }
 
-  public log (event: PeersInterface$Events, peer: PeerInterface, withDebug: boolean = true, withShort: boolean = true): void {
+  public log (event: PeersInterface$Events, peer: PeerInterface, withDebug = true, withShort = true): void {
     l[withDebug ? 'debug' : 'log']((): any[] => [withShort ? peer.shortId : peer.id, event]);
 
     this.emit(event, peer);

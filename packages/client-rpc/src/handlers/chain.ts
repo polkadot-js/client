@@ -8,10 +8,12 @@ import { Endpoint } from './types';
 
 import { hexToU8a, u8aToHex } from '@polkadot/util';
 
+// eslint-disable-next-line @typescript-eslint/require-await
 const subscribeNewHead = async (): Promise<string> =>
   'chain_newHead';
 
 const getBlock = ({ blocks }: ChainInterface): (params: string[]) => Promise<string> =>
+  // eslint-disable-next-line @typescript-eslint/require-await
   async ([hash]: string[]): Promise<string> => {
     // FIXME This is BlockData, not SignedBlock as it should be
     return u8aToHex(

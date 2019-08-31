@@ -48,7 +48,7 @@ const l = logger('wrtc/client');
 const noop = (): void => {};
 
 class Discovery extends EventEmitter {
-  public tag: string = 'webRTCStar';
+  public tag = 'webRTCStar';
 
   public start (fn: () => void): void {
     fn();
@@ -70,7 +70,7 @@ class Listener extends EventEmitter {
 
   public io: any;
 
-  public srcMultiaddr: string = '<unknown>';
+  public srcMultiaddr = '<unknown>';
 
   public constructor (options: Options, handler: Function, onDiscovery: (addr: string) => void) {
     super();
@@ -282,7 +282,7 @@ export default class WebRTCClient {
 
   public filter (multiaddrs: Multiaddr | Multiaddr[]): Multiaddr[] {
     return (Array.isArray(multiaddrs) ? multiaddrs : [multiaddrs]).filter((ma): boolean =>
-      ma.protoNames().indexOf('p2p-circuit') !== -1
+      ma.protoNames().includes('p2p-circuit')
         ? false
         : mafmt.WebRTCStar.matches(ma)
     );
