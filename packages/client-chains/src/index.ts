@@ -78,7 +78,7 @@ export default class Chain implements ChainInterface {
     // return this.rollbackBlock(bestBlock.header, true, false);
   }
 
-  private initGenesisFromBest (bestHeader: Header, rollback: boolean = true): ChainGenesis {
+  private initGenesisFromBest (bestHeader: Header, rollback = true): ChainGenesis {
     const hexState = u8aToHex(bestHeader.stateRoot, 48);
 
     l.log(`Initializing from state ${hexState}`);
@@ -101,7 +101,7 @@ export default class Chain implements ChainInterface {
     };
   }
 
-  private rollbackBlock (bestHeader: Header, rollback: boolean, isLogging: boolean = true): ChainGenesis {
+  private rollbackBlock (bestHeader: Header, rollback: boolean, isLogging = true): ChainGenesis {
     const prevHash = bestHeader.parentHash;
     const prevNumber = bestHeader.number.unwrap().subn(1);
 

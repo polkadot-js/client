@@ -25,13 +25,13 @@ function cli (params?: string): Config {
         const name = keyToCamel(key, 1);
 
         config[section] = config[section] || {};
-        // @ts-ignore ummm... no index, not Map-ing this one
-        config[section][name] = argv[key];
+        // ummm... no index, not Map-ing this one
+        config[section][name] = (argv as any)[key];
       } else if (!/^(db|dev|p2p|rpc|signal|telemetry|wasm)[A-Z]/.test(key)) {
         const name = keyToCamel(key) as ConfigKeys;
 
-        // @ts-ignore ummm... no index, not Map-ing this one
-        config[name] = argv[key];
+        // ummm... no index, not Map-ing this one
+        config[name] = (argv as any)[key];
       }
 
       return config as Config;
@@ -58,6 +58,7 @@ getExternalIp()
     process.exit(-1);
   });
 
+// eslint-disable-next-line @typescript-eslint/no-misused-promises
 process.on('SIGINT', async (): Promise<void> => {
   l.log('Caught interrupt signal, shutting down');
 

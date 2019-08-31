@@ -4,7 +4,7 @@
 
 // TODO: It may make sense to move this to @polkadot/util
 // (it has `stringCamelCase` available, however start...)
-export default function keyToCamel (key: string, startIndex: number = 0): string {
+export default function keyToCamel (key: string, startIndex = 0): string {
   return key
     .split('-')
     .reduce((name, part, index): string => {

@@ -12,8 +12,6 @@ import { assert, hexToU8a } from '@polkadot/util';
 
 import chains from './chains';
 
-type ChainKey = keyof typeof chains;
-
 export default class Loader implements ChainLoader {
   public readonly chain: Chainspec;
 
@@ -22,14 +20,14 @@ export default class Loader implements ChainLoader {
   public readonly genesisRoot: Uint8Array;
 
   public constructor ({ chain }: Config) {
-    this.chain = chains[chain as ChainKey] || this.loadJson(chain);
+    this.chain = chains[chain] || this.loadJson(chain);
 
     this.genesisRoot = this.calculateGenesisRoot();
     this.id = this.chain.id;
   }
 
   private loadJson (chain: string): Chainspec {
-    assert(/\.json$/.test(chain), 'Expected .json extension on custom non built-in chain');
+    assert(chain.endsWith('.json'), 'Expected .json extension on custom non built-in chain');
     assert(fs.existsSync(chain), `Unable to find custom ${chain}`);
 
     return JSON.parse(

@@ -46,7 +46,7 @@ export default class Client extends EventEmitter {
 
   private prevTime: number = Date.now();
 
-  private prevImport: number = 0;
+  private prevImport = 0;
 
   public async start (config: ConfigPartial): Promise<void> {
     await cryptoWaitReady();
