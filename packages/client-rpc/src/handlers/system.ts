@@ -9,12 +9,15 @@ import { Endpoint } from './types';
 import * as clientId from '@polkadot/client/clientId';
 
 const systemChain = ({ chain: { name } }: ChainInterface): () => Promise<string> =>
+  // eslint-disable-next-line @typescript-eslint/require-await
   async (): Promise<string> =>
     name;
 
+// eslint-disable-next-line @typescript-eslint/require-await
 const systemName = async (): Promise<string> =>
   clientId.name;
 
+// eslint-disable-next-line @typescript-eslint/require-await
 const systemVersion = async (): Promise<string> =>
   clientId.version;
 

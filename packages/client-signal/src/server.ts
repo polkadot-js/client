@@ -53,6 +53,7 @@ export default class WebRTCSignal extends EventEmitter {
     return true;
   }
 
+  // eslint-disable-next-line @typescript-eslint/require-await
   public async stop (): Promise<boolean> {
     if (!this.server) {
       return false;

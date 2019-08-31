@@ -21,7 +21,7 @@ const DEFAULT_TABLE: WebAssembly.TableDescriptor = {
 
 const cache: Map<string, WebAssembly.Instance> = new Map();
 
-export default async function createExports (bytecode: Uint8Array, imports?: WasmExtraImports, memory?: WebAssembly.Memory | null, forceCreate: boolean = false): Promise<ExportResult> {
+export default async function createExports (bytecode: Uint8Array, imports?: WasmExtraImports, memory?: WebAssembly.Memory | null, forceCreate = false): Promise<ExportResult> {
   // FIXME This should be the full hash, however it takes 35-65ms - this is a danger area
   const codeHash = xxhashAsHex(bytecode.subarray(0, 2048));
   const lookup = `${codeHash}_${bytecode.length}`;

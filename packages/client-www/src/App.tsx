@@ -68,8 +68,11 @@ class App extends React.PureComponent<Props, State> {
   }
 
   private initClient (): void {
+    // eslint-disable-next-line @typescript-eslint/unbound-method
     console.error = this.consoleHook('error');
+    // eslint-disable-next-line @typescript-eslint/unbound-method
     console.log = this.consoleHook('log');
+    // eslint-disable-next-line @typescript-eslint/unbound-method
     console.warn = this.consoleHook('warn');
 
     const client = new Client();

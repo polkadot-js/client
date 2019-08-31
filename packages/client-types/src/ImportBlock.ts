@@ -13,8 +13,7 @@ export default class ImportBlock extends Struct {
       body: 'Vec<Bytes>'
     }, {
       header: {
-        // @ts-ignore This is spread-able...
-        ...header.toJSON(),
+        ...(header.toJSON() as {}),
         digest: {
           // remove all Seal logs (not sure about consensus)
           logs: header.digest.logsWithout('SealV0', 'Consensus')

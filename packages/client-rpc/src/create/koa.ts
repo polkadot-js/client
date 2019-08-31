@@ -43,7 +43,7 @@ export default function createKoa ({ handlers, path, types }: CreateKoaOption): 
         })();
 
       default:
-        // eslint-disable-next-line no-unused-expressions
+        // eslint-disable-next-line no-unused-expressions,@typescript-eslint/no-unnecessary-type-assertion
         (type as never);
         throw new Error(`Uanble to create RPC listener for ${type}`);
     }

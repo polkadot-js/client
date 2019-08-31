@@ -23,7 +23,9 @@ export default function runtime (stateDb: StateDb): RuntimeInterface {
       {}, createChain(environment), createCrypto(environment), createIo(environment), createMemory(environment), createSandbox(environment), createStorage(environment)
     ) as RuntimeInterface$Exports),
     instrument: {
+      // eslint-disable-next-line @typescript-eslint/unbound-method
       start: instrument.clear,
+      // eslint-disable-next-line @typescript-eslint/unbound-method
       stop: instrument.stats
     }
   };

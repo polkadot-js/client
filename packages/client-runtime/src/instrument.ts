@@ -31,6 +31,7 @@ function instrument <T> (name: string, fn: () => T): T {
   return result;
 }
 
+// eslint-disable-next-line @typescript-eslint/unbound-method
 (instrument as Instrument<any>).clear = (): void => {
   stats = {
     total: {
@@ -40,6 +41,7 @@ function instrument <T> (name: string, fn: () => T): T {
   };
 };
 
+// eslint-disable-next-line @typescript-eslint/unbound-method
 (instrument as Instrument<any>).stats = (): RuntimeStats => {
   Object.keys(stats).forEach((fn): void => {
     if (fn === 'total') {

@@ -45,8 +45,11 @@ function consoleHook (type: 'error' | 'log' | 'warn'): (...args: string[]) => vo
 }
 
 function initClient (config: ConfigPartial): void {
+  // eslint-disable-next-line @typescript-eslint/unbound-method
   console.error = consoleHook('error');
+  // eslint-disable-next-line @typescript-eslint/unbound-method
   console.log = consoleHook('log');
+  // eslint-disable-next-line @typescript-eslint/unbound-method
   console.warn = consoleHook('warn');
 
   client = new Client();
@@ -69,6 +72,7 @@ function initClient (config: ConfigPartial): void {
   });
 }
 
+// eslint-disable-next-line @typescript-eslint/require-await
 ctx.onmessage = async ({ data: { data, type } }): Promise<void> => {
   if (type === 'create') {
     initClient(data);

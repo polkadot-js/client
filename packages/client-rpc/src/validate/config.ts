@@ -9,7 +9,7 @@ import { assert } from '@polkadot/util';
 import defaults from '../defaults';
 
 export default function validateConfig ({ path, types }: RpcConfig): void {
-  assert(/^\//.test(path), 'Expected valid path');
+  assert(path.startsWith('/'), 'Expected valid path');
 
   const invalid = types
     .filter((_type): boolean => !defaults.TYPES.includes(_type))
