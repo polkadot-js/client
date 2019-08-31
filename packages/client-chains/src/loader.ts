@@ -27,7 +27,7 @@ export default class Loader implements ChainLoader {
   }
 
   private loadJson (chain: string): Chainspec {
-    assert(chain.endsWith('.json'), 'Expected .json extension on custom non built-in chain');
+    assert(chain && chain.endsWith('.json'), 'Expected .json extension on custom non built-in chain');
     assert(fs.existsSync(chain), `Unable to find custom ${chain}`);
 
     return JSON.parse(

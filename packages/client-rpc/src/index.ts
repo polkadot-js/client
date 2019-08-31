@@ -93,7 +93,7 @@ export default class Rpc extends EventEmitter implements RpcInterface {
   }
 
   private handleRequest = async ({ id, jsonrpc, method, params }: JsonRpcRequest, socket?: WsContextSocket): Promise<JsonRpcError | JsonRpcResponse> => {
-    const isSubscription = method.includes('_subscribe');
+    const isSubscription = method && method.includes('_subscribe');
 
     if (isSubscription && isUndefined(socket)) {
       throw new Error(`Subscription for '${method}' not available on RPC interface`);
