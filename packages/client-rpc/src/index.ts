@@ -122,6 +122,7 @@ export default class Rpc extends EventEmitter implements RpcInterface {
     }
   }
 
+  // eslint-disable-next-line @typescript-eslint/require-await
   private handleMessage = async (message: string, socket?: WsContextSocket): Promise<JsonRpcError | JsonRpcResponse> => {
     try {
       return this.handleRequest(JSON.parse(message), socket);
