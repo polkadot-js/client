@@ -1,6 +1,6 @@
 {
   "name": "@polkadot/client-signal",
-  "version": "0.23.0-beta.28",
+  "version": "0.23.0-beta.29",
   "description": "WebRTC signalling server (compat with libp2p-webrtc-star)",
   "main": "index.js",
   "publishConfig": {
