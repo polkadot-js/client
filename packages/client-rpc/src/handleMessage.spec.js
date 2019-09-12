@@ -2,21 +2,20 @@
 // This software may be modified and distributed under the terms
 // of the Apache-2.0 license. See the LICENSE file for details.
 
-import { ExtError } from '@polkadot/util';
+const MockExtError = Error;
 
-const MockExtError = ExtError;
 const mockHandlers = ({
   errorThrow: () => {
     throw new Error('errorThrow');
   },
   errorThrowEx: () => {
-    throw new MockExtError('errorThrowEx', -123);
+    throw new MockExtError('errorThrowEx');
   },
   errorRet: () => {
     return Promise.resolve(new Error('errorRet'));
   },
   errorRetEx: () => {
-    return Promise.resolve(new MockExtError('errorRetEx', -456));
+    return Promise.resolve(new MockExtError('errorRetEx'));
   },
   test: jest.fn(() => Promise.resolve('test')),
   echo: (...params) => Promise.resolve(`echo: ${params.join(', ')}`)
@@ -47,7 +46,7 @@ describe('handleMessage', () => {
       expect(result).toMatchObject({
         id: 0,
         error: {
-          code: ExtError.CODES.UNKNOWN,
+          code: -1,
           message: expect.stringMatching(/JSON/)
         }
       });
@@ -63,7 +62,7 @@ describe('handleMessage', () => {
     return server.handleMessage(message).then((result) => {
       expect(result).toMatchObject({
         error: {
-          code: ExtError.CODES.INVALID_JSONRPC,
+          code: -1,
           message: 'Expected a numeric id'
         }
       });
@@ -80,7 +79,7 @@ describe('handleMessage', () => {
     return server.handleMessage(message).then((result) => {
       expect(result).toMatchObject({
         error: {
-          code: ExtError.CODES.METHOD_NOT_FOUND,
+          code: -1,
           message: "Method 'noSuchThing' not found"
         }
       });
@@ -111,7 +110,7 @@ describe('handleMessage', () => {
     return server.handleMessage(message).then((result) => {
       expect(result).toMatchObject({
         error: {
-          code: ExtError.CODES.UNKNOWN,
+          code: -1,
           message: 'errorThrow'
         }
       });
@@ -130,7 +129,7 @@ describe('handleMessage', () => {
       expect(result).toMatchObject({
         id: 1,
         error: {
-          code: ExtError.CODES.UNKNOWN,
+          code: -1,
           message: 'errorRet'
         }
       });

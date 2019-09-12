@@ -5,7 +5,7 @@
 import { RuntimeEnvHeap, Pointer } from '../../types';
 import { Memory, SizeUsed } from './types';
 
-import { ExtError, isUndefined, logger } from '@polkadot/util';
+import { isUndefined, logger } from '@polkadot/util';
 
 const PAGE_SIZE = 64 * 1024;
 
@@ -46,7 +46,7 @@ export default class Heap implements RuntimeEnvHeap {
     const size = this.memory.allocated.get(ptr);
 
     if (isUndefined(size)) {
-      throw new ExtError('Calling free() on unallocated memory');
+      throw new Error('Calling free() on unallocated memory');
     }
 
     this.memory.allocated.delete(ptr);
