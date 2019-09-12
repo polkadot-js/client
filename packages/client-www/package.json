@@ -26,7 +26,7 @@
   },
   "homepage": "https://github.com/polkadot-js/client/tree/master/packages/client-www#readme",
   "dependencies": {
-    "@babel/runtime": "^7.5.5",
+    "@babel/runtime": "^7.6.0",
     "@polkadot/client": "^0.23.0-beta.29"
   }
 }
