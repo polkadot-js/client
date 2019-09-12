@@ -4,14 +4,12 @@
 
 import { JsonRpcError } from '../types';
 
-import { ExtError } from '@polkadot/util';
-
 import createJson from './json';
 
-export default function createError (id: number, error: Error | ExtError): JsonRpcError {
+export default function createError (id: number, error: Error): JsonRpcError {
   return createJson(id, {
     error: {
-      code: (error as ExtError).code || ExtError.CODES.UNKNOWN,
+      code: -1,
       message: error.message
     }
   });

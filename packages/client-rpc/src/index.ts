@@ -11,7 +11,7 @@ import { Handlers } from './handlers/types';
 import { JsonRpcError, JsonRpcRequest, JsonRpcResponse, RpcInterface, SubInterface, WsContext, WsContextSocket } from './types';
 
 import coBody from 'co-body';
-import { ExtError, assert, isError, isFunction, isUndefined, logger } from '@polkadot/util';
+import { assert, isError, isFunction, isUndefined, logger } from '@polkadot/util';
 
 import handlers from './handlers';
 import { validateConfig, validateRequest } from './validate';
@@ -104,7 +104,7 @@ export default class Rpc extends EventEmitter implements RpcInterface {
 
       const handler = this.handlers[method];
 
-      assert(isFunction(handler), `Method '${method}' not found`, ExtError.CODES.METHOD_NOT_FOUND);
+      assert(isFunction(handler), `Method '${method}' not found`);
 
       const result = isSubscription
         ? await this.subscribe(socket, handler, params)

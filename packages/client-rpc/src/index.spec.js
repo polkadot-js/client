@@ -3,22 +3,20 @@
 // This software may be modified and distributed under the terms
 // of the Apache-2.0 license. See the LICENSE file for details.
 
-import { ExtError } from '@polkadot/util';
-
-const MockExtError = ExtError;
+const MockExtError = Error;
 
 jest.mock('./handlers', () => () => ({
   errorThrow: () => {
     throw new Error('errorThrow');
   },
   errorThrowEx: () => {
-    throw new MockExtError('errorThrowEx', -123);
+    throw new MockExtError('errorThrowEx');
   },
   errorRet: () => {
     return Promise.resolve(new Error('errorRet'));
   },
   errorRetEx: () => {
-    return Promise.resolve(new MockExtError('errorRetEx', -456));
+    return Promise.resolve(new MockExtError('errorRetEx'));
   },
   test: jest.fn(() => Promise.resolve('test')),
   echo: (...params) => Promise.resolve(`echo: ${params.join(', ')}`)
