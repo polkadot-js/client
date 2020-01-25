@@ -28,7 +28,7 @@
     "@babel/core": "^7.6.0",
     "@babel/runtime": "^7.6.0",
     "@polkadot/dev-react": "^0.31.0-beta.8",
-    "@polkadot/ts": "^0.1.72",
+    "@polkadot/ts": "^0.1.91",
     "copyfiles": "^2.1.1",
     "empty": "^0.10.1",
     "gh-pages": "^2.1.1"
